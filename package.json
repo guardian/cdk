@@ -5,13 +5,12 @@
   "types": "src/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src test --ext .ts",
+    "lint": "eslint src --ext .ts",
     "format": "prettier --write \"(src|test)/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.74.0",
     "@guardian/eslint-config-typescript": "^0.4.1",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
@@ -31,6 +30,12 @@
     "@aws-cdk/core": "1.74.0"
   },
   "dependencies": {
-    "@aws-cdk/core": "1.74.0"
+    "@aws-cdk/core": "1.74.0",
+    "@aws-cdk/assert": "1.74.0",
+    "@aws-cdk/aws-ec2": "^1.74.0",
+    "@aws-cdk/aws-iam": "^1.74.0",
+    "@aws-cdk/aws-autoscaling": "1.74.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "1.74.0",
+    "@aws-cdk/aws-rds": "1.74.0"
   }
 }
