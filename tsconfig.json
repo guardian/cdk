@@ -1,7 +1,13 @@
 {
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
   "compilerOptions": {
-    "target":"ES2018",
-    "module": "commonjs",
+    "target": "ES2018",
+    "module": "esnext",
+    "moduleResolution": "node",
     "lib": ["es2018"],
     "declaration": true,
     "strict": true,
@@ -16,8 +22,17 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization":false,
+    "strictPropertyInitialization": false,
     "typeRoots": ["./node_modules/@types"],
     "outDir": "dist"
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "test",
+    "src/**/*.test.ts",
+    "src/**/__snapshots__/**"
+  ]
 }

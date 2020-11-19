@@ -1,12 +1,11 @@
-import * as cdk from '@aws-cdk/core';
+import { Construct } from "@aws-cdk/core";
 
 export interface CdkProps {
-  // Define construct properties here
+  name?: string;
 }
 
-export class Cdk extends cdk.Construct {
-
-  constructor(scope: cdk.Construct, id: string, props: CdkProps = {}) {
+export class Cdk extends Construct {
+  constructor(scope: Construct, id: string, props: CdkProps = {}) {
     super(scope, id);
 
     // Define construct contents here

@@ -1,15 +1,15 @@
-import { expect as expectCDK, countResources } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
-import * as Cdk from '../src/index';
+import { countResources, expect as expectCDK } from "@aws-cdk/assert";
+import { App, Stack } from "@aws-cdk/core";
+import { Cdk as Cdk_Cdk } from "../src/index";
 
 /*
- * Example test 
+ * Example test
  */
-test('SNS Topic Created', () => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, "TestStack");
+test("SNS Topic Created", () => {
+  const app = new App();
+  const stack = new Stack(app, "TestStack");
   // WHEN
-  new Cdk.Cdk(stack, 'MyTestConstruct');
+  new Cdk_Cdk(stack, "MyTestConstruct");
   // THEN
-  expectCDK(stack).to(countResources("AWS::SNS::Topic",0));
+  expectCDK(stack).to(countResources("AWS::SNS::Topic", 0));
 });
