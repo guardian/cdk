@@ -72,7 +72,7 @@ export class GuSSMParameter extends GuParameter {
 export class GuSubnetListParameter extends GuParameter {
   static defaultProps: GuParameterProps = {};
 
-  constructor(scope: Construct, id: string, props: GuNoTypeParameterProps) {
+  constructor(scope: Construct, props: GuNoTypeParameterProps) {
     super(scope, "Subnets", {
       ...GuSubnetListParameter.defaultProps,
       ...props,
