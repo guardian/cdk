@@ -1,2 +1,9 @@
+# Generated / builds
 dist
+
+# IDEs
+.idea
+
+# NPM / Yarn
+yarn-error.log
 node_modules

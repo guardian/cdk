@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "lib": ["es2018"],
     "declaration": true,
+    "esModuleInterop": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -26,13 +27,6 @@
     "typeRoots": ["./node_modules/@types"],
     "outDir": "dist"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "test",
-    "src/**/*.test.ts",
-    "src/**/__snapshots__/**"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "test", "src/**/*.test.ts", "src/**/__snapshots__/**"]
 }
