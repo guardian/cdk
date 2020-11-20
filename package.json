@@ -1,5 +1,5 @@
 {
-  "name": "cdk",
+  "name": "@guardian/cdk",
   "version": "0.1.0",
   "main": "src/index.js",
   "types": "src/index.d.ts",
