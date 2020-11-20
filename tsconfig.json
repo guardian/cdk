@@ -1,12 +1,7 @@
 {
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
   "compilerOptions": {
     "target": "ES2020",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
     "esModuleInterop": true,
@@ -19,7 +14,7 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
-    "outDir": "dist"
+    "outDir": "lib"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "test", "src/**/*.test.ts", "src/**/__snapshots__/**"]

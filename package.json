@@ -1,14 +1,15 @@
 {
   "name": "@guardian/cdk",
   "version": "0.1.0",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"(src|test)/**/*.ts\"",
     "watch": "tsc -w",
-    "test": "jest --detectOpenHandles --runInBand"
+    "test": "jest --detectOpenHandles --runInBand",
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.1",
