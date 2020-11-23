@@ -40,7 +40,7 @@ npm install --save git+ssh://git@github.com:guardian/cdk.git
 
 ### NPM
 
-To get the `@guardian/cdk` library to work you must currently install dependencies via `npm`. This is due to a bug that causes the contents `lib` directory of the module to be removed after the `prepare` script has run.
+To get the `@guardian/cdk` library to work you must currently install dependencies via `npm`. This is due to [a bug](https://github.com/yarnpkg/yarn/issues/5235#issuecomment-571206092) that causes the contents `lib` directory of the module to be removed after the `prepare` script has run.
 
 ### Profile
 
