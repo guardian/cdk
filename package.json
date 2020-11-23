@@ -9,7 +9,7 @@
     "format": "prettier --write \"(src|test)/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
-    "prepare": "yarn build"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.1",
