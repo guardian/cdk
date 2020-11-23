@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "src/**/*",
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"(src|test)/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
-    "prepare": "npm run build"
+    "prepare": "tsc"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.1",
