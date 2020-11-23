@@ -12,14 +12,14 @@ import {
   ApplicationProtocol,
   ApplicationTargetGroup,
 } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { Construct } from "@aws-cdk/core";
+import type { GuStack } from "../core";
 
 // TODO: By default, an application load balancer has deletion protection set to false.
 // We probably want to protect this load balancer as much as possible
 // should we set it to true instead?
 
 export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
-  constructor(scope: Construct, id: string, props: ApplicationLoadBalancerProps) {
+  constructor(scope: GuStack, id: string, props: ApplicationLoadBalancerProps) {
     super(scope, id, { ...props });
 
     // TODO: Maybe we should put these behind an option(s) so that the user
@@ -36,7 +36,7 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
 }
 
 export class GuApplicationTargetGroup extends ApplicationTargetGroup {
-  constructor(scope: Construct, id: string, props: GuApplicationTargetGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
     super(scope, id, props);
 
     if (props.overrideId) {
@@ -55,7 +55,7 @@ export class GuApplicationListener extends ApplicationListener {
     protocol: ApplicationProtocol.HTTPS,
   };
 
-  constructor(scope: Construct, id: string, props: GuApplicationListenerProps) {
+  constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     super(scope, id, { ...GuApplicationListener.defaultProps, ...props });
 
     if (props.overrideId) {

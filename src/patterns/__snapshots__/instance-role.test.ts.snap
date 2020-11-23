@@ -2,6 +2,22 @@
 
 exports[`The InstanceRole construct should allow additional policies to be specified 1`] = `
 Object {
+  "Parameters": Object {
+    "Stack": Object {
+      "Default": "deploy",
+      "Description": "Name of this stack",
+      "Type": "String",
+    },
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
     "GetConfigPolicy6F934A1C": Object {
       "Properties": Object {
@@ -70,6 +86,20 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
+        "Tags": Array [
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -115,6 +145,22 @@ Object {
 
 exports[`The InstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
 Object {
+  "Parameters": Object {
+    "Stack": Object {
+      "Default": "deploy",
+      "Description": "Name of this stack",
+      "Type": "String",
+    },
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
     "GetDistributablesPolicy": Object {
       "Properties": Object {
@@ -162,6 +208,20 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
+        "Tags": Array [
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -246,6 +306,22 @@ Object {
 
 exports[`The InstanceRole construct should create the correct resources with minimal config 1`] = `
 Object {
+  "Parameters": Object {
+    "Stack": Object {
+      "Default": "deploy",
+      "Description": "Name of this stack",
+      "Type": "String",
+    },
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
     "GetDistributablesPolicy": Object {
       "Properties": Object {
@@ -293,6 +369,20 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
+        "Tags": Array [
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },

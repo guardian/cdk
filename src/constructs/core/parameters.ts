@@ -1,6 +1,7 @@
-import type { CfnParameterProps, Construct } from "@aws-cdk/core";
+import type { CfnParameterProps } from "@aws-cdk/core";
 import { CfnParameter } from "@aws-cdk/core";
 import { Stage, Stages } from "../../constants";
+import type { GuStack } from "./stack";
 
 export type GuParameterProps = CfnParameterProps;
 
@@ -9,19 +10,19 @@ export type GuNoTypeParameterProps = Omit<GuParameterProps, "type">;
 export class GuParameter extends CfnParameter {
   static defaultProps: GuParameterProps = {};
 
-  constructor(scope: Construct, id: string, props: GuParameterProps) {
+  constructor(scope: GuStack, id: string, props: GuParameterProps) {
     super(scope, id, { ...GuParameter.defaultProps, ...props });
   }
 }
 
 export class GuStringParameter extends GuParameter {
-  constructor(scope: Construct, id: string, props: GuNoTypeParameterProps) {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, { ...props, type: "String" });
   }
 }
 
 export class GuStageParameter extends GuParameter {
-  constructor(scope: Construct) {
+  constructor(scope: GuStack) {
     super(scope, "Stage", {
       type: "String",
       description: "Stage name",
@@ -32,7 +33,7 @@ export class GuStageParameter extends GuParameter {
 }
 
 export class GuStackParameter extends GuParameter {
-  constructor(scope: Construct) {
+  constructor(scope: GuStack) {
     super(scope, "Stack", {
       type: "String",
       description: "Name of this stack",
@@ -50,7 +51,7 @@ export class GuInstanceTypeParameter extends GuParameter {
     default: "t3.small",
   };
 
-  constructor(scope: Construct, id: string = "InstanceType", props: GuParameterProps = {}) {
+  constructor(scope: GuStack, id: string = "InstanceType", props: GuParameterProps = {}) {
     super(scope, id, { ...GuInstanceTypeParameter.defaultProps, ...props });
   }
 }
@@ -60,7 +61,7 @@ export class GuSSMParameter extends GuParameter {
     noEcho: true,
   };
 
-  constructor(scope: Construct, id: string, props: GuNoTypeParameterProps) {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...GuSSMParameter.defaultProps,
       ...props,
@@ -72,7 +73,7 @@ export class GuSSMParameter extends GuParameter {
 export class GuSubnetListParameter extends GuParameter {
   static defaultProps: GuParameterProps = {};
 
-  constructor(scope: Construct, props: GuNoTypeParameterProps) {
+  constructor(scope: GuStack, props: GuNoTypeParameterProps) {
     super(scope, "Subnets", {
       ...GuSubnetListParameter.defaultProps,
       ...props,
@@ -84,7 +85,7 @@ export class GuSubnetListParameter extends GuParameter {
 export class GuVpcParameter extends GuParameter {
   static defaultProps: GuParameterProps = {};
 
-  constructor(scope: Construct, id: string, props: GuNoTypeParameterProps) {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...GuVpcParameter.defaultProps,
       ...props,
@@ -96,7 +97,7 @@ export class GuVpcParameter extends GuParameter {
 export class GuAmiParameter extends GuParameter {
   static defaultProps: GuParameterProps = {};
 
-  constructor(scope: Construct, id: string, props: GuNoTypeParameterProps) {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...GuAmiParameter.defaultProps,
       ...props,

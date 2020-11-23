@@ -1,10 +1,11 @@
 import "@aws-cdk/assert/jest";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { Stack } from "@aws-cdk/core";
+import { App } from "@aws-cdk/core";
+import { GuStack } from "../core";
 import { GuSSMRunCommandPolicy } from "./policies";
 
 test("GuSSMRunCommandPolicy component", () => {
-  const stack = new Stack();
+  const stack = new GuStack(new App());
 
   const ssmPolicy = new GuSSMRunCommandPolicy(stack, "SSMRunCommandPolicy", {});
 

@@ -1,5 +1,5 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
-import type { Stack } from "@aws-cdk/core";
+import type { GuStack } from "../constructs/core";
 import type { GuPolicy } from "../constructs/iam";
 import { GuGetS3ObjectPolicy, GuLogShippingPolicy, GuRole, GuSSMRunCommandPolicy } from "../constructs/iam";
 
@@ -12,7 +12,7 @@ export interface InstanceRoleProps {
 export class InstanceRole extends GuRole {
   private policies: GuPolicy[];
 
-  constructor(scope: Stack, props: InstanceRoleProps) {
+  constructor(scope: GuStack, props: InstanceRoleProps) {
     super(scope, "InstanceRole", {
       overrideId: true,
       path: "/",

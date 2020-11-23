@@ -3,7 +3,7 @@ import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { Construct } from "@aws-cdk/core";
+import type { GuStack } from "../core";
 // TODO: Can GuAutoScalingGroup be more tightly integrated with amigo?
 //       Do we want to restrict to only allow amigo images?
 
@@ -23,7 +23,7 @@ export interface GuAutoScalingGroupProps
 }
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
-  constructor(scope: Construct, id: string, props: GuAutoScalingGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     // We need to override getImage() so that we can pass in the AMI as a parameter
     // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
     // as the name is hard-coded

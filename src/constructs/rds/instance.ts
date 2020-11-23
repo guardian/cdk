@@ -1,8 +1,8 @@
 import { InstanceType } from "@aws-cdk/aws-ec2";
 import type { CfnDBInstance, DatabaseInstanceProps, IParameterGroup } from "@aws-cdk/aws-rds";
 import { DatabaseInstance, ParameterGroup } from "@aws-cdk/aws-rds";
-import type { Construct } from "@aws-cdk/core";
 import { Fn } from "@aws-cdk/core";
+import type { GuStack } from "../core";
 
 export interface GuDatabaseInstanceProps extends Omit<DatabaseInstanceProps, "instanceType"> {
   overrideId?: boolean;
@@ -11,7 +11,7 @@ export interface GuDatabaseInstanceProps extends Omit<DatabaseInstanceProps, "in
 }
 
 export class GuDatabaseInstance extends DatabaseInstance {
-  constructor(scope: Construct, id: string, props: GuDatabaseInstanceProps) {
+  constructor(scope: GuStack, id: string, props: GuDatabaseInstanceProps) {
     // CDK just wants "t3.micro" format, whereas
     // some CFN yaml might have the older "db.t3.micro" with the "db." prefix
     // This logic ensures the "db." prefix is removed before applying the CFN
