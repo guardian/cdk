@@ -29,9 +29,11 @@ export class GuSecurityGroup extends SecurityGroup {
     }
 
     props.ingresses?.forEach(({ range, description, port }) =>
-      this.addIngressRule(range, port ?? Port.tcp(443), description ?? "")
+      this.addIngressRule(range, port ?? Port.tcp(443), description ?? undefined)
     );
 
-    props.egresses?.forEach(({ range, description, port }) => this.addEgressRule(range, port, description ?? ""));
+    props.egresses?.forEach(({ range, description, port }) =>
+      this.addEgressRule(range, port, description ?? undefined)
+    );
   }
 }
