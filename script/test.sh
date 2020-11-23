@@ -2,5 +2,5 @@
 
 set -e
 
-yarn install --frozen-lockfile
-yarn test
+npm install --frozen-lockfile
+npm run test

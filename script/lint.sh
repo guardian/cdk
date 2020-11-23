@@ -2,5 +2,5 @@
 
 set -e
 
-yarn install --frozen-lockfile
-yarn lint
+npm install --frozen-lockfile
+npm run lint
