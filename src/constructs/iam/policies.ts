@@ -2,7 +2,7 @@
 
 import type { CfnPolicy, PolicyProps } from "@aws-cdk/aws-iam";
 import { Effect, Policy, PolicyStatement } from "@aws-cdk/aws-iam";
-import type { Construct, Stack } from "@aws-cdk/core";
+import type { GuStack } from "../core";
 
 export interface GuPolicyProps extends PolicyProps {
   overrideId?: boolean;
@@ -11,7 +11,7 @@ export interface GuPolicyProps extends PolicyProps {
 export class GuPolicy extends Policy {
   static defaultProps: Partial<GuPolicyProps> = {};
 
-  constructor(scope: Construct, id: string, props: GuPolicyProps) {
+  constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, { ...GuPolicy.defaultProps, ...props });
 
     if (props.overrideId) {
@@ -28,7 +28,7 @@ export interface GuLogShippingPolicyProps extends GuPolicyProps {
 // TODO: Should the constructor require a stack (which so far is the only thing it ever will be) or
 // should we pass through account and region explicitly?
 export class GuLogShippingPolicy extends GuPolicy {
-  private static getDefaultProps(scope: Stack, props: GuLogShippingPolicyProps): Partial<PolicyProps> {
+  private static getDefaultProps(scope: GuStack, props: GuLogShippingPolicyProps): Partial<PolicyProps> {
     return {
       policyName: "log-shipping-policy",
       statements: [
@@ -41,7 +41,7 @@ export class GuLogShippingPolicy extends GuPolicy {
     };
   }
 
-  constructor(scope: Stack, id: string = "LogShippingPolicy", props: GuLogShippingPolicyProps) {
+  constructor(scope: GuStack, id: string = "LogShippingPolicy", props: GuLogShippingPolicyProps) {
     super(scope, id, {
       ...GuLogShippingPolicy.getDefaultProps(scope, props),
       ...props,
@@ -81,7 +81,7 @@ export class GuSSMRunCommandPolicy extends GuPolicy {
   }
 
   // TODO: It's not possible to use the default id if you want to pass props in, should it?
-  constructor(scope: Construct, id: string = "SSMRunCommandPolicy", props: GuPolicyProps) {
+  constructor(scope: GuStack, id: string = "SSMRunCommandPolicy", props: GuPolicyProps) {
     super(scope, id, {
       ...GuSSMRunCommandPolicy.getDefaultProps(),
       ...props,
@@ -94,7 +94,7 @@ export interface GuGetS3ObjectPolicyProps extends GuPolicyProps {
 }
 
 export class GuGetS3ObjectPolicy extends GuPolicy {
-  constructor(scope: Stack, id: string, props: GuGetS3ObjectPolicyProps) {
+  constructor(scope: GuStack, id: string, props: GuGetS3ObjectPolicyProps) {
     // TODO validate `props.bucket` based on the rules defined here https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-s3-bucket-naming-requirements.html
 
     const policy = {

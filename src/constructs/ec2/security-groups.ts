@@ -1,6 +1,6 @@
 import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { Port, SecurityGroup } from "@aws-cdk/aws-ec2";
-import type { Construct } from "@aws-cdk/core";
+import type { GuStack } from "../core";
 
 export interface CidrIngress {
   range: IPeer;
@@ -22,7 +22,7 @@ export interface GuSecurityGroupProps extends SecurityGroupProps {
 export class GuSecurityGroup extends SecurityGroup {
   static defaultIngressPort = Port.tcp(443);
 
-  constructor(scope: Construct, id: string, props: GuSecurityGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
     super(scope, id, props);
 
     if (props.overrideId) {

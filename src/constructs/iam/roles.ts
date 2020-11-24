@@ -1,6 +1,6 @@
 import type { CfnRole, RoleProps } from "@aws-cdk/aws-iam";
 import { Role } from "@aws-cdk/aws-iam";
-import type { Construct } from "@aws-cdk/core";
+import type { GuStack } from "../core";
 
 export interface GuRoleProps extends RoleProps {
   overrideId?: boolean;
@@ -11,7 +11,7 @@ export class GuRole extends Role {
 
   private child: CfnRole;
 
-  constructor(scope: Construct, id: string, props: GuRoleProps) {
+  constructor(scope: GuStack, id: string, props: GuRoleProps) {
     super(scope, id, { ...GuRole.defaultProps, ...props });
 
     this.child = this.node.defaultChild as CfnRole;
