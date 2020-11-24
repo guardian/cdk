@@ -4,8 +4,7 @@ import type { Construct } from "@aws-cdk/core";
 
 export interface CidrIngress {
   range: IPeer;
-  port?: Port;
-  description?: string;
+  description: string;
 }
 
 export interface CidrEgress {
@@ -21,6 +20,8 @@ export interface GuSecurityGroupProps extends SecurityGroupProps {
 }
 
 export class GuSecurityGroup extends SecurityGroup {
+  static defaultIngressPort = Port.tcp(443);
+
   constructor(scope: Construct, id: string, props: GuSecurityGroupProps) {
     super(scope, id, props);
 
@@ -28,8 +29,8 @@ export class GuSecurityGroup extends SecurityGroup {
       (this.node.defaultChild as CfnSecurityGroup).overrideLogicalId(id);
     }
 
-    props.ingresses?.forEach(({ range, description, port }) =>
-      this.addIngressRule(range, port ?? Port.tcp(443), description ?? undefined)
+    props.ingresses?.forEach(({ range, description }) =>
+      this.addIngressRule(range, GuSecurityGroup.defaultIngressPort, description)
     );
 
     props.egresses?.forEach(({ range, description, port }) =>
