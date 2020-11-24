@@ -1,5 +1,5 @@
 import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
-import { Port, SecurityGroup } from "@aws-cdk/aws-ec2";
+import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import type { Construct } from "@aws-cdk/core";
 
 interface CidrIngress {
@@ -13,6 +13,15 @@ interface CidrEgress {
   port: Port;
   description?: string;
 }
+
+export const transformToCidrIngress = (ingresses: Array<[string, string]>): CidrIngress[] => {
+  return ingresses.map(([key, value]) => {
+    return {
+      range: Peer.ipv4(value),
+      description: key,
+    };
+  });
+};
 
 export interface GuSecurityGroupProps extends SecurityGroupProps {
   overrideId?: boolean;
