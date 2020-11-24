@@ -2,13 +2,13 @@ import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-e
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import type { Construct } from "@aws-cdk/core";
 
-interface CidrIngress {
+export interface CidrIngress {
   range: IPeer;
   port?: Port;
   description?: string;
 }
 
-interface CidrEgress {
+export interface CidrEgress {
   range: IPeer;
   port: Port;
   description?: string;
