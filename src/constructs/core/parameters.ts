@@ -71,14 +71,8 @@ export class GuSSMParameter extends GuParameter {
 }
 
 export class GuSubnetListParameter extends GuParameter {
-  static defaultProps: GuParameterProps = {};
-
-  constructor(scope: GuStack, props: GuNoTypeParameterProps) {
-    super(scope, "Subnets", {
-      ...GuSubnetListParameter.defaultProps,
-      ...props,
-      type: "List<AWS::EC2::Subnet::Id>",
-    });
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+    super(scope, id, { ...props, type: "List<AWS::EC2::Subnet::Id>" });
   }
 }
 
