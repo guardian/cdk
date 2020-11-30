@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GuLambdaFunction should create a lambda function with a schedule to run every week 1`] = `
+Object {
+  "Resources": Object {
+    "lambda8B5974B5": Object {
+      "DependsOn": Array [
+        "lambdaServiceRole494E4CA6",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "bucket1",
+          "S3Key": "folder/to/key",
+        },
+        "Handler": "handler.ts",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "lambdaServiceRole494E4CA6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "lambdaServiceRole494E4CA6": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdalambda7daysAllowEventRulelambdalambda7daysA269ED0EFFB7184B": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "lambda8B5974B5",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "lambdalambda7daysC799B8C2",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "lambdalambda7daysC799B8C2": Object {
+      "Properties": Object {
+        "Description": "run every week",
+        "ScheduleExpression": "rate(7 days)",
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "lambda8B5974B5",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+  },
+}
+`;
+
+exports[`GuLambdaFunction should create a lambda function with no schedule rules 1`] = `
+Object {
+  "Resources": Object {
+    "lambda8B5974B5": Object {
+      "DependsOn": Array [
+        "lambdaServiceRole494E4CA6",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "bucket1",
+          "S3Key": "folder/to/key",
+        },
+        "Handler": "handler.ts",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "lambdaServiceRole494E4CA6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "lambdaServiceRole494E4CA6": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
