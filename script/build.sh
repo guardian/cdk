@@ -2,5 +2,5 @@
 
 set -e
 
-npm install --frozen-lockfile
+npm ci
 npm run build
