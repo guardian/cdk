@@ -3,10 +3,6 @@
   "version": "0.1.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "files": [
-    "src/**/*",
-    "lib/**/*"
-  ],
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --ext .ts",
