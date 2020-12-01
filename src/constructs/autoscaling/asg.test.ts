@@ -2,7 +2,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stack } from "@aws-cdk/core";
+import { App, Stack } from "@aws-cdk/core";
 import { GuStack } from "../core/stack";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
@@ -27,7 +27,8 @@ describe("The GuAutoScalingGroup", () => {
   };
 
   test("correctly sets the machine image using props and calling getImage", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
 
@@ -37,7 +38,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("correctly sets instance type using prop", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
@@ -47,7 +49,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("correctly sets the user data using prop", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
@@ -59,7 +62,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds any target groups passed through props", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
 
     const targetGroup1 = new GuApplicationTargetGroup(stack, "TargetGroup1", {
       vpc: vpc,
@@ -82,7 +86,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds any security groups passed through props", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
 
     const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, overrideId: true });
     const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, overrideId: true });
@@ -110,7 +115,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("does not include the UpdatePolicy property", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -118,7 +124,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("overrides the id to remove the 8 digit value added automagically", () => {
-    const stack = new GuStack();
+    const app = new App();
+    const stack = new GuStack(app);
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
