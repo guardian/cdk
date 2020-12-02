@@ -22,7 +22,7 @@ describe("The GuAutoScalingGroup", () => {
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
     imageId: "123",
-    instanceType: "t3.macro",
+    instanceType: "t3.macro", // Use a value that doesn't exist to ensure that we haven't matched a default
     userData: "user data",
   };
 
