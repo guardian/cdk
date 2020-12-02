@@ -63,3 +63,7 @@ but eventually for setting up new stacks too.
 ## Migration
 
 You can read more about migrating from Cloudformation to CDK in [MIGRATING.md](./MIGRATING.md)
+
+## Testing
+
+For unit testing, the two key strategies are direct assertions and snapshot tests. When testing constructs, prefer using direct asserts while for patterns, make greater use of snapshot testing. For examples of these two approaches see [src/constructs/autoscaling/asg.test.ts](./src/constructs/autoscaling/asg.test.ts) and [src/patterns/instance-role.test.ts](./src/patterns/instance-role.test.ts) respectively.
