@@ -1,3 +1,5 @@
+import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
+import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
 import { Rule, Schedule } from "@aws-cdk/aws-events";
 import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function } from "@aws-cdk/aws-lambda";
@@ -5,12 +7,17 @@ import type { FunctionProps } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import type { Construct, Duration } from "@aws-cdk/core";
 
+interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
+  id: string;
+}
+
 interface GuFunctionProps extends Omit<FunctionProps, "code"> {
   code: { bucket: string; key: string };
   rules?: Array<{
     frequency: Duration;
     description?: string;
   }>;
+  apis?: ApiProps[];
 }
 
 export class GuLambdaFunction extends Function {
@@ -31,6 +38,13 @@ export class GuLambdaFunction extends Function {
         targets: [target],
         ...(rule.description && { description: rule.description }),
         enabled: true,
+      });
+    });
+
+    props.apis?.forEach((api) => {
+      new LambdaRestApi(this, api.id, {
+        handler: this,
+        ...api,
       });
     });
   }
