@@ -65,7 +65,7 @@ describe("The GuAutoScalingGroup", () => {
     const app = new App();
     const stack = new GuStack(app);
 
-    const targetGroup1 = new GuApplicationTargetGroup(stack, "TargetGroup1", {
+    const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
       overrideId: true,
@@ -73,13 +73,13 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      targetGroups: [targetGroup1],
+      targetGroup: targetGroup,
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
       TargetGroupARNs: [
         {
-          Ref: "TargetGroup1",
+          Ref: "TargetGroup",
         },
       ],
     });
