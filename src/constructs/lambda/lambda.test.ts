@@ -35,4 +35,22 @@ describe("GuLambdaFunction", () => {
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
+
+  it("should create a lambda function with an api gateway", () => {
+    const stack = new Stack();
+
+    new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      apis: [
+        {
+          id: "api",
+          description: "this is a test",
+        },
+      ],
+    });
+
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
 });
