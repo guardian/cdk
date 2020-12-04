@@ -5,6 +5,7 @@ Object {
   "Resources": Object {
     "lambda8B5974B5": Object {
       "DependsOn": Array [
+        "lambdaServiceRoleDefaultPolicyBF6FA5E7",
         "lambdaServiceRole494E4CA6",
       ],
       "Properties": Object {
@@ -53,6 +54,56 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1",
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "Roles": Array [
+          Object {
+            "Ref": "lambdaServiceRole494E4CA6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "lambdalambda7daysAllowEventRulelambdalambda7daysA269ED0EFFB7184B": Object {
       "Properties": Object {
@@ -101,6 +152,7 @@ Object {
   "Resources": Object {
     "lambda8B5974B5": Object {
       "DependsOn": Array [
+        "lambdaServiceRoleDefaultPolicyBF6FA5E7",
         "lambdaServiceRole494E4CA6",
       ],
       "Properties": Object {
@@ -149,6 +201,56 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1",
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "Roles": Array [
+          Object {
+            "Ref": "lambdaServiceRole494E4CA6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
   },
 }
