@@ -5,7 +5,7 @@ import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function } from "@aws-cdk/aws-lambda";
 import type { FunctionProps } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
-import type { Construct, Duration } from "@aws-cdk/core";
+import type { Construct } from "@aws-cdk/core";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
@@ -14,7 +14,7 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
 interface GuFunctionProps extends Omit<FunctionProps, "code"> {
   code: { bucket: string; key: string };
   rules?: Array<{
-    frequency: Duration;
+    schedule: Schedule;
     description?: string;
   }>;
   apis?: ApiProps[];
@@ -29,12 +29,10 @@ export class GuLambdaFunction extends Function {
       code,
     });
 
-    props.rules?.forEach((rule) => {
-      const frequency = rule.frequency;
-      const schedule = Schedule.rate(frequency);
+    props.rules?.forEach((rule, index) => {
       const target = new LambdaFunction(this);
-      new Rule(this, `${id}-${frequency.toHumanString()}`, {
-        schedule: schedule,
+      new Rule(this, `${id}-${rule.schedule.expressionString}-${index}`, {
+        schedule: rule.schedule,
         targets: [target],
         ...(rule.description && { description: rule.description }),
         enabled: true,
@@ -47,5 +45,7 @@ export class GuLambdaFunction extends Function {
         ...api,
       });
     });
+
+    bucket.grantRead(this);
   }
 }

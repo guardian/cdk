@@ -42,6 +42,8 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       userData: UserData.custom(props.userData),
     });
 
+    // TODO: When I tried adding more than one target group, this failed. I think you
+    // may only be able to add one TG to an ASG
     props.targetGroups?.forEach((tg) => this.attachToApplicationTargetGroup(tg));
     props.securityGroups?.forEach((sg) => this.addSecurityGroup(sg));
 

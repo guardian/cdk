@@ -32,15 +32,23 @@ If there is a pattern available for your use case, prefer to use that over compo
 
 ## Usage
 
-This library can currently be installed using git and ssh.
+This library can be installed from npm.
 
 ```
-npm install --save git+ssh://git@github.com:guardian/cdk.git
+npm install --save @guardian/cdk
 ```
 
-### NPM
+or
 
-To get the `@guardian/cdk` library to work you must currently install dependencies via `npm`. This is due to [a bug](https://github.com/yarnpkg/yarn/issues/5235#issuecomment-571206092) that causes the contents `lib` directory of the module to be removed after the `prepare` script has run.
+```
+yarn add @guardian/cdk
+```
+
+Patterns can be imported from the top level of the library (e.g. `import { InstanceRole } from "@guardian/cdk";`) while constructs must be imported from their construct directory (e.g. `import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";`)
+
+### AWS Library Versions
+
+Any versions of the `@aws-cdk` libraries that you have installed in your project must be the same version as those used in the `@guardian/cdk` library.
 
 ### Profile
 
@@ -62,4 +70,13 @@ but eventually for setting up new stacks too.
 
 ## Migration
 
-You can read more about migrating from Cloudformation to CDK in [MIGRATING.md](./MIGRATING.md)
+You can read more about migrating from Cloudformation to CDK in [MIGRATING.md](MIGRATING.md)
+
+## Testing
+
+For unit testing, the two key strategies are direct assertions and snapshot tests. When testing constructs, prefer using direct asserts while for patterns, make greater use of snapshot testing. For examples of these two approaches see [src/constructs/autoscaling/asg.test.ts](src/constructs/autoscaling/asg.test.ts) and [src/patterns/instance-role.test.ts](src/patterns/instance-role.test.ts) respectively.
+
+## Releasing
+
+We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
+To release a new version, run `npm run release`.
