@@ -33,5 +33,7 @@ export class GuLambdaFunction extends Function {
         enabled: true,
       });
     });
+
+    bucket.grantRead(this);
   }
 }
