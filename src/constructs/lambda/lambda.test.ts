@@ -1,6 +1,7 @@
 import "@aws-cdk/assert/jest";
 
 import { SynthUtils } from "@aws-cdk/assert";
+import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration, Stack } from "@aws-cdk/core";
 import { GuLambdaFunction } from "./lambda";
@@ -27,7 +28,7 @@ describe("GuLambdaFunction", () => {
       runtime: Runtime.NODEJS_12_X,
       rules: [
         {
-          frequency: Duration.days(7),
+          schedule: Schedule.rate(Duration.days(7)),
           description: "run every week",
         },
       ],
