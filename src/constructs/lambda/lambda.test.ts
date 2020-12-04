@@ -3,12 +3,13 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
-import { Duration, Stack } from "@aws-cdk/core";
+import { App, Duration } from "@aws-cdk/core";
+import { GuStack } from "../core";
 import { GuLambdaFunction } from "./lambda";
 
 describe("GuLambdaFunction", () => {
   it("should create a lambda function with no schedule rules", () => {
-    const stack = new Stack();
+    const stack = new GuStack(new App());
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
@@ -20,7 +21,7 @@ describe("GuLambdaFunction", () => {
   });
 
   it("should create a lambda function with a schedule to run every week", () => {
-    const stack = new Stack();
+    const stack = new GuStack(new App());
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
@@ -38,7 +39,7 @@ describe("GuLambdaFunction", () => {
   });
 
   it("should create a lambda function with an api gateway", () => {
-    const stack = new Stack();
+    const stack = new GuStack(new App());
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
