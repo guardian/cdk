@@ -2,5 +2,5 @@
 
 set -e
 
-npm ci
-npm run test
+yarn --frozen-lockfile
+yarn test
