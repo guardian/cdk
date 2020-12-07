@@ -5,7 +5,7 @@ import { Rule } from "@aws-cdk/aws-events";
 import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function } from "@aws-cdk/aws-lambda";
 import type { FunctionProps } from "@aws-cdk/aws-lambda";
-import { Bucket } from "@aws-cdk/aws-s3";
+import { Bucket, IBucket } from "@aws-cdk/aws-s3";
 import type { GuStack } from "../core";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
@@ -22,6 +22,7 @@ interface GuFunctionProps extends Omit<FunctionProps, "code"> {
 }
 
 export class GuLambdaFunction extends Function {
+  bucket: IBucket;
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, props.code.bucket);
     const code = Code.fromBucket(bucket, props.code.key);
@@ -48,5 +49,6 @@ export class GuLambdaFunction extends Function {
     });
 
     bucket.grantRead(this);
+    this.bucket = bucket;
   }
 }
