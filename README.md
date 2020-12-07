@@ -80,3 +80,10 @@ For unit testing, the two key strategies are direct assertions and snapshot test
 
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
 To release a new version, run `npm run release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
+
+## Yarn
+
+This repository uses npm as attempts to move to `yarn` have highlighted issues including those below:
+
+- `yarn login` still prompts for a password at release time which doesn't work with `np`
+- publishing with `yarn` leaves only the `index.js` file in the `lib` directory
