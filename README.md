@@ -22,13 +22,22 @@ Constructs are lower level classes which will create one or more resources to pr
 If there is a pattern available for your use case, prefer to use that over composing constructs yourself. We welcome feedback and/or PRs to extend the functionality of patterns. Where you need to do something outside of currently available patterns, you can use the constructs to provide some level of abstraction. In this case, consider whether it's worth defining a pattern.
 
 ## Useful commands
+We follow the [`script/task`](https://github.com/github/scripts-to-rule-them-all) pattern,
+find useful scripts within the [`script`](./script) directory for common tasks.
 
-- `npm run test` perform the jest unit tests
-- `npm run lint` lint the code using eslint
+- `./script/setup` to install dependencies
+- `./script/start` to run the Jest unit tests in watch mode
+- `./script/lint` to lint the code using ESLint
+- `./script/test` to run the Jest unit tests
+- `./script/build` to compile TypeScript to JS
+- `./script/release` to release a new version to NPM
+
+There are also some other commands defined in `package.json`:
 - `npm run lint --fix` attempt to autofix any linter errors
-- `npm run format` format the code using prettier
-- `npm run build` compile typescript to js
+- `npm run format` format the code using Prettier
 - `npm run watch` watch for changes and compile
+
+However, it's advised you configure your IDE to format on save to avoid horrible "correct linting" commits.
 
 ## Usage
 
@@ -79,7 +88,7 @@ For unit testing, the two key strategies are direct assertions and snapshot test
 ## Releasing
 
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
-To release a new version, run `npm run release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
+To release a new version, run `./script/release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
 
 ## Yarn
 
