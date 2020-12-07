@@ -79,4 +79,4 @@ For unit testing, the two key strategies are direct assertions and snapshot test
 ## Releasing
 
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
-To release a new version, run `npm run release`.
+To release a new version, run `npm run release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
