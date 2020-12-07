@@ -2,5 +2,5 @@
 
 set -e
 
-yarn --frozen-lockfile
-yarn build
+npm ci
+npm run build

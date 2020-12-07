@@ -10,7 +10,7 @@
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
     "prepublish": "tsc",
-    "release": "np --branch main"
+    "release": "np --no-yarn --branch main"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.1",

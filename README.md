@@ -23,12 +23,12 @@ If there is a pattern available for your use case, prefer to use that over compo
 
 ## Useful commands
 
-- `yarn test` perform the jest unit tests
-- `yarn lint` lint the code using eslint
-- `yarn lint --fix` attempt to autofix any linter errors
-- `yarn format` format the code using prettier
-- `yarn build` compile typescript to js
-- `yarn watch` watch for changes and compile
+- `npm run test` perform the jest unit tests
+- `npm run lint` lint the code using eslint
+- `npm run lint --fix` attempt to autofix any linter errors
+- `npm run format` format the code using prettier
+- `npm run build` compile typescript to js
+- `npm run watch` watch for changes and compile
 
 ## Usage
 
@@ -79,4 +79,4 @@ For unit testing, the two key strategies are direct assertions and snapshot test
 ## Releasing
 
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
-To release a new version, run `yarn release`.
+To release a new version, run `npm run release`.
