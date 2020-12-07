@@ -2,5 +2,5 @@
 
 set -e
 
-npm ci
-npm run lint
+yarn --frozen-lockfile
+yarn lint
