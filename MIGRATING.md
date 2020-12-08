@@ -103,3 +103,8 @@ with the following default keys and values:
 
 - `CopyTagsToSnapshot` is added and defaults to `true` if not otherwise specified
 - `UpdateReplacePolicy` is added and follows the value of `DeletionPolicy` if it is specified
+
+### Lambdas and API Gateways
+
+#### The GuLambdaFunction `apis` prop and maintaining API Gateway endpoints
+
