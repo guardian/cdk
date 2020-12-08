@@ -5,7 +5,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src test --ext .ts",
     "format": "prettier --write \"(src|test)/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
