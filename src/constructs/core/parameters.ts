@@ -8,10 +8,8 @@ export type GuParameterProps = CfnParameterProps;
 export type GuNoTypeParameterProps = Omit<GuParameterProps, "type">;
 
 export class GuParameter extends CfnParameter {
-  static defaultProps: GuParameterProps = {};
-
   constructor(scope: GuStack, id: string, props: GuParameterProps) {
-    super(scope, id, { ...GuParameter.defaultProps, ...props });
+    super(scope, id, props);
   }
 }
 
@@ -77,11 +75,8 @@ export class GuSubnetListParameter extends GuParameter {
 }
 
 export class GuVpcParameter extends GuParameter {
-  static defaultProps: GuParameterProps = {};
-
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
-      ...GuVpcParameter.defaultProps,
       ...props,
       type: "AWS::EC2::VPC::Id",
     });
@@ -89,11 +84,8 @@ export class GuVpcParameter extends GuParameter {
 }
 
 export class GuAmiParameter extends GuParameter {
-  static defaultProps: GuParameterProps = {};
-
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
-      ...GuAmiParameter.defaultProps,
       ...props,
       type: "AWS::EC2::Image::Id",
     });
