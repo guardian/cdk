@@ -1,11 +1,12 @@
 import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
-import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
+import { CfnRestApi, LambdaRestApi } from "@aws-cdk/aws-apigateway";
 import type { Schedule } from "@aws-cdk/aws-events";
 import { Rule } from "@aws-cdk/aws-events";
 import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function } from "@aws-cdk/aws-lambda";
 import type { FunctionProps } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
+import { CfnOutput } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
@@ -41,9 +42,17 @@ export class GuLambdaFunction extends Function {
     });
 
     props.apis?.forEach((api) => {
-      new LambdaRestApi(this, api.id, {
+      const lambdaRestApi = new LambdaRestApi(this, api.id, {
         handler: this,
         ...api,
+      });
+
+      const cfnApi = lambdaRestApi.node.defaultChild as CfnRestApi;
+      cfnApi.overrideLogicalId(api.id);
+
+      new CfnOutput(this, api.id, {
+        description: `${api.id} domain name`,
+        value: api.domainName?.domainName ?? "Undefined",
       });
     });
 
