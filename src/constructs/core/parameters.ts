@@ -43,25 +43,20 @@ export class GuStackParameter extends GuParameter {
 // TODO: Is there a way of removing default props if they weren't implemented before?
 //       Should that be allowed even if it is possible?
 export class GuInstanceTypeParameter extends GuParameter {
-  static defaultProps: GuParameterProps = {
-    type: "String",
-    description: "EC2 Instance Type",
-    default: "t3.small",
-  };
-
   constructor(scope: GuStack, id: string = "InstanceType", props: GuParameterProps = {}) {
-    super(scope, id, { ...GuInstanceTypeParameter.defaultProps, ...props });
+    super(scope, id, {
+      type: "String",
+      description: "EC2 Instance Type",
+      default: "t3.small",
+      ...props,
+    });
   }
 }
 
 export class GuSSMParameter extends GuParameter {
-  static defaultProps: GuParameterProps = {
-    noEcho: true,
-  };
-
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
-      ...GuSSMParameter.defaultProps,
+      noEcho: true,
       ...props,
       type: "AWS::SSM::Parameter::Value<String>",
     });
