@@ -50,7 +50,7 @@ export class GuLambdaFunction extends Function {
       const cfnApi = lambdaRestApi.node.defaultChild as CfnRestApi;
       cfnApi.overrideLogicalId(api.id);
 
-      new CfnOutput(this, api.id, {
+      new CfnOutput(this, `${api.id}-output`, {
         description: `${api.id} domain name`,
         value: api.domainName?.domainName ?? "Undefined",
       });
