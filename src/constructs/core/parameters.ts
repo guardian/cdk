@@ -86,3 +86,14 @@ export class GuAmiParameter extends GuParameter {
     });
   }
 }
+
+export class GuArnParameter extends GuStringParameter {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+    super(scope, id, {
+      ...props,
+      allowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
+      constraintDescription: "Must be a valid ARN",
+      default: "arn:partition:service:region:account-id:resource-id",
+    });
+  }
+}
