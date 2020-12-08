@@ -5,6 +5,7 @@ import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { Stage, Stages } from "../../constants";
 import {
   GuAmiParameter,
+  GuArnParameter,
   GuInstanceTypeParameter,
   GuSSMParameter,
   GuStackParameter,
@@ -177,6 +178,24 @@ describe("The GuAmiParameter class", () => {
     expect(json.Parameters.Parameter).toEqual({
       Type: "AWS::EC2::Image::Id",
       Description: "This is a test",
+    });
+  });
+});
+
+describe("The GuArnParameter class", () => {
+  it("should combine override and prop values", () => {
+    const app = new App();
+    const stack = new GuStack(app);
+
+    new GuArnParameter(stack, "Parameter", { description: "This is a test" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
+      Type: "String",
+      Description: "This is a test",
+      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
+      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
     });
   });
 });

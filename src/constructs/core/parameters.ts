@@ -92,8 +92,7 @@ export class GuArnParameter extends GuStringParameter {
     super(scope, id, {
       ...props,
       allowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
-      constraintDescription: "Must be a valid ARN",
-      default: "arn:partition:service:region:account-id:resource-id",
+      constraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
     });
   }
 }
