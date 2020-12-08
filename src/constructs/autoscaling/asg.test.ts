@@ -3,15 +3,12 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { App, Stack } from "@aws-cdk/core";
+import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { GuStack } from "../core/stack";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
 import { GuAutoScalingGroup } from "./asg";
-
-interface SynthedStack {
-  Resources: Record<string, { Properties: Record<string, unknown> }>;
-}
 
 describe("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {

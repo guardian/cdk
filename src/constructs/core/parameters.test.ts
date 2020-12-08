@@ -1,6 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { App, Stack } from "@aws-cdk/core";
+import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { Stage, Stages } from "../../constants";
 import {
   GuAmiParameter,
@@ -13,10 +14,6 @@ import {
   GuVpcParameter,
 } from "./parameters";
 import { GuStack } from "./stack";
-
-interface SynthedStack {
-  Parameters: Record<string, { Properties: Record<string, unknown> }>;
-}
 
 describe("The GuStringParameter class", () => {
   it("should set the type to string", () => {

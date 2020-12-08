@@ -3,12 +3,9 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { App } from "@aws-cdk/core";
+import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { Stage, Stages } from "../../constants";
 import { GuStack } from "./stack";
-
-interface SynthedStack {
-  Parameters: Record<string, { Properties: Record<string, unknown> }>;
-}
 
 describe("The GuStack construct", () => {
   it("should have stack and stage parameters", () => {
