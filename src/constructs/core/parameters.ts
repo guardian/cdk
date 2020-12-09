@@ -102,7 +102,7 @@ export class GuArnParameter extends GuStringParameter {
 const s3BucketRegex = "(?!^(\\d{1,3}\\.){3}\\d{1,3}$)(^[a-z0-9]([a-z0-9-]*(\\.[a-z0-9])?)*$(?<!\\-))";
 export const s3ArnRegex = `arn:aws:s3:::${s3BucketRegex}*`;
 
-export class GuS3ArnParameter extends GuStringParameter {
+export class GuS3ObjectArnParameter extends GuStringParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...props,

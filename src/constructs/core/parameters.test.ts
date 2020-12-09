@@ -8,7 +8,7 @@ import {
   GuAmiParameter,
   GuArnParameter,
   GuInstanceTypeParameter,
-  GuS3ArnParameter,
+  GuS3ObjectArnParameter,
   GuSSMParameter,
   GuStackParameter,
   GuStageParameter,
@@ -209,12 +209,12 @@ describe("The GuArnParameter class", () => {
   });
 });
 
-describe("The GuS3ArnParameter class", () => {
+describe("The GuS3ObjectArnParameter class", () => {
   it("should constrain input to a S3 ARN allowed pattern", () => {
     const app = new App();
     const stack = new GuStack(app);
 
-    new GuS3ArnParameter(stack, "Parameter", { description: "This is a test" });
+    new GuS3ObjectArnParameter(stack, "Parameter", { description: "This is a test" });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
