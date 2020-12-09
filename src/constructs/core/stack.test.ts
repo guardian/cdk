@@ -88,59 +88,9 @@ describe("The GuStack construct", () => {
 
     expect(stack.app).toBe("MyApp");
   });
-
-  it("should create an app parameter and use that to tag the stack if the appParameter props is true", () => {
-    const stack = new GuStack(new App(), "Test", { appParameter: true });
-
-    new Role(stack, "MyRole", {
-      assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(json.Parameters.App).toEqual({
-      Description: "The name of the app",
-      Type: "String",
-    });
-
-    expect(stack).toHaveResource("AWS::IAM::Role", {
-      Tags: [
-        {
-          Key: "App",
-          Value: {
-            Ref: "App",
-          },
-        },
-        {
-          Key: "Stack",
-          Value: {
-            Ref: "Stack",
-          },
-        },
-        {
-          Key: "Stage",
-          Value: {
-            Ref: "Stage",
-          },
-        },
-      ],
-    });
-  });
-
-  it("should return a value when app is accessed and appParameter is set", () => {
-    const stack = new GuStack(new App(), "Test", { appParameter: true });
-
-    expect(() => stack.app).not.toThrowError();
-  });
-
   it("should return an error when app is accessed and no app is set", () => {
     const stack = new GuStack(new App(), "Test");
 
     expect(() => stack.app).toThrowError("App is not set");
-  });
-
-  it("should throw an error if both app and appParameter provided", () => {
-    expect(() => new GuStack(new App(), "Test", { app: "test", appParameter: true })).toThrowError(
-      "Cannot provide both app and appParameter"
-    );
   });
 });
