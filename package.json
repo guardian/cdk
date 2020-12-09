@@ -9,6 +9,7 @@
     "format": "prettier --write \"(src|test)/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
+    "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepublish": "tsc",
     "release": "np --no-yarn --branch main"
   },
