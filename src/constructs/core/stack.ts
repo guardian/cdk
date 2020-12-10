@@ -7,8 +7,16 @@ export interface GuStackProps extends StackProps {
 }
 
 export class GuStack extends Stack {
-  protected stage: GuStageParameter;
-  protected stack: GuStackParameter;
+  protected _stage: GuStageParameter;
+  protected _stack: GuStackParameter;
+
+  get stage(): string {
+    return this._stage.valueAsString;
+  }
+
+  get stack(): string {
+    return this._stack.valueAsString;
+  }
 
   private _app: string | undefined;
 
@@ -25,11 +33,11 @@ export class GuStack extends Stack {
   constructor(app: App, id?: string, props?: GuStackProps) {
     super(app, id, props);
 
-    this.stage = new GuStageParameter(this);
-    this.stack = new GuStackParameter(this);
+    this._stage = new GuStageParameter(this);
+    this._stack = new GuStackParameter(this);
 
-    Tags.of(this).add("Stack", this.stack.valueAsString);
-    Tags.of(this).add("Stage", this.stage.valueAsString);
+    Tags.of(this).add("Stack", this.stack);
+    Tags.of(this).add("Stage", this.stage);
 
     if (props?.app) {
       this._app = props.app;
