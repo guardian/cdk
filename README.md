@@ -10,7 +10,7 @@ You can read more about it in the [aws-cdk README](https://github.com/aws/aws-cd
 
 ## Architecture
 
-Read more about constructs, patterns and other architectural decisions in (docs)[docs]
+Read more about constructs, patterns and other architectural decisions in [docs](docs)
 
 ### Patterns
 
