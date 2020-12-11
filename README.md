@@ -8,20 +8,25 @@ Welcome to the Guardian CDK library! This library contains a number of reusable 
 
 You can read more about it in the [aws-cdk README](https://github.com/aws/aws-cdk).
 
-## Patterns
+## Architecture
+
+Read more about constructs, patterns and other architectural decisions in (docs)[docs]
+
+### Patterns
 
 Patterns are high level classes which compose a number of constructs to produce standard architectures. For example, you should be able to get all of the resources you need to deploy a new lambda function from one `GuLambdaStack` class. We're still working on these right now but hope to start bringing you
 some of the most common Guardian stacks soon!
 
 Patterns should be your default entry point to this library.
 
-## Constructs
+### Constructs
 
 Constructs are lower level classes which will create one or more resources to produce one element of a stack. For example, the `GuDatabaseInstance` will create an RDS instance as well as a parameter group, if required. This library defines a number of constructs which are combined to create the higher level patterns.
 
 If there is a pattern available for your use case, prefer to use that over composing constructs yourself. We welcome feedback and/or PRs to extend the functionality of patterns. Where you need to do something outside of currently available patterns, you can use the constructs to provide some level of abstraction. In this case, consider whether it's worth defining a pattern.
 
 ## Useful commands
+
 We follow the [`script/task`](https://github.com/github/scripts-to-rule-them-all) pattern,
 find useful scripts within the [`script`](./script) directory for common tasks.
 
@@ -33,6 +38,7 @@ find useful scripts within the [`script`](./script) directory for common tasks.
 - `./script/release` to release a new version to NPM
 
 There are also some other commands defined in `package.json`:
+
 - `npm run lint --fix` attempt to autofix any linter errors
 - `npm run format` format the code using Prettier
 - `npm run watch` watch for changes and compile
@@ -55,44 +61,9 @@ yarn add @guardian/cdk
 
 Patterns can be imported from the top level of the library (e.g. `import { InstanceRole } from "@guardian/cdk";`) while constructs must be imported from their construct directory (e.g. `import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";`)
 
-### AWS Library Versions
-
-Any versions of the `@aws-cdk` libraries that you have installed in your project must be the same version as those used in the `@guardian/cdk` library.
-
-### Profile
-
-You may need to set the profile value in the `cdk.json` file to a value which does not exist (e.g. `does-not-exist`).
-This is a workaround to a known
-[issue](https://github.com/aws/aws-cdk/issues/7849) where expired credentials
-cause an error when running the `cdk synth` command. As we don't (yet) use any
-features which require connecting to an account this does not break anything but
-in the future we may actually require valid credentials to generate the
-cloudformation.
-
-## Starting a new CDK project
-
-The [AWS CDK CLI](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-typescript.html) provides a command to generate
-a starter project. From there, you can install this library and get started defining your new stack.
-
-The [Guardian CDK CLI](https://github.com/guardian/cdk-cli) also provides some tooling, currently focused on migration
-but eventually for setting up new stacks too.
-
-## Migration
-
-You can read more about migrating from Cloudformation to CDK in [MIGRATING.md](MIGRATING.md)
-
-## Testing
-
-For unit testing, the two key strategies are direct assertions and snapshot tests. When testing constructs, prefer using direct asserts while for patterns, make greater use of snapshot testing. For examples of these two approaches see [src/constructs/autoscaling/asg.test.ts](src/constructs/autoscaling/asg.test.ts) and [src/patterns/instance-role.test.ts](src/patterns/instance-role.test.ts) respectively.
+There are more details on using the CDK library in [docs](docs)
 
 ## Releasing
 
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
 To release a new version, run `./script/release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
-
-## Yarn
-
-This repository uses npm as attempts to move to `yarn` have highlighted issues including those below:
-
-- `yarn login` still prompts for a password at release time which doesn't work with `np`
-- publishing with `yarn` leaves only the `index.js` file in the `lib` directory
