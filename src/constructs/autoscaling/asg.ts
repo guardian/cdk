@@ -53,8 +53,6 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
 
-    if (props.overrideId) {
-      cfnAsg.overrideLogicalId(id);
-    }
+    if (props.overrideId) cfnAsg.overrideLogicalId(id);
   }
 }

@@ -48,34 +48,32 @@ export class GuLogShippingPolicy extends GuPolicy {
   }
 }
 
+export const allowSSMRunCommandPolicyStatement = new PolicyStatement({
+  effect: Effect.ALLOW,
+  actions: [
+    "ec2messages:AcknowledgeMessage",
+    "ec2messages:DeleteMessage",
+    "ec2messages:FailMessage",
+    "ec2messages:GetEndpoint",
+    "ec2messages:GetMessages",
+    "ec2messages:SendReply",
+    "ssm:UpdateInstanceInformation",
+    "ssm:ListInstanceAssociations",
+    "ssm:DescribeInstanceProperties",
+    "ssm:DescribeDocumentParameters",
+    "ssmmessages:CreateControlChannel",
+    "ssmmessages:CreateDataChannel",
+    "ssmmessages:OpenControlChannel",
+    "ssmmessages:OpenDataChannel",
+  ],
+  resources: ["*"],
+});
+
 export class GuSSMRunCommandPolicy extends GuPolicy {
-  // TODO: Is it worth extracting some of these defaults to make them easier to use
-  //       in their own right elsewhere
   private static getDefaultProps(): Partial<PolicyProps> {
     return {
       policyName: "ssm-run-command-policy",
-      statements: [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: [
-            "ec2messages:AcknowledgeMessage",
-            "ec2messages:DeleteMessage",
-            "ec2messages:FailMessage",
-            "ec2messages:GetEndpoint",
-            "ec2messages:GetMessages",
-            "ec2messages:SendReply",
-            "ssm:UpdateInstanceInformation",
-            "ssm:ListInstanceAssociations",
-            "ssm:DescribeInstanceProperties",
-            "ssm:DescribeDocumentParameters",
-            "ssmmessages:CreateControlChannel",
-            "ssmmessages:CreateDataChannel",
-            "ssmmessages:OpenControlChannel",
-            "ssmmessages:OpenDataChannel",
-          ],
-          resources: ["*"],
-        }),
-      ],
+      statements: [allowSSMRunCommandPolicyStatement],
     };
   }
 
@@ -91,20 +89,20 @@ export interface GuGetS3ObjectPolicyProps extends GuPolicyProps {
   bucket: string;
 }
 
+export const allowGetObjectPolicyStatement = (bucket: string) => ({
+  statements: [
+    new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: ["s3:GetObject"],
+      resources: [`arn:aws:s3:::${bucket}/*`],
+    }),
+  ],
+});
+
 export class GuGetS3ObjectPolicy extends GuPolicy {
   constructor(scope: GuStack, id: string, props: GuGetS3ObjectPolicyProps) {
     // TODO validate `props.bucket` based on the rules defined here https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-s3-bucket-naming-requirements.html
 
-    const policy = {
-      statements: [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["s3:GetObject"],
-          resources: [`arn:aws:s3:::${props.bucket}/*`],
-        }),
-      ],
-    };
-
-    super(scope, id, { ...policy, ...props });
+    super(scope, id, { ...allowGetObjectPolicyStatement(props.bucket), ...props });
   }
 }
