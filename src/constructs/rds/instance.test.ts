@@ -15,12 +15,15 @@ describe("The GuDatabaseInstance class", () => {
     privateSubnetIds: [""],
   });
 
-  it("removes the db prefix from the input instance type", () => {
+  it("removes the db prefix from the instanceType prop (before CDK adds it back again)", () => {
     const app = new App();
     const stack = new GuStack(app);
 
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
+      // When you pass an instanceType to the DatabaseInstance class, the db. prefix is added automagically
+      // regardless of whether it exists already. The GuDatabaseInstance class contains some functionality
+      // to remove this where it exists on the input value to ensure it doesn't get included twice
       instanceType: "db.t3.small",
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
