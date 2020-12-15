@@ -20,6 +20,7 @@ export interface GuAutoScalingGroupProps
   userData: string;
   securityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
+  overrideId: boolean;
 }
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
@@ -51,7 +52,9 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // leaves it to the default value, which is actually false.
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
-    // TODO: I think this should be behind an option prop
-    cfnAsg.overrideLogicalId(id);
+
+    if (props.overrideId) {
+      cfnAsg.overrideLogicalId(id);
+    }
   }
 }
