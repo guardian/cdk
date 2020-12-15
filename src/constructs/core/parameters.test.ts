@@ -4,14 +4,18 @@ import { App, Stack } from "@aws-cdk/core";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { Stage, Stages } from "../../constants";
 import {
+  arnRegex,
   GuAmiParameter,
+  GuArnParameter,
   GuInstanceTypeParameter,
+  GuS3ObjectArnParameter,
   GuSSMParameter,
   GuStackParameter,
   GuStageParameter,
   GuStringParameter,
   GuSubnetListParameter,
   GuVpcParameter,
+  s3ArnRegex,
 } from "./parameters";
 import { GuStack } from "./stack";
 
@@ -178,5 +182,55 @@ describe("The GuAmiParameter class", () => {
       Type: "AWS::EC2::Image::Id",
       Description: "This is a test",
     });
+  });
+});
+
+describe("The GuArnParameter class", () => {
+  it("should constrain input to an ARN allowed pattern", () => {
+    const app = new App();
+    const stack = new GuStack(app);
+
+    new GuArnParameter(stack, "Parameter", { description: "This is a test" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
+      Type: "String",
+      Description: "This is a test",
+      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
+      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+    });
+  });
+
+  it("should successfully regex against valid ARNs", () => {
+    const regex = new RegExp(arnRegex);
+    expect(regex.test("fooooo")).toBeFalsy();
+    expect(regex.test("arn:aws:rds:us-east-2:123456789012:db:my-mysql-instance-1")).toBeTruthy();
+  });
+});
+
+describe("The GuS3ObjectArnParameter class", () => {
+  it("should constrain input to a S3 ARN allowed pattern", () => {
+    const app = new App();
+    const stack = new GuStack(app);
+
+    new GuS3ObjectArnParameter(stack, "Parameter", { description: "This is a test" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
+      Type: "String",
+      Description: "This is a test",
+      AllowedPattern: "arn:aws:s3:::(?!^(\\d{1,3}\\.){3}\\d{1,3}$)(^[a-z0-9]([a-z0-9-]*(\\.[a-z0-9])?)*$(?<!\\-))*",
+      ConstraintDescription:
+        "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
+    });
+  });
+
+  it("should successfully regex against valid s3 ARNs only", () => {
+    const regex = new RegExp(s3ArnRegex);
+    expect(regex.test("fooooo")).toBeFalsy();
+    expect(regex.test("arn:aws:rds:us-east-2:123456789012:db:my-mysql-instance-1")).toBeFalsy();
+    expect(regex.test("arn:aws:s3:::examplebucket/my-data/sales-export-2019-q4.json")).toBeTruthy();
   });
 });

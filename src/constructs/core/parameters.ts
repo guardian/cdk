@@ -86,3 +86,29 @@ export class GuAmiParameter extends GuParameter {
     });
   }
 }
+
+export const arnRegex = "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*";
+
+export class GuArnParameter extends GuStringParameter {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+    super(scope, id, {
+      ...props,
+      allowedPattern: arnRegex,
+      constraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+    });
+  }
+}
+
+const s3BucketRegex = "(?!^(\\d{1,3}\\.){3}\\d{1,3}$)(^[a-z0-9]([a-z0-9-]*(\\.[a-z0-9])?)*$(?<!\\-))";
+export const s3ArnRegex = `arn:aws:s3:::${s3BucketRegex}*`;
+
+export class GuS3ObjectArnParameter extends GuStringParameter {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+    super(scope, id, {
+      ...props,
+      allowedPattern: s3ArnRegex,
+      constraintDescription:
+        "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
+    });
+  }
+}

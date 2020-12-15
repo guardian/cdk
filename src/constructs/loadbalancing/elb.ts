@@ -20,7 +20,7 @@ import type { GuStack } from "../core";
 
 export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
   constructor(scope: GuStack, id: string, props: ApplicationLoadBalancerProps) {
-    super(scope, id, { ...props });
+    super(scope, id, props);
 
     // TODO: Maybe we should put these behind an option(s) so that the user
     // can decide if they want/need it

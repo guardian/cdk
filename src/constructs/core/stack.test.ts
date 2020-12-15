@@ -53,4 +53,44 @@ describe("The GuStack construct", () => {
       ],
     });
   });
+
+  it("should apply the app tag to resources added to it if provided", () => {
+    const stack = new GuStack(new App(), "Test", { app: "MyApp" });
+
+    new Role(stack, "MyRole", {
+      assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
+    });
+
+    expect(stack).toHaveResource("AWS::IAM::Role", {
+      Tags: [
+        {
+          Key: "App",
+          Value: "MyApp",
+        },
+        {
+          Key: "Stack",
+          Value: {
+            Ref: "Stack",
+          },
+        },
+        {
+          Key: "Stage",
+          Value: {
+            Ref: "Stage",
+          },
+        },
+      ],
+    });
+  });
+
+  it("should return the correct app value when app is set", () => {
+    const stack = new GuStack(new App(), "Test", { app: "MyApp" });
+
+    expect(stack.app).toBe("MyApp");
+  });
+  it("should return an error when app is accessed and no app is set", () => {
+    const stack = new GuStack(new App(), "Test");
+
+    expect(() => stack.app).toThrowError("App is not set");
+  });
 });
