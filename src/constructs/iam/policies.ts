@@ -79,8 +79,7 @@ export class GuSSMRunCommandPolicy extends GuPolicy {
     };
   }
 
-  // TODO: It's not possible to use the default id as props are required. Should we change this?
-  constructor(scope: GuStack, id: string = "SSMRunCommandPolicy", props: GuPolicyProps) {
+  constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, {
       ...GuSSMRunCommandPolicy.getDefaultProps(),
       ...props,

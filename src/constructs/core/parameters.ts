@@ -40,8 +40,6 @@ export class GuStackParameter extends GuParameter {
   }
 }
 
-// TODO: Is there a way of removing default props if they weren't implemented before?
-//       Should that be allowed even if it is possible?
 export class GuInstanceTypeParameter extends GuParameter {
   constructor(scope: GuStack, id: string = "InstanceType", props: GuParameterProps = {}) {
     super(scope, id, {
