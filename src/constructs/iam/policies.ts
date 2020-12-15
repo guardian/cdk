@@ -25,8 +25,7 @@ export interface GuLogShippingPolicyProps extends GuPolicyProps {
   kinesisStreamName: string;
 }
 
-// TODO: Should the constructor require a stack (which so far is the only thing it ever will be) or
-// should we pass through account and region explicitly?
+// This interface is inconsistent. Should we add the ID here?
 export class GuLogShippingPolicy extends GuPolicy {
   private static getDefaultProps(scope: GuStack, props: GuLogShippingPolicyProps): Partial<PolicyProps> {
     return {
@@ -80,7 +79,7 @@ export class GuSSMRunCommandPolicy extends GuPolicy {
     };
   }
 
-  // TODO: It's not possible to use the default id if you want to pass props in, should it?
+  // TODO: It's not possible to use the default id as props are required. Should we change this?
   constructor(scope: GuStack, id: string = "SSMRunCommandPolicy", props: GuPolicyProps) {
     super(scope, id, {
       ...GuSSMRunCommandPolicy.getDefaultProps(),
