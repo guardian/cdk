@@ -114,19 +114,29 @@ describe("The GuAutoScalingGroup", () => {
   test("does not include the UpdatePolicy property", () => {
     const app = new App();
     const stack = new GuStack(app);
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources.AutoscalingGroup)).not.toContain("UpdatePolicy");
   });
 
-  test("overrides the id to remove the 8 digit value added automagically", () => {
+  test("overrides the id with the overrideId prop set to true", () => {
+    const app = new App();
+    const stack = new GuStack(app);
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, overrideId: true });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Resources)).toContain("AutoscalingGroup");
+  });
+
+  test("does not override the id by default", () => {
     const app = new App();
     const stack = new GuStack(app);
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(Object.keys(json.Resources)).toContain("AutoscalingGroup");
+    expect(Object.keys(json.Resources)).not.toContain("AutoscalingGroup");
   });
 });

@@ -20,7 +20,7 @@ export interface GuAutoScalingGroupProps
   userData: string;
   securityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
-  overrideId: boolean;
+  overrideId?: boolean;
 }
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
