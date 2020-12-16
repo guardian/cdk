@@ -7,7 +7,9 @@ export interface GuGetS3ObjectPolicyProps extends GuPolicyProps {
   bucket: string;
 }
 
-export const allowGetObjectPolicyStatement = (bucket: string) => ({
+export const allowGetObjectPolicyStatement: (bucket: string) => { statements: PolicyStatement[] } = (
+  bucket: string
+) => ({
   statements: [
     new PolicyStatement({
       effect: Effect.ALLOW,
