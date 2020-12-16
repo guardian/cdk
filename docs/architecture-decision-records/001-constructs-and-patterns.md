@@ -1,5 +1,3 @@
-**TODO: Write this in full sentences**
-
 # Constructs and Patterns
 
 ## Status
@@ -12,32 +10,36 @@ proposed
 
 <!--- What is the issue that we're seeing that is motivating this decision or change? -->
 
-- It's possible to abstract at many levels.
-- AWS already provide multiple levels:
-  - CfnComponent - maps 1-to-1 with a cfn resource
-  - Construct - create 1 to many resources but all grouped on a similar concept. e.g an RDS instance construct may also create a parameters object which it references, rather than requiring it to be defined separately.
-- Plus lots of open source patterns which group Constructs to provide an templated stacks
-  - e.g. an ec2 app stack might give you ASG, LB, SG
-  - likely composed of multiple constructs under the hood
+The AWS CDK provides components with two levels of abstraction. CfnComponents map directly to cloudformation resources whilst constructs are a higher abstraction which may create multiple related resources. For example, the `AutoScalingGroup` construct will also create `LaunchConfig` and `SecurityGroup` resources. This is a useful abstraction as it allows you to define all the components required for a particular concept in one place.
+
+Further to this, various patterns are available - both AWS supported and open source. These patterns define an entire stack, based around common template. For example, a `EC2App` pattern might provide an `AutoScalingGroup`, `LoadBalancer` and the required `Roles` and `SecurityGroups`. These patterns are likely composed of multiple constrcuts (rather than CfnComponents) under-the-hood.
+
+This library aims to standardise and simplify the process of setting up Guardian stacks by providing reusable components but what level(s) of abstraction should be provided?
 
 ## Positions
 
 <!--- What are the differing positions or proposals on this issue? -->
 
-- Provide constructs and patterns
-- Any other option?
+1. Provide Constructs only
+
+   Constructs would give teams components they can use to get sensbile Guardian settings by default but with the flexibility to architect there stacks however they choose.
+
+2. Provide both Constructs and Patterns
+
+   Providing both patterns and constructs gives teams the flexibility to use constructs where required but also the ability to standup standard stacks with minimal effort. It also brings even greater standardisation and allows more complex features to be built in "for free".
 
 ## Decision
 
 <!-- What is the change that we're proposing and/or doing? -->
 
-- Produce both constructs and patterns
-- Patterns for common Guardian stacks
-- Utility constructs covering common patterns for each construct (e.g. policy -> SSM policy, S3Artifact Policy, LogShippingPolicy)
+This library should define a number of Guardian flavoured constructs which extend those provided by the AWS CDK library with Guardian defaults baked in. For example, a `GuAutoScalingGroup` and `GuApplicationLoadBalancer`.
+
+Where those constructs are used in multiple ways, it should provide utlity classes for any common usages. For example, for the `Policy` constructs: `GuSSMPolicy`, `GuLogShippingPolicy` and `GuGetS3ObjectPolicy`
+
+Built on top of those, it should also provide a number of patterns to cover common Guardian stack architectures. For example, `GuEC2App` and `GuLambdaApp` patterns. These patterns should be the encouraged entry point to the library, with the constructs only used outside of standard cases.
 
 ## Consequences
 
 <!-- What becomes easier or more difficult to do because of this change? -->
 
-- Clear definition makes library use and maintainence easier.
-- Some difficult where components are across the boundary?
+Providing patterns makes the developer experience far quicker and simpler in cases where developers are standing up standard stack types. From a maintainence viewpoint, it adds some complexity in designing, building and maintaing the patterns.
