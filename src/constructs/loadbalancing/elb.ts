@@ -15,17 +15,20 @@ import {
 import type { GuStack } from "../core";
 
 // TODO: By default, an application load balancer has deletion protection set to false.
-// We probably want to protect this load balancer as much as possible
-// should we set it to true instead?
+//  We probably want to protect this load balancer as much as possible
+//  should we set it to true instead?
+
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
+  overrideId?: boolean;
+}
 
 export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
-  constructor(scope: GuStack, id: string, props: ApplicationLoadBalancerProps) {
+  constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
     super(scope, id, props);
 
-    // TODO: Maybe we should put these behind an option(s) so that the user
-    // can decide if they want/need it
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
-    cfnLb.overrideLogicalId(id);
+
+    if (props.overrideId) cfnLb.overrideLogicalId(id);
 
     cfnLb.addPropertyDeletionOverride("Type");
   }
@@ -39,9 +42,7 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
   constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
     super(scope, id, props);
 
-    if (props.overrideId) {
-      (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
-    }
+    if (props.overrideId) (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
   }
 }
 
@@ -58,8 +59,6 @@ export class GuApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     super(scope, id, { ...GuApplicationListener.defaultProps, ...props });
 
-    if (props.overrideId) {
-      (this.node.defaultChild as CfnListener).overrideLogicalId(id);
-    }
+    if (props.overrideId) (this.node.defaultChild as CfnListener).overrideLogicalId(id);
   }
 }

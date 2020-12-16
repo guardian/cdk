@@ -14,19 +14,28 @@ describe("The GuApplicationLoadBalancer class", () => {
     publicSubnetIds: [""],
   });
 
-  test("overrides the id", () => {
+  test("overrides the id with the overrideId prop", () => {
     const app = new App();
     const stack = new GuStack(app);
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
   });
 
-  test("deletes the Type property", () => {
+  test("has an auto-generated ID by default", () => {
     const app = new App();
     const stack = new GuStack(app);
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
+  });
+
+  test("deletes the Type property", () => {
+    const app = new App();
+    const stack = new GuStack(app);
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources.ApplicationLoadBalancer.Properties)).not.toContain("Type");
