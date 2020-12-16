@@ -33,13 +33,3 @@ Patterns can be imported from the top level of the library (e.g. `import { Insta
 ## AWS Library Versions
 
 Any versions of the `@aws-cdk` libraries that you have installed in your project must be the same version as those used in the `@guardian/cdk` library.
-
-## Profile
-
-You may need to set the profile value in the `cdk.json` file to a value which does not exist (e.g. `does-not-exist`).
-This is a workaround to a known
-[issue](https://github.com/aws/aws-cdk/issues/7849) where expired credentials
-cause an error when running the `cdk synth` command. As we don't (yet) use any
-features which require connecting to an account this does not break anything but
-in the future we may actually require valid credentials to generate the
-cloudformation.
