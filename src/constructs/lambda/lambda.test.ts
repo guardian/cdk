@@ -1,3 +1,4 @@
+import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
@@ -91,6 +92,8 @@ describe("The GuLambdaFunction class", () => {
       Description: "this is a test2",
       Name: "api2",
     });
+
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
   it("should give the function read permissions to the required bucket", () => {
