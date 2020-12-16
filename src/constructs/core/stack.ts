@@ -7,8 +7,9 @@ export interface GuStackProps extends StackProps {
 }
 
 export class GuStack extends Stack {
-  protected _stage: GuStageParameter;
-  protected _stack: GuStackParameter;
+  private readonly _stage: GuStageParameter;
+  private readonly _stack: GuStackParameter;
+  private readonly _app: string | undefined;
 
   get stage(): string {
     return this._stage.valueAsString;
@@ -17,8 +18,6 @@ export class GuStack extends Stack {
   get stack(): string {
     return this._stack.valueAsString;
   }
-
-  private _app: string | undefined;
 
   get app(): string {
     if (this._app) {
