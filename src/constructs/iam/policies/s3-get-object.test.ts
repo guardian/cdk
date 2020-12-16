@@ -8,7 +8,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
   it("sets default props", () => {
     const stack = new GuStack(new App());
 
-    const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucket: "test" });
+    const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test" });
 
     // IAM Policies need to be attached to a role, group or user to be created in a stack
     s3Policy.attachToRole(
@@ -34,7 +34,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
   it("merges defaults and passed in props", () => {
     const stack = new GuStack(new App());
 
-    const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucket: "test", policyName: "test" });
+    const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
 
     // IAM Policies need to be attached to a role, group or user to be created in a stack
     s3Policy.attachToRole(

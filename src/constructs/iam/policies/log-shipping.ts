@@ -5,7 +5,7 @@ import type { GuPolicyProps } from "./base-policy";
 import { GuPolicy } from "./base-policy";
 
 export interface GuLogShippingPolicyProps extends GuPolicyProps {
-  kinesisStreamName: string;
+  loggingStreamName: string;
 }
 
 export class GuLogShippingPolicy extends GuPolicy {
@@ -16,7 +16,7 @@ export class GuLogShippingPolicy extends GuPolicy {
         new PolicyStatement({
           effect: Effect.ALLOW,
           actions: ["kinesis:Describe*", "kinesis:Put*"],
-          resources: [`arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.kinesisStreamName}`],
+          resources: [`arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.loggingStreamName}`],
         }),
       ],
     };

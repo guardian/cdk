@@ -1,12 +1,10 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../constructs/core";
-import type { GuPolicy } from "../constructs/iam";
+import type { GuGetS3ObjectPolicyProps, GuLogShippingPolicyProps, GuPolicy } from "../constructs/iam";
 import { GuGetS3ObjectPolicy, GuLogShippingPolicy, GuRole, GuSSMRunCommandPolicy } from "../constructs/iam";
 
-export interface InstanceRoleProps {
-  artifactBucket: string;
+interface InstanceRoleProps extends GuGetS3ObjectPolicyProps, Partial<GuLogShippingPolicyProps> {
   additionalPolicies?: GuPolicy[];
-  loggingStreamName?: string;
 }
 
 export class InstanceRole extends GuRole {
@@ -20,15 +18,10 @@ export class InstanceRole extends GuRole {
     });
 
     this.policies = [
-      new GuSSMRunCommandPolicy(scope, "SSMRunCommandPolicy", { overrideId: true }),
-      new GuGetS3ObjectPolicy(scope, "GetDistributablesPolicy", { overrideId: true, bucket: props.artifactBucket }),
+      new GuSSMRunCommandPolicy(scope),
+      new GuGetS3ObjectPolicy(scope, "GetDistributablesPolicy", props),
       ...(props.loggingStreamName
-        ? [
-            new GuLogShippingPolicy(scope, "LogShippingPolicy", {
-              overrideId: true,
-              kinesisStreamName: props.loggingStreamName,
-            }),
-          ]
+        ? [new GuLogShippingPolicy(scope, "LogShippingPolicy", props as GuLogShippingPolicyProps)]
         : []),
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
