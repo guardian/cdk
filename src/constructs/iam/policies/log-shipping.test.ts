@@ -8,7 +8,7 @@ describe("The GuLogShippingPolicy class", () => {
   it("sets default props", () => {
     const stack = new GuStack(new App());
 
-    const logShippingPolicy = new GuLogShippingPolicy(stack, "SSMRunCommandPolicy", { kinesisStreamName: "test" });
+    const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", { kinesisStreamName: "test" });
 
     // IAM Policies need to be attached to a role, group or user to be created in a stack
     logShippingPolicy.attachToRole(
@@ -50,7 +50,7 @@ describe("The GuLogShippingPolicy class", () => {
   it("merges defaults and passed in props", () => {
     const stack = new GuStack(new App());
 
-    const logShippingPolicy = new GuLogShippingPolicy(stack, "SSMRunCommandPolicy", {
+    const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", {
       kinesisStreamName: "test",
       policyName: "test",
     });
