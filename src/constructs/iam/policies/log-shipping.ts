@@ -8,7 +8,6 @@ export interface GuLogShippingPolicyProps extends GuPolicyProps {
   kinesisStreamName: string;
 }
 
-// This interface is inconsistent. Should we add the ID here?
 export class GuLogShippingPolicy extends GuPolicy {
   private static getDefaultProps(scope: GuStack, props: GuLogShippingPolicyProps): PolicyProps {
     return {
