@@ -29,18 +29,22 @@ export class GuStack extends Stack {
     }
   }
 
+  protected addTag(key: string, value: string, applyToLaunchedInstances: boolean = true): void {
+    Tags.of(this).add(key, value, { applyToLaunchedInstances });
+  }
+
   constructor(app: App, id?: string, props?: GuStackProps) {
     super(app, id, props);
 
     this._stage = new GuStageParameter(this);
     this._stack = new GuStackParameter(this);
 
-    Tags.of(this).add("Stack", this.stack);
-    Tags.of(this).add("Stage", this.stage);
+    this.addTag("Stack", this.stack);
+    this.addTag("Stage", this.stage);
 
     if (props?.app) {
       this._app = props.app;
-      Tags.of(this).add("App", props.app);
+      this.addTag("App", props.app);
     }
   }
 }
