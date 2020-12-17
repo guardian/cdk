@@ -7,7 +7,7 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 ROOT_DIR="${DIR}/.."
 
 if [[ -f "${ROOT_DIR}/yarn.lock" ]]; then
-  echo -e "${RED}There is a yarn.lock file when this is an npm directory!"
+  echo -e "${RED}There is a yarn.lock file when this is an npm project!"
   echo -e "Location: ${ROOT_DIR}/yarn.lock"
   echo -e "This can cause issues with building and maintaining this library, please remove before continuing${PLAIN}"
   exit 1
