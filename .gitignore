@@ -7,3 +7,5 @@ lib
 # NPM / Yarn
 yarn-error.log
 node_modules
+# This repository currently uses npm over yarn due to some complications in releasing the library with yarn
+yarn.lock
