@@ -33,7 +33,7 @@ export class GuSSMRunCommandPolicy extends GuPolicy {
     };
   }
 
-  constructor(scope: GuStack, id: string = "SSMRunCommandPolicy", props: GuPolicyProps = { overrideId: false }) {
+  constructor(scope: GuStack, id: string = "SSMRunCommandPolicy", props?: GuPolicyProps) {
     super(scope, id, {
       ...GuSSMRunCommandPolicy.getDefaultProps(),
       ...props,
