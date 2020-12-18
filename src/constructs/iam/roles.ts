@@ -7,12 +7,10 @@ export interface GuRoleProps extends RoleProps {
 }
 
 export class GuRole extends Role {
-  private static defaultProps: Partial<GuRoleProps> = {};
-
   private child: CfnRole;
 
   constructor(scope: GuStack, id: string, props: GuRoleProps) {
-    super(scope, id, { ...GuRole.defaultProps, ...props });
+    super(scope, id, props);
 
     this.child = this.node.defaultChild as CfnRole;
     if (props.overrideId) {
