@@ -6,8 +6,8 @@ export interface GuPolicyProps extends PolicyProps {
   overrideId?: boolean;
 }
 
-export class GuPolicy extends Policy {
-  constructor(scope: GuStack, id: string, props: GuPolicyProps) {
+export abstract class GuPolicy extends Policy {
+  protected constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, props);
 
     if (props.overrideId) {
