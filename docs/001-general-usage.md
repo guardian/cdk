@@ -33,3 +33,7 @@ Patterns can be imported from the top level of the library (e.g. `import { Insta
 ## AWS Library Versions
 
 Any versions of the `@aws-cdk` libraries that you have installed in your project must be the same version as those used in the `@guardian/cdk` library.
+
+## Synthesising
+
+The `cdk synth` command can be used to generate cloudformation from CDK defintions. This will, by default, generate JSON in the `cdk.out` directory. Apps written in typescript will need to either be built first so the javascript can be passed to the app value, or can be passed in directly using `ts-node` (e.g. `--app="ts-node ./bin/my-app.ts"`). For apps with a single stack, the generated yaml will also be printed in the console. For app with multiple stacks, you can specify a stack to see the yaml output. This yaml can then be directed to a file if desired.

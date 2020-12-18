@@ -20,7 +20,7 @@ The lib directory contains all of the stack defitions. For single apps, these fi
 
 **cdk.out**
 
-This directory is where the synthesised cloudformation will be written to.
+This directory is where the synthesised cloudformation will be written to in JSON format.
 
 **cdk.json**
 
