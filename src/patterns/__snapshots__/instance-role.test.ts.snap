@@ -88,6 +88,10 @@ Object {
         "Path": "/",
         "Tags": Array [
           Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -209,6 +213,10 @@ Object {
         },
         "Path": "/",
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
           Object {
             "Key": "Stack",
             "Value": Object {
@@ -370,6 +378,10 @@ Object {
         },
         "Path": "/",
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
           Object {
             "Key": "Stack",
             "Value": Object {

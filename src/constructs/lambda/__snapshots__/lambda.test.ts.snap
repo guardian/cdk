@@ -93,6 +93,10 @@ Object {
         "Runtime": "nodejs12.x",
         "Tags": Array [
           Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -137,6 +141,10 @@ Object {
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
           Object {
             "Key": "Stack",
             "Value": Object {
@@ -209,6 +217,10 @@ Object {
         "Name": "api2",
         "Tags": Array [
           Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -224,7 +236,7 @@ Object {
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "lambdaapi2ANYApiPermissionTestlambdaapi259EAFB9DANY48E96467": Object {
+    "lambdaapi2ANYApiPermissionTestTestlambdaapi29FEAC710ANYB2B37DB0": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -261,7 +273,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapi2ANYApiPermissionlambdaapi259EAFB9DANY6FDE4CEE": Object {
+    "lambdaapi2ANYApiPermissionTestlambdaapi29FEAC710ANY878BC567": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -389,6 +401,10 @@ Object {
         ],
         "Tags": Array [
           Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -404,7 +420,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB9373147f6f95cb40b69dd906958d230d079f": Object {
+    "lambdaapi2Deployment4ECB93738ba48d7cb88b4c2b9ec5c442ee1c99e9": Object {
       "DependsOn": Array [
         "lambdaapi2proxyANY3F8E1D36",
         "lambdaapi2proxyE68FDFBC",
@@ -421,13 +437,17 @@ Object {
     "lambdaapi2DeploymentStageprodCC9E3016": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB9373147f6f95cb40b69dd906958d230d079f",
+          "Ref": "lambdaapi2Deployment4ECB93738ba48d7cb88b4c2b9ec5c442ee1c99e9",
         },
         "RestApiId": Object {
           "Ref": "lambdaapi239350ECC",
         },
         "StageName": "prod",
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
           Object {
             "Key": "Stack",
             "Value": Object {
@@ -484,7 +504,7 @@ Object {
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapi2proxyANYApiPermissionTestlambdaapi259EAFB9DANYproxy9E2764AE": Object {
+    "lambdaapi2proxyANYApiPermissionTestTestlambdaapi29FEAC710ANYproxy20D9E3C9": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -521,7 +541,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapi2proxyANYApiPermissionlambdaapi259EAFB9DANYproxyAD2B0773": Object {
+    "lambdaapi2proxyANYApiPermissionTestlambdaapi29FEAC710ANYproxy33429FF8": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -620,7 +640,7 @@ Object {
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiANYApiPermissionTestlambdaapiC0087213ANY5E7CDADF": Object {
+    "lambdaapiANYApiPermissionTestTestlambdaapi0E958EEBANY3DF279D1": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -657,7 +677,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiANYApiPermissionlambdaapiC0087213ANY629951AC": Object {
+    "lambdaapiANYApiPermissionTestlambdaapi0E958EEBANYA0BDE5E2": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -718,6 +738,10 @@ Object {
         "Name": "api",
         "Tags": Array [
           Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -763,6 +787,10 @@ Object {
         ],
         "Tags": Array [
           Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -778,7 +806,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B585cd631e09cd975e3e69d1ae39cb1f1c4c": Object {
+    "lambdaapiDeployment8E95B5854e05b687211f19a449136200fabf5846": Object {
       "DependsOn": Array [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -795,13 +823,17 @@ Object {
     "lambdaapiDeploymentStageprod9598BC2F": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B585cd631e09cd975e3e69d1ae39cb1f1c4c",
+          "Ref": "lambdaapiDeployment8E95B5854e05b687211f19a449136200fabf5846",
         },
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
         },
         "StageName": "prod",
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
           Object {
             "Key": "Stack",
             "Value": Object {
@@ -858,7 +890,7 @@ Object {
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiproxyANYApiPermissionTestlambdaapiC0087213ANYproxyB7FE8155": Object {
+    "lambdaapiproxyANYApiPermissionTestTestlambdaapi0E958EEBANYproxy716A4EB4": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -895,7 +927,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyANYApiPermissionlambdaapiC0087213ANYproxyAA2F1520": Object {
+    "lambdaapiproxyANYApiPermissionTestlambdaapi0E958EEBANYproxy81BB250D": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
