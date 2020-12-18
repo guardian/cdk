@@ -7,10 +7,8 @@ export interface GuPolicyProps extends PolicyProps {
 }
 
 export class GuPolicy extends Policy {
-  static defaultProps: Partial<GuPolicyProps> = {};
-
   constructor(scope: GuStack, id: string, props: GuPolicyProps) {
-    super(scope, id, { ...GuPolicy.defaultProps, ...props });
+    super(scope, id, props);
 
     if (props.overrideId) {
       const child = this.node.defaultChild as CfnPolicy;

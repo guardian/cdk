@@ -51,13 +51,8 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps {
 }
 
 export class GuApplicationListener extends ApplicationListener {
-  static defaultProps: Partial<GuApplicationListenerProps> = {
-    port: 443,
-    protocol: ApplicationProtocol.HTTPS,
-  };
-
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
-    super(scope, id, { ...GuApplicationListener.defaultProps, ...props });
+    super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
 
     if (props.overrideId) (this.node.defaultChild as CfnListener).overrideLogicalId(id);
   }
