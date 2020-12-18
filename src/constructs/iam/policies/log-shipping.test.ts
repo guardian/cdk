@@ -1,6 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuLogShippingPolicy } from "./log-shipping";
 
 describe("The GuLogShippingPolicy class", () => {
@@ -9,12 +8,7 @@ describe("The GuLogShippingPolicy class", () => {
 
     const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", { loggingStreamName: "test" });
 
-    // IAM Policies need to be attached to a role, group or user to be created in a stack
-    logShippingPolicy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, logShippingPolicy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyName: "log-shipping-policy",
@@ -54,12 +48,7 @@ describe("The GuLogShippingPolicy class", () => {
       policyName: "test",
     });
 
-    // IAM Policies need to be attached to a role, group or user to be created in a stack
-    logShippingPolicy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, logShippingPolicy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyName: "test",

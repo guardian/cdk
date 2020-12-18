@@ -1,6 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuGetS3ObjectPolicy } from "./s3-get-object";
 
 describe("The GuGetS3ObjectPolicy class", () => {
@@ -9,12 +8,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
 
     const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test" });
 
-    // IAM Policies need to be attached to a role, group or user to be created in a stack
-    s3Policy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, s3Policy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyDocument: {
@@ -35,12 +29,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
 
     const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
 
-    // IAM Policies need to be attached to a role, group or user to be created in a stack
-    s3Policy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, s3Policy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyName: "test",

@@ -1,6 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuSSMRunCommandPolicy } from "./ssm";
 
 describe("The GuSSMRunCommandPolicy class", () => {
@@ -9,12 +8,7 @@ describe("The GuSSMRunCommandPolicy class", () => {
 
     const ssmPolicy = new GuSSMRunCommandPolicy(stack, "SSMRunCommandPolicy", {});
 
-    // IAM Policies need to be attached to a role, group or user to be created in a stack
-    ssmPolicy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, ssmPolicy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyName: "ssm-run-command-policy",
@@ -53,12 +47,7 @@ describe("The GuSSMRunCommandPolicy class", () => {
       policyName: "test",
     });
 
-    // IAM Policies need to be attached to a role, group or user to be created in a stack
-    ssmPolicy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, ssmPolicy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyName: "test",
