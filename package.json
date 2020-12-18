@@ -11,7 +11,7 @@
     "test": "jest --detectOpenHandles --runInBand",
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepublish": "tsc",
-    "release": "np --no-yarn --branch main"
+    "release": "np minor --no-yarn --branch main"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.1",
