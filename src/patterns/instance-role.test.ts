@@ -12,7 +12,7 @@ describe("The InstanceRole construct", () => {
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
-    expect(stack).toCountResources("AWS::IAM::Policy", 3);
+    expect(stack).toCountResources("AWS::IAM::Policy", 4);
   });
 
   it("should create an additional logging policy if logging stream is specified", () => {
@@ -21,7 +21,7 @@ describe("The InstanceRole construct", () => {
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
-    expect(stack).toCountResources("AWS::IAM::Policy", 4);
+    expect(stack).toCountResources("AWS::IAM::Policy", 5);
   });
 
   it("should allow additional policies to be specified", () => {
@@ -34,6 +34,6 @@ describe("The InstanceRole construct", () => {
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
-    expect(stack).toCountResources("AWS::IAM::Policy", 4);
+    expect(stack).toCountResources("AWS::IAM::Policy", 5);
   });
 });
