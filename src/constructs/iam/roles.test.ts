@@ -1,14 +1,13 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
-import { App } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuStack } from "../core";
 import { GuRole } from "./roles";
 
 describe("The GuRole class", () => {
   it("overrides id if prop set to true", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuRole(stack, "TestRole", {
       overrideId: true,
@@ -20,7 +19,7 @@ describe("The GuRole class", () => {
   });
 
   it("does not override id if prop set to false", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuRole(stack, "TestRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -31,7 +30,7 @@ describe("The GuRole class", () => {
   });
 
   it("returns a string value for the child ref", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     const role = new GuRole(stack, "TestRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),

@@ -1,9 +1,9 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
-import { App, Stack } from "@aws-cdk/core";
+import { Stack } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuStack } from "../core";
 import { GuSecurityGroup, GuWazuhAccess } from "./security-groups";
 
 describe("The GuSecurityGroup class", () => {
@@ -14,8 +14,7 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("overrides the id if the prop is set to true", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, overrideId: true });
 
@@ -24,8 +23,7 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("does not overrides the id if the prop is set to false", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSecurityGroup(stack, "TestSecurityGroup", { vpc });
 
@@ -34,8 +32,7 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("adds the ingresses passed in through props", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
@@ -66,8 +63,7 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("adds the egresses passed in through props", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
@@ -107,8 +103,7 @@ describe("The GuWazuhAccess class", () => {
   });
 
   it("sets props as expected", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuWazuhAccess(stack, "WazuhSecurityGroup", { vpc });
 
@@ -134,8 +129,7 @@ describe("The GuWazuhAccess class", () => {
   });
 
   it("merges default and passed in props", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuWazuhAccess(stack, "WazuhSecurityGroup", { vpc, description: "This is a test" });
 
@@ -145,8 +139,7 @@ describe("The GuWazuhAccess class", () => {
   });
 
   it("overrides the id if the prop is set to true", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuWazuhAccess(stack, "WazuhSecurityGroup", { vpc });
 
@@ -155,8 +148,7 @@ describe("The GuWazuhAccess class", () => {
   });
 
   it("does not overrides the id if the prop is set to false", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuWazuhAccess(stack, "WazuhSecurityGroup", { vpc, overrideId: false });
 

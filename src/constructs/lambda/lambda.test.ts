@@ -2,13 +2,13 @@ import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
-import { App, Duration } from "@aws-cdk/core";
-import { GuStack } from "../core";
+import { Duration } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import { GuLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {
   it("should create the code object from the bucket and key passed in", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
@@ -25,7 +25,7 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should not have any schedule rules by default", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
@@ -37,7 +37,7 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should add any rules passed in", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
@@ -66,7 +66,7 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should add any apis passed in", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
@@ -97,7 +97,7 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should give the function read permissions to the required bucket", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
       code: { bucket: "bucket1", key: "folder/to/key" },
