@@ -27,7 +27,7 @@ The project can either use `npm` or `yarn` as the package manager. This should b
 
    Given that issues have been encountered using `yarn` and the fact that `npm` provides a working alternative with no obvious drawbacks (save the more common use of `yarn` in the department), it's not worth fixing the `yarn` issues.
 
-3. Use `npm` but use the script pattern to make it (more) transparent to the user
+3. Use `npm` but use the script pattern to make it (more) opaque to the user
 
    The [script pattern](https://github.com/github/scripts-to-rule-them-all) abstracts the choice of package manager (and the implementation of various tasks) away from the user. This would allow whichever tool was the best fit to be used across all projects whilst maintaining a consistent experience for developers.
 
