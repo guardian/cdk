@@ -85,6 +85,10 @@ describe("The GuDatabaseInstance class", () => {
       },
       Tags: [
         {
+          Key: "App",
+          Value: "testing",
+        },
+        {
           Key: "Stack",
           Value: {
             Ref: "Stack",
