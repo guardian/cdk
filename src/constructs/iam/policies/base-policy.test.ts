@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Effect, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../../test/utils/synthed-stack";
+import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import type { SynthedStack } from "../../../../test/utils";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuPolicy } from "./base-policy";
 
 describe("The GuPolicy", () => {
@@ -19,11 +19,7 @@ describe("The GuPolicy", () => {
       ],
     });
 
-    policy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, policy);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
@@ -42,11 +38,7 @@ describe("The GuPolicy", () => {
       ],
     });
 
-    policy.attachToRole(
-      new Role(stack, "TestRole", {
-        assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      })
-    );
+    attachPolicyToTestRole(stack, policy);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
