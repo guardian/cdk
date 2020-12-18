@@ -12,6 +12,3 @@
 
 ## Have we considered potential risks?
 <!-- What are the potential risks and how can they be mitigated? Does an error require an alarm? Should user help, infosec, or legal be informed of this change? Is private information guarded? Do we need to add anything in the backlog? -->
-
-## Images
-<!-- Usually only applicable to UI changes, what did it look like before and what will it look like after? -->
