@@ -1,12 +1,11 @@
 import "@aws-cdk/assert/jest";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { App } from "@aws-cdk/core";
-import { GuStack } from "../../core";
+import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
 import { GuGetS3ObjectPolicy } from "./s3-get-object";
 
 describe("The GuGetS3ObjectPolicy class", () => {
   it("sets default props", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test" });
 
@@ -32,7 +31,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
   });
 
   it("merges defaults and passed in props", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
 

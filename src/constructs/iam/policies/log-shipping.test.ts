@@ -1,12 +1,11 @@
 import "@aws-cdk/assert/jest";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { App } from "@aws-cdk/core";
-import { GuStack } from "../../core";
+import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
 import { GuLogShippingPolicy } from "./log-shipping";
 
 describe("The GuLogShippingPolicy class", () => {
   it("sets default props", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", { loggingStreamName: "test" });
 
@@ -48,7 +47,7 @@ describe("The GuLogShippingPolicy class", () => {
   });
 
   it("merges defaults and passed in props", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
 
     const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", {
       loggingStreamName: "test",

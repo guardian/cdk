@@ -1,14 +1,13 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Effect, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { App } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../../test/utils/synthed-stack";
-import { GuStack } from "../../core";
 import { GuPolicy } from "./base-policy";
 
 describe("The GuPolicy", () => {
   it("overrides id if prop set to true", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
     const policy = new GuPolicy(stack, "Policy", {
       overrideId: true,
       statements: [
@@ -32,7 +31,7 @@ describe("The GuPolicy", () => {
   });
 
   it("does not override id if prop set to false", () => {
-    const stack = new GuStack(new App());
+    const stack = simpleGuStackForTesting();
     const policy = new GuPolicy(stack, "Policy", {
       statements: [
         new PolicyStatement({

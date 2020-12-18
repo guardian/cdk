@@ -1,6 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { App, Stack } from "@aws-cdk/core";
+import { Stack } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { Stage, Stages } from "../../constants";
 import {
@@ -17,12 +18,11 @@ import {
   GuVpcParameter,
   s3ArnRegex,
 } from "./parameters";
-import { GuStack } from "./stack";
+import type { GuStack } from "./stack";
 
 describe("The GuStringParameter class", () => {
   it("should set the type to string", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuStringParameter(stack, "Parameter", { description: "This is a test" });
 
@@ -70,8 +70,7 @@ describe("The GuStackParameter class", () => {
 
 describe("The GuInstanceTypeParameter class", () => {
   it("should combine default, override and prop values", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuInstanceTypeParameter(stack, "Parameter", { allowedValues: ["t3.small"] });
 
@@ -86,8 +85,7 @@ describe("The GuInstanceTypeParameter class", () => {
   });
 
   it("let's you override the default values", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuInstanceTypeParameter(stack, "Parameter", {
       type: "Number",
@@ -107,8 +105,7 @@ describe("The GuInstanceTypeParameter class", () => {
 
 describe("The GuSSMParameter class", () => {
   it("should combine default, override and prop values", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSSMParameter(stack, "Parameter", { description: "This is a test" });
 
@@ -122,8 +119,7 @@ describe("The GuSSMParameter class", () => {
   });
 
   it("let's you override default props", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSSMParameter(stack, "Parameter", { noEcho: false, description: "This is a test" });
 
@@ -139,8 +135,7 @@ describe("The GuSSMParameter class", () => {
 
 describe("The GuSubnetListParameter class", () => {
   it("should combine override and prop values", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuSubnetListParameter(stack, "Parameter", { description: "This is a test" });
 
@@ -155,8 +150,7 @@ describe("The GuSubnetListParameter class", () => {
 
 describe("The GuVpcParameter class", () => {
   it("should combine override and prop values", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuVpcParameter(stack, "Parameter", { description: "This is a test" });
 
@@ -171,8 +165,7 @@ describe("The GuVpcParameter class", () => {
 
 describe("The GuAmiParameter class", () => {
   it("should combine override and prop values", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuAmiParameter(stack, "Parameter", { description: "This is a test" });
 
@@ -187,8 +180,7 @@ describe("The GuAmiParameter class", () => {
 
 describe("The GuArnParameter class", () => {
   it("should constrain input to an ARN allowed pattern", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuArnParameter(stack, "Parameter", { description: "This is a test" });
 
@@ -211,8 +203,7 @@ describe("The GuArnParameter class", () => {
 
 describe("The GuS3ObjectArnParameter class", () => {
   it("should constrain input to a S3 ARN allowed pattern", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuS3ObjectArnParameter(stack, "Parameter", { description: "This is a test" });
 

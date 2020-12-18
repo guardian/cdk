@@ -2,9 +2,9 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "@aws-cdk/aws-rds";
-import { App, Stack } from "@aws-cdk/core";
+import { Stack } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuStack } from "../core";
 import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
@@ -16,8 +16,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("removes the db prefix from the instanceType prop (before CDK adds it back again)", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
@@ -36,8 +35,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("sets the parameter group if passed in", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     const parameterGroup = new ParameterGroup(stack, "ParameterGroup", {
       parameters: { max_connections: "100" },
@@ -63,8 +61,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("creates a new parameter group if parameters are passed in", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
       instanceType: "t3.small",
@@ -104,8 +101,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("overrides the id if the prop is true", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
       overrideId: true,
@@ -121,8 +117,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("does not override the id if the prop is false", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
       instanceType: "t3.small",

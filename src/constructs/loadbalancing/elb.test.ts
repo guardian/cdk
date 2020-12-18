@@ -2,9 +2,9 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { App, Stack } from "@aws-cdk/core";
+import { Stack } from "@aws-cdk/core";
+import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuStack } from "../core/stack";
 import { GuApplicationListener, GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 
 describe("The GuApplicationLoadBalancer class", () => {
@@ -15,8 +15,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("overrides the id with the overrideId prop", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -24,8 +23,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("has an auto-generated ID by default", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -33,8 +31,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("deletes the Type property", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -50,8 +47,7 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("overrides the id if the prop is true", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -59,8 +55,7 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("does not override the id if the prop is false", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -76,8 +71,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("overrides the id if the prop is true", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
@@ -97,8 +91,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("does not override the id if the prop is false", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
@@ -117,8 +110,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("sets default props", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
@@ -139,8 +131,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("merges default and passed in props", () => {
-    const app = new App();
-    const stack = new GuStack(app);
+    const stack = simpleGuStackForTesting();
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
