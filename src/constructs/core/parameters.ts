@@ -1,6 +1,6 @@
 import type { CfnParameterProps } from "@aws-cdk/core";
 import { CfnParameter } from "@aws-cdk/core";
-import { Stage, Stages } from "../../constants";
+import { RegexPattern, Stage, Stages } from "../../constants";
 import type { GuStack } from "./stack";
 
 export type GuParameterProps = CfnParameterProps;
@@ -85,26 +85,21 @@ export class GuAmiParameter extends GuParameter {
   }
 }
 
-export const arnRegex = "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*";
-
 export class GuArnParameter extends GuStringParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...props,
-      allowedPattern: arnRegex,
+      allowedPattern: RegexPattern.ARN,
       constraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
     });
   }
 }
 
-const s3BucketRegex = "(?!^(\\d{1,3}\\.){3}\\d{1,3}$)(^[a-z0-9]([a-z0-9-]*(\\.[a-z0-9])?)*$(?<!\\-))";
-export const s3ArnRegex = `arn:aws:s3:::${s3BucketRegex}*`;
-
 export class GuS3ObjectArnParameter extends GuStringParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...props,
-      allowedPattern: s3ArnRegex,
+      allowedPattern: RegexPattern.S3ARN,
       constraintDescription:
         "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
     });
