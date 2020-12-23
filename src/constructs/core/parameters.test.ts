@@ -1,11 +1,10 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
 import { Stage, Stages } from "../../constants";
 import {
-  arnRegex,
   GuAmiParameter,
   GuArnParameter,
   GuInstanceTypeParameter,
@@ -16,7 +15,6 @@ import {
   GuStringParameter,
   GuSubnetListParameter,
   GuVpcParameter,
-  s3ArnRegex,
 } from "./parameters";
 import type { GuStack } from "./stack";
 
@@ -193,12 +191,6 @@ describe("The GuArnParameter class", () => {
       ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
     });
   });
-
-  it("should successfully regex against valid ARNs", () => {
-    const regex = new RegExp(arnRegex);
-    expect(regex.test("fooooo")).toBeFalsy();
-    expect(regex.test("arn:aws:rds:us-east-2:123456789012:db:my-mysql-instance-1")).toBeTruthy();
-  });
 });
 
 describe("The GuS3ObjectArnParameter class", () => {
@@ -216,12 +208,5 @@ describe("The GuS3ObjectArnParameter class", () => {
       ConstraintDescription:
         "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
     });
-  });
-
-  it("should successfully regex against valid s3 ARNs only", () => {
-    const regex = new RegExp(s3ArnRegex);
-    expect(regex.test("fooooo")).toBeFalsy();
-    expect(regex.test("arn:aws:rds:us-east-2:123456789012:db:my-mysql-instance-1")).toBeFalsy();
-    expect(regex.test("arn:aws:s3:::examplebucket/my-data/sales-export-2019-q4.json")).toBeTruthy();
   });
 });
