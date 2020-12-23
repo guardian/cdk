@@ -10,11 +10,16 @@ export interface GuParameterProps extends CfnParameterProps {
 export type GuNoTypeParameterProps = Omit<GuParameterProps, "type">;
 
 export class GuParameter extends CfnParameter {
+  public readonly id: string;
+
   constructor(scope: GuStack, id: string, props: GuParameterProps) {
     super(scope, id, {
       ...props,
       type: props.fromSSM ? `AWS::SSM::Parameter::Value<${props.type ?? "String"}>` : props.type,
     });
+
+    this.id = id;
+    scope.setParam(this);
   }
 }
 
