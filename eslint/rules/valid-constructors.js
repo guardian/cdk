@@ -10,6 +10,29 @@
 // TODO: 9. If all values in third type are optional then parameter should be optional
 // 10. Third parameter type should be custom
 
+const getPath = (node, path) => {
+  const keys = path.split(".");
+  let value = node;
+
+  for (const key of keys) {
+    if (!value) break;
+    value = value[key];
+  }
+
+  return value;
+};
+
+const getStandardOrLeftProp = (node, path) => {
+  switch (node.type) {
+    case "Identifier":
+      return getPath(node, path);
+    case "AssignmentPattern":
+      return getPath(node, `left.${path}`);
+    default:
+      return false;
+  }
+};
+
 module.exports = {
   meta: {
     type: "suggestion",
@@ -61,7 +84,7 @@ module.exports = {
         if (scope.typeAnnotation.typeAnnotation.typeName.name !== "GuStack") {
           return context.report(
             node,
-            scope.typeAnnotation.typeAnnotation.typeName.loc,
+            scope.typeAnnotation.loc,
             `The first parameter in a construct or pattern contructor must be of type GuStack`
           );
         }
@@ -69,10 +92,7 @@ module.exports = {
         const id = params[1];
 
         // 5. Second parameter must be called id
-        if (
-          (id.type === "Identifier" && id.name !== "id") ||
-          (id.type === "AssignmentPattern" && id.left.name !== "id")
-        ) {
+        if (getStandardOrLeftProp(id, "name") !== "id") {
           return context.report(
             node,
             id.loc,
@@ -81,25 +101,19 @@ module.exports = {
         }
 
         // 6. Second parameter must be of type string
-        if (
-          (id.type === "Identifier" && id.typeAnnotation.typeAnnotation.type !== "TSStringKeyword") ||
-          (id.type === "AssignmentPattern" && id.left.typeAnnotation.typeAnnotation.type !== "TSStringKeyword")
-        ) {
+        if (getStandardOrLeftProp(id, "typeAnnotation.typeAnnotation.type") !== "TSStringKeyword") {
           return context.report(
             node,
-            id.typeAnnotation.typeAnnotation.typeName.loc,
+            getStandardOrLeftProp(id, "typeAnnotation.loc"),
             `The second parameter in a construct or pattern contructor must be of type string`
           );
         }
 
-        if (params.length === 3) {
-          const props = params[2];
+        const props = params[2];
 
+        if (props) {
           // 7. Third parameter (if exists) must called props
-          if (
-            (props.type === "Identifier" && props.name !== "props") ||
-            (props.type === "AssignmentPattern" && props.left.name !== "props")
-          ) {
+          if (getStandardOrLeftProp(props, "name") !== "props") {
             return context.report(
               node,
               props.loc,
@@ -108,30 +122,22 @@ module.exports = {
           }
 
           // 10. Third parameter type should be custom
-          if (
-            (props.type === "Identifier" && props.typeAnnotation.typeAnnotation.type !== "TSTypeReference") ||
-            (props.type === "AssignmentPattern" && props.left.typeAnnotation.typeAnnotation.type !== "TSTypeReference")
-          ) {
+          if (getStandardOrLeftProp(props, "typeAnnotation.typeAnnotation.type") !== "TSTypeReference") {
             return context.report(
               node,
-              props.loc,
+              getStandardOrLeftProp(props, "typeAnnotation.loc"),
               `The third parameter in a construct or pattern contructor must be a custom type`
             );
           }
-        }
 
-        // 8. If third parameter is present and non-optional then the second parameter should not be initialised
-        if (
-          params.length === 3 &&
-          params[2].type !== "AssignmentPattern" &&
-          !params[2].optional &&
-          id.type === "AssignmentPattern"
-        ) {
-          return context.report(
-            node,
-            id.loc,
-            `The second parameter cannot be initialised if there is a non-optional third parameter`
-          );
+          // 8. If third parameter is present and non-optional then the second parameter should not be initialised
+          if (props.type !== "AssignmentPattern" && !props.optional && id.type === "AssignmentPattern") {
+            return context.report(
+              node,
+              id.loc,
+              `The second parameter cannot be initialised if there is a non-optional third parameter`
+            );
+          }
         }
 
         return null;
