@@ -4,13 +4,10 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { GuStack } from "../core";
-// TODO: Can GuAutoScalingGroup be more tightly integrated with amigo?
-//       Do we want to restrict to only allow amigo images?
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
-
 export interface GuAutoScalingGroupProps
   extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
   imageId: string;

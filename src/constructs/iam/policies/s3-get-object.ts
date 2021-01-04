@@ -21,8 +21,6 @@ export const allowGetObjectPolicyStatement: (bucket: string) => { statements: Po
 
 export class GuGetS3ObjectPolicy extends GuPolicy {
   constructor(scope: GuStack, id: string, props: GuGetS3ObjectPolicyProps) {
-    // TODO validate `props.bucket` based on the rules defined here https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-s3-bucket-naming-requirements.html
-
     super(scope, id, { ...allowGetObjectPolicyStatement(props.bucketName), ...props });
   }
 }

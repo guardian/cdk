@@ -14,10 +14,6 @@ import {
 } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { GuStack } from "../core";
 
-// TODO: By default, an application load balancer has deletion protection set to false.
-//  We probably want to protect this load balancer as much as possible
-//  should we set it to true instead?
-
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
   overrideId?: boolean;
 }
