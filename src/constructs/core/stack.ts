@@ -3,8 +3,8 @@ import { Stack, Tags } from "@aws-cdk/core";
 import { GuStackParameter, GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
-  // This limits a stack to a single app
-  // TODO understand how to support a multi-app stack
+  // This limits GuStack to supporting a single app.
+  // In the future, support for stacks with multiple apps may be required
   app: string;
 }
 
