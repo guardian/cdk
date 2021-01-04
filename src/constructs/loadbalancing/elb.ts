@@ -20,7 +20,7 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
 
 export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
-    super(scope, id, props);
+    super(scope, id, { deletionProtection: true, ...props });
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
