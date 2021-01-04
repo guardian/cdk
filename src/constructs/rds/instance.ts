@@ -28,6 +28,7 @@ export class GuDatabaseInstance extends DatabaseInstance {
     }
 
     super(scope, id, {
+      deletionProtection: true,
       ...props,
       instanceType,
       ...(parameterGroup && { parameterGroup }),

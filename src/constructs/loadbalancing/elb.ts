@@ -14,17 +14,13 @@ import {
 } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { GuStack } from "../core";
 
-// TODO: By default, an application load balancer has deletion protection set to false.
-//  We probably want to protect this load balancer as much as possible
-//  should we set it to true instead?
-
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
   overrideId?: boolean;
 }
 
 export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
-    super(scope, id, props);
+    super(scope, id, { deletionProtection: true, ...props });
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
