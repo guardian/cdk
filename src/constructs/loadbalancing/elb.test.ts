@@ -37,6 +37,20 @@ describe("The GuApplicationLoadBalancer class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources.ApplicationLoadBalancer.Properties)).not.toContain("Type");
   });
+
+  test("sets the deletion protection value to true by default", () => {
+    const stack = simpleGuStackForTesting();
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: [
+        {
+          Key: "deletion_protection.enabled",
+          Value: "true",
+        },
+      ],
+    });
+  });
 });
 
 describe("The GuApplicationTargetGroup class", () => {

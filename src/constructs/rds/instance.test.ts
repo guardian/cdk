@@ -134,4 +134,19 @@ describe("The GuDatabaseInstance class", () => {
 
     expect(Object.keys(json.Resources)).not.toContain("DatabaseInstance");
   });
+
+  test("sets the deletion protection value to true by default", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDatabaseInstance(stack, "DatabaseInstance", {
+      vpc,
+      instanceType: "t3.small",
+      engine: DatabaseInstanceEngine.postgres({
+        version: PostgresEngineVersion.VER_11_8,
+      }),
+    });
+
+    expect(stack).toHaveResource("AWS::RDS::DBInstance", {
+      DeletionProtection: true,
+    });
+  });
 });
