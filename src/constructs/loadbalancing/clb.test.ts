@@ -35,7 +35,7 @@ describe("The GuClassicLoadBalancer class", () => {
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       vpc,
       overrideId: true,
-      deletionOverrideProperties: [GuClassicLoadBalancer.DeletionOverrideProperties.SCHEME],
+      propertiesToRemove: [GuClassicLoadBalancer.RemoveableProperties.SCHEME],
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -47,7 +47,7 @@ describe("The GuClassicLoadBalancer class", () => {
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       vpc,
       overrideId: true,
-      overrideProperties: {
+      propertiesToOverride: {
         AccessLoggingPolicy: {
           EmitInterval: 5,
           Enabled: true,

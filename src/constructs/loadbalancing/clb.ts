@@ -2,18 +2,18 @@ import type { CfnLoadBalancer, LoadBalancerProps } from "@aws-cdk/aws-elasticloa
 import { LoadBalancer } from "@aws-cdk/aws-elasticloadbalancing";
 import type { GuStack } from "../core";
 
-enum DeletionOverrideProperties {
+enum RemoveableProperties {
   SCHEME = "Scheme",
 }
 
 interface GuClassicLoadBalancerProps extends LoadBalancerProps {
   overrideId?: boolean;
-  deletionOverrideProperties?: DeletionOverrideProperties[];
-  overrideProperties?: Record<string, unknown>;
+  propertiesToRemove?: RemoveableProperties[];
+  propertiesToOverride?: Record<string, unknown>;
 }
 
 export class GuClassicLoadBalancer extends LoadBalancer {
-  static DeletionOverrideProperties = DeletionOverrideProperties;
+  static RemoveableProperties = RemoveableProperties;
 
   constructor(scope: GuStack, id: string, props: GuClassicLoadBalancerProps) {
     super(scope, id, props);
@@ -22,11 +22,11 @@ export class GuClassicLoadBalancer extends LoadBalancer {
 
     if (props.overrideId) cfnLb.overrideLogicalId(id);
 
-    props.deletionOverrideProperties?.forEach((key) => {
+    props.propertiesToRemove?.forEach((key) => {
       cfnLb.addPropertyDeletionOverride(key);
     });
 
-    props.overrideProperties &&
-      Object.entries(props.overrideProperties).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
+    props.propertiesToOverride &&
+      Object.entries(props.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
   }
 }
