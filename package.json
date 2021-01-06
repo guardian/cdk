@@ -35,6 +35,7 @@
     "@aws-cdk/aws-autoscaling": "~1.74.0",
     "@aws-cdk/aws-ec2": "~1.74.0",
     "@aws-cdk/aws-apigateway": "~1.74.0",
+    "@aws-cdk/aws-elasticloadbalancing": "~1.74.0",
     "@aws-cdk/aws-elasticloadbalancingv2": "~1.74.0",
     "@aws-cdk/aws-events-targets": "~1.74.0",
     "@aws-cdk/aws-iam": "~1.74.0",
