@@ -121,21 +121,21 @@ module.exports = {
             );
           }
 
-          // 10. Third parameter type should be custom
-          if (getStandardOrLeftProp(props, "typeAnnotation.typeAnnotation.type") !== "TSTypeReference") {
-            return context.report(
-              node,
-              getStandardOrLeftProp(props, "typeAnnotation.loc"),
-              `The third parameter in a construct or pattern contructor must be a custom type`
-            );
-          }
-
           // 8. If third parameter is present and non-optional then the second parameter should not be initialised
           if (props.type !== "AssignmentPattern" && !props.optional && id.type === "AssignmentPattern") {
             return context.report(
               node,
               id.loc,
               `The second parameter cannot be initialised if there is a non-optional third parameter`
+            );
+          }
+
+          // 10. Third parameter type should be custom
+          if (getStandardOrLeftProp(props, "typeAnnotation.typeAnnotation.type") !== "TSTypeReference") {
+            return context.report(
+              node,
+              getStandardOrLeftProp(props, "typeAnnotation.loc"),
+              `The third parameter in a construct or pattern contructor must be a custom type`
             );
           }
         }
