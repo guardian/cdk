@@ -29,6 +29,7 @@ export class GuStack extends Stack {
     Tags.of(this).add(key, value, { applyToLaunchedInstances });
   }
 
+  // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
     super(app, id, props);
 

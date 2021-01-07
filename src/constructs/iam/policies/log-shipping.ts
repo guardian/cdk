@@ -22,7 +22,7 @@ export class GuLogShippingPolicy extends GuPolicy {
     };
   }
 
-  constructor(scope: GuStack, id: string = "LogShippingPolicy", props: GuLogShippingPolicyProps) {
+  constructor(scope: GuStack, id: string, props: GuLogShippingPolicyProps) {
     super(scope, id, {
       ...GuLogShippingPolicy.getDefaultProps(scope, props),
       ...props,

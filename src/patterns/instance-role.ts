@@ -17,8 +17,8 @@ interface InstanceRoleProps extends GuGetS3ObjectPolicyProps, Partial<GuLogShipp
 export class InstanceRole extends GuRole {
   private policies: GuPolicy[];
 
-  constructor(scope: GuStack, props: InstanceRoleProps) {
-    super(scope, "InstanceRole", {
+  constructor(scope: GuStack, id: string, props: InstanceRoleProps) {
+    super(scope, id, {
       overrideId: true,
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),

@@ -10,10 +10,11 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.eslint.json"],
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "custom-rules"],
   rules: {
     "@typescript-eslint/no-inferrable-types": 0,
     "import/no-namespace": 2,
+    "custom-rules/valid-constructors": 2,
   },
   root: true,
   ignorePatterns: ["**/*.js", "node_modules"],

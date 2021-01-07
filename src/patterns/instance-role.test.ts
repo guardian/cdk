@@ -7,7 +7,7 @@ import { InstanceRole } from "./instance-role";
 describe("The InstanceRole construct", () => {
   it("should create the correct resources with minimal config", () => {
     const stack = simpleGuStackForTesting();
-    new InstanceRole(stack, { bucketName: "test" });
+    new InstanceRole(stack, "InstanceRole", { bucketName: "test" });
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
@@ -16,7 +16,7 @@ describe("The InstanceRole construct", () => {
 
   it("should create an additional logging policy if logging stream is specified", () => {
     const stack = simpleGuStackForTesting();
-    new InstanceRole(stack, { bucketName: "test", loggingStreamName: "my-logging-stream" });
+    new InstanceRole(stack, "InstanceRole", { bucketName: "test", loggingStreamName: "my-logging-stream" });
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
@@ -26,7 +26,7 @@ describe("The InstanceRole construct", () => {
   it("should allow additional policies to be specified", () => {
     const stack = simpleGuStackForTesting();
 
-    new InstanceRole(stack, {
+    new InstanceRole(stack, "InstanceRole", {
       bucketName: "test",
       additionalPolicies: [new GuGetS3ObjectPolicy(stack, "GetConfigPolicy", { bucketName: "config" })],
     });

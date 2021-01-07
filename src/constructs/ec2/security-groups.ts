@@ -52,7 +52,7 @@ export class GuWazuhAccess extends GuSecurityGroup {
     };
   }
 
-  constructor(scope: GuStack, id: string = "WazuhSecurityGroup", props: GuSecurityGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
     super(scope, id, {
       ...GuWazuhAccess.getDefaultProps(),
       ...props,
