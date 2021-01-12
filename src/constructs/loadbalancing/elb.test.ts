@@ -91,6 +91,22 @@ describe("The GuApplicationTargetGroup class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
   });
+
+  test("overrides the id if the stack migrated value is true", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
+  });
+
+  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: false });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
+  });
 });
 
 describe("The GuApplicationListener class", () => {
@@ -131,6 +147,45 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       loadBalancer,
+      defaultAction: ListenerAction.forward([targetGroup]),
+      certificates: [{ certificateArn: "" }],
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).not.toContain("ApplicationListener");
+  });
+
+  test("overrides the id if the stack migrated value is true", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
+      vpc: vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuApplicationListener(stack, "ApplicationListener", {
+      loadBalancer,
+      defaultAction: ListenerAction.forward([targetGroup]),
+      certificates: [{ certificateArn: "" }],
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).toContain("ApplicationListener");
+  });
+
+  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
+      vpc: vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuApplicationListener(stack, "ApplicationListener", {
+      loadBalancer,
+      overrideId: false,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });

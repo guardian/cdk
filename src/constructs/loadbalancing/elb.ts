@@ -38,7 +38,8 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
   constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
     super(scope, id, props);
 
-    if (props.overrideId) (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
+    if (props.overrideId || (scope.migrated && props.overrideId !== false))
+      (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
   }
 }
 
@@ -50,6 +51,7 @@ export class GuApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
 
-    if (props.overrideId) (this.node.defaultChild as CfnListener).overrideLogicalId(id);
+    if (props.overrideId || (scope.migrated && props.overrideId !== false))
+      (this.node.defaultChild as CfnListener).overrideLogicalId(id);
   }
 }
