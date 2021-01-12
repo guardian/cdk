@@ -135,6 +135,37 @@ describe("The GuDatabaseInstance class", () => {
     expect(Object.keys(json.Resources)).not.toContain("DatabaseInstance");
   });
 
+  it("overrides the id if the stack migrated value is true", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuDatabaseInstance(stack, "DatabaseInstance", {
+      vpc,
+      instanceType: "t3.small",
+      engine: DatabaseInstanceEngine.postgres({
+        version: PostgresEngineVersion.VER_11_8,
+      }),
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Resources)).toContain("DatabaseInstance");
+  });
+
+  it("does not override the id if the stack migrated value is true but the override id value is false", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuDatabaseInstance(stack, "DatabaseInstance", {
+      vpc,
+      overrideId: false,
+      instanceType: "t3.small",
+      engine: DatabaseInstanceEngine.postgres({
+        version: PostgresEngineVersion.VER_11_8,
+      }),
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Resources)).not.toContain("DatabaseInstance");
+  });
+
   test("sets the deletion protection value to true by default", () => {
     const stack = simpleGuStackForTesting();
     new GuDatabaseInstance(stack, "DatabaseInstance", {

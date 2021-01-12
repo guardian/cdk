@@ -30,6 +30,22 @@ describe("The GuApplicationLoadBalancer class", () => {
     expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
   });
 
+  test("overrides the id if the stack migrated value is true", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
+  });
+
+  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: false });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
+  });
+
   test("deletes the Type property", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });

@@ -30,6 +30,22 @@ describe("The GuClassicLoadBalancer class", () => {
     expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
   });
 
+  test("overrides the id if the stack migrated value is true", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).toContain("ClassicLoadBalancer");
+  });
+
+  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
+    const stack = simpleGuStackForTesting({ migrated: true });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, overrideId: false });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
+  });
+
   test("deletes any provided properties", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {

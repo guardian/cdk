@@ -24,7 +24,7 @@ export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
-    if (props.overrideId) cfnLb.overrideLogicalId(id);
+    if (props.overrideId || (scope.migrated && props.overrideId !== false)) cfnLb.overrideLogicalId(id);
 
     cfnLb.addPropertyDeletionOverride("Type");
   }
