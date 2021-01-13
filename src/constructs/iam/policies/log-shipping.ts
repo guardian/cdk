@@ -1,31 +1,24 @@
-import type { PolicyProps } from "@aws-cdk/aws-iam";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../../core";
+import { GuSSMParameter } from "../../core";
 import type { GuPolicyProps } from "./base-policy";
 import { GuPolicy } from "./base-policy";
 
-export interface GuLogShippingPolicyProps extends GuPolicyProps {
-  loggingStreamName: string;
-}
-
 export class GuLogShippingPolicy extends GuPolicy {
-  private static getDefaultProps(scope: GuStack, props: GuLogShippingPolicyProps): PolicyProps {
-    return {
-      policyName: "log-shipping-policy",
-      statements: [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["kinesis:Describe*", "kinesis:Put*"],
-          resources: [`arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.loggingStreamName}`],
-        }),
-      ],
-    };
-  }
+  constructor(scope: GuStack, id: string = "GuLogShippingPolicy", props?: GuPolicyProps) {
+    super(scope, id, { ...props });
 
-  constructor(scope: GuStack, id: string, props: GuLogShippingPolicyProps) {
-    super(scope, id, {
-      ...GuLogShippingPolicy.getDefaultProps(scope, props),
-      ...props,
+    const loggingStreamNameParam = new GuSSMParameter(scope, "LoggingStreamName", {
+      description: "SSM parameter containing the Name (not ARN) on the kinesis stream",
+      default: "/account/services/logging.stream.name",
     });
+
+    this.addStatements(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["kinesis:Describe*", "kinesis:Put*"],
+        resources: [`arn:aws:kinesis:${scope.region}:${scope.account}:stream/${loggingStreamNameParam.valueAsString}`],
+      })
+    );
   }
 }

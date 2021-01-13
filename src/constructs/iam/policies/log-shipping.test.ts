@@ -6,12 +6,12 @@ describe("The GuLogShippingPolicy class", () => {
   it("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
-    const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", { loggingStreamName: "test" });
+    const logShippingPolicy = new GuLogShippingPolicy(stack);
 
     attachPolicyToTestRole(stack, logShippingPolicy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
-      PolicyName: "log-shipping-policy",
+      PolicyName: "GuLogShippingPolicy981BFE5A",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -30,7 +30,10 @@ describe("The GuLogShippingPolicy class", () => {
                   {
                     Ref: "AWS::AccountId",
                   },
-                  ":stream/test",
+                  ":stream/",
+                  {
+                    Ref: "LoggingStreamName",
+                  },
                 ],
               ],
             },
@@ -44,7 +47,6 @@ describe("The GuLogShippingPolicy class", () => {
     const stack = simpleGuStackForTesting();
 
     const logShippingPolicy = new GuLogShippingPolicy(stack, "LogShippingPolicy", {
-      loggingStreamName: "test",
       policyName: "test",
     });
 
@@ -70,7 +72,10 @@ describe("The GuLogShippingPolicy class", () => {
                   {
                     Ref: "AWS::AccountId",
                   },
-                  ":stream/test",
+                  ":stream/",
+                  {
+                    Ref: "LoggingStreamName",
+                  },
                 ],
               ],
             },

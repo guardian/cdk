@@ -1,6 +1,6 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../constructs/core";
-import type { GuGetS3ObjectPolicyProps, GuLogShippingPolicyProps, GuPolicy } from "../constructs/iam";
+import type { GuGetS3ObjectPolicyProps, GuPolicy } from "../constructs/iam";
 import {
   GuDescribeEC2Policy,
   GuGetS3ObjectPolicy,
@@ -10,7 +10,8 @@ import {
   GuSSMRunCommandPolicy,
 } from "../constructs/iam";
 
-interface InstanceRoleProps extends GuGetS3ObjectPolicyProps, Partial<GuLogShippingPolicyProps> {
+interface InstanceRoleProps extends GuGetS3ObjectPolicyProps {
+  withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out
   additionalPolicies?: GuPolicy[];
 }
 
@@ -29,9 +30,7 @@ export class InstanceRole extends GuRole {
       new GuGetS3ObjectPolicy(scope, "GetDistributablesPolicy", props),
       new GuDescribeEC2Policy(scope),
       new GuParameterStoreReadPolicy(scope),
-      ...(props.loggingStreamName
-        ? [new GuLogShippingPolicy(scope, "LogShippingPolicy", props as GuLogShippingPolicyProps)]
-        : []),
+      ...(props.withoutLogShipping ? [] : [new GuLogShippingPolicy(scope)]),
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 
