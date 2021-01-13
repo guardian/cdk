@@ -1,18 +1,19 @@
 import type { GuStack } from "../../core";
-import type { GuPolicyProps } from "./base-policy";
+import type { GuNoStatementsPolicyProps } from "./base-policy";
 import { GuAllowPolicy } from "./base-policy";
 
 interface GuDynamoDBPolicyProps {
   tableName: string;
 }
 
-interface GuDynamoDBPolicyPropsWithActions extends GuPolicyProps, GuDynamoDBPolicyProps {
+interface GuDynamoDBPolicyPropsWithActions extends GuNoStatementsPolicyProps, GuDynamoDBPolicyProps {
   actions: string[];
 }
 
 abstract class GuDynamoDBPolicy extends GuAllowPolicy {
   protected constructor(scope: GuStack, id: string, props: GuDynamoDBPolicyPropsWithActions) {
     super(scope, id, {
+      ...props,
       actions: props.actions.map((action) => `dynamodb:${action}`),
       resources: [`arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}`],
     });
