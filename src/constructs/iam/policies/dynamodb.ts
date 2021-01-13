@@ -13,6 +13,7 @@ interface GuDynamoDBPolicyPropsWithActions extends GuPolicyProps, GuDynamoDBPoli
 abstract class GuDynamoDBPolicy extends GuAllowPolicy {
   protected constructor(scope: GuStack, id: string, props: GuDynamoDBPolicyPropsWithActions) {
     super(scope, id, {
+      ...props,
       actions: props.actions.map((action) => `dynamodb:${action}`),
       resources: [`arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}`],
     });
