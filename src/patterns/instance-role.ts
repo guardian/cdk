@@ -11,7 +11,7 @@ import {
 } from "../constructs/iam";
 
 interface InstanceRoleProps extends GuGetS3ObjectPolicyProps {
-  includeLogShipping: boolean;
+  withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out
   additionalPolicies?: GuPolicy[];
 }
 
@@ -30,7 +30,7 @@ export class InstanceRole extends GuRole {
       new GuGetS3ObjectPolicy(scope, "GetDistributablesPolicy", props),
       new GuDescribeEC2Policy(scope),
       new GuParameterStoreReadPolicy(scope),
-      ...(props.includeLogShipping ? [new GuLogShippingPolicy(scope)] : []),
+      ...(props.withoutLogShipping ? [] : [new GuLogShippingPolicy(scope)]),
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 
