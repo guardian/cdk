@@ -1,12 +1,12 @@
 import type { GuStack } from "../../core";
-import type { GuPolicyProps } from "./base-policy";
+import type { GuNoStatementsPolicyProps } from "./base-policy";
 import { GuAllowPolicy } from "./base-policy";
 
 interface GuDynamoDBPolicyProps {
   tableName: string;
 }
 
-interface GuDynamoDBPolicyPropsWithActions extends GuPolicyProps, GuDynamoDBPolicyProps {
+interface GuDynamoDBPolicyPropsWithActions extends GuNoStatementsPolicyProps, GuDynamoDBPolicyProps {
   actions: string[];
 }
 

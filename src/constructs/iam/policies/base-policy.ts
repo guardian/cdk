@@ -6,6 +6,8 @@ export interface GuPolicyProps extends PolicyProps {
   overrideId?: boolean;
 }
 
+export type GuNoStatementsPolicyProps = Omit<GuPolicyProps, "statements">;
+
 export abstract class GuPolicy extends Policy {
   protected constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, props);
@@ -17,7 +19,7 @@ export abstract class GuPolicy extends Policy {
   }
 }
 
-export interface GuAllowPolicyProps extends GuPolicyProps {
+export interface GuAllowPolicyProps extends GuNoStatementsPolicyProps {
   actions: string[];
   resources: string[];
 }
