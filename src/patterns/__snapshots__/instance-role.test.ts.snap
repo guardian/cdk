@@ -220,6 +220,12 @@ Object {
 exports[`The InstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
 Object {
   "Parameters": Object {
+    "LoggingStreamName": Object {
+      "Default": "/account/services/logging.stream.name",
+      "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
+      "NoEcho": true,
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "Stack": Object {
       "Default": "deploy",
       "Description": "Name of this stack",
@@ -283,6 +289,48 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "GuLogShippingPolicy981BFE5A": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kinesis:Describe*",
+                "kinesis:Put*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:kinesis:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":stream/",
+                    Object {
+                      "Ref": "LoggingStreamName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "InstanceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -328,45 +376,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "LogShippingPolicyBCA13F45": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "kinesis:Describe*",
-                "kinesis:Put*",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:kinesis:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":stream/my-logging-stream",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "log-shipping-policy",
-        "Roles": Array [
-          Object {
-            "Ref": "InstanceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
     "ParameterStoreRead9D2F4FAB": Object {
       "Properties": Object {
