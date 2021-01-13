@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
-import { GuGetS3ObjectPolicy } from "./s3-get-object";
+import { GuGetDistributablePolicy, GuGetS3ObjectPolicy } from "./s3-get-object";
 
 describe("The GuGetS3ObjectPolicy class", () => {
   it("sets default props", () => {
@@ -40,6 +40,38 @@ describe("The GuGetS3ObjectPolicy class", () => {
             Effect: "Allow",
             Resource: "arn:aws:s3:::test/*",
             Action: "s3:GetObject",
+          },
+        ],
+      },
+    });
+  });
+});
+
+describe("The GuGetDistributablePolicy construct", () => {
+  it("creates the correct policy", () => {
+    const stack = simpleGuStackForTesting();
+    attachPolicyToTestRole(stack, new GuGetDistributablePolicy(stack));
+
+    expect(stack).toHaveResource("AWS::IAM::Policy", {
+      PolicyName: "GetDistributablePolicyC6B4A871",
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: "s3:GetObject",
+            Effect: "Allow",
+            Resource: {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:s3:::",
+                  {
+                    Ref: "DistributionBucketName",
+                  },
+                  "/*",
+                ],
+              ],
+            },
           },
         ],
       },

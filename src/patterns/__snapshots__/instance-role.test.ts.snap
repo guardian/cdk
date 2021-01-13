@@ -3,6 +3,12 @@
 exports[`The InstanceRole construct should allow additional policies to be specified 1`] = `
 Object {
   "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "NoEcho": true,
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "Stack": Object {
       "Default": "deploy",
       "Description": "Name of this stack",
@@ -66,19 +72,30 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablesPolicy648EC38C": Object {
+    "GetDistributablePolicyC6B4A871": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": "arn:aws:s3:::test/*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:s3:::",
+                    Object {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablesPolicy648EC38C",
+        "PolicyName": "GetDistributablePolicyC6B4A871",
         "Roles": Array [
           Object {
             "Ref": "InstanceRole",
@@ -220,6 +237,12 @@ Object {
 exports[`The InstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
 Object {
   "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "NoEcho": true,
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "LoggingStreamName": Object {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
@@ -268,19 +291,30 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablesPolicy648EC38C": Object {
+    "GetDistributablePolicyC6B4A871": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": "arn:aws:s3:::test/*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:s3:::",
+                    Object {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablesPolicy648EC38C",
+        "PolicyName": "GetDistributablePolicyC6B4A871",
         "Roles": Array [
           Object {
             "Ref": "InstanceRole",
@@ -464,6 +498,12 @@ Object {
 exports[`The InstanceRole construct should create the correct resources with minimal config 1`] = `
 Object {
   "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "NoEcho": true,
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "Stack": Object {
       "Default": "deploy",
       "Description": "Name of this stack",
@@ -506,19 +546,30 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablesPolicy648EC38C": Object {
+    "GetDistributablePolicyC6B4A871": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": "arn:aws:s3:::test/*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:s3:::",
+                    Object {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablesPolicy648EC38C",
+        "PolicyName": "GetDistributablePolicyC6B4A871",
         "Roles": Array [
           Object {
             "Ref": "InstanceRole",
