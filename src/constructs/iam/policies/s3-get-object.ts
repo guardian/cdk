@@ -1,26 +1,25 @@
-import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../../core";
-import type { GuPolicyProps } from "./base-policy";
-import { GuPolicy } from "./base-policy";
+import { GuSSMParameter } from "../../core";
+import type { GuNoStatementsPolicyProps } from "./base-policy";
+import { GuAllowPolicy } from "./base-policy";
 
-export interface GuGetS3ObjectPolicyProps extends GuPolicyProps {
+export interface GuGetS3ObjectPolicyProps extends GuNoStatementsPolicyProps {
   bucketName: string;
 }
 
-export const allowGetObjectPolicyStatement: (bucket: string) => { statements: PolicyStatement[] } = (
-  bucketName: string
-) => ({
-  statements: [
-    new PolicyStatement({
-      effect: Effect.ALLOW,
-      actions: ["s3:GetObject"],
-      resources: [`arn:aws:s3:::${bucketName}/*`],
-    }),
-  ],
-});
-
-export class GuGetS3ObjectPolicy extends GuPolicy {
+export class GuGetS3ObjectPolicy extends GuAllowPolicy {
   constructor(scope: GuStack, id: string, props: GuGetS3ObjectPolicyProps) {
-    super(scope, id, { ...allowGetObjectPolicyStatement(props.bucketName), ...props });
+    super(scope, id, { ...props, actions: ["s3:GetObject"], resources: [`arn:aws:s3:::${props.bucketName}/*`] });
+  }
+}
+
+export class GuGetDistributablePolicy extends GuGetS3ObjectPolicy {
+  constructor(scope: GuStack, id: string = "GetDistributablePolicy", props?: GuNoStatementsPolicyProps) {
+    const distributionBucketNameParam = new GuSSMParameter(scope, "DistributionBucketName", {
+      description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      default: "/account/services/artifact.bucket",
+    });
+
+    super(scope, id, { ...props, bucketName: distributionBucketNameParam.valueAsString });
   }
 }
