@@ -8,8 +8,8 @@ import {
   GuAmiParameter,
   GuArnParameter,
   GuInstanceTypeParameter,
-  GuParameter,
   GuS3ObjectArnParameter,
+  GuSSMParameter,
   GuStackParameter,
   GuStageParameter,
   GuStringParameter,
@@ -17,57 +17,6 @@ import {
   GuVpcParameter,
 } from "./parameters";
 import type { GuStack } from "./stack";
-
-describe("The GuParameter class", () => {
-  it("sets the type as passed through by default", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuParameter(stack, "Parameter", { type: "Boolean" });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
-      Type: "Boolean",
-    });
-  });
-
-  it("wraps the type with SSM utility is fromSSM is true", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
-      Type: "AWS::SSM::Parameter::Value<Boolean>",
-    });
-  });
-
-  it("defaults to string if SSM is true but no type provided", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuParameter(stack, "Parameter", { fromSSM: true });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
-      Type: "AWS::SSM::Parameter::Value<String>",
-    });
-  });
-
-  it("passes through other values without modification", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true, description: "This is a test" });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
-      Type: "AWS::SSM::Parameter::Value<Boolean>",
-      Description: "This is a test",
-    });
-  });
-});
 
 describe("The GuStringParameter class", () => {
   it("should set the type to string", () => {
@@ -148,6 +97,36 @@ describe("The GuInstanceTypeParameter class", () => {
       Type: "Number",
       Description: "This is a test",
       Default: 1,
+    });
+  });
+});
+
+describe("The GuSSMParameter class", () => {
+  it("should combine default, override and prop values", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuSSMParameter(stack, "Parameter", { description: "This is a test" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
+      NoEcho: true,
+      Type: "AWS::SSM::Parameter::Value<String>",
+      Description: "This is a test",
+    });
+  });
+
+  it("let's you override default props", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuSSMParameter(stack, "Parameter", { noEcho: false, description: "This is a test" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
+      NoEcho: false,
+      Type: "AWS::SSM::Parameter::Value<String>",
+      Description: "This is a test",
     });
   });
 });

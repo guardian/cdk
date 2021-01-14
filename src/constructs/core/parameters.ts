@@ -3,18 +3,13 @@ import { CfnParameter } from "@aws-cdk/core";
 import { RegexPattern, Stage, Stages } from "../../constants";
 import type { GuStack } from "./stack";
 
-export interface GuParameterProps extends CfnParameterProps {
-  fromSSM?: boolean;
-}
+export type GuParameterProps = CfnParameterProps;
 
 export type GuNoTypeParameterProps = Omit<GuParameterProps, "type">;
 
 export class GuParameter extends CfnParameter {
   constructor(scope: GuStack, id: string, props: GuParameterProps) {
-    super(scope, id, {
-      ...props,
-      type: props.fromSSM ? `AWS::SSM::Parameter::Value<${props.type ?? "String"}>` : props.type,
-    });
+    super(scope, id, props);
   }
 }
 
@@ -52,6 +47,16 @@ export class GuInstanceTypeParameter extends GuParameter {
       description: "EC2 Instance Type",
       default: "t3.small",
       ...props,
+    });
+  }
+}
+
+export class GuSSMParameter extends GuParameter {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+    super(scope, id, {
+      noEcho: true,
+      ...props,
+      type: "AWS::SSM::Parameter::Value<String>",
     });
   }
 }
