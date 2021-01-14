@@ -63,7 +63,6 @@ describe("The GuGetDistributablePolicy construct", () => {
     expect(json.Parameters.DistributionBucketName).toEqual({
       Default: "/account/services/artifact.bucket",
       Description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      NoEcho: true,
       Type: "AWS::SSM::Parameter::Value<String>",
     });
 

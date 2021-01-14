@@ -6,7 +6,6 @@ Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      "NoEcho": true,
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "Stack": Object {
@@ -240,13 +239,11 @@ Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      "NoEcho": true,
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "LoggingStreamName": Object {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
-      "NoEcho": true,
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "Stack": Object {
@@ -501,7 +498,6 @@ Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      "NoEcho": true,
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "Stack": Object {
