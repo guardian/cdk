@@ -1,4 +1,6 @@
 import "@aws-cdk/assert/jest";
+import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
+import type { SynthedStack } from "../../../../test/utils";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuGetDistributablePolicy, GuGetS3ObjectPolicy } from "./s3-get-object";
 
@@ -51,6 +53,19 @@ describe("The GuGetDistributablePolicy construct", () => {
   it("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuGetDistributablePolicy(stack));
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    const parameterKeys = Object.keys(json.Parameters);
+    const expectedKeys = ["Stage", "Stack", "DistributionBucketName"];
+    expect(parameterKeys).toEqual(expectedKeys);
+
+    expect(json.Parameters.DistributionBucketName).toEqual({
+      Default: "/account/services/artifact.bucket",
+      Description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      NoEcho: true,
+      Type: "AWS::SSM::Parameter::Value<String>",
+    });
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyName: "GetDistributablePolicyC6B4A871",
