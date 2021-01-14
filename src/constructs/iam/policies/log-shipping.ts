@@ -12,7 +12,6 @@ export class GuLogShippingPolicy extends GuPolicy {
       description: "SSM parameter containing the Name (not ARN) on the kinesis stream",
       default: "/account/services/logging.stream.name",
       fromSSM: true,
-      noEcho: true,
     });
 
     this.addStatements(
