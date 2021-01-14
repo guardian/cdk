@@ -1,3 +1,4 @@
+export * from "./assume-role";
 export * from "./base-policy";
 export * from "./describe-ec2";
 export * from "./dynamodb";
