@@ -1,9 +1,9 @@
 import type { GuStack } from "../../core";
 import { GuSSMParameter } from "../../core";
-import type { GuPolicyProps } from "./base-policy";
+import type { GuNoStatementsPolicyProps } from "./base-policy";
 import { GuAllowPolicy } from "./base-policy";
 
-export interface GuGetS3ObjectPolicyProps extends GuPolicyProps {
+export interface GuGetS3ObjectPolicyProps extends GuNoStatementsPolicyProps {
   bucketName: string;
 }
 
@@ -14,7 +14,7 @@ export class GuGetS3ObjectPolicy extends GuAllowPolicy {
 }
 
 export class GuGetDistributablePolicy extends GuGetS3ObjectPolicy {
-  constructor(scope: GuStack, id: string = "GetDistributablePolicy", props?: GuPolicyProps) {
+  constructor(scope: GuStack, id: string = "GetDistributablePolicy", props?: GuNoStatementsPolicyProps) {
     const distributionBucketNameParam = new GuSSMParameter(scope, "DistributionBucketName", {
       description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
       default: "/account/services/artifact.bucket",
