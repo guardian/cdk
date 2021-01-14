@@ -54,7 +54,6 @@ export class GuInstanceTypeParameter extends GuParameter {
 export class GuSSMParameter extends GuParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
-      noEcho: true,
       ...props,
       type: "AWS::SSM::Parameter::Value<String>",
     });

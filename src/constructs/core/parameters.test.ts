@@ -110,6 +110,19 @@ describe("The GuSSMParameter class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Parameters.Parameter).toEqual({
+      Type: "AWS::SSM::Parameter::Value<String>",
+      Description: "This is a test",
+    });
+  });
+
+  it("should allow noEcho to be specified", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuSSMParameter(stack, "Parameter", { description: "This is a test", noEcho: true });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
       NoEcho: true,
       Type: "AWS::SSM::Parameter::Value<String>",
       Description: "This is a test",
