@@ -10,15 +10,15 @@ import {
   GuSSMRunCommandPolicy,
 } from "../constructs/iam";
 
-interface InstanceRoleProps {
+interface GuInstanceRoleProps {
   withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out
   additionalPolicies?: GuPolicy[];
 }
 
-export class InstanceRole extends GuRole {
+export class GuInstanceRole extends GuRole {
   private policies: GuPolicy[];
 
-  constructor(scope: GuStack, id: string = "InstanceRole", props?: InstanceRoleProps) {
+  constructor(scope: GuStack, id: string = "InstanceRole", props?: GuInstanceRoleProps) {
     super(scope, id, {
       overrideId: true,
       path: "/",
