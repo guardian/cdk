@@ -12,7 +12,7 @@
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepublish": "tsc",
     "release": "np minor --no-yarn --branch main",
-    "release:docs": "rm -rf target && typedoc && gh-pages -d target",
+    "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && http-server target -o"
   },
   "devDependencies": {
