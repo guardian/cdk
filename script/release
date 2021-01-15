@@ -9,7 +9,6 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 if npm whoami &>/dev/null; then
   rm -rf ./lib
   npm run release
-  npm run release:docs
 else
   echo "You are not logged into npm!"
   echo "  Run 'npm login' first!"
