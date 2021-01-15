@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The InstanceRole construct should allow additional policies to be specified 1`] = `
+exports[`The GuInstanceRole construct should allow additional policies to be specified 1`] = `
 Object {
   "Parameters": Object {
     "DistributionBucketName": Object {
@@ -44,7 +44,7 @@ Object {
         "PolicyName": "describe-ec2-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
@@ -65,7 +65,7 @@ Object {
         "PolicyName": "GetConfigPolicy6F934A1C",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
@@ -97,13 +97,13 @@ Object {
         "PolicyName": "GetDistributablePolicyC6B4A871",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRole": Object {
+    "GuInstanceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -187,7 +187,7 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
@@ -223,7 +223,7 @@ Object {
         "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
@@ -233,7 +233,7 @@ Object {
 }
 `;
 
-exports[`The InstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
+exports[`The GuInstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
 Object {
   "Parameters": Object {
     "DistributionBucketName": Object {
@@ -492,7 +492,7 @@ Object {
 }
 `;
 
-exports[`The InstanceRole construct should create the correct resources with minimal config 1`] = `
+exports[`The GuInstanceRole construct should create the correct resources with minimal config 1`] = `
 Object {
   "Parameters": Object {
     "DistributionBucketName": Object {
@@ -536,7 +536,7 @@ Object {
         "PolicyName": "describe-ec2-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
@@ -568,13 +568,13 @@ Object {
         "PolicyName": "GetDistributablePolicyC6B4A871",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRole": Object {
+    "GuInstanceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -658,7 +658,7 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },
@@ -694,7 +694,7 @@ Object {
         "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "GuInstanceRole",
           },
         ],
       },

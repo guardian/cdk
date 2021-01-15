@@ -2,12 +2,12 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { simpleGuStackForTesting } from "../../test/utils";
 import { GuGetS3ObjectPolicy } from "../constructs/iam";
-import { InstanceRole } from "./instance-role";
+import { GuInstanceRole } from "./instance-role";
 
-describe("The InstanceRole construct", () => {
+describe("The GuInstanceRole construct", () => {
   it("should create the correct resources with minimal config", () => {
     const stack = simpleGuStackForTesting();
-    new InstanceRole(stack, "InstanceRole", { withoutLogShipping: true });
+    new GuInstanceRole(stack, "GuInstanceRole", { withoutLogShipping: true });
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
@@ -16,7 +16,7 @@ describe("The InstanceRole construct", () => {
 
   it("should create an additional logging policy if logging stream is specified", () => {
     const stack = simpleGuStackForTesting();
-    new InstanceRole(stack);
+    new GuInstanceRole(stack);
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toCountResources("AWS::IAM::Role", 1);
@@ -26,7 +26,7 @@ describe("The InstanceRole construct", () => {
   it("should allow additional policies to be specified", () => {
     const stack = simpleGuStackForTesting();
 
-    new InstanceRole(stack, "InstanceRole", {
+    new GuInstanceRole(stack, "GuInstanceRole", {
       withoutLogShipping: true,
       additionalPolicies: [new GuGetS3ObjectPolicy(stack, "GetConfigPolicy", { bucketName: "config" })],
     });
