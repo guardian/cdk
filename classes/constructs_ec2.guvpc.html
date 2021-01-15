@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuVpc | @guardian/cdk - v0.17.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v0.17.0">
+	<title>GuVpc | @guardian/cdk - v0.19.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v0.19.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v0.17.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v0.19.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v0.17.0</a>
+					<a href="../modules.html">@guardian/cdk - v0.19.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
@@ -90,6 +90,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="constructs_ec2.guvpc.html#fromid" class="tsd-kind-icon">from<wbr>Id</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="constructs_ec2.guvpc.html#fromidparameter" class="tsd-kind-icon">from<wbr>IdParameter</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="constructs_ec2.guvpc.html#subnets" class="tsd-kind-icon">subnets</a></li>
 							</ul>
 						</section>
@@ -119,13 +120,13 @@
 					<a name="fromid" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Id</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">from<wbr>Id<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, vpcId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">VpcAttributes</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IVpc</span></li>
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Id<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">VpcFromIdProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IVpc</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/b793502/src/constructs/ec2/vpc.ts#L10">src/constructs/ec2/vpc.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/ec2/vpc.ts#L17">src/constructs/ec2/vpc.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -137,10 +138,36 @@
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>vpcId: <span class="tsd-signature-type">string</span></h5>
+									<h5>props: <span class="tsd-signature-type">VpcFromIdProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IVpc</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="fromidparameter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>IdParameter</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>IdParameter<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">VpcFromIdProps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;availabilityZones&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;vpcCidrBlock&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;publicSubnetIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;publicSubnetNames&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;publicSubnetRouteTableIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;privateSubnetIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;privateSubnetNames&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;privateSubnetRouteTableIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;isolatedSubnetIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;isolatedSubnetNames&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;isolatedSubnetRouteTableIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;vpnGatewayId&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IVpc</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/ec2/vpc.ts#L24">src/constructs/ec2/vpc.ts:24</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scope: <a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> props: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">VpcAttributes</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> props: <span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">VpcFromIdProps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;availabilityZones&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;vpcCidrBlock&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;publicSubnetIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;publicSubnetNames&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;publicSubnetRouteTableIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;privateSubnetIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;privateSubnetNames&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;privateSubnetRouteTableIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;isolatedSubnetIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;isolatedSubnetNames&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;isolatedSubnetRouteTableIds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;vpnGatewayId&quot;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IVpc</span></h4>
@@ -157,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/b793502/src/constructs/ec2/vpc.ts#L6">src/constructs/ec2/vpc.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/ec2/vpc.ts#L13">src/constructs/ec2/vpc.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -228,6 +255,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="constructs_ec2.guvpc.html#fromid" class="tsd-kind-icon">from<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="constructs_ec2.guvpc.html#fromidparameter" class="tsd-kind-icon">from<wbr>IdParameter</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="constructs_ec2.guvpc.html#subnets" class="tsd-kind-icon">subnets</a>
