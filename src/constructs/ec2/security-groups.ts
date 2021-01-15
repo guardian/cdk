@@ -1,5 +1,6 @@
 import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
+import { transformToCidrIngress } from "../../utils";
 import type { GuStack } from "../core";
 
 export interface CidrIngress {
@@ -56,6 +57,16 @@ export class GuWazuhAccess extends GuSecurityGroup {
     super(scope, id, {
       ...GuWazuhAccess.getDefaultProps(),
       ...props,
+    });
+  }
+}
+
+export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
+  constructor(scope: GuStack, id: string, props: SecurityGroupProps) {
+    super(scope, id, {
+      ...props,
+      ingresses: transformToCidrIngress(Object.entries({ GLOBAL_ACCESS: "0.0.0.0/0" })),
+      description: `Allows internet access on ${GuPublicInternetAccessSecurityGroup.defaultIngressPort.toString()}`,
     });
   }
 }
