@@ -1,7 +1,8 @@
-name: Deploy Documentation on new release
+name: Deploy documentation on new tag
 on:
-  release:
-    types: [created]
+  create:
+    tags:
+      - 'v*'
 jobs:
   validate:
     runs-on: ubuntu-latest
