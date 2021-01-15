@@ -12,7 +12,7 @@ module.exports = {
     // list sub directories for tsdoc to generate documentation for the constructs
     ...readdirSync(constructsDir).map((dir) => `${constructsDir}/${dir}/index.ts`),
   ],
-  out: "target/docs",
+  out: "target",
   includeVersion: true,
   readme: "docs/001-general-usage.md",
 };

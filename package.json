@@ -12,8 +12,8 @@
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepublish": "tsc",
     "release": "np minor --no-yarn --branch main",
-    "release:docs": "rm -rf target && typedoc && gh-pages -d target/docs",
-    "serve:docs": "rm -rf target && typedoc && http-server target/docs -o"
+    "release:docs": "rm -rf target && typedoc && gh-pages -d target",
+    "serve:docs": "rm -rf target && typedoc && http-server target -o"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.2",
