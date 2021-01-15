@@ -32,6 +32,7 @@ find useful scripts within the [`script`](./script) directory for common tasks.
 
 - `./script/setup` to install dependencies
 - `./script/start` to run the Jest unit tests in watch mode
+- `./script/docs` to generate documentation and view in the browser
 - `./script/lint` to lint the code using ESLint
 - `./script/test` to run the Jest unit tests
 - `./script/build` to compile TypeScript to JS
