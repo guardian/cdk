@@ -136,7 +136,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
       instanceType: "t3.small",
@@ -151,7 +151,7 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
       overrideId: false,

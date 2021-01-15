@@ -31,7 +31,7 @@ describe("The GuClassicLoadBalancer class", () => {
   });
 
   test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -39,7 +39,7 @@ describe("The GuClassicLoadBalancer class", () => {
   });
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, overrideId: false });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;

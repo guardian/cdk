@@ -31,7 +31,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -39,7 +39,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: false });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -93,7 +93,7 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -101,7 +101,7 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: false });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -156,7 +156,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
@@ -175,7 +175,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migrated: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {

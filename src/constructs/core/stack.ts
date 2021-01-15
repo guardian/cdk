@@ -6,7 +6,7 @@ export interface GuStackProps extends StackProps {
   // This limits GuStack to supporting a single app.
   // In the future, support for stacks with multiple apps may be required
   app: string;
-  migrated?: boolean;
+  migratedFromCloudFormation?: boolean;
 }
 
 export class GuStack extends Stack {
@@ -26,7 +26,7 @@ export class GuStack extends Stack {
     return this._app;
   }
 
-  migrated: boolean;
+  migratedFromCloudFormation: boolean;
 
   protected addTag(key: string, value: string, applyToLaunchedInstances: boolean = true): void {
     Tags.of(this).add(key, value, { applyToLaunchedInstances });
@@ -36,7 +36,7 @@ export class GuStack extends Stack {
   constructor(app: App, id: string, props: GuStackProps) {
     super(app, id, props);
 
-    this.migrated = !!props.migrated;
+    this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
 
     this._stage = new GuStageParameter(this);
     this._stack = new GuStackParameter(this);
