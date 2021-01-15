@@ -21,7 +21,7 @@ export class GuVpc {
     });
   }
 
-  static fromIdParameter(scope: GuStack, id: string, props: VpcFromIdParameterProps): IVpc {
+  static fromIdParameter(scope: GuStack, id: string, props?: VpcFromIdParameterProps): IVpc {
     const vpc = new GuVpcParameter(scope, "VpcId", {
       description: "Virtual Private Cloud to run EC2 instances within",
       default: "/account/services/default.vpc",
