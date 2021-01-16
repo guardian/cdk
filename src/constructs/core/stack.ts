@@ -8,6 +8,24 @@ export interface GuStackProps extends StackProps {
   app: string;
 }
 
+/**
+ * GuStack provides the `stack` and `stage` parameters to a template.
+ * It also takes the `app` in the constructor.
+ *
+ * GuStack will apply the Stack, Stage and App tags to all resources added to it.
+ *
+ * Typical usage is to extend GuStack
+ *
+ * ```typescript
+ * class MyStack extends GuStack {
+ *   constructor(scope: App, id: string, props: GuStackProps) {
+ *     super(scope, id, props)
+ *   }
+ *
+ *   // add resources here
+ * }
+ * ```
+ */
 export class GuStack extends Stack {
   private readonly _stage: GuStageParameter;
   private readonly _stack: GuStackParameter;
@@ -25,6 +43,13 @@ export class GuStack extends Stack {
     return this._app;
   }
 
+  /**
+   * A helper function to add a tag to all resources in a stack.
+   * @param key the tag name
+   * @param value the value of the tag
+   * @param applyToLaunchedInstances whether or not to apply the tag to instances launched in an ASG.
+   * @protected
+   */
   protected addTag(key: string, value: string, applyToLaunchedInstances: boolean = true): void {
     Tags.of(this).add(key, value, { applyToLaunchedInstances });
   }
