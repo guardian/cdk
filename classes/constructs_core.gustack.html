@@ -68,6 +68,24 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>GuStack provides the <code>stack</code> and <code>stage</code> parameters to a template.
+						It also takes the <code>app</code> in the constructor.</p>
+					</div>
+					<p>GuStack will apply the Stack, Stage and App tags to all resources added to it.</p>
+					<p>Typical usage is to extend GuStack</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyStack</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">GuStack</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span><span style="color: #001080">scope</span><span style="color: #000000">: </span><span style="color: #267F99">App</span><span style="color: #000000">, </span><span style="color: #001080">id</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">props</span><span style="color: #000000">: </span><span style="color: #267F99">GuStackProps</span><span style="color: #000000">) {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">super</span><span style="color: #000000">(</span><span style="color: #001080">scope</span><span style="color: #000000">, </span><span style="color: #001080">id</span><span style="color: #000000">, </span><span style="color: #001080">props</span><span style="color: #000000">)</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// add resources here</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -177,7 +195,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L30">src/constructs/core/stack.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L55">src/constructs/core/stack.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -205,7 +223,7 @@
 					<div class="tsd-signature tsd-kind-icon">_app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L14">src/constructs/core/stack.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L32">src/constructs/core/stack.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -215,7 +233,7 @@
 					<div class="tsd-signature tsd-kind-icon">_stack<span class="tsd-signature-symbol">:</span> <a href="constructs_core.gustackparameter.html" class="tsd-signature-type" data-tsd-kind="Class">GuStackParameter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L13">src/constructs/core/stack.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L31">src/constructs/core/stack.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -225,7 +243,7 @@
 					<div class="tsd-signature tsd-kind-icon">_stage<span class="tsd-signature-symbol">:</span> <a href="constructs_core.gustageparameter.html" class="tsd-signature-type" data-tsd-kind="Class">GuStageParameter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L12">src/constructs/core/stack.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L30">src/constructs/core/stack.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -482,7 +500,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L24">src/constructs/core/stack.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L42">src/constructs/core/stack.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -666,7 +684,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L20">src/constructs/core/stack.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L38">src/constructs/core/stack.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -739,7 +757,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L16">src/constructs/core/stack.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L34">src/constructs/core/stack.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1013,19 +1031,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/661b5bc/src/constructs/core/stack.ts#L28">src/constructs/core/stack.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/656f368/src/constructs/core/stack.ts#L53">src/constructs/core/stack.ts:53</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A helper function to add a tag to all resources in a stack.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the tag name</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the value of the tag</p>
+									</div>
 								</li>
 								<li>
 									<h5>applyToLaunchedInstances: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>whether or not to apply the tag to instances launched in an ASG.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
