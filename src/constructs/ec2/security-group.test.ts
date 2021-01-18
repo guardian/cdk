@@ -2,9 +2,9 @@ import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuSecurityGroup, GuWazuhAccess } from "./security-groups";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
+import { GuPublicInternetAccessSecurityGroup, GuSecurityGroup, GuWazuhAccess } from "./security-groups";
 
 describe("The GuSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -154,5 +154,34 @@ describe("The GuWazuhAccess class", () => {
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).not.toContain("WazuhSecurityGroup");
+  });
+});
+
+describe("The GuSecurityGroup class", () => {
+  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
+    vpcId: "test",
+    availabilityZones: [""],
+    publicSubnetIds: [""],
+  });
+
+  it("adds the ingresses passed in through props", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuPublicInternetAccessSecurityGroup(stack, "InternetAccessGroup", {
+      vpc,
+    });
+
+    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+      GroupDescription: "Allows internet access on 443",
+      SecurityGroupIngress: [
+        {
+          CidrIp: "0.0.0.0/0",
+          Description: "GLOBAL_ACCESS",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+      ],
+    });
   });
 });
