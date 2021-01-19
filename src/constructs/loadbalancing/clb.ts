@@ -20,7 +20,8 @@ export class GuClassicLoadBalancer extends LoadBalancer {
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
-    if (props.overrideId) cfnLb.overrideLogicalId(id);
+    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
+      cfnLb.overrideLogicalId(id);
 
     props.propertiesToRemove?.forEach((key) => {
       cfnLb.addPropertyDeletionOverride(key);

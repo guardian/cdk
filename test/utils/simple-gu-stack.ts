@@ -1,4 +1,6 @@
 import { App } from "@aws-cdk/core";
+import type { GuStackProps } from "../../src/constructs/core";
 import { GuStack } from "../../src/constructs/core";
 
-export const simpleGuStackForTesting: () => GuStack = () => new GuStack(new App(), "Test", { app: "testing" });
+export const simpleGuStackForTesting: (props?: Partial<GuStackProps>) => GuStack = (props?: Partial<GuStackProps>) =>
+  new GuStack(new App(), "Test", { app: "testing", ...props });

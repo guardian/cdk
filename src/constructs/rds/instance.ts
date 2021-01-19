@@ -34,7 +34,7 @@ export class GuDatabaseInstance extends DatabaseInstance {
       ...(parameterGroup && { parameterGroup }),
     });
 
-    if (props.overrideId) {
+    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false)) {
       (this.node.defaultChild as CfnDBInstance).overrideLogicalId(id);
     }
   }
