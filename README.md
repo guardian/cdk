@@ -2,7 +2,7 @@
 
 Welcome to the Guardian CDK library! This library contains a number of reusable patterns and constructs which can be used to build up your AWS Cloudformation stacks.
 
-📖 API documentation can be found [here](https://guardian.github.io/cdk/).
+📖 View the available components in the [API documentation](https://guardian.github.io/cdk/).
 
 ## Wait, what is CDK?
 
