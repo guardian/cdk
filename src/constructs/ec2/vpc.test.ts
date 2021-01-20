@@ -1,7 +1,7 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import type { SynthedStack } from "../../../test/utils";
 import { simpleGuStackForTesting } from "../../../test/utils";
-import { GuVpc } from "./vpc";
+import { GuVpc, SubnetType } from "./vpc";
 
 describe("The GuVpc class", () => {
   describe("subnets method", () => {
@@ -15,6 +15,36 @@ describe("The GuVpc class", () => {
 
       // test that no extra subnets are defined
       expect(rest.length).toBe(0);
+    });
+  });
+
+  describe("subnetsFromParameter method", () => {
+    test("adds the parameter with default type as private", () => {
+      const stack = simpleGuStackForTesting();
+
+      GuVpc.subnetsfromParameter(stack);
+
+      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+      expect(json.Parameters.PrivateSubnets).toEqual({
+        Default: "/account/vpc/primary/subnets/private",
+        Description: "A list of private subnets",
+        Type: "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+      });
+    });
+
+    test("adds a public subnets parameter if the type is public", () => {
+      const stack = simpleGuStackForTesting();
+
+      GuVpc.subnetsfromParameter(stack, { type: SubnetType.PUBLIC });
+
+      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+      expect(json.Parameters.PublicSubnets).toEqual({
+        Default: "/account/vpc/primary/subnets/public",
+        Description: "A list of public subnets",
+        Type: "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+      });
     });
   });
 
