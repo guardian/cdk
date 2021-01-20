@@ -12,7 +12,7 @@ describe("The GuVpc class", () => {
 
       expect(subnet1.subnetId).toBe("subnet1");
       expect(subnet2.subnetId).toBe("subnet2");
-      
+
       // test that no extra subnets are defined
       expect(rest.length).toBe(0);
     });
