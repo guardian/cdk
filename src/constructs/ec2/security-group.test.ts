@@ -157,14 +157,14 @@ describe("The GuWazuhAccess class", () => {
   });
 });
 
-describe("The GuSecurityGroup class", () => {
+describe("The GuPublicInternetAccessSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
   });
 
-  it("adds the ingresses passed in through props", () => {
+  it("adds global access on 443 by default", () => {
     const stack = simpleGuStackForTesting();
 
     new GuPublicInternetAccessSecurityGroup(stack, "InternetAccessGroup", {
