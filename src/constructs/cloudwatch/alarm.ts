@@ -5,7 +5,7 @@ import type { ITopic } from "@aws-cdk/aws-sns";
 import { Topic } from "@aws-cdk/aws-sns";
 import type { GuStack } from "../core";
 
-interface GuAlarmProps extends AlarmProps {
+export interface GuAlarmProps extends AlarmProps {
   snsTopicArn: string;
 }
 
