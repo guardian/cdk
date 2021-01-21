@@ -39,11 +39,10 @@ export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, props.code.bucket);
     const code = Code.fromBucket(bucket, props.code.key);
-    const { memorySize, timeout, ...rest } = props;
     super(scope, id, {
-      ...rest,
-      memorySize: defaultMemorySize(props.runtime, memorySize),
-      timeout: props.timeout ? props.timeout : Duration.seconds(30),
+      ...props,
+      memorySize: defaultMemorySize(props.runtime, props.memorySize),
+      timeout: props.timeout ?? Duration.seconds(30),
       code,
     });
 
