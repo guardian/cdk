@@ -1,8 +1,8 @@
 import { ComparisonOperator, MathExpression } from "@aws-cdk/aws-cloudwatch";
-import type { GuAlarmProps } from "../constructs/cloudwatch/alarm";
-import { GuAlarm } from "../constructs/cloudwatch/alarm";
-import type { GuStack } from "../constructs/core";
-import type { GuLambdaFunction } from "../constructs/lambda";
+import type { GuStack } from "../core";
+import type { GuLambdaFunction } from "../lambda";
+import type { GuAlarmProps } from "./alarm";
+import { GuAlarm } from "./alarm";
 
 export interface ErrorPercentageMonitoring
   extends Omit<GuAlarmProps, "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods"> {

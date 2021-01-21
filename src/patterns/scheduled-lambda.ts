@@ -1,9 +1,9 @@
 import type { Schedule } from "@aws-cdk/aws-events";
+import type { ErrorPercentageMonitoring } from "../constructs/cloudwatch/lambda-alarms";
+import { GuLambdaErrorPercentageAlarm } from "../constructs/cloudwatch/lambda-alarms";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
-import type { ErrorPercentageMonitoring } from "./lambda-alarms";
-import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";
 
 interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "rules" | "apis"> {
   schedule: Schedule;

@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
-import { simpleGuStackForTesting } from "../../test/utils";
-import { GuLambdaFunction } from "../constructs/lambda";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import { GuLambdaFunction } from "../lambda";
 import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";
 
 describe("The GuLambdaErrorPercentageAlarm pattern", () => {
