@@ -6,6 +6,18 @@ on:
     branches:
       - main
 jobs:
+  check-aws-cdk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.15.1 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: ./script/check-aws-cdk
   build:
     runs-on: ubuntu-latest
     strategy:
