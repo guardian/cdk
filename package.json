@@ -3,6 +3,7 @@
   "version": "0.23.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
     "lint": "eslint src test --ext .ts",
