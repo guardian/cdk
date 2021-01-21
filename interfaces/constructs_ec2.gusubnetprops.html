@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CidrIngress | @guardian/cdk - v0.23.0</title>
+	<title>GuSubnetProps | @guardian/cdk - v0.23.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.23.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
 				</li>
 				<li>
-					<a href="constructs_ec2.cidringress.html">CidrIngress</a>
+					<a href="constructs_ec2.gusubnetprops.html">GuSubnetProps</a>
 				</li>
 			</ul>
-			<h1>Interface CidrIngress</h1>
+			<h1>Interface GuSubnetProps</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CidrIngress</span>
+						<span class="target">GuSubnetProps</span>
 					</li>
 				</ul>
 			</section>
@@ -83,8 +83,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.cidringress.html#description" class="tsd-kind-icon">description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.cidringress.html#range" class="tsd-kind-icon">range</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gusubnetprops.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,22 +92,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="description" class="tsd-anchor"></a>
-					<h3>description</h3>
-					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="type" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../enums/constructs_ec2.subnettype.html#public" class="tsd-signature-type" data-tsd-kind="Enumeration member">PUBLIC</a><span class="tsd-signature-symbol"> | </span><a href="../enums/constructs_ec2.subnettype.html#private" class="tsd-signature-type" data-tsd-kind="Enumeration member">PRIVATE</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d83f422/src/constructs/ec2/security-groups.ts#L8">src/constructs/ec2/security-groups.ts:8</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="range" class="tsd-anchor"></a>
-					<h3>range</h3>
-					<div class="tsd-signature tsd-kind-icon">range<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPeer</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d83f422/src/constructs/ec2/security-groups.ts#L7">src/constructs/ec2/security-groups.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d83f422/src/constructs/ec2/vpc.ts#L18">src/constructs/ec2/vpc.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -172,27 +161,24 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_ec2.cidregress.html" class="tsd-kind-icon">Cidr<wbr>Egress</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_ec2.cidringress.html" class="tsd-kind-icon">Cidr<wbr>Ingress</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_ec2.cidringress.html" class="tsd-kind-icon">Cidr<wbr>Ingress</a>
+						<a href="constructs_ec2.gusubnetprops.html" class="tsd-kind-icon">Gu<wbr>Subnet<wbr>Props</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_ec2.cidringress.html#description" class="tsd-kind-icon">description</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_ec2.cidringress.html#range" class="tsd-kind-icon">range</a>
+								<a href="constructs_ec2.gusubnetprops.html#type" class="tsd-kind-icon">type</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_ec2.gusubnetprops.html" class="tsd-kind-icon">Gu<wbr>Subnet<wbr>Props</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
