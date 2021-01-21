@@ -27,9 +27,7 @@ Constructs are lower level classes which will create one or more resources to pr
 
 If there is a pattern available for your use case, prefer to use that over composing constructs yourself. We welcome feedback and/or PRs to extend the functionality of patterns. Where you need to do something outside of currently available patterns, you can use the constructs to provide some level of abstraction. In this case, consider whether it's worth defining a pattern.
 
-## Decision Records
-
-## Architecture
+### Decision Records
 
 [Architecture Decisions Records](https://github.com/joelparkerhenderson/architecture_decision_record) are files where we can document the decisions we make around any form of structure, architecture or approach. By documenting them in this way, we can preserve the thought process behind all of the decisions whilst also laying out formally the preferences for all developers working on the library.
 
