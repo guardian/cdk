@@ -84,6 +84,7 @@ Object {
           "S3Key": "folder/to/key",
         },
         "Handler": "handler.ts",
+        "MemorySize": 512,
         "Role": Object {
           "Fn::GetAtt": Array [
             "lambdaServiceRole494E4CA6",
