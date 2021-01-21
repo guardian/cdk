@@ -6,6 +6,7 @@ import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
+import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
@@ -38,10 +39,11 @@ export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, props.code.bucket);
     const code = Code.fromBucket(bucket, props.code.key);
-    const { memorySize, ...rest } = props;
+    const { memorySize, timeout, ...rest } = props;
     super(scope, id, {
       ...rest,
       memorySize: defaultMemorySize(props.runtime, memorySize),
+      timeout: props.timeout ? props.timeout : Duration.seconds(30),
       code,
     });
 
