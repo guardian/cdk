@@ -143,4 +143,62 @@ describe("The GuLambdaFunction class", () => {
       },
     });
   });
+
+  it("should use the memorySize provided via props when it is defined", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+      memorySize: 2048,
+    });
+
+    expect(stack).toHaveResource("AWS::Lambda::Function", {
+      MemorySize: 2048,
+    });
+  });
+
+  it("should add a sensible default memorySize if none is provided", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+    });
+
+    expect(stack).toHaveResource("AWS::Lambda::Function", {
+      MemorySize: 1024,
+    });
+  });
+
+  it("should use the timeout provided via props when it is defined", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+      timeout: Duration.seconds(60),
+    });
+
+    expect(stack).toHaveResource("AWS::Lambda::Function", {
+      Timeout: 60,
+    });
+  });
+
+  it("should add a sensible default timeout if none is provided", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+    });
+
+    expect(stack).toHaveResource("AWS::Lambda::Function", {
+      Timeout: 30,
+    });
+  });
 });
