@@ -4,16 +4,15 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { GuStack } from "../core";
+import { GuInstanceTypeParameter, GuStringParameter } from "../core";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
 export interface GuAutoScalingGroupProps
   extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
-  imageId: string;
   osType?: OperatingSystemType;
   machineImage?: MachineImage;
-  instanceType: string;
   userData: string;
   securityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
@@ -22,6 +21,12 @@ export interface GuAutoScalingGroupProps
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
+    const imageId = new GuStringParameter(scope, "AMI", {
+      description: "AMI ID",
+    });
+
+    const instanceType = new GuInstanceTypeParameter(scope);
+
     // We need to override getImage() so that we can pass in the AMI as a parameter
     // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
     // as the name is hard-coded
@@ -29,20 +34,22 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       return {
         osType: props.osType ?? OperatingSystemType.LINUX,
         userData: UserData.custom(props.userData),
-        imageId: props.imageId,
+        imageId: imageId.valueAsString,
       };
     }
 
-    super(scope, id, {
+    const mergedProps = {
       ...props,
       machineImage: { getImage: getImage },
-      instanceType: new InstanceType(props.instanceType),
+      instanceType: new InstanceType(instanceType.valueAsString),
       userData: UserData.custom(props.userData),
-    });
+    };
 
-    props.targetGroup && this.attachToApplicationTargetGroup(props.targetGroup);
+    super(scope, id, mergedProps);
 
-    props.securityGroups?.forEach((sg) => this.addSecurityGroup(sg));
+    mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
+
+    mergedProps.securityGroups?.forEach((sg) => this.addSecurityGroup(sg));
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group
@@ -50,6 +57,6 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
 
-    if (props.overrideId) cfnAsg.overrideLogicalId(id);
+    if (mergedProps.overrideId) cfnAsg.overrideLogicalId(id);
   }
 }

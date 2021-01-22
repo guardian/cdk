@@ -18,28 +18,45 @@ describe("The GuAutoScalingGroup", () => {
   });
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
-    imageId: "123",
-    instanceType: "t3.macro", // Use a value that doesn't exist to ensure that we haven't matched a default
     userData: "user data",
   };
 
-  test("correctly sets the machine image using props and calling getImage", () => {
+  test("adds the AMI parameter", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
 
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.AMI).toEqual({
+      Description: "AMI ID",
+      Type: "String",
+    });
+
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
-      ImageId: "123",
+      ImageId: {
+        Ref: "AMI",
+      },
     });
   });
 
-  test("correctly sets instance type using prop", () => {
+  test("adds the instanceType parameter", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.InstanceType).toEqual({
+      Type: "String",
+      Description: "EC2 Instance Type",
+      Default: "t3.small",
+    });
+
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
-      InstanceType: "t3.macro",
+      InstanceType: {
+        Ref: "InstanceType",
+      },
     });
   });
 

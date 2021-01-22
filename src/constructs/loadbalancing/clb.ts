@@ -1,33 +1,50 @@
-import type { CfnLoadBalancer, LoadBalancerProps } from "@aws-cdk/aws-elasticloadbalancing";
-import { LoadBalancer } from "@aws-cdk/aws-elasticloadbalancing";
+import type { CfnLoadBalancer, HealthCheck, LoadBalancerProps } from "@aws-cdk/aws-elasticloadbalancing";
+import { LoadBalancer, LoadBalancingProtocol } from "@aws-cdk/aws-elasticloadbalancing";
+import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 
 enum RemoveableProperties {
   SCHEME = "Scheme",
 }
 
-interface GuClassicLoadBalancerProps extends LoadBalancerProps {
+interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck"> {
   overrideId?: boolean;
   propertiesToRemove?: RemoveableProperties[];
   propertiesToOverride?: Record<string, unknown>;
+  healthCheck?: Partial<HealthCheck>;
 }
 
 export class GuClassicLoadBalancer extends LoadBalancer {
   static RemoveableProperties = RemoveableProperties;
 
+  static DefaultHealthCheck = {
+    port: 9000,
+    path: "/healthcheck",
+    protocol: LoadBalancingProtocol.HTTP,
+    healthyThreshold: 2,
+    unhealthyThreshold: 5,
+    interval: Duration.seconds(30),
+    timeout: Duration.seconds(10),
+  };
+
   constructor(scope: GuStack, id: string, props: GuClassicLoadBalancerProps) {
-    super(scope, id, props);
+    const mergedProps = {
+      ...props,
+      healthCheck: { ...GuClassicLoadBalancer.DefaultHealthCheck, ...props.healthCheck },
+    };
+
+    super(scope, id, mergedProps);
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
+    if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
       cfnLb.overrideLogicalId(id);
 
-    props.propertiesToRemove?.forEach((key) => {
+    mergedProps.propertiesToRemove?.forEach((key) => {
       cfnLb.addPropertyDeletionOverride(key);
     });
 
-    props.propertiesToOverride &&
-      Object.entries(props.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
+    mergedProps.propertiesToOverride &&
+      Object.entries(mergedProps.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
   }
 }

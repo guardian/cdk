@@ -4,6 +4,8 @@ Welcome to the Guardian CDK library! This library contains a number of reusable 
 
 📖 View the available components in the [API documentation](https://guardian.github.io/cdk/).
 
+💬 Come and chat to us in [Discussions](https://github.com/guardian/cdk/discussions)
+
 ## Wait, what is CDK?
 
 > The AWS Cloud Development Kit (AWS CDK) is an open-source software development framework to define cloud infrastructure in code and provision it through AWS CloudFormation.
@@ -11,8 +13,6 @@ Welcome to the Guardian CDK library! This library contains a number of reusable 
 You can read more about it in the [aws-cdk README](https://github.com/aws/aws-cdk).
 
 ## Architecture
-
-Read more about constructs, patterns and other architectural decisions in [docs](docs)
 
 ### Patterns
 
@@ -26,6 +26,12 @@ Patterns should be your default entry point to this library.
 Constructs are lower level classes which will create one or more resources to produce one element of a stack. For example, the `GuDatabaseInstance` will create an RDS instance as well as a parameter group, if required. This library defines a number of constructs which are combined to create the higher level patterns.
 
 If there is a pattern available for your use case, prefer to use that over composing constructs yourself. We welcome feedback and/or PRs to extend the functionality of patterns. Where you need to do something outside of currently available patterns, you can use the constructs to provide some level of abstraction. In this case, consider whether it's worth defining a pattern.
+
+### Decision Records
+
+[Architecture Decisions Records](https://github.com/joelparkerhenderson/architecture_decision_record) are files where we can document the decisions we make around any form of structure, architecture or approach. By documenting them in this way, we can preserve the thought process behind all of the decisions whilst also laying out formally the preferences for all developers working on the library.
+
+The [docs/architecture-decision-records directory](https://github.com/guardian/cdk/tree/main/docs/architecture-decision-records) contains the records for `@guardian/cdk`.
 
 ## Useful commands
 

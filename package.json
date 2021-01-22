@@ -1,8 +1,9 @@
 {
   "name": "@guardian/cdk",
-  "version": "0.22.0",
+  "version": "0.24.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
     "lint": "eslint src test --ext .ts",
@@ -10,10 +11,10 @@
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
-    "prepublish": "tsc",
+    "prepare": "tsc",
     "release": "np minor --no-yarn --branch main",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
-    "serve:docs": "rm -rf target && typedoc && http-server target -o"
+    "serve:docs": "rm -rf target && typedoc && serve target"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.2",
@@ -28,10 +29,10 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
     "gh-pages": "^3.1.0",
-    "http-server": "^0.12.3",
     "jest": "^26.4.2",
     "np": "^7.2.0",
     "prettier": "^2.2.1",
+    "serve": "^11.3.2",
     "ts-jest": "^26.2.0",
     "typedoc": "^0.20.16",
     "typescript": "~4.1.3"

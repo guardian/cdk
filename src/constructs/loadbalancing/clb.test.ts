@@ -78,4 +78,41 @@ describe("The GuClassicLoadBalancer class", () => {
       },
     });
   });
+
+  test("uses default health check properties", () => {
+    const stack = simpleGuStackForTesting();
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      vpc,
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      HealthCheck: {
+        HealthyThreshold: "2",
+        Interval: "30",
+        Target: "HTTP:9000/healthcheck",
+        Timeout: "10",
+        UnhealthyThreshold: "5",
+      },
+    });
+  });
+
+  test("merges any health check properties provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      vpc,
+      healthCheck: {
+        path: "/test",
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      HealthCheck: {
+        HealthyThreshold: "2",
+        Interval: "30",
+        Target: "HTTP:9000/test",
+        Timeout: "10",
+        UnhealthyThreshold: "5",
+      },
+    });
+  });
 });
