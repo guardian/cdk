@@ -3,6 +3,7 @@
   "version": "0.23.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
     "lint": "eslint src test --ext .ts",
@@ -10,7 +11,7 @@
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
-    "prepublish": "tsc",
+    "prepare": "tsc",
     "release": "np minor --no-yarn --branch main",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target"
