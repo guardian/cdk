@@ -39,6 +39,32 @@ Object {
             ],
           },
         ],
+        "AlarmDescription": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "mylambdafunction8D341B54",
+              },
+              " exceeded 99% error rate",
+            ],
+          ],
+        },
+        "AlarmName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "High error % from ",
+              Object {
+                "Ref": "mylambdafunction8D341B54",
+              },
+              " lambda in ",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": Array [

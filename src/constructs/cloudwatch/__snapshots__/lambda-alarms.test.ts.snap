@@ -179,6 +179,32 @@ Object {
             ],
           },
         ],
+        "AlarmDescription": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "lambda8B5974B5",
+              },
+              " exceeded 65% error rate",
+            ],
+          ],
+        },
+        "AlarmName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "High error % from ",
+              Object {
+                "Ref": "lambda8B5974B5",
+              },
+              " lambda in ",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 12,
         "Metrics": Array [
@@ -425,6 +451,32 @@ Object {
             ],
           },
         ],
+        "AlarmDescription": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "lambda8B5974B5",
+              },
+              " exceeded 80% error rate",
+            ],
+          ],
+        },
+        "AlarmName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "High error % from ",
+              Object {
+                "Ref": "lambda8B5974B5",
+              },
+              " lambda in ",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": Array [
@@ -485,6 +537,526 @@ Object {
           },
         ],
         "Threshold": 80,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+  },
+}
+`;
+
+exports[`The GuLambdaErrorPercentageAlarm pattern should use a custom alarm name if one is provided 1`] = `
+Object {
+  "Parameters": Object {
+    "Stack": Object {
+      "Default": "deploy",
+      "Description": "Name of this stack",
+      "Type": "String",
+    },
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "lambda8B5974B5": Object {
+      "DependsOn": Array [
+        "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "lambdaServiceRole494E4CA6",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "bucket1",
+          "S3Key": "folder/to/key",
+        },
+        "Handler": "handler.ts",
+        "MemorySize": 512,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "lambdaServiceRole494E4CA6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "lambdaServiceRole494E4CA6": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1",
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "Roles": Array [
+          Object {
+            "Ref": "lambdaServiceRole494E4CA6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mylambdafunction8D341B54": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alerts-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "lambda8B5974B5",
+              },
+              " exceeded 65% error rate",
+            ],
+          ],
+        },
+        "AlarmName": "test-custom-alarm-name",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 12,
+        "Metrics": Array [
+          Object {
+            "Expression": "100*m1/m2",
+            "Id": "expr_1",
+            "Label": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "Error % of ",
+                  Object {
+                    "Ref": "lambda8B5974B5",
+                  },
+                ],
+              ],
+            },
+          },
+          Object {
+            "Id": "m1",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "FunctionName",
+                    "Value": Object {
+                      "Ref": "lambda8B5974B5",
+                    },
+                  },
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          Object {
+            "Id": "m2",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "FunctionName",
+                    "Value": Object {
+                      "Ref": "lambda8B5974B5",
+                    },
+                  },
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 65,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+  },
+}
+`;
+
+exports[`The GuLambdaErrorPercentageAlarm pattern should use a custom description if one is provided 1`] = `
+Object {
+  "Parameters": Object {
+    "Stack": Object {
+      "Default": "deploy",
+      "Description": "Name of this stack",
+      "Type": "String",
+    },
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "lambda8B5974B5": Object {
+      "DependsOn": Array [
+        "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "lambdaServiceRole494E4CA6",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "bucket1",
+          "S3Key": "folder/to/key",
+        },
+        "Handler": "handler.ts",
+        "MemorySize": 512,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "lambdaServiceRole494E4CA6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "lambdaServiceRole494E4CA6": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1",
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::bucket1/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "Roles": Array [
+          Object {
+            "Ref": "lambdaServiceRole494E4CA6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mylambdafunction8D341B54": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alerts-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "test-custom-alarm-description",
+        "AlarmName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "High error % from ",
+              Object {
+                "Ref": "lambda8B5974B5",
+              },
+              " lambda in ",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 12,
+        "Metrics": Array [
+          Object {
+            "Expression": "100*m1/m2",
+            "Id": "expr_1",
+            "Label": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "Error % of ",
+                  Object {
+                    "Ref": "lambda8B5974B5",
+                  },
+                ],
+              ],
+            },
+          },
+          Object {
+            "Id": "m1",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "FunctionName",
+                    "Value": Object {
+                      "Ref": "lambda8B5974B5",
+                    },
+                  },
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          Object {
+            "Id": "m2",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "FunctionName",
+                    "Value": Object {
+                      "Ref": "lambda8B5974B5",
+                    },
+                  },
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 65,
       },
       "Type": "AWS::CloudWatch::Alarm",
     },

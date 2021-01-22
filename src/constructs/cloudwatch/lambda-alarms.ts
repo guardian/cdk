@@ -28,12 +28,16 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
       usingMetrics: { m1: props.lambda.metricErrors(), m2: props.lambda.metricInvocations() },
       label: `Error % of ${props.lambda.functionName}`,
     });
+    const defaultAlarmName = `High error % from ${props.lambda.functionName} lambda in ${scope.stage}`;
+    const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
     const alarmProps = {
       ...props,
       metric: mathExpression,
       threshold: props.toleratedErrorPercentage,
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
-      evaluationPeriods: props.numberOfFiveMinutePeriodsToEvaluate ? props.numberOfFiveMinutePeriodsToEvaluate : 1,
+      evaluationPeriods: props.numberOfFiveMinutePeriodsToEvaluate ?? 1,
+      alarmName: props.alarmName ?? defaultAlarmName,
+      alarmDescription: props.alarmDescription ?? defaultDescription,
     };
     super(scope, id, alarmProps);
   }

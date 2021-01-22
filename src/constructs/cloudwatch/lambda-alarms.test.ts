@@ -41,4 +41,46 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       EvaluationPeriods: 12,
     });
   });
+
+  it("should use a custom description if one is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const lambda = new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+    });
+    const props = {
+      toleratedErrorPercentage: 65,
+      numberOfFiveMinutePeriodsToEvaluate: 12,
+      snsTopicName: "alerts-topic",
+      alarmDescription: "test-custom-alarm-description",
+      lambda: lambda,
+    };
+    new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+      AlarmDescription: "test-custom-alarm-description",
+    });
+  });
+
+  it("should use a custom alarm name if one is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const lambda = new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+    });
+    const props = {
+      toleratedErrorPercentage: 65,
+      numberOfFiveMinutePeriodsToEvaluate: 12,
+      snsTopicName: "alerts-topic",
+      lambda: lambda,
+      alarmName: "test-custom-alarm-name",
+    };
+    new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+      AlarmName: "test-custom-alarm-name",
+    });
+  });
 });
