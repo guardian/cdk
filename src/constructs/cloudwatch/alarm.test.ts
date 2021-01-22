@@ -20,7 +20,7 @@ describe("The GuAlarm class", () => {
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       threshold: 1,
       evaluationPeriods: 1,
-      snsTopicArn: "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+      snsTopicName: "alerts-topic",
     });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
   });
@@ -39,10 +39,27 @@ describe("The GuAlarm class", () => {
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       threshold: 1,
       evaluationPeriods: 1,
-      snsTopicArn: "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+      snsTopicName: "alerts-topic",
     });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
-      AlarmActions: ["arn:aws:sns:eu-west-1:123456789012:alerts-topic"],
+      AlarmActions: [
+        {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:sns:",
+              {
+                Ref: "AWS::Region",
+              },
+              ":",
+              {
+                Ref: "AWS::AccountId",
+              },
+              ":alerts-topic",
+            ],
+          ],
+        },
+      ],
     });
   });
 });

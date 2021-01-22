@@ -15,7 +15,7 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
     });
     const props = {
       toleratedErrorPercentage: 80,
-      snsTopicArn: "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+      snsTopicName: "alerts-topic",
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
@@ -32,7 +32,7 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
     const props = {
       toleratedErrorPercentage: 65,
       numberOfFiveMinutePeriodsToEvaluate: 12,
-      snsTopicArn: "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+      snsTopicName: "alerts-topic",
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);

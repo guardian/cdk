@@ -160,7 +160,22 @@ Object {
     "mylambdafunction8D341B54": Object {
       "Properties": Object {
         "AlarmActions": Array [
-          "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alerts-topic",
+              ],
+            ],
+          },
         ],
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 12,
@@ -378,7 +393,22 @@ Object {
     "mylambdafunction8D341B54": Object {
       "Properties": Object {
         "AlarmActions": Array [
-          "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alerts-topic",
+              ],
+            ],
+          },
         ],
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,

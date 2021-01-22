@@ -30,7 +30,7 @@ describe("The GuScheduledLambda pattern", () => {
       schedule: Schedule.rate(Duration.seconds(60)),
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
-        snsTopicArn: "arn:aws:sns:eu-west-1:123456789012:alerts-topic",
+        snsTopicName: "alerts-topic",
       },
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
