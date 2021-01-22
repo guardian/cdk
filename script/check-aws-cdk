@@ -13,7 +13,7 @@ TOTAL_VERSIONS=$(echo "$VERSIONS" | jq '. | length')
 
 INSTALLED_VERSION_NUMBER=$(jq -r ".dependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
 
-INSTALLED_VERSION_POSITION=$(echo "$VERSIONS" | jq ". | index(\"${INSTALLED_VERSION_NUMBER:1}\")") # :1 to remove the first character (~)
+INSTALLED_VERSION_POSITION=$(echo "$VERSIONS" | jq ". | index(\"${INSTALLED_VERSION_NUMBER}\")")
 
 DIFFERENCE=$((TOTAL_VERSIONS - INSTALLED_VERSION_POSITION))
 
