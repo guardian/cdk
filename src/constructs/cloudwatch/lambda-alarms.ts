@@ -26,6 +26,7 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
     const mathExpression = new MathExpression({
       expression: "100*m1/m2",
       usingMetrics: { m1: props.lambda.metricErrors(), m2: props.lambda.metricInvocations() },
+      label: `Error % of ${props.lambda.functionName}`,
     });
     const alarmProps = {
       ...props,

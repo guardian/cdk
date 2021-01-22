@@ -185,6 +185,17 @@ Object {
           Object {
             "Expression": "100*m1/m2",
             "Id": "expr_1",
+            "Label": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "Error % of ",
+                  Object {
+                    "Ref": "lambda8B5974B5",
+                  },
+                ],
+              ],
+            },
           },
           Object {
             "Id": "m1",
@@ -420,6 +431,17 @@ Object {
           Object {
             "Expression": "100*m1/m2",
             "Id": "expr_1",
+            "Label": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "Error % of ",
+                  Object {
+                    "Ref": "lambda8B5974B5",
+                  },
+                ],
+              ],
+            },
           },
           Object {
             "Id": "m1",

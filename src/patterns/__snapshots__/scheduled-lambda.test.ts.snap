@@ -45,6 +45,17 @@ Object {
           Object {
             "Expression": "100*m1/m2",
             "Id": "expr_1",
+            "Label": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "Error % of ",
+                  Object {
+                    "Ref": "mylambdafunction8D341B54",
+                  },
+                ],
+              ],
+            },
           },
           Object {
             "Id": "m1",
