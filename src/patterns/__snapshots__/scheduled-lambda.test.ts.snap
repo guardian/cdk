@@ -103,6 +103,7 @@ Object {
         },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
+        "MemorySize": 512,
         "Role": Object {
           "Fn::GetAtt": Array [
             "mylambdafunctionServiceRoleE82C2E25",
@@ -128,6 +129,7 @@ Object {
             },
           },
         ],
+        "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
     },
@@ -302,6 +304,7 @@ Object {
         },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
+        "MemorySize": 512,
         "Role": Object {
           "Fn::GetAtt": Array [
             "mylambdafunctionServiceRoleE82C2E25",
@@ -327,6 +330,7 @@ Object {
             },
           },
         ],
+        "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
     },
