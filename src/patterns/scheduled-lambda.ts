@@ -1,6 +1,5 @@
 import type { Schedule } from "@aws-cdk/aws-events";
-import type { ErrorPercentageMonitoring } from "../../lib/patterns/lambda-alarms";
-import type { LambdaMonitoring } from "../constructs/cloudwatch/lambda-alarms";
+import type { ErrorPercentageMonitoring, LambdaMonitoring } from "../constructs/cloudwatch/lambda-alarms";
 import { GuLambdaErrorPercentageAlarm } from "../constructs/cloudwatch/lambda-alarms";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
