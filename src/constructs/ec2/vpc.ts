@@ -30,7 +30,7 @@ export class GuVpc {
      * As a hacky workaround, we have moved to using the fromSubnetAttributes method and hardcoded an empty value
      * for the routeTableId prop. This prevents the error and, when tested on existings stacks, results in no change to the CFN output
      *
-     * TODO: Understand VPCs and Subnets better and developer a better solution to this problem
+     * TODO: Understand VPCs and Subnets better and develop a better solution to this problem
      */
     return subnets.map((subnetId) =>
       Subnet.fromSubnetAttributes(scope, `subnet-${subnetId}`, { subnetId, routeTableId: " " })
