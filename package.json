@@ -14,7 +14,8 @@
     "prepare": "tsc",
     "release": "np minor --no-yarn --branch main",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
-    "serve:docs": "rm -rf target && typedoc && serve target"
+    "serve:docs": "rm -rf target && typedoc && serve target",
+    "update-aws-cdk": "ncu \"/^@aws-cdk/.*$/\" --upgrade && npm install"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.4.2",
@@ -31,6 +32,7 @@
     "gh-pages": "^3.1.0",
     "jest": "^26.4.2",
     "np": "^7.2.0",
+    "npm-check-updates": "^11.0.2",
     "prettier": "^2.2.1",
     "serve": "^11.3.2",
     "ts-jest": "^26.2.0",
