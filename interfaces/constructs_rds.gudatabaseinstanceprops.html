@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuDatabaseInstanceProps | @guardian/cdk - v0.24.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v0.24.0">
+	<title>GuDatabaseInstanceProps | @guardian/cdk - v0.25.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v0.25.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v0.24.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v0.25.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v0.24.0</a>
+					<a href="../modules.html">@guardian/cdk - v0.25.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_rds.html">constructs/rds</a>
@@ -125,6 +125,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#preferredbackupwindow" class="tsd-kind-icon">preferred<wbr>Backup<wbr>Window</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#preferredmaintenancewindow" class="tsd-kind-icon">preferred<wbr>Maintenance<wbr>Window</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#processorfeatures" class="tsd-kind-icon">processor<wbr>Features</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#publiclyaccessible" class="tsd-kind-icon">publicly<wbr>Accessible</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#removalpolicy" class="tsd-kind-icon">removal<wbr>Policy</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#s3exportbuckets" class="tsd-kind-icon">s3<wbr>Export<wbr>Buckets</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_rds.gudatabaseinstanceprops.html#s3exportrole" class="tsd-kind-icon">s3<wbr>Export<wbr>Role</a></li>
@@ -152,7 +153,7 @@
 					<div class="tsd-signature tsd-kind-icon">allocated<wbr>Storage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:572</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:709</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -163,6 +164,9 @@
 							<dt>default</dt>
 							<dd><p>100</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -172,7 +176,7 @@
 					<div class="tsd-signature tsd-kind-icon">allow<wbr>Major<wbr>Version<wbr>Upgrade<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:558</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:693</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -183,6 +187,9 @@
 							<dt>default</dt>
 							<dd><p>false</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -192,7 +199,7 @@
 					<div class="tsd-signature tsd-kind-icon">auto<wbr>Minor<wbr>Version<wbr>Upgrade<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:392</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:498</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -203,6 +210,9 @@
 							<dt>default</dt>
 							<dd><p>true</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -212,7 +222,7 @@
 					<div class="tsd-signature tsd-kind-icon">availability<wbr>Zone<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:225</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:304</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -225,6 +235,9 @@
 									<li>no preference</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -234,7 +247,7 @@
 					<div class="tsd-signature tsd-kind-icon">backup<wbr>Retention<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Duration</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:308</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:402</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -248,6 +261,9 @@
 							<dt>default</dt>
 							<dd><p>Duration.days(1)</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -257,7 +273,7 @@
 					<div class="tsd-signature tsd-kind-icon">character<wbr>Set<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:638</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:786</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -270,6 +286,9 @@
 									<li>RDS default character set name</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -279,7 +298,7 @@
 					<div class="tsd-signature tsd-kind-icon">cloudwatch<wbr>Logs<wbr>Exports<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:370</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:473</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -292,6 +311,9 @@
 									<li>no log exports</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -301,7 +323,7 @@
 					<div class="tsd-signature tsd-kind-icon">cloudwatch<wbr>Logs<wbr>Retention<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ONE_DAY</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">THREE_DAYS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FIVE_DAYS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ONE_WEEK</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TWO_WEEKS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ONE_MONTH</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TWO_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">THREE_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FOUR_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FIVE_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SIX_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ONE_YEAR</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">THIRTEEN_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">EIGHTEEN_MONTHS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TWO_YEARS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FIVE_YEARS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TEN_YEARS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">INFINITE</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:380</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:484</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -317,6 +339,9 @@
 									<li>logs never expire</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -326,7 +351,7 @@
 					<div class="tsd-signature tsd-kind-icon">cloudwatch<wbr>Logs<wbr>Retention<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IRole</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:386</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:491</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -339,6 +364,9 @@
 									<li>a new role is created.</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -348,7 +376,7 @@
 					<div class="tsd-signature tsd-kind-icon">copy<wbr>Tags<wbr>ToSnapshot<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:328</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:424</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -359,6 +387,9 @@
 							<dt>default</dt>
 							<dd><p>true</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -368,7 +399,7 @@
 					<div class="tsd-signature tsd-kind-icon">credentials<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Credentials</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:632</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:779</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -381,6 +412,9 @@
 									<li>A username of &#39;admin&#39; (or &#39;postgres&#39; for PostgreSQL) and SecretsManager-generated password</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -390,7 +424,7 @@
 					<div class="tsd-signature tsd-kind-icon">database<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:578</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:716</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -403,6 +437,9 @@
 									<li>no name</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -412,7 +449,7 @@
 					<div class="tsd-signature tsd-kind-icon">delete<wbr>Automated<wbr>Backups<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:334</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:431</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -423,6 +460,9 @@
 							<dt>default</dt>
 							<dd><p>false</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -432,7 +472,7 @@
 					<div class="tsd-signature tsd-kind-icon">deletion<wbr>Protection<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:409</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:517</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -445,6 +485,9 @@
 									<li>true if <code>removalPolicy</code> is RETAIN, false otherwise</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -454,7 +497,7 @@
 					<div class="tsd-signature tsd-kind-icon">domain<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:428</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:539</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -467,6 +510,9 @@
 									<li>Do not join domain</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -476,7 +522,7 @@
 					<div class="tsd-signature tsd-kind-icon">domain<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IRole</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:437</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:549</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -491,6 +537,9 @@
 									<li>The role will be created for you if {@link DatabaseInstanceNewProps#domain} is specified</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -500,7 +549,7 @@
 					<div class="tsd-signature tsd-kind-icon">enable<wbr>Performance<wbr>Insights<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:352</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:452</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -513,6 +562,9 @@
 									<li>false, unless <code>performanceInsightRentention</code> or <code>performanceInsightEncryptionKey</code> is set.</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -522,13 +574,18 @@
 					<div class="tsd-signature tsd-kind-icon">engine<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IInstanceEngine</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:540</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:672</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The database engine.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
@@ -537,7 +594,7 @@
 					<div class="tsd-signature tsd-kind-icon">iam<wbr>Authentication<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:298</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:391</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -548,6 +605,9 @@
 							<dt>default</dt>
 							<dd><p>false</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -557,7 +617,7 @@
 					<div class="tsd-signature tsd-kind-icon">instance<wbr>Identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:257</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:343</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -572,6 +632,9 @@
 									<li>a CloudFormation generated name</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -581,7 +644,7 @@
 					<div class="tsd-signature tsd-kind-icon">instance<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/bc97060/src/constructs/rds/instance.ts#L9">src/constructs/rds/instance.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/9af50bc/src/constructs/rds/instance.ts#L9">src/constructs/rds/instance.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -591,7 +654,7 @@
 					<div class="tsd-signature tsd-kind-icon">iops<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:239</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:323</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -605,6 +668,9 @@
 									<li>no provisioned iops</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -614,7 +680,7 @@
 					<div class="tsd-signature tsd-kind-icon">license<wbr>Model<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">LICENSE_INCLUDED</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">BRING_YOUR_OWN_LICENSE</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">GENERAL_PUBLIC_LICENSE</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:552</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:686</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -627,6 +693,9 @@
 									<li>RDS default license model</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -636,7 +705,7 @@
 					<div class="tsd-signature tsd-kind-icon">max<wbr>Allocated<wbr>Storage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:422</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:532</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -652,6 +721,9 @@
 							<dt>see</dt>
 							<dd><p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling</a></p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -661,7 +733,7 @@
 					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Duration</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:340</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:438</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -674,6 +746,9 @@
 									<li>no enhanced monitoring</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -683,7 +758,7 @@
 					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IRole</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:346</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:445</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -696,6 +771,9 @@
 									<li>A role is automatically created for you</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -705,7 +783,7 @@
 					<div class="tsd-signature tsd-kind-icon">multi<wbr>Az<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:219</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:297</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -716,6 +794,9 @@
 							<dt>default</dt>
 							<dd><p>false</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -725,7 +806,7 @@
 					<div class="tsd-signature tsd-kind-icon">option<wbr>Group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IOptionGroup</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:292</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:384</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -738,6 +819,9 @@
 									<li>no option group</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -747,7 +831,7 @@
 					<div class="tsd-signature tsd-kind-icon">override<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/bc97060/src/constructs/rds/instance.ts#L8">src/constructs/rds/instance.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/9af50bc/src/constructs/rds/instance.ts#L8">src/constructs/rds/instance.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -757,7 +841,7 @@
 					<div class="tsd-signature tsd-kind-icon">parameter<wbr>Group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IParameterGroup</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:584</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:723</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -770,6 +854,9 @@
 									<li>no parameter group</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -779,7 +866,7 @@
 					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/bc97060/src/constructs/rds/instance.ts#L10">src/constructs/rds/instance.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/9af50bc/src/constructs/rds/instance.ts#L10">src/constructs/rds/instance.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -789,7 +876,7 @@
 					<div class="tsd-signature tsd-kind-icon">performance<wbr>Insight<wbr>Encryption<wbr>Key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IKey</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:364</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:466</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -802,6 +889,9 @@
 									<li>default master key</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -811,7 +901,7 @@
 					<div class="tsd-signature tsd-kind-icon">performance<wbr>Insight<wbr>Retention<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">DEFAULT</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">LONG_TERM</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:358</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:459</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -822,6 +912,9 @@
 							<dt>default</dt>
 							<dd><p>7</p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -831,7 +924,7 @@
 					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:286</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:377</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -844,6 +937,9 @@
 									<li>the default port for the chosen engine.</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -853,7 +949,7 @@
 					<div class="tsd-signature tsd-kind-icon">preferred<wbr>Backup<wbr>Window<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:322</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:417</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -875,6 +971,9 @@
 									<a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow</a></li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -884,7 +983,7 @@
 					<div class="tsd-signature tsd-kind-icon">preferred<wbr>Maintenance<wbr>Window<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:403</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:510</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -901,6 +1000,9 @@
 									the time blocks available, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#Concepts.DBMaintenance">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#Concepts.DBMaintenance</a></li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -910,7 +1012,7 @@
 					<div class="tsd-signature tsd-kind-icon">processor<wbr>Features<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ProcessorFeatures</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:248</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:333</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -925,6 +1027,34 @@
 								</ul>
 								<p>See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor</a></p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="publiclyaccessible" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> publicly<wbr>Accessible</h3>
+					<div class="tsd-signature tsd-kind-icon">publicly<wbr>Accessible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:619</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Indicates whether the DB instance is an internet-facing instance.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li><code>true</code> if <code>vpcSubnets</code> is <code>subnetType: SubnetType.PUBLIC</code>, <code>false</code> otherwise</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -934,7 +1064,7 @@
 					<div class="tsd-signature tsd-kind-icon">removal<wbr>Policy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">DESTROY</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RETAIN</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SNAPSHOT</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:415</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:524</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -947,6 +1077,9 @@
 									<li>RemovalPolicy.SNAPSHOT (remove the resource, but retain a snapshot of the data)</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -956,7 +1089,7 @@
 					<div class="tsd-signature tsd-kind-icon">s3<wbr>Export<wbr>Buckets<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IBucket</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:495</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:612</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -975,6 +1108,9 @@
 							<dt>see</dt>
 							<dd><p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-s3-integration.html">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-s3-integration.html</a></p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -984,7 +1120,7 @@
 					<div class="tsd-signature tsd-kind-icon">s3<wbr>Export<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IRole</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:482</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:598</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1003,6 +1139,9 @@
 							<dt>see</dt>
 							<dd><p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-s3-integration.html">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-s3-integration.html</a></p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1012,7 +1151,7 @@
 					<div class="tsd-signature tsd-kind-icon">s3<wbr>Import<wbr>Buckets<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IBucket</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:469</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:584</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1031,6 +1170,9 @@
 							<dt>see</dt>
 							<dd><p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.html">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.html</a></p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1040,7 +1182,7 @@
 					<div class="tsd-signature tsd-kind-icon">s3<wbr>Import<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IRole</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:456</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:570</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1059,6 +1201,9 @@
 							<dt>see</dt>
 							<dd><p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.html">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.html</a></p>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1068,7 +1213,7 @@
 					<div class="tsd-signature tsd-kind-icon">security<wbr>Groups<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:280</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:370</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1081,6 +1226,9 @@
 									<li>a new security group is created</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1090,7 +1238,7 @@
 					<div class="tsd-signature tsd-kind-icon">storage<wbr>Encrypted<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:644</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:793</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1103,6 +1251,9 @@
 									<li>true if storageEncryptionKey has been provided, false otherwise</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1112,7 +1263,7 @@
 					<div class="tsd-signature tsd-kind-icon">storage<wbr>Encryption<wbr>Key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IKey</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:650</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:800</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1125,6 +1276,9 @@
 									<li>default master key if storageEncrypted is true, no key otherwise</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1134,16 +1288,23 @@
 					<div class="tsd-signature tsd-kind-icon">storage<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">STANDARD</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">GP2</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IO1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:231</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:314</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The storage type.</p>
 						</div>
+						<p>Storage types supported are gp2, io1, standard.</p>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p>GP2</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD">https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD</a></p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
 							</dd>
 						</dl>
 					</div>
@@ -1154,7 +1315,7 @@
 					<div class="tsd-signature tsd-kind-icon">subnet<wbr>Group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ISubnetGroup</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:443</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:556</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1167,6 +1328,9 @@
 									<li>a new subnet group will be created.</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1176,7 +1340,7 @@
 					<div class="tsd-signature tsd-kind-icon">timezone<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:566</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:702</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1190,6 +1354,9 @@
 									<li>RDS default timezone</li>
 								</ul>
 							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 						</dl>
 					</div>
 				</section>
@@ -1199,13 +1366,18 @@
 					<div class="tsd-signature tsd-kind-icon">vpc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IVpc</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:261</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:349</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The VPC network where the DB subnet group should be created.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
@@ -1214,7 +1386,7 @@
 					<div class="tsd-signature tsd-kind-icon">vpc<wbr>Placement<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SubnetSelection</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:268</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:356</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1239,7 +1411,7 @@
 					<div class="tsd-signature tsd-kind-icon">vpc<wbr>Subnets<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SubnetSelection</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:274</li>
+							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:363</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1251,6 +1423,9 @@
 							<dd><ul>
 									<li>private subnets</li>
 								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
 							</dd>
 						</dl>
 					</div>
@@ -1415,6 +1590,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="constructs_rds.gudatabaseinstanceprops.html#processorfeatures" class="tsd-kind-icon">processor<wbr>Features</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="constructs_rds.gudatabaseinstanceprops.html#publiclyaccessible" class="tsd-kind-icon">publicly<wbr>Accessible</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="constructs_rds.gudatabaseinstanceprops.html#removalpolicy" class="tsd-kind-icon">removal<wbr>Policy</a>

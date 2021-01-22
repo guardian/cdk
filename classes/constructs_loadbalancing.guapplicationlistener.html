@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuApplicationListener | @guardian/cdk - v0.24.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v0.24.0">
+	<title>GuApplicationListener | @guardian/cdk - v0.25.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v0.25.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v0.24.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v0.25.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v0.24.0</a>
+					<a href="../modules.html">@guardian/cdk - v0.25.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
@@ -147,7 +147,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/bc97060/src/constructs/loadbalancing/elb.ts#L51">src/constructs/loadbalancing/elb.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/9af50bc/src/constructs/loadbalancing/elb.ts#L51">src/constructs/loadbalancing/elb.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -175,13 +175,18 @@
 					<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connections</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:131</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:155</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Manage connections to this ApplicationListener.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -190,7 +195,7 @@
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:97</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:120</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -203,6 +208,11 @@
 							however, for imported resources
 							(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
 						that might be different than the stack they were imported into.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -211,11 +221,14 @@
 					<div class="tsd-signature tsd-kind-icon">listener<wbr>Arn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-listener.d.ts:65</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-listener.d.ts:73</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
 							<dt>attribute</dt>
 							<dd><p>true</p>
 							</dd>
@@ -228,13 +241,18 @@
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IApplicationLoadBalancer</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:135</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:161</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Load balancer this listener is associated with.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -243,13 +261,18 @@
 					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:54</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:70</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The construct tree node associated with this construct.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-external">
@@ -258,7 +281,7 @@
 					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:109</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:132</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -284,13 +307,18 @@
 					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:86</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:107</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The stack in which this resource is defined.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -306,7 +334,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:124</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:147</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -335,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-listener.d.ts:80</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-listener.d.ts:90</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -367,7 +395,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:177</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:207</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -380,6 +408,11 @@
 								<p>It&#39;s possible to add routing conditions to the Action added in this way.
 									At least one Action must be added without conditions (which becomes the
 								default Action).</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -404,7 +437,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:157</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:183</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -443,7 +476,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:165</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:193</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -453,6 +486,11 @@
 								<p>After the first certificate, this creates ApplicationListenerCertificates
 									resources since cloudformation requires the certificates array on the
 								listener resource to have a length of 1.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -477,7 +515,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:209</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:242</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -513,7 +551,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:215</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:248</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -549,7 +587,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:188</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:220</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -561,6 +599,11 @@
 								<p>It&#39;s possible to add routing conditions to the TargetGroups added in this
 									way. At least one TargetGroup must be added without conditions (which will
 								become the default Action for this listener).</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -585,7 +628,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:203</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:236</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -598,6 +641,11 @@
 								and use <code>addAction</code> yourself.</p>
 								<p>It&#39;s possible to add conditions to the targets added in this way. At least
 								one set of targets must be added without conditions.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -623,9 +671,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:128</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:151</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -640,7 +695,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:152</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:175</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -685,7 +740,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:139</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:162</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -723,7 +778,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:78</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:97</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -735,6 +790,11 @@
 								constructs have been prepared.</p>
 								<p>This is an advanced framework feature. Only use this if you
 								understand the implications.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -750,7 +810,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:87</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -759,6 +819,11 @@
 								</div>
 								<p>This method is usually implemented by framework-level constructs such as <code>Stack</code> and <code>Asset</code>
 								as they participate in synthesizing the cloud assembly.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -783,7 +848,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:67</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:84</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -792,6 +857,11 @@
 								</div>
 								<p>This method can be implemented by derived constructs in order to perform
 								validation logic. It is called on all constructs before synthesis.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 							<p>An array of validation error messages, or an empty array if the construct is valid.</p>
@@ -808,7 +878,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:130</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -820,6 +890,11 @@
 								constructs have been prepared.</p>
 								<p>This is an advanced framework feature. Only use this if you
 								understand the implications.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -835,7 +910,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:221</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:256</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -843,6 +918,11 @@
 									<p>Register that a connectable that has been added to this load balancer.</p>
 								</div>
 								<p>Don&#39;t call this directly. It is called by ApplicationTargetGroup.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -867,7 +947,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:116</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:140</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -876,6 +956,11 @@
 								</div>
 								<p>This method is usually implemented by framework-level constructs such as <code>Stack</code> and <code>Asset</code>
 								as they participate in synthesizing the cloud assembly.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -900,13 +985,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/constructs/lib/construct.d.ts:311</li>
+									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Returns a string representation of this construct.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
@@ -922,13 +1012,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:225</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:262</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Validate this listener.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
@@ -944,7 +1039,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-listener.d.ts:61</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-listener.d.ts:68</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -980,13 +1075,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:127</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:149</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Import an existing listener.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1014,13 +1114,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:123</li>
+									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:143</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Look up an ApplicationListener.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1048,13 +1153,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:50</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:64</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Return whether the given object is a Construct.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

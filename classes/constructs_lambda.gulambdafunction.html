@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuLambdaFunction | @guardian/cdk - v0.24.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v0.24.0">
+	<title>GuLambdaFunction | @guardian/cdk - v0.25.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v0.25.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v0.24.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v0.25.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v0.24.0</a>
+					<a href="../modules.html">@guardian/cdk - v0.25.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_lambda.html">constructs/lambda</a>
@@ -178,7 +178,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/bc97060/src/constructs/lambda/lambda.ts#L38">src/constructs/lambda/lambda.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/9af50bc/src/constructs/lambda/lambda.ts#L38">src/constructs/lambda/lambda.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -206,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">_connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Connections</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:197</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:251</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -226,7 +226,7 @@
 					<div class="tsd-signature tsd-kind-icon">_invocation<wbr>Grants<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Grant</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:203</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:257</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -245,7 +245,7 @@
 					<div class="tsd-signature tsd-kind-icon">can<wbr>Create<wbr>Permissions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> = true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:403</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:485</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -254,6 +254,11 @@
 						</div>
 						<p>True for new Lambdas, false for version $LATEST and imported Lambdas
 						from different accounts.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -262,13 +267,18 @@
 					<div class="tsd-signature tsd-kind-icon">dead<wbr>Letter<wbr>Queue<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IQueue</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:392</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:470</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The DLQ associated with this Lambda Function (this is an optional attribute).</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -277,7 +287,7 @@
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:97</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:120</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -290,6 +300,11 @@
 							however, for imported resources
 							(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
 						that might be different than the stack they were imported into.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -298,13 +313,18 @@
 					<div class="tsd-signature tsd-kind-icon">function<wbr>Arn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:376</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:446</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>ARN of this function.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -313,13 +333,18 @@
 					<div class="tsd-signature tsd-kind-icon">function<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:372</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:440</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Name of this function.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -328,13 +353,18 @@
 					<div class="tsd-signature tsd-kind-icon">grant<wbr>Principal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPrincipal</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:388</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:464</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The principal this Lambda Function is running as.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -343,13 +373,18 @@
 					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:54</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:70</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The construct tree node associated with this construct.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -358,13 +393,18 @@
 					<div class="tsd-signature tsd-kind-icon">permissions<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:396</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:476</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The construct node where permissions are attached.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-external">
@@ -373,7 +413,7 @@
 					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:109</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:132</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -399,13 +439,18 @@
 					<div class="tsd-signature tsd-kind-icon">role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IRole</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:380</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:452</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Execution role associated with this function.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -414,13 +459,18 @@
 					<div class="tsd-signature tsd-kind-icon">runtime<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Runtime</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:384</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:458</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The runtime configured for this lambda.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -429,13 +479,18 @@
 					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:86</li>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:107</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The stack in which this resource is defined.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -451,7 +506,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:221</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:280</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -459,6 +514,11 @@
 									<p>Access the Connections object.</p>
 								</div>
 								<p>Will fail if not a VPC-enabled Lambda Function</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Connections</span></h4>
 						</li>
@@ -474,7 +534,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:316</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:373</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -483,6 +543,11 @@
 								</div>
 								<p>You can specify options for this version using the <code>currentVersionOptions</code>
 								prop when initializing the <code>lambda.Function</code>.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Version</span></h4>
 						</li>
@@ -498,7 +563,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:238</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:301</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -506,6 +571,11 @@
 									<p>Whether or not this Lambda function was bound to a VPC.</p>
 								</div>
 								<p>If this is is <code>false</code>, trying to access the <code>connections</code> object will fail.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
@@ -521,7 +591,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:232</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:293</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -533,6 +603,11 @@
 								different invocations.</p>
 								<p>To obtain a reference to an explicit version which references the current
 								function configuration, use <code>lambdaFunction.currentVersion</code> instead.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IVersion</span></h4>
 						</li>
@@ -548,7 +623,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:466</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:552</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -560,6 +635,11 @@
 								period (never expire, by default).</p>
 								<p>Further, if the log group already exists and the <code>logRetention</code> is not set, the custom resource will reset the log retention
 								to never expire even if it was configured with a different value.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ILogGroup</span></h4>
 						</li>
@@ -578,7 +658,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:468</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:554</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -601,7 +681,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:124</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:147</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -630,7 +710,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:269</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:339</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -657,7 +737,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:284</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:354</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -688,7 +768,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:425</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:508</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -696,6 +776,11 @@
 									<p>Adds an environment variable to this Lambda function.</p>
 								</div>
 								<p>If this is a ref to a Lambda function, this operation results in a no-op.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -732,7 +817,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:259</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:327</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -741,17 +826,19 @@
 								</div>
 								<p>Event sources are implemented in the @aws-cdk/aws-lambda-event-sources module.</p>
 								<p>The following example adds an SQS Queue as an event source:</p>
-								<pre><code><span style="color: #000000"> </span><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">SqsEventSource</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-cdk/aws-lambda-event-sources&#039;</span><span style="color: #000000">;</span>
-<span style="color: #000000"> </span><span style="color: #001080">myFunction</span><span style="color: #000000">.</span><span style="color: #795E26">addEventSource</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">SqsEventSource</span><span style="color: #000000">(</span><span style="color: #001080">myQueue</span><span style="color: #000000">));</span>
+								<pre><code><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">SqsEventSource</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-cdk/aws-lambda-event-sources&#039;</span><span style="color: #000000">;</span>
+<span style="color: #001080">myFunction</span><span style="color: #000000">.</span><span style="color: #795E26">addEventSource</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">SqsEventSource</span><span style="color: #000000">(</span><span style="color: #001080">myQueue</span><span style="color: #000000">));</span>
 </code></pre>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>source: <span class="tsd-signature-type">IEventSource</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The event source to bind to this function.</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -768,13 +855,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:242</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:307</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Adds an event source that maps to this AWS Lambda function.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -799,7 +891,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:432</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:516</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -807,6 +899,9 @@
 									<p>Adds one or more Lambda Layers to this Lambda function.</p>
 								</div>
 								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
 									<dt>throws</dt>
 									<dd><p>if there are already 5 layers on this function, or the layer is incompatible with this function&#39;s runtime.</p>
 									</dd>
@@ -835,7 +930,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:211</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:266</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -845,6 +940,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>see</dt>
 									<dd><p>Permission for details.</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
@@ -877,13 +975,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:215</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:272</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Adds a statement to the IAM role assumed by the instance.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -905,7 +1008,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:455</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:539</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -975,13 +1078,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:263</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:333</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Configures options for asynchronous invocation.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1003,9 +1111,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:128</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:151</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
@@ -1020,7 +1135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:152</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:175</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1065,7 +1180,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:139</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:162</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1103,13 +1218,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:246</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function-base.d.ts:313</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Grant the given identity permissions to invoke this Lambda.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1131,13 +1251,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:49</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:58</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Return the given named metric for this Function.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1162,7 +1287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:73</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:90</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1170,6 +1295,11 @@
 									<p>How long execution of this Lambda takes.</p>
 								</div>
 								<p>Average over 5 minutes</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1191,7 +1321,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:67</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:82</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1199,6 +1329,11 @@
 									<p>How many invocations of this Lambda fail.</p>
 								</div>
 								<p>Sum over 5 minutes</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1220,7 +1355,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:61</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:74</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1228,6 +1363,11 @@
 									<p>How often this Lambda is invoked.</p>
 								</div>
 								<p>Sum over 5 minutes</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1249,7 +1389,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:55</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/lambda-augmentations.generated.d.ts:66</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1257,6 +1397,11 @@
 									<p>How often this Lambda is throttled.</p>
 								</div>
 								<p>Sum over 5 minutes</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1278,7 +1423,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:78</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:97</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1290,6 +1435,11 @@
 								constructs have been prepared.</p>
 								<p>This is an advanced framework feature. Only use this if you
 								understand the implications.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -1305,7 +1455,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:87</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1314,6 +1464,11 @@
 								</div>
 								<p>This method is usually implemented by framework-level constructs such as <code>Stack</code> and <code>Asset</code>
 								as they participate in synthesizing the cloud assembly.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1338,7 +1493,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:67</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:84</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1347,6 +1502,11 @@
 								</div>
 								<p>This method can be implemented by derived constructs in order to perform
 								validation logic. It is called on all constructs before synthesis.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 							<p>An array of validation error messages, or an empty array if the construct is valid.</p>
@@ -1363,7 +1523,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:130</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1375,6 +1535,11 @@
 								constructs have been prepared.</p>
 								<p>This is an advanced framework feature. Only use this if you
 								understand the implications.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -1390,7 +1555,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:116</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:140</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1399,6 +1564,11 @@
 								</div>
 								<p>This method is usually implemented by framework-level constructs such as <code>Stack</code> and <code>Asset</code>
 								as they participate in synthesizing the cloud assembly.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1423,13 +1593,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/constructs/lib/construct.d.ts:311</li>
+									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Returns a string representation of this construct.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
@@ -1445,7 +1620,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:96</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:117</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1454,6 +1629,11 @@
 								</div>
 								<p>This method can be implemented by derived constructs in order to perform
 								validation logic. It is called on all constructs before synthesis.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 							<p>An array of validation error messages, or an empty array if the construct is valid.</p>
@@ -1470,9 +1650,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:320</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:377</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -1499,13 +1686,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:328</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:386</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Creates a Lambda function object which represents a function not defined within this stack.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1542,13 +1734,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:50</li>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:64</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Return whether the given object is a Construct.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1570,13 +1767,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:332</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:392</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Return the given named metric for this Lambda.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1601,7 +1803,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:362</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:427</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1611,6 +1813,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>default</dt>
 									<dd><p>max over 5 minutes</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
@@ -1634,7 +1839,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:344</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:406</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1644,6 +1849,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>default</dt>
 									<dd><p>average over 5 minutes</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
@@ -1667,7 +1875,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:338</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:399</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1677,6 +1885,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>default</dt>
 									<dd><p>sum over 5 minutes</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
@@ -1700,7 +1911,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:350</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:413</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1710,6 +1921,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>default</dt>
 									<dd><p>sum over 5 minutes</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
@@ -1733,7 +1947,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:356</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:420</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1743,6 +1957,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>default</dt>
 									<dd><p>sum over 5 minutes</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
@@ -1766,7 +1983,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:368</li>
+									<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:434</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1776,6 +1993,9 @@
 								<dl class="tsd-comment-tags">
 									<dt>default</dt>
 									<dd><p>max over 5 minutes</p>
+									</dd>
+									<dt>stability</dt>
+									<dd><p>stable</p>
 									</dd>
 								</dl>
 							</div>
