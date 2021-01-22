@@ -1,5 +1,5 @@
 import type { Schedule } from "@aws-cdk/aws-events";
-import type { ErrorPercentageMonitoring, LambdaMonitoring } from "../constructs/cloudwatch/lambda-alarms";
+import type { LambdaMonitoring } from "../constructs/cloudwatch/lambda-alarms";
 import { GuLambdaErrorPercentageAlarm } from "../constructs/cloudwatch/lambda-alarms";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
@@ -18,9 +18,8 @@ export class GuScheduledLambda extends GuLambdaFunction {
     };
     super(scope, id, lambdaProps);
     if (!props.monitoringConfiguration.noMonitoring) {
-      const errorPercentageMonitoring = props.monitoringConfiguration as ErrorPercentageMonitoring;
       new GuLambdaErrorPercentageAlarm(scope, "error-percentage-alarm-for-scheduled-lambda", {
-        ...errorPercentageMonitoring,
+        ...props.monitoringConfiguration,
         lambda: this,
       });
     }
