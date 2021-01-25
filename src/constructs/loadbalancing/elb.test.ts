@@ -107,6 +107,43 @@ describe("The GuApplicationTargetGroup class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
   });
+
+  test("uses default health check properties", () => {
+    const stack = simpleGuStackForTesting();
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
+      vpc,
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      HealthCheckIntervalSeconds: 30,
+      HealthCheckPath: "/healthcheck",
+      HealthCheckPort: "9000",
+      HealthCheckProtocol: "HTTP",
+      HealthCheckTimeoutSeconds: 10,
+      HealthyThresholdCount: 2,
+      UnhealthyThresholdCount: 5,
+    });
+  });
+
+  test("merges any health check properties provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
+      vpc,
+      healthCheck: {
+        path: "/test",
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      HealthCheckIntervalSeconds: 30,
+      HealthCheckPath: "/test",
+      HealthCheckPort: "9000",
+      HealthCheckProtocol: "HTTP",
+      HealthCheckTimeoutSeconds: 10,
+      HealthyThresholdCount: 2,
+      UnhealthyThresholdCount: 5,
+    });
+  });
 });
 
 describe("The GuApplicationListener class", () => {
