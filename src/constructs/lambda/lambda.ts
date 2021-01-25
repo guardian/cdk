@@ -13,7 +13,7 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
 }
 
-interface GuFunctionProps extends Omit<FunctionProps, "code"> {
+export interface GuFunctionProps extends Omit<FunctionProps, "code"> {
   code: { bucket: string; key: string };
   rules?: Array<{
     schedule: Schedule;
