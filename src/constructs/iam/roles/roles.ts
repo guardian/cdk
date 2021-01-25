@@ -1,6 +1,6 @@
 import type { CfnRole, RoleProps } from "@aws-cdk/aws-iam";
 import { Role } from "@aws-cdk/aws-iam";
-import type { GuStack } from "../core";
+import type { GuStack } from "../../core";
 
 export interface GuRoleProps extends RoleProps {
   overrideId?: boolean;

@@ -1,14 +1,14 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
-import type { GuStack } from "../constructs/core";
-import type { GuPolicy } from "../constructs/iam";
+import type { GuStack } from "../../core";
+import type { GuPolicy } from "../policies";
 import {
   GuDescribeEC2Policy,
   GuGetDistributablePolicy,
   GuLogShippingPolicy,
   GuParameterStoreReadPolicy,
-  GuRole,
   GuSSMRunCommandPolicy,
-} from "../constructs/iam";
+} from "../policies";
+import { GuRole } from "../roles";
 
 interface GuInstanceRoleProps {
   withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out

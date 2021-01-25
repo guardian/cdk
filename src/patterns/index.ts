@@ -1,1 +1,1 @@
-export * from "./instance-role";
+export * from "./scheduled-lambda";
