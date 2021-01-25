@@ -36,7 +36,6 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       EvaluationPeriods: 12,
     });
@@ -57,7 +56,6 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       AlarmDescription: "test-custom-alarm-description",
     });
@@ -78,7 +76,6 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       alarmName: "test-custom-alarm-name",
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       AlarmName: "test-custom-alarm-name",
     });
