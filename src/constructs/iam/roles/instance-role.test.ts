@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { simpleGuStackForTesting } from "../../test/utils";
-import { GuGetS3ObjectPolicy } from "../constructs/iam";
+import { simpleGuStackForTesting } from "../../../../test/utils";
+import { GuGetS3ObjectPolicy } from "../policies";
 import { GuInstanceRole } from "./instance-role";
 
 describe("The GuInstanceRole construct", () => {

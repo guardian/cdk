@@ -1,8 +1,8 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../../test/utils/simple-gu-stack";
+import type { SynthedStack } from "../../../../test/utils/synthed-stack";
 import { GuRole } from "./roles";
 
 describe("The GuRole class", () => {
