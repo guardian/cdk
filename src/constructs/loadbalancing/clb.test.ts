@@ -5,6 +5,7 @@ import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
 import { GuClassicLoadBalancer } from "../loadbalancing";
+import { GuHttpsClassicLoadBalancer } from "./clb";
 
 describe("The GuClassicLoadBalancer class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -113,6 +114,102 @@ describe("The GuClassicLoadBalancer class", () => {
         Timeout: "10",
         UnhealthyThreshold: "5",
       },
+    });
+  });
+});
+
+describe("The GuHttpsClassicLoadBalancer class", () => {
+  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
+    vpcId: "test",
+    availabilityZones: [""],
+    publicSubnetIds: [""],
+    privateSubnetIds: [""],
+  });
+
+  test("uses default listener values", () => {
+    const stack = simpleGuStackForTesting();
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Listeners: [
+        {
+          InstancePort: "9000",
+          InstanceProtocol: "http",
+          LoadBalancerPort: "443",
+          Protocol: "https",
+          SSLCertificateId: {
+            Ref: "CertificateARN",
+          },
+        },
+      ],
+    });
+  });
+
+  test("adds the CertificateARN parameter if no value provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.CertificateARN).toEqual({
+      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
+      Description: "Certificate ARN for ELB",
+      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+      Type: "String",
+    });
+  });
+
+  test("uses the certificate id provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
+      listener: {
+        sslCertificateId: "certificateId",
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Listeners: [
+        {
+          InstancePort: "9000",
+          InstanceProtocol: "http",
+          LoadBalancerPort: "443",
+          Protocol: "https",
+          SSLCertificateId: "certificateId",
+        },
+      ],
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Parameters)).not.toContain("CertificateARN");
+  });
+
+  test("merges any listener values provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
+      listener: {
+        internalPort: 3000,
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Listeners: [
+        {
+          InstancePort: "3000",
+          InstanceProtocol: "http",
+          LoadBalancerPort: "443",
+          Protocol: "https",
+          SSLCertificateId: {
+            Ref: "CertificateARN",
+          },
+        },
+      ],
     });
   });
 });
