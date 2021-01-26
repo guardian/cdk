@@ -8,7 +8,7 @@ import {
   GuParameterStoreReadPolicy,
   GuSSMRunCommandPolicy,
 } from "../policies";
-import { GuRole } from "../roles";
+import { GuRole } from "./roles";
 
 interface GuInstanceRoleProps {
   withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out
