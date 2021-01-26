@@ -30,7 +30,7 @@ describe("The GuAutoScalingGroup", () => {
 
     expect(json.Parameters.AMI).toEqual({
       Description: "AMI ID",
-      Type: "String",
+      Type: "AWS::EC2::Image::Id",
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
