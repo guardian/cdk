@@ -76,3 +76,11 @@ There are more details on using the CDK library in [docs](docs)
 
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
 To release a new version, run `./script/release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
+
+### A note about release numbers
+
+This library follows [semantic versioning](https://semver.org/). Part of the semantic versioning specification [states](https://semver.org/#spec-item-4):
+
+> Major version zero (0.y.z) is for initial development. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
+
+For simplicity, this library only has minor version releases whilst still on a 0 major number.
