@@ -4,7 +4,7 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { GuStack } from "../core";
-import { GuInstanceTypeParameter, GuStringParameter } from "../core";
+import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
@@ -21,7 +21,7 @@ export interface GuAutoScalingGroupProps
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
-    const imageId = new GuStringParameter(scope, "AMI", {
+    const imageId = new GuAmiParameter(scope, "AMI", {
       description: "AMI ID",
     });
 
