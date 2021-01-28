@@ -7,6 +7,8 @@ import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
+import type { LambdaErrorPercentageMonitoring } from "../cloudwatch/lambda-alarms";
+import { GuLambdaErrorPercentageAlarm } from "../cloudwatch/lambda-alarms";
 import type { GuStack } from "../core";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
@@ -20,6 +22,7 @@ export interface GuFunctionProps extends Omit<FunctionProps, "code"> {
     description?: string;
   }>;
   apis?: ApiProps[];
+  errorPercentageMonitoring?: LambdaErrorPercentageMonitoring;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -62,6 +65,13 @@ export class GuLambdaFunction extends Function {
         ...api,
       });
     });
+
+    if (props.errorPercentageMonitoring) {
+      new GuLambdaErrorPercentageAlarm(scope, "error-percentage-alarm-for-lambda", {
+        ...props.errorPercentageMonitoring,
+        lambda: this,
+      });
+    }
 
     bucket.grantRead(this);
   }

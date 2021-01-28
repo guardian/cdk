@@ -19,7 +19,7 @@ Object {
     },
   },
   "Resources": Object {
-    "errorpercentagealarmforscheduledlambdaF6DA7824": Object {
+    "errorpercentagealarmforlambdaC1C480A2": Object {
       "Properties": Object {
         "AlarmActions": Array [
           Object {

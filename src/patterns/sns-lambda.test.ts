@@ -3,7 +3,7 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import type { SynthedStack } from "../../test/utils";
 import { simpleGuStackForTesting } from "../../test/utils";
-import type { NoMonitoring } from "../constructs/cloudwatch/lambda-alarms";
+import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
 import { GuSnsLambda } from "./sns-lambda";
 
 describe("The GuSnsLambda pattern", () => {

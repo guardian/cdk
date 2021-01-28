@@ -96,6 +96,22 @@ describe("The GuLambdaFunction class", () => {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
+  it("should add an alarm if errorPercentageMonitoring is passed in", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      code: { bucket: "bucket1", key: "folder/to/key" },
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      errorPercentageMonitoring: {
+        toleratedErrorPercentage: 5,
+        snsTopicName: "test-topic",
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+  });
+
   it("should give the function read permissions to the required bucket", () => {
     const stack = simpleGuStackForTesting();
 
