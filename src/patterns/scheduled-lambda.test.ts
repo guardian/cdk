@@ -37,7 +37,6 @@ describe("The GuScheduledLambda pattern", () => {
       },
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
   });
 });
