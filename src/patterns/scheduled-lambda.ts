@@ -5,7 +5,7 @@ import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 
-interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "rules" | "apis"> {
+interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
   schedule: Schedule;
   monitoringConfiguration: NoMonitoring | LambdaErrorPercentageMonitoring;
 }

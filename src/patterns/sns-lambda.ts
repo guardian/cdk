@@ -12,7 +12,7 @@ interface ExistingSnsTopic {
   externalTopicName?: string; // Allows us to link the lambda to an SNS topic owned by a different stack (or created outside of CloudFormation)
 }
 
-interface GuSnsLambdaProps extends Omit<GuFunctionProps, "rules" | "apis"> {
+interface GuSnsLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
   monitoringConfiguration: NoMonitoring | LambdaErrorPercentageMonitoring;
   existingSnsTopic?: ExistingSnsTopic;
 }
