@@ -52,4 +52,20 @@ describe("The GuSnsLambda pattern", () => {
     expect(stack).toHaveResource("AWS::SNS::Subscription");
     expect(stack).not.toHaveResource("AWS::SNS::Topic");
   });
+
+  it("should create an alarm if monitoring configuration is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const props = {
+      code: { bucket: "test-dist", key: "lambda.zip" },
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: {
+        toleratedErrorPercentage: 99,
+        snsTopicName: "alerts-topic",
+      },
+    };
+    new GuSnsLambda(stack, "my-lambda-function", props);
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+  });
 });

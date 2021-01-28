@@ -19,7 +19,10 @@ interface GuSnsLambdaProps extends Omit<GuFunctionProps, "rules" | "apis"> {
 
 export class GuSnsLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, props: GuSnsLambdaProps) {
-    super(scope, id, props);
+    super(scope, id, {
+      ...props,
+      errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
+    });
     const topicId = props.existingSnsTopic?.logicalIdFromCloudFormation ?? "sns-incoming-events-topic";
     const snsTopic = props.existingSnsTopic?.externalTopicName
       ? Topic.fromTopicArn(
