@@ -21,7 +21,7 @@ describe("The GuAutoScalingGroup", () => {
     userData: "user data",
   };
 
-  test("adds the AMI parameter", () => {
+  test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
@@ -37,6 +37,20 @@ describe("The GuAutoScalingGroup", () => {
       ImageId: {
         Ref: "AMI",
       },
+    });
+  });
+
+  test("does not add the AMI parameter if an imageId prop provided", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1, imageId: "123" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Parameters)).not.toContain("AMI");
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      ImageId: "123",
     });
   });
 

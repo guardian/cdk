@@ -12,6 +12,7 @@ import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 export interface GuAutoScalingGroupProps
   extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
   instanceType?: InstanceType;
+  imageId?: string;
   osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: string;
@@ -22,10 +23,6 @@ export interface GuAutoScalingGroupProps
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
-    const imageId = new GuAmiParameter(scope, "AMI", {
-      description: "AMI ID",
-    });
-
     // We need to override getImage() so that we can pass in the AMI as a parameter
     // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
     // as the name is hard-coded
@@ -33,7 +30,11 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       return {
         osType: props.osType ?? OperatingSystemType.LINUX,
         userData: UserData.custom(props.userData),
-        imageId: imageId.valueAsString,
+        imageId:
+          props.imageId ??
+          new GuAmiParameter(scope, "AMI", {
+            description: "AMI ID",
+          }).valueAsString,
       };
     }
 
