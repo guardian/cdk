@@ -5,7 +5,12 @@ import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbal
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuApplicationListener, GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
+import {
+  GuApplicationListener,
+  GuApplicationLoadBalancer,
+  GuApplicationTargetGroup,
+  GuHttpsApplicationListener,
+} from "../loadbalancing";
 
 describe("The GuApplicationLoadBalancer class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -271,6 +276,104 @@ describe("The GuApplicationListener class", () => {
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
       Port: 80,
       Protocol: "HTTPS",
+    });
+  });
+});
+
+describe("The GuHttpsApplicationListener class", () => {
+  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
+    vpcId: "test",
+    availabilityZones: [""],
+    publicSubnetIds: [""],
+  });
+
+  test("sets default props", () => {
+    const stack = simpleGuStackForTesting();
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
+      vpc: vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      loadBalancer,
+      targetGroup,
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+      Port: 443,
+      Protocol: "HTTPS",
+      DefaultActions: [
+        {
+          TargetGroupArn: {
+            Ref: "GrafanaInternalTargetGroup837A1034",
+          },
+          Type: "forward",
+        },
+      ],
+    });
+  });
+
+  test("creates certificate prop if no value passed in", () => {
+    const stack = simpleGuStackForTesting();
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
+      vpc: vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      loadBalancer,
+      targetGroup,
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.CertificateARN).toEqual({
+      Type: "String",
+      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
+      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+      Description: "Certificate ARN for ApplicationListener",
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+      Certificates: [
+        {
+          CertificateArn: {
+            Ref: "CertificateARN",
+          },
+        },
+      ],
+    });
+  });
+
+  test("does not create certificate prop if a value passed in", () => {
+    const stack = simpleGuStackForTesting();
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
+      vpc: vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      loadBalancer,
+      targetGroup,
+      certificate: "test",
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Parameters)).not.toContain("CertificateARN");
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+      Certificates: [
+        {
+          CertificateArn: "test",
+        },
+      ],
     });
   });
 });
