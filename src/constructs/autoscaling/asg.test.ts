@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
@@ -40,7 +40,7 @@ describe("The GuAutoScalingGroup", () => {
     });
   });
 
-  test("adds the instanceType parameter", () => {
+  test("adds the instanceType parameter if none provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
@@ -57,6 +57,20 @@ describe("The GuAutoScalingGroup", () => {
       InstanceType: {
         Ref: "InstanceType",
       },
+    });
+  });
+
+  test("does not create the instanceType parameter if value is provided", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Parameters)).not.toContain(InstanceType);
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      InstanceType: "t3.small",
     });
   });
 

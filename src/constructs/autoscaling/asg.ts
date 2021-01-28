@@ -11,6 +11,7 @@ import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
 export interface GuAutoScalingGroupProps
   extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
+  instanceType?: InstanceType;
   osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: string;
@@ -24,8 +25,6 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     const imageId = new GuAmiParameter(scope, "AMI", {
       description: "AMI ID",
     });
-
-    const instanceType = new GuInstanceTypeParameter(scope);
 
     // We need to override getImage() so that we can pass in the AMI as a parameter
     // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
@@ -41,7 +40,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     const mergedProps = {
       ...props,
       machineImage: { getImage: getImage },
-      instanceType: new InstanceType(instanceType.valueAsString),
+      instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
       userData: UserData.custom(props.userData),
     };
 
