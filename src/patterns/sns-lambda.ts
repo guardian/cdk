@@ -1,6 +1,6 @@
 import { SnsEventSource } from "@aws-cdk/aws-lambda-event-sources";
 import { Topic } from "@aws-cdk/aws-sns";
-import type { LambdaErrorPercentageMonitoring } from "../constructs/cloudwatch/lambda-alarms";
+import type { GuLambdaErrorPercentageMonitoringProps } from "../constructs/cloudwatch/lambda-alarms";
 import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
 import type { GuStack } from "../constructs/core";
 import type { GuFunctionProps } from "../constructs/lambda";
@@ -13,7 +13,7 @@ interface ExistingSnsTopic {
 }
 
 interface GuSnsLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
-  monitoringConfiguration: NoMonitoring | LambdaErrorPercentageMonitoring;
+  monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
   existingSnsTopic?: ExistingSnsTopic;
 }
 

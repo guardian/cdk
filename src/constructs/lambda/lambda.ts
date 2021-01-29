@@ -7,7 +7,7 @@ import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
-import type { LambdaErrorPercentageMonitoring } from "../cloudwatch/lambda-alarms";
+import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch/lambda-alarms";
 import { GuLambdaErrorPercentageAlarm } from "../cloudwatch/lambda-alarms";
 import type { GuStack } from "../core";
 
@@ -22,7 +22,7 @@ export interface GuFunctionProps extends Omit<FunctionProps, "code"> {
     description?: string;
   }>;
   apis?: ApiProps[];
-  errorPercentageMonitoring?: LambdaErrorPercentageMonitoring;
+  errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {

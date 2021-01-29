@@ -4,14 +4,14 @@ import type { GuLambdaFunction } from "../lambda";
 import type { GuAlarmProps } from "./alarm";
 import { GuAlarm } from "./alarm";
 
-export interface LambdaErrorPercentageMonitoring
+export interface GuLambdaErrorPercentageMonitoringProps
   extends Omit<GuAlarmProps, "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods"> {
   toleratedErrorPercentage: number;
   numberOfFiveMinutePeriodsToEvaluate?: number;
   noMonitoring?: false;
 }
 
-interface GuLambdaAlarmProps extends LambdaErrorPercentageMonitoring {
+interface GuLambdaAlarmProps extends GuLambdaErrorPercentageMonitoringProps {
   lambda: GuLambdaFunction;
 }
 
