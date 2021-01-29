@@ -1,10 +1,11 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
@@ -21,7 +22,7 @@ describe("The GuAutoScalingGroup", () => {
     userData: "user data",
   };
 
-  test("adds the AMI parameter", () => {
+  test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
@@ -40,7 +41,28 @@ describe("The GuAutoScalingGroup", () => {
     });
   });
 
-  test("adds the instanceType parameter", () => {
+  test("does not add the AMI parameter if an imageId prop provided", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      ...defaultProps,
+      osType: 1,
+      imageId: new GuAmiParameter(stack, "CustomAMI", {}),
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Parameters)).not.toContain("AMI");
+    expect(Object.keys(json.Parameters)).toContain("CustomAMI");
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      ImageId: {
+        Ref: "CustomAMI",
+      },
+    });
+  });
+
+  test("adds the instanceType parameter if none provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
@@ -57,6 +79,20 @@ describe("The GuAutoScalingGroup", () => {
       InstanceType: {
         Ref: "InstanceType",
       },
+    });
+  });
+
+  test("does not create the instanceType parameter if value is provided", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(Object.keys(json.Parameters)).not.toContain(InstanceType);
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      InstanceType: "t3.small",
     });
   });
 
