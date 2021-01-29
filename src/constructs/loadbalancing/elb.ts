@@ -11,10 +11,12 @@ import {
   ApplicationLoadBalancer,
   ApplicationProtocol,
   ApplicationTargetGroup,
+  ListenerAction,
   Protocol,
 } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
+import { GuArnParameter } from "../core";
 
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
   overrideId?: boolean;
@@ -71,5 +73,32 @@ export class GuApplicationListener extends ApplicationListener {
 
     if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
       (this.node.defaultChild as CfnListener).overrideLogicalId(id);
+  }
+}
+
+export interface GuHttpsApplicationListenerProps
+  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates"> {
+  targetGroup: GuApplicationTargetGroup;
+  certificate?: string;
+}
+
+export class GuHttpsApplicationListener extends ApplicationListener {
+  constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
+    const mergedProps: GuApplicationListenerProps = {
+      port: 443,
+      protocol: ApplicationProtocol.HTTPS,
+      ...props,
+      certificates: [
+        {
+          certificateArn:
+            props.certificate ??
+            new GuArnParameter(scope, "CertificateARN", { description: "Certificate ARN for ApplicationListener" })
+              .valueAsString,
+        },
+      ],
+      defaultAction: ListenerAction.forward([props.targetGroup]),
+    };
+
+    super(scope, id, mergedProps);
   }
 }
