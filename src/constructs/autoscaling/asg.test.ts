@@ -5,6 +5,7 @@ import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
@@ -43,14 +44,21 @@ describe("The GuAutoScalingGroup", () => {
   test("does not add the AMI parameter if an imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1, imageId: "123" });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      ...defaultProps,
+      osType: 1,
+      imageId: new GuAmiParameter(stack, "CustomAMI", {}),
+    });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(Object.keys(json.Parameters)).not.toContain("AMI");
+    expect(Object.keys(json.Parameters)).toContain("CustomAMI");
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
-      ImageId: "123",
+      ImageId: {
+        Ref: "CustomAMI",
+      },
     });
   });
 
