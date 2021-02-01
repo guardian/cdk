@@ -2,6 +2,16 @@
 
 exports[`The GuSnsLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
+  "Outputs": Object {
+    "mylambdafunctiontopicname1F6D9C7E": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "snsincomingeventstopic65EA4C3A",
+          "TopicName",
+        ],
+      },
+    },
+  },
   "Parameters": Object {
     "Stack": Object {
       "Default": "deploy",

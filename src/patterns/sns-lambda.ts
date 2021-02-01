@@ -1,5 +1,6 @@
 import { SnsEventSource } from "@aws-cdk/aws-lambda-event-sources";
 import { Topic } from "@aws-cdk/aws-sns";
+import { CfnOutput } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps } from "../constructs/cloudwatch/lambda-alarms";
 import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
 import type { GuStack } from "../constructs/core";
@@ -34,5 +35,6 @@ export class GuSnsLambda extends GuLambdaFunction {
           overrideId: !!props.existingSnsTopic?.logicalIdFromCloudFormation,
         });
     this.addEventSource(new SnsEventSource(snsTopic));
+    new CfnOutput(this, "topic-name", { value: snsTopic.topicName });
   }
 }
