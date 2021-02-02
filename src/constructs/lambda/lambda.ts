@@ -67,7 +67,7 @@ export class GuLambdaFunction extends Function {
     });
 
     if (props.errorPercentageMonitoring) {
-      new GuLambdaErrorPercentageAlarm(scope, "error-percentage-alarm-for-lambda", {
+      new GuLambdaErrorPercentageAlarm(scope, "ErrorPercentageAlarmForLambda", {
         ...props.errorPercentageMonitoring,
         lambda: this,
       });

@@ -3,10 +3,10 @@
 exports[`The GuSnsLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
   "Outputs": Object {
-    "mylambdafunctiontopicname1F6D9C7E": Object {
+    "mylambdafunctionTopicNameA4E69772": Object {
       "Value": Object {
         "Fn::GetAtt": Array [
-          "snsincomingeventstopic65EA4C3A",
+          "SnsIncomingEventsTopic308392EC",
           "TopicName",
         ],
       },
@@ -29,6 +29,29 @@ Object {
     },
   },
   "Resources": Object {
+    "SnsIncomingEventsTopic308392EC": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
     "mylambdafunction8D341B54": Object {
       "DependsOn": Array [
         "mylambdafunctionServiceRoleDefaultPolicy769897D4",
@@ -71,7 +94,7 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mylambdafunctionAllowInvokeTestsnsincomingeventstopicAA3554EFB8307CCE": Object {
+    "mylambdafunctionAllowInvokeTestSnsIncomingEventsTopicFE4AC0FA7C8D8231": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -82,7 +105,7 @@ Object {
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": Object {
-          "Ref": "snsincomingeventstopic65EA4C3A",
+          "Ref": "SnsIncomingEventsTopic308392EC",
         },
       },
       "Type": "AWS::Lambda::Permission",
@@ -186,7 +209,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "mylambdafunctionsnsincomingeventstopic75CA5BD7": Object {
+    "mylambdafunctionSnsIncomingEventsTopic6726218D": Object {
       "Properties": Object {
         "Endpoint": Object {
           "Fn::GetAtt": Array [
@@ -196,33 +219,10 @@ Object {
         },
         "Protocol": "lambda",
         "TopicArn": Object {
-          "Ref": "snsincomingeventstopic65EA4C3A",
+          "Ref": "SnsIncomingEventsTopic308392EC",
         },
       },
       "Type": "AWS::SNS::Subscription",
-    },
-    "snsincomingeventstopic65EA4C3A": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "testing",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::SNS::Topic",
     },
   },
 }

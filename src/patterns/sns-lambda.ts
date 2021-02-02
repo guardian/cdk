@@ -24,7 +24,7 @@ export class GuSnsLambda extends GuLambdaFunction {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const topicId = props.existingSnsTopic?.logicalIdFromCloudFormation ?? "sns-incoming-events-topic";
+    const topicId = props.existingSnsTopic?.logicalIdFromCloudFormation ?? "SnsIncomingEventsTopic";
     const snsTopic = props.existingSnsTopic?.externalTopicName
       ? Topic.fromTopicArn(
           scope,
@@ -35,6 +35,6 @@ export class GuSnsLambda extends GuLambdaFunction {
           overrideId: !!props.existingSnsTopic?.logicalIdFromCloudFormation,
         });
     this.addEventSource(new SnsEventSource(snsTopic));
-    new CfnOutput(this, "topic-name", { value: snsTopic.topicName });
+    new CfnOutput(this, "TopicName", { value: snsTopic.topicName });
   }
 }
