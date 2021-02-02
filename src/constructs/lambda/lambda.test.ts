@@ -109,7 +109,7 @@ describe("The GuLambdaFunction class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); // The shape of this alarm is tested via lambda-alarms.test.ts
   });
 
   it("should give the function read permissions to the required bucket", () => {
