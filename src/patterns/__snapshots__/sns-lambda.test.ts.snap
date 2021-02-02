@@ -48,6 +48,10 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
+          },
         ],
       },
       "Type": "AWS::SNS::Topic",
@@ -88,6 +92,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
           },
         ],
         "Timeout": 30,
@@ -204,6 +212,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
           },
         ],
       },

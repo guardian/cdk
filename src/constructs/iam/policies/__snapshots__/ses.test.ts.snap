@@ -104,6 +104,10 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",

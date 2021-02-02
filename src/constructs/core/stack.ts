@@ -1,5 +1,6 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
+import { TrackingTag } from "../../constants/library-info";
 import { GuStackParameter, GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
@@ -41,6 +42,8 @@ export class GuStack extends Stack {
     this._stage = new GuStageParameter(this);
     this._stack = new GuStackParameter(this);
     this._app = props.app;
+
+    this.addTag(TrackingTag.Key, TrackingTag.Value);
 
     this.addTag("Stack", this.stack);
     this.addTag("Stage", this.stage);

@@ -109,6 +109,10 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
+          },
         ],
         "Timeout": 30,
       },
@@ -158,6 +162,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
           },
         ],
       },
@@ -233,6 +241,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
           },
         ],
       },
@@ -418,11 +430,15 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB93738ba48d7cb88b4c2b9ec5c442ee1c99e9": Object {
+    "lambdaapi2Deployment4ECB937324608a148e4c74ee74e20f580623b2d9": Object {
       "DependsOn": Array [
         "lambdaapi2proxyANY3F8E1D36",
         "lambdaapi2proxyE68FDFBC",
@@ -439,7 +455,7 @@ Object {
     "lambdaapi2DeploymentStageprodCC9E3016": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB93738ba48d7cb88b4c2b9ec5c442ee1c99e9",
+          "Ref": "lambdaapi2Deployment4ECB937324608a148e4c74ee74e20f580623b2d9",
         },
         "RestApiId": Object {
           "Ref": "lambdaapi239350ECC",
@@ -461,6 +477,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
           },
         ],
       },
@@ -755,6 +775,10 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
+          },
         ],
       },
       "Type": "AWS::ApiGateway::RestApi",
@@ -804,11 +828,15 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B5854e05b687211f19a449136200fabf5846": Object {
+    "lambdaapiDeployment8E95B585b22be554088fbcc2c63fc037a54e995d": Object {
       "DependsOn": Array [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -825,7 +853,7 @@ Object {
     "lambdaapiDeploymentStageprod9598BC2F": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B5854e05b687211f19a449136200fabf5846",
+          "Ref": "lambdaapiDeployment8E95B585b22be554088fbcc2c63fc037a54e995d",
         },
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
@@ -847,6 +875,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "0.31.0",
           },
         ],
       },
