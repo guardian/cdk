@@ -4,6 +4,9 @@ import type { GuLambdaFunction } from "../lambda";
 import type { GuAlarmProps } from "./alarm";
 import { GuAlarm } from "./alarm";
 
+/**
+ * Creates an alarm which is triggered whenever the error percentage specified is exceeded.
+ */
 export interface GuLambdaErrorPercentageMonitoringProps
   extends Omit<GuAlarmProps, "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods"> {
   toleratedErrorPercentage: number;
