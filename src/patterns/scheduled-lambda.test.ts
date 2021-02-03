@@ -4,7 +4,7 @@ import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../test/utils";
-import type { NoMonitoring } from "../constructs/cloudwatch/lambda-alarms";
+import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
 import { GuScheduledLambda } from "./scheduled-lambda";
 
 describe("The GuScheduledLambda pattern", () => {
@@ -37,7 +37,6 @@ describe("The GuScheduledLambda pattern", () => {
       },
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
   });
 });

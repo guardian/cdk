@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuScheduledLambda pattern should create the correct resources with minimal config 1`] = `
+exports[`The GuSnsLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
+  "Outputs": Object {
+    "mylambdafunctionTopicNameA4E69772": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "SnsIncomingEventsTopic308392EC",
+          "TopicName",
+        ],
+      },
+    },
+  },
   "Parameters": Object {
     "Stack": Object {
       "Default": "deploy",
@@ -19,6 +29,29 @@ Object {
     },
   },
   "Resources": Object {
+    "SnsIncomingEventsTopic308392EC": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": Object {
+              "Ref": "Stack",
+            },
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
     "mylambdafunction8D341B54": Object {
       "DependsOn": Array [
         "mylambdafunctionServiceRoleDefaultPolicy769897D4",
@@ -60,6 +93,22 @@ Object {
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "mylambdafunctionAllowInvokeTestSnsIncomingEventsTopicFE4AC0FA7C8D8231": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "mylambdafunction8D341B54",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": Object {
+          "Ref": "SnsIncomingEventsTopic308392EC",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "mylambdafunctionServiceRoleDefaultPolicy769897D4": Object {
       "Properties": Object {
@@ -160,42 +209,20 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "mylambdafunctionmylambdafunctionrate1minute06AD0015D": Object {
+    "mylambdafunctionSnsIncomingEventsTopic6726218D": Object {
       "Properties": Object {
-        "ScheduleExpression": "rate(1 minute)",
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
-                "mylambdafunction8D341B54",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "mylambdafunctionmylambdafunctionrate1minute0AllowEventRuleTestmylambdafunctionmylambdafunctionrate1minute0A609CD2636B92639": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
+        "Endpoint": Object {
           "Fn::GetAtt": Array [
             "mylambdafunction8D341B54",
             "Arn",
           ],
         },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "mylambdafunctionmylambdafunctionrate1minute06AD0015D",
-            "Arn",
-          ],
+        "Protocol": "lambda",
+        "TopicArn": Object {
+          "Ref": "SnsIncomingEventsTopic308392EC",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::SNS::Subscription",
     },
   },
 }
