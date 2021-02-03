@@ -2,10 +2,14 @@ name: CI
 on:
   pull_request:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 jobs:
+  # see https://github.com/marketplace/actions/semantic-pull-request
+  lint-PR:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v3.2.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   check-aws-cdk:
     runs-on: ubuntu-latest
     strategy:
