@@ -77,6 +77,10 @@ There are more details on using the CDK library in [docs](docs)
 We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
 To release a new version, run `./script/release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
 
+The script automatically prepares a [GitHub Release](https://docs.github.com/en/github/administering-a-repository/about-releases) and opens a pre-populated form in your browser. Please complete the GitHub Release creation manually.
+
+You will also need to manually checkout a new branch and open a PR containing version bump changes which are automatically committed during the release process.
+
 ### A note about release numbers
 
 This library follows [semantic versioning](https://semver.org/). Part of the semantic versioning specification [states](https://semver.org/#spec-item-4):
