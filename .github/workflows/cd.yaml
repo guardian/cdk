@@ -1,0 +1,44 @@
+name: CD
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.15.1]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: ./script/build
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.15.1]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: ./script/test
+  release:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.15.1]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          echo "TODO: replace this with semantic-release or similar"
