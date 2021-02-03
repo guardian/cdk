@@ -58,7 +58,7 @@ Object {
           },
           Object {
             "Key": "X-Gu-CDK-Version",
-            "Value": "0.31.0",
+            "Value": "TEST",
           },
         ],
         "Timeout": 30,
@@ -162,7 +162,7 @@ Object {
           },
           Object {
             "Key": "X-Gu-CDK-Version",
-            "Value": "0.31.0",
+            "Value": "TEST",
           },
         ],
       },

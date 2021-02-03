@@ -147,7 +147,7 @@ Object {
           },
           Object {
             "Key": "X-Gu-CDK-Version",
-            "Value": "0.31.0",
+            "Value": "TEST",
           },
         ],
       },
@@ -410,7 +410,7 @@ Object {
           },
           Object {
             "Key": "X-Gu-CDK-Version",
-            "Value": "0.31.0",
+            "Value": "TEST",
           },
         ],
       },
@@ -626,7 +626,7 @@ Object {
           },
           Object {
             "Key": "X-Gu-CDK-Version",
-            "Value": "0.31.0",
+            "Value": "TEST",
           },
         ],
       },
