@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuScheduledLambda | @guardian/cdk - v0.31.0</title>
+	<title>GuSnsLambda | @guardian/cdk - v0.31.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.31.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,16 +58,27 @@
 					<a href="../modules/index.html">index</a>
 				</li>
 				<li>
-					<a href="index.guscheduledlambda.html">GuScheduledLambda</a>
+					<a href="index.gusnslambda.html">GuSnsLambda</a>
 				</li>
 			</ul>
-			<h1>Class GuScheduledLambda</h1>
+			<h1>Class GuSnsLambda</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Pattern which creates all of the resources needed to invoke a lambda function whenever a message
+						is published onto an SNS topic.</p>
+					</div>
+					<p>This pattern will create a new SNS topic by default. If you are migrating a stack from CloudFormation,
+						you will need to opt-out of this behaviour. For information on overriding the default behaviour,
+					see <a href="../interfaces/index.gusnslambdaprops.html"><code>GuSnsLambdaProps</code></a>.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -75,7 +86,7 @@
 						<a href="constructs_lambda.gulambdafunction.html" class="tsd-signature-type" data-tsd-kind="Class">GuLambdaFunction</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">GuScheduledLambda</span>
+								<span class="target">GuSnsLambda</span>
 							</li>
 						</ul>
 					</li>
@@ -88,79 +99,79 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="index.guscheduledlambda.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="index.gusnslambda.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#_connections" class="tsd-kind-icon">_connections</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#_invocationgrants" class="tsd-kind-icon">_invocation<wbr>Grants</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#cancreatepermissions" class="tsd-kind-icon">can<wbr>Create<wbr>Permissions</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#env" class="tsd-kind-icon">env</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#functionarn" class="tsd-kind-icon">function<wbr>Arn</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#functionname" class="tsd-kind-icon">function<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#grantprincipal" class="tsd-kind-icon">grant<wbr>Principal</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#node" class="tsd-kind-icon">node</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#permissionsnode" class="tsd-kind-icon">permissions<wbr>Node</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#physicalname" class="tsd-kind-icon">physical<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#role" class="tsd-kind-icon">role</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#runtime" class="tsd-kind-icon">runtime</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#_connections" class="tsd-kind-icon">_connections</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#_invocationgrants" class="tsd-kind-icon">_invocation<wbr>Grants</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#cancreatepermissions" class="tsd-kind-icon">can<wbr>Create<wbr>Permissions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#env" class="tsd-kind-icon">env</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#functionarn" class="tsd-kind-icon">function<wbr>Arn</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#functionname" class="tsd-kind-icon">function<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#grantprincipal" class="tsd-kind-icon">grant<wbr>Principal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#node" class="tsd-kind-icon">node</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#permissionsnode" class="tsd-kind-icon">permissions<wbr>Node</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#physicalname" class="tsd-kind-icon">physical<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#role" class="tsd-kind-icon">role</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#runtime" class="tsd-kind-icon">runtime</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#stack" class="tsd-kind-icon">stack</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#connections" class="tsd-kind-icon">connections</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#currentversion" class="tsd-kind-icon">current<wbr>Version</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#isboundtovpc" class="tsd-kind-icon">is<wbr>Bound<wbr>ToVpc</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#latestversion" class="tsd-kind-icon">latest<wbr>Version</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#loggroup" class="tsd-kind-icon">log<wbr>Group</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#connections" class="tsd-kind-icon">connections</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#currentversion" class="tsd-kind-icon">current<wbr>Version</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#isboundtovpc" class="tsd-kind-icon">is<wbr>Bound<wbr>ToVpc</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#latestversion" class="tsd-kind-icon">latest<wbr>Version</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#loggroup" class="tsd-kind-icon">log<wbr>Group</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#_checkedgecompatibility" class="tsd-kind-icon">_check<wbr>Edge<wbr>Compatibility</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#_enablecrossenvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#_functionnode" class="tsd-kind-icon">_function<wbr>Node</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#_isstackaccount" class="tsd-kind-icon">_is<wbr>Stack<wbr>Account</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addenvironment" class="tsd-kind-icon">add<wbr>Environment</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addeventsource" class="tsd-kind-icon">add<wbr>Event<wbr>Source</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addeventsourcemapping" class="tsd-kind-icon">add<wbr>Event<wbr>Source<wbr>Mapping</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addlayers" class="tsd-kind-icon">add<wbr>Layers</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addpermission" class="tsd-kind-icon">add<wbr>Permission</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addtorolepolicy" class="tsd-kind-icon">add<wbr>ToRole<wbr>Policy</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#addversion" class="tsd-kind-icon">add<wbr>Version</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#configureasyncinvoke" class="tsd-kind-icon">configure<wbr>Async<wbr>Invoke</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#generatephysicalname" class="tsd-kind-icon">generate<wbr>Physical<wbr>Name</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#getresourcearnattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#getresourcenameattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#grantinvoke" class="tsd-kind-icon">grant<wbr>Invoke</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#metric" class="tsd-kind-icon">metric</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#metricduration" class="tsd-kind-icon">metric<wbr>Duration</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#metricerrors" class="tsd-kind-icon">metric<wbr>Errors</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#metricinvocations" class="tsd-kind-icon">metric<wbr>Invocations</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#metricthrottles" class="tsd-kind-icon">metric<wbr>Throttles</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#onprepare" class="tsd-kind-icon">on<wbr>Prepare</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#onsynthesize" class="tsd-kind-icon">on<wbr>Synthesize</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#onvalidate" class="tsd-kind-icon">on<wbr>Validate</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#prepare" class="tsd-kind-icon">prepare</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#synthesize" class="tsd-kind-icon">synthesize</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.guscheduledlambda.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.guscheduledlambda.html#validate" class="tsd-kind-icon">validate</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#fromfunctionarn" class="tsd-kind-icon">from<wbr>Function<wbr>Arn</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#fromfunctionattributes" class="tsd-kind-icon">from<wbr>Function<wbr>Attributes</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#isconstruct" class="tsd-kind-icon">is<wbr>Construct</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricall" class="tsd-kind-icon">metric<wbr>All</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricallconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Concurrent<wbr>Executions</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricallduration" class="tsd-kind-icon">metric<wbr>All<wbr>Duration</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricallerrors" class="tsd-kind-icon">metric<wbr>All<wbr>Errors</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricallinvocations" class="tsd-kind-icon">metric<wbr>All<wbr>Invocations</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricallthrottles" class="tsd-kind-icon">metric<wbr>All<wbr>Throttles</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.guscheduledlambda.html#metricallunreservedconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Unreserved<wbr>Concurrent<wbr>Executions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#_checkedgecompatibility" class="tsd-kind-icon">_check<wbr>Edge<wbr>Compatibility</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#_enablecrossenvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#_functionnode" class="tsd-kind-icon">_function<wbr>Node</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#_isstackaccount" class="tsd-kind-icon">_is<wbr>Stack<wbr>Account</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addenvironment" class="tsd-kind-icon">add<wbr>Environment</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addeventsource" class="tsd-kind-icon">add<wbr>Event<wbr>Source</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addeventsourcemapping" class="tsd-kind-icon">add<wbr>Event<wbr>Source<wbr>Mapping</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addlayers" class="tsd-kind-icon">add<wbr>Layers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addpermission" class="tsd-kind-icon">add<wbr>Permission</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addtorolepolicy" class="tsd-kind-icon">add<wbr>ToRole<wbr>Policy</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#addversion" class="tsd-kind-icon">add<wbr>Version</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#configureasyncinvoke" class="tsd-kind-icon">configure<wbr>Async<wbr>Invoke</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#generatephysicalname" class="tsd-kind-icon">generate<wbr>Physical<wbr>Name</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#getresourcearnattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#getresourcenameattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#grantinvoke" class="tsd-kind-icon">grant<wbr>Invoke</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#metric" class="tsd-kind-icon">metric</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#metricduration" class="tsd-kind-icon">metric<wbr>Duration</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#metricerrors" class="tsd-kind-icon">metric<wbr>Errors</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#metricinvocations" class="tsd-kind-icon">metric<wbr>Invocations</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#metricthrottles" class="tsd-kind-icon">metric<wbr>Throttles</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#onprepare" class="tsd-kind-icon">on<wbr>Prepare</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#onsynthesize" class="tsd-kind-icon">on<wbr>Synthesize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#onvalidate" class="tsd-kind-icon">on<wbr>Validate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#prepare" class="tsd-kind-icon">prepare</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#synthesize" class="tsd-kind-icon">synthesize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="index.gusnslambda.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="index.gusnslambda.html#validate" class="tsd-kind-icon">validate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#fromfunctionarn" class="tsd-kind-icon">from<wbr>Function<wbr>Arn</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#fromfunctionattributes" class="tsd-kind-icon">from<wbr>Function<wbr>Attributes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#isconstruct" class="tsd-kind-icon">is<wbr>Construct</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricall" class="tsd-kind-icon">metric<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricallconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Concurrent<wbr>Executions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricallduration" class="tsd-kind-icon">metric<wbr>All<wbr>Duration</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricallerrors" class="tsd-kind-icon">metric<wbr>All<wbr>Errors</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricallinvocations" class="tsd-kind-icon">metric<wbr>All<wbr>Invocations</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricallthrottles" class="tsd-kind-icon">metric<wbr>All<wbr>Throttles</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="index.gusnslambda.html#metricallunreservedconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Unreserved<wbr>Concurrent<wbr>Executions</a></li>
 							</ul>
 						</section>
 					</div>
@@ -172,14 +183,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>GuScheduled<wbr>Lambda<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuScheduledLambdaProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.guscheduledlambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuScheduledLambda</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>GuSns<wbr>Lambda<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><a href="../interfaces/index.gusnslambdaprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuSnsLambdaProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.gusnslambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuSnsLambda</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="constructs_lambda.gulambdafunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.gulambdafunction.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/patterns/scheduled-lambda.ts#L13">src/patterns/scheduled-lambda.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/patterns/sns-lambda.ts#L82">src/patterns/sns-lambda.ts:82</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -191,10 +202,10 @@
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>props: <span class="tsd-signature-type">GuScheduledLambdaProps</span></h5>
+									<h5>props: <a href="../interfaces/index.gusnslambdaprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuSnsLambdaProps</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index.guscheduledlambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuScheduledLambda</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index.gusnslambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuSnsLambda</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -781,7 +792,7 @@
 					<a name="addenvironment" class="tsd-anchor"></a>
 					<h3>add<wbr>Environment</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Environment<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">EnvironmentOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.guscheduledlambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuScheduledLambda</a></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Environment<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">EnvironmentOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.gusnslambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuSnsLambda</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -823,7 +834,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index.guscheduledlambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuScheduledLambda</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index.gusnslambda.html" class="tsd-signature-type" data-tsd-kind="Class">GuSnsLambda</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -2107,192 +2118,192 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="index.guscheduledlambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="index.guscheduledlambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
+						<a href="index.gusnslambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-								<a href="index.guscheduledlambda.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="index.gusnslambda.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#_connections" class="tsd-kind-icon">_connections</a>
+								<a href="index.gusnslambda.html#_connections" class="tsd-kind-icon">_connections</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#_invocationgrants" class="tsd-kind-icon">_invocation<wbr>Grants</a>
+								<a href="index.gusnslambda.html#_invocationgrants" class="tsd-kind-icon">_invocation<wbr>Grants</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#cancreatepermissions" class="tsd-kind-icon">can<wbr>Create<wbr>Permissions</a>
+								<a href="index.gusnslambda.html#cancreatepermissions" class="tsd-kind-icon">can<wbr>Create<wbr>Permissions</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a>
+								<a href="index.gusnslambda.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#env" class="tsd-kind-icon">env</a>
+								<a href="index.gusnslambda.html#env" class="tsd-kind-icon">env</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#functionarn" class="tsd-kind-icon">function<wbr>Arn</a>
+								<a href="index.gusnslambda.html#functionarn" class="tsd-kind-icon">function<wbr>Arn</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#functionname" class="tsd-kind-icon">function<wbr>Name</a>
+								<a href="index.gusnslambda.html#functionname" class="tsd-kind-icon">function<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#grantprincipal" class="tsd-kind-icon">grant<wbr>Principal</a>
+								<a href="index.gusnslambda.html#grantprincipal" class="tsd-kind-icon">grant<wbr>Principal</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#node" class="tsd-kind-icon">node</a>
+								<a href="index.gusnslambda.html#node" class="tsd-kind-icon">node</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#permissionsnode" class="tsd-kind-icon">permissions<wbr>Node</a>
+								<a href="index.gusnslambda.html#permissionsnode" class="tsd-kind-icon">permissions<wbr>Node</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#physicalname" class="tsd-kind-icon">physical<wbr>Name</a>
+								<a href="index.gusnslambda.html#physicalname" class="tsd-kind-icon">physical<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#role" class="tsd-kind-icon">role</a>
+								<a href="index.gusnslambda.html#role" class="tsd-kind-icon">role</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#runtime" class="tsd-kind-icon">runtime</a>
+								<a href="index.gusnslambda.html#runtime" class="tsd-kind-icon">runtime</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#stack" class="tsd-kind-icon">stack</a>
+								<a href="index.gusnslambda.html#stack" class="tsd-kind-icon">stack</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#connections" class="tsd-kind-icon">connections</a>
+								<a href="index.gusnslambda.html#connections" class="tsd-kind-icon">connections</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#currentversion" class="tsd-kind-icon">current<wbr>Version</a>
+								<a href="index.gusnslambda.html#currentversion" class="tsd-kind-icon">current<wbr>Version</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#isboundtovpc" class="tsd-kind-icon">is<wbr>Bound<wbr>ToVpc</a>
+								<a href="index.gusnslambda.html#isboundtovpc" class="tsd-kind-icon">is<wbr>Bound<wbr>ToVpc</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#latestversion" class="tsd-kind-icon">latest<wbr>Version</a>
+								<a href="index.gusnslambda.html#latestversion" class="tsd-kind-icon">latest<wbr>Version</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#loggroup" class="tsd-kind-icon">log<wbr>Group</a>
+								<a href="index.gusnslambda.html#loggroup" class="tsd-kind-icon">log<wbr>Group</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#_checkedgecompatibility" class="tsd-kind-icon">_check<wbr>Edge<wbr>Compatibility</a>
+								<a href="index.gusnslambda.html#_checkedgecompatibility" class="tsd-kind-icon">_check<wbr>Edge<wbr>Compatibility</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#_enablecrossenvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a>
+								<a href="index.gusnslambda.html#_enablecrossenvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#_functionnode" class="tsd-kind-icon">_function<wbr>Node</a>
+								<a href="index.gusnslambda.html#_functionnode" class="tsd-kind-icon">_function<wbr>Node</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#_isstackaccount" class="tsd-kind-icon">_is<wbr>Stack<wbr>Account</a>
+								<a href="index.gusnslambda.html#_isstackaccount" class="tsd-kind-icon">_is<wbr>Stack<wbr>Account</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addenvironment" class="tsd-kind-icon">add<wbr>Environment</a>
+								<a href="index.gusnslambda.html#addenvironment" class="tsd-kind-icon">add<wbr>Environment</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addeventsource" class="tsd-kind-icon">add<wbr>Event<wbr>Source</a>
+								<a href="index.gusnslambda.html#addeventsource" class="tsd-kind-icon">add<wbr>Event<wbr>Source</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addeventsourcemapping" class="tsd-kind-icon">add<wbr>Event<wbr>Source<wbr>Mapping</a>
+								<a href="index.gusnslambda.html#addeventsourcemapping" class="tsd-kind-icon">add<wbr>Event<wbr>Source<wbr>Mapping</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addlayers" class="tsd-kind-icon">add<wbr>Layers</a>
+								<a href="index.gusnslambda.html#addlayers" class="tsd-kind-icon">add<wbr>Layers</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addpermission" class="tsd-kind-icon">add<wbr>Permission</a>
+								<a href="index.gusnslambda.html#addpermission" class="tsd-kind-icon">add<wbr>Permission</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addtorolepolicy" class="tsd-kind-icon">add<wbr>ToRole<wbr>Policy</a>
+								<a href="index.gusnslambda.html#addtorolepolicy" class="tsd-kind-icon">add<wbr>ToRole<wbr>Policy</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#addversion" class="tsd-kind-icon">add<wbr>Version</a>
+								<a href="index.gusnslambda.html#addversion" class="tsd-kind-icon">add<wbr>Version</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#configureasyncinvoke" class="tsd-kind-icon">configure<wbr>Async<wbr>Invoke</a>
+								<a href="index.gusnslambda.html#configureasyncinvoke" class="tsd-kind-icon">configure<wbr>Async<wbr>Invoke</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#generatephysicalname" class="tsd-kind-icon">generate<wbr>Physical<wbr>Name</a>
+								<a href="index.gusnslambda.html#generatephysicalname" class="tsd-kind-icon">generate<wbr>Physical<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#getresourcearnattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute</a>
+								<a href="index.gusnslambda.html#getresourcearnattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#getresourcenameattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute</a>
+								<a href="index.gusnslambda.html#getresourcenameattribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#grantinvoke" class="tsd-kind-icon">grant<wbr>Invoke</a>
+								<a href="index.gusnslambda.html#grantinvoke" class="tsd-kind-icon">grant<wbr>Invoke</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#metric" class="tsd-kind-icon">metric</a>
+								<a href="index.gusnslambda.html#metric" class="tsd-kind-icon">metric</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricduration" class="tsd-kind-icon">metric<wbr>Duration</a>
+								<a href="index.gusnslambda.html#metricduration" class="tsd-kind-icon">metric<wbr>Duration</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricerrors" class="tsd-kind-icon">metric<wbr>Errors</a>
+								<a href="index.gusnslambda.html#metricerrors" class="tsd-kind-icon">metric<wbr>Errors</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricinvocations" class="tsd-kind-icon">metric<wbr>Invocations</a>
+								<a href="index.gusnslambda.html#metricinvocations" class="tsd-kind-icon">metric<wbr>Invocations</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricthrottles" class="tsd-kind-icon">metric<wbr>Throttles</a>
+								<a href="index.gusnslambda.html#metricthrottles" class="tsd-kind-icon">metric<wbr>Throttles</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#onprepare" class="tsd-kind-icon">on<wbr>Prepare</a>
+								<a href="index.gusnslambda.html#onprepare" class="tsd-kind-icon">on<wbr>Prepare</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#onsynthesize" class="tsd-kind-icon">on<wbr>Synthesize</a>
+								<a href="index.gusnslambda.html#onsynthesize" class="tsd-kind-icon">on<wbr>Synthesize</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#onvalidate" class="tsd-kind-icon">on<wbr>Validate</a>
+								<a href="index.gusnslambda.html#onvalidate" class="tsd-kind-icon">on<wbr>Validate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#prepare" class="tsd-kind-icon">prepare</a>
+								<a href="index.gusnslambda.html#prepare" class="tsd-kind-icon">prepare</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#synthesize" class="tsd-kind-icon">synthesize</a>
+								<a href="index.gusnslambda.html#synthesize" class="tsd-kind-icon">synthesize</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="index.guscheduledlambda.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+								<a href="index.gusnslambda.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
-								<a href="index.guscheduledlambda.html#validate" class="tsd-kind-icon">validate</a>
+								<a href="index.gusnslambda.html#validate" class="tsd-kind-icon">validate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#fromfunctionarn" class="tsd-kind-icon">from<wbr>Function<wbr>Arn</a>
+								<a href="index.gusnslambda.html#fromfunctionarn" class="tsd-kind-icon">from<wbr>Function<wbr>Arn</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#fromfunctionattributes" class="tsd-kind-icon">from<wbr>Function<wbr>Attributes</a>
+								<a href="index.gusnslambda.html#fromfunctionattributes" class="tsd-kind-icon">from<wbr>Function<wbr>Attributes</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#isconstruct" class="tsd-kind-icon">is<wbr>Construct</a>
+								<a href="index.gusnslambda.html#isconstruct" class="tsd-kind-icon">is<wbr>Construct</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricall" class="tsd-kind-icon">metric<wbr>All</a>
+								<a href="index.gusnslambda.html#metricall" class="tsd-kind-icon">metric<wbr>All</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricallconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Concurrent<wbr>Executions</a>
+								<a href="index.gusnslambda.html#metricallconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Concurrent<wbr>Executions</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricallduration" class="tsd-kind-icon">metric<wbr>All<wbr>Duration</a>
+								<a href="index.gusnslambda.html#metricallduration" class="tsd-kind-icon">metric<wbr>All<wbr>Duration</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricallerrors" class="tsd-kind-icon">metric<wbr>All<wbr>Errors</a>
+								<a href="index.gusnslambda.html#metricallerrors" class="tsd-kind-icon">metric<wbr>All<wbr>Errors</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricallinvocations" class="tsd-kind-icon">metric<wbr>All<wbr>Invocations</a>
+								<a href="index.gusnslambda.html#metricallinvocations" class="tsd-kind-icon">metric<wbr>All<wbr>Invocations</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricallthrottles" class="tsd-kind-icon">metric<wbr>All<wbr>Throttles</a>
+								<a href="index.gusnslambda.html#metricallthrottles" class="tsd-kind-icon">metric<wbr>All<wbr>Throttles</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-								<a href="index.guscheduledlambda.html#metricallunreservedconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Unreserved<wbr>Concurrent<wbr>Executions</a>
+								<a href="index.gusnslambda.html#metricallunreservedconcurrentexecutions" class="tsd-kind-icon">metric<wbr>All<wbr>Unreserved<wbr>Concurrent<wbr>Executions</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="index.gusnslambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/index.existingsnstopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
 					</li>
