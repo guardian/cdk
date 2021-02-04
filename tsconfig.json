@@ -15,7 +15,6 @@
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
     "outDir": "lib",
-    "resolveJsonModule": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "test", "src/**/*.test.ts", "src/**/__snapshots__/**"]

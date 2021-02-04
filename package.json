@@ -41,10 +41,10 @@
   },
   "dependencies": {
     "@aws-cdk/assert": "1.86.0",
+    "@aws-cdk/aws-apigateway": "1.86.0",
     "@aws-cdk/aws-autoscaling": "1.86.0",
     "@aws-cdk/aws-cloudwatch-actions": "1.86.0",
     "@aws-cdk/aws-ec2": "1.86.0",
-    "@aws-cdk/aws-apigateway": "1.86.0",
     "@aws-cdk/aws-elasticloadbalancing": "1.86.0",
     "@aws-cdk/aws-elasticloadbalancingv2": "1.86.0",
     "@aws-cdk/aws-events-targets": "1.86.0",
@@ -53,6 +53,7 @@
     "@aws-cdk/aws-lambda-event-sources": "1.86.0",
     "@aws-cdk/aws-rds": "1.86.0",
     "@aws-cdk/aws-s3": "1.86.0",
-    "@aws-cdk/core": "1.86.0"
+    "@aws-cdk/core": "1.86.0",
+    "read-pkg-up": "^7.0.1"
   }
 }
