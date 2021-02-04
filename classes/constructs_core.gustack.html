@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuStack | @guardian/cdk - v0.31.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v0.31.0">
+	<title>GuStack | @guardian/cdk - v0.32.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v0.32.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v0.31.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v0.32.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v0.31.0</a>
+					<a href="../modules.html">@guardian/cdk - v0.32.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_core.html">constructs/core</a>
@@ -68,6 +68,34 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>GuStack provides the <code>stack</code> and <code>stage</code> parameters to a template.
+						It also takes the <code>app</code> in the constructor.</p>
+					</div>
+					<p>GuStack will add the Stack, Stage and App tags to all resources.</p>
+					<p>GuStack also adds the tag <code>X-Gu-CDK-Version</code>.
+						This tag allows us to measure adoption of this library.
+						It&#39;s value is the version of guardian/cdk being used, as defined in <code>package.json</code>.
+						As a result, the change sets between version numbers will be fairly noisy,
+						as all resources receive a tag update.
+					It is recommended to upgrade the version of @guardian/cdk being used in two steps:</p>
+					<ol>
+						<li>Bump the library, apply the tag updates</li>
+						<li>Make any other stack changes</li>
+					</ol>
+					<p>Typical usage is to extend GuStack:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyStack</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">GuStack</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span><span style="color: #001080">scope</span><span style="color: #000000">: </span><span style="color: #267F99">App</span><span style="color: #000000">, </span><span style="color: #001080">id</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">props</span><span style="color: #000000">: </span><span style="color: #267F99">GuStackProps</span><span style="color: #000000">) {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">super</span><span style="color: #000000">(</span><span style="color: #001080">scope</span><span style="color: #000000">, </span><span style="color: #001080">id</span><span style="color: #000000">, </span><span style="color: #001080">props</span><span style="color: #000000">)</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// add resources here</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -179,7 +207,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L33">src/constructs/core/stack.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L68">src/constructs/core/stack.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -207,7 +235,7 @@
 					<div class="tsd-signature tsd-kind-icon">_app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L15">src/constructs/core/stack.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L43">src/constructs/core/stack.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -217,7 +245,7 @@
 					<div class="tsd-signature tsd-kind-icon">_stack<span class="tsd-signature-symbol">:</span> <a href="constructs_core.gustackparameter.html" class="tsd-signature-type" data-tsd-kind="Class">GuStackParameter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L14">src/constructs/core/stack.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L42">src/constructs/core/stack.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -227,7 +255,7 @@
 					<div class="tsd-signature tsd-kind-icon">_stage<span class="tsd-signature-symbol">:</span> <a href="constructs_core.gustageparameter.html" class="tsd-signature-type" data-tsd-kind="Class">GuStageParameter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L13">src/constructs/core/stack.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L41">src/constructs/core/stack.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -342,7 +370,7 @@
 					<div class="tsd-signature tsd-kind-icon">migrated<wbr>From<wbr>Cloud<wbr>Formation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L29">src/constructs/core/stack.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L57">src/constructs/core/stack.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -537,7 +565,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L25">src/constructs/core/stack.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L53">src/constructs/core/stack.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -774,7 +802,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L21">src/constructs/core/stack.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L49">src/constructs/core/stack.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -856,7 +884,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L17">src/constructs/core/stack.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L45">src/constructs/core/stack.ts:45</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1140,19 +1168,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/71f7237/src/constructs/core/stack.ts#L31">src/constructs/core/stack.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7a46c0f/src/constructs/core/stack.ts#L66">src/constructs/core/stack.ts:66</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A helper function to add a tag to all resources in a stack.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the tag name</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the value of the tag</p>
+									</div>
 								</li>
 								<li>
 									<h5>applyToLaunchedInstances: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>whether or not to apply the tag to instances launched in an ASG.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
