@@ -3,6 +3,9 @@
   "version": "0.32.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
