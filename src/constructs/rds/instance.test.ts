@@ -3,8 +3,9 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "@aws-cdk/aws-rds";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
+import { TrackingTag } from "../../constants/library-info";
 import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
@@ -100,6 +101,7 @@ describe("The GuDatabaseInstance class", () => {
             Ref: "Stage",
           },
         },
+        TrackingTag,
       ],
     });
   });

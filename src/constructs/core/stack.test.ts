@@ -3,9 +3,10 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { App } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
 import { Stage, Stages } from "../../constants";
+import { TrackingTag } from "../../constants/library-info";
 import { GuStack } from "./stack";
 
 describe("The GuStack construct", () => {
@@ -54,6 +55,7 @@ describe("The GuStack construct", () => {
             Ref: "Stage",
           },
         },
+        TrackingTag,
       ],
     });
   });

@@ -56,6 +56,10 @@ Object {
               "Ref": "Stage",
             },
           },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "TEST",
+          },
         ],
         "Timeout": 30,
       },
@@ -155,6 +159,10 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
+          },
+          Object {
+            "Key": "X-Gu-CDK-Version",
+            "Value": "TEST",
           },
         ],
       },
