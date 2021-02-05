@@ -9,6 +9,13 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 if npm whoami &>/dev/null; then
   rm -rf ./lib
   npm run release
+
+  # The default branch is protected.
+  # Raise a chore PR to bump `version` in `package.json`.
+  NEW_VERSION=$(git log -1 --pretty=%B)
+  git checkout -b "release-${NEW_VERSION}"
+  git push -u origin "release-${NEW_VERSION}"
+  gh pr create --title "chore: ${NEW_VERSION}" --body ""
 else
   echo "You are not logged into npm!"
   echo "  Run 'npm login' first!"

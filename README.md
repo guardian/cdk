@@ -79,7 +79,7 @@ To release a new version, run `./script/release`. You will need to be logged in 
 
 The script automatically prepares a [GitHub Release](https://docs.github.com/en/github/administering-a-repository/about-releases) and opens a pre-populated form in your browser. Please complete the GitHub Release creation manually.
 
-You will also need to manually checkout a new branch and open a PR containing version bump changes which are automatically committed during the release process.
+It will also automatically create a PR to edit `version` in [`package.json`](./package.json).
 
 ### A note about release numbers
 
