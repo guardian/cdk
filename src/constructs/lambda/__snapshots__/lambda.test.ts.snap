@@ -98,6 +98,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -108,10 +112,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
         "Timeout": 30,
@@ -152,6 +152,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -162,10 +166,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
@@ -231,6 +231,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -241,10 +245,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
@@ -419,6 +419,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -430,15 +434,11 @@ Object {
               "Ref": "Stage",
             },
           },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
-          },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB937340ba28821c4d87686bb600192997b7b2": Object {
+    "lambdaapi2Deployment4ECB93739afe50d503afeac32f7e1b1edd2caf70": Object {
       "DependsOn": Array [
         "lambdaapi2proxyANY3F8E1D36",
         "lambdaapi2proxyE68FDFBC",
@@ -455,7 +455,7 @@ Object {
     "lambdaapi2DeploymentStageprodCC9E3016": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB937340ba28821c4d87686bb600192997b7b2",
+          "Ref": "lambdaapi2Deployment4ECB93739afe50d503afeac32f7e1b1edd2caf70",
         },
         "RestApiId": Object {
           "Ref": "lambdaapi239350ECC",
@@ -465,6 +465,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
           },
           Object {
             "Key": "Stack",
@@ -477,10 +481,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
@@ -764,6 +764,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -774,10 +778,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
@@ -817,6 +817,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -828,15 +832,11 @@ Object {
               "Ref": "Stage",
             },
           },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
-          },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B58515e203156872c143be11756a3c89fbba": Object {
+    "lambdaapiDeployment8E95B5854a7d40530a7080bd25491376ccd199af": Object {
       "DependsOn": Array [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -853,7 +853,7 @@ Object {
     "lambdaapiDeploymentStageprod9598BC2F": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B58515e203156872c143be11756a3c89fbba",
+          "Ref": "lambdaapiDeployment8E95B5854a7d40530a7080bd25491376ccd199af",
         },
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
@@ -863,6 +863,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
           },
           Object {
             "Key": "Stack",
@@ -875,10 +879,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },

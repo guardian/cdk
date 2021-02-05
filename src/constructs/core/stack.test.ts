@@ -3,7 +3,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { App } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils";
+import { alphabeticalTags, simpleGuStackForTesting } from "../../../test/utils";
 import type { SynthedStack } from "../../../test/utils";
 import { Stage, Stages } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
@@ -38,7 +38,7 @@ describe("The GuStack construct", () => {
     });
 
     expect(stack).toHaveResource("AWS::IAM::Role", {
-      Tags: [
+      Tags: alphabeticalTags([
         {
           Key: "App",
           Value: "MyApp",
@@ -56,7 +56,7 @@ describe("The GuStack construct", () => {
           },
         },
         TrackingTag,
-      ],
+      ]),
     });
   });
 

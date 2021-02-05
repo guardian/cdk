@@ -7,6 +7,6 @@ export const LibraryInfo = {
 };
 
 export const TrackingTag = {
-  Key: "X-Gu-CDK-Version",
+  Key: "gu:cdk:version",
   Value: LibraryInfo.VERSION,
 };
