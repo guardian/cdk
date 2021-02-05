@@ -9,6 +9,20 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 if npm whoami &>/dev/null; then
   rm -rf ./lib
   npm run release
+
+  # The default branch is protected.
+  # Push commit to new branch.
+  NEW_VERSION=$(git log -1 --pretty=%B)
+  git checkout -b "release-${NEW_VERSION}"
+  git push -u origin "release-${NEW_VERSION}"
+
+  if ! command -v gh &> /dev/null
+  then
+      echo "GitHub CLI not found. Please raise PR manually."
+  else
+    # Raise a chore PR to bump `version` in `package.json`.
+    gh pr create --title "chore: ${NEW_VERSION}" --body ""
+  fi
 else
   echo "You are not logged into npm!"
   echo "  Run 'npm login' first!"
