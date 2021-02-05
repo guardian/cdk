@@ -58,12 +58,17 @@ export class GuStack extends Stack {
 
   /**
    * A helper function to add a tag to all resources in a stack.
+   *
+   * Note: tags will be listed in alphabetical order during synthesis.
+   *
    * @param key the tag name
    * @param value the value of the tag
    * @param applyToLaunchedInstances whether or not to apply the tag to instances launched in an ASG.
    * @protected
    */
   protected addTag(key: string, value: string, applyToLaunchedInstances: boolean = true): void {
+    // TODO add validation for `key` and `value`
+    //  see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html
     Tags.of(this).add(key, value, { applyToLaunchedInstances });
   }
 

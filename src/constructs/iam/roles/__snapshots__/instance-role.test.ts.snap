@@ -134,6 +134,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -144,10 +148,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
@@ -397,6 +397,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -407,10 +411,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
@@ -613,6 +613,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "Stack",
             "Value": Object {
               "Ref": "Stack",
@@ -623,10 +627,6 @@ Object {
             "Value": Object {
               "Ref": "Stage",
             },
-          },
-          Object {
-            "Key": "X-Gu-CDK-Version",
-            "Value": "TEST",
           },
         ],
       },
