@@ -42,6 +42,8 @@ export class GuStack extends Stack {
   private readonly _stack: GuStackParameter;
   private readonly _app: string;
 
+  public readonly migratedFromCloudFormation: boolean;
+
   get stage(): string {
     return this._stage.valueAsString;
   }
@@ -53,8 +55,6 @@ export class GuStack extends Stack {
   get app(): string {
     return this._app;
   }
-
-  migratedFromCloudFormation: boolean;
 
   /**
    * A helper function to add a tag to all resources in a stack.
