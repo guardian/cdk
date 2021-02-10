@@ -12,7 +12,6 @@ import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 export interface GuAutoScalingGroupProps
   extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
   instanceType?: InstanceType;
-  imageId?: GuAmiParameter;
   osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: string;
@@ -30,11 +29,9 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       return {
         osType: props.osType ?? OperatingSystemType.LINUX,
         userData: UserData.custom(props.userData),
-        imageId:
-          props.imageId?.valueAsString ??
-          new GuAmiParameter(scope, "AMI", {
-            description: "AMI ID",
-          }).valueAsString,
+        imageId: new GuAmiParameter(scope, `${scope.app}AMI`, {
+          description: "AMI ID",
+        }).valueAsString,
       };
     }
 

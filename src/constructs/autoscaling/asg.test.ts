@@ -3,9 +3,8 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { GuAmiParameter } from "../core";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
@@ -22,42 +21,21 @@ describe("The GuAutoScalingGroup", () => {
     userData: "user data",
   };
 
-  test("adds the AMI parameter if no imageId prop provided", () => {
+  test("adds the AMI parameter, tied to the app name", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.AMI).toEqual({
+    expect(json.Parameters[`${stack.app}AMI`]).toEqual({
       Description: "AMI ID",
       Type: "AWS::EC2::Image::Id",
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       ImageId: {
-        Ref: "AMI",
-      },
-    });
-  });
-
-  test("does not add the AMI parameter if an imageId prop provided", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      ...defaultProps,
-      osType: 1,
-      imageId: new GuAmiParameter(stack, "CustomAMI", {}),
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Parameters)).not.toContain("AMI");
-    expect(Object.keys(json.Parameters)).toContain("CustomAMI");
-
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
-      ImageId: {
-        Ref: "CustomAMI",
+        Ref: `${stack.app}AMI`,
       },
     });
   });
