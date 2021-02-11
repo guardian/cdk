@@ -7,6 +7,8 @@ export interface GuStackProps extends StackProps {
   // This limits GuStack to supporting a single app.
   // In the future, support for stacks with multiple apps may be required
   app: string;
+  stack?: string;
+  stage?: string;
   migratedFromCloudFormation?: boolean;
 }
 
@@ -38,17 +40,23 @@ export interface GuStackProps extends StackProps {
  * ```
  */
 export class GuStack extends Stack {
-  private readonly _stage: GuStageParameter;
-  private readonly _stack: GuStackParameter;
+  private readonly _stage: string | GuStageParameter;
+  private readonly _stack: string | GuStackParameter;
   private readonly _app: string;
 
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
+    if (typeof this._stage === "string") {
+      return this._stage;
+    }
     return this._stage.valueAsString;
   }
 
   get stack(): string {
+    if (typeof this._stack === "string") {
+      return this._stack;
+    }
     return this._stack.valueAsString;
   }
 
@@ -78,8 +86,8 @@ export class GuStack extends Stack {
 
     this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
 
-    this._stage = new GuStageParameter(this);
-    this._stack = new GuStackParameter(this);
+    this._stage = props.stage ?? new GuStageParameter(this);
+    this._stack = props.stack ?? new GuStackParameter(this);
     this._app = props.app;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);

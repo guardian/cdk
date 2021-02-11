@@ -10,6 +10,15 @@ import { TrackingTag } from "../../constants/library-info";
 import { GuStack } from "./stack";
 
 describe("The GuStack construct", () => {
+  it("should be able to take stack and stage values as props", function () {
+    const stack = simpleGuStackForTesting({ stack: "some-stack", stage: "some-stage" });
+    expect(stack.stack).toEqual("some-stack");
+    expect(stack.stage).toEqual("some-stage");
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters).toBeUndefined();
+  });
   it("should have stack and stage parameters", () => {
     const stack = simpleGuStackForTesting();
 
