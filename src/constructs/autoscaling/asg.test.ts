@@ -22,6 +22,15 @@ describe("The GuAutoScalingGroup", () => {
     userData: "user data",
   };
 
+  test("what happens with multiple ASGs", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup1", { ...defaultProps });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup2", { ...defaultProps });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+  });
+
   test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
