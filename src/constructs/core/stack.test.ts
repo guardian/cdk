@@ -19,6 +19,12 @@ describe("The GuStack construct", () => {
 
     expect(json.Parameters).toBeUndefined();
   });
+
+  it("can accept only one of stack or stage", function () {
+    const stack = simpleGuStackForTesting({ stage: "some-stage" });
+    expect(stack.stage).toEqual("some-stage");
+  });
+
   it("should have stack and stage parameters", () => {
     const stack = simpleGuStackForTesting();
 
