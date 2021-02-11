@@ -25,10 +25,13 @@ describe("The GuAutoScalingGroup", () => {
   test("what happens with multiple ASGs", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup1", { ...defaultProps });
-    new GuAutoScalingGroup(stack, "AutoscalingGroup2", { ...defaultProps });
+    const imageId = new GuAmiParameter(stack, "MyAMI", {});
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup1", { ...defaultProps, imageId });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup2", { ...defaultProps, imageId });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    console.log(json.Parameters);
   });
 
   test("adds the AMI parameter if no imageId prop provided", () => {
