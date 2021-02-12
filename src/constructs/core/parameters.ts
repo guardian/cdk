@@ -30,7 +30,8 @@ export class GuStringParameter extends GuParameter {
 }
 
 export class GuStageParameter extends GuParameter {
-  constructor(scope: GuStack, id: string = "Stage") {
+  public static readonly defaultId = "Stage";
+  constructor(scope: GuStack, id: string = GuStageParameter.defaultId) {
     super(scope, id, {
       type: "String",
       description: "Stage name",
@@ -41,7 +42,8 @@ export class GuStageParameter extends GuParameter {
 }
 
 export class GuStackParameter extends GuParameter {
-  constructor(scope: GuStack, id: string = "Stack") {
+  public static readonly defaultId = "Stack";
+  constructor(scope: GuStack, id: string = GuStackParameter.defaultId) {
     super(scope, id, {
       type: "String",
       description: "Name of this stack",
