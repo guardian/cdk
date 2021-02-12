@@ -8,11 +8,6 @@ Object {
       "ConstraintDescription": "Must be an @theguardian.com email address",
       "Type": "String",
     },
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Name of this stack",
-      "Type": "String",
-    },
     "Stage": Object {
       "AllowedValues": Array [
         "CODE",
@@ -98,9 +93,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",

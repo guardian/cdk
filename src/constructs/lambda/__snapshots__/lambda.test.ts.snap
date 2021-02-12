@@ -57,11 +57,6 @@ Object {
     },
   },
   "Parameters": Object {
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Name of this stack",
-      "Type": "String",
-    },
     "Stage": Object {
       "AllowedValues": Array [
         "CODE",
@@ -103,9 +98,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -157,9 +150,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -236,9 +227,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -424,9 +413,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -438,7 +425,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB93739afe50d503afeac32f7e1b1edd2caf70": Object {
+    "lambdaapi2Deployment4ECB9373eeef9ed08d134e870f1057489fa78a0f": Object {
       "DependsOn": Array [
         "lambdaapi2proxyANY3F8E1D36",
         "lambdaapi2proxyE68FDFBC",
@@ -455,7 +442,7 @@ Object {
     "lambdaapi2DeploymentStageprodCC9E3016": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB93739afe50d503afeac32f7e1b1edd2caf70",
+          "Ref": "lambdaapi2Deployment4ECB9373eeef9ed08d134e870f1057489fa78a0f",
         },
         "RestApiId": Object {
           "Ref": "lambdaapi239350ECC",
@@ -472,9 +459,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -769,9 +754,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -822,9 +805,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -836,7 +817,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B5854a7d40530a7080bd25491376ccd199af": Object {
+    "lambdaapiDeployment8E95B58563248bfce6018e332697b729bf0efbba": Object {
       "DependsOn": Array [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -853,7 +834,7 @@ Object {
     "lambdaapiDeploymentStageprod9598BC2F": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B5854a7d40530a7080bd25491376ccd199af",
+          "Ref": "lambdaapiDeployment8E95B58563248bfce6018e332697b729bf0efbba",
         },
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
@@ -870,9 +851,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",

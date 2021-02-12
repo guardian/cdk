@@ -91,9 +91,7 @@ describe("The GuDatabaseInstance class", () => {
         },
         {
           Key: "Stack",
-          Value: {
-            Ref: "Stack",
-          },
+          Value: "test-stack",
         },
         {
           Key: "Stage",

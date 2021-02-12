@@ -1,14 +1,13 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import { TrackingTag } from "../../constants/library-info";
-import { GuStackParameter, GuStageParameter } from "./parameters";
+import { GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
   // This limits GuStack to supporting a single app.
   // In the future, support for stacks with multiple apps may be required
   app: string;
-  stack?: string;
-  stage?: string;
+  stack: string;
   migratedFromCloudFormation?: boolean;
 }
 
@@ -40,24 +39,18 @@ export interface GuStackProps extends StackProps {
  * ```
  */
 export class GuStack extends Stack {
-  private readonly _stage: string | GuStageParameter;
-  private readonly _stack: string | GuStackParameter;
+  private readonly _stage: GuStageParameter;
+  private readonly _stack: string;
   private readonly _app: string;
 
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    if (typeof this._stage === "string") {
-      return this._stage;
-    }
     return this._stage.valueAsString;
   }
 
   get stack(): string {
-    if (typeof this._stack === "string") {
-      return this._stack;
-    }
-    return this._stack.valueAsString;
+    return this._stack;
   }
 
   get app(): string {
@@ -86,8 +79,8 @@ export class GuStack extends Stack {
 
     this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
 
-    this._stage = props.stage ?? new GuStageParameter(this);
-    this._stack = props.stack ?? new GuStackParameter(this);
+    this._stage = new GuStageParameter(this);
+    this._stack = props.stack;
     this._app = props.app;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);
