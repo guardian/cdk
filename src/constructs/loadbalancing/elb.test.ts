@@ -5,6 +5,7 @@ import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbal
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
 import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { RegexPattern } from "../../constants";
 import {
   GuApplicationListener,
   GuApplicationLoadBalancer,
@@ -331,10 +332,10 @@ describe("The GuHttpsApplicationListener class", () => {
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.CertificateARN).toEqual({
+    expect(json.Parameters.TLSCertificate).toEqual({
       Type: "String",
-      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
-      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+      AllowedPattern: RegexPattern.ACM_ARN,
+      ConstraintDescription: "Must be an ACM ARN resource",
       Description: "Certificate ARN for ApplicationListener",
     });
 
@@ -342,11 +343,30 @@ describe("The GuHttpsApplicationListener class", () => {
       Certificates: [
         {
           CertificateArn: {
-            Ref: "CertificateARN",
+            Ref: "TLSCertificate",
           },
         },
       ],
     });
+  });
+
+  test("passing in an invalid ACM ARN", () => {
+    const stack = simpleGuStackForTesting();
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
+      vpc: vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    expect(
+      () =>
+        new GuHttpsApplicationListener(stack, "ApplicationListener", {
+          loadBalancer,
+          targetGroup,
+          certificate: "test",
+        })
+    ).toThrowError(new Error("test is not a valid ACM ARN"));
   });
 
   test("does not create certificate prop if a value passed in", () => {
@@ -361,7 +381,7 @@ describe("The GuHttpsApplicationListener class", () => {
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       loadBalancer,
       targetGroup,
-      certificate: "test",
+      certificate: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -371,7 +391,7 @@ describe("The GuHttpsApplicationListener class", () => {
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
       Certificates: [
         {
-          CertificateArn: "test",
+          CertificateArn: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
         },
       ],
     });
