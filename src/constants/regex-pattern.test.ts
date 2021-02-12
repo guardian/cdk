@@ -25,4 +25,10 @@ describe("the regex patterns", () => {
     expect(regex.test("another.@theguardian.com")).toBeFalsy();
     expect(regex.test("another1@theguardian.com")).toBeFalsy();
   });
+
+  it("should successfully regex against ACM ARNs", () => {
+    const regex = new RegExp(RegexPattern.ACM_ARN);
+    expect(regex.test("arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc")).toBeTruthy();
+    expect(regex.test("arn:aws:acm:eu-west-1:000000000000:tls/123abc-0000-0000-0000-123abc")).toBeFalsy();
+  });
 });
