@@ -20,6 +20,10 @@ describe("The GuAutoScalingGroup", () => {
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
     userData: "user data",
+    capacity: {
+      minimumCodeInstances: 1,
+      minimumProdInstances: 3,
+    },
   };
 
   test("adds the AMI parameter if no imageId prop provided", () => {
@@ -183,5 +187,79 @@ describe("The GuAutoScalingGroup", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(Object.keys(json.Resources)).not.toContain("AutoscalingGroup");
+  });
+
+  test("adds the correct mappings when provided with minimal capacity config", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: {
+          minInstances: 1,
+          maxInstances: 2,
+        },
+        PROD: {
+          minInstances: 3,
+          maxInstances: 6,
+        },
+      },
+    });
+  });
+
+  test("uses custom max capacities (if provided)", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      ...defaultProps,
+      capacity: {
+        minimumCodeInstances: 1,
+        minimumProdInstances: 3,
+        maximumCodeInstances: 5,
+        maximumProdInstances: 7,
+      },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: {
+          minInstances: 1,
+          maxInstances: 5,
+        },
+        PROD: {
+          minInstances: 3,
+          maxInstances: 7,
+        },
+      },
+    });
+  });
+
+  test("Uses Find In Map correctly to reference capacity mappings", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+
+    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+      MinSize: {
+        "Fn::FindInMap": [
+          "stagemapping",
+          {
+            Ref: "Stage",
+          },
+          "minInstances",
+        ],
+      },
+      MaxSize: {
+        "Fn::FindInMap": [
+          "stagemapping",
+          {
+            Ref: "Stage",
+          },
+          "maxInstances",
+        ],
+      },
+    });
   });
 });

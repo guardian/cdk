@@ -3,14 +3,25 @@ import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { GuStack } from "../core";
+import type { GuStack, GuStageVariable } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
 export interface GuAutoScalingGroupProps
-  extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
+  extends Omit<
+    AutoScalingGroupProps,
+    | "imageId"
+    | "osType"
+    | "machineImage"
+    | "instanceType"
+    | "userData"
+    | "minCapacity"
+    | "maxCapacity"
+    | "desiredCapacity"
+  > {
+  capacity: GuAsgCapacityProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
   osType?: OperatingSystemType;
@@ -19,6 +30,50 @@ export interface GuAutoScalingGroupProps
   securityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   overrideId?: boolean;
+}
+
+/**
+ * `minimumCodeInstances` and `minimumProdInstances` determine the number of ec2 instances running
+ * in each stage under normal circumstances (i.e. when there are no deployment or scaling events in progress).
+ *
+ * `maximumCodeInstances` and `maximumProdInstances` are both optional. If omitted, these
+ * will be set to `minimumCodeInstances * 2` and `minimumProdInstances * 2`, respectively.
+ * This allows us to support Riff-Raff's autoscaling deployment type by default.
+ *
+ * The maximum capacity values can be set manually if you need to scale beyond the default limit (e.g. due to heavy traffic)
+ * or restrict scaling for a specific reason.
+ */
+export interface GuAsgCapacityProps {
+  minimumCodeInstances: number;
+  minimumProdInstances: number;
+  maximumCodeInstances?: number;
+  maximumProdInstances?: number;
+}
+
+interface AwsAsgCapacityProps {
+  minCapacity: number;
+  maxCapacity: number;
+}
+
+function wireCapacityProps(scope: GuStack, capacity: GuAsgCapacityProps): AwsAsgCapacityProps {
+  const minInstancesKey = "minInstances";
+  const maxInstancesKey = "maxInstances";
+  const minInstances: GuStageVariable = {
+    variableName: minInstancesKey,
+    codeValue: capacity.minimumCodeInstances,
+    prodValue: capacity.minimumProdInstances,
+  };
+  const maxInstances: GuStageVariable = {
+    variableName: maxInstancesKey,
+    codeValue: capacity.maximumCodeInstances ?? capacity.minimumCodeInstances * 2,
+    prodValue: capacity.maximumProdInstances ?? capacity.minimumProdInstances * 2,
+  };
+  scope.mappings.addStageVariable(minInstances);
+  scope.mappings.addStageVariable(maxInstances);
+  return {
+    minCapacity: (scope.mappings.findInMap(scope.stage, minInstancesKey) as unknown) as number,
+    maxCapacity: (scope.mappings.findInMap(scope.stage, maxInstancesKey) as unknown) as number,
+  };
 }
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
@@ -40,6 +95,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
 
     const mergedProps = {
       ...props,
+      ...wireCapacityProps(scope, props.capacity),
       machineImage: { getImage: getImage },
       instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
       userData: UserData.custom(props.userData),

@@ -1,6 +1,7 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import { TrackingTag } from "../../constants/library-info";
+import { GuStageMapping } from "./mappings";
 import { GuStackParameter, GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
@@ -40,6 +41,7 @@ export interface GuStackProps extends StackProps {
 export class GuStack extends Stack {
   private readonly _stage: GuStageParameter;
   private readonly _stack: GuStackParameter;
+  private _mappings: undefined | GuStageMapping;
   private readonly _app: string;
 
   public readonly migratedFromCloudFormation: boolean;
@@ -54,6 +56,11 @@ export class GuStack extends Stack {
 
   get app(): string {
     return this._app;
+  }
+
+  // Use lazy initialisation for GuStageMapping so that Mappings block is only created when necessary
+  get mappings(): GuStageMapping {
+    return this._mappings ?? (this._mappings = new GuStageMapping(this));
   }
 
   /**
