@@ -13,17 +13,6 @@ describe("The GuStack construct", () => {
   it("requires passing the stack value as props", function () {
     const stack = simpleGuStackForTesting({ stack: "some-stack" });
     expect(stack.stack).toEqual("some-stack");
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters).toEqual({
-      Stage: {
-        Type: "String",
-        Description: "Stage name",
-        AllowedValues: Stages,
-        Default: Stage.CODE,
-      },
-    });
   });
 
   it("should have a stage parameter", () => {
