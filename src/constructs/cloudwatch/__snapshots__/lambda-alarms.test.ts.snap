@@ -3,11 +3,6 @@
 exports[`The GuLambdaErrorPercentageAlarm pattern should create the correct alarm resource with minimal config 1`] = `
 Object {
   "Parameters": Object {
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Name of this stack",
-      "Type": "String",
-    },
     "Stage": Object {
       "AllowedValues": Array [
         "CODE",
@@ -49,9 +44,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -103,9 +96,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",

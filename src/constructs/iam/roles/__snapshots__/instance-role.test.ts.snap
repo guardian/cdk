@@ -8,11 +8,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Name of this stack",
-      "Type": "String",
-    },
     "Stage": Object {
       "AllowedValues": Array [
         "CODE",
@@ -139,9 +134,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -176,11 +169,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/",
-                    Object {
-                      "Ref": "Stack",
-                    },
-                    "/testing",
+                    "/test-stack/testing",
                   ],
                 ],
               },
@@ -249,11 +238,6 @@ Object {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Name of this stack",
-      "Type": "String",
     },
     "Stage": Object {
       "AllowedValues": Array [
@@ -402,9 +386,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -439,11 +421,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/",
-                    Object {
-                      "Ref": "Stack",
-                    },
-                    "/testing",
+                    "/test-stack/testing",
                   ],
                 ],
               },
@@ -507,11 +485,6 @@ Object {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-    "Stack": Object {
-      "Default": "deploy",
-      "Description": "Name of this stack",
-      "Type": "String",
     },
     "Stage": Object {
       "AllowedValues": Array [
@@ -618,9 +591,7 @@ Object {
           },
           Object {
             "Key": "Stack",
-            "Value": Object {
-              "Ref": "Stack",
-            },
+            "Value": "test-stack",
           },
           Object {
             "Key": "Stage",
@@ -655,11 +626,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/",
-                    Object {
-                      "Ref": "Stack",
-                    },
-                    "/testing",
+                    "/test-stack/testing",
                   ],
                 ],
               },

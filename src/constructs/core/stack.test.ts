@@ -10,17 +10,17 @@ import { TrackingTag } from "../../constants/library-info";
 import { GuStack } from "./stack";
 
 describe("The GuStack construct", () => {
-  it("should have stack and stage parameters", () => {
-    const stack = simpleGuStackForTesting();
+  it("requires passing the stack value as props", function () {
+    const stack = simpleGuStackForTesting({ stack: "some-stack" });
+    expect(stack.stack).toEqual("some-stack");
+  });
+
+  it("should have a stage parameter", () => {
+    const stack = simpleGuStackForTesting({ stack: "test" });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Parameters).toEqual({
-      Stack: {
-        Type: "String",
-        Description: "Name of this stack",
-        Default: "deploy",
-      },
       Stage: {
         Type: "String",
         Description: "Stage name",
@@ -31,7 +31,7 @@ describe("The GuStack construct", () => {
   });
 
   it("should apply the stack, stage and app tags to resources added to it", () => {
-    const stack = new GuStack(new App(), "Test", { app: "MyApp" });
+    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
 
     new Role(stack, "MyRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -45,9 +45,7 @@ describe("The GuStack construct", () => {
         },
         {
           Key: "Stack",
-          Value: {
-            Ref: "Stack",
-          },
+          Value: "test",
         },
         {
           Key: "Stage",
@@ -61,7 +59,7 @@ describe("The GuStack construct", () => {
   });
 
   it("should return the correct app value when app is set", () => {
-    const stack = new GuStack(new App(), "Test", { app: "MyApp" });
+    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
 
     expect(stack.app).toBe("MyApp");
   });
