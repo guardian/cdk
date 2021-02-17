@@ -3,6 +3,7 @@ import { Stack, Tags } from "@aws-cdk/core";
 import { TrackingTag } from "../../constants/library-info";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
+import type { GuParameter } from "./parameters";
 import { GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
@@ -41,16 +42,16 @@ export interface GuStackProps extends StackProps {
  * ```
  */
 export class GuStack extends Stack {
-  private readonly _stage: GuStageParameter;
   private readonly _stack: string;
   private readonly _app: string;
 
   private _mappings: undefined | GuStageMapping;
+  private params: Map<string, GuParameter>;
 
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    return this._stage.valueAsString;
+    return this.getParam(GuStageParameter.defaultId).valueAsString;
   }
 
   get stack(): string {
@@ -91,13 +92,27 @@ export class GuStack extends Stack {
     Tags.of(this).add(key, value, { applyToLaunchedInstances });
   }
 
+  setParam(value: GuParameter): void {
+    this.params.set(value.id, value);
+  }
+
+  getParam<T extends GuParameter>(key: string): T {
+    if (!this.params.has(key)) {
+      throw new Error(`Attempting to read parameter ${key} which does not exist`);
+    }
+
+    return this.params.get(key) as T;
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
     super(app, id, props);
 
     this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
 
-    this._stage = new GuStageParameter(this);
+    this.params = new Map<string, GuParameter>();
+
+    new GuStageParameter(this);
     this._stack = props.stack;
     this._app = props.app;
 
