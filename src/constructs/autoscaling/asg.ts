@@ -3,7 +3,7 @@ import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { GuStack, GuStageVariable } from "../core";
+import type { GuStack, GuStageDependentValue } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -55,24 +55,24 @@ interface AwsAsgCapacityProps {
   maxCapacity: number;
 }
 
-function wireCapacityProps(scope: GuStack, capacity: GuAsgCapacityProps): AwsAsgCapacityProps {
+function wireCapacityProps(stack: GuStack, capacity: GuAsgCapacityProps): AwsAsgCapacityProps {
   const minInstancesKey = "minInstances";
   const maxInstancesKey = "maxInstances";
-  const minInstances: GuStageVariable = {
+  const minInstances: GuStageDependentValue = {
     variableName: minInstancesKey,
     codeValue: capacity.minimumCodeInstances,
     prodValue: capacity.minimumProdInstances,
   };
-  const maxInstances: GuStageVariable = {
+  const maxInstances: GuStageDependentValue = {
     variableName: maxInstancesKey,
     codeValue: capacity.maximumCodeInstances ?? capacity.minimumCodeInstances * 2,
     prodValue: capacity.maximumProdInstances ?? capacity.minimumProdInstances * 2,
   };
-  scope.mappings.addStageVariable(minInstances);
-  scope.mappings.addStageVariable(maxInstances);
+  stack.setStageDependentValue(minInstances);
+  stack.setStageDependentValue(maxInstances);
   return {
-    minCapacity: (scope.mappings.findInMap(scope.stage, minInstancesKey) as unknown) as number,
-    maxCapacity: (scope.mappings.findInMap(scope.stage, maxInstancesKey) as unknown) as number,
+    minCapacity: stack.getStageDependentValue(minInstancesKey),
+    maxCapacity: stack.getStageDependentValue(maxInstancesKey),
   };
 }
 

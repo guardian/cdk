@@ -1,6 +1,7 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import { TrackingTag } from "../../constants/library-info";
+import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
 import { GuStackParameter, GuStageParameter } from "./parameters";
 
@@ -61,6 +62,15 @@ export class GuStack extends Stack {
   // Use lazy initialisation for GuStageMapping so that Mappings block is only created when necessary
   get mappings(): GuStageMapping {
     return this._mappings ?? (this._mappings = new GuStageMapping(this));
+  }
+
+  setStageDependentValue(stageVariable: GuStageDependentValue): void {
+    this.mappings.setValue("CODE", stageVariable.variableName, stageVariable.codeValue);
+    this.mappings.setValue("PROD", stageVariable.variableName, stageVariable.prodValue);
+  }
+
+  getStageDependentValue<T>(key: string): T {
+    return (this.mappings.findInMap(this.stage, key) as unknown) as T;
   }
 
   /**
