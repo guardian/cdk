@@ -10,11 +10,16 @@ export interface GuParameterProps extends CfnParameterProps {
 export type GuNoTypeParameterProps = Omit<GuParameterProps, "type">;
 
 export class GuParameter extends CfnParameter {
+  public readonly id: string;
+
   constructor(scope: GuStack, id: string, props: GuParameterProps) {
     super(scope, id, {
       ...props,
       type: props.fromSSM ? `AWS::SSM::Parameter::Value<${props.type ?? "String"}>` : props.type,
     });
+
+    this.id = id;
+    scope.setParam(this);
   }
 }
 
@@ -25,7 +30,8 @@ export class GuStringParameter extends GuParameter {
 }
 
 export class GuStageParameter extends GuParameter {
-  constructor(scope: GuStack, id: string = "Stage") {
+  public static readonly defaultId = "Stage";
+  constructor(scope: GuStack, id: string = GuStageParameter.defaultId) {
     super(scope, id, {
       type: "String",
       description: "Stage name",
@@ -36,7 +42,8 @@ export class GuStageParameter extends GuParameter {
 }
 
 export class GuStackParameter extends GuParameter {
-  constructor(scope: GuStack, id: string = "Stack") {
+  public static readonly defaultId = "Stack";
+  constructor(scope: GuStack, id: string = GuStackParameter.defaultId) {
     super(scope, id, {
       type: "String",
       description: "Name of this stack",

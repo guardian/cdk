@@ -1,22 +1,17 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
 import type { SynthedStack } from "../../../test/utils";
-import { Stage, Stages } from "../../constants";
 import {
   GuAmiParameter,
   GuArnParameter,
   GuInstanceTypeParameter,
   GuParameter,
   GuS3ObjectArnParameter,
-  GuStackParameter,
-  GuStageParameter,
   GuStringParameter,
   GuSubnetListParameter,
   GuVpcParameter,
 } from "./parameters";
-import type { GuStack } from "./stack";
 
 describe("The GuParameter class", () => {
   it("sets the type as passed through by default", () => {
@@ -80,39 +75,6 @@ describe("The GuStringParameter class", () => {
     expect(json.Parameters.Parameter).toEqual({
       Type: "String",
       Description: "This is a test",
-    });
-  });
-});
-
-describe("The GuStageParameter class", () => {
-  it("should set the values as required", () => {
-    const stack = new Stack() as GuStack;
-
-    new GuStageParameter(stack);
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Stage).toEqual({
-      Type: "String",
-      Description: "Stage name",
-      AllowedValues: Stages,
-      Default: Stage.CODE,
-    });
-  });
-});
-
-describe("The GuStackParameter class", () => {
-  it("should set the values as required", () => {
-    const stack = new Stack() as GuStack;
-
-    new GuStackParameter(stack);
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Stack).toEqual({
-      Type: "String",
-      Description: "Name of this stack",
-      Default: "deploy",
     });
   });
 });

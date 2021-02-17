@@ -7,6 +7,7 @@ import { alphabeticalTags, simpleGuStackForTesting } from "../../../test/utils";
 import type { SynthedStack } from "../../../test/utils";
 import { Stage, Stages } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
+import { GuParameter } from "./parameters";
 import { GuStack } from "./stack";
 
 describe("The GuStack construct", () => {
@@ -62,5 +63,22 @@ describe("The GuStack construct", () => {
     const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
 
     expect(stack.app).toBe("MyApp");
+  });
+
+  it("should return a parameter that exists", () => {
+    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
+    const testParam = new GuParameter(stack, "MyTestParam", {});
+    stack.setParam(testParam);
+
+    const actual = stack.getParam<GuParameter>("MyTestParam");
+    expect(actual).toBe(testParam);
+  });
+
+  it("should throw on attempt to get a parameter that doesn't exist", () => {
+    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
+
+    expect(() => stack.getParam<GuParameter>("i-do-not-exist")).toThrowError(
+      "Attempting to read parameter i-do-not-exist which does not exist"
+    );
   });
 });
