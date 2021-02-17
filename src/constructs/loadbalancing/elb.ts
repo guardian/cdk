@@ -15,8 +15,9 @@ import {
   Protocol,
 } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
+import { RegexPattern } from "../../constants";
 import type { GuStack } from "../core";
-import { GuArnParameter } from "../core";
+import { GuCertificateArnParameter } from "../core";
 
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
   overrideId?: boolean;
@@ -84,6 +85,13 @@ export interface GuHttpsApplicationListenerProps
 
 export class GuHttpsApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
+    if (props.certificate) {
+      const isValid = new RegExp(RegexPattern.ACM_ARN).test(props.certificate);
+      if (!isValid) {
+        throw new Error(`${props.certificate} is not a valid ACM ARN`);
+      }
+    }
+
     const mergedProps: GuApplicationListenerProps = {
       port: 443,
       protocol: ApplicationProtocol.HTTPS,
@@ -92,8 +100,9 @@ export class GuHttpsApplicationListener extends ApplicationListener {
         {
           certificateArn:
             props.certificate ??
-            new GuArnParameter(scope, "CertificateARN", { description: "Certificate ARN for ApplicationListener" })
-              .valueAsString,
+            new GuCertificateArnParameter(scope, "TLSCertificate", {
+              description: `Certificate ARN for ${id}`,
+            }).valueAsString,
         },
       ],
       defaultAction: ListenerAction.forward([props.targetGroup]),
