@@ -3,7 +3,7 @@ import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { GuStack, GuStageDependentValue } from "../core";
+import type { GuStack, GuStageDependentNumber } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -58,12 +58,12 @@ interface AwsAsgCapacityProps {
 function wireCapacityProps(stack: GuStack, capacity: GuAsgCapacityProps): AwsAsgCapacityProps {
   const minInstancesKey = "minInstances";
   const maxInstancesKey = "maxInstances";
-  const minInstances: GuStageDependentValue = {
+  const minInstances: GuStageDependentNumber = {
     variableName: minInstancesKey,
     codeValue: capacity.minimumCodeInstances,
     prodValue: capacity.minimumProdInstances,
   };
-  const maxInstances: GuStageDependentValue = {
+  const maxInstances: GuStageDependentNumber = {
     variableName: maxInstancesKey,
     codeValue: capacity.maximumCodeInstances ?? capacity.minimumCodeInstances * 2,
     prodValue: capacity.maximumProdInstances ?? capacity.minimumProdInstances * 2,

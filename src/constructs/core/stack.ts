@@ -64,9 +64,9 @@ export class GuStack extends Stack {
     return this._mappings ?? (this._mappings = new GuStageMapping(this));
   }
 
-  setStageDependentValue(stageVariable: GuStageDependentValue): void {
-    this.mappings.setValue("CODE", stageVariable.variableName, stageVariable.codeValue);
-    this.mappings.setValue("PROD", stageVariable.variableName, stageVariable.prodValue);
+  setStageDependentValue(stageDependentValue: GuStageDependentValue): void {
+    this.mappings.setValue("CODE", stageDependentValue.variableName, stageDependentValue.codeValue);
+    this.mappings.setValue("PROD", stageDependentValue.variableName, stageDependentValue.prodValue);
   }
 
   getStageDependentValue<T>(key: string): T {
