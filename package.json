@@ -1,6 +1,6 @@
 {
   "name": "@guardian/cdk",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -25,7 +25,7 @@
     "@types/jest": "^26.0.20",
     "@types/node": "14.14.25",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
-    "@typescript-eslint/parser": "^4.14.2",
+    "@typescript-eslint/parser": "^4.15.1",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-custom-rules": "file:eslint",
