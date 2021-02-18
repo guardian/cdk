@@ -3,8 +3,8 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
 import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
@@ -25,7 +25,7 @@ describe("The GuAutoScalingGroup", () => {
   test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
@@ -46,7 +46,6 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      osType: 1,
       imageId: new GuAmiParameter(stack, "CustomAMI", {}),
     });
 

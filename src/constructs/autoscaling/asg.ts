@@ -13,7 +13,6 @@ export interface GuAutoScalingGroupProps
   extends Omit<AutoScalingGroupProps, "imageId" | "osType" | "machineImage" | "instanceType" | "userData"> {
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
-  osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: string;
   securityGroups?: ISecurityGroup[];
@@ -28,7 +27,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // as the name is hard-coded
     function getImage(): MachineImageConfig {
       return {
-        osType: props.osType ?? OperatingSystemType.LINUX,
+        osType: OperatingSystemType.LINUX,
         userData: UserData.custom(props.userData),
         imageId:
           props.imageId?.valueAsString ??
