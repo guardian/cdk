@@ -35,7 +35,7 @@ describe("Secrets:", function () {
         expect(getSsmParameter(json)).toEqual(
           expect.objectContaining({
             Default: {
-              "Fn::Join": ["", ["/", { Ref: "Stage" }, "/", { Ref: "Stack" }, "/testing/some-secret-name"]],
+              "Fn::Join": ["", ["/", { Ref: "Stage" }, "/test-stack/testing/some-secret-name"]],
             },
           })
         );
@@ -50,7 +50,7 @@ describe("Secrets:", function () {
         expect(getSsmParameter(json)).toEqual(
           expect.objectContaining({
             Default: {
-              "Fn::Join": ["", ["/", { Ref: "Stage" }, "/", { Ref: "Stack" }, "/testing/some-secret-name"]],
+              "Fn::Join": ["", ["/", { Ref: "Stage" }, "/test-stack/testing/some-secret-name"]],
             },
           })
         );
@@ -67,10 +67,7 @@ describe("Secrets:", function () {
 
         expect(constructUsingSecret.Properties.Description).toEqual(
           expect.objectContaining({
-            "Fn::Join": [
-              "",
-              ["{{resolve:ssm:/", { Ref: "Stage" }, "/", { Ref: "Stack" }, "/testing/some-secret-name:3}}"],
-            ],
+            "Fn::Join": ["", ["{{resolve:ssm:/", { Ref: "Stage" }, "/test-stack/testing/some-secret-name:3}}"]],
           })
         );
       });
@@ -88,10 +85,7 @@ describe("Secrets:", function () {
 
       expect(constructUsingSecret.Properties.Description).toEqual(
         expect.objectContaining({
-          "Fn::Join": [
-            "",
-            ["{{resolve:ssm-secure:/", { Ref: "Stage" }, "/", { Ref: "Stack" }, "/testing/some-secret-name:3}}"],
-          ],
+          "Fn::Join": ["", ["{{resolve:ssm-secure:/", { Ref: "Stage" }, "/test-stack/testing/some-secret-name:3}}"]],
         })
       );
     });
