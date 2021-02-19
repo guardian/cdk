@@ -82,7 +82,11 @@ describe("The GuGetDistributablePolicy construct", () => {
                   {
                     Ref: "DistributionBucketName",
                   },
-                  "/*",
+                  `/test-stack/`,
+                  {
+                    Ref: "Stage",
+                  },
+                  "/testing/*",
                 ],
               ],
             },
