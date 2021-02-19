@@ -43,7 +43,7 @@ describe("Secrets:", function () {
 
       it("treats version 0 as latest version", function () {
         const stack = simpleGuStackForTesting();
-        GuSecret(stack, "some-secret-name", 0);
+        GuSecret(stack, "some-secret-name", { version: 0 });
 
         const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
@@ -59,7 +59,7 @@ describe("Secrets:", function () {
     describe("with a version specified, does not create a Cloudformation parameter and", function () {
       it("resolves the SSM path using `resolve:ssm` instead and references it directly in a construct that uses it", function () {
         const stack = simpleGuStackForTesting();
-        const secret = GuSecret(stack, "some-secret-name", 3);
+        const secret = GuSecret(stack, "some-secret-name", { version: 3 });
         exampleConstructUsingSecret(stack, secret.stringValue);
 
         const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -71,6 +71,15 @@ describe("Secrets:", function () {
           })
         );
       });
+    });
+
+    it("optionally accepts a path to use", function () {
+      const stack = simpleGuStackForTesting();
+      GuSecret(stack, "some-secret-name", { version: 0, path: "/foo/bar" });
+
+      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+      expect(getSsmParameter(json)).toEqual(expect.objectContaining({ Default: "/foo/bar/some-secret-name" }));
     });
   });
 
@@ -88,6 +97,17 @@ describe("Secrets:", function () {
           "Fn::Join": ["", ["{{resolve:ssm-secure:/", { Ref: "Stage" }, "/test-stack/testing/some-secret-name:3}}"]],
         })
       );
+    });
+
+    it("optionally accepts a path to use", function () {
+      const stack = simpleGuStackForTesting();
+      const secret = GuSecureSecret(stack, "some-secret-name", 0, "/foo/bar");
+      exampleConstructUsingSecret(stack, secret.stringValue);
+
+      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+      const constructUsingSecret = json.Resources["someconstruct"];
+
+      expect(constructUsingSecret.Properties.Description).toEqual("{{resolve:ssm-secure:/foo/bar/some-secret-name:0}}");
     });
   });
 });
