@@ -2,6 +2,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import type { SynthedStack } from "../../../../test/utils";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
+import { GuDistributionBucketParameter } from "../../core";
 import { GuGetDistributablePolicy, GuGetS3ObjectPolicy } from "./s3-get-object";
 
 describe("The GuGetS3ObjectPolicy class", () => {
@@ -57,7 +58,7 @@ describe("The GuGetDistributablePolicy construct", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     const parameterKeys = Object.keys(json.Parameters);
-    const expectedKeys = ["Stage", "DistributionBucketName"];
+    const expectedKeys = ["Stage", GuDistributionBucketParameter.parameterName];
     expect(parameterKeys).toEqual(expectedKeys);
 
     expect(json.Parameters.DistributionBucketName).toEqual({
@@ -67,7 +68,6 @@ describe("The GuGetDistributablePolicy construct", () => {
     });
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
-      PolicyName: "GetDistributablePolicyC6B4A871",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -82,7 +82,11 @@ describe("The GuGetDistributablePolicy construct", () => {
                   {
                     Ref: "DistributionBucketName",
                   },
-                  "/*",
+                  `/test-stack/`,
+                  {
+                    Ref: "Stage",
+                  },
+                  "/testing/*",
                 ],
               ],
             },

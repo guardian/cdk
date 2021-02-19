@@ -81,7 +81,11 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/*",
+                    "/test-stack/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/testing/*",
                   ],
                 ],
               },
@@ -291,7 +295,11 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/*",
+                    "/test-stack/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/testing/*",
                   ],
                 ],
               },
@@ -538,7 +546,11 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/*",
+                    "/test-stack/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/testing/*",
                   ],
                 ],
               },
