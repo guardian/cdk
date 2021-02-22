@@ -149,12 +149,14 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      securityGroup,
-      securityGroups: [securityGroup1, securityGroup2],
+      securityGroups: [securityGroup, securityGroup1, securityGroup2],
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       SecurityGroups: [
+        {
+          "Fn::GetAtt": ["GuHttpsEgressSecurityGroupF63CDA96", "GroupId"],
+        },
         {
           "Fn::GetAtt": ["SecurityGroup", "GroupId"],
         },

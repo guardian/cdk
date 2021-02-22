@@ -4,7 +4,12 @@ import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
 import type { SynthedStack } from "../../../test/utils";
-import { GuPublicInternetAccessSecurityGroup, GuSecurityGroup, GuWazuhAccess } from "./security-groups";
+import {
+  GuHttpsEgressSecurityGroup,
+  GuPublicInternetAccessSecurityGroup,
+  GuSecurityGroup,
+  GuWazuhAccess,
+} from "./security-groups";
 
 describe("The GuSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -177,6 +182,33 @@ describe("The GuPublicInternetAccessSecurityGroup class", () => {
         {
           CidrIp: "0.0.0.0/0",
           Description: "GLOBAL_ACCESS",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+      ],
+    });
+  });
+});
+
+describe("The GuHttpsEgressSecurityGroup class", () => {
+  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
+    vpcId: "test",
+    availabilityZones: [""],
+    publicSubnetIds: [""],
+  });
+
+  it("adds global access on 443 by default", () => {
+    const stack = simpleGuStackForTesting();
+
+    GuHttpsEgressSecurityGroup.forVpc(stack, { vpc });
+
+    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+      GroupDescription: "Allow all outbound traffic on port 443",
+      SecurityGroupEgress: [
+        {
+          CidrIp: "0.0.0.0/0",
+          Description: "from 0.0.0.0/0:443",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,
