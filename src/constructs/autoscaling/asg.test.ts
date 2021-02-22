@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
@@ -18,9 +18,13 @@ describe("The GuAutoScalingGroup", () => {
     availabilityZones: [""],
     publicSubnetIds: [""],
   });
+
+  const userData = UserData.forLinux();
+  userData.addCommands("service my-app start");
+
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
-    userData: "user data",
+    userData,
     stageDependentProps: {
       [Stage.CODE]: {
         minimumInstances: 1,
