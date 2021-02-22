@@ -149,7 +149,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      securityGroups: [securityGroup, securityGroup1, securityGroup2],
+      additionalSecurityGroups: [securityGroup, securityGroup1, securityGroup2],
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {

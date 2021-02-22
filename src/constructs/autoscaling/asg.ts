@@ -30,7 +30,7 @@ export interface GuAutoScalingGroupProps
   osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: string;
-  securityGroups?: ISecurityGroup[];
+  additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   overrideId?: boolean;
 }
@@ -115,7 +115,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
-    mergedProps.securityGroups?.forEach((sg) => this.addSecurityGroup(sg));
+    mergedProps.additionalSecurityGroups?.forEach((sg) => this.addSecurityGroup(sg));
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group
