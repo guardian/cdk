@@ -1,6 +1,6 @@
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
-import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
+import type { ISecurityGroup, MachineImage, MachineImageConfig, S3DownloadOptions } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
@@ -27,12 +27,29 @@ export interface GuAutoScalingGroupProps
   stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
-  osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   overrideId?: boolean;
+}
+
+export class GuUserData {
+  private _userData = UserData.forLinux();
+
+  get userData(): UserData {
+    return this._userData;
+  }
+
+  addCommands(...commands: string[]): GuUserData {
+    this._userData.addCommands(...commands);
+    return this;
+  }
+
+  addS3DownloadCommand(params: S3DownloadOptions): GuUserData {
+    this._userData.addS3DownloadCommand(params);
+    return this;
+  }
 }
 
 type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
@@ -91,7 +108,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // as the name is hard-coded
     function getImage(): MachineImageConfig {
       return {
-        osType: props.osType ?? OperatingSystemType.LINUX,
+        osType: OperatingSystemType.LINUX,
         userData,
         imageId:
           props.imageId?.valueAsString ??

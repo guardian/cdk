@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
@@ -10,7 +10,7 @@ import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
-import { GuAutoScalingGroup } from "./asg";
+import { GuAutoScalingGroup, GuUserData } from "./asg";
 
 describe("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -19,8 +19,7 @@ describe("The GuAutoScalingGroup", () => {
     publicSubnetIds: [""],
   });
 
-  const userData = UserData.forLinux();
-  userData.addCommands("service my-app start");
+  const { userData } = new GuUserData().addCommands(...["service some-dependency start", "service my-app start"]);
 
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
@@ -38,7 +37,7 @@ describe("The GuAutoScalingGroup", () => {
   test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
@@ -59,7 +58,6 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      osType: 1,
       imageId: new GuAmiParameter(stack, "CustomAMI", {}),
     });
 
@@ -116,7 +114,7 @@ describe("The GuAutoScalingGroup", () => {
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
-        "Fn::Base64": "user data",
+        "Fn::Base64": "#!/bin/bash\nservice some-dependency start\nservice my-app start",
       },
     });
   });
