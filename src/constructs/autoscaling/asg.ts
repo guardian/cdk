@@ -36,14 +36,13 @@ export interface GuAutoScalingGroupProps
 type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
 
 /**
- * `minimumCodeInstances` and `minimumProdInstances` determine the number of ec2 instances running
- * in each stage under normal circumstances (i.e. when there are no deployment or scaling events in progress).
+ * `minimumInstances` determines the number of ec2 instances running under normal circumstances
+ * (i.e. when there are no deployment or scaling events in progress).
  *
- * `maximumCodeInstances` and `maximumProdInstances` are both optional. If omitted, these
- * will be set to `minimumCodeInstances * 2` and `minimumProdInstances * 2`, respectively.
+ * `maximumInstances` is optional. If omitted, this will be set to `minimumInstances * 2`.
  * This allows us to support Riff-Raff's autoscaling deployment type by default.
  *
- * The maximum capacity values can be set manually if you need to scale beyond the default limit (e.g. due to heavy traffic)
+ * The maximum capacity value should only be set if you need to scale beyond the default limit (e.g. due to heavy traffic)
  * or restrict scaling for a specific reason.
  */
 export interface GuAsgCapacityProps {
