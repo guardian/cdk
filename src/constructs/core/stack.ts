@@ -1,6 +1,9 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
+import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
+import type { GuStageDependentValue } from "./mappings";
+import { GuStageMapping } from "./mappings";
 import type { GuParameter } from "./parameters";
 import { GuStageParameter } from "./parameters";
 
@@ -43,6 +46,7 @@ export class GuStack extends Stack {
   private readonly _stack: string;
   private readonly _app: string;
 
+  private _mappings?: GuStageMapping;
   private params: Map<string, GuParameter>;
 
   public readonly migratedFromCloudFormation: boolean;
@@ -57,6 +61,20 @@ export class GuStack extends Stack {
 
   get app(): string {
     return this._app;
+  }
+
+  // Use lazy initialisation for GuStageMapping so that Mappings block is only created when necessary
+  get mappings(): GuStageMapping {
+    return this._mappings ?? (this._mappings = new GuStageMapping(this));
+  }
+
+  setStageDependentValue<T extends string | number | boolean>(stageDependentValue: GuStageDependentValue<T>): void {
+    this.mappings.setValue(Stage.CODE, stageDependentValue.variableName, stageDependentValue.stageValues.CODE);
+    this.mappings.setValue(Stage.PROD, stageDependentValue.variableName, stageDependentValue.stageValues.PROD);
+  }
+
+  getStageDependentValue<T>(key: string): T {
+    return (this.mappings.findInMap(this.stage, key) as unknown) as T;
   }
 
   /**

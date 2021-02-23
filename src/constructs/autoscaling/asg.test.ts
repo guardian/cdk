@@ -3,8 +3,9 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
+import { Stage } from "../../constants";
 import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
@@ -20,6 +21,14 @@ describe("The GuAutoScalingGroup", () => {
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
     userData: "user data",
+    stageDependentProps: {
+      [Stage.CODE]: {
+        minimumInstances: 1,
+      },
+      [Stage.PROD]: {
+        minimumInstances: 3,
+      },
+    },
   };
 
   test("adds the AMI parameter if no imageId prop provided", () => {
@@ -183,5 +192,83 @@ describe("The GuAutoScalingGroup", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(Object.keys(json.Resources)).not.toContain("AutoscalingGroup");
+  });
+
+  test("adds the correct mappings when provided with minimal capacity config", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: {
+          minInstances: 1,
+          maxInstances: 2,
+        },
+        PROD: {
+          minInstances: 3,
+          maxInstances: 6,
+        },
+      },
+    });
+  });
+
+  test("uses custom max capacities (if provided)", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      ...defaultProps,
+      stageDependentProps: {
+        [Stage.CODE]: {
+          minimumInstances: 1,
+          maximumInstances: 5,
+        },
+        [Stage.PROD]: {
+          minimumInstances: 3,
+          maximumInstances: 7,
+        },
+      },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: {
+          minInstances: 1,
+          maxInstances: 5,
+        },
+        PROD: {
+          minInstances: 3,
+          maxInstances: 7,
+        },
+      },
+    });
+  });
+
+  test("Uses Find In Map correctly to reference capacity mappings", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+
+    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+      MinSize: {
+        "Fn::FindInMap": [
+          "stagemapping",
+          {
+            Ref: "Stage",
+          },
+          "minInstances",
+        ],
+      },
+      MaxSize: {
+        "Fn::FindInMap": [
+          "stagemapping",
+          {
+            Ref: "Stage",
+          },
+          "maxInstances",
+        ],
+      },
+    });
   });
 });
