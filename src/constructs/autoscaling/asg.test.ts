@@ -10,7 +10,7 @@ import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
-import { GuAutoScalingGroup, GuUserData } from "./asg";
+import { GuAutoScalingGroup, GuUserData } from "./";
 
 describe("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
