@@ -22,6 +22,7 @@ describe("GuUserData", () => {
       distributable: {
         bucketName: new GuDistributionBucketParameter(stack).valueAsString,
         fileName: "my-app.deb",
+        executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
       },
     };
 
@@ -54,7 +55,7 @@ describe("GuUserData", () => {
               {
                 Ref: "Stage",
               },
-              "/testing/my-app.deb' '/testing/my-app.deb'",
+              "/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
             ],
           ],
         },
@@ -69,6 +70,7 @@ describe("GuUserData", () => {
       distributable: {
         bucketName: new GuDistributionBucketParameter(stack).valueAsString,
         fileName: "my-app.deb",
+        executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
       },
       configuration: {
         bucketName: "test-app-config",
@@ -105,7 +107,7 @@ describe("GuUserData", () => {
               {
                 Ref: "Stage",
               },
-              "/testing/my-app.deb' '/testing/my-app.deb'",
+              "/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
             ],
           ],
         },

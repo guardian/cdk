@@ -11,6 +11,7 @@ import type { GuStack } from "../core";
 export interface GuUserDataS3DistributableProps {
   bucketName: string;
   fileName: string;
+  executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
 
 /**
@@ -84,6 +85,7 @@ export class GuUserData {
     if (props) {
       props.configuration && this.downloadConfiguration(scope, props.configuration);
       this.downloadDistributable(scope, props.distributable);
+      this.addCommands(props.distributable.executionStatement);
     }
   }
 
