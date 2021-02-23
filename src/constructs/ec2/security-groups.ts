@@ -70,3 +70,18 @@ export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
     });
   }
 }
+
+export class GuHttpsEgressSecurityGroup extends GuSecurityGroup {
+  constructor(scope: GuStack, id: string, props: SecurityGroupProps) {
+    super(scope, id, {
+      vpc: props.vpc,
+      allowAllOutbound: false,
+      description: "Allow all outbound traffic on port 443",
+      egresses: [{ range: Peer.anyIpv4(), port: Port.tcp(443) }],
+    });
+  }
+
+  public static forVpc(scope: GuStack, props: SecurityGroupProps): GuHttpsEgressSecurityGroup {
+    return new GuHttpsEgressSecurityGroup(scope, "GuHttpsEgressSecurityGroup", props);
+  }
+}

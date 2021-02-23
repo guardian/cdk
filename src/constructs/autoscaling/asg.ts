@@ -6,6 +6,7 @@ import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2
 import { Stage } from "../../constants";
 import type { GuStack, GuStageDependentValue } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
+import { GuHttpsEgressSecurityGroup } from "../ec2";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
@@ -21,6 +22,7 @@ export interface GuAutoScalingGroupProps
     | "minCapacity"
     | "maxCapacity"
     | "desiredCapacity"
+    | "securityGroup"
   > {
   stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
@@ -28,7 +30,7 @@ export interface GuAutoScalingGroupProps
   osType?: OperatingSystemType;
   machineImage?: MachineImage;
   userData: string;
-  securityGroups?: ISecurityGroup[];
+  additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   overrideId?: boolean;
 }
@@ -103,13 +105,17 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       machineImage: { getImage: getImage },
       instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
       userData: UserData.custom(props.userData),
+
+      // Do not use the default AWS security group which allows egress on any port.
+      // Favour HTTPS only egress rules by default.
+      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, props),
     };
 
     super(scope, id, mergedProps);
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
-    mergedProps.securityGroups?.forEach((sg) => this.addSecurityGroup(sg));
+    mergedProps.additionalSecurityGroups?.forEach((sg) => this.addSecurityGroup(sg));
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group
