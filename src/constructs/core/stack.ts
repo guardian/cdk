@@ -46,7 +46,7 @@ export class GuStack extends Stack {
   private readonly _stack: string;
   private readonly _app: string;
 
-  private _mappings: undefined | GuStageMapping;
+  private _mappings?: GuStageMapping;
   private params: Map<string, GuParameter>;
 
   public readonly migratedFromCloudFormation: boolean;
