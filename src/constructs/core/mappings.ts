@@ -1,25 +1,10 @@
 import { CfnMapping } from "@aws-cdk/core";
+import type { Stage } from "../../constants";
 import type { GuStack } from "./stack";
 
-export interface GuStageDependentValue {
+export interface GuStageDependentValue<T extends string | number | boolean> {
   variableName: string;
-  codeValue: number | string | boolean;
-  prodValue: unknown;
-}
-
-export interface GuStageDependentNumber extends GuStageDependentValue {
-  codeValue: number;
-  prodValue: number;
-}
-
-export interface GuStageDependentString extends GuStageDependentValue {
-  codeValue: string;
-  prodValue: string;
-}
-
-export interface GuStageDependentBoolean extends GuStageDependentValue {
-  codeValue: boolean;
-  prodValue: boolean;
+  stageValues: Record<Stage, T>;
 }
 
 export class GuStageMapping extends CfnMapping {

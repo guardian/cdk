@@ -3,8 +3,9 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
+import { Stage } from "../../constants";
 import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
@@ -20,9 +21,13 @@ describe("The GuAutoScalingGroup", () => {
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
     userData: "user data",
-    capacity: {
-      minimumCodeInstances: 1,
-      minimumProdInstances: 3,
+    stageDependentProps: {
+      [Stage.CODE]: {
+        minimumInstances: 1,
+      },
+      [Stage.PROD]: {
+        minimumInstances: 3,
+      },
     },
   };
 
@@ -213,11 +218,15 @@ describe("The GuAutoScalingGroup", () => {
     const stack = simpleGuStackForTesting();
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      capacity: {
-        minimumCodeInstances: 1,
-        minimumProdInstances: 3,
-        maximumCodeInstances: 5,
-        maximumProdInstances: 7,
+      stageDependentProps: {
+        [Stage.CODE]: {
+          minimumInstances: 1,
+          maximumInstances: 5,
+        },
+        [Stage.PROD]: {
+          minimumInstances: 3,
+          maximumInstances: 7,
+        },
       },
     });
 

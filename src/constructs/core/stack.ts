@@ -1,5 +1,6 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
+import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
@@ -67,9 +68,9 @@ export class GuStack extends Stack {
     return this._mappings ?? (this._mappings = new GuStageMapping(this));
   }
 
-  setStageDependentValue(stageDependentValue: GuStageDependentValue): void {
-    this.mappings.setValue("CODE", stageDependentValue.variableName, stageDependentValue.codeValue);
-    this.mappings.setValue("PROD", stageDependentValue.variableName, stageDependentValue.prodValue);
+  setStageDependentValue<T extends string | number | boolean>(stageDependentValue: GuStageDependentValue<T>): void {
+    this.mappings.setValue(Stage.CODE, stageDependentValue.variableName, stageDependentValue.stageValues.CODE);
+    this.mappings.setValue(Stage.PROD, stageDependentValue.variableName, stageDependentValue.stageValues.PROD);
   }
 
   getStageDependentValue<T>(key: string): T {

@@ -3,7 +3,8 @@ import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { GuStack, GuStageDependentNumber } from "../core";
+import { Stage } from "../../constants";
+import type { GuStack, GuStageDependentValue } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -21,7 +22,7 @@ export interface GuAutoScalingGroupProps
     | "maxCapacity"
     | "desiredCapacity"
   > {
-  capacity: GuAsgCapacityProps;
+  stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
   osType?: OperatingSystemType;
@@ -31,6 +32,8 @@ export interface GuAutoScalingGroupProps
   targetGroup?: ApplicationTargetGroup;
   overrideId?: boolean;
 }
+
+type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
 
 /**
  * `minimumCodeInstances` and `minimumProdInstances` determine the number of ec2 instances running
@@ -44,10 +47,8 @@ export interface GuAutoScalingGroupProps
  * or restrict scaling for a specific reason.
  */
 export interface GuAsgCapacityProps {
-  minimumCodeInstances: number;
-  minimumProdInstances: number;
-  maximumCodeInstances?: number;
-  maximumProdInstances?: number;
+  minimumInstances: number;
+  maximumInstances?: number;
 }
 
 interface AwsAsgCapacityProps {
@@ -55,18 +56,22 @@ interface AwsAsgCapacityProps {
   maxCapacity: number;
 }
 
-function wireCapacityProps(stack: GuStack, capacity: GuAsgCapacityProps): AwsAsgCapacityProps {
+function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDependentAsgProps): AwsAsgCapacityProps {
   const minInstancesKey = "minInstances";
   const maxInstancesKey = "maxInstances";
-  const minInstances: GuStageDependentNumber = {
+  const minInstances: GuStageDependentValue<number> = {
     variableName: minInstancesKey,
-    codeValue: capacity.minimumCodeInstances,
-    prodValue: capacity.minimumProdInstances,
+    stageValues: {
+      [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
+      [Stage.PROD]: stageDependentProps.PROD.minimumInstances,
+    },
   };
-  const maxInstances: GuStageDependentNumber = {
+  const maxInstances: GuStageDependentValue<number> = {
     variableName: maxInstancesKey,
-    codeValue: capacity.maximumCodeInstances ?? capacity.minimumCodeInstances * 2,
-    prodValue: capacity.maximumProdInstances ?? capacity.minimumProdInstances * 2,
+    stageValues: {
+      [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
+      [Stage.PROD]: stageDependentProps.PROD.maximumInstances ?? stageDependentProps.PROD.minimumInstances * 2,
+    },
   };
   stack.setStageDependentValue(minInstances);
   stack.setStageDependentValue(maxInstances);
@@ -95,7 +100,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
 
     const mergedProps = {
       ...props,
-      ...wireCapacityProps(scope, props.capacity),
+      ...wireStageDependentProps(scope, props.stageDependentProps),
       machineImage: { getImage: getImage },
       instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
       userData: UserData.custom(props.userData),
