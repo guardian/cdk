@@ -19,7 +19,9 @@ describe("The GuAutoScalingGroup", () => {
     publicSubnetIds: [""],
   });
 
-  const { userData } = new GuUserData().addCommands(...["service some-dependency start", "service my-app start"]);
+  const { userData } = new GuUserData(simpleGuStackForTesting()).addCommands(
+    ...["service some-dependency start", "service my-app start"]
+  );
 
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
