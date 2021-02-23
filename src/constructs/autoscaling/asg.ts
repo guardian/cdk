@@ -27,9 +27,8 @@ export interface GuAutoScalingGroupProps
   stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
-  osType?: OperatingSystemType;
   machineImage?: MachineImage;
-  userData: string;
+  userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   overrideId?: boolean;
@@ -84,13 +83,15 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
+    const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
+
     // We need to override getImage() so that we can pass in the AMI as a parameter
     // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
     // as the name is hard-coded
     function getImage(): MachineImageConfig {
       return {
-        osType: props.osType ?? OperatingSystemType.LINUX,
-        userData: UserData.custom(props.userData),
+        osType: OperatingSystemType.LINUX,
+        userData,
         imageId:
           props.imageId?.valueAsString ??
           new GuAmiParameter(scope, "AMI", {
@@ -104,7 +105,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       ...wireStageDependentProps(scope, props.stageDependentProps),
       machineImage: { getImage: getImage },
       instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
-      userData: UserData.custom(props.userData),
+      userData,
 
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.

@@ -10,7 +10,7 @@ import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
-import { GuAutoScalingGroup } from "./asg";
+import { GuAutoScalingGroup, GuUserData } from "./";
 
 describe("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -18,9 +18,12 @@ describe("The GuAutoScalingGroup", () => {
     availabilityZones: [""],
     publicSubnetIds: [""],
   });
+
+  const { userData } = new GuUserData().addCommands(...["service some-dependency start", "service my-app start"]);
+
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
-    userData: "user data",
+    userData,
     stageDependentProps: {
       [Stage.CODE]: {
         minimumInstances: 1,
@@ -34,7 +37,7 @@ describe("The GuAutoScalingGroup", () => {
   test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, osType: 1 });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
@@ -55,7 +58,6 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
-      osType: 1,
       imageId: new GuAmiParameter(stack, "CustomAMI", {}),
     });
 
@@ -112,7 +114,7 @@ describe("The GuAutoScalingGroup", () => {
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
-        "Fn::Base64": "user data",
+        "Fn::Base64": "#!/bin/bash\nservice some-dependency start\nservice my-app start",
       },
     });
   });
