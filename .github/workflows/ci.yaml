@@ -10,7 +10,7 @@ jobs:
       - uses: amannn/action-semantic-pull-request@v3.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  check-aws-cdk:
+  CI:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,40 +21,4 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: ./script/check-aws-cdk
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.15.1]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.1.4
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: ./script/build
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.15.1]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.1.4
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: ./script/lint
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.15.1]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.1.4
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: ./script/test
+      - run: ./script/ci
