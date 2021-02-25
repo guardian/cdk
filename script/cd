@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+npm ci
+# These steps should have passed at the PR level.
+# Re-run them for sanity.
+npm run build
+npm run test
+npm run lint
+
+echo "Build successful! You can now run ./script/release locally to create a new release on npm."
+echo "  TODO: add semantic-release or similar"

@@ -21,4 +21,4 @@ jobs:
         # see https://github.com/tschaub/gh-pages/issues/345
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          ./script/release-docs
+          ./script/cd-docs
