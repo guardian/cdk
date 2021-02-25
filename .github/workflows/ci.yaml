@@ -22,3 +22,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: ./script/ci
+  approve-and-merge:
+    runs-on: ubuntu-latest
+    needs: [CI]
+    steps:
+      - name: Validate, approve and merge release PRs
+        uses: guardian/post-release-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

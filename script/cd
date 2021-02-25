@@ -8,6 +8,4 @@ npm ci
 npm run build
 npm run test
 npm run lint
-
-echo "Build successful! You can now run ./script/release locally to create a new release on npm."
-echo "  TODO: add semantic-release or similar"
+npm run release
