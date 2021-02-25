@@ -1,5 +1,7 @@
 # Guardian CDK Library
 
+![npm](https://img.shields.io/npm/v/@guardian/cdk?style=flat-square)
+
 Welcome to the Guardian CDK library! This library contains a number of reusable patterns and constructs which can be used to build up your AWS Cloudformation stacks.
 
 📖 View the available components in the [API documentation](https://guardian.github.io/cdk/).
@@ -68,23 +70,32 @@ or
 yarn add @guardian/cdk
 ```
 
-Patterns can be imported from the top level of the library (e.g. `import { InstanceRole } from "@guardian/cdk";`) while constructs must be imported from their construct directory (e.g. `import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";`)
+Patterns can be imported from the top level of the library:
+
+```typescript
+import { GuScheduledLambda } from "@guardian/cdk";
+```
+
+While constructs must be imported from their construct directory:
+
+```typescript
+import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";
+```
+
+This is intentional as the patterns ideally solve the majority of use-cases.
+if they don't, PRs are welcome!
 
 There are more details on using the CDK library in [docs](docs)
 
 ## Releasing
 
-We use [`np`](https://www.npmjs.com/package/np) to help orchestrate the release process.
-To release a new version, run `./script/release`. You will need to be logged in to your `npm` account (`npm login`) which must be part of the Guardian organisation. If you have 2fa enabled, you will be prompted for an OTP during the release process.
+TL;DR We release new versions of the library to NPM automagically.
 
-The script automatically prepares a [GitHub Release](https://docs.github.com/en/github/administering-a-repository/about-releases) and opens a pre-populated form in your browser. Please complete the GitHub Release creation manually.
+We use [semantic-release](https://github.com/semantic-release/semantic-release) and [guardian/post-release-action](https://github.com/guardian/post-release-action) to automate releases.
 
-It will also automatically create a PR to edit `version` in [`package.json`](./package.json).
-
-### A note about release numbers
-
-This library follows [semantic versioning](https://semver.org/). Part of the semantic versioning specification [states](https://semver.org/#spec-item-4):
-
-> Major version zero (0.y.z) is for initial development. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
-
-For simplicity, this library only has minor version releases whilst still on a 0 major number.
+To release a new version:
+1. Raise a PR following using [Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits) / [Karma](http://karma-runner.github.io/6.1/dev/git-commit-msg.html) commits
+1. Get your PR reviewed and approved
+1. Merge your PR
+1. Wait... The robots will parse your commits to determine the next version number (following [semantic versioning](https://semver.org/)), release to npm and update `package.json`. Automatically.
+1. Enjoy a comment on your PR to inform you that your change has been released.
