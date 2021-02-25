@@ -17,15 +17,22 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: CD
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # This step will create a tag when creating a new release.
+        # We have an action to update docs upon tag creation.
+        # The standard `secrets.GITHUB_TOKEN` doesn't trigger other actions.
+        # We cannot use the standard token as it won't trigger the docs action, so we need to provide a different token.
+        # This is a PAT for the guardian-ci user.
+        # See ./cd-docs.yaml
+        # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
+        GITHUB_TOKEN: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: ./script/cd
     - name: post-release
       uses: guardian/post-release-action@main
       with:
         # This action will raise a PR to edit package.json.
-        # PRs raised by the default `secrets.GIT_TOKEN` will not trigger CI,
+        # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI,
         # so we need to provide a different token.
         # This is a PAT for the guardian-ci user.
         # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
-        github-token: ${{ secrets.POST_RELEASE_TOKEN }}
+        github-token: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
