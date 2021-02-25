@@ -1,7 +1,7 @@
 import type { S3DownloadOptions } from "@aws-cdk/aws-ec2";
 import { UserData } from "@aws-cdk/aws-ec2";
 import { Bucket } from "@aws-cdk/aws-s3";
-import type { GuStack } from "../core";
+import type { GuDistributionBucketParameter, GuStack } from "../core";
 
 /**
  * Where to download a distributable from.
@@ -9,7 +9,7 @@ import type { GuStack } from "../core";
  * `executionStatement` will be something like "dpkg -i application.deb` or `service foo start`.
  */
 export interface GuUserDataS3DistributableProps {
-  bucketName: string;
+  bucket: GuDistributionBucketParameter;
   fileName: string;
   executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
@@ -45,17 +45,16 @@ export class GuUserData {
 
   private downloadDistributable(scope: GuStack, props: GuUserDataS3DistributableProps) {
     const localDirectory = `/${scope.app}`;
-    const { bucketName, fileName } = props;
-    const bucketKey = [scope.stack, scope.stage, scope.app, fileName].join("/");
+    const bucketKey = [scope.stack, scope.stage, scope.app, props.fileName].join("/");
 
     const bucket = Bucket.fromBucketAttributes(scope, "DistributionBucket", {
-      bucketName,
+      bucketName: props.bucket.valueAsString,
     });
 
     this.addS3DownloadCommand({
-      bucket: bucket,
+      bucket,
       bucketKey,
-      localFile: `${localDirectory}/${fileName}`,
+      localFile: `${localDirectory}/${props.fileName}`,
     });
   }
 
