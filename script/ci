@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+preamble() {
+  "${DIR}"/check-yarn-lock
+  "${DIR}"/check-aws-cdk
+}
+
+main() {
+  preamble
+
+  npm ci
+  npm run build
+  npm run lint
+  npm run test
+}
+
+main
