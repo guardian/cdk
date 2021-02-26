@@ -17,14 +17,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: CD
       env:
-        # This step will create a tag when creating a new release.
-        # We have an action to update docs upon tag creation.
-        # The standard `secrets.GITHUB_TOKEN` doesn't trigger other actions.
-        # We cannot use the standard token as it won't trigger the docs action, so we need to provide a different token.
-        # This is a PAT for the guardian-ci user.
-        # See ./cd-docs.yaml
-        # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
-        GITHUB_TOKEN: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: ./script/cd
     - name: post-release

@@ -9,3 +9,4 @@ npm run build
 npm run test
 npm run lint
 npm run release
+npm run release:docs
