@@ -19,7 +19,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: ./script/cd
+      # see https://github.com/tschaub/gh-pages/issues/345  
+      run: |
+        git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        ./script/cd
     - name: post-release
       uses: guardian/post-release-action@main
       with:
