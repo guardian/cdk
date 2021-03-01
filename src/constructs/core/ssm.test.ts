@@ -7,7 +7,7 @@ import { GuStringParameter } from "./parameters";
 import { GuSSMSecureStringParameter, GuSSMStringParameter } from "./ssm";
 import type { GuStack } from "./stack";
 
-// TODO: The parameter key is auto-generated, is there a better way of identifying it?
+// The parameter key is auto-generated, is there a better way of identifying it?
 function getSsmParameter(json: SynthedStack) {
   const maybeSSMparam = Object.keys(json.Parameters).filter((p) => p.toLowerCase().includes("ssmstringparameter"));
   expect(maybeSSMparam.length).toEqual(1);
@@ -37,7 +37,7 @@ describe("Secrets:", function () {
 
     it("throws error if being passed a token", function () {
       const stack = simpleGuStackForTesting();
-      const token = new GuStringParameter(stack, "some-token", {});
+      const token = new GuStringParameter(stack, "some-token", {}); // CFN parameters are tokens, and get resolved at deployment
       expect(() => GuSSMStringParameter(stack, `/path/${token.valueAsString}/some-secret-name`)).toThrowError();
     });
 
