@@ -6,7 +6,7 @@ describe("The GuSSMRunCommandPolicy class", () => {
   it("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
-    const ssmPolicy = new GuSSMRunCommandPolicy(stack, "SSMRunCommandPolicy", {});
+    const ssmPolicy = new GuSSMRunCommandPolicy(stack);
 
     attachPolicyToTestRole(stack, ssmPolicy);
 
