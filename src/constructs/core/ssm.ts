@@ -49,6 +49,9 @@ function GuSSMParameter(
 export const GuSSMStringParameter = (scope: GuStack, path: string, version?: number): IStringParameter =>
   <IStringParameter>GuSSMParameter(scope, path, { type: SSMParameterType.String, version, path });
 
+export const GuSSMStringListParameter = (scope: GuStack, path: string, version?: number): IStringListParameter =>
+  <IStringListParameter>GuSSMParameter(scope, path, { type: SSMParameterType.StringList, version, path });
+
 export const GuSSMSecureStringParameter = (
   scope: GuStack,
   name: string,

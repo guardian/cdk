@@ -10,7 +10,10 @@ import type { GuStack } from "./stack";
 // The parameter key is auto-generated, is there a better way of identifying it?
 function getSsmParameter(json: SynthedStack) {
   const maybeSSMparam = Object.keys(json.Parameters).filter((p) => p.toLowerCase().includes("ssmstringparameter"));
-  expect(maybeSSMparam.length).toEqual(1);
+  if (maybeSSMparam.length !== 1) {
+    console.log(JSON.stringify(json, null, 1));
+    throw new Error("Couldn't find exact SSM parameter from synthed JSON");
+  }
   return json.Parameters[maybeSSMparam[0]];
 }
 
