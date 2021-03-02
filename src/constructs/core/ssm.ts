@@ -15,6 +15,7 @@ interface GuSSMParameterProps {
 }
 
 type GuSSMParameterNoTypeProps = Omit<GuSSMParameterProps, "type">;
+type GuSSMSecureStringParameterProps = Omit<GuSSMParameterNoTypeProps, "version">;
 
 function GuSSMParameter(
   scope: GuStack,
@@ -51,5 +52,15 @@ export const GuSSMStringParameter = (scope: GuStack, path: string, version?: num
 export const GuSSMSecureStringParameter = (
   scope: GuStack,
   name: string,
-  props: GuSSMParameterNoTypeProps
-): IStringParameter => <IStringParameter>GuSSMParameter(scope, name, { ...props, type: SSMParameterType.SecureString });
+  version: number,
+  props?: GuSSMSecureStringParameterProps
+): IStringParameter => {
+  // You cannot currently dynamically reference the latest SSM secure string version, so we throw an error here to avoid issues at deployment
+  // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html#dynamic-references-ssm-pattern
+  if (version <= 0) {
+    throw new Error(
+      "Version must be above 0.\nPlease read: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html#dynamic-references-ssm-pattern"
+    );
+  }
+  return <IStringParameter>GuSSMParameter(scope, name, { ...props, version, type: SSMParameterType.SecureString });
+};

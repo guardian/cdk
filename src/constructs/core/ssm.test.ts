@@ -35,13 +35,13 @@ describe("Secrets:", function () {
       expect(getSsmParameter(json)).toEqual(expect.objectContaining({ Default: "/path/to/some-secret-name" }));
     });
 
-    it("throws error if being passed a token", function () {
+    it("throws error if the path contains a token", function () {
       const stack = simpleGuStackForTesting();
       const token = new GuStringParameter(stack, "some-token", {}); // CFN parameters are tokens, and get resolved at deployment
       expect(() => GuSSMStringParameter(stack, `/path/${token.valueAsString}/some-secret-name`)).toThrowError();
     });
 
-    it("can optionally require a version, which uses `resolve:ssm-secure` instead", function () {
+    it("can optionally specify a version, which uses `resolve:ssm` instead", function () {
       const stack = simpleGuStackForTesting();
       const secret = GuSSMStringParameter(stack, "/path/to/some-secret-name", 3);
       exampleConstructUsingSecret(stack, secret.stringValue);
@@ -56,7 +56,7 @@ describe("Secrets:", function () {
   describe("the GuSSMSecureStringParameter function", function () {
     it("resolves the SSM path using `resolve:ssm-secure` and references it directly in a construct that uses it", function () {
       const stack = simpleGuStackForTesting();
-      const secret = GuSSMSecureStringParameter(stack, "some-secret-name", { version: 3 });
+      const secret = GuSSMSecureStringParameter(stack, "some-secret-name", 3);
       exampleConstructUsingSecret(stack, secret.stringValue);
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -71,13 +71,18 @@ describe("Secrets:", function () {
 
     it("optionally accepts a path to use", function () {
       const stack = simpleGuStackForTesting();
-      const secret = GuSSMSecureStringParameter(stack, "some-secret-name", { version: 0, path: "/foo/bar" });
+      const secret = GuSSMSecureStringParameter(stack, "some-secret-name", 1, { path: "/foo/bar" });
       exampleConstructUsingSecret(stack, secret.stringValue);
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
       const constructUsingSecret = json.Resources["someconstruct"];
 
-      expect(constructUsingSecret.Properties.Description).toEqual("{{resolve:ssm-secure:/foo/bar/some-secret-name:0}}");
+      expect(constructUsingSecret.Properties.Description).toEqual("{{resolve:ssm-secure:/foo/bar/some-secret-name:1}}");
+    });
+
+    it("Requires a positive version number above 0", function () {
+      const stack = simpleGuStackForTesting();
+      expect(() => GuSSMSecureStringParameter(stack, "some-secret-name", 0, { path: "/foo/bar" })).toThrowError();
     });
   });
 });
