@@ -2,7 +2,7 @@ import type { CfnStream, StreamProps } from "@aws-cdk/aws-kinesis";
 import { Stream } from "@aws-cdk/aws-kinesis";
 import type { GuStack } from "../core";
 
-interface GuKinesisStreamProps extends StreamProps {
+export interface GuKinesisStreamProps extends StreamProps {
   overrideId?: boolean;
 }
 
