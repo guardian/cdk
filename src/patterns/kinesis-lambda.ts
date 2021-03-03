@@ -27,7 +27,7 @@ type AwsErrorHandlingProps = Pick<
   "bisectBatchOnError" | "maxRecordAge" | "onFailure" | "retryAttempts"
 >;
 
-function toAwsProps(errorHandlingProps: ErrorHandlingProps): AwsErrorHandlingProps {
+function toAwsErrorHandlingProps(errorHandlingProps: ErrorHandlingProps): AwsErrorHandlingProps {
   return {
     bisectBatchOnError: errorHandlingProps.bisectBatchOnError,
     onFailure: errorHandlingProps.deadLetterQueueForSkippedRecords,
@@ -99,7 +99,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
 
     const errorHandlingPropsToAwsProps = props.errorHandlingConfiguration.blockProcessingAndRetryIndefinitely
       ? undefined
-      : toAwsProps(props.errorHandlingConfiguration);
+      : toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 
     const eventSourceProps: KinesisEventSourceProps = {
       startingPosition: StartingPosition.LATEST,
