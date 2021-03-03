@@ -12,9 +12,7 @@ export class GuParameterStoreReadPolicy extends GuPolicy {
         new PolicyStatement({
           effect: Effect.ALLOW,
           actions: ["ssm:GetParametersByPath"],
-          resources: [
-            `arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${scope.app}`,
-          ],
+          resources: [`arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.identityPath}`],
         }),
       ],
     };

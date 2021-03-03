@@ -2,6 +2,7 @@ import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
+import type { Identity } from "./identity";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
 import type { GuParameter } from "./parameters";
@@ -42,7 +43,7 @@ export interface GuStackProps extends StackProps {
  * }
  * ```
  */
-export class GuStack extends Stack {
+export class GuStack extends Stack implements Identity {
   private readonly _stack: string;
   private readonly _app: string;
 
@@ -61,6 +62,10 @@ export class GuStack extends Stack {
 
   get app(): string {
     return this._app;
+  }
+
+  get identityPath(): string {
+    return [this.stack, this.stage, this.app].join("/");
   }
 
   // Use lazy initialisation for GuStageMapping so that Mappings block is only created when necessary

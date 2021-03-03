@@ -17,7 +17,7 @@ export class GuGetS3ObjectPolicy extends GuAllowPolicy {
 
 export class GuGetDistributablePolicy extends GuGetS3ObjectPolicy {
   constructor(scope: GuStack, id: string = "GetDistributablePolicy", props?: GuNoStatementsPolicyProps) {
-    const path = [scope.stack, scope.stage, scope.app, "*"].join("/");
+    const path = [scope.identityPath, "*"].join("/");
     super(scope, id, { ...props, bucketName: new GuDistributionBucketParameter(scope).valueAsString, path });
   }
 }

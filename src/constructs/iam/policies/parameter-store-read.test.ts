@@ -32,11 +32,11 @@ describe("ParameterStoreReadPolicy", () => {
                   {
                     Ref: "AWS::AccountId",
                   },
-                  ":parameter/",
+                  ":parameter/test-stack/",
                   {
                     Ref: "Stage",
                   },
-                  "/test-stack/MyApp",
+                  "/MyApp",
                 ],
               ],
             },

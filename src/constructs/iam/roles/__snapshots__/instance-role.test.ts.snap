@@ -169,11 +169,11 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
+                    ":parameter/test-stack/",
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing",
+                    "/testing",
                   ],
                 ],
               },
@@ -425,11 +425,11 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
+                    ":parameter/test-stack/",
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing",
+                    "/testing",
                   ],
                 ],
               },
@@ -634,11 +634,11 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
+                    ":parameter/test-stack/",
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing",
+                    "/testing",
                   ],
                 ],
               },
