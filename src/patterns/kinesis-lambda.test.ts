@@ -64,7 +64,7 @@ describe("The GuKinesisLambda pattern", () => {
         "Fn::Join": [
           "",
           [
-            "arn:aws:sns:",
+            "arn:aws:kinesis:",
             {
               Ref: "AWS::Region",
             },
@@ -72,7 +72,7 @@ describe("The GuKinesisLambda pattern", () => {
             {
               Ref: "AWS::AccountId",
             },
-            ":kinesis-stream-from-another-stack",
+            ":stream/kinesis-stream-from-another-stack",
           ],
         ],
       },

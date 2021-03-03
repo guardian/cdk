@@ -93,7 +93,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
       ? Stream.fromStreamArn(
           scope,
           streamId,
-          `arn:aws:sns:${scope.region}:${scope.account}:${props.existingKinesisStream.externalKinesisStreamName}`
+          `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
         )
       : new GuKinesisStream(scope, streamId, kinesisProps);
 
