@@ -1,83 +1,78 @@
 import type { StreamProps } from "@aws-cdk/aws-kinesis";
 import { Stream } from "@aws-cdk/aws-kinesis";
-import type { IEventSourceDlq } from "@aws-cdk/aws-lambda";
 import { StartingPosition } from "@aws-cdk/aws-lambda";
 import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources";
 import { KinesisEventSource } from "@aws-cdk/aws-lambda-event-sources";
-import { Duration } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
+import { toAwsErrorHandlingProps } from "../constructs/lambda/event-sources";
+import type {
+  BlockProcessingAndRetryIndefinitely,
+  StreamErrorHandlingProps,
+  StreamProcessingProps,
+} from "../constructs/lambda/event-sources";
 
 export interface ExistingKinesisStream {
   logicalIdFromCloudFormation?: string;
   externalKinesisStreamName?: string;
 }
 
-export type StreamProcessingProps = Omit<
-  KinesisEventSourceProps,
-  "bisectBatchOnError" | "maxRecordAge" | "onFailure" | "retryAttempts"
->;
-
-type AwsErrorHandlingProps = Pick<
-  KinesisEventSourceProps,
-  "bisectBatchOnError" | "maxRecordAge" | "onFailure" | "retryAttempts"
->;
-
-function toAwsErrorHandlingProps(errorHandlingProps: ErrorHandlingProps): AwsErrorHandlingProps {
-  return {
-    bisectBatchOnError: errorHandlingProps.bisectBatchOnError,
-    onFailure: errorHandlingProps.deadLetterQueueForSkippedRecords,
-    ...errorHandlingProps.retryBehaviour.toAwsProp(),
-  };
-}
-
-type AwsRetryProp = Pick<AwsErrorHandlingProps, "maxRecordAge" | "retryAttempts">;
-type RetryType = "attempts" | "recordAge";
-
-export class Retry {
-  public static maxAttempts(amount: number): Retry {
-    return new Retry(amount, "attempts");
-  }
-  public static maxAge(duration: Duration): Retry {
-    return new Retry(duration.toSeconds(), "recordAge");
-  }
-  public toAwsProp(): AwsRetryProp {
-    return this.retryType === "attempts"
-      ? { retryAttempts: this.amount }
-      : { maxRecordAge: Duration.seconds(this.amount) };
-  }
-  private readonly amount: number;
-  readonly retryType: RetryType;
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO only lint for things that extend IConstruct
-  private constructor(amount: number, type: RetryType) {
-    this.amount = amount;
-    this.retryType = type;
-  }
-}
-
-export interface ErrorHandlingProps {
-  bisectBatchOnError: boolean;
-  retryBehaviour: Retry;
-  deadLetterQueueForSkippedRecords?: IEventSourceDlq;
-  blockProcessingAndRetryIndefinitely?: false;
-}
-
-export interface BlockProcessingAndRetryIndefinitely {
-  blockProcessingAndRetryIndefinitely: true;
-}
-
+/**
+ * Configuration options for the [[`GuKinesisLambda`]] pattern.
+ *
+ * For all lambda function configuration options, see [[`GuFunctionProps`]].
+ *
+ * The `existingKinesisStream` property can be used to inherit or reference a Kinesis stream which
+ * has been created outside of this pattern (i.e. via CloudFormation, or via a different `cdk` pattern, or stack).
+ * For more details and example usage, see [[`ExistingKinesisStream`]].
+ * If this property is omitted, the [[`GuKinesisLambda`]] pattern will create a new stream. If you have specific
+ * stream configuration requirements (e.g. data retention period), these can be set via `kinesisStreamProps`.
+ *
+ * If you need to override the default stream processing options (e.g. batch size and parallelization), pass
+ * [[`StreamProcessingProps`]] via `processingProps`.
+ *
+ * You must provide errorHandlingConfiguration to this pattern. To prevent the lambda from repeatedly
+ * retrying to process the same records (effectively stalling stream processing), you should configure
+ * retry conditions via [[`StreamErrorHandlingProps]]. If your use-case dictates that you must retry processing until
+ * a record expires, see [[`BlockProcessingAndRetryIndefinitely`]] for more details.
+ *
+ * It is advisable to configure an alarm based on the lambda's error percentage.
+ * To do this, add the `monitoringConfiguration` property. The required properties for this are:
+ *
+ * ```typescript
+ * monitoringConfiguration: {
+ *   toleratedErrorPercentage: <sensible_error_percentage_threshold>,
+ *   snsTopicName: "my-topic-for-cloudwatch-alerts",
+ * }
+ * ```
+ * Other alarm properties (e.g. alarm name and description) will be pre-populated with sensible defaults.
+ * For a full list of optional properties, see [[`GuLambdaErrorPercentageMonitoringProps`]].
+ *
+ * If your team do not use CloudWatch, it's possible to opt-out with the following configuration:
+ * ```typescript
+ *  monitoringConfiguration: { noMonitoring: true } as NoMonitoring
+ * ```
+ */
 export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
   monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
   existingKinesisStream?: ExistingKinesisStream;
-  errorHandlingConfiguration: BlockProcessingAndRetryIndefinitely | ErrorHandlingProps;
+  errorHandlingConfiguration: BlockProcessingAndRetryIndefinitely | StreamErrorHandlingProps;
   kinesisStreamProps?: StreamProps;
   processingProps?: StreamProcessingProps;
 }
 
+/**
+ * Pattern which creates all of the resources needed to invoke a lambda function whenever a record is
+ * put onto a Kinesis stream.
+ *
+ * This pattern will create a new Kinesis stream by default. If you are migrating a stack from CloudFormation,
+ * you will need to opt-out of this behaviour. For information on overriding the default behaviour,
+ * see [[`GuKinesisLambdaProps`]].
+ */
 export class GuKinesisLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
     super(scope, id, {

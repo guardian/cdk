@@ -7,8 +7,13 @@ import { Duration } from "@aws-cdk/core";
 import type { SynthedStack } from "../../test/utils";
 import { simpleGuStackForTesting } from "../../test/utils";
 import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
-import type { BlockProcessingAndRetryIndefinitely, ErrorHandlingProps, StreamProcessingProps } from "./kinesis-lambda";
-import { GuKinesisLambda, Retry } from "./kinesis-lambda";
+import type {
+  BlockProcessingAndRetryIndefinitely,
+  StreamErrorHandlingProps,
+  StreamProcessingProps,
+} from "../constructs/lambda/event-sources";
+import { StreamRetry } from "../constructs/lambda/event-sources";
+import { GuKinesisLambda } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {
   it("should create the correct resources for a new stack with minimal config", () => {
@@ -162,9 +167,9 @@ describe("The GuKinesisLambda pattern", () => {
   it("should configure error handling correctly based on max number of retry attempts", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
-    const errorHandlingProps: ErrorHandlingProps = {
+    const errorHandlingProps: StreamErrorHandlingProps = {
       bisectBatchOnError: true,
-      retryBehaviour: Retry.maxAttempts(5),
+      retryBehaviour: StreamRetry.maxAttempts(5),
     };
     const props = {
       code: { bucket: "test-dist", key: "lambda.zip" },
@@ -184,9 +189,9 @@ describe("The GuKinesisLambda pattern", () => {
   it("should configure error handling correctly based on max age of records", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
-    const errorHandlingProps: ErrorHandlingProps = {
+    const errorHandlingProps: StreamErrorHandlingProps = {
       bisectBatchOnError: true,
-      retryBehaviour: Retry.maxAge(Duration.minutes(5)),
+      retryBehaviour: StreamRetry.maxAge(Duration.minutes(5)),
     };
     const props = {
       code: { bucket: "test-dist", key: "lambda.zip" },
