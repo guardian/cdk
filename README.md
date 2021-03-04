@@ -46,7 +46,6 @@ find useful scripts within the [`script`](./script) directory for common tasks.
 - `./script/lint` to lint the code using ESLint
 - `./script/test` to run the Jest unit tests
 - `./script/build` to compile TypeScript to JS
-- `./script/release` to release a new version to NPM
 
 There are also some other commands defined in `package.json`:
 
