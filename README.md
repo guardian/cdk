@@ -83,7 +83,7 @@ import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";
 ```
 
 This is intentional as the patterns ideally solve the majority of use-cases.
-if they don't, PRs are welcome!
+If they don't, please let us know about your use-case so that we can consider supporting it via a pattern. Alternatively, PRs are always welcome!
 
 There are more details on using the CDK library in [docs](docs)
 
