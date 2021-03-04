@@ -88,13 +88,14 @@ There are more details on using the CDK library in [docs](docs)
 
 ## Releasing
 
-TL;DR We release new versions of the library to NPM automagically.
+✨ TL;DR We release new versions of the library to NPM automagically ✨
 
-We use [semantic-release](https://github.com/semantic-release/semantic-release) and [guardian/post-release-action](https://github.com/guardian/post-release-action) to automate releases.
+We use [semantic-release](https://github.com/semantic-release/semantic-release) and [guardian/actions-merge-release-changes-to-protected-branch](https://github.com/guardian/actions-merge-release-changes-to-protected-branch) to automate releases.
 
 To release a new version:
-1. Raise a PR using [Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits) / [Karma](http://karma-runner.github.io/6.1/dev/git-commit-msg.html) commits
-1. Get your PR reviewed and approved
-1. Merge your PR
-1. Wait... The robots will parse your commits to determine the next version number (following [semantic versioning](https://semver.org/)), release to npm and update `package.json`. Automatically.
+1. Raise a PR. The PR title must follow the [Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits) / [Karma](http://karma-runner.github.io/6.1/dev/git-commit-msg.html) format. Don't worry, CI checks this!
+1. Once reviewed and approved, merge your PR.
+1. Wait for the robots to:
+   - Use your structured commit (we squash commits!) to automatically determine the next version number (following [semantic versioning](https://semver.org/)).
+   - Release a new version to npm and update `package.json`.
 1. Enjoy a comment on your PR to inform you that your change has been released.
