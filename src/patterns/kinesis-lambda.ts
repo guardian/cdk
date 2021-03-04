@@ -64,7 +64,7 @@ export interface ExistingKinesisStream {
  * If you need to override the default stream processing options (e.g. batch size and parallelization), pass
  * [[`StreamProcessingProps`]] via `processingProps`.
  *
- * You must provide errorHandlingConfiguration to this pattern. To prevent the lambda from repeatedly
+ * You must provide `errorHandlingConfiguration` to this pattern. To prevent the lambda from repeatedly
  * retrying to process the same records (effectively stalling stream processing), you should configure
  * retry conditions via [[`StreamErrorHandlingProps`]]. If your use-case dictates that you must retry processing until
  * a record expires, see [[`BlockProcessingAndRetryIndefinitely`]] for more details.

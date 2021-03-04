@@ -26,7 +26,7 @@ export interface BlockProcessingAndRetryIndefinitely {
  * or after a specified number of attempts. See [[`StreamRetry`]] for more details.
  *
  * In order to isolate bad records as part of the retry process, you may also want to bisect problematic batches
- * using bisectBatchOnError. For example:
+ * using `bisectBatchOnError`. For example:
  *
  * ```typescript
  * const errorHandlingProps: ErrorHandlingProps = {
@@ -66,7 +66,7 @@ type RetryType = "attempts" | "recordAge";
  * ```typescript
  * StreamRetry.maxAttempts(5)
  * ```
- *  * To retry based on the age of a record, use:
+ * To retry based on the age of a record, use:
  * ```typescript
  * StreamRetry.maxAge(Duration.minutes(5))
  * ```
