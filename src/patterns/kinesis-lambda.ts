@@ -16,6 +16,33 @@ import type {
   StreamProcessingProps,
 } from "../constructs/lambda/event-sources";
 
+/**
+ * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
+ *
+ * Specify a `logicalIdFromCloudFormation` to inherit a Kinesis stream which has already
+ * been created via a CloudFormation stack. This is necessary to avoid data loss and interruptions of
+ * service when migrating stacks from CloudFormation to `cdk`.
+ *
+ * Specify an `externalKinesisStreamName` to link the lambda to a Kinesis stream owned by a different stack
+ * (or created outside of version control).
+ *
+ * **Example Usage**
+ *
+ * When migrating a CloudFormation stack which includes the following resource:
+ * ```yaml
+ * MyCloudFormedKinesisStream:
+ *   Type: AWS::Kinesis::Stream
+ * ```
+ * Inherit the Kinesis stream (rather than creating a new one) using:
+ * ```typescript
+ * existingKinesisStream: { logicalIdFromCloudFormation: "MyCloudFormedKinesisStream" }
+ * ```
+ *
+ * Alternatively, reference a Kinesis stream which belongs to another stack or pattern using:
+ * ```typescript
+ * existingKinesisStream: { externalKinesisStreamName: "KinesisStreamFromAnotherStack" }
+ * ```
+ */
 export interface ExistingKinesisStream {
   logicalIdFromCloudFormation?: string;
   externalKinesisStreamName?: string;
@@ -29,15 +56,17 @@ export interface ExistingKinesisStream {
  * The `existingKinesisStream` property can be used to inherit or reference a Kinesis stream which
  * has been created outside of this pattern (i.e. via CloudFormation, or via a different `cdk` pattern, or stack).
  * For more details and example usage, see [[`ExistingKinesisStream`]].
- * If this property is omitted, the [[`GuKinesisLambda`]] pattern will create a new stream. If you have specific
- * stream configuration requirements (e.g. data retention period), these can be set via `kinesisStreamProps`.
+ * If this property is omitted, the [[`GuKinesisLambda`]] pattern will create a new stream.
+ *
+ * If you have specific stream configuration requirements (e.g. data retention period), these can be set via
+ * `kinesisStreamProps`.
  *
  * If you need to override the default stream processing options (e.g. batch size and parallelization), pass
  * [[`StreamProcessingProps`]] via `processingProps`.
  *
  * You must provide errorHandlingConfiguration to this pattern. To prevent the lambda from repeatedly
  * retrying to process the same records (effectively stalling stream processing), you should configure
- * retry conditions via [[`StreamErrorHandlingProps]]. If your use-case dictates that you must retry processing until
+ * retry conditions via [[`StreamErrorHandlingProps`]]. If your use-case dictates that you must retry processing until
  * a record expires, see [[`BlockProcessingAndRetryIndefinitely`]] for more details.
  *
  * It is advisable to configure an alarm based on the lambda's error percentage.
