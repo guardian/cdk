@@ -76,7 +76,7 @@ Patterns can be imported from the top level of the library:
 import { GuScheduledLambda } from "@guardian/cdk";
 ```
 
-While constructs must be imported from their construct directory:
+We encourage you to use patterns rather than constructs whenever possible. If you need to use a construct directly, they must be imported from their construct directory:
 
 ```typescript
 import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";
