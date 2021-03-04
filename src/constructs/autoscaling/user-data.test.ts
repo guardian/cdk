@@ -3,6 +3,7 @@ import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
 import { Stage } from "../../constants";
+import type { GuStack } from "../core";
 import { GuDistributionBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";
 import type { GuUserDataProps } from "./user-data";
@@ -13,6 +14,33 @@ describe("GuUserData", () => {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
+  });
+
+  const createAsg = (stack: GuStack, props: GuUserDataProps) => {
+    return new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      vpc,
+      userData: new GuUserData(stack, props).userData,
+      stageDependentProps: {
+        [Stage.CODE]: {
+          minimumInstances: 1,
+        },
+        [Stage.PROD]: {
+          minimumInstances: 3,
+        },
+      },
+    });
+  };
+
+  test("GuUserData.stripMargin", () => {
+    const actual = GuUserData.stripMargin`
+      |mkdir /etc/gu
+      |cat > /etc/gu/my-application.conf <<-'EOF'
+      |  include "application"
+      |EOF
+      |`;
+
+    const expected = `\nmkdir /etc/gu\ncat > /etc/gu/my-application.conf <<-'EOF'\n  include "application"\nEOF\n`;
+    expect(actual).toEqual(expected);
   });
 
   test("Distributable should be downloaded from a standard path in S3 (bucket/stack/stage/app/filename)", () => {
@@ -26,20 +54,7 @@ describe("GuUserData", () => {
       },
     };
 
-    const { userData } = new GuUserData(stack, props);
-
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      vpc,
-      userData,
-      stageDependentProps: {
-        [Stage.CODE]: {
-          minimumInstances: 1,
-        },
-        [Stage.PROD]: {
-          minimumInstances: 3,
-        },
-      },
-    });
+    createAsg(stack, props);
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
@@ -78,20 +93,7 @@ describe("GuUserData", () => {
       },
     };
 
-    const { userData } = new GuUserData(stack, props);
-
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      vpc,
-      userData,
-      stageDependentProps: {
-        [Stage.CODE]: {
-          minimumInstances: 1,
-        },
-        [Stage.PROD]: {
-          minimumInstances: 3,
-        },
-      },
-    });
+    createAsg(stack, props);
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
@@ -100,6 +102,97 @@ describe("GuUserData", () => {
             "",
             [
               "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://test-app-config/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://test-app-config/application.conf' '/etc/testing/application.conf'\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
+              {
+                Ref: "DistributionBucketName",
+              },
+              "/test-stack/",
+              {
+                Ref: "Stage",
+              },
+              "/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+            ],
+          ],
+        },
+      },
+    });
+  });
+
+  test("additionalStatements (using stripMargin) should run between configuration download and distributable download", () => {
+    const stack = simpleGuStackForTesting();
+
+    const props: GuUserDataProps = {
+      distributable: {
+        bucket: new GuDistributionBucketParameter(stack),
+        fileName: "my-app.deb",
+        executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
+      },
+      configuration: {
+        bucketName: "test-app-config",
+        files: ["secrets.json", "application.conf"],
+      },
+      additionalStatements: [
+        GuUserData.stripMargin`
+        |mkdir /etc/gu
+        |cat > /etc/gu/my-application.conf <<-'EOF'
+        |  include "application"
+        |EOF`,
+      ],
+    };
+
+    createAsg(stack, props);
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      UserData: {
+        "Fn::Base64": {
+          "Fn::Join": [
+            "",
+            [
+              "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://test-app-config/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://test-app-config/application.conf' '/etc/testing/application.conf'\n\nmkdir /etc/gu\ncat > /etc/gu/my-application.conf <<-'EOF'\n  include \"application\"\nEOF\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
+              {
+                Ref: "DistributionBucketName",
+              },
+              "/test-stack/",
+              {
+                Ref: "Stage",
+              },
+              "/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+            ],
+          ],
+        },
+      },
+    });
+  });
+
+  test("additionalStatements should run between configuration download and distributable download", () => {
+    const stack = simpleGuStackForTesting();
+
+    const props: GuUserDataProps = {
+      distributable: {
+        bucket: new GuDistributionBucketParameter(stack),
+        fileName: "my-app.deb",
+        executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
+      },
+      configuration: {
+        bucketName: "test-app-config",
+        files: ["secrets.json", "application.conf"],
+      },
+      additionalStatements: [
+        "mkdir /etc/gu",
+        "cat > /etc/gu/my-application.conf <<-'EOF'",
+        `  include "application"`,
+        "EOF",
+      ],
+    };
+
+    createAsg(stack, props);
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      UserData: {
+        "Fn::Base64": {
+          "Fn::Join": [
+            "",
+            [
+              "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://test-app-config/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://test-app-config/application.conf' '/etc/testing/application.conf'\nmkdir /etc/gu\ncat > /etc/gu/my-application.conf <<-'EOF'\n  include \"application\"\nEOF\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
               {
                 Ref: "DistributionBucketName",
               },

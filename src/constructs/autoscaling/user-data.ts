@@ -27,6 +27,11 @@ export interface GuUserDataS3ConfigurationProps {
 export interface GuUserDataProps {
   distributable: GuUserDataS3DistributableProps;
   configuration?: GuUserDataS3ConfigurationProps;
+
+  /**
+   * Statements to run after downloading configuration but before the executionStatement in [[GuUserDataS3DistributableProps]]
+   */
+  additionalStatements?: string[];
 }
 
 /**
@@ -38,6 +43,27 @@ export interface GuUserDataProps {
  */
 export class GuUserData {
   private readonly _userData: UserData;
+
+  /**
+   * A helper function to make user data strings easier to write.
+   *
+   * Example usage:
+   * ```typescript
+   * const additionalStatements = GuUserData.stripMargin`
+   *   |mkdir /etc/gu
+   *   |cat > /etc/gu/my-application.conf <<-'EOF'
+   *   |  include "application"
+   *   |EOF
+   *   |`;
+   * ```
+   *
+   * @param template a template string
+   * @param args extra arguments
+   */
+  static stripMargin = (template: TemplateStringsArray, ...args: unknown[]): string => {
+    const result = template.reduce((acc, part, i) => [acc, args[i - 1], part].join(""));
+    return result.replace(/\r?(\n)\s*\|/g, "$1");
+  };
 
   get userData(): UserData {
     return this._userData;
@@ -83,6 +109,7 @@ export class GuUserData {
 
     if (props) {
       props.configuration && this.downloadConfiguration(scope, props.configuration);
+      props.additionalStatements && this.addCommands(...props.additionalStatements);
       this.downloadDistributable(scope, props.distributable);
       this.addCommands(props.distributable.executionStatement);
     }
