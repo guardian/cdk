@@ -62,7 +62,7 @@ export interface ExistingSnsTopic {
  *
  * If your team do not use CloudWatch, it's possible to opt-out with the following configuration:
  * ```typescript
- *  monitoringConfiguration: { noMonitoring: true }
+ *  monitoringConfiguration: { noMonitoring: true } as NoMonitoring
  * ```
  */
 export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
