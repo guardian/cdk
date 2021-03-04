@@ -94,7 +94,7 @@ TL;DR We release new versions of the library to NPM automagically.
 We use [semantic-release](https://github.com/semantic-release/semantic-release) and [guardian/post-release-action](https://github.com/guardian/post-release-action) to automate releases.
 
 To release a new version:
-1. Raise a PR following using [Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits) / [Karma](http://karma-runner.github.io/6.1/dev/git-commit-msg.html) commits
+1. Raise a PR using [Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits) / [Karma](http://karma-runner.github.io/6.1/dev/git-commit-msg.html) commits
 1. Get your PR reviewed and approved
 1. Merge your PR
 1. Wait... The robots will parse your commits to determine the next version number (following [semantic versioning](https://semver.org/)), release to npm and update `package.json`. Automatically.
