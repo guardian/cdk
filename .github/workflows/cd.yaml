@@ -10,25 +10,25 @@ jobs:
       matrix:
         node-version: [14.15.1]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.1.5
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: CD
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # see https://github.com/tschaub/gh-pages/issues/345  
-      run: |
-        git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        ./script/cd
-    - name: post-release
-      uses: guardian/post-release-action@main
-      with:
-        # This action will raise a PR to edit package.json.
-        # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI,
-        # so we need to provide a different token.
-        # This is a PAT for the guardian-ci user.
-        # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
-        github-token: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: CD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # see https://github.com/tschaub/gh-pages/issues/345
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          ./script/cd
+      - name: post-release
+        uses: guardian/actions-merge-release-changes-to-protected-branch@main
+        with:
+          # This action will raise a PR to edit package.json.
+          # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI,
+          # so we need to provide a different token.
+          # This is a PAT for the guardian-ci user.
+          # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
+          github-token: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
