@@ -336,7 +336,7 @@ describe("The GuHttpsApplicationListener class", () => {
       Type: "String",
       AllowedPattern: RegexPattern.ACM_ARN,
       ConstraintDescription: "Must be an ACM ARN resource",
-      Description: "Certificate ARN for ApplicationListener",
+      Description: "Certificate ARN",
     });
 
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {

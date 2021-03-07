@@ -104,7 +104,8 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       ...props,
       ...wireStageDependentProps(scope, props.stageDependentProps),
       machineImage: { getImage: getImage },
-      instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
+      instanceType:
+        props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope, "InstanceType", {}).valueAsString),
       userData,
 
       // Do not use the default AWS security group which allows egress on any port.

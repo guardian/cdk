@@ -140,7 +140,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
           LoadBalancerPort: "443",
           Protocol: "https",
           SSLCertificateId: {
-            Ref: "CertificateARN",
+            Ref: "TLSCertificate",
           },
         },
       ],
@@ -155,10 +155,10 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.CertificateARN).toEqual({
-      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
-      Description: "Certificate ARN for ELB",
-      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+    expect(json.Parameters.TLSCertificate).toEqual({
+      AllowedPattern: "arn:aws:acm:[0-9a-z\\-]+:[0-9]{12}:certificate/[0-9a-z\\-]+",
+      Description: "Certificate ARN",
+      ConstraintDescription: "Must be an ACM ARN resource",
       Type: "String",
     });
   });
@@ -206,7 +206,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
           LoadBalancerPort: "443",
           Protocol: "https",
           SSLCertificateId: {
-            Ref: "CertificateARN",
+            Ref: "TLSCertificate",
           },
         },
       ],

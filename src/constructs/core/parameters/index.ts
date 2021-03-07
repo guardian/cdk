@@ -1,7 +1,7 @@
 import type { CfnParameterProps } from "@aws-cdk/core";
 import { CfnParameter } from "@aws-cdk/core";
-import { RegexPattern, Stage, Stages } from "../../constants";
-import type { GuStack } from "./stack";
+import { RegexPattern, Stage, Stages } from "../../../constants";
+import type { GuStack } from "../stack";
 
 export interface GuParameterProps extends CfnParameterProps {
   fromSSM?: boolean;
@@ -29,11 +29,10 @@ export class GuStringParameter extends GuParameter {
   }
 }
 
-export class GuStageParameter extends GuParameter {
+export class GuStageParameter extends GuStringParameter {
   public static readonly defaultId = "Stage";
-  constructor(scope: GuStack, id: string = GuStageParameter.defaultId) {
-    super(scope, id, {
-      type: "String",
+  constructor(scope: GuStack) {
+    super(scope, GuStageParameter.defaultId, {
       description: "Stage name",
       allowedValues: Stages,
       default: Stage.CODE,
@@ -41,11 +40,10 @@ export class GuStageParameter extends GuParameter {
   }
 }
 
-export class GuStackParameter extends GuParameter {
+export class GuStackParameter extends GuStringParameter {
   public static readonly defaultId = "Stack";
-  constructor(scope: GuStack, id: string = GuStackParameter.defaultId) {
-    super(scope, id, {
-      type: "String",
+  constructor(scope: GuStack) {
+    super(scope, GuStackParameter.defaultId, {
       description: "Name of this stack",
       default: "deploy",
     });
@@ -53,7 +51,7 @@ export class GuStackParameter extends GuParameter {
 }
 
 export class GuInstanceTypeParameter extends GuParameter {
-  constructor(scope: GuStack, id: string = "InstanceType", props: GuParameterProps = {}) {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       type: "String",
       description: "EC2 Instance Type",
@@ -87,31 +85,20 @@ export class GuAmiParameter extends GuParameter {
   }
 }
 
-export class GuArnParameter extends GuStringParameter {
+export class GuArnParameter extends GuParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
       ...props,
+      type: "String",
       allowedPattern: RegexPattern.ARN,
       constraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
     });
   }
 }
 
-export class GuS3ObjectArnParameter extends GuStringParameter {
-  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
-    super(scope, id, {
-      ...props,
-      allowedPattern: RegexPattern.S3ARN,
-      constraintDescription:
-        "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
-    });
-  }
-}
-
 export class GuGuardianEmailSenderParameter extends GuStringParameter {
-  constructor(scope: GuStack, id: string = "EmailSenderAddress", props?: GuNoTypeParameterProps) {
-    super(scope, id, {
-      ...props,
+  constructor(scope: GuStack) {
+    super(scope, "EmailSenderAddress", {
       allowedPattern: RegexPattern.GUARDIAN_EMAIL,
       constraintDescription: "Must be an @theguardian.com email address",
     });
@@ -119,11 +106,11 @@ export class GuGuardianEmailSenderParameter extends GuStringParameter {
 }
 
 export class GuCertificateArnParameter extends GuStringParameter {
-  constructor(scope: GuStack, id: string = "TLSCertificate", props?: GuNoTypeParameterProps) {
-    super(scope, id, {
-      ...props,
+  constructor(scope: GuStack) {
+    super(scope, "TLSCertificate", {
       allowedPattern: RegexPattern.ACM_ARN,
       constraintDescription: "Must be an ACM ARN resource",
+      description: "Certificate ARN",
     });
   }
 }
@@ -131,8 +118,8 @@ export class GuCertificateArnParameter extends GuStringParameter {
 export class GuDistributionBucketParameter extends GuStringParameter {
   public static parameterName = "DistributionBucketName";
 
-  constructor(scope: GuStack, id: string = GuDistributionBucketParameter.parameterName) {
-    super(scope, id, {
+  constructor(scope: GuStack) {
+    super(scope, GuDistributionBucketParameter.parameterName, {
       description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
       default: "/account/services/artifact.bucket",
       fromSSM: true,

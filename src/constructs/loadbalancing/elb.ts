@@ -98,11 +98,7 @@ export class GuHttpsApplicationListener extends ApplicationListener {
       ...props,
       certificates: [
         {
-          certificateArn:
-            props.certificate ??
-            new GuCertificateArnParameter(scope, "TLSCertificate", {
-              description: `Certificate ARN for ${id}`,
-            }).valueAsString,
+          certificateArn: props.certificate ?? new GuCertificateArnParameter(scope).valueAsString,
         },
       ],
       defaultAction: ListenerAction.forward([props.targetGroup]),

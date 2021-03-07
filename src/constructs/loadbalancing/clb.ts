@@ -7,7 +7,7 @@ import type {
 import { LoadBalancer, LoadBalancingProtocol } from "@aws-cdk/aws-elasticloadbalancing";
 import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
-import { GuArnParameter } from "../core";
+import { GuCertificateArnParameter } from "../core";
 
 enum RemoveableProperties {
   SCHEME = "Scheme",
@@ -71,9 +71,7 @@ export class GuHttpsClassicLoadBalancer extends GuClassicLoadBalancer {
     const listenerProps = { ...GuHttpsClassicLoadBalancer.DefaultListener, ...props.listener };
 
     if (!listenerProps.sslCertificateId) {
-      const certificateId = new GuArnParameter(scope, "CertificateARN", {
-        description: "Certificate ARN for ELB",
-      });
+      const certificateId = new GuCertificateArnParameter(scope);
       listenerProps.sslCertificateId = certificateId.valueAsString;
     }
 

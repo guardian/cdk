@@ -1,17 +1,16 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { simpleGuStackForTesting } from "../../../test/utils";
-import type { SynthedStack } from "../../../test/utils";
+import { simpleGuStackForTesting } from "../../../../test/utils";
+import type { SynthedStack } from "../../../../test/utils";
 import {
   GuAmiParameter,
   GuArnParameter,
   GuInstanceTypeParameter,
   GuParameter,
-  GuS3ObjectArnParameter,
   GuStringParameter,
   GuSubnetListParameter,
   GuVpcParameter,
-} from "./parameters";
+} from "./";
 
 describe("The GuParameter class", () => {
   it("sets the type as passed through by default", () => {
@@ -94,24 +93,6 @@ describe("The GuInstanceTypeParameter class", () => {
       AllowedValues: ["t3.small"],
     });
   });
-
-  it("let's you override the default values", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuInstanceTypeParameter(stack, "Parameter", {
-      type: "Number",
-      description: "This is a test",
-      default: 1,
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
-      Type: "Number",
-      Description: "This is a test",
-      Default: 1,
-    });
-  });
 });
 
 describe("The GuSubnetListParameter class", () => {
@@ -172,24 +153,6 @@ describe("The GuArnParameter class", () => {
       Description: "This is a test",
       AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
       ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
-    });
-  });
-});
-
-describe("The GuS3ObjectArnParameter class", () => {
-  it("should constrain input to a S3 ARN allowed pattern", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuS3ObjectArnParameter(stack, "Parameter", { description: "This is a test" });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
-      Type: "String",
-      Description: "This is a test",
-      AllowedPattern: "arn:aws:s3:::(?!^(\\d{1,3}\\.){3}\\d{1,3}$)(^[a-z0-9]([a-z0-9-]*(\\.[a-z0-9])?)*$(?<!\\-))*",
-      ConstraintDescription:
-        "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
     });
   });
 });
