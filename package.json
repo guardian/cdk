@@ -21,7 +21,7 @@
     "update-aws-cdk": "ncu \"/^@aws-cdk/.*$/\" --upgrade && npm install"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "^0.4.2",
+    "@guardian/eslint-config-typescript": "^0.5.0",
     "@types/jest": "^26.0.20",
     "@types/node": "14.14.32",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
