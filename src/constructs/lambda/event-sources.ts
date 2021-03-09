@@ -8,19 +8,6 @@ export type StreamProcessingProps = Omit<
 >;
 
 /**
- * Use with caution! This will cause your lambda to continuously retry if it encounters errors
- * whilst processing a batch. If the errors are permanent (e.g. due to a bad record) your lambda
- * will fall behind with stream processing i.e. it will only move onto new batches when the problematic
- * records expire. Consider using [[`StreamErrorHandlingProps`]] instead.
- *
- * When using this approach to error handling, ensure that an alarm is configured to monitor
- * lambda failures.
- */
-export interface BlockProcessingAndRetryIndefinitely {
-  blockProcessingAndRetryIndefinitely: true;
-}
-
-/**
  * In order to prevent your lambda from continuously retrying if it encounters errors
  * whilst processing a batch, use `retryBehaviour` to give up on a record once it reaches a certain age,
  * or after a specified number of attempts. See [[`StreamRetry`]] for more details.

@@ -122,6 +122,7 @@ Object {
     "mylambdafunctionKinesisEventSourceTestKinesisStream4CAC6550FA5E175D": Object {
       "Properties": Object {
         "BatchSize": 100,
+        "BisectBatchOnFunctionError": false,
         "EventSourceArn": Object {
           "Fn::GetAtt": Array [
             "KinesisStream46752A3E",
@@ -131,6 +132,7 @@ Object {
         "FunctionName": Object {
           "Ref": "mylambdafunction8D341B54",
         },
+        "MaximumRetryAttempts": 1,
         "StartingPosition": "LATEST",
       },
       "Type": "AWS::Lambda::EventSourceMapping",

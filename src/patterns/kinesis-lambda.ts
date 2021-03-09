@@ -10,11 +10,7 @@ import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { toAwsErrorHandlingProps } from "../constructs/lambda/event-sources";
-import type {
-  BlockProcessingAndRetryIndefinitely,
-  StreamErrorHandlingProps,
-  StreamProcessingProps,
-} from "../constructs/lambda/event-sources";
+import type { StreamErrorHandlingProps, StreamProcessingProps } from "../constructs/lambda/event-sources";
 
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
@@ -64,10 +60,8 @@ export interface ExistingKinesisStream {
  * If you need to override the default stream processing options (e.g. batch size and parallelization), pass
  * [[`StreamProcessingProps`]] via `processingProps`.
  *
- * You must provide `errorHandlingConfiguration` to this pattern. To prevent the lambda from repeatedly
- * retrying to process the same records (effectively stalling stream processing), you should configure
- * retry conditions via [[`StreamErrorHandlingProps`]]. If your use-case dictates that you must retry processing until
- * a record expires, see [[`BlockProcessingAndRetryIndefinitely`]] for more details.
+ * You must provide `errorHandlingConfiguration` to this pattern. Retry conditions can be configured
+ * via [[`StreamErrorHandlingProps`]].
  *
  * It is advisable to configure an alarm based on the lambda's error percentage.
  * To do this, add the `monitoringConfiguration` property. The required properties for this are:
@@ -89,7 +83,7 @@ export interface ExistingKinesisStream {
 export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
   monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
   existingKinesisStream?: ExistingKinesisStream;
-  errorHandlingConfiguration: BlockProcessingAndRetryIndefinitely | StreamErrorHandlingProps;
+  errorHandlingConfiguration: StreamErrorHandlingProps;
   kinesisStreamProps?: StreamProps;
   processingProps?: StreamProcessingProps;
 }
