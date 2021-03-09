@@ -9,8 +9,8 @@ import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { toAwsErrorHandlingProps } from "../constructs/lambda/event-sources";
-import type { StreamErrorHandlingProps, StreamProcessingProps } from "../constructs/lambda/event-sources";
+import { toAwsErrorHandlingProps } from "../utils/lambda";
+import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
 
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.

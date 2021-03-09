@@ -7,8 +7,8 @@ import { Duration } from "@aws-cdk/core";
 import type { SynthedStack } from "../../test/utils";
 import { simpleGuStackForTesting } from "../../test/utils";
 import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
-import type { StreamErrorHandlingProps, StreamProcessingProps } from "../constructs/lambda/event-sources";
-import { StreamRetry } from "../constructs/lambda/event-sources";
+import { StreamRetry } from "../utils/lambda";
+import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
 import { GuKinesisLambda } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {
