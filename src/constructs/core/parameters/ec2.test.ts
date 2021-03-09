@@ -24,7 +24,6 @@ describe("The GuInstanceTypeParameter class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuInstanceTypeParameter(stack, "Parameter", {
-      type: "Number",
       description: "This is a test",
       default: 1,
     });
@@ -32,7 +31,7 @@ describe("The GuInstanceTypeParameter class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Parameters.Parameter).toEqual({
-      Type: "Number",
+      Type: "String",
       Description: "This is a test",
       Default: 1,
     });
