@@ -115,9 +115,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
         )
       : new GuKinesisStream(scope, streamId, kinesisProps);
 
-    const errorHandlingPropsToAwsProps = props.errorHandlingConfiguration.blockProcessingAndRetryIndefinitely
-      ? undefined
-      : toAwsErrorHandlingProps(props.errorHandlingConfiguration);
+    const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 
     const eventSourceProps: KinesisEventSourceProps = {
       startingPosition: StartingPosition.LATEST,
