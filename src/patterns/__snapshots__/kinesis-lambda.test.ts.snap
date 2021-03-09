@@ -2,28 +2,6 @@
 
 exports[`The GuKinesisLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
-  "Conditions": Object {
-    "AwsCdkKinesisEncryptedStreamsUnsupportedRegions": Object {
-      "Fn::Or": Array [
-        Object {
-          "Fn::Equals": Array [
-            Object {
-              "Ref": "AWS::Region",
-            },
-            "cn-north-1",
-          ],
-        },
-        Object {
-          "Fn::Equals": Array [
-            Object {
-              "Ref": "AWS::Region",
-            },
-            "cn-northwest-1",
-          ],
-        },
-      ],
-    },
-  },
   "Parameters": Object {
     "Stage": Object {
       "AllowedValues": Array [
@@ -41,16 +19,8 @@ Object {
         "RetentionPeriodHours": 24,
         "ShardCount": 1,
         "StreamEncryption": Object {
-          "Fn::If": Array [
-            "AwsCdkKinesisEncryptedStreamsUnsupportedRegions",
-            Object {
-              "Ref": "AWS::NoValue",
-            },
-            Object {
-              "EncryptionType": "KMS",
-              "KeyId": "alias/aws/kinesis",
-            },
-          ],
+          "EncryptionType": "KMS",
+          "KeyId": "alias/aws/kinesis",
         },
         "Tags": Array [
           Object {

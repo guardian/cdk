@@ -1,5 +1,5 @@
 import type { StreamProps } from "@aws-cdk/aws-kinesis";
-import { Stream } from "@aws-cdk/aws-kinesis";
+import { Stream, StreamEncryption } from "@aws-cdk/aws-kinesis";
 import { StartingPosition } from "@aws-cdk/aws-lambda";
 import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources";
 import { KinesisEventSource } from "@aws-cdk/aws-lambda-event-sources";
@@ -9,8 +9,8 @@ import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { toAwsErrorHandlingProps } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
+import { toAwsErrorHandlingProps } from "../utils/lambda";
 
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
@@ -104,6 +104,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
     });
     const kinesisProps: GuKinesisStreamProps = {
       overrideId: !!props.existingKinesisStream?.logicalIdFromCloudFormation,
+      encryption: StreamEncryption.MANAGED,
       ...props.kinesisStreamProps,
     };
     const streamId = props.existingKinesisStream?.logicalIdFromCloudFormation ?? "KinesisStream";

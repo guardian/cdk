@@ -111,7 +111,58 @@ describe("The GuKinesisLambda pattern", () => {
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
   });
 
-  it("should pass through Kinesis stream properties", () => {
+  it("should use managed encryption by default", () => {
+    const stack = simpleGuStackForTesting();
+    const basicErrorHandling: StreamErrorHandlingProps = {
+      bisectBatchOnError: false,
+      retryBehaviour: StreamRetry.maxAttempts(1),
+    };
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      code: { bucket: "test-dist", key: "lambda.zip" },
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      errorHandlingConfiguration: basicErrorHandling,
+      monitoringConfiguration: noMonitoring,
+    };
+    new GuKinesisLambda(stack, "my-lambda-function", props);
+    expect(stack).toHaveResource("AWS::Kinesis::Stream", {
+      StreamEncryption: {
+        EncryptionType: "KMS",
+        KeyId: "alias/aws/kinesis",
+      },
+    });
+  });
+
+  it("should override the default encryption type if encryption is explicitly set", () => {
+    const stack = simpleGuStackForTesting();
+    const basicErrorHandling: StreamErrorHandlingProps = {
+      bisectBatchOnError: false,
+      retryBehaviour: StreamRetry.maxAttempts(1),
+    };
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      code: { bucket: "test-dist", key: "lambda.zip" },
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      errorHandlingConfiguration: basicErrorHandling,
+      monitoringConfiguration: noMonitoring,
+      kinesisStreamProps: {
+        encryption: StreamEncryption.UNENCRYPTED,
+      },
+    };
+    new GuKinesisLambda(stack, "my-lambda-function", props);
+    expect(stack).not.toHaveResource("AWS::Kinesis::Stream", {
+      StreamEncryption: {
+        EncryptionType: "KMS",
+        KeyId: "alias/aws/kinesis",
+      },
+    });
+  });
+
+  it("should pass through other Kinesis stream properties", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -122,7 +173,6 @@ describe("The GuKinesisLambda pattern", () => {
       streamName: "custom-kinesis-stream-name",
       retentionPeriod: Duration.hours(100),
       shardCount: 3,
-      encryption: StreamEncryption.MANAGED,
     };
     const props = {
       code: { bucket: "test-dist", key: "lambda.zip" },
@@ -138,10 +188,6 @@ describe("The GuKinesisLambda pattern", () => {
       Name: "custom-kinesis-stream-name",
       RetentionPeriodHours: 100,
       ShardCount: 3,
-      StreamEncryption: {
-        EncryptionType: "KMS",
-        KeyId: "alias/aws/kinesis",
-      },
     });
   });
 
