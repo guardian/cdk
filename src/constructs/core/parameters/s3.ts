@@ -1,18 +1,5 @@
-import { RegexPattern } from "../../../constants";
 import type { GuStack } from "../stack";
-import type { GuNoTypeParameterProps } from "./base";
 import { GuStringParameter } from "./base";
-
-export class GuS3ObjectArnParameter extends GuStringParameter {
-  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
-    super(scope, id, {
-      ...props,
-      allowedPattern: RegexPattern.S3ARN,
-      constraintDescription:
-        "Must be a valid S3 ARN, see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html",
-    });
-  }
-}
 
 export class GuDistributionBucketParameter extends GuStringParameter {
   public static parameterName = "DistributionBucketName";

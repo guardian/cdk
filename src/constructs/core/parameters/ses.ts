@@ -9,6 +9,7 @@ export class GuGuardianEmailSenderParameter extends GuStringParameter {
       ...props,
       allowedPattern: RegexPattern.GUARDIAN_EMAIL,
       constraintDescription: "Must be an @theguardian.com email address",
+      description: "The sender of emails sent using SES.",
     });
   }
 }
