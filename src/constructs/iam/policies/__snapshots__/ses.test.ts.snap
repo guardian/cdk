@@ -6,6 +6,7 @@ Object {
     "EmailSenderAddress": Object {
       "AllowedPattern": "^[a-zA-Z]+(\\\\.[a-zA-Z]+)*@theguardian.com$",
       "ConstraintDescription": "Must be an @theguardian.com email address",
+      "Description": "The sender of emails sent using SES.",
       "Type": "String",
     },
     "Stage": Object {
