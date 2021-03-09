@@ -45,11 +45,11 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
-      existingKinesisStream: { logicalIdFromCloudFormation: "in-use-kinesis-stream" },
+      existingKinesisStream: { logicalIdFromCloudFormation: "pre-existing-kinesis-stream" },
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("in-use-kinesis-stream");
+    expect(Object.keys(json.Resources)).toContain("pre-existing-kinesis-stream");
   });
 
   it("should not generate a new Kinesis stream if an external stream name is passed in", () => {
