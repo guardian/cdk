@@ -16,8 +16,9 @@ export class GuInstanceTypeParameter extends GuParameter {
 export class GuAmiParameter extends GuParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {
-      ...props,
       type: "AWS::EC2::Image::Id",
+      description: "Amazon Machine Image ID. Use this in conjunction with AMIgo to keep AMIs up to date.",
+      ...props,
     });
   }
 }
