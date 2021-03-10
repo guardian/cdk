@@ -73,7 +73,7 @@ describe("GuUserData", () => {
         executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
       },
       configuration: {
-        bucketName: new GuPrivateConfigBucketParameter(stack),
+        bucket: new GuPrivateConfigBucketParameter(stack),
         files: ["secrets.json", "application.conf"],
       },
     };

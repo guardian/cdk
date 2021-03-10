@@ -6,6 +6,6 @@ import type { GuPrivateConfigBucketParameter } from "../../constructs/core";
  *   TODO change this once we have defined best practice for configuration.
  */
 export interface GuPrivateS3ConfigurationProps {
-  bucketName: GuPrivateConfigBucketParameter;
+  bucket: GuPrivateConfigBucketParameter;
   files: string[];
 }

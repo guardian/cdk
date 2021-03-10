@@ -51,14 +51,12 @@ export class GuUserData {
 
   private downloadConfiguration(scope: GuStack, props: GuPrivateS3ConfigurationProps) {
     const localDirectory = `/etc/${scope.app}`;
-    const bucketName = props.bucketName.valueAsString;
-    const files = props.files;
 
     const bucket = Bucket.fromBucketAttributes(scope, `${scope.app}ConfigurationBucket`, {
-      bucketName,
+      bucketName: props.bucket.valueAsString,
     });
 
-    files.forEach((bucketKey) => {
+    props.files.forEach((bucketKey) => {
       const fileName = bucketKey.split("/").slice(-1)[0];
 
       this.addS3DownloadCommand({
