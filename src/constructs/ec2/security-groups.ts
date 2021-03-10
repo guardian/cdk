@@ -1,6 +1,6 @@
 import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
-import { transformToCidrIngress } from "../../utils";
+import { transformToCidrIngress } from "../../utils/security-groups";
 import type { GuStack } from "../core";
 
 export interface CidrIngress {

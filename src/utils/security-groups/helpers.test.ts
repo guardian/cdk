@@ -1,5 +1,5 @@
 import { Peer } from "@aws-cdk/aws-ec2";
-import { transformToCidrIngress } from "./index";
+import { transformToCidrIngress } from "./helpers";
 
 describe("The transformToCidrIngress", () => {
   const expected = [
