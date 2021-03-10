@@ -24,8 +24,8 @@ export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
   }
 }
 
-export class GuGetPrivateConfigFilePolicy extends GuGetS3ObjectsPolicy {
+export class GuGetPrivateConfigPolicy extends GuGetS3ObjectsPolicy {
   constructor(scope: GuStack, id: string, props: GuPrivateS3ConfigurationProps) {
-    super(scope, id, { bucketName: new GuDistributionBucketParameter(scope).valueAsString, paths: props.files });
+    super(scope, id, { bucketName: props.bucket.valueAsString, paths: props.files });
   }
 }
