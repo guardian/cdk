@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { simpleGuStackForTesting } from "../../../../test/utils";
-import { GuGetS3ObjectPolicy } from "../policies";
+import { GuGetS3ObjectsPolicy } from "../policies";
 import { GuInstanceRole } from "./instance-role";
 
 describe("The GuInstanceRole construct", () => {
@@ -28,7 +28,7 @@ describe("The GuInstanceRole construct", () => {
 
     new GuInstanceRole(stack, "GuInstanceRole", {
       withoutLogShipping: true,
-      additionalPolicies: [new GuGetS3ObjectPolicy(stack, "GetConfigPolicy", { bucketName: "config" })],
+      additionalPolicies: [new GuGetS3ObjectsPolicy(stack, "GetConfigPolicy", { bucketName: "config" })],
     });
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();

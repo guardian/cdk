@@ -3,13 +3,13 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import type { SynthedStack } from "../../../../test/utils";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuDistributionBucketParameter } from "../../core";
-import { GuGetDistributablePolicy, GuGetS3ObjectPolicy } from "./s3-get-object";
+import { GuGetDistributablePolicy, GuGetS3ObjectsPolicy } from "./s3-get-object";
 
 describe("The GuGetS3ObjectPolicy class", () => {
   it("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
-    const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test" });
+    const s3Policy = new GuGetS3ObjectsPolicy(stack, "S3Policy", { bucketName: "test" });
 
     attachPolicyToTestRole(stack, s3Policy);
 
@@ -30,7 +30,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
   it("merges defaults and passed in props", () => {
     const stack = simpleGuStackForTesting();
 
-    const s3Policy = new GuGetS3ObjectPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
+    const s3Policy = new GuGetS3ObjectsPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
 
     attachPolicyToTestRole(stack, s3Policy);
 
@@ -42,6 +42,30 @@ describe("The GuGetS3ObjectPolicy class", () => {
           {
             Effect: "Allow",
             Resource: "arn:aws:s3:::test/*",
+            Action: "s3:GetObject",
+          },
+        ],
+      },
+    });
+  });
+
+  it("handles multiple paths correctly", () => {
+    const stack = simpleGuStackForTesting();
+
+    const s3Policy = new GuGetS3ObjectsPolicy(stack, "S3Policy", {
+      bucketName: "test",
+      paths: ["file1.txt", "file2.txt"],
+    });
+
+    attachPolicyToTestRole(stack, s3Policy);
+
+    expect(stack).toHaveResource("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Resource: ["arn:aws:s3:::test/file1.txt", "arn:aws:s3:::test/file2.txt"],
             Action: "s3:GetObject",
           },
         ],
