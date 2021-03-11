@@ -19,15 +19,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CI:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.15.1]
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.1.5
-        with:
-          node-version: ${{ matrix.node-version }}
       - run: ./script/ci
   approve-and-merge:
     runs-on: ubuntu-latest
