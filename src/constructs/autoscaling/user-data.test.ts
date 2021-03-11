@@ -3,7 +3,7 @@ import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
 import { Stage } from "../../constants";
-import { GuDistributionBucketParameter } from "../core";
+import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";
 import type { GuUserDataProps } from "./user-data";
 import { GuUserData } from "./user-data";
@@ -73,7 +73,7 @@ describe("GuUserData", () => {
         executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
       },
       configuration: {
-        bucketName: "test-app-config",
+        bucket: new GuPrivateConfigBucketParameter(stack),
         files: ["secrets.json", "application.conf"],
       },
     };
@@ -99,7 +99,15 @@ describe("GuUserData", () => {
           "Fn::Join": [
             "",
             [
-              "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://test-app-config/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://test-app-config/application.conf' '/etc/testing/application.conf'\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
+              "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://",
+              {
+                Ref: "PrivateConfigBucketName",
+              },
+              "/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://",
+              {
+                Ref: "PrivateConfigBucketName",
+              },
+              "/application.conf' '/etc/testing/application.conf'\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
               {
                 Ref: "DistributionBucketName",
               },

@@ -1,6 +1,7 @@
 import type { S3DownloadOptions } from "@aws-cdk/aws-ec2";
 import { UserData } from "@aws-cdk/aws-ec2";
 import { Bucket } from "@aws-cdk/aws-s3";
+import type { GuPrivateS3ConfigurationProps } from "../../utils/ec2";
 import type { GuDistributionBucketParameter, GuStack } from "../core";
 
 /**
@@ -14,19 +15,9 @@ export interface GuUserDataS3DistributableProps {
   executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
 
-/**
- * Where to download configuration from.
- * `files` are paths from the root of the bucket.
- *   TODO change this once we have defined best practice for configuration.
- */
-export interface GuUserDataS3ConfigurationProps {
-  bucketName: string;
-  files: string[];
-}
-
 export interface GuUserDataProps {
   distributable: GuUserDataS3DistributableProps;
-  configuration?: GuUserDataS3ConfigurationProps;
+  configuration?: GuPrivateS3ConfigurationProps;
 }
 
 /**
@@ -58,15 +49,14 @@ export class GuUserData {
     });
   }
 
-  private downloadConfiguration(scope: GuStack, props: GuUserDataS3ConfigurationProps) {
+  private downloadConfiguration(scope: GuStack, props: GuPrivateS3ConfigurationProps) {
     const localDirectory = `/etc/${scope.app}`;
-    const { bucketName, files } = props;
 
     const bucket = Bucket.fromBucketAttributes(scope, `${scope.app}ConfigurationBucket`, {
-      bucketName,
+      bucketName: props.bucket.valueAsString,
     });
 
-    files.forEach((bucketKey) => {
+    props.files.forEach((bucketKey) => {
       const fileName = bucketKey.split("/").slice(-1)[0];
 
       this.addS3DownloadCommand({

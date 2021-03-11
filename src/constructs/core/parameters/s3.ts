@@ -12,3 +12,15 @@ export class GuDistributionBucketParameter extends GuStringParameter {
     });
   }
 }
+
+export class GuPrivateConfigBucketParameter extends GuStringParameter {
+  public static parameterName = "PrivateConfigBucketName";
+
+  constructor(scope: GuStack, id: string = GuPrivateConfigBucketParameter.parameterName) {
+    super(scope, id, {
+      description: "SSM parameter containing the S3 bucket name holding the app's private configuration",
+      default: "/account/services/private.config.bucket",
+      fromSSM: true,
+    });
+  }
+}
