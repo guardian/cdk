@@ -2,6 +2,18 @@
 
 set -e
 
+setupNvm() {
+  # nvm is available through the GitHub virtual environment
+  # see https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu1804-README.md
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+  nvm install
+  nvm use
+}
+
+setupNvm
+
 npm ci
 # These steps should have passed at the PR level.
 # Re-run them for sanity.

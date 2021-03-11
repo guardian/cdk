@@ -10,6 +10,16 @@ preamble() {
   "${DIR}"/check-aws-cdk
 }
 
+setupNvm() {
+  # nvm is available through the GitHub virtual environment
+  # see https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu1804-README.md
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+  nvm install
+  nvm use
+}
+
 runIntegrationTest() {
   (
     cd "$ROOT_DIR/integration-test"
@@ -19,6 +29,7 @@ runIntegrationTest() {
 
 main() {
   preamble
+  setupNvm
 
   npm ci
   npm run build
