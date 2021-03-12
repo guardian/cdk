@@ -44,6 +44,7 @@ export interface GuStackProps extends StackProps {
  */
 export class GuStack extends Stack {
   private readonly _stack: string;
+  private readonly _stage: string;
   private readonly _app: string;
 
   private _mappings?: GuStageMapping;
@@ -52,7 +53,7 @@ export class GuStack extends Stack {
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    return this.getParam(GuStageParameter.defaultId).valueAsString;
+    return this._stage;
   }
 
   get stack(): string {
@@ -113,8 +114,8 @@ export class GuStack extends Stack {
 
     this.params = new Map<string, GuParameter>();
 
-    new GuStageParameter(this);
     this._stack = props.stack;
+    this._stage = new GuStageParameter(this).valueAsString;
     this._app = props.app;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);
