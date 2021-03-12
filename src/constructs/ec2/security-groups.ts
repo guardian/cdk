@@ -44,6 +44,10 @@ export class GuSecurityGroup extends SecurityGroup {
     props.ingresses?.forEach(({ range, port, description }) => {
       const connection: Port = typeof port === "number" ? Port.tcp(port) : port;
 
+      if (connection.toString() === "22") {
+        throw new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM.");
+      }
+
       this.addIngressRule(range, connection, description);
     });
 

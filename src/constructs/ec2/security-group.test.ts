@@ -98,6 +98,17 @@ describe("The GuSecurityGroup class", () => {
       ],
     });
   });
+
+  it("should not allow an ingress rule for port 22", () => {
+    const stack = simpleGuStackForTesting();
+
+    expect(() => {
+      new GuSecurityGroup(stack, "TestSecurityGroup", {
+        vpc,
+        ingresses: [{ range: Peer.anyIpv4(), description: "SSH access", port: 22 }],
+      });
+    }).toThrow(new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
+  });
 });
 
 describe("The GuWazuhAccess class", () => {
