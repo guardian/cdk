@@ -42,8 +42,8 @@ describe("The GuSecurityGroup class", () => {
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
       ingresses: [
-        { range: Peer.ipv4("127.0.0.1/24"), description: "ingress1" },
-        { range: Peer.ipv4("127.0.0.2/8"), description: "ingress2" },
+        { range: Peer.ipv4("127.0.0.1/24"), description: "ingress1", port: 443 },
+        { range: Peer.ipv4("127.0.0.2/8"), description: "ingress2", port: 443 },
       ],
     });
 
@@ -181,7 +181,7 @@ describe("The GuPublicInternetAccessSecurityGroup class", () => {
       SecurityGroupIngress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "GLOBAL_ACCESS",
+          Description: "Allows internet access on 443",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,
@@ -208,7 +208,7 @@ describe("The GuHttpsEgressSecurityGroup class", () => {
       SecurityGroupEgress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "from 0.0.0.0/0:443",
+          Description: "Allow all outbound traffic on port 443",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,
