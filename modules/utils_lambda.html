@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>constructs/cloudwatch | @guardian/cdk - v0.40.0</title>
+	<title>utils/lambda | @guardian/cdk - v0.40.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.40.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">@guardian/cdk - v0.40.0</a>
 				</li>
 				<li>
-					<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
+					<a href="utils_lambda.html">utils/lambda</a>
 				</li>
 			</ul>
-			<h1>Module constructs/cloudwatch</h1>
+			<h1>Module utils/lambda</h1>
 		</div>
 	</div>
 </header>
@@ -72,19 +72,67 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_cloudwatch.gualarm.html" class="tsd-kind-icon">Gu<wbr>Alarm</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_cloudwatch.gulambdaerrorpercentagealarm.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Alarm</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/utils_lambda.streamretry.html" class="tsd-kind-icon">Stream<wbr>Retry</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_cloudwatch.gualarmprops.html" class="tsd-kind-icon">Gu<wbr>Alarm<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Monitoring<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_cloudwatch.nomonitoring.html" class="tsd-kind-icon">No<wbr>Monitoring</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-kind-icon">Stream<wbr>Error<wbr>Handling<wbr>Props</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="utils_lambda.html#streamprocessingprops" class="tsd-kind-icon">Stream<wbr>Processing<wbr>Props</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_lambda.html#toawserrorhandlingprops" class="tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="streamprocessingprops" class="tsd-anchor"></a>
+					<h3>Stream<wbr>Processing<wbr>Props</h3>
+					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Processing<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">KinesisEventSourceProps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;bisectBatchOnError&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;maxRecordAge&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;onFailure&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;retryAttempts&quot;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/lambda/event-source.ts#L5">src/utils/lambda/event-source.ts:5</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="toawserrorhandlingprops" class="tsd-anchor"></a>
+					<h3>to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props<span class="tsd-signature-symbol">(</span>errorHandlingProps<span class="tsd-signature-symbol">: </span><a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-signature-type" data-tsd-kind="Interface">StreamErrorHandlingProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AwsErrorHandlingProps</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/lambda/event-source.ts#L40">src/utils/lambda/event-source.ts:40</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>errorHandlingProps: <a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-signature-type" data-tsd-kind="Interface">StreamErrorHandlingProps</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AwsErrorHandlingProps</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -100,7 +148,7 @@
 					<li class=" tsd-kind-module">
 						<a href="constructs_autoscaling.html">constructs/autoscaling</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -133,7 +181,7 @@
 					<li class=" tsd-kind-module">
 						<a href="utils_ec2.html">utils/ec2</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="utils_lambda.html">utils/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -144,19 +192,16 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_cloudwatch.gualarm.html" class="tsd-kind-icon">Gu<wbr>Alarm</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_cloudwatch.gulambdaerrorpercentagealarm.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Alarm</a>
+						<a href="../classes/utils_lambda.streamretry.html" class="tsd-kind-icon">Stream<wbr>Retry</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_cloudwatch.gualarmprops.html" class="tsd-kind-icon">Gu<wbr>Alarm<wbr>Props</a>
+						<a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-kind-icon">Stream<wbr>Error<wbr>Handling<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Monitoring<wbr>Props</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="utils_lambda.html#streamprocessingprops" class="tsd-kind-icon">Stream<wbr>Processing<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_cloudwatch.nomonitoring.html" class="tsd-kind-icon">No<wbr>Monitoring</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="utils_lambda.html#toawserrorhandlingprops" class="tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>

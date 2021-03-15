@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ExistingSnsTopic | @guardian/cdk - v0.40.0</title>
+	<title>StreamErrorHandlingProps | @guardian/cdk - v0.40.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.40.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">@guardian/cdk - v0.40.0</a>
 				</li>
 				<li>
-					<a href="../modules/index.html">index</a>
+					<a href="../modules/utils_lambda.html">utils/lambda</a>
 				</li>
 				<li>
-					<a href="index.existingsnstopic.html">ExistingSnsTopic</a>
+					<a href="utils_lambda.streamerrorhandlingprops.html">StreamErrorHandlingProps</a>
 				</li>
 			</ul>
-			<h1>Interface ExistingSnsTopic</h1>
+			<h1>Interface StreamErrorHandlingProps</h1>
 		</div>
 	</div>
 </header>
@@ -71,31 +71,26 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used to provide information about an existing SNS topic to the <a href="../classes/index.gusnslambda.html"><code>GuSnsLambda</code></a> pattern.</p>
+						<p>In order to prevent your lambda from continuously retrying if it encounters errors
+							whilst processing a batch, use <code>retryBehaviour</code> to give up on a record once it reaches a certain age,
+						or after a specified number of attempts. See <a href="../classes/utils_lambda.streamretry.html"><code>StreamRetry</code></a> for more details.</p>
 					</div>
-					<p>Specify a <code>logicalIdFromCloudFormation</code> to inherit an SNS topic which has already
-						been created via a CloudFormation stack. This is necessary to avoid interruptions of
-					service when migrating stacks from CloudFormation to <code>cdk</code>.</p>
-					<p>Specify an <code>externalTopicName</code> to link the lambda to an SNS topic owned by a different stack
-					(or created outside of version control).</p>
-					<p><strong>Example Usage</strong></p>
-					<p>When migrating a CloudFormation stack which includes the following resource:</p>
-					<pre><code class="language-yaml"><span style="color: #800000">MyCloudFormedSnsTopic</span><span style="color: #000000">:</span>
-<span style="color: #000000">  </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::SNS::Topic</span>
+					<p>In order to isolate bad records as part of the retry process, you may also want to bisect problematic batches
+					using <code>bisectBatchOnError</code>. For example:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">errorHandlingProps</span><span style="color: #000000">: </span><span style="color: #267F99">ErrorHandlingProps</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">bisectBatchOnError:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">retryBehaviour:</span><span style="color: #000000"> </span><span style="color: #001080">StreamRetry</span><span style="color: #000000">.</span><span style="color: #795E26">maxAttempts</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">),</span>
+<span style="color: #000000">}</span>
 </code></pre>
-					<p>Inherit the SNS topic (rather than creating a new one) using:</p>
-					<pre><code class="language-typescript"><span style="color: #000000"> existingSnsTopic: { logicalIdFromCloudFormation: </span><span style="color: #A31515">&quot;MyCloudFormedSnsTopic&quot;</span><span style="color: #000000"> }</span>
-</code></pre>
-					<p>Alternatively, reference an SNS topic which belongs to another stack using:</p>
-					<pre><code class="language-typescript"><span style="color: #000000"> existingSnsTopic: { externalTopicName: </span><span style="color: #A31515">&quot;MySnsTopicNameFromAnotherStack&quot;</span><span style="color: #000000"> }</span>
-</code></pre>
+					<p>Records which could not be processed successfully can (optionally) be sent to a dead letter queue
+					via <code>deadLetterQueueForSkippedRecords</code>.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ExistingSnsTopic</span>
+						<span class="target">StreamErrorHandlingProps</span>
 					</li>
 				</ul>
 			</section>
@@ -106,8 +101,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.existingsnstopic.html#externaltopicname" class="tsd-kind-icon">external<wbr>Topic<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.existingsnstopic.html#logicalidfromcloudformation" class="tsd-kind-icon">logical<wbr>IdFrom<wbr>Cloud<wbr>Formation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_lambda.streamerrorhandlingprops.html#bisectbatchonerror" class="tsd-kind-icon">bisect<wbr>Batch<wbr>OnError</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_lambda.streamerrorhandlingprops.html#blockprocessingandretryindefinitely" class="tsd-kind-icon">block<wbr>Processing<wbr>And<wbr>Retry<wbr>Indefinitely</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_lambda.streamerrorhandlingprops.html#deadletterqueueforskippedrecords" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>For<wbr>Skipped<wbr>Records</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_lambda.streamerrorhandlingprops.html#retrybehaviour" class="tsd-kind-icon">retry<wbr>Behaviour</a></li>
 							</ul>
 						</section>
 					</div>
@@ -116,22 +113,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="externaltopicname" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> external<wbr>Topic<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">external<wbr>Topic<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="bisectbatchonerror" class="tsd-anchor"></a>
+					<h3>bisect<wbr>Batch<wbr>OnError</h3>
+					<div class="tsd-signature tsd-kind-icon">bisect<wbr>Batch<wbr>OnError<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/patterns/sns-lambda.ts#L39">src/patterns/sns-lambda.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/lambda/event-source.ts#L30">src/utils/lambda/event-source.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="logicalidfromcloudformation" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> logical<wbr>IdFrom<wbr>Cloud<wbr>Formation</h3>
-					<div class="tsd-signature tsd-kind-icon">logical<wbr>IdFrom<wbr>Cloud<wbr>Formation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="blockprocessingandretryindefinitely" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> block<wbr>Processing<wbr>And<wbr>Retry<wbr>Indefinitely</h3>
+					<div class="tsd-signature tsd-kind-icon">block<wbr>Processing<wbr>And<wbr>Retry<wbr>Indefinitely<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/patterns/sns-lambda.ts#L38">src/patterns/sns-lambda.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/lambda/event-source.ts#L32">src/utils/lambda/event-source.ts:32</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="deadletterqueueforskippedrecords" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> dead<wbr>Letter<wbr>Queue<wbr>For<wbr>Skipped<wbr>Records</h3>
+					<div class="tsd-signature tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>For<wbr>Skipped<wbr>Records<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IEventSourceDlq</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/lambda/event-source.ts#L31">src/utils/lambda/event-source.ts:31</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="retrybehaviour" class="tsd-anchor"></a>
+					<h3>retry<wbr>Behaviour</h3>
+					<div class="tsd-signature tsd-kind-icon">retry<wbr>Behaviour<span class="tsd-signature-symbol">:</span> <a href="../classes/utils_lambda.streamretry.html" class="tsd-signature-type" data-tsd-kind="Class">StreamRetry</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/lambda/event-source.ts#L29">src/utils/lambda/event-source.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -176,13 +193,13 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/constructs_sns.html">constructs/sns</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/utils_ec2.html">utils/ec2</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/utils_lambda.html">utils/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -193,40 +210,34 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.gukinesislambda.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.guscheduledlambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.gusnslambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.existingkinesisstream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
+						<a href="../classes/utils_lambda.streamretry.html" class="tsd-kind-icon">Stream<wbr>Retry</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.existingsnstopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
+						<a href="utils_lambda.streamerrorhandlingprops.html" class="tsd-kind-icon">Stream<wbr>Error<wbr>Handling<wbr>Props</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.existingsnstopic.html#externaltopicname" class="tsd-kind-icon">external<wbr>Topic<wbr>Name</a>
+								<a href="utils_lambda.streamerrorhandlingprops.html#bisectbatchonerror" class="tsd-kind-icon">bisect<wbr>Batch<wbr>OnError</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.existingsnstopic.html#logicalidfromcloudformation" class="tsd-kind-icon">logical<wbr>IdFrom<wbr>Cloud<wbr>Formation</a>
+								<a href="utils_lambda.streamerrorhandlingprops.html#blockprocessingandretryindefinitely" class="tsd-kind-icon">block<wbr>Processing<wbr>And<wbr>Retry<wbr>Indefinitely</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="utils_lambda.streamerrorhandlingprops.html#deadletterqueueforskippedrecords" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>For<wbr>Skipped<wbr>Records</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="utils_lambda.streamerrorhandlingprops.html#retrybehaviour" class="tsd-kind-icon">retry<wbr>Behaviour</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.gukinesislambdaprops.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda<wbr>Props</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/utils_lambda.html#streamprocessingprops" class="tsd-kind-icon">Stream<wbr>Processing<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.guscheduledlambdaprops.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.gusnslambdaprops.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="../modules/utils_lambda.html#toawserrorhandlingprops" class="tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>

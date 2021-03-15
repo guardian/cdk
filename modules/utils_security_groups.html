@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>constructs/cloudwatch | @guardian/cdk - v0.40.0</title>
+	<title>utils/security-groups | @guardian/cdk - v0.40.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.40.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">@guardian/cdk - v0.40.0</a>
 				</li>
 				<li>
-					<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
+					<a href="utils_security_groups.html">utils/security-groups</a>
 				</li>
 			</ul>
-			<h1>Module constructs/cloudwatch</h1>
+			<h1>Module utils/security-groups</h1>
 		</div>
 	</div>
 </header>
@@ -70,21 +70,38 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_cloudwatch.gualarm.html" class="tsd-kind-icon">Gu<wbr>Alarm</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_cloudwatch.gulambdaerrorpercentagealarm.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Alarm</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_cloudwatch.gualarmprops.html" class="tsd-kind-icon">Gu<wbr>Alarm<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Monitoring<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_cloudwatch.nomonitoring.html" class="tsd-kind-icon">No<wbr>Monitoring</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_security_groups.html#transformtocidringress" class="tsd-kind-icon">transform<wbr>ToCidr<wbr>Ingress</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="transformtocidringress" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> transform<wbr>ToCidr<wbr>Ingress</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">transform<wbr>ToCidr<wbr>Ingress<span class="tsd-signature-symbol">(</span>ingresses<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/constructs_ec2.cidringress.html" class="tsd-signature-type" data-tsd-kind="Interface">CidrIngress</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/d44cf25/src/utils/security-groups/helpers.ts#L4">src/utils/security-groups/helpers.ts:4</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ingresses: <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/constructs_ec2.cidringress.html" class="tsd-signature-type" data-tsd-kind="Interface">CidrIngress</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -100,7 +117,7 @@
 					<li class=" tsd-kind-module">
 						<a href="constructs_autoscaling.html">constructs/autoscaling</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -136,27 +153,15 @@
 					<li class=" tsd-kind-module">
 						<a href="utils_lambda.html">utils/lambda</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="utils_security_groups.html">utils/security-<wbr>groups</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_cloudwatch.gualarm.html" class="tsd-kind-icon">Gu<wbr>Alarm</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_cloudwatch.gulambdaerrorpercentagealarm.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Alarm</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_cloudwatch.gualarmprops.html" class="tsd-kind-icon">Gu<wbr>Alarm<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Monitoring<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_cloudwatch.nomonitoring.html" class="tsd-kind-icon">No<wbr>Monitoring</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="utils_security_groups.html#transformtocidringress" class="tsd-kind-icon">transform<wbr>ToCidr<wbr>Ingress</a>
 					</li>
 				</ul>
 			</nav>
