@@ -128,14 +128,14 @@ describe("The GuWazuhAccess class", () => {
       SecurityGroupEgress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "wazuh event logging",
+          Description: "Wazuh event logging",
           FromPort: 1514,
           IpProtocol: "tcp",
           ToPort: 1514,
         },
         {
           CidrIp: "0.0.0.0/0",
-          Description: "wazuh agent registration",
+          Description: "Wazuh agent registration",
           FromPort: 1515,
           IpProtocol: "tcp",
           ToPort: 1515,

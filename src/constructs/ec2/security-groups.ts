@@ -65,8 +65,8 @@ export class GuWazuhAccess extends GuSecurityGroup {
       overrideId: true,
       allowAllOutbound: false,
       egresses: [
-        { range: Peer.anyIpv4(), port: 1514, description: "wazuh event logging" },
-        { range: Peer.anyIpv4(), port: 1515, description: "wazuh agent registration" },
+        { range: Peer.anyIpv4(), port: 1514, description: "Wazuh event logging" },
+        { range: Peer.anyIpv4(), port: 1515, description: "Wazuh agent registration" },
       ],
     };
   }
