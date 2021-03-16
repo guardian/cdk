@@ -42,8 +42,8 @@ describe("The GuSecurityGroup class", () => {
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
       ingresses: [
-        { range: Peer.ipv4("127.0.0.1/24"), description: "ingress1" },
-        { range: Peer.ipv4("127.0.0.2/8"), description: "ingress2" },
+        { range: Peer.ipv4("127.0.0.1/24"), description: "ingress1", port: 443 },
+        { range: Peer.ipv4("127.0.0.2/8"), description: "ingress2", port: 443 },
       ],
     });
 
@@ -98,6 +98,17 @@ describe("The GuSecurityGroup class", () => {
       ],
     });
   });
+
+  it("should not allow an ingress rule for port 22", () => {
+    const stack = simpleGuStackForTesting();
+
+    expect(() => {
+      new GuSecurityGroup(stack, "TestSecurityGroup", {
+        vpc,
+        ingresses: [{ range: Peer.anyIpv4(), description: "SSH access", port: 22 }],
+      });
+    }).toThrow(new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
+  });
 });
 
 describe("The GuWazuhAccess class", () => {
@@ -117,14 +128,14 @@ describe("The GuWazuhAccess class", () => {
       SecurityGroupEgress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "wazuh event logging",
+          Description: "Wazuh event logging",
           FromPort: 1514,
           IpProtocol: "tcp",
           ToPort: 1514,
         },
         {
           CidrIp: "0.0.0.0/0",
-          Description: "wazuh agent registration",
+          Description: "Wazuh agent registration",
           FromPort: 1515,
           IpProtocol: "tcp",
           ToPort: 1515,
@@ -177,11 +188,11 @@ describe("The GuPublicInternetAccessSecurityGroup class", () => {
     });
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      GroupDescription: "Allows internet access on 443",
+      GroupDescription: "Allow all inbound traffic via HTTPS",
       SecurityGroupIngress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "GLOBAL_ACCESS",
+          Description: "Allow all inbound traffic via HTTPS",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,
@@ -204,11 +215,11 @@ describe("The GuHttpsEgressSecurityGroup class", () => {
     GuHttpsEgressSecurityGroup.forVpc(stack, { vpc });
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      GroupDescription: "Allow all outbound traffic on port 443",
+      GroupDescription: "Allow all outbound HTTPS traffic",
       SecurityGroupEgress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "from 0.0.0.0/0:443",
+          Description: "Allow all outbound HTTPS traffic",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,

@@ -1,15 +1,17 @@
 import { Peer } from "@aws-cdk/aws-ec2";
-import { transformToCidrIngress } from "./helpers";
+import { transformToSecurityGroupAccessRule } from "./helpers";
 
-describe("The transformToCidrIngress", () => {
+describe("The transformToSecurityGroupAccessRule", () => {
   const expected = [
     {
       range: Peer.ipv4("127.0.0.1/32"),
       description: "One",
+      port: 443,
     },
     {
       range: Peer.ipv4("127.0.0.2/32"),
       description: "Two",
+      port: 443,
     },
   ];
   test("correctly transforms objects", () => {
@@ -18,7 +20,7 @@ describe("The transformToCidrIngress", () => {
       Two: "127.0.0.2/32",
     };
 
-    expect(transformToCidrIngress(Object.entries(ingresses))).toStrictEqual(expected);
+    expect(transformToSecurityGroupAccessRule(Object.entries(ingresses), 443)).toStrictEqual(expected);
   });
 
   test("correctly transforms enums", () => {
@@ -27,6 +29,6 @@ describe("The transformToCidrIngress", () => {
       Two = "127.0.0.2/32",
     }
 
-    expect(transformToCidrIngress(Object.entries(Ingresses))).toStrictEqual(expected);
+    expect(transformToSecurityGroupAccessRule(Object.entries(Ingresses), 443)).toStrictEqual(expected);
   });
 });
