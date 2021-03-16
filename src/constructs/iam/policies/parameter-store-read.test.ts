@@ -6,9 +6,9 @@ import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
 describe("ParameterStoreReadPolicy", () => {
   it("should constrain the policy to the patch of a stack's identity", () => {
-    const stack = new GuStack(new App(), "my-app", { app: "MyApp", stack: "test-stack" });
+    const stack = new GuStack(new App(), "my-app", { stack: "test-stack" });
 
-    const policy = new GuParameterStoreReadPolicy(stack);
+    const policy = new GuParameterStoreReadPolicy(stack, { app: "MyApp" });
 
     attachPolicyToTestRole(stack, policy);
 

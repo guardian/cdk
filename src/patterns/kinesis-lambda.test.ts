@@ -26,6 +26,7 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -46,6 +47,7 @@ describe("The GuKinesisLambda pattern", () => {
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       existingKinesisStream: { logicalIdFromCloudFormation: "pre-existing-kinesis-stream" },
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -67,6 +69,7 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       errorHandlingConfiguration: basicErrorHandling,
       existingKinesisStream: { externalKinesisStreamName: "kinesis-stream-from-another-stack" },
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
@@ -106,6 +109,7 @@ describe("The GuKinesisLambda pattern", () => {
         toleratedErrorPercentage: 1,
         snsTopicName: "alerts-topic",
       },
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
@@ -125,6 +129,7 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::Kinesis::Stream", {
@@ -152,6 +157,7 @@ describe("The GuKinesisLambda pattern", () => {
       kinesisStreamProps: {
         encryption: StreamEncryption.UNENCRYPTED,
       },
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).not.toHaveResource("AWS::Kinesis::Stream", {
@@ -182,6 +188,7 @@ describe("The GuKinesisLambda pattern", () => {
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       kinesisStreamProps: kinesisStreamProps,
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::Kinesis::Stream", {
@@ -213,6 +220,7 @@ describe("The GuKinesisLambda pattern", () => {
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       processingProps: processingProps,
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
@@ -238,6 +246,7 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: errorHandlingProps,
       monitoringConfiguration: noMonitoring,
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
@@ -260,6 +269,7 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: errorHandlingProps,
       monitoringConfiguration: noMonitoring,
+      app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {

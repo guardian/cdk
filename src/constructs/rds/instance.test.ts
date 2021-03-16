@@ -28,6 +28,7 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::RDS::DBInstance", {
@@ -52,6 +53,7 @@ describe("The GuDatabaseInstance class", () => {
         version: PostgresEngineVersion.VER_11_8,
       }),
       parameterGroup,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::RDS::DBInstance", {
@@ -70,6 +72,7 @@ describe("The GuDatabaseInstance class", () => {
         version: PostgresEngineVersion.VER_11_8,
       }),
       parameters: { max_connections: "100" },
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::RDS::DBInstance", {
@@ -113,6 +116,7 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
+      app: "testing",
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -128,6 +132,7 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
+      app: "testing",
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -143,6 +148,7 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
+      app: "testing",
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -159,6 +165,7 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
+      app: "testing",
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -174,6 +181,7 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::RDS::DBInstance", {

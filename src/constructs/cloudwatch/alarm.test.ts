@@ -12,6 +12,7 @@ describe("The GuAlarm class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
     new GuAlarm(stack, "alarm", {
       alarmName: `Alarm in ${stack.stage}`,
@@ -31,6 +32,7 @@ describe("The GuAlarm class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
     new GuAlarm(stack, "alarm", {
       alarmName: `Alarm in ${stack.stage}`,

@@ -31,8 +31,8 @@ describe("The GuStack construct", () => {
     });
   });
 
-  it("should apply the stack, stage and app tags to resources added to it", () => {
-    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
+  it("should apply the stack and stage tags to resources added to it", () => {
+    const stack = new GuStack(new App(), "Test", { stack: "test" });
 
     new Role(stack, "MyRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -40,10 +40,6 @@ describe("The GuStack construct", () => {
 
     expect(stack).toHaveResource("AWS::IAM::Role", {
       Tags: alphabeticalTags([
-        {
-          Key: "App",
-          Value: "MyApp",
-        },
         {
           Key: "Stack",
           Value: "test",
@@ -59,14 +55,8 @@ describe("The GuStack construct", () => {
     });
   });
 
-  it("should return the correct app value when app is set", () => {
-    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
-
-    expect(stack.app).toBe("MyApp");
-  });
-
   it("should return a parameter that exists", () => {
-    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
+    const stack = new GuStack(new App(), "Test", { stack: "test" });
     const testParam = new GuParameter(stack, "MyTestParam", {});
     stack.setParam(testParam);
 
@@ -75,7 +65,7 @@ describe("The GuStack construct", () => {
   });
 
   it("should throw on attempt to get a parameter that doesn't exist", () => {
-    const stack = new GuStack(new App(), "Test", { app: "MyApp", stack: "test" });
+    const stack = new GuStack(new App(), "Test", { stack: "test" });
 
     expect(() => stack.getParam<GuParameter>("i-do-not-exist")).toThrowError(
       "Attempting to read parameter i-do-not-exist which does not exist"

@@ -1,4 +1,5 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
+import { Tags } from "@aws-cdk/core";
 import type { GuStack } from "../../core";
 import type { AppIdentity } from "../../core/identity";
 import type { GuPolicy } from "../policies";
@@ -21,7 +22,7 @@ export class GuInstanceRole extends GuRole {
 
   // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: GuInstanceRoleProps) {
-    super(scope, `InstanceRole-${props.app}`, {
+    super(scope, `GuInstanceRole-${props.app}`, {
       overrideId: true,
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -37,5 +38,7 @@ export class GuInstanceRole extends GuRole {
     ];
 
     this.policies.forEach((p) => p.attachToRole(this));
+
+    Tags.of(this).add("App", props.app);
   }
 }
