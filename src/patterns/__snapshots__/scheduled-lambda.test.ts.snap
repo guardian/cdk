@@ -177,7 +177,7 @@ Object {
       },
       "Type": "AWS::Events::Rule",
     },
-    "mylambdafunctionmylambdafunctionrate1minute0AllowEventRuleTestmylambdafunctionmylambdafunctionrate1minute0A609CD2636B92639": Object {
+    "mylambdafunctionmylambdafunctionrate1minute0AllowEventRuleTestmylambdafunction4858F7ED96852F99": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {

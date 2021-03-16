@@ -4,7 +4,7 @@ import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../test/utils";
-import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
+import type { NoMonitoring } from "../constructs/cloudwatch";
 import { GuScheduledLambda } from "./scheduled-lambda";
 
 describe("The GuScheduledLambda pattern", () => {
@@ -16,7 +16,7 @@ describe("The GuScheduledLambda pattern", () => {
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
-      schedule: Schedule.rate(Duration.seconds(60)),
+      schedule: Schedule.rate(Duration.minutes(1)),
       monitoringConfiguration: noMonitoring,
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
@@ -30,7 +30,7 @@ describe("The GuScheduledLambda pattern", () => {
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
-      schedule: Schedule.rate(Duration.seconds(60)),
+      schedule: Schedule.rate(Duration.minutes(1)),
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
         snsTopicName: "alerts-topic",
