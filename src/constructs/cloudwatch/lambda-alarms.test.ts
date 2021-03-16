@@ -12,6 +12,7 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
     const props = {
       toleratedErrorPercentage: 80,
@@ -28,6 +29,7 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
     const props = {
       toleratedErrorPercentage: 65,
@@ -47,6 +49,7 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
     const props = {
       toleratedErrorPercentage: 65,
@@ -67,6 +70,7 @@ describe("The GuLambdaErrorPercentageAlarm pattern", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
     const props = {
       toleratedErrorPercentage: 65,

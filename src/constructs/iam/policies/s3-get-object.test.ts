@@ -77,7 +77,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
 describe("The GuGetDistributablePolicy construct", () => {
   it("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuGetDistributablePolicy(stack));
+    attachPolicyToTestRole(stack, new GuGetDistributablePolicy(stack, { app: "testing" }));
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 

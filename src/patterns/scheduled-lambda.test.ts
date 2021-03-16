@@ -18,6 +18,7 @@ describe("The GuScheduledLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       schedule: Schedule.rate(Duration.minutes(1)),
       monitoringConfiguration: noMonitoring,
+      app: "testing",
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -35,6 +36,7 @@ describe("The GuScheduledLambda pattern", () => {
         toleratedErrorPercentage: 99,
         snsTopicName: "alerts-topic",
       },
+      app: "testing",
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");

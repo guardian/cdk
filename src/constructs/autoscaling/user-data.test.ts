@@ -17,12 +17,14 @@ describe("GuUserData", () => {
 
   test("Distributable should be downloaded from a standard path in S3 (bucket/stack/stage/app/filename)", () => {
     const stack = simpleGuStackForTesting();
+    const app = "testing";
 
     const props: GuUserDataProps = {
+      app,
       distributable: {
         bucket: new GuDistributionBucketParameter(stack),
         fileName: "my-app.deb",
-        executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
+        executionStatement: `dpkg -i /${app}/my-app.deb`,
       },
     };
 
@@ -39,6 +41,7 @@ describe("GuUserData", () => {
           minimumInstances: 3,
         },
       },
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
@@ -65,12 +68,14 @@ describe("GuUserData", () => {
 
   test("Distributable should download configuration first", () => {
     const stack = simpleGuStackForTesting();
+    const app = "testing";
 
     const props: GuUserDataProps = {
+      app,
       distributable: {
         bucket: new GuDistributionBucketParameter(stack),
         fileName: "my-app.deb",
-        executionStatement: `dpkg -i /${stack.app}/my-app.deb`,
+        executionStatement: `dpkg -i /${app}/my-app.deb`,
       },
       configuration: {
         bucket: new GuPrivateConfigBucketParameter(stack),
@@ -91,6 +96,7 @@ describe("GuUserData", () => {
           minimumInstances: 3,
         },
       },
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {

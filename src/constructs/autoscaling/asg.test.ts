@@ -1,16 +1,15 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { InstanceType, Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
 import type { SynthedStack } from "../../../test/utils";
 import { Stage } from "../../constants";
-import { GuAmiParameter } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
-import { GuAutoScalingGroup, GuUserData } from "./";
+import { GuAutoScalingGroup } from "./";
 
 describe("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -19,13 +18,9 @@ describe("The GuAutoScalingGroup", () => {
     publicSubnetIds: [""],
   });
 
-  const { userData } = new GuUserData(simpleGuStackForTesting()).addCommands(
-    ...["service some-dependency start", "service my-app start"]
-  );
-
   const defaultProps: GuAutoScalingGroupProps = {
     vpc,
-    userData,
+    userData: UserData.custom(["#!/bin/bash", "service some-dependency start", "service my-app start"].join("\n")),
     stageDependentProps: {
       [Stage.CODE]: {
         minimumInstances: 1,
@@ -34,6 +29,7 @@ describe("The GuAutoScalingGroup", () => {
         minimumInstances: 3,
       },
     },
+    app: "testing",
   };
 
   test("adds the AMI parameter if no imageId prop provided", () => {
@@ -43,34 +39,15 @@ describe("The GuAutoScalingGroup", () => {
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.AMI).toEqual({
-      Description: "AMI ID",
+    expect(json.Parameters["AMITesting"]).toEqual({
+      Description:
+        "Amazon Machine Image ID for the app testing. Use this in conjunction with AMIgo to keep AMIs up to date.",
       Type: "AWS::EC2::Image::Id",
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       ImageId: {
-        Ref: "AMI",
-      },
-    });
-  });
-
-  test("does not add the AMI parameter if an imageId prop provided", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      ...defaultProps,
-      imageId: new GuAmiParameter(stack, "CustomAMI", {}),
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Parameters)).not.toContain("AMI");
-    expect(Object.keys(json.Parameters)).toContain("CustomAMI");
-
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
-      ImageId: {
-        Ref: "CustomAMI",
+        Ref: "AMITesting",
       },
     });
   });
@@ -82,15 +59,15 @@ describe("The GuAutoScalingGroup", () => {
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.InstanceType).toEqual({
+    expect(json.Parameters["InstanceTypeTesting"]).toEqual({
       Type: "String",
-      Description: "EC2 Instance Type",
+      Description: "EC2 Instance Type for the app testing",
       Default: "t3.small",
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       InstanceType: {
-        Ref: "InstanceType",
+        Ref: "InstanceTypeTesting",
       },
     });
   });
