@@ -33,6 +33,16 @@ export interface GuSecurityGroupProps extends SecurityGroupProps {
   egresses?: SecurityGroupAccessRule[];
 }
 
+/**
+ * Defining an AWS Security Group with ingress and egress rules.
+ *
+ * An ingress rule on port 22 is strictly forbidden as SSH via SSM is preferred.
+ *
+ * Prefer to use a concrete implementation where possible. See:
+ * - [[GuWazuhAccess]]
+ * - [[GuPublicInternetAccessSecurityGroup]]
+ * - [[GuHttpsEgressSecurityGroup]]
+ */
 export class GuSecurityGroup extends SecurityGroup {
   constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
     super(scope, id, props);
