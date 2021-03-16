@@ -6,16 +6,17 @@ import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
-import { Duration } from "@aws-cdk/core";
+import { Duration, Tags } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch/lambda-alarms";
 import { GuLambdaErrorPercentageAlarm } from "../cloudwatch/lambda-alarms";
 import type { GuStack } from "../core";
+import type { AppIdentity } from "../core/identity";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
 }
 
-export interface GuFunctionProps extends Omit<FunctionProps, "code"> {
+export interface GuFunctionProps extends Omit<FunctionProps, "code">, AppIdentity {
   code: { bucket: string; key: string };
   rules?: Array<{
     schedule: Schedule;
@@ -74,5 +75,7 @@ export class GuLambdaFunction extends Function {
     }
 
     bucket.grantRead(this);
+
+    Tags.of(this).add("App", props.app);
   }
 }

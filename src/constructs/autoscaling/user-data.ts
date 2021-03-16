@@ -3,6 +3,7 @@ import { UserData } from "@aws-cdk/aws-ec2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import type { GuPrivateS3ConfigurationProps } from "../../utils/ec2";
 import type { GuDistributionBucketParameter, GuStack } from "../core";
+import type { AppIdentity } from "../core/identity";
 
 /**
  * Where to download a distributable from.
@@ -15,7 +16,7 @@ export interface GuUserDataS3DistributableProps {
   executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
 
-export interface GuUserDataProps {
+export interface GuUserDataProps extends AppIdentity {
   distributable: GuUserDataS3DistributableProps;
   configuration?: GuPrivateS3ConfigurationProps;
 }
@@ -34,9 +35,8 @@ export class GuUserData {
     return this._userData;
   }
 
-  private downloadDistributable(scope: GuStack, props: GuUserDataS3DistributableProps) {
-    const localDirectory = `/${scope.app}`;
-    const bucketKey = [scope.stack, scope.stage, scope.app, props.fileName].join("/");
+  private downloadDistributable(scope: GuStack, app: string, props: GuUserDataS3DistributableProps) {
+    const bucketKey = [scope.stack, scope.stage, app, props.fileName].join("/");
 
     const bucket = Bucket.fromBucketAttributes(scope, "DistributionBucket", {
       bucketName: props.bucket.valueAsString,
@@ -45,14 +45,12 @@ export class GuUserData {
     this.addS3DownloadCommand({
       bucket,
       bucketKey,
-      localFile: `${localDirectory}/${props.fileName}`,
+      localFile: `/${app}/${props.fileName}`,
     });
   }
 
-  private downloadConfiguration(scope: GuStack, props: GuPrivateS3ConfigurationProps) {
-    const localDirectory = `/etc/${scope.app}`;
-
-    const bucket = Bucket.fromBucketAttributes(scope, `${scope.app}ConfigurationBucket`, {
+  private downloadConfiguration(scope: GuStack, app: string, props: GuPrivateS3ConfigurationProps) {
+    const bucket = Bucket.fromBucketAttributes(scope, `${app}ConfigurationBucket`, {
       bucketName: props.bucket.valueAsString,
     });
 
@@ -62,20 +60,21 @@ export class GuUserData {
       this.addS3DownloadCommand({
         bucket,
         bucketKey,
-        localFile: `${localDirectory}/${fileName}`,
+        localFile: `/etc/${app}/${fileName}`,
       });
     });
   }
 
   // eslint-disable-next-line custom-rules/valid-constructors -- TODO only lint for things that extend IConstruct
-  constructor(scope: GuStack, props?: GuUserDataProps) {
+  constructor(scope: GuStack, props: GuUserDataProps) {
     this._userData = UserData.forLinux();
 
-    if (props) {
-      props.configuration && this.downloadConfiguration(scope, props.configuration);
-      this.downloadDistributable(scope, props.distributable);
-      this.addCommands(props.distributable.executionStatement);
+    if (props.configuration) {
+      this.downloadConfiguration(scope, props.app, props.configuration);
     }
+
+    this.downloadDistributable(scope, props.app, props.distributable);
+    this.addCommands(props.distributable.executionStatement);
   }
 
   addCommands(...commands: string[]): GuUserData {
