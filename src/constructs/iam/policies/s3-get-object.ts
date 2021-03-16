@@ -1,6 +1,7 @@
 import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
 import type { GuStack } from "../../core";
 import { GuDistributionBucketParameter } from "../../core";
+import { AppIdentity } from "../../core/identity";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 import { GuAllowPolicy } from "./base-policy";
 
@@ -18,9 +19,15 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
 }
 
 export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
-  constructor(scope: GuStack, id: string = "GetDistributablePolicy", props?: GuNoStatementsPolicyProps) {
-    const path = [scope.stack, scope.stage, scope.app, "*"].join("/");
-    super(scope, id, { ...props, bucketName: new GuDistributionBucketParameter(scope).valueAsString, paths: [path] });
+  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
+  constructor(scope: GuStack, props: AppIdentity) {
+    const path = [scope.stack, scope.stage, props.app, "*"].join("/");
+    super(scope, AppIdentity.suffixText(props, "GetDistributablePolicy"), {
+      ...props,
+      bucketName: new GuDistributionBucketParameter(scope).valueAsString,
+      paths: [path],
+    });
+    AppIdentity.addTag(props, this);
   }
 }
 

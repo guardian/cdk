@@ -6,6 +6,7 @@ import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2
 import { Stage } from "../../constants";
 import type { GuStack, GuStageDependentValue } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
+import type { AppIdentity } from "../core/identity";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -13,17 +14,18 @@ import { GuHttpsEgressSecurityGroup } from "../ec2";
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
 export interface GuAutoScalingGroupProps
   extends Omit<
-    AutoScalingGroupProps,
-    | "imageId"
-    | "osType"
-    | "machineImage"
-    | "instanceType"
-    | "userData"
-    | "minCapacity"
-    | "maxCapacity"
-    | "desiredCapacity"
-    | "securityGroup"
-  > {
+      AutoScalingGroupProps,
+      | "imageId"
+      | "osType"
+      | "machineImage"
+      | "instanceType"
+      | "userData"
+      | "minCapacity"
+      | "maxCapacity"
+      | "desiredCapacity"
+      | "securityGroup"
+    >,
+    AppIdentity {
   stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
@@ -92,11 +94,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       return {
         osType: OperatingSystemType.LINUX,
         userData,
-        imageId:
-          props.imageId?.valueAsString ??
-          new GuAmiParameter(scope, "AMI", {
-            description: "AMI ID",
-          }).valueAsString,
+        imageId: props.imageId?.valueAsString ?? new GuAmiParameter(scope, props).valueAsString,
       };
     }
 
@@ -104,7 +102,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       ...props,
       ...wireStageDependentProps(scope, props.stageDependentProps),
       machineImage: { getImage: getImage },
-      instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope).valueAsString),
+      instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope, props).valueAsString),
       userData,
 
       // Do not use the default AWS security group which allows egress on any port.

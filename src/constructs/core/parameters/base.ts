@@ -1,6 +1,7 @@
 import type { CfnParameterProps } from "@aws-cdk/core";
 import { CfnParameter } from "@aws-cdk/core";
 import { RegexPattern } from "../../../constants";
+import type { AppIdentity } from "../identity";
 import type { GuStack } from "../stack";
 
 export interface GuParameterProps extends CfnParameterProps {
@@ -8,6 +9,7 @@ export interface GuParameterProps extends CfnParameterProps {
 }
 
 export type GuNoTypeParameterProps = Omit<GuParameterProps, "type">;
+export type GuNoTypeParameterPropsWithAppIdentity = Omit<GuParameterProps, "type"> & AppIdentity;
 
 export class GuParameter extends CfnParameter {
   public readonly id: string;

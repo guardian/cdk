@@ -1,5 +1,6 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../../core";
+import { AppIdentity } from "../../core/identity";
 import type { GuPolicy } from "../policies";
 import {
   GuDescribeEC2Policy,
@@ -10,7 +11,7 @@ import {
 } from "../policies";
 import { GuRole } from "./roles";
 
-interface GuInstanceRoleProps {
+interface GuInstanceRoleProps extends AppIdentity {
   withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out
   additionalPolicies?: GuPolicy[];
 }
@@ -18,8 +19,9 @@ interface GuInstanceRoleProps {
 export class GuInstanceRole extends GuRole {
   private policies: GuPolicy[];
 
-  constructor(scope: GuStack, id: string = "InstanceRole", props?: GuInstanceRoleProps) {
-    super(scope, id, {
+  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
+  constructor(scope: GuStack, props: GuInstanceRoleProps) {
+    super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
       overrideId: true,
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -27,13 +29,15 @@ export class GuInstanceRole extends GuRole {
 
     this.policies = [
       new GuSSMRunCommandPolicy(scope),
-      new GuGetDistributablePolicy(scope),
+      new GuGetDistributablePolicy(scope, props),
       new GuDescribeEC2Policy(scope),
-      new GuParameterStoreReadPolicy(scope),
-      ...(props?.withoutLogShipping ? [] : [new GuLogShippingPolicy(scope)]),
-      ...(props?.additionalPolicies ? props.additionalPolicies : []),
+      new GuParameterStoreReadPolicy(scope, props),
+      ...(props.withoutLogShipping ? [] : [new GuLogShippingPolicy(scope)]),
+      ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 
     this.policies.forEach((p) => p.attachToRole(this));
+
+    AppIdentity.addTag(props, this);
   }
 }
