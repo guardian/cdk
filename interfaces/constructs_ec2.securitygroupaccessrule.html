@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CidrIngress | @guardian/cdk - v0.40.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v0.40.0">
+	<title>SecurityGroupAccessRule | @guardian/cdk - v1.0.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v1.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v0.40.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v1.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,27 +52,35 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v0.40.0</a>
+					<a href="../modules.html">@guardian/cdk - v1.0.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
 				</li>
 				<li>
-					<a href="constructs_ec2.cidringress.html">CidrIngress</a>
+					<a href="constructs_ec2.securitygroupaccessrule.html">SecurityGroupAccessRule</a>
 				</li>
 			</ul>
-			<h1>Interface CidrIngress</h1>
+			<h1>Interface SecurityGroupAccessRule</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A way to describe an ingress or egress rule for a security group.</p>
+					</div>
+					<p>See <a href="../modules/utils_security_groups.html#transformtosecuritygroupaccessrule">transformToSecurityGroupAccessRule</a> for a handy helper function.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CidrIngress</span>
+						<span class="target">SecurityGroupAccessRule</span>
 					</li>
 				</ul>
 			</section>
@@ -83,8 +91,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.cidringress.html#description" class="tsd-kind-icon">description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.cidringress.html#range" class="tsd-kind-icon">range</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.securitygroupaccessrule.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.securitygroupaccessrule.html#port" class="tsd-kind-icon">port</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.securitygroupaccessrule.html#range" class="tsd-kind-icon">range</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,9 +107,31 @@
 					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7005ff/src/constructs/ec2/security-groups.ts#L8">src/constructs/ec2/security-groups.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/constructs/ec2/security-groups.ts#L27">src/constructs/ec2/security-groups.ts:27</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A short explanation for this rule.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="port" class="tsd-anchor"></a>
+					<h3>port</h3>
+					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Port</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/constructs/ec2/security-groups.ts#L22">src/constructs/ec2/security-groups.ts:22</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The port to open in a security group.
+								The default protocol is TCP.
+							Use <code>Port.udp(port)</code> for the UDP protocol.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="range" class="tsd-anchor"></a>
@@ -108,9 +139,15 @@
 					<div class="tsd-signature tsd-kind-icon">range<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPeer</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7005ff/src/constructs/ec2/security-groups.ts#L7">src/constructs/ec2/security-groups.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/constructs/ec2/security-groups.ts#L15">src/constructs/ec2/security-groups.ts:15</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The CIDR address for this rule.
+							Use <code>Peer.anyIpv4()</code> for global access.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -188,29 +225,29 @@
 						<a href="../classes/constructs_ec2.guwazuhaccess.html" class="tsd-kind-icon">Gu<wbr>Wazuh<wbr>Access</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_ec2.cidregress.html" class="tsd-kind-icon">Cidr<wbr>Egress</a>
-					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_ec2.cidringress.html" class="tsd-kind-icon">Cidr<wbr>Ingress</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_ec2.cidringress.html#description" class="tsd-kind-icon">description</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_ec2.cidringress.html#range" class="tsd-kind-icon">range</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_ec2.gusubnetprops.html" class="tsd-kind-icon">Gu<wbr>Subnet<wbr>Props</a>
 					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_ec2.securitygroupaccessrule.html" class="tsd-kind-icon">Security<wbr>Group<wbr>Access<wbr>Rule</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_ec2.securitygroupaccessrule.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_ec2.securitygroupaccessrule.html#port" class="tsd-kind-icon">port</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_ec2.securitygroupaccessrule.html#range" class="tsd-kind-icon">range</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
