@@ -93,8 +93,8 @@ export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
   constructor(scope: GuStack, id: string, props: SecurityGroupProps) {
     super(scope, id, {
       ...props,
-      ingresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allows internet access on 443" }],
-      description: "Allows internet access on 443",
+      ingresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allow all inbound traffic via HTTPS" }],
+      description: "Allow all inbound traffic via HTTPS",
     });
   }
 }
@@ -104,8 +104,8 @@ export class GuHttpsEgressSecurityGroup extends GuSecurityGroup {
     super(scope, id, {
       vpc: props.vpc,
       allowAllOutbound: false,
-      description: "Allow all outbound traffic on port 443",
-      egresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allow all outbound traffic on port 443" }],
+      description: "Allow all outbound HTTPS traffic",
+      egresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allow all outbound HTTPS traffic" }],
     });
   }
 
