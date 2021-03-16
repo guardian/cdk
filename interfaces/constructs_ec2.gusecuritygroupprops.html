@@ -88,13 +88,13 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#allowalloutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#allowalloutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#description" class="tsd-kind-icon">description</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gusecuritygroupprops.html#egresses" class="tsd-kind-icon">egresses</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gusecuritygroupprops.html#ingresses" class="tsd-kind-icon">ingresses</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gusecuritygroupprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#securitygroupname" class="tsd-kind-icon">security<wbr>Group<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#vpc" class="tsd-kind-icon">vpc</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#securitygroupname" class="tsd-kind-icon">security<wbr>Group<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#vpc" class="tsd-kind-icon">vpc</a></li>
 							</ul>
 						</section>
 					</div>
@@ -102,11 +102,12 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="allowalloutbound" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> allow<wbr>All<wbr>Outbound</h3>
 					<div class="tsd-signature tsd-kind-icon">allow<wbr>All<wbr>Outbound<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from SecurityGroupProps.allowAllOutbound</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:140</li>
 						</ul>
@@ -128,11 +129,12 @@
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="description" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> description</h3>
 					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from SecurityGroupProps.description</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:123</li>
 						</ul>
@@ -157,7 +159,7 @@
 					<div class="tsd-signature tsd-kind-icon">egresses<span class="tsd-signature-symbol">:</span> <a href="constructs_ec2.cidregress.html" class="tsd-signature-type" data-tsd-kind="Interface">CidrEgress</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/3af82ee/src/constructs/ec2/security-groups.ts#L20">src/constructs/ec2/security-groups.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7005ff/src/constructs/ec2/security-groups.ts#L20">src/constructs/ec2/security-groups.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -167,7 +169,7 @@
 					<div class="tsd-signature tsd-kind-icon">ingresses<span class="tsd-signature-symbol">:</span> <a href="constructs_ec2.cidringress.html" class="tsd-signature-type" data-tsd-kind="Interface">CidrIngress</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/3af82ee/src/constructs/ec2/security-groups.ts#L19">src/constructs/ec2/security-groups.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7005ff/src/constructs/ec2/security-groups.ts#L19">src/constructs/ec2/security-groups.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -177,15 +179,16 @@
 					<div class="tsd-signature tsd-kind-icon">override<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/3af82ee/src/constructs/ec2/security-groups.ts#L18">src/constructs/ec2/security-groups.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7005ff/src/constructs/ec2/security-groups.ts#L18">src/constructs/ec2/security-groups.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="securitygroupname" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> security<wbr>Group<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">security<wbr>Group<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from SecurityGroupProps.securityGroupName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:116</li>
 						</ul>
@@ -209,11 +212,12 @@
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="vpc" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> vpc</h3>
 					<div class="tsd-signature tsd-kind-icon">vpc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IVpc</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from SecurityGroupProps.vpc</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:129</li>
 						</ul>
@@ -315,10 +319,10 @@
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroupprops.html#allowalloutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroupprops.html#description" class="tsd-kind-icon">description</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -330,10 +334,10 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="constructs_ec2.gusecuritygroupprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroupprops.html#securitygroupname" class="tsd-kind-icon">security<wbr>Group<wbr>Name</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroupprops.html#vpc" class="tsd-kind-icon">vpc</a>
 							</li>
 						</ul>
