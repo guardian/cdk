@@ -30,15 +30,15 @@ describe("AppIdentity.suffixText", () => {
   });
 });
 
-describe("AppIdentity.addTag", () => {
+describe("AppIdentity.taggedConstruct", () => {
   it("should apply a tag to a resource", () => {
-    // not using any Gu constructs to purely test the impact of AppIdentity.addTag
+    // not using any Gu constructs to purely test the impact of AppIdentity.taggedConstruct
     const stack = new Stack();
 
     const snsTopic = new Topic(stack, "myTopic");
     const appIdentity: AppIdentity = { app: "testing" };
 
-    AppIdentity.addTag(appIdentity, snsTopic);
+    AppIdentity.taggedConstruct(appIdentity, snsTopic);
 
     expect(stack).toHaveResource("AWS::SNS::Topic", {
       Tags: alphabeticalTags([

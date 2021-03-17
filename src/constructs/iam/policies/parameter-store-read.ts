@@ -19,6 +19,6 @@ export class GuParameterStoreReadPolicy extends GuPolicy {
       ],
     });
 
-    AppIdentity.addTag(props, this);
+    AppIdentity.taggedConstruct(props, this);
   }
 }

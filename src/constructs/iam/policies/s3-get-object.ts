@@ -27,7 +27,7 @@ export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
       bucketName: new GuDistributionBucketParameter(scope).valueAsString,
       paths: [path],
     });
-    AppIdentity.addTag(props, this);
+    AppIdentity.taggedConstruct(props, this);
   }
 }
 

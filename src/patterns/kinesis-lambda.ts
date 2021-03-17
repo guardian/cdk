@@ -116,7 +116,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
           streamId,
           `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
         )
-      : AppIdentity.addTag(props, new GuKinesisStream(scope, streamId, kinesisProps));
+      : AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 

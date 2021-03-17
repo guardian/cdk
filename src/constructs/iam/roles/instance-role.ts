@@ -38,6 +38,6 @@ export class GuInstanceRole extends GuRole {
 
     this.policies.forEach((p) => p.attachToRole(this));
 
-    AppIdentity.addTag(props, this);
+    AppIdentity.taggedConstruct(props, this);
   }
 }

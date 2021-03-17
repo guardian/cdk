@@ -39,7 +39,7 @@ export class GuDatabaseInstance extends DatabaseInstance {
       (this.node.defaultChild as CfnDBInstance).overrideLogicalId(id);
     }
 
-    parameterGroup && AppIdentity.addTag(props, parameterGroup);
-    AppIdentity.addTag(props, this);
+    parameterGroup && AppIdentity.taggedConstruct(props, parameterGroup);
+    AppIdentity.taggedConstruct(props, this);
   }
 }

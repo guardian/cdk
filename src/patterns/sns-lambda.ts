@@ -93,7 +93,7 @@ export class GuSnsLambda extends GuLambdaFunction {
           topicId,
           `arn:aws:sns:${scope.region}:${scope.account}:${props.existingSnsTopic.externalTopicName}`
         )
-      : AppIdentity.addTag(
+      : AppIdentity.taggedConstruct(
           props,
           new GuSnsTopic(scope, topicId, {
             overrideId: !!props.existingSnsTopic?.logicalIdFromCloudFormation,

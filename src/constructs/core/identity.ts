@@ -17,7 +17,7 @@ export const AppIdentity = {
     const titleCaseApp = appIdentity.app.charAt(0).toUpperCase() + appIdentity.app.slice(1);
     return `${text}${titleCaseApp}`;
   },
-  addTag<T extends IConstruct>(appIdentity: AppIdentity, construct: T): T {
+  taggedConstruct<T extends IConstruct>(appIdentity: AppIdentity, construct: T): T {
     Tags.of(construct).add("App", appIdentity.app);
     return construct;
   },

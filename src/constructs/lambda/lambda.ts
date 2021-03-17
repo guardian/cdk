@@ -76,6 +76,6 @@ export class GuLambdaFunction extends Function {
 
     bucket.grantRead(this);
 
-    AppIdentity.addTag(props, this);
+    AppIdentity.taggedConstruct(props, this);
   }
 }
