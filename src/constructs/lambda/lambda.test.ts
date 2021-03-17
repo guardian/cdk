@@ -14,6 +14,7 @@ describe("The GuLambdaFunction class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::Lambda::Function", {
@@ -31,6 +32,7 @@ describe("The GuLambdaFunction class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
 
     expect(stack).not.toHaveResource("AWS::Events::Rule");
@@ -53,6 +55,7 @@ describe("The GuLambdaFunction class", () => {
           description: "run every hour (cron)",
         },
       ],
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::Events::Rule", {
@@ -82,6 +85,7 @@ describe("The GuLambdaFunction class", () => {
           description: "this is a test2",
         },
       ],
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::ApiGateway::RestApi", {
@@ -107,6 +111,7 @@ describe("The GuLambdaFunction class", () => {
         toleratedErrorPercentage: 5,
         snsTopicName: "test-topic",
       },
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); // The shape of this alarm is tested via lambda-alarms.test.ts
@@ -119,6 +124,7 @@ describe("The GuLambdaFunction class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
@@ -168,6 +174,7 @@ describe("The GuLambdaFunction class", () => {
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       memorySize: 2048,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::Lambda::Function", {
@@ -182,6 +189,7 @@ describe("The GuLambdaFunction class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::Lambda::Function", {
@@ -197,6 +205,7 @@ describe("The GuLambdaFunction class", () => {
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       timeout: Duration.seconds(60),
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::Lambda::Function", {
@@ -211,6 +220,7 @@ describe("The GuLambdaFunction class", () => {
       code: { bucket: "bucket1", key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::Lambda::Function", {

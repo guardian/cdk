@@ -39,7 +39,7 @@ Object {
         "PolicyName": "describe-ec2-policy",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -60,13 +60,13 @@ Object {
         "PolicyName": "GetConfigPolicy6F934A1C",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyC6B4A871": Object {
+    "GetDistributablePolicyTestingF9D43A3E": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -93,16 +93,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablePolicyC6B4A871",
+        "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuInstanceRole": Object {
+    "InstanceRoleTesting": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -150,7 +150,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreRead9D2F4FAB": Object {
+    "ParameterStoreReadTesting0F3B634A": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -184,7 +184,7 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -220,7 +220,7 @@ Object {
         "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -274,13 +274,13 @@ Object {
         "PolicyName": "describe-ec2-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyC6B4A871": Object {
+    "GetDistributablePolicyTestingF9D43A3E": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -307,10 +307,10 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablePolicyC6B4A871",
+        "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -352,13 +352,13 @@ Object {
         "PolicyName": "GuLogShippingPolicy981BFE5A",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRole": Object {
+    "InstanceRoleTesting": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -406,7 +406,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreRead9D2F4FAB": Object {
+    "ParameterStoreReadTesting0F3B634A": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -440,7 +440,7 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -476,7 +476,7 @@ Object {
         "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -525,13 +525,13 @@ Object {
         "PolicyName": "describe-ec2-policy",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyC6B4A871": Object {
+    "GetDistributablePolicyTestingF9D43A3E": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -558,16 +558,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablePolicyC6B4A871",
+        "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuInstanceRole": Object {
+    "InstanceRoleTesting": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -615,7 +615,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreRead9D2F4FAB": Object {
+    "ParameterStoreReadTesting0F3B634A": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -649,7 +649,7 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },
@@ -685,7 +685,7 @@ Object {
         "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
-            "Ref": "GuInstanceRole",
+            "Ref": "InstanceRoleTesting",
           },
         ],
       },

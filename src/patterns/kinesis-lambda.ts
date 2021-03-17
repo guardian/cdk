@@ -5,6 +5,7 @@ import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources"
 import { KinesisEventSource } from "@aws-cdk/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
+import { AppIdentity } from "../constructs/core/identity";
 import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuFunctionProps } from "../constructs/lambda";
@@ -108,13 +109,14 @@ export class GuKinesisLambda extends GuLambdaFunction {
       ...props.kinesisStreamProps,
     };
     const streamId = props.existingKinesisStream?.logicalIdFromCloudFormation ?? "KinesisStream";
+
     const kinesisStream = props.existingKinesisStream?.externalKinesisStreamName
       ? Stream.fromStreamArn(
           scope,
           streamId,
           `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
         )
-      : new GuKinesisStream(scope, streamId, kinesisProps);
+      : AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 

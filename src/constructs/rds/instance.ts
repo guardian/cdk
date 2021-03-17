@@ -3,8 +3,9 @@ import type { CfnDBInstance, DatabaseInstanceProps, IParameterGroup } from "@aws
 import { DatabaseInstance, ParameterGroup } from "@aws-cdk/aws-rds";
 import { Fn } from "@aws-cdk/core";
 import type { GuStack } from "../core";
+import { AppIdentity } from "../core/identity";
 
-export interface GuDatabaseInstanceProps extends Omit<DatabaseInstanceProps, "instanceType"> {
+export interface GuDatabaseInstanceProps extends Omit<DatabaseInstanceProps, "instanceType">, AppIdentity {
   overrideId?: boolean;
   instanceType: string;
   parameters?: Record<string, string>;
@@ -37,5 +38,8 @@ export class GuDatabaseInstance extends DatabaseInstance {
     if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false)) {
       (this.node.defaultChild as CfnDBInstance).overrideLogicalId(id);
     }
+
+    parameterGroup && AppIdentity.taggedConstruct(props, parameterGroup);
+    AppIdentity.taggedConstruct(props, this);
   }
 }

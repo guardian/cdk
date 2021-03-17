@@ -16,6 +16,7 @@ describe("The GuSnsLambda pattern", () => {
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
+      app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -31,6 +32,7 @@ describe("The GuSnsLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
       existingSnsTopic: { logicalIdFromCloudFormation: "in-use-sns-topic" },
+      app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -47,6 +49,7 @@ describe("The GuSnsLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
       existingSnsTopic: { externalTopicName: "sns-topic-from-another-stack" },
+      app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::SNS::Subscription");
@@ -64,6 +67,7 @@ describe("The GuSnsLambda pattern", () => {
         toleratedErrorPercentage: 99,
         snsTopicName: "alerts-topic",
       },
+      app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");

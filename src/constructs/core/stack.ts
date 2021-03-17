@@ -2,15 +2,13 @@ import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
+import type { StackStageIdentity } from "./identity";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
 import type { GuParameter } from "./parameters";
 import { GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
-  // This limits GuStack to supporting a single app.
-  // In the future, support for stacks with multiple apps may be required
-  app: string;
   stack: string;
   migratedFromCloudFormation?: boolean;
 }
@@ -42,10 +40,9 @@ export interface GuStackProps extends StackProps {
  * }
  * ```
  */
-export class GuStack extends Stack {
+export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
-  private readonly _app: string;
 
   private _mappings?: GuStageMapping;
   private params: Map<string, GuParameter>;
@@ -58,10 +55,6 @@ export class GuStack extends Stack {
 
   get stack(): string {
     return this._stack;
-  }
-
-  get app(): string {
-    return this._app;
   }
 
   // Use lazy initialisation for GuStageMapping so that Mappings block is only created when necessary
@@ -116,12 +109,10 @@ export class GuStack extends Stack {
 
     this._stack = props.stack;
     this._stage = new GuStageParameter(this).valueAsString;
-    this._app = props.app;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);
 
     this.addTag("Stack", this.stack);
     this.addTag("Stage", this.stage);
-    this.addTag("App", props.app);
   }
 }
