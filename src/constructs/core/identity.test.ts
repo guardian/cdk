@@ -1,3 +1,7 @@
+import "@aws-cdk/assert/jest";
+import { Topic } from "@aws-cdk/aws-sns";
+import { Stack } from "@aws-cdk/core";
+import { alphabeticalTags } from "../../../test/utils";
 import { AppIdentity } from "./identity";
 
 describe("AppIdentity.suffixText", () => {
@@ -23,5 +27,26 @@ describe("AppIdentity.suffixText", () => {
     const actual = AppIdentity.suffixText({ app: "my-app" }, "InstanceType");
     const expected = "InstanceTypeMy-app";
     expect(actual).toEqual(expected);
+  });
+});
+
+describe("AppIdentity.addTag", () => {
+  it("should apply a tag to a resource", () => {
+    // not using any Gu constructs to purely test the impact of AppIdentity.addTag
+    const stack = new Stack();
+
+    const snsTopic = new Topic(stack, "myTopic");
+    const appIdentity: AppIdentity = { app: "testing" };
+
+    AppIdentity.addTag(appIdentity, snsTopic);
+
+    expect(stack).toHaveResource("AWS::SNS::Topic", {
+      Tags: alphabeticalTags([
+        {
+          Key: "App",
+          Value: "testing",
+        },
+      ]),
+    });
   });
 });
