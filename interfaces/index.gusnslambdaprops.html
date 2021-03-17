@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuSnsLambdaProps | @guardian/cdk - v1.0.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v1.0.0">
+	<title>GuSnsLambdaProps | @guardian/cdk - v2.0.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v2.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v1.0.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v2.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v1.0.0</a>
+					<a href="../modules.html">@guardian/cdk - v2.0.0</a>
 				</li>
 				<li>
 					<a href="../modules/index.html">index</a>
@@ -114,6 +114,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#allowalloutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#allowpublicsubnet" class="tsd-kind-icon">allow<wbr>Public<wbr>Subnet</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.gusnslambdaprops.html#code" class="tsd-kind-icon">code</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#codesigningconfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#currentversionoptions" class="tsd-kind-icon">current<wbr>Version<wbr>Options</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#deadletterqueueenabled" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>Enabled</a></li>
@@ -161,7 +162,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.allowAllOutbound</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:181</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:182</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -187,7 +188,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.allowPublicSubnet</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:300</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:301</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -215,7 +216,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.code</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/constructs/lambda/lambda.ts#L19">src/constructs/lambda/lambda.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b5539e8/src/constructs/lambda/lambda.ts#L19">src/constructs/lambda/lambda.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -231,13 +232,39 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="codesigningconfig" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> code<wbr>Signing<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">code<wbr>Signing<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ICodeSigningConfig</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.codeSigningConfig</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:315</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Code signing config associated with this function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>Not Sign the Code</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="currentversionoptions" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> current<wbr>Version<wbr>Options</h3>
 					<div class="tsd-signature tsd-kind-icon">current<wbr>Version<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">VersionOptions</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.currentVersionOptions</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:283</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:284</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -263,7 +290,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.deadLetterQueue</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:198</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:199</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -289,7 +316,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.deadLetterQueueEnabled</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:191</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:192</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -317,7 +344,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.description</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:58</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:59</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -343,7 +370,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.environment</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:79</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:80</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -380,7 +407,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.environmentEncryption</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:307</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:308</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -406,7 +433,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.events</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:249</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:250</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -432,7 +459,7 @@
 					<div class="tsd-signature tsd-kind-icon">existing<wbr>Sns<wbr>Topic<span class="tsd-signature-symbol">:</span> <a href="index.existingsnstopic.html" class="tsd-signature-type" data-tsd-kind="Interface">ExistingSnsTopic</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/patterns/sns-lambda.ts#L70">src/patterns/sns-lambda.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b5539e8/src/patterns/sns-lambda.ts#L70">src/patterns/sns-lambda.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -443,7 +470,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.filesystem</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:290</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:291</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -469,7 +496,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.functionName</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:89</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:90</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -496,7 +523,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.handler</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:349</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:357</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -524,7 +551,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.initialPolicy</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:109</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:110</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -551,7 +578,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.layers</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:232</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:233</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -560,7 +587,7 @@
 						</div>
 						<p>You can configure your Lambda function to pull in
 							additional code during initialization in the form of layers. Layers are packages of libraries or other dependencies
-						that can be used by mulitple functions.</p>
+						that can be used by multiple functions.</p>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><ul>
@@ -580,7 +607,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.logRetention</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:260</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:261</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -607,7 +634,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.logRetentionRetryOptions</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:276</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:277</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -634,7 +661,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.logRetentionRole</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:267</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:268</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -686,7 +713,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.memorySize</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:100</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:101</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -712,7 +739,7 @@
 					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.nomonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuLambdaErrorPercentageMonitoringProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/patterns/sns-lambda.ts#L69">src/patterns/sns-lambda.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b5539e8/src/patterns/sns-lambda.ts#L69">src/patterns/sns-lambda.ts:69</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -775,7 +802,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.profiling</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:213</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:214</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -804,7 +831,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.profilingGroup</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:221</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:222</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -833,7 +860,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.reservedConcurrentExecutions</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:240</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:241</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -888,7 +915,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.role</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:127</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:128</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -922,7 +949,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.runtime</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:323</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:331</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -946,7 +973,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.securityGroup</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:160</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:161</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -979,7 +1006,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.securityGroups</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:171</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:172</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1008,7 +1035,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.timeout</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:68</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:69</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1034,7 +1061,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.tracing</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:205</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:206</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1058,7 +1085,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.vpc</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:136</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:137</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1085,7 +1112,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.vpcSubnets</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:146</li>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:147</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1197,6 +1224,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="index.gusnslambdaprops.html#code" class="tsd-kind-icon">code</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.gusnslambdaprops.html#codesigningconfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="index.gusnslambdaprops.html#currentversionoptions" class="tsd-kind-icon">current<wbr>Version<wbr>Options</a>

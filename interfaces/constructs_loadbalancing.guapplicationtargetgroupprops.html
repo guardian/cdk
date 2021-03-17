@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuApplicationTargetGroupProps | @guardian/cdk - v1.0.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v1.0.0">
+	<title>GuApplicationTargetGroupProps | @guardian/cdk - v2.0.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v2.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v1.0.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v2.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v1.0.0</a>
+					<a href="../modules.html">@guardian/cdk - v2.0.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
@@ -93,8 +93,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#port" class="tsd-kind-icon">port</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#protocol" class="tsd-kind-icon">protocol</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#protocolversion" class="tsd-kind-icon">protocol<wbr>Version</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#slowstart" class="tsd-kind-icon">slow<wbr>Start</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#stickinesscookieduration" class="tsd-kind-icon">stickiness<wbr>Cookie<wbr>Duration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#stickinesscookiename" class="tsd-kind-icon">stickiness<wbr>Cookie<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#targetgroupname" class="tsd-kind-icon">target<wbr>Group<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#targettype" class="tsd-kind-icon">target<wbr>Type</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#targets" class="tsd-kind-icon">targets</a></li>
@@ -163,7 +165,7 @@
 					<div class="tsd-signature tsd-kind-icon">override<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/57442a8/src/constructs/loadbalancing/elb.ts#L40">src/constructs/loadbalancing/elb.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b5539e8/src/constructs/loadbalancing/elb.ts#L40">src/constructs/loadbalancing/elb.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -174,7 +176,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ApplicationTargetGroupProps.port</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:28</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:35</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -220,13 +222,37 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="protocolversion" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> protocol<wbr>Version</h3>
+					<div class="tsd-signature tsd-kind-icon">protocol<wbr>Version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApplicationProtocolVersion</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from ApplicationTargetGroupProps.protocolVersion</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:28</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The protocol version to use.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>ApplicationProtocolVersion.HTTP1</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="slowstart" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> slow<wbr>Start</h3>
 					<div class="tsd-signature tsd-kind-icon">slow<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Duration</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from ApplicationTargetGroupProps.slowStart</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:37</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:44</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -251,7 +277,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ApplicationTargetGroupProps.stickinessCookieDuration</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:49</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:56</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -264,6 +290,39 @@
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p>Duration.days(1)</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="stickinesscookiename" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> stickiness<wbr>Cookie<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">stickiness<wbr>Cookie<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from ApplicationTargetGroupProps.stickinessCookieName</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:70</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The name of an application-based stickiness cookie.</p>
+						</div>
+						<p>Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP,
+						and AWSALBTG; they&#39;re reserved for use by the load balancer.</p>
+						<p>Note: <code>stickinessCookieName</code> parameter depends on the presence of <code>stickinessCookieDuration</code> parameter.
+						If <code>stickinessCookieDuration</code> is not set, <code>stickinessCookieName</code> will be omitted.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>If <code>stickinessCookieDuration</code> is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/sticky-sessions.html">https://docs.aws.amazon.com/elasticloadbalancing/latest/application/sticky-sessions.html</a></p>
 							</dd>
 							<dt>stability</dt>
 							<dd><p>stable</p>
@@ -336,7 +395,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ApplicationTargetGroupProps.targets</p>
 						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:60</li>
+							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-target-group.d.ts:81</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -484,10 +543,16 @@
 								<a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#protocol" class="tsd-kind-icon">protocol</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#protocolversion" class="tsd-kind-icon">protocol<wbr>Version</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#slowstart" class="tsd-kind-icon">slow<wbr>Start</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#stickinesscookieduration" class="tsd-kind-icon">stickiness<wbr>Cookie<wbr>Duration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#stickinesscookiename" class="tsd-kind-icon">stickiness<wbr>Cookie<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_loadbalancing.guapplicationtargetgroupprops.html#targetgroupname" class="tsd-kind-icon">target<wbr>Group<wbr>Name</a>
