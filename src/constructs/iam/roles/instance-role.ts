@@ -28,7 +28,7 @@ export class GuInstanceRole extends GuRole {
     });
 
     this.policies = [
-      new GuSSMRunCommandPolicy(scope),
+      GuSSMRunCommandPolicy.getInstance(scope),
       new GuGetDistributablePolicy(scope, props),
       new GuDescribeEC2Policy(scope),
       new GuParameterStoreReadPolicy(scope, props),
