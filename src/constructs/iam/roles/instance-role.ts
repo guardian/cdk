@@ -17,8 +17,6 @@ interface GuInstanceRoleProps extends AppIdentity {
 }
 
 export class GuInstanceRole extends GuRole {
-  private policies: GuPolicy[];
-
   // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: GuInstanceRoleProps) {
     super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
@@ -27,16 +25,20 @@ export class GuInstanceRole extends GuRole {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    this.policies = [
+    const sharedPolicies = [
       GuSSMRunCommandPolicy.getInstance(scope),
-      new GuGetDistributablePolicy(scope, props),
       GuDescribeEC2Policy.getInstance(scope),
-      new GuParameterStoreReadPolicy(scope, props),
       ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope)]),
+    ];
+
+    const policies = [
+      ...sharedPolicies,
+      new GuGetDistributablePolicy(scope, props),
+      new GuParameterStoreReadPolicy(scope, props),
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 
-    this.policies.forEach((p) => p.attachToRole(this));
+    policies.forEach((p) => p.attachToRole(this));
 
     AppIdentity.taggedConstruct(props, this);
   }
