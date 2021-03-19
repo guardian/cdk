@@ -24,7 +24,7 @@ export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
     const path = [scope.stack, scope.stage, props.app, "*"].join("/");
     super(scope, AppIdentity.suffixText(props, "GetDistributablePolicy"), {
       ...props,
-      bucketName: new GuDistributionBucketParameter(scope).valueAsString,
+      bucketName: GuDistributionBucketParameter.getInstance(scope).valueAsString,
       paths: [path],
     });
     AppIdentity.taggedConstruct(props, this);
