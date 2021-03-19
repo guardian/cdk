@@ -4,10 +4,10 @@ import type { Stack } from "@aws-cdk/core";
 import { Tags } from "@aws-cdk/core";
 
 // IAM Policies need to be attached to a role, group or user to be created in a stack
-export const attachPolicyToTestRole = (stack: Stack, policy: Policy, app: string = "testing"): void => {
-  const role = new Role(stack, "TestRole", {
+export const attachPolicyToTestRole = (stack: Stack, policy: Policy, id: string = "TestRole"): void => {
+  const role = new Role(stack, id, {
     assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
   });
-  Tags.of(role).add("App", app);
+  Tags.of(role).add("App", "testing");
   policy.attachToRole(role);
 };

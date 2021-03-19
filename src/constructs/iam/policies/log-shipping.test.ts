@@ -4,11 +4,11 @@ import type { SynthedStack } from "../../../../test/utils";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
 import { GuLogShippingPolicy } from "./log-shipping";
 
-describe("The GuLogShippingPolicy class", () => {
+describe("The GuLogShippingPolicy singleton class", () => {
   it("creates a policy restricted to a kinesis stream defined in a parameter", () => {
     const stack = simpleGuStackForTesting();
 
-    const logShippingPolicy = new GuLogShippingPolicy(stack);
+    const logShippingPolicy = GuLogShippingPolicy.getInstance(stack);
     attachPolicyToTestRole(stack, logShippingPolicy);
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -49,5 +49,34 @@ describe("The GuLogShippingPolicy class", () => {
         ],
       },
     });
+  });
+
+  it("will only be defined once in a stack, even when attached to multiple roles", () => {
+    const stack = simpleGuStackForTesting();
+
+    const logShippingPolicy = GuLogShippingPolicy.getInstance(stack);
+    attachPolicyToTestRole(stack, logShippingPolicy, "MyFirstRole");
+    attachPolicyToTestRole(stack, logShippingPolicy, "MySecondRole");
+
+    expect(stack).toCountResources("AWS::IAM::Policy", 1);
+    expect(stack).toCountResources("AWS::IAM::Role", 2);
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+
+  it("works across multiple stacks", () => {
+    const stack1 = simpleGuStackForTesting();
+    const stack2 = simpleGuStackForTesting();
+
+    const logShippingPolicy1 = GuLogShippingPolicy.getInstance(stack1);
+    const logShippingPolicy2 = GuLogShippingPolicy.getInstance(stack2);
+
+    attachPolicyToTestRole(stack1, logShippingPolicy1);
+    attachPolicyToTestRole(stack2, logShippingPolicy2);
+
+    expect(stack1).toCountResources("AWS::IAM::Policy", 1);
+    expect(stack1).toCountResources("AWS::IAM::Role", 1);
+
+    expect(stack2).toCountResources("AWS::IAM::Policy", 1);
+    expect(stack2).toCountResources("AWS::IAM::Role", 1);
   });
 });
