@@ -1,25 +1,31 @@
-import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../../core";
-import { GuStringParameter } from "../../core";
-import type { GuPolicyProps } from "./base-policy";
-import { GuPolicy } from "./base-policy";
+import { GuLoggingStreamNameParameter } from "../../core/parameters/log-shipping";
+import { GuAllowPolicy } from "./base-policy";
 
-export class GuLogShippingPolicy extends GuPolicy {
-  constructor(scope: GuStack, id: string = "GuLogShippingPolicy", props?: GuPolicyProps) {
-    super(scope, id, { ...props });
+export class GuLogShippingPolicy extends GuAllowPolicy {
+  private static instance: GuLogShippingPolicy | undefined;
 
-    const loggingStreamNameParam = new GuStringParameter(scope, "LoggingStreamName", {
-      description: "SSM parameter containing the Name (not ARN) on the kinesis stream",
-      default: "/account/services/logging.stream.name",
-      fromSSM: true,
+  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
+  private constructor(scope: GuStack) {
+    super(scope, "GuLogShippingPolicy", {
+      actions: ["kinesis:Describe*", "kinesis:Put*"],
+      resources: [
+        `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${
+          GuLoggingStreamNameParameter.getInstance(scope).valueAsString
+        }`,
+      ],
     });
+  }
 
-    this.addStatements(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["kinesis:Describe*", "kinesis:Put*"],
-        resources: [`arn:aws:kinesis:${scope.region}:${scope.account}:stream/${loggingStreamNameParam.valueAsString}`],
-      })
-    );
+  public static getInstance(stack: GuStack): GuLogShippingPolicy {
+    // Resources can only live in the same App so return a new `GuSSMRunCommandPolicy` where necessary.
+    // See https://github.com/aws/aws-cdk/blob/0ea4b19afd639541e5f1d7c1783032ee480c307e/packages/%40aws-cdk/core/lib/private/refs.ts#L47-L50
+    const isSameStack = this.instance?.node.root === stack.node.root;
+
+    if (!this.instance || !isSameStack) {
+      this.instance = new GuLogShippingPolicy(stack);
+    }
+
+    return this.instance;
   }
 }

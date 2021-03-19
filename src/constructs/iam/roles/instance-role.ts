@@ -32,7 +32,7 @@ export class GuInstanceRole extends GuRole {
       new GuGetDistributablePolicy(scope, props),
       new GuDescribeEC2Policy(scope),
       new GuParameterStoreReadPolicy(scope, props),
-      ...(props.withoutLogShipping ? [] : [new GuLogShippingPolicy(scope)]),
+      ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope)]),
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 
