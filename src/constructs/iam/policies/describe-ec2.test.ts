@@ -3,15 +3,15 @@ import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../tes
 import { GuDescribeEC2Policy } from "./describe-ec2";
 
 describe("DescribeEC2Policy", () => {
-  it("can accept a custom policy name", () => {
+  it("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
 
-    const policy = new GuDescribeEC2Policy(stack, "DescribeEC2Policy", { policyName: "my-awesome-policy" });
+    const policy = GuDescribeEC2Policy.getInstance(stack);
 
     attachPolicyToTestRole(stack, policy);
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
-      PolicyName: "my-awesome-policy",
+      PolicyName: "describe-ec2-policy",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
