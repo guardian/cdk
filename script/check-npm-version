@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+NPM_VERSION=$(npm -v)
+
+if [[ ${NPM_VERSION:0:1} != "6" ]]; then
+  echo "This project requires NPM v6. You're running NPM ${NPM_VERSION}."
+  exit 1
+fi
