@@ -2,4 +2,11 @@
 
 set -e
 
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+preamble() {
+  "${DIR}"/check-npm-version
+}
+
+preamble
 npm install
