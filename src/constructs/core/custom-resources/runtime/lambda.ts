@@ -1,20 +1,20 @@
 import { request } from "https";
 import { parse } from "url";
-// eslint-disable-next-line import/no-unresolved -- this should come from @types/aws-lambda, but doesn't for some reason
+// eslint-disable-next-line import/no-unresolved -- this comes from @types/aws-lambda, but eslint can't seem to read it properly
 import type { CloudFormationCustomResourceEvent, Context } from "aws-lambda";
-import AWS from "aws-sdk";
+import SSM from "aws-sdk/clients/ssm";
 import type { CustomResourceGetParameterProps } from "../interfaces";
 
-// Copied over from
+/* eslint-disable -- This function is copied straight from AWS */
 // https://github.com/aws/aws-cdk/blob/95438b56bfdc90e94f969f6998e5b5b680cbd7a8/packages/%40aws-cdk/custom-resources/lib/aws-custom-resource/runtime/index.ts#L16-L29
 export function flatten(object: Record<string, unknown>): Record<string, string> {
   return Object.assign(
     {},
-    ...(function _flatten(child: any, path: string[] = []): any {
+    ...(function _flatten(child: Record<string, any>, path: string[] = []): any {
       return [].concat(
         ...Object.keys(child).map((key) => {
-          const childKey = Buffer.isBuffer(child[key]) ? child[key].toString("utf8") : child[key];
-          return typeof childKey === "object" && childKey !== null
+          const childKey = Buffer.isBuffer(child[key]) ? child[key].toString() : child[key];
+          return typeof childKey === "object"
             ? _flatten(childKey, path.concat([key]))
             : { [path.concat([key]).join(".")]: childKey };
         })
@@ -22,6 +22,7 @@ export function flatten(object: Record<string, unknown>): Record<string, string>
     })(object)
   ) as Record<string, string>;
 }
+/* eslint-enable */
 
 export async function handler(event: CloudFormationCustomResourceEvent, context: Context): Promise<void> {
   try {
@@ -47,7 +48,7 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
 
     if (getParamsProps) {
       const request = decodeCall(getParamsProps);
-      const ssmClient = new AWS.SSM();
+      const ssmClient = new SSM();
       const response = await ssmClient.getParameter(request.apiRequest).promise();
       console.log("Response:", JSON.stringify(response, null, 4));
       data = { ...flatten((response as unknown) as Record<string, string>) };
@@ -57,7 +58,8 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
     await respond("SUCCESS", "OK", physicalResourceId, data);
   } catch (e) {
     console.log(e);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- e.message exists, not sure how to type it explicitly
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- e.message is valid, see docs above
     await respond("FAILED", e.message || "Internal Error", context.logStreamName, {});
   }
 
