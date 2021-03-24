@@ -36,4 +36,20 @@ describe("The GuInstanceRole construct", () => {
     expect(stack).toCountResources("AWS::IAM::Role", 1);
     expect(stack).toCountResources("AWS::IAM::Policy", 5);
   });
+
+  it("should be possible to create multiple instance roles in a single stack", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuInstanceRole(stack, {
+      app: "my-first-app",
+    });
+
+    new GuInstanceRole(stack, {
+      app: "my-second-app",
+    });
+
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(stack).toCountResources("AWS::IAM::Role", 2);
+    expect(stack).toCountResources("AWS::IAM::Policy", 7); // 3 shared policies + 2 policies per role (3 + (2*2))
+  });
 });

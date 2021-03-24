@@ -1,12 +1,13 @@
-import type { PolicyProps } from "@aws-cdk/aws-iam";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../../core";
-import type { GuPolicyProps } from "./base-policy";
 import { GuPolicy } from "./base-policy";
 
 export class GuDescribeEC2Policy extends GuPolicy {
-  private static getDefaultProps(): PolicyProps {
-    return {
+  private static instance: GuPolicy | undefined;
+
+  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
+  private constructor(scope: GuStack) {
+    super(scope, "DescribeEC2Policy", {
       policyName: "describe-ec2-policy",
       statements: [
         new PolicyStatement({
@@ -20,10 +21,18 @@ export class GuDescribeEC2Policy extends GuPolicy {
           resources: ["*"],
         }),
       ],
-    };
+    });
   }
 
-  constructor(scope: GuStack, id: string = "DescribeEC2Policy", props?: GuPolicyProps) {
-    super(scope, id, { ...GuDescribeEC2Policy.getDefaultProps(), ...props });
+  public static getInstance(stack: GuStack): GuDescribeEC2Policy {
+    // Resources can only live in the same App so return a new instance where necessary.
+    // See https://github.com/aws/aws-cdk/blob/0ea4b19afd639541e5f1d7c1783032ee480c307e/packages/%40aws-cdk/core/lib/private/refs.ts#L47-L50
+    const isSameStack = this.instance?.node.root === stack.node.root;
+
+    if (!this.instance || !isSameStack) {
+      this.instance = new GuDescribeEC2Policy(stack);
+    }
+
+    return this.instance;
   }
 }
