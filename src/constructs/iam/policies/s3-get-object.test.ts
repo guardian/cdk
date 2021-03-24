@@ -82,7 +82,7 @@ describe("The GuGetDistributablePolicy construct", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     const parameterKeys = Object.keys(json.Parameters);
-    const expectedKeys = ["Stage", GuDistributionBucketParameter.parameterName];
+    const expectedKeys = ["Stage", GuDistributionBucketParameter.getInstance(stack).id];
     expect(parameterKeys).toEqual(expectedKeys);
 
     expect(json.Parameters.DistributionBucketName).toEqual({

@@ -22,7 +22,7 @@ describe("GuUserData", () => {
     const props: GuUserDataProps = {
       app,
       distributable: {
-        bucket: new GuDistributionBucketParameter(stack),
+        bucket: GuDistributionBucketParameter.getInstance(stack),
         fileName: "my-app.deb",
         executionStatement: `dpkg -i /${app}/my-app.deb`,
       },
@@ -73,7 +73,7 @@ describe("GuUserData", () => {
     const props: GuUserDataProps = {
       app,
       distributable: {
-        bucket: new GuDistributionBucketParameter(stack),
+        bucket: GuDistributionBucketParameter.getInstance(stack),
         fileName: "my-app.deb",
         executionStatement: `dpkg -i /${app}/my-app.deb`,
       },
