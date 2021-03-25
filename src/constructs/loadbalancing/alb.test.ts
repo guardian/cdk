@@ -6,6 +6,7 @@ import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../test/utils";
 import type { SynthedStack } from "../../../test/utils";
 import { RegexPattern } from "../../constants";
+import type { AppIdentity } from "../core/identity";
 import {
   GuApplicationListener,
   GuApplicationLoadBalancer,
@@ -288,6 +289,8 @@ describe("The GuHttpsApplicationListener class", () => {
     publicSubnetIds: [""],
   });
 
+  const app: AppIdentity = { app: "testing" };
+
   test("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
@@ -300,6 +303,7 @@ describe("The GuHttpsApplicationListener class", () => {
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       loadBalancer,
       targetGroup,
+      ...app,
     });
 
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
@@ -328,22 +332,23 @@ describe("The GuHttpsApplicationListener class", () => {
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       loadBalancer,
       targetGroup,
+      ...app,
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.TLSCertificate).toEqual({
+    expect(json.Parameters.TLSCertificateTesting).toEqual({
       Type: "String",
       AllowedPattern: RegexPattern.ACM_ARN,
       ConstraintDescription: "Must be an ACM ARN resource",
-      Description: "Certificate ARN for ApplicationListener",
+      Description: "The ARN of an ACM certificate for use on a load balancer",
     });
 
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
       Certificates: [
         {
           CertificateArn: {
-            Ref: "TLSCertificate",
+            Ref: "TLSCertificateTesting",
           },
         },
       ],
@@ -365,6 +370,7 @@ describe("The GuHttpsApplicationListener class", () => {
           loadBalancer,
           targetGroup,
           certificate: "test",
+          ...app,
         })
     ).toThrowError(new Error("test is not a valid ACM ARN"));
   });
@@ -382,6 +388,7 @@ describe("The GuHttpsApplicationListener class", () => {
       loadBalancer,
       targetGroup,
       certificate: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
+      ...app,
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;

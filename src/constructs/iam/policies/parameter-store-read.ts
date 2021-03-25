@@ -4,7 +4,6 @@ import { AppIdentity } from "../../core/identity";
 import { GuPolicy } from "./base-policy";
 
 export class GuParameterStoreReadPolicy extends GuPolicy {
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: AppIdentity) {
     super(scope, AppIdentity.suffixText(props, "ParameterStoreRead"), {
       policyName: "parameter-store-read-policy",

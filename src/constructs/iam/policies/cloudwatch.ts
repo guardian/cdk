@@ -13,13 +13,15 @@ abstract class GuCloudwatchPolicy extends GuAllowPolicy {
 }
 
 export class GuGetCloudwatchMetricsPolicy extends GuCloudwatchPolicy {
-  constructor(scope: GuStack, id: string = "GuGetCloudwatchMetricsPolicy") {
-    super(scope, id, { actions: ["ListMetrics", "GetMetricData", "GetMetricStatistics", "DescribeAlarmsForMetric"] });
+  constructor(scope: GuStack) {
+    super(scope, "GuGetCloudwatchMetricsPolicy", {
+      actions: ["ListMetrics", "GetMetricData", "GetMetricStatistics", "DescribeAlarmsForMetric"],
+    });
   }
 }
 
 export class GuPutCloudwatchMetricsPolicy extends GuCloudwatchPolicy {
-  constructor(scope: GuStack, id: string = "GuPutCloudwatchMetricsPolicy") {
-    super(scope, id, { actions: ["PutMetricData"] });
+  constructor(scope: GuStack) {
+    super(scope, "GuPutCloudwatchMetricsPolicy", { actions: ["PutMetricData"] });
   }
 }

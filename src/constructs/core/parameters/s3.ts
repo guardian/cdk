@@ -4,7 +4,6 @@ import { GuStringParameter } from "./base";
 export class GuDistributionBucketParameter extends GuStringParameter {
   private static instance: GuDistributionBucketParameter | undefined;
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   private constructor(scope: GuStack) {
     super(scope, "DistributionBucketName", {
       description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
@@ -29,8 +28,8 @@ export class GuDistributionBucketParameter extends GuStringParameter {
 export class GuPrivateConfigBucketParameter extends GuStringParameter {
   public static parameterName = "PrivateConfigBucketName";
 
-  constructor(scope: GuStack, id: string = GuPrivateConfigBucketParameter.parameterName) {
-    super(scope, id, {
+  constructor(scope: GuStack) {
+    super(scope, GuPrivateConfigBucketParameter.parameterName, {
       description: "SSM parameter containing the S3 bucket name holding the app's private configuration",
       default: "/account/services/private.config.bucket",
       fromSSM: true,

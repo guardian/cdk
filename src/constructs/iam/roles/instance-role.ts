@@ -17,7 +17,6 @@ interface GuInstanceRoleProps extends AppIdentity {
 }
 
 export class GuInstanceRole extends GuRole {
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: GuInstanceRoleProps) {
     super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
       overrideId: true,

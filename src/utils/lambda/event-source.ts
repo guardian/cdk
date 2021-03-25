@@ -72,7 +72,7 @@ export class StreamRetry {
   }
   private readonly amount: number;
   readonly retryType: RetryType;
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO only lint for things that extend IConstruct
+
   private constructor(amount: number, type: RetryType) {
     this.amount = amount;
     this.retryType = type;
