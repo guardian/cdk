@@ -8,4 +8,5 @@ if [ $CI ] ; then
   npm ci
 fi
 
+npm run test:custom-lint-rule
 npm run lint
