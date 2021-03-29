@@ -25,5 +25,23 @@ describe("SSM:", () => {
       });
       expect(param.getValue()).toMatch(/TOKEN/i);
     });
+
+    it("creates unique IDs using param and stack name for the parameters", function () {
+      const stack = simpleGuStackForTesting({ stack: "some-stack" });
+      const param1 = new GuSSMParameter(stack, { parameter: "/path/to/some-param" });
+      const param2 = new GuSSMParameter(stack, { parameter: "/path/to/some-param" });
+      expect(param1.toString()).toMatch(/Test\/GuSSMParameter-pathtosomeparam/i);
+      expect(param2.toString()).toMatch(/Test\/GuSSMParameter-pathtosomeparam/i);
+      expect(param1.toString()).not.toEqual(param2.toString());
+    });
+
+    it("creates unique IDs that handles tokens", function () {
+      const stack = simpleGuStackForTesting({ stack: "some-stack" });
+      const param1 = new GuSSMParameter(stack, { parameter: `/path/${stack.stage}/some-param` });
+      const param2 = new GuSSMParameter(stack, { parameter: `/path/${stack.stage}/some-param` });
+      expect(param1.toString()).toMatch(/Test\/GuSSMParameter-token/i);
+      expect(param2.toString()).toMatch(/Test\/GuSSMParameter-token/i);
+      expect(param1.toString()).not.toEqual(param2.toString());
+    });
   });
 });
