@@ -65,7 +65,6 @@ export class GuUserData {
     });
   }
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO only lint for things that extend IConstruct
   constructor(scope: GuStack, props: GuUserDataProps) {
     this._userData = UserData.forLinux();
 

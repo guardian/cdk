@@ -5,7 +5,6 @@ import { GuAllowPolicy } from "./base-policy";
 export class GuLogShippingPolicy extends GuAllowPolicy {
   private static instance: GuLogShippingPolicy | undefined;
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   private constructor(scope: GuStack) {
     super(scope, "GuLogShippingPolicy", {
       actions: ["kinesis:Describe*", "kinesis:Put*"],

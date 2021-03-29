@@ -4,7 +4,6 @@ import { GuAllowPolicy } from "./base-policy";
 export class GuSSMRunCommandPolicy extends GuAllowPolicy {
   private static instance: GuSSMRunCommandPolicy | undefined;
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- WIP
   private constructor(scope: GuStack) {
     super(scope, "SSMRunCommandPolicy", {
       policyName: "ssm-run-command-policy",

@@ -15,6 +15,7 @@ main() {
   npm ci
   npm run build
   npm run lint
+  npm run test:custom-lint-rule
   npm run test
 }
 

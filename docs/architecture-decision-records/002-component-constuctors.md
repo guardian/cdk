@@ -20,7 +20,7 @@ This project contains a large number of classes, making up the various construct
 
    By having a consistent style for constructors, users will know what to expect every time they use a class from the library. This makes the developer experience easier and faster as users do not have to check what is required for each class.
 
-2. Constrctors should be the best fit for each class
+2. Constructors should be the best fit for each class
 
    In the case of this library, this mainly means either missing out the id or changing the order of the id and props inputs. In scenarios where a sensible id can either be hardcoded or defaulted, this would prevent users from having to add ids everywhere, reducing the amount of code they have to write.
 
@@ -30,13 +30,13 @@ This project contains a large number of classes, making up the various construct
 
 Constructors should follow the following rules for consistency.
 
-1. Constructors should all accept a `scope` of type `GuStack` and an `id` of type `string`
+1. The first parameter should be a `scope` of type `GuStack`:
 
    :white_check_mark: Valid
 
    ```ts
    class MyConstruct {
-     constructor(scope: GuStack, id: string) {
+     constructor(scope: GuStack) {
        ...
      }
    }
@@ -46,13 +46,39 @@ Constructors should follow the following rules for consistency.
 
    ```ts
    class MyConstruct {
-     constructor(scope: Stack, id: string) {
+     constructor(scope: Stack) {
        ...
      }
    }
    ```
 
-2. They can also take a `props` object which should be correctly typed
+   The construct/pattern will then have a static `id` as it will never change, for example the `Stage` parameter.
+
+2. They can also take a `props` object which should be correctly typed:
+
+   :white_check_mark: Valid
+
+   ```ts
+   class MyConstruct {
+     constructor(scope: GuStack, props: MyConstructProps) {
+       ...
+     }
+   }
+   ```
+
+   :x: Invalid
+
+   ```ts
+   class MyConstruct {
+     constructor(scope: Stack, props: object) {
+       ...
+     }
+   }
+   ```
+
+   The construct/pattern will then derive `id` from `props` as it will never change, for example `InstanceTypeFor${props.app}`.
+
+3. They can also take an `id` of type string and a `props` object which should be correctly typed
 
    :white_check_mark: Valid
 
@@ -70,13 +96,13 @@ Constructors should follow the following rules for consistency.
 
    ```ts
    class MyConstruct {
-     constructor(scope: GuStack, id: string, props: object) {
+     constructor(scope: GuStack, id: any, props: object) {
        ...
      }
    }
    ```
 
-3. Where all `props` are optional, the `props` object should be optional as a whole
+4. Where all `props` are optional, the `props` object should be optional as a whole
 
    :white_check_mark: Valid
 
@@ -103,35 +129,6 @@ Constructors should follow the following rules for consistency.
 
    class MyConstruct {
      constructor(scope: GuStack, id: string, props: MyConstructProps) {
-       ...
-     }
-   }
-   ```
-
-4. Where `props` are optional, a default value for the `id` can be provided where appropriate
-
-   :white_check_mark: Valid
-
-   ```ts
-   interface MyConstructProps {
-     prop1?: string;
-     prop2?: string
-   }
-
-   class MyConstruct {
-     constructor(scope: GuStack, id: string = "MyConstruct", props?: MyConstructProps) {
-       ...
-     }
-   }
-   ```
-
-   :x: Invalid
-
-   ```ts
-   interface MyConstructProps {...}
-
-   class MyConstruct {
-     constructor(scope: GuStack, id: string = "MyConstruct", props: MyConstructProps) {
        ...
      }
    }

@@ -4,7 +4,6 @@ import { GuStringParameter } from "./base";
 export class GuLoggingStreamNameParameter extends GuStringParameter {
   private static instance: GuStringParameter | undefined;
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   private constructor(scope: GuStack) {
     super(scope, "LoggingStreamName", {
       description: "SSM parameter containing the Name (not ARN) on the kinesis stream",

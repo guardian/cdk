@@ -18,6 +18,7 @@ import { Duration } from "@aws-cdk/core";
 import { RegexPattern } from "../../constants";
 import type { GuStack } from "../core";
 import { GuCertificateArnParameter } from "../core";
+import type { AppIdentity } from "../core/identity";
 
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
   overrideId?: boolean;
@@ -78,7 +79,8 @@ export class GuApplicationListener extends ApplicationListener {
 }
 
 export interface GuHttpsApplicationListenerProps
-  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates"> {
+  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">,
+    AppIdentity {
   targetGroup: GuApplicationTargetGroup;
   certificate?: string;
 }
@@ -98,11 +100,7 @@ export class GuHttpsApplicationListener extends ApplicationListener {
       ...props,
       certificates: [
         {
-          certificateArn:
-            props.certificate ??
-            new GuCertificateArnParameter(scope, "TLSCertificate", {
-              description: `Certificate ARN for ${id}`,
-            }).valueAsString,
+          certificateArn: props.certificate ?? new GuCertificateArnParameter(scope, props).valueAsString,
         },
       ],
       defaultAction: ListenerAction.forward([props.targetGroup]),

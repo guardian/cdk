@@ -4,7 +4,6 @@ import type { GuNoTypeParameterPropsWithAppIdentity } from "./base";
 import { GuParameter } from "./base";
 
 export class GuInstanceTypeParameter extends GuParameter {
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: GuNoTypeParameterPropsWithAppIdentity) {
     super(scope, AppIdentity.suffixText(props, "InstanceType"), {
       type: "String",
@@ -16,7 +15,6 @@ export class GuInstanceTypeParameter extends GuParameter {
 }
 
 export class GuAmiParameter extends GuParameter {
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: GuNoTypeParameterPropsWithAppIdentity) {
     super(scope, AppIdentity.suffixText(props, "AMI"), {
       type: "AWS::EC2::Image::Id",

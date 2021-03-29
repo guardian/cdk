@@ -5,7 +5,6 @@ import { GuPolicy } from "./base-policy";
 export class GuDescribeEC2Policy extends GuPolicy {
   private static instance: GuPolicy | undefined;
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   private constructor(scope: GuStack) {
     super(scope, "DescribeEC2Policy", {
       policyName: "describe-ec2-policy",

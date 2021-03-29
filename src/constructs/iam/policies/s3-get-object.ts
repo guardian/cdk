@@ -19,7 +19,6 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
 }
 
 export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
-  // eslint-disable-next-line custom-rules/valid-constructors -- TODO be better
   constructor(scope: GuStack, props: AppIdentity) {
     const path = [scope.stack, scope.stage, props.app, "*"].join("/");
     super(scope, AppIdentity.suffixText(props, "GetDistributablePolicy"), {

@@ -8,7 +8,7 @@ export interface GuStageDependentValue<T extends string | number | boolean> {
 }
 
 export class GuStageMapping extends CfnMapping {
-  constructor(scope: GuStack, id: string = "stage-mapping") {
-    super(scope, id);
+  constructor(scope: GuStack) {
+    super(scope, "stage-mapping");
   }
 }
