@@ -38,7 +38,7 @@ export class GuSSMParameter extends Construct implements IGrantable {
 
     const provider = new SingletonFunction(scope, id("Provider"), {
       code: Code.fromInline(readFileSync(join(__dirname, "/custom-resources/runtime/lambda.js")).toString()),
-      runtime: Runtime.NODEJS_12_X, // TODO: Ensure that the TS -> JS compile creates a NODE12-compliant file
+      runtime: Runtime.NODEJS_12_X,
       handler: "index.handler",
       uuid: "eda001a3-b7c8-469d-bc13-787c4e13cfd9",
       lambdaPurpose: "Lambda to fetch SSM parameters",

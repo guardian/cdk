@@ -4,10 +4,6 @@ import { GuSSMIdentityParameter, GuSSMParameter } from "./ssm";
 
 describe("SSM:", () => {
   describe("The GuSSMIdentityParameter construct", () => {
-    beforeAll(() => {
-      // TODO: Experiment with compiling `custom-resources/runtime/lambda.ts` to JS so that tests run
-    });
-
     it("requires the scope and parameter name", function () {
       const stack = simpleGuStackForTesting({ stack: "some-stack" });
       const param = new GuSSMIdentityParameter(stack, { parameter: "some-param", app: "foo" });
