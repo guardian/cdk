@@ -1,111 +1,85 @@
 import type {
-  ApplicationListenerProps,
-  ApplicationLoadBalancerProps,
-  ApplicationTargetGroupProps,
-  CfnListener,
   CfnLoadBalancer,
-  CfnTargetGroup,
-} from "@aws-cdk/aws-elasticloadbalancingv2";
-import {
-  ApplicationListener,
-  ApplicationLoadBalancer,
-  ApplicationProtocol,
-  ApplicationTargetGroup,
-  ListenerAction,
-  Protocol,
-} from "@aws-cdk/aws-elasticloadbalancingv2";
+  HealthCheck,
+  LoadBalancerListener,
+  LoadBalancerProps,
+} from "@aws-cdk/aws-elasticloadbalancing";
+import { LoadBalancer, LoadBalancingProtocol } from "@aws-cdk/aws-elasticloadbalancing";
 import { Duration } from "@aws-cdk/core";
-import { RegexPattern } from "../../constants";
 import type { GuStack } from "../core";
-import { GuCertificateArnParameter } from "../core";
+import { GuArnParameter } from "../core";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
+enum RemoveableProperties {
+  SCHEME = "Scheme",
+}
+
+interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck"> {
   overrideId?: boolean;
+  propertiesToRemove?: RemoveableProperties[];
+  propertiesToOverride?: Record<string, unknown>;
+  healthCheck?: Partial<HealthCheck>;
 }
 
-export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
-  constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
-    super(scope, id, { deletionProtection: true, ...props });
+export class GuClassicLoadBalancer extends LoadBalancer {
+  static RemoveableProperties = RemoveableProperties;
 
-    const cfnLb = this.node.defaultChild as CfnLoadBalancer;
-
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
-      cfnLb.overrideLogicalId(id);
-
-    cfnLb.addPropertyDeletionOverride("Type");
-  }
-}
-
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps {
-  overrideId?: boolean;
-}
-
-export class GuApplicationTargetGroup extends ApplicationTargetGroup {
   static DefaultHealthCheck = {
-    port: "9000",
+    port: 9000,
     path: "/healthcheck",
-    protocol: Protocol.HTTP,
-    healthyThresholdCount: 2,
-    unhealthyThresholdCount: 5,
+    protocol: LoadBalancingProtocol.HTTP,
+    healthyThreshold: 2,
+    unhealthyThreshold: 5,
     interval: Duration.seconds(30),
     timeout: Duration.seconds(10),
   };
 
-  constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuClassicLoadBalancerProps) {
     const mergedProps = {
       ...props,
-      healthCheck: { ...GuApplicationTargetGroup.DefaultHealthCheck, ...props.healthCheck },
+      healthCheck: { ...GuClassicLoadBalancer.DefaultHealthCheck, ...props.healthCheck },
     };
 
     super(scope, id, mergedProps);
 
+    const cfnLb = this.node.defaultChild as CfnLoadBalancer;
+
     if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
-      (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
+      cfnLb.overrideLogicalId(id);
+
+    mergedProps.propertiesToRemove?.forEach((key) => {
+      cfnLb.addPropertyDeletionOverride(key);
+    });
+
+    mergedProps.propertiesToOverride &&
+      Object.entries(mergedProps.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
   }
 }
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps {
-  overrideId?: boolean;
+interface GuHttpsClassicLoadBalancerProps extends Omit<GuClassicLoadBalancerProps, "listeners"> {
+  listener?: Partial<LoadBalancerListener>;
 }
 
-export class GuApplicationListener extends ApplicationListener {
-  constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
-    super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
+export class GuHttpsClassicLoadBalancer extends GuClassicLoadBalancer {
+  static DefaultListener: LoadBalancerListener = {
+    internalPort: 9000,
+    externalPort: 443,
+    internalProtocol: LoadBalancingProtocol.HTTP,
+    externalProtocol: LoadBalancingProtocol.HTTPS,
+  };
 
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
-      (this.node.defaultChild as CfnListener).overrideLogicalId(id);
-  }
-}
+  constructor(scope: GuStack, id: string, props: GuHttpsClassicLoadBalancerProps) {
+    const listenerProps = { ...GuHttpsClassicLoadBalancer.DefaultListener, ...props.listener };
 
-export interface GuHttpsApplicationListenerProps
-  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates"> {
-  targetGroup: GuApplicationTargetGroup;
-  certificate?: string;
-}
-
-export class GuHttpsApplicationListener extends ApplicationListener {
-  constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
-    if (props.certificate) {
-      const isValid = new RegExp(RegexPattern.ACM_ARN).test(props.certificate);
-      if (!isValid) {
-        throw new Error(`${props.certificate} is not a valid ACM ARN`);
-      }
+    if (!listenerProps.sslCertificateId) {
+      const certificateId = new GuArnParameter(scope, "CertificateARN", {
+        description: "Certificate ARN for ELB",
+      });
+      listenerProps.sslCertificateId = certificateId.valueAsString;
     }
 
-    const mergedProps: GuApplicationListenerProps = {
-      port: 443,
-      protocol: ApplicationProtocol.HTTPS,
+    const mergedProps = {
       ...props,
-      certificates: [
-        {
-          certificateArn:
-            props.certificate ??
-            new GuCertificateArnParameter(scope, "TLSCertificate", {
-              description: `Certificate ARN for ${id}`,
-            }).valueAsString,
-        },
-      ],
-      defaultAction: ListenerAction.forward([props.targetGroup]),
+      listeners: [listenerProps],
     };
 
     super(scope, id, mergedProps);

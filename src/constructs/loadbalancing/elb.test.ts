@@ -1,397 +1,212 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
-import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
-import type { SynthedStack } from "../../../test/utils/synthed-stack";
-import { RegexPattern } from "../../constants";
-import {
-  GuApplicationListener,
-  GuApplicationLoadBalancer,
-  GuApplicationTargetGroup,
-  GuHttpsApplicationListener,
-} from "../loadbalancing";
+import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../../test/utils";
+import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
 
-describe("The GuApplicationLoadBalancer class", () => {
+describe("The GuClassicLoadBalancer class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
+    privateSubnetIds: [""],
   });
 
   test("overrides the id with the overrideId prop", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
+    expect(Object.keys(json.Resources)).toContain("ClassicLoadBalancer");
   });
 
   test("has an auto-generated ID by default", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
+    expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
   });
 
   test("overrides the id if the stack migrated value is true", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
+    expect(Object.keys(json.Resources)).toContain("ClassicLoadBalancer");
   });
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: false });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, overrideId: false });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
+    expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
   });
 
-  test("deletes the Type property", () => {
+  test("deletes any provided properties", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.ApplicationLoadBalancer.Properties)).not.toContain("Type");
-  });
-
-  test("sets the deletion protection value to true by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      LoadBalancerAttributes: [
-        {
-          Key: "deletion_protection.enabled",
-          Value: "true",
-        },
-      ],
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      vpc,
+      overrideId: true,
+      propertiesToRemove: [GuClassicLoadBalancer.RemoveableProperties.SCHEME],
     });
-  });
-});
 
-describe("The GuApplicationTargetGroup class", () => {
-  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
-    availabilityZones: [""],
-    publicSubnetIds: [""],
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources.ClassicLoadBalancer.Properties)).not.toContain("Scheme");
   });
 
-  test("overrides the id if the prop is true", () => {
+  test("overrides any properties as required", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: true });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      vpc,
+      overrideId: true,
+      propertiesToOverride: {
+        AccessLoggingPolicy: {
+          EmitInterval: 5,
+          Enabled: true,
+        },
+      },
+    });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
-  });
-
-  test("does not override the id if the prop is false", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: false });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      AccessLoggingPolicy: {
+        EmitInterval: 5,
+        Enabled: true,
+      },
+    });
   });
 
   test("uses default health check properties", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       vpc,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckIntervalSeconds: 30,
-      HealthCheckPath: "/healthcheck",
-      HealthCheckPort: "9000",
-      HealthCheckProtocol: "HTTP",
-      HealthCheckTimeoutSeconds: 10,
-      HealthyThresholdCount: 2,
-      UnhealthyThresholdCount: 5,
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      HealthCheck: {
+        HealthyThreshold: "2",
+        Interval: "30",
+        Target: "HTTP:9000/healthcheck",
+        Timeout: "10",
+        UnhealthyThreshold: "5",
+      },
     });
   });
 
   test("merges any health check properties provided", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       vpc,
       healthCheck: {
         path: "/test",
       },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckIntervalSeconds: 30,
-      HealthCheckPath: "/test",
-      HealthCheckPort: "9000",
-      HealthCheckProtocol: "HTTP",
-      HealthCheckTimeoutSeconds: 10,
-      HealthyThresholdCount: 2,
-      UnhealthyThresholdCount: 5,
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      HealthCheck: {
+        HealthyThreshold: "2",
+        Interval: "30",
+        Target: "HTTP:9000/test",
+        Timeout: "10",
+        UnhealthyThreshold: "5",
+      },
     });
   });
 });
 
-describe("The GuApplicationListener class", () => {
+describe("The GuHttpsClassicLoadBalancer class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
+    privateSubnetIds: [""],
   });
 
-  test("overrides the id if the prop is true", () => {
+  test("uses default listener values", () => {
     const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
     });
 
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      overrideId: true,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationListener");
-  });
-
-  test("does not override the id if the prop is false", () => {
-    const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationListener");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationListener");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      overrideId: false,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationListener");
-  });
-
-  test("sets default props", () => {
-    const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
-      Port: 443,
-      Protocol: "HTTPS",
-    });
-  });
-
-  test("merges default and passed in props", () => {
-    const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-      port: 80,
-    });
-
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
-      Port: 80,
-      Protocol: "HTTPS",
-    });
-  });
-});
-
-describe("The GuHttpsApplicationListener class", () => {
-  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
-    availabilityZones: [""],
-    publicSubnetIds: [""],
-  });
-
-  test("sets default props", () => {
-    const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      targetGroup,
-    });
-
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
-      Port: 443,
-      Protocol: "HTTPS",
-      DefaultActions: [
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Listeners: [
         {
-          TargetGroupArn: {
-            Ref: "GrafanaInternalTargetGroup837A1034",
+          InstancePort: "9000",
+          InstanceProtocol: "http",
+          LoadBalancerPort: "443",
+          Protocol: "https",
+          SSLCertificateId: {
+            Ref: "CertificateARN",
           },
-          Type: "forward",
         },
       ],
     });
   });
 
-  test("creates certificate prop if no value passed in", () => {
+  test("adds the CertificateARN parameter if no value provided", () => {
     const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      targetGroup,
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(json.Parameters.TLSCertificate).toEqual({
+    expect(json.Parameters.CertificateARN).toEqual({
+      AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
+      Description: "Certificate ARN for ELB",
+      ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
       Type: "String",
-      AllowedPattern: RegexPattern.ACM_ARN,
-      ConstraintDescription: "Must be an ACM ARN resource",
-      Description: "Certificate ARN for ApplicationListener",
+    });
+  });
+
+  test("uses the certificate id provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
+      listener: {
+        sslCertificateId: "certificateId",
+      },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
-      Certificates: [
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Listeners: [
         {
-          CertificateArn: {
-            Ref: "TLSCertificate",
-          },
+          InstancePort: "9000",
+          InstanceProtocol: "http",
+          LoadBalancerPort: "443",
+          Protocol: "https",
+          SSLCertificateId: "certificateId",
         },
       ],
-    });
-  });
-
-  test("passing in an invalid ACM ARN", () => {
-    const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    expect(
-      () =>
-        new GuHttpsApplicationListener(stack, "ApplicationListener", {
-          loadBalancer,
-          targetGroup,
-          certificate: "test",
-        })
-    ).toThrowError(new Error("test is not a valid ACM ARN"));
-  });
-
-  test("does not create certificate prop if a value passed in", () => {
-    const stack = simpleGuStackForTesting();
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      targetGroup,
-      certificate: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(Object.keys(json.Parameters)).not.toContain("CertificateARN");
+  });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
-      Certificates: [
+  test("merges any listener values provided", () => {
+    const stack = simpleGuStackForTesting();
+    new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      vpc,
+      listener: {
+        internalPort: 3000,
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Listeners: [
         {
-          CertificateArn: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
+          InstancePort: "3000",
+          InstanceProtocol: "http",
+          LoadBalancerPort: "443",
+          Protocol: "https",
+          SSLCertificateId: {
+            Ref: "CertificateARN",
+          },
         },
       ],
     });
