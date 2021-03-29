@@ -19,25 +19,22 @@ export interface GuSSMIdentityParameterProps extends GuSSMParameterProps, AppIde
 
 const stripped = (str: string) => str.replace(/[-/]/g, "");
 
+export function id(id: string, parameter: string): string {
+  const now = Date.now();
+  // We need to create UIDs for the resources in this construct, as otherwise CFN will not trigger the lambda on updates for resources that appear to be the same
+  const uid = now.toString().substr(now.toString().length - 4);
+  return parameter.toUpperCase().includes("TOKEN") ? `${id}-token-${uid}` : `${id}-${stripped(parameter)}-${uid}`;
+}
+
 export class GuSSMParameter extends Construct implements IGrantable {
   private readonly customResource: CustomResource;
   readonly grantPrincipal: IPrincipal;
-  private readonly parameter: string;
-
-  id(id: string, maybeParameter?: string): string {
-    const now = Date.now();
-    const parameter = maybeParameter ?? this.parameter;
-    // We need to create UIDs for the resources in this construct, as otherwise CFN will not trigger the lambda on updates for resources that appear to be the same
-    const uid = now.toString().substr(now.toString().length - 4);
-    return parameter.toUpperCase().includes("TOKEN") ? `${id}-token-${uid}` : `${id}-${stripped(parameter)}-${uid}`;
-  }
 
   constructor(scope: GuStack, props: GuSSMParameterProps) {
-    super(scope, `GuSSMParameter${Date.now()}`);
+    super(scope, id("GuSSMParameter", props.parameter));
     const { parameter } = props;
-    this.parameter = parameter;
 
-    const provider = new SingletonFunction(scope, this.id("Provider"), {
+    const provider = new SingletonFunction(scope, id("Provider", parameter), {
       code: Code.fromInline(readFileSync(join(__dirname, "/custom-resources/runtime/lambda.js")).toString()),
       runtime: Runtime.NODEJS_12_X,
       handler: "index.handler",
@@ -48,7 +45,7 @@ export class GuSSMParameter extends Construct implements IGrantable {
 
     this.grantPrincipal = provider.grantPrincipal;
 
-    const policy = new Policy(scope, this.id("CustomResourcePolicy"), {
+    const policy = new Policy(scope, id("CustomResourcePolicy", parameter), {
       statements: [
         new PolicyStatement({
           actions: ["ssm:getParameter"],
@@ -65,7 +62,7 @@ export class GuSSMParameter extends Construct implements IGrantable {
       apiRequest: { Name: parameter, WithDecryption: props.secure },
     };
 
-    this.customResource = new CustomResource(this, this.id("Resource"), {
+    this.customResource = new CustomResource(this, id("Resource", parameter), {
       resourceType: "Custom::GuGetSSMParameter",
       serviceToken: provider.functionArn,
       pascalCaseProperties: false,
@@ -91,7 +88,6 @@ export class GuSSMParameter extends Construct implements IGrantable {
  *
  * */
 export class GuSSMIdentityParameter extends GuSSMParameter {
-  // eslint-disable-next-line custom-rules/valid-constructors -- this may not be necessary going forward
   constructor(scope: GuStack, props: GuSSMIdentityParameterProps) {
     super(scope, { ...props, parameter: `/${scope.stage}/${scope.stack}/${props.app}/${props.parameter}` });
   }

@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { simpleGuStackForTesting } from "../../../test/utils";
-import { GuSSMIdentityParameter, GuSSMParameter } from "./ssm";
+import { GuSSMIdentityParameter, GuSSMParameter, id } from "./ssm";
 
 describe("SSM:", () => {
   describe("The GuSSMIdentityParameter construct", () => {
@@ -30,6 +30,7 @@ describe("SSM:", () => {
       const stack = simpleGuStackForTesting({ stack: "some-stack" });
       const param1 = new GuSSMParameter(stack, { parameter: "/path/to/some-param" });
       const param2 = new GuSSMParameter(stack, { parameter: "/path/to/some-param" });
+
       expect(param1.toString()).toMatch(/Test\/GuSSMParameter-pathtosomeparam/i);
       expect(param2.toString()).toMatch(/Test\/GuSSMParameter-pathtosomeparam/i);
       expect(param1.toString()).not.toEqual(param2.toString());
@@ -42,6 +43,16 @@ describe("SSM:", () => {
       expect(param1.toString()).toMatch(/Test\/GuSSMParameter-token/i);
       expect(param2.toString()).toMatch(/Test\/GuSSMParameter-token/i);
       expect(param1.toString()).not.toEqual(param2.toString());
+    });
+  });
+
+  describe("the id function", function () {
+    it("creates a unique ID given a string", function () {
+      expect(id("NameOfConstruct", "some-parameter")).toMatch(/NameOfConstruct-someparameter/i);
+    });
+
+    it("will substitute a CDK token for an acceptable string", function () {
+      expect(id("NameOfConstruct", "${TOKEN}foobar")).toMatch(/NameOfConstruct-token/i);
     });
   });
 });
