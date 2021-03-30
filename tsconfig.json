@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "ES2020",
     "moduleResolution": "node",
     "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -14,7 +15,7 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
-    "outDir": "lib",
+    "outDir": "lib"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "test", "src/**/*.test.ts", "src/**/__snapshots__/**", "src/**/__mocks__/**"]
