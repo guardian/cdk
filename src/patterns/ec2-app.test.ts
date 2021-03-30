@@ -7,7 +7,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
-      app: "my-amazing-app",
+      app: "test-gu-ec2-app",
       publicFacing: false,
       userData: "#!/bin/dev foobarbaz",
     });

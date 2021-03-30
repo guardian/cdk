@@ -1,3 +1,4 @@
+import { Certificate } from "@aws-cdk/aws-certificatemanager";
 import { ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
@@ -36,9 +37,10 @@ export enum GuApplicationPorts {
 
 export class GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppProps) {
-    const vpc = GuVpc.fromIdParameter(scope, "vpc");
+    const vpc = GuVpc.fromIdParameter(scope, "VPC");
+    const subnets = GuVpc.subnetsfromParameter(scope);
 
-    new GuAutoScalingGroup(scope, "asg", {
+    new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app: props.app,
       stageDependentProps: {
         CODE: { minimumInstances: 1 },
@@ -46,16 +48,27 @@ export class GuEc2App {
       },
       userData: props.userData,
       vpc: vpc,
+      vpcSubnets: { subnets },
     });
 
-    const loadBalancer = new GuApplicationLoadBalancer(scope, "lb", {
+    const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       vpc: vpc,
+      vpcSubnets: { subnets },
     });
 
-    const targetGroup = new GuApplicationTargetGroup(scope, "targetGroup", {});
+    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", { vpc });
+
+    // TODO: Work out why this isn't working with scope
+    const certificate = new Certificate(scope, "Certificate", {
+      domainName: "",
+    });
+
     new GuApplicationListener(scope, "listener", {
       loadBalancer: loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
+      certificates: [certificate],
     });
+
+    // new ApplicationListenerCertificate(scope, "ListenerCertificate", { listener: listener });
   }
 }
