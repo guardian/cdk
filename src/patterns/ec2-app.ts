@@ -1,4 +1,5 @@
 import { ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { simpleGuStackForTesting } from "../../test/utils";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
@@ -15,18 +16,18 @@ interface GuEc2AppProps extends AppIdentity {
   applicationPort: number | GuApplicationPorts;
 
   // Ignore these
-  autoscalingGroup: {
-    vpc?: string;
-    subnets?: string[];
-    role?: string;
-    capacity?: { min: number; max?: number };
-    healthcheck?: string;
-    targetGroup?: string;
-    additionalSecurityGroups?: string[];
-    associatePublicIpAddress?: boolean; // inferred from publicFacing
-  };
-
-  loadbalancer: { optional: { certificates: string[]; open: false } };
+  // autoscalingGroup: {
+  //   vpc?: string;
+  //   subnets?: string[];
+  //   role?: string;
+  //   capacity?: { min: number; max?: number };
+  //   healthcheck?: string;
+  //   targetGroup?: string;
+  //   additionalSecurityGroups?: string[];
+  //   associatePublicIpAddress?: boolean; // inferred from publicFacing
+  // };
+  //
+  // loadbalancer: { optional: { certificates: string[]; open: false } };
 }
 
 enum GuApplicationPorts {
@@ -35,10 +36,10 @@ enum GuApplicationPorts {
 }
 
 export class GuEc2App {
-  constructor(scope: GuStack, id: string, props: GuEc2AppProps) {
+  constructor(scope: GuStack, props: GuEc2AppProps) {
     const vpc = GuVpc.fromIdParameter(scope, "vpc");
 
-    const asg = new GuAutoScalingGroup(scope, {
+    new GuAutoScalingGroup(scope, {
       app: props.app,
       stageDependentProps: {
         CODE: { minimumInstances: 1 },
@@ -54,9 +55,17 @@ export class GuEc2App {
     });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "targetGroup", {});
-    const listener = new GuApplicationListener(scope, "listener", {
+    new GuApplicationListener(scope, "listener", {
       loadBalancer: loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
     });
   }
 }
+
+const stack = simpleGuStackForTesting();
+new GuEc2App(stack, {
+  applicationPort: GuApplicationPorts.Node,
+  app: "my-amazing-app",
+  publicFacing: false,
+  userData: "#!/bin/dev foobarbaz",
+});
