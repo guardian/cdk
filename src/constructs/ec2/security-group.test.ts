@@ -2,8 +2,8 @@ import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils";
-import type { SynthedStack } from "../../../test/utils";
+import { simpleGuStackForTesting } from "../../utils/test";
+import type { SynthedStack } from "../../utils/test";
 import {
   GuHttpsEgressSecurityGroup,
   GuPublicInternetAccessSecurityGroup,

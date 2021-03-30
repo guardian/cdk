@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import type { SynthedStack } from "../../../../test/utils";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
+import type { SynthedStack } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuLogShippingPolicy } from "./log-shipping";
 
 describe("The GuLogShippingPolicy singleton class", () => {

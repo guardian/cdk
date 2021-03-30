@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils";
 import { Stage } from "../../constants";
+import { simpleGuStackForTesting } from "../../utils/test";
 import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";
 import type { GuUserDataProps } from "./user-data";

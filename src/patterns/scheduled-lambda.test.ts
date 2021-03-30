@@ -3,8 +3,8 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../test/utils";
 import type { NoMonitoring } from "../constructs/cloudwatch";
+import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledLambda } from "./scheduled-lambda";
 
 describe("The GuScheduledLambda pattern", () => {

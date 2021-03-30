@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuSESSenderPolicy } from "./ses";
 
 describe("GuSESSenderPolicy", () => {

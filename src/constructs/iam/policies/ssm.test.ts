@@ -1,5 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuSSMRunCommandPolicy } from "./ssm";
 
 describe("The GuSSMRunCommandPolicy class", () => {

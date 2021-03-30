@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { simpleGuStackForTesting } from "../../../../test/utils";
+import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuGetS3ObjectsPolicy } from "../policies";
 import { GuInstanceRole } from "./instance-role";
 

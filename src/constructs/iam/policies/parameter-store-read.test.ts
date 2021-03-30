@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { App } from "@aws-cdk/core";
-import { attachPolicyToTestRole } from "../../../../test/utils";
+import { attachPolicyToTestRole } from "../../../utils/test";
 import { GuStack } from "../../core";
 import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
