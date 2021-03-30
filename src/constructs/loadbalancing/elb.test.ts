@@ -46,18 +46,6 @@ describe("The GuClassicLoadBalancer class", () => {
     expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
   });
 
-  test("deletes any provided properties", () => {
-    const stack = simpleGuStackForTesting();
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
-      vpc,
-      overrideId: true,
-      propertiesToRemove: [GuClassicLoadBalancer.RemoveableProperties.SCHEME],
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.ClassicLoadBalancer.Properties)).not.toContain("Scheme");
-  });
-
   test("overrides any properties as required", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {

@@ -9,20 +9,13 @@ import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 import { GuArnParameter } from "../core";
 
-enum RemoveableProperties {
-  SCHEME = "Scheme",
-}
-
 interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck"> {
   overrideId?: boolean;
-  propertiesToRemove?: RemoveableProperties[];
   propertiesToOverride?: Record<string, unknown>;
   healthCheck?: Partial<HealthCheck>;
 }
 
 export class GuClassicLoadBalancer extends LoadBalancer {
-  static RemoveableProperties = RemoveableProperties;
-
   static DefaultHealthCheck = {
     port: 9000,
     path: "/healthcheck",
@@ -45,10 +38,6 @@ export class GuClassicLoadBalancer extends LoadBalancer {
 
     if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
       cfnLb.overrideLogicalId(id);
-
-    mergedProps.propertiesToRemove?.forEach((key) => {
-      cfnLb.addPropertyDeletionOverride(key);
-    });
 
     mergedProps.propertiesToOverride &&
       Object.entries(mergedProps.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
