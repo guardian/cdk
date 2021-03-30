@@ -3,10 +3,18 @@
 set -e
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+ROOT_DIR=$DIR/..
 
 preamble() {
   "${DIR}"/check-yarn-lock
   "${DIR}"/check-aws-cdk
+}
+
+runIntegrationTest() {
+  (
+    cd "$ROOT_DIR/integration-test"
+    ./script/ci
+  )
 }
 
 main() {
@@ -17,6 +25,8 @@ main() {
   npm run lint
   npm run test:custom-lint-rule
   npm run test
+
+  runIntegrationTest
 }
 
 main
