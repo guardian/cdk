@@ -1,5 +1,4 @@
 import { ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { simpleGuStackForTesting } from "../../test/utils";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
@@ -30,7 +29,7 @@ interface GuEc2AppProps extends AppIdentity {
   // loadbalancer: { optional: { certificates: string[]; open: false } };
 }
 
-enum GuApplicationPorts {
+export enum GuApplicationPorts {
   Node = 3000,
   Play = 9000,
 }
@@ -39,7 +38,7 @@ export class GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppProps) {
     const vpc = GuVpc.fromIdParameter(scope, "vpc");
 
-    new GuAutoScalingGroup(scope, {
+    new GuAutoScalingGroup(scope, "asg", {
       app: props.app,
       stageDependentProps: {
         CODE: { minimumInstances: 1 },
@@ -49,8 +48,7 @@ export class GuEc2App {
       vpc: vpc,
     });
 
-    const loadBalancer = new GuApplicationLoadBalancer(scope, {
-      app: props.app,
+    const loadBalancer = new GuApplicationLoadBalancer(scope, "lb", {
       vpc: vpc,
     });
 
@@ -61,11 +59,3 @@ export class GuEc2App {
     });
   }
 }
-
-const stack = simpleGuStackForTesting();
-new GuEc2App(stack, {
-  applicationPort: GuApplicationPorts.Node,
-  app: "my-amazing-app",
-  publicFacing: false,
-  userData: "#!/bin/dev foobarbaz",
-});
