@@ -62,7 +62,7 @@
     "@aws-cdk/aws-s3": "1.94.1",
     "@aws-cdk/core": "1.94.1",
     "aws-sdk": "^2.868.0",
-    "read-pkg-up": "^8.0.0"
+    "read-pkg-up": "7.0.1"
   },
   "config": {
     "commitizen": {
