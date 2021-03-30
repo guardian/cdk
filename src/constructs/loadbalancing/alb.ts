@@ -20,18 +20,18 @@ import type { GuStack } from "../core";
 import { GuCertificateArnParameter } from "../core";
 import type { AppIdentity } from "../core/identity";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity {
   overrideId?: boolean;
 }
 
 export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
-  constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
-    super(scope, id, { deletionProtection: true, ...props });
+  constructor(scope: GuStack, props: GuApplicationLoadBalancerProps) {
+    super(scope, props.app, { deletionProtection: true, ...props });
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
     if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
-      cfnLb.overrideLogicalId(id);
+      cfnLb.overrideLogicalId(props.app);
 
     cfnLb.addPropertyDeletionOverride("Type");
   }

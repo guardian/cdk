@@ -33,7 +33,8 @@ export interface GuAutoScalingGroupProps
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
-  overrideId?: boolean;
+  keepExistingLogicalId?: boolean;
+  logicalId?: string;
 }
 
 type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
@@ -84,7 +85,7 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
 }
 
 export class GuAutoScalingGroup extends AutoScalingGroup {
-  constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
+  constructor(scope: GuStack, props: GuAutoScalingGroupProps) {
     const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
 
     // We need to override getImage() so that we can pass in the AMI as a parameter
@@ -110,7 +111,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, props),
     };
 
-    super(scope, id, mergedProps);
+    super(scope, props.app, mergedProps);
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
@@ -122,6 +123,6 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
 
-    if (mergedProps.overrideId) cfnAsg.overrideLogicalId(id);
+    if (mergedProps.keepExistingLogicalId) cfnAsg.overrideLogicalId(props.app);
   }
 }
