@@ -1,6 +1,6 @@
-import { readPackageUpSync } from "read-pkg-up";
+import readPkgUp from "read-pkg-up";
 
-const version = readPackageUpSync({ cwd: __dirname })?.packageJson.version ?? "unknown";
+const version = readPkgUp.sync({ cwd: __dirname })?.packageJson.version ?? "unknown";
 
 export const LibraryInfo = {
   VERSION: version,
