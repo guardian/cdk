@@ -10,6 +10,14 @@ import { GuStageParameter } from "./parameters";
 
 export interface GuStackProps extends StackProps {
   stack: string;
+
+  /**
+   * A flag to symbolise if a stack is being migrated from a previous format (eg YAML) into guardian/cdk.
+   * A value of `true` means resources in the stack can have custom logicalIds set using the property `existingLogicalId` (where available).
+   * A value of `false` or `undefined` means the stack is brand new. Any resource that gets created will have an auto-generated logicalId.
+   *
+   * @see GuMigratingResource
+   */
   migratedFromCloudFormation?: boolean;
 }
 
