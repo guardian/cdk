@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
+import { performance } from "perf_hooks";
 import type { IGrantable, IPrincipal } from "@aws-cdk/aws-iam";
 import { Policy, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Code, Runtime, SingletonFunction } from "@aws-cdk/aws-lambda";
@@ -19,22 +20,27 @@ export interface GuSSMIdentityParameterProps extends GuSSMParameterProps, AppIde
 
 const stripped = (str: string) => str.replace(/[-/]/g, "");
 
-export function id(id: string, parameter: string): string {
-  const now = Date.now();
-  // We need to create UIDs for the resources in this construct, as otherwise CFN will not trigger the lambda on updates for resources that appear to be the same
-  const uid = now.toString().substr(now.toString().length - 4);
-  return parameter.toUpperCase().includes("TOKEN") ? `${id}-token-${uid}` : `${id}-${stripped(parameter)}-${uid}`;
-}
-
 export class GuSSMParameter extends Construct implements IGrantable {
   private readonly customResource: CustomResource;
   readonly grantPrincipal: IPrincipal;
 
+  static id = (prefix: string, parameter: string): string => {
+    // `performance.now()` provides a high resolution timer.
+    // We've seen tests failing in this area with `Date.now()`, the increased resolution should increase uniqueness.
+    // See https://stackoverflow.com/a/21120901/3868241
+    const now: string = performance.now().toString();
+    // We need to create UIDs for the resources in this construct, as otherwise CFN will not trigger the lambda on updates for resources that appear to be the same
+    const uid = now.substr(now.length - 4);
+    return parameter.toUpperCase().includes("TOKEN")
+      ? `${prefix}-token-${uid}`
+      : `${prefix}-${stripped(parameter)}-${uid}`;
+  };
+
   constructor(scope: GuStack, props: GuSSMParameterProps) {
-    super(scope, id("GuSSMParameter", props.parameter));
+    super(scope, GuSSMParameter.id("GuSSMParameter", props.parameter));
     const { parameter } = props;
 
-    const provider = new SingletonFunction(scope, id("Provider", parameter), {
+    const provider = new SingletonFunction(scope, GuSSMParameter.id("Provider", parameter), {
       code: Code.fromInline(readFileSync(join(__dirname, "/custom-resources/runtime/lambda.js")).toString()),
       runtime: Runtime.NODEJS_12_X,
       handler: "index.handler",
@@ -45,7 +51,7 @@ export class GuSSMParameter extends Construct implements IGrantable {
 
     this.grantPrincipal = provider.grantPrincipal;
 
-    const policy = new Policy(scope, id("CustomResourcePolicy", parameter), {
+    const policy = new Policy(scope, GuSSMParameter.id("CustomResourcePolicy", parameter), {
       statements: [
         new PolicyStatement({
           actions: ["ssm:getParameter"],
@@ -62,7 +68,7 @@ export class GuSSMParameter extends Construct implements IGrantable {
       apiRequest: { Name: parameter, WithDecryption: props.secure },
     };
 
-    this.customResource = new CustomResource(this, id("Resource", parameter), {
+    this.customResource = new CustomResource(this, GuSSMParameter.id("Resource", parameter), {
       resourceType: "Custom::GuGetSSMParameter",
       serviceToken: provider.functionArn,
       pascalCaseProperties: false,
