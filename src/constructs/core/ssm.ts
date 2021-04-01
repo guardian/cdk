@@ -24,12 +24,11 @@ export class GuSSMParameter extends Construct implements IGrantable {
   readonly grantPrincipal: IPrincipal;
 
   static id = (prefix: string, parameter: string): string => {
-    const now = Date.now().toString();
     // We need to create UIDs for the resources in this construct, as otherwise CFN will not trigger the lambda on updates for resources that appear to be the same
-    const uid = now.substr(now.length - 4);
+    const randomNumberBetweenOneAndTenThousand = Math.floor(Math.random() * 10000) + 1;
     return parameter.toUpperCase().includes("TOKEN")
-      ? `${prefix}-token-${uid}`
-      : `${prefix}-${stripped(parameter)}-${uid}`;
+      ? `${prefix}-token-${randomNumberBetweenOneAndTenThousand}`
+      : `${prefix}-${stripped(parameter)}-${randomNumberBetweenOneAndTenThousand}`;
   };
 
   constructor(scope: GuStack, props: GuSSMParameterProps) {
