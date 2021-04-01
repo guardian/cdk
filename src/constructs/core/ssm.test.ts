@@ -48,11 +48,21 @@ describe("SSM:", () => {
 
   describe("the id function", function () {
     it("creates a unique ID given a string", function () {
-      expect(id("NameOfConstruct", "some-parameter")).toMatch(/NameOfConstruct-someparameter/i);
+      const actual1 = id("NameOfConstruct", "some-parameter");
+      const actual2 = id("NameOfConstruct", "some-parameter");
+
+      expect(actual1).toMatch(/NameOfConstruct-someparameter/i);
+      expect(actual2).toMatch(/NameOfConstruct-someparameter/i);
+      expect(actual1).not.toEqual(actual2);
     });
 
     it("will substitute a CDK token for an acceptable string", function () {
-      expect(id("NameOfConstruct", "${TOKEN}foobar")).toMatch(/NameOfConstruct-token/i);
+      const actual1 = id("NameOfConstruct", "${TOKEN}foobar");
+      const actual2 = id("NameOfConstruct", "${TOKEN}foobar");
+
+      expect(actual1).toMatch(/NameOfConstruct-token/i);
+      expect(actual2).toMatch(/NameOfConstruct-token/i);
+      expect(actual1).not.toEqual(actual2);
     });
   });
 });
