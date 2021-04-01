@@ -122,11 +122,12 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds any security groups passed through props", () => {
+    const app = "Testing";
     const stack = simpleGuStackForTesting();
 
-    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, overrideId: true });
-    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, overrideId: true });
-    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, overrideId: true });
+    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, overrideId: true, app });
+    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, overrideId: true, app });
+    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, overrideId: true, app });
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
@@ -136,16 +137,16 @@ describe("The GuAutoScalingGroup", () => {
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       SecurityGroups: [
         {
-          "Fn::GetAtt": ["GuHttpsEgressSecurityGroupF63CDA96", "GroupId"],
+          "Fn::GetAtt": [`GuHttpsEgressSecurityGroup${app}89CDDA4B`, "GroupId"],
         },
         {
-          "Fn::GetAtt": ["SecurityGroup", "GroupId"],
+          "Fn::GetAtt": [`SecurityGroup${app}`, "GroupId"],
         },
         {
-          "Fn::GetAtt": ["SecurityGroup1", "GroupId"],
+          "Fn::GetAtt": [`SecurityGroup1${app}`, "GroupId"],
         },
         {
-          "Fn::GetAtt": ["SecurityGroup2", "GroupId"],
+          "Fn::GetAtt": [`SecurityGroup2${app}`, "GroupId"],
         },
       ],
     });

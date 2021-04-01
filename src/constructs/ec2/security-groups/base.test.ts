@@ -16,16 +16,16 @@ describe("The GuSecurityGroup class", () => {
   it("overrides the id if the prop is set to true", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, overrideId: true });
+    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, overrideId: true, app: "testing" });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("TestSecurityGroup");
+    expect(Object.keys(json.Resources)).toContain("TestSecurityGroupTesting");
   });
 
   it("does not overrides the id if the prop is set to false", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc });
+    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, app: "testing" });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).not.toContain("TestSecurityGroup");
@@ -40,6 +40,7 @@ describe("The GuSecurityGroup class", () => {
         { range: Peer.ipv4("127.0.0.1/24"), description: "ingress1", port: 443 },
         { range: Peer.ipv4("127.0.0.2/8"), description: "ingress2", port: 443 },
       ],
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
@@ -72,6 +73,7 @@ describe("The GuSecurityGroup class", () => {
         { range: Peer.ipv4("127.0.0.1/24"), port: Port.tcp(8000), description: "egress1" },
         { range: Peer.ipv4("127.0.0.2/8"), port: Port.tcp(9000), description: "egress2" },
       ],
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
@@ -101,6 +103,7 @@ describe("The GuSecurityGroup class", () => {
       new GuSecurityGroup(stack, "TestSecurityGroup", {
         vpc,
         ingresses: [{ range: Peer.anyIpv4(), description: "SSH access", port: 22 }],
+        app: "testing",
       });
     }).toThrow(new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
   });
@@ -118,6 +121,7 @@ describe("The GuPublicInternetAccessSecurityGroup class", () => {
 
     new GuPublicInternetAccessSecurityGroup(stack, "InternetAccessGroup", {
       vpc,
+      app: "testing",
     });
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
@@ -145,7 +149,7 @@ describe("The GuHttpsEgressSecurityGroup class", () => {
   it("adds global access on 443 by default", () => {
     const stack = simpleGuStackForTesting();
 
-    GuHttpsEgressSecurityGroup.forVpc(stack, { vpc });
+    GuHttpsEgressSecurityGroup.forVpc(stack, { vpc, app: "testing" });
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
       GroupDescription: "Allow all outbound HTTPS traffic",
