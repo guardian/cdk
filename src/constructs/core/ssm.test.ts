@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuSSMIdentityParameter, GuSSMParameter, id } from "./ssm";
+import { GuSSMIdentityParameter, GuSSMParameter } from "./ssm";
 
 describe("SSM:", () => {
   describe("The GuSSMIdentityParameter construct", () => {
@@ -48,8 +48,8 @@ describe("SSM:", () => {
 
   describe("the id function", function () {
     it("creates a unique ID given a string", function () {
-      const actual1 = id("NameOfConstruct", "some-parameter");
-      const actual2 = id("NameOfConstruct", "some-parameter");
+      const actual1 = GuSSMParameter.id("NameOfConstruct", "some-parameter");
+      const actual2 = GuSSMParameter.id("NameOfConstruct", "some-parameter");
 
       expect(actual1).toMatch(/NameOfConstruct-someparameter/i);
       expect(actual2).toMatch(/NameOfConstruct-someparameter/i);
@@ -57,8 +57,8 @@ describe("SSM:", () => {
     });
 
     it("will substitute a CDK token for an acceptable string", function () {
-      const actual1 = id("NameOfConstruct", "${TOKEN}foobar");
-      const actual2 = id("NameOfConstruct", "${TOKEN}foobar");
+      const actual1 = GuSSMParameter.id("NameOfConstruct", "${TOKEN}foobar");
+      const actual2 = GuSSMParameter.id("NameOfConstruct", "${TOKEN}foobar");
 
       expect(actual1).toMatch(/NameOfConstruct-token/i);
       expect(actual2).toMatch(/NameOfConstruct-token/i);
