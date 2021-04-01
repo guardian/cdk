@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>utils/lambda | @guardian/cdk - v6.2.3</title>
+	<title>utils/test | @guardian/cdk - v6.2.3</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v6.2.3">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">@guardian/cdk - v6.2.3</a>
 				</li>
 				<li>
-					<a href="utils_lambda.html">utils/lambda</a>
+					<a href="utils_test.html">utils/test</a>
 				</li>
 			</ul>
-			<h1>Module utils/lambda</h1>
+			<h1>Module utils/test</h1>
 		</div>
 	</div>
 </header>
@@ -70,67 +70,96 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/utils_lambda.streamretry.html" class="tsd-kind-icon">Stream<wbr>Retry</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-kind-icon">Stream<wbr>Error<wbr>Handling<wbr>Props</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Type aliases</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="utils_lambda.html#streamprocessingprops" class="tsd-kind-icon">Stream<wbr>Processing<wbr>Props</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/utils_test.synthedstack.html" class="tsd-kind-icon">Synthed<wbr>Stack</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_lambda.html#toawserrorhandlingprops" class="tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#alphabeticaltags" class="tsd-kind-icon">alphabetical<wbr>Tags</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#attachpolicytotestrole" class="tsd-kind-icon">attach<wbr>Policy<wbr>ToTest<wbr>Role</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#simplegustackfortesting" class="tsd-kind-icon">simple<wbr>GuStack<wbr>For<wbr>Testing</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
-					<a name="streamprocessingprops" class="tsd-anchor"></a>
-					<h3>Stream<wbr>Processing<wbr>Props</h3>
-					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Processing<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">KinesisEventSourceProps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;bisectBatchOnError&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;maxRecordAge&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;onFailure&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;retryAttempts&quot;</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/eb38c21/src/utils/lambda/event-source.ts#L5">src/utils/lambda/event-source.ts:5</a></li>
-						</ul>
-					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="toawserrorhandlingprops" class="tsd-anchor"></a>
-					<h3>to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</h3>
+					<a name="alphabeticaltags" class="tsd-anchor"></a>
+					<h3>alphabetical<wbr>Tags</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props<span class="tsd-signature-symbol">(</span>errorHandlingProps<span class="tsd-signature-symbol">: </span><a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-signature-type" data-tsd-kind="Interface">StreamErrorHandlingProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AwsErrorHandlingProps</span></li>
+						<li class="tsd-signature tsd-kind-icon">alphabetical<wbr>Tags<span class="tsd-signature-symbol">(</span>tags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Tag</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Tag</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/eb38c21/src/utils/lambda/event-source.ts#L40">src/utils/lambda/event-source.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/eb38c21/src/utils/test/alphabetical-tags.ts#L6">src/utils/test/alphabetical-tags.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>errorHandlingProps: <a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-signature-type" data-tsd-kind="Interface">StreamErrorHandlingProps</a></h5>
+									<h5>tags: <span class="tsd-signature-type">Tag</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AwsErrorHandlingProps</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Tag</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="attachpolicytotestrole" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> attach<wbr>Policy<wbr>ToTest<wbr>Role</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">attach<wbr>Policy<wbr>ToTest<wbr>Role<span class="tsd-signature-symbol">(</span>stack<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Stack</span>, policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Policy</span>, id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/eb38c21/src/utils/test/attach-policy-to-test-role.ts#L7">src/utils/test/attach-policy-to-test-role.ts:7</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>stack: <span class="tsd-signature-type">Stack</span></h5>
+								</li>
+								<li>
+									<h5>policy: <span class="tsd-signature-type">Policy</span></h5>
+								</li>
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;TestRole&quot;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="simplegustackfortesting" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> simple<wbr>GuStack<wbr>For<wbr>Testing</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">simple<wbr>GuStack<wbr>For<wbr>Testing<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/constructs_core.gustackprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuStackProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/eb38c21/src/utils/test/simple-gu-stack.ts#L5">src/utils/test/simple-gu-stack.ts:5</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> props: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/constructs_core.gustackprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuStackProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -181,30 +210,30 @@
 					<li class=" tsd-kind-module">
 						<a href="utils_ec2.html">utils/ec2</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="utils_lambda.html">utils/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="utils_security_groups.html">utils/security-<wbr>groups</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="utils_test.html">utils/test</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/utils_lambda.streamretry.html" class="tsd-kind-icon">Stream<wbr>Retry</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/utils_lambda.streamerrorhandlingprops.html" class="tsd-kind-icon">Stream<wbr>Error<wbr>Handling<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="utils_lambda.html#streamprocessingprops" class="tsd-kind-icon">Stream<wbr>Processing<wbr>Props</a>
+						<a href="../interfaces/utils_test.synthedstack.html" class="tsd-kind-icon">Synthed<wbr>Stack</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="utils_lambda.html#toawserrorhandlingprops" class="tsd-kind-icon">to<wbr>Aws<wbr>Error<wbr>Handling<wbr>Props</a>
+						<a href="utils_test.html#alphabeticaltags" class="tsd-kind-icon">alphabetical<wbr>Tags</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="utils_test.html#attachpolicytotestrole" class="tsd-kind-icon">attach<wbr>Policy<wbr>ToTest<wbr>Role</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="utils_test.html#simplegustackfortesting" class="tsd-kind-icon">simple<wbr>GuStack<wbr>For<wbr>Testing</a>
 					</li>
 				</ul>
 			</nav>
