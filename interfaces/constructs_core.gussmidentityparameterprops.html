@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuStageDependentValue | @guardian/cdk - v6.3.1</title>
+	<title>GuSSMIdentityParameterProps | @guardian/cdk - v6.3.1</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v6.3.1">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,29 +58,29 @@
 					<a href="../modules/constructs_core.html">constructs/core</a>
 				</li>
 				<li>
-					<a href="constructs_core.gustagedependentvalue.html">GuStageDependentValue</a>
+					<a href="constructs_core.gussmidentityparameterprops.html">GuSSMIdentityParameterProps</a>
 				</li>
 			</ul>
-			<h1>Interface GuStageDependentValue&lt;T&gt;</h1>
+			<h1>Interface GuSSMIdentityParameterProps</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GuStageDependentValue</span>
+						<a href="constructs_core.gussmparameterprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuSSMParameterProps</a>
+					</li>
+					<li>
+						<span class="tsd-signature-type">AppIdentity</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">GuSSMIdentityParameterProps</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -88,35 +88,49 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_core.gustagedependentvalue.html#stagevalues" class="tsd-kind-icon">stage<wbr>Values</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_core.gustagedependentvalue.html#variablename" class="tsd-kind-icon">variable<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_core.gussmidentityparameterprops.html#app" class="tsd-kind-icon">app</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_core.gussmidentityparameterprops.html#parameter" class="tsd-kind-icon">parameter</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_core.gussmidentityparameterprops.html#secure" class="tsd-kind-icon">secure</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="stagevalues" class="tsd-anchor"></a>
-					<h3>stage<wbr>Values</h3>
-					<div class="tsd-signature tsd-kind-icon">stage<wbr>Values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="../enums/constants.stage.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Stage</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="app" class="tsd-anchor"></a>
+					<h3>app</h3>
+					<div class="tsd-signature tsd-kind-icon">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from AppIdentity.app</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4cad8aa/src/constructs/core/mappings.ts#L7">src/constructs/core/mappings.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4cad8aa/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="variablename" class="tsd-anchor"></a>
-					<h3>variable<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">variable<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="parameter" class="tsd-anchor"></a>
+					<h3>parameter</h3>
+					<div class="tsd-signature tsd-kind-icon">parameter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="constructs_core.gussmparameterprops.html">GuSSMParameterProps</a>.<a href="constructs_core.gussmparameterprops.html#parameter">parameter</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4cad8aa/src/constructs/core/mappings.ts#L6">src/constructs/core/mappings.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4cad8aa/src/constructs/core/ssm.ts#L15">src/constructs/core/ssm.ts:15</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="secure" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> secure</h3>
+					<div class="tsd-signature tsd-kind-icon">secure<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="constructs_core.gussmparameterprops.html">GuSSMParameterProps</a>.<a href="constructs_core.gussmparameterprops.html#secure">secure</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4cad8aa/src/constructs/core/ssm.ts#L16">src/constructs/core/ssm.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -234,30 +248,33 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_core.guparameterprops.html" class="tsd-kind-icon">Gu<wbr>Parameter<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_core.gussmidentityparameterprops.html" class="tsd-kind-icon">GuSSMIdentity<wbr>Parameter<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_core.gussmidentityparameterprops.html#app" class="tsd-kind-icon">app</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_core.gussmidentityparameterprops.html#parameter" class="tsd-kind-icon">parameter</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_core.gussmidentityparameterprops.html#secure" class="tsd-kind-icon">secure</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_core.gussmparameterprops.html" class="tsd-kind-icon">GuSSMParameter<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_core.gustackprops.html" class="tsd-kind-icon">Gu<wbr>Stack<wbr>Props</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="constructs_core.gustagedependentvalue.html" class="tsd-kind-icon">Gu<wbr>Stage<wbr>Dependent<wbr>Value</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_core.gustagedependentvalue.html#stagevalues" class="tsd-kind-icon">stage<wbr>Values</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_core.gustagedependentvalue.html#variablename" class="tsd-kind-icon">variable<wbr>Name</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/constructs_core.html#gunotypeparameterprops" class="tsd-kind-icon">Gu<wbr>NoType<wbr>Parameter<wbr>Props</a>
 					</li>
@@ -281,7 +298,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
