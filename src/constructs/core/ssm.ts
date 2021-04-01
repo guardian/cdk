@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { performance } from "perf_hooks";
 import type { IGrantable, IPrincipal } from "@aws-cdk/aws-iam";
 import { Policy, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Code, Runtime, SingletonFunction } from "@aws-cdk/aws-lambda";
@@ -25,15 +24,11 @@ export class GuSSMParameter extends Construct implements IGrantable {
   readonly grantPrincipal: IPrincipal;
 
   static id = (prefix: string, parameter: string): string => {
-    // `performance.now()` provides a high resolution timer.
-    // We've seen tests failing in this area with `Date.now()`, the increased resolution should increase uniqueness.
-    // See https://stackoverflow.com/a/21120901/3868241
-    const now: string = performance.now().toString();
     // We need to create UIDs for the resources in this construct, as otherwise CFN will not trigger the lambda on updates for resources that appear to be the same
-    const uid = now.substr(now.length - 4);
+    const randomNumberBetweenOneAndTenThousand = Math.floor(Math.random() * 10000) + 1;
     return parameter.toUpperCase().includes("TOKEN")
-      ? `${prefix}-token-${uid}`
-      : `${prefix}-${stripped(parameter)}-${uid}`;
+      ? `${prefix}-token-${randomNumberBetweenOneAndTenThousand}`
+      : `${prefix}-${stripped(parameter)}-${randomNumberBetweenOneAndTenThousand}`;
   };
 
   constructor(scope: GuStack, props: GuSSMParameterProps) {
