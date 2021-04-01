@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Ignore package-lock.json to avoid the following error when reinstalling dependencies:
+#   npm ERR! notarget No matching version found for eslint-plugin-custom-rules@1.0.0.
+# This is because we're installing @guardian/cdk from file, which is in turn installing eslint-plugin-custom-rules from file.
+npm install --no-package-lock
+
+npm run build
+npm run lint
+npm run test
+npm run generate
