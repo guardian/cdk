@@ -39,7 +39,10 @@ export enum GuApplicationPorts {
 export class GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppProps) {
     const vpc = GuVpc.fromIdParameter(scope, "VPC");
-    const subnets = GuVpc.subnetsfromParameter(scope);
+
+    // TODO: Establish how this works in CFN at deploy-time. Can we get away with this vs
+    //  needing to create a `subnets` parameter?
+    const subnets = props.publicFacing ? vpc.publicSubnets : vpc.privateSubnets;
     const certificateArn = new GuArnParameter(scope, "CertArn", {
       description: "ARN of a TLS certificate to install on the load balancer",
     });
