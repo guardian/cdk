@@ -19,6 +19,12 @@ Object {
       "Description": "Amazon Machine Image ID for the app test-gu-ec2-app. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
     },
+    "CertArn": Object {
+      "AllowedPattern": "arn:aws:[a-z0-9]*:[a-z0-9\\\\-]*:[0-9]{12}:.*",
+      "ConstraintDescription": "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+      "Description": "ARN of a TLS certificate to install on the load balancer",
+      "Type": "String",
+    },
     "InstanceTypeTestguec2app": Object {
       "Default": "t3.small",
       "Description": "EC2 Instance Type for the app test-gu-ec2-app",
@@ -183,35 +189,6 @@ Object {
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "Certificate4E7ABB08": Object {
-      "Properties": Object {
-        "DomainName": "",
-        "DomainValidationOptions": Array [
-          Object {
-            "DomainName": "",
-            "ValidationDomain": "",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "ValidationMethod": "EMAIL",
-      },
-      "Type": "AWS::CertificateManager::Certificate",
-    },
     "GuHttpsEgressSecurityGroupF63CDA96": Object {
       "Properties": Object {
         "GroupDescription": "Allow all outbound HTTPS traffic",
@@ -245,6 +222,31 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Listener828B0E81": Object {
+      "Properties": Object {
+        "Certificates": Array [
+          Object {
+            "CertificateArn": Object {
+              "Ref": "CertArn",
+            },
+          },
+        ],
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "TargetGroup3D7CD9B8",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "LoadBalancerBE9EEC3A",
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
     "LoadBalancerBE9EEC3A": Object {
       "Properties": Object {
@@ -358,31 +360,6 @@ Object {
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "listener1BD7566E": Object {
-      "Properties": Object {
-        "Certificates": Array [
-          Object {
-            "CertificateArn": Object {
-              "Ref": "Certificate4E7ABB08",
-            },
-          },
-        ],
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "TargetGroup3D7CD9B8",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "LoadBalancerBE9EEC3A",
-        },
-        "Port": 443,
-        "Protocol": "HTTPS",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
   },
 }
