@@ -4,11 +4,11 @@ import type { StreamProps } from "@aws-cdk/aws-kinesis";
 import { StreamEncryption } from "@aws-cdk/aws-kinesis";
 import { Runtime, StartingPosition } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
-import type { SynthedStack } from "../../test/utils";
-import { simpleGuStackForTesting } from "../../test/utils";
-import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
+import type { NoMonitoring } from "../constructs/cloudwatch";
 import { StreamRetry } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
+import { simpleGuStackForTesting } from "../utils/test";
+import type { SynthedStack } from "../utils/test";
 import { GuKinesisLambda } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {

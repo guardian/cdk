@@ -1,5 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { simpleGuStackForTesting } from "../../../test/utils";
+import { simpleGuStackForTesting } from "../../utils/test";
 import { GuSSMIdentityParameter, GuSSMParameter, id } from "./ssm";
 
 describe("SSM:", () => {

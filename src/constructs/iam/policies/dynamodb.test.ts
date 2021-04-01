@@ -1,5 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../../test/utils";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuDynamoDBReadPolicy, GuDynamoDBWritePolicy } from "./dynamodb";
 
 describe("The GuDynamoDBReadPolicy construct", () => {

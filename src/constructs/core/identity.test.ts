@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { Topic } from "@aws-cdk/aws-sns";
 import { Stack } from "@aws-cdk/core";
-import { alphabeticalTags } from "../../../test/utils";
+import { alphabeticalTags } from "../../utils/test";
 import { AppIdentity } from "./identity";
 
 describe("AppIdentity.suffixText", () => {

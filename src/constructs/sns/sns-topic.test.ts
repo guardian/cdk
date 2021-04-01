@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import type { SynthedStack } from "../../../test/utils";
-import { simpleGuStackForTesting } from "../../../test/utils";
+import type { SynthedStack } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
 import { GuSnsTopic } from "./sns-topic";
 
 describe("The GuSnsTopic construct", () => {

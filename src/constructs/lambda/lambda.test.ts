@@ -3,7 +3,7 @@ import "@aws-cdk/assert/jest";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../test/utils/simple-gu-stack";
+import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {

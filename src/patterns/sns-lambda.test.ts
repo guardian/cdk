@@ -1,9 +1,9 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
-import type { SynthedStack } from "../../test/utils";
-import { simpleGuStackForTesting } from "../../test/utils";
-import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
+import type { NoMonitoring } from "../constructs/cloudwatch";
+import type { SynthedStack } from "../utils/test";
+import { simpleGuStackForTesting } from "../utils/test";
 import { GuSnsLambda } from "./sns-lambda";
 
 describe("The GuSnsLambda pattern", () => {

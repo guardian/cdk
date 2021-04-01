@@ -9,8 +9,8 @@
   "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src test --ext .ts",
-    "format": "prettier --write \"(src|test)/**/*.ts\"",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
     "test:custom-lint-rule": "eslint eslint/rules/valid-constructors.test.ts",

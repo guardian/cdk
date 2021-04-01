@@ -3,10 +3,10 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { App } from "@aws-cdk/core";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../../test/utils";
-import type { SynthedStack } from "../../../test/utils";
 import { Stage, Stages } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
+import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import type { SynthedStack } from "../../utils/test";
 import { GuParameter } from "./parameters";
 import { GuStack } from "./stack";
 
