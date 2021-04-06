@@ -1,7 +1,8 @@
 import { Certificate } from "@aws-cdk/aws-certificatemanager";
-import { ApplicationProtocol, ListenerAction, TargetType } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
-import { GuArnParameter, GuStack } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
+import { GuArnParameter } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
 import {
@@ -37,6 +38,8 @@ export enum GuApplicationPorts {
 
 export class GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppProps) {
+    scope.tags.setTag("App", props.app);
+
     const vpc = GuVpc.fromIdParameter(scope, "VPC");
 
     // TODO: Establish how this works in CFN at deploy-time. Can we get away with this vs
@@ -49,7 +52,7 @@ export class GuEc2App {
 
     const certificate = Certificate.fromCertificateArn(scope, "Certificate", certificateArn.valueAsString);
 
-    new GuAutoScalingGroup(scope, "AutoScalingGroup", {
+    const asg = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       vpc,
       app: props.app,
       stageDependentProps: {
@@ -70,7 +73,8 @@ export class GuEc2App {
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
       vpc,
       protocol: ApplicationProtocol.HTTP,
-      targetType: TargetType.INSTANCE,
+      targets: [asg],
+      port: props.applicationPort,
     });
 
     new GuApplicationListener(scope, "Listener", {
