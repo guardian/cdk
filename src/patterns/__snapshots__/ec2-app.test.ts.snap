@@ -178,7 +178,7 @@ Object {
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "GuHttpsEgressSecurityGroupF63CDA96",
+              "GuHttpsEgressSecurityGroupTestguec2app03766BDB",
               "GroupId",
             ],
           },
@@ -189,7 +189,7 @@ Object {
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "GuHttpsEgressSecurityGroupF63CDA96": Object {
+    "GuHttpsEgressSecurityGroupTestguec2app03766BDB": Object {
       "Properties": Object {
         "GroupDescription": "Allow all outbound HTTPS traffic",
         "SecurityGroupEgress": Array [
@@ -202,6 +202,10 @@ Object {
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -338,6 +342,8 @@ Object {
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 10,
         "HealthyThresholdCount": 2,
+        "Port": 80,
+        "Protocol": "HTTP",
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
@@ -354,6 +360,7 @@ Object {
             },
           },
         ],
+        "TargetType": "instance",
         "UnhealthyThresholdCount": 5,
         "VpcId": Object {
           "Ref": "VpcId",

@@ -1,5 +1,5 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { simpleGuStackForTesting } from "../../test/utils";
+import { simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App } from "./ec2-app";
 
 describe("the GuEC2App pattern", function () {

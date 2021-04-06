@@ -1,6 +1,5 @@
 import { Certificate } from "@aws-cdk/aws-certificatemanager";
-import { ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { App } from "@aws-cdk/core";
+import { ApplicationProtocol, ListenerAction, TargetType } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuArnParameter, GuStack } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
@@ -68,7 +67,11 @@ export class GuEc2App {
       },
     });
 
-    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+      vpc,
+      protocol: ApplicationProtocol.HTTP,
+      targetType: TargetType.INSTANCE,
+    });
 
     new GuApplicationListener(scope, "Listener", {
       loadBalancer: loadBalancer,
@@ -77,11 +80,3 @@ export class GuEc2App {
     });
   }
 }
-const app = new App();
-const stack = new GuStack(app, "test-stack", { stack: "deploy" });
-new GuEc2App(stack, {
-  app: "test-app",
-  applicationPort: 9000,
-  publicFacing: false,
-  userData: "",
-});
