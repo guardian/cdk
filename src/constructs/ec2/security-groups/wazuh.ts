@@ -1,9 +1,9 @@
 import type { IVpc } from "@aws-cdk/aws-ec2";
 import { Peer } from "@aws-cdk/aws-ec2";
 import type { GuStack } from "../../core";
-import { GuSecurityGroup } from "./base";
+import { GuBaseSecurityGroup } from "./base";
 
-export class GuWazuhAccess extends GuSecurityGroup {
+export class GuWazuhAccess extends GuBaseSecurityGroup {
   private static instance: GuWazuhAccess | undefined;
 
   private constructor(scope: GuStack, vpc: IVpc) {
