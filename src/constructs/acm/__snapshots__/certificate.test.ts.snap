@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuCertificate class should create a new certificate from scratch 1`] = `
+Object {
+  "Mappings": Object {
+    "stagemapping": Object {
+      "CODE": Object {
+        "domainName": "code-guardian.com",
+        "hostedZoneId": "id123",
+      },
+      "PROD": Object {
+        "domainName": "prod-guardian.com",
+        "hostedZoneId": "id124",
+      },
+    },
+  },
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "TestCertificate6B4956B6": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "DomainValidationOptions": Array [
+          Object {
+            "DomainName": Object {
+              "Fn::FindInMap": Array [
+                "stagemapping",
+                Object {
+                  "Ref": "Stage",
+                },
+                "domainName",
+              ],
+            },
+            "HostedZoneId": Object {
+              "Fn::FindInMap": Array [
+                "stagemapping",
+                Object {
+                  "Ref": "Stage",
+                },
+                "hostedZoneId",
+              ],
+            },
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
