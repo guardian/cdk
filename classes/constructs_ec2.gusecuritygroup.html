@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuSecurityGroup | @guardian/cdk - v6.3.2</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v6.3.2">
+	<title>GuSecurityGroup | @guardian/cdk - v6.4.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v6.4.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v6.3.2</a>
+					<a href="../index.html" class="title">@guardian/cdk - v6.4.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v6.3.2</a>
+					<a href="../modules.html">@guardian/cdk - v6.4.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
@@ -68,25 +68,11 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Defining an AWS Security Group with ingress and egress rules.</p>
-					</div>
-					<p>An ingress rule on port 22 is strictly forbidden as SSH via SSM is preferred.</p>
-					<p>Prefer to use a concrete implementation where possible. See:</p>
-					<ul>
-						<li><a href="constructs_ec2.guwazuhaccess.html">GuWazuhAccess</a></li>
-						<li><a href="constructs_ec2.gupublicinternetaccesssecuritygroup.html">GuPublicInternetAccessSecurityGroup</a></li>
-						<li><a href="constructs_ec2.guhttpsegresssecuritygroup.html">GuHttpsEgressSecurityGroup</a></li>
-					</ul>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">SecurityGroup</span>
+						<a href="constructs_ec2.gubasesecuritygroup.html" class="tsd-signature-type" data-tsd-kind="Class">GuBaseSecurityGroup</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">GuSecurityGroup</span>
@@ -96,9 +82,6 @@
 									</li>
 									<li>
 										<a href="constructs_ec2.guhttpsegresssecuritygroup.html" class="tsd-signature-type" data-tsd-kind="Class">GuHttpsEgressSecurityGroup</a>
-									</li>
-									<li>
-										<a href="constructs_ec2.guwazuhaccess.html" class="tsd-signature-type" data-tsd-kind="Class">GuWazuhAccess</a>
 									</li>
 								</ul>
 							</li>
@@ -135,7 +118,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="constructs_ec2.gusecuritygroup.html#uniqueid" class="tsd-kind-icon">unique<wbr>Id</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroup.html#uniqueid" class="tsd-kind-icon">unique<wbr>Id</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited tsd-is-external">
@@ -178,9 +161,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides SecurityGroup.constructor</p>
+								<p>Overrides <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/d1d7542/src/constructs/ec2/security-groups/base.ts#L46">src/constructs/ec2/security-groups/base.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/6c6dadd/src/constructs/ec2/security-groups/base.ts#L74">src/constructs/ec2/security-groups/base.ts:74</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -207,7 +190,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> allow<wbr>All<wbr>Outbound</h3>
 					<div class="tsd-signature tsd-kind-icon">allow<wbr>All<wbr>Outbound<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.allowAllOutbound</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#allowalloutbound">allowAllOutbound</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:254</li>
 						</ul>
@@ -228,7 +211,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> can<wbr>Inline<wbr>Rule</h3>
 					<div class="tsd-signature tsd-kind-icon">can<wbr>Inline<wbr>Rule<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.canInlineRule</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#caninlinerule">canInlineRule</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:68</li>
 						</ul>
@@ -249,7 +232,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> connections</h3>
 					<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connections</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.connections</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#connections">connections</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:72</li>
 						</ul>
@@ -267,7 +250,7 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> default<wbr>Port</h3>
 					<div class="tsd-signature tsd-kind-icon">default<wbr>Port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Port</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.defaultPort</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#defaultport">defaultPort</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:76</li>
 						</ul>
@@ -285,7 +268,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> env</h3>
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.env</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#env">env</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:128</li>
 						</ul>
@@ -312,7 +295,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> node</h3>
 					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.node</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#node">node</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:70</li>
 						</ul>
@@ -333,7 +316,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> physical<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.physicalName</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#physicalname">physicalName</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:140</li>
 						</ul>
@@ -360,7 +343,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> security<wbr>Group<wbr>Id</h3>
 					<div class="tsd-signature tsd-kind-icon">security<wbr>Group<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.securityGroupId</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#securitygroupid">securityGroupId</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:241</li>
 						</ul>
@@ -384,7 +367,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> security<wbr>Group<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">security<wbr>Group<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.securityGroupName</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#securitygroupname">securityGroupName</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:234</li>
 						</ul>
@@ -408,7 +391,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> security<wbr>Group<wbr>Vpc<wbr>Id</h3>
 					<div class="tsd-signature tsd-kind-icon">security<wbr>Group<wbr>Vpc<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.securityGroupVpcId</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#securitygroupvpcid">securityGroupVpcId</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:248</li>
 						</ul>
@@ -432,7 +415,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> stack</h3>
 					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from SecurityGroup.stack</p>
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#stack">stack</a></p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:115</li>
 						</ul>
@@ -451,10 +434,10 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="uniqueid" class="tsd-anchor"></a>
 					<h3>unique<wbr>Id</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> uniqueId<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -490,7 +473,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup._enableCrossEnvironment</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#_enablecrossenvironment">_enableCrossEnvironment</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:155</li>
 								</ul>
@@ -520,7 +503,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.addEgressRule</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#addegressrule">addEgressRule</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:285</li>
 								</ul>
@@ -568,7 +551,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.addIngressRule</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#addingressrule">addIngressRule</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:273</li>
 								</ul>
@@ -616,7 +599,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.applyRemovalPolicy</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#applyremovalpolicy">applyRemovalPolicy</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:169</li>
 								</ul>
@@ -656,7 +639,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.generatePhysicalName</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#generatephysicalname">generatePhysicalName</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:173</li>
 								</ul>
@@ -681,7 +664,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.getResourceArnAttribute</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#getresourcearnattribute">getResourceArnAttribute</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:197</li>
 								</ul>
@@ -727,7 +710,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.getResourceNameAttribute</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#getresourcenameattribute">getResourceNameAttribute</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:184</li>
 								</ul>
@@ -766,7 +749,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.onPrepare</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#onprepare">onPrepare</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:97</li>
 								</ul>
@@ -799,7 +782,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.onSynthesize</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#onsynthesize">onSynthesize</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
 								</ul>
@@ -838,7 +821,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.onValidate</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#onvalidate">onValidate</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:84</li>
 								</ul>
@@ -869,7 +852,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.prepare</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#prepare">prepare</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:130</li>
 								</ul>
@@ -902,7 +885,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.synthesize</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#synthesize">synthesize</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:140</li>
 								</ul>
@@ -941,7 +924,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.toEgressRuleConfig</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#toegressruleconfig">toEgressRuleConfig</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:97</li>
 								</ul>
@@ -969,7 +952,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.toIngressRuleConfig</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#toingressruleconfig">toIngressRuleConfig</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:91</li>
 								</ul>
@@ -997,7 +980,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.toString</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#tostring">toString</a></p>
 								<ul>
 									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
 								</ul>
@@ -1025,7 +1008,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.validate</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#validate">validate</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:117</li>
 								</ul>
@@ -1056,7 +1039,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.fromLookup</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#fromlookup">fromLookup</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:214</li>
 								</ul>
@@ -1096,7 +1079,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.fromSecurityGroupId</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#fromsecuritygroupid">fromSecurityGroupId</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:227</li>
 								</ul>
@@ -1144,7 +1127,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.isConstruct</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#isconstruct">isConstruct</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:64</li>
 								</ul>
@@ -1178,7 +1161,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.isResource</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#isresource">isResource</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:109</li>
 								</ul>
@@ -1212,7 +1195,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from SecurityGroup.isSecurityGroup</p>
+								<p>Inherited from <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#issecuritygroup">isSecurityGroup</a></p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:60</li>
 								</ul>
@@ -1301,6 +1284,9 @@
 						<a href="../enums/constructs_ec2.subnettype.html" class="tsd-kind-icon">Subnet<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="constructs_ec2.gubasesecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Base<wbr>Security<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="constructs_ec2.guhttpsegresssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Egress<wbr>Security<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
@@ -1347,7 +1333,7 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroup.html#stack" class="tsd-kind-icon">stack</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroup.html#uniqueid" class="tsd-kind-icon">unique<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
@@ -1422,6 +1408,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="constructs_ec2.guwazuhaccess.html" class="tsd-kind-icon">Gu<wbr>Wazuh<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/constructs_ec2.gubasesecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Base<wbr>Security<wbr>Group<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
