@@ -1,10 +1,10 @@
 import { Certificate } from "@aws-cdk/aws-certificatemanager";
 import { ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { App } from "@aws-cdk/core";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
-import type { GuStack } from "../constructs/core";
-import { GuArnParameter } from "../constructs/core";
+import { GuArnParameter, GuStack } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
-import { GuVpc } from "../constructs/ec2";
+import { GuVpc, SubnetType } from "../constructs/ec2";
 import {
   GuApplicationListener,
   GuApplicationLoadBalancer,
@@ -42,7 +42,8 @@ export class GuEc2App {
 
     // TODO: Establish how this works in CFN at deploy-time. Can we get away with this vs
     //  needing to create a `subnets` parameter?
-    const subnets = props.publicFacing ? vpc.publicSubnets : vpc.privateSubnets;
+    const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE });
+
     const certificateArn = new GuArnParameter(scope, "CertArn", {
       description: "ARN of a TLS certificate to install on the load balancer",
     });
@@ -50,19 +51,21 @@ export class GuEc2App {
     const certificate = Certificate.fromCertificateArn(scope, "Certificate", certificateArn.valueAsString);
 
     new GuAutoScalingGroup(scope, "AutoScalingGroup", {
+      vpc,
       app: props.app,
       stageDependentProps: {
         CODE: { minimumInstances: 1 },
         PROD: { minimumInstances: 3 },
       },
       userData: props.userData,
-      vpc: vpc,
-      vpcSubnets: { subnets },
+      vpcSubnets: { subnets: privateSubnets },
     });
 
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       vpc: vpc,
-      vpcSubnets: { subnets },
+      vpcSubnets: {
+        subnets: props.publicFacing ? GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC }) : privateSubnets,
+      },
     });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", { vpc });
@@ -74,3 +77,11 @@ export class GuEc2App {
     });
   }
 }
+const app = new App();
+const stack = new GuStack(app, "test-stack", { stack: "deploy" });
+new GuEc2App(stack, {
+  app: "test-app",
+  applicationPort: 9000,
+  publicFacing: false,
+  userData: "",
+});
