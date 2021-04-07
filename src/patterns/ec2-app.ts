@@ -30,9 +30,6 @@ export class GuEc2App {
     scope.tags.setTag("App", props.app);
 
     const vpc = GuVpc.fromIdParameter(scope, "VPC");
-
-    // TODO: Establish how this works in CFN at deploy-time. Can we get away with this vs
-    //  needing to create a `subnets` parameter?
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE });
 
     const certificateArn = new GuArnParameter(scope, "CertArn", {
