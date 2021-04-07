@@ -46,7 +46,7 @@ export class GuEc2App {
         PROD: { minimumInstances: 3 },
       },
       role: new GuInstanceRole(scope, { app: props.app }),
-      healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }),
+      healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
       userData: props.userData instanceof GuUserData ? props.userData.userData : props.userData,
       vpcSubnets: { subnets: privateSubnets },
     });
