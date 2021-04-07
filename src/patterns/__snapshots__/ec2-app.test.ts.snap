@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`the GuEC2App pattern should compile 1`] = `
+exports[`the GuEC2App pattern should produce a functional EC2 app with minimal arguments 1`] = `
 Object {
   "Mappings": Object {
     "stagemapping": Object {
