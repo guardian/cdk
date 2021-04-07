@@ -1,6 +1,7 @@
 import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import type { GuStack } from "../../core";
+import { AppIdentity } from "../../core/identity";
 
 /**
  * A way to describe an ingress or egress rule for a security group.
@@ -27,11 +28,13 @@ export interface SecurityGroupAccessRule {
   description: string;
 }
 
-export interface GuSecurityGroupProps extends SecurityGroupProps {
+export interface GuBaseSecurityGroupProps extends SecurityGroupProps {
   overrideId?: boolean;
   ingresses?: SecurityGroupAccessRule[];
   egresses?: SecurityGroupAccessRule[];
 }
+
+export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdentity {}
 
 /**
  * Defining an AWS Security Group with ingress and egress rules.
@@ -43,8 +46,8 @@ export interface GuSecurityGroupProps extends SecurityGroupProps {
  * - [[GuPublicInternetAccessSecurityGroup]]
  * - [[GuHttpsEgressSecurityGroup]]
  */
-export class GuSecurityGroup extends SecurityGroup {
-  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
+export abstract class GuBaseSecurityGroup extends SecurityGroup {
+  protected constructor(scope: GuStack, id: string, props: GuBaseSecurityGroupProps) {
     super(scope, id, props);
 
     if (props.overrideId) {
@@ -68,8 +71,16 @@ export class GuSecurityGroup extends SecurityGroup {
   }
 }
 
+export class GuSecurityGroup extends GuBaseSecurityGroup {
+  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
+    super(scope, AppIdentity.suffixText(props, id), props);
+    AppIdentity.taggedConstruct(props, this);
+  }
+}
+
+// TODO should this be a singleton?
 export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
-  constructor(scope: GuStack, id: string, props: SecurityGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
     super(scope, id, {
       ...props,
       ingresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allow all inbound traffic via HTTPS" }],
@@ -78,17 +89,19 @@ export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
   }
 }
 
+// TODO should this be a singleton?
 export class GuHttpsEgressSecurityGroup extends GuSecurityGroup {
-  constructor(scope: GuStack, id: string, props: SecurityGroupProps) {
+  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
     super(scope, id, {
-      vpc: props.vpc,
+      ...props,
       allowAllOutbound: false,
       description: "Allow all outbound HTTPS traffic",
+      ingresses: [],
       egresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allow all outbound HTTPS traffic" }],
     });
   }
 
-  public static forVpc(scope: GuStack, props: SecurityGroupProps): GuHttpsEgressSecurityGroup {
+  public static forVpc(scope: GuStack, props: GuSecurityGroupProps): GuHttpsEgressSecurityGroup {
     return new GuHttpsEgressSecurityGroup(scope, "GuHttpsEgressSecurityGroup", props);
   }
 }

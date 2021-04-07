@@ -62,13 +62,18 @@ export class GuStack extends Stack implements StackStageIdentity {
     return this._mappings ?? (this._mappings = new GuStageMapping(this));
   }
 
-  setStageDependentValue<T extends string | number | boolean>(stageDependentValue: GuStageDependentValue<T>): void {
+  /**
+   * A helper function to switch between different values depending on the Stage being CloudFormed (e.g.
+   * use 1 in `CODE` or 3 in `PROD`).
+   *
+   * Note: Standard conditional logic which references a CloudFormation Parameter's value will not work
+   * as Parameters are not resolved at synth-time. This helper function creates CloudFormation
+   * Mappings to work around this limitation.
+   */
+  withStageDependentValue<T extends string | number | boolean>(stageDependentValue: GuStageDependentValue<T>): T {
     this.mappings.setValue(Stage.CODE, stageDependentValue.variableName, stageDependentValue.stageValues.CODE);
     this.mappings.setValue(Stage.PROD, stageDependentValue.variableName, stageDependentValue.stageValues.PROD);
-  }
-
-  getStageDependentValue<T>(key: string): T {
-    return (this.mappings.findInMap(this.stage, key) as unknown) as T;
+    return (this.mappings.findInMap(this.stage, stageDependentValue.variableName) as unknown) as T;
   }
 
   /**
