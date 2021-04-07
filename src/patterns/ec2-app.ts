@@ -2,7 +2,7 @@ import { HealthCheck } from "@aws-cdk/aws-autoscaling";
 import { Certificate } from "@aws-cdk/aws-certificatemanager";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
-import { GuAutoScalingGroup } from "../constructs/autoscaling";
+import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
 import { GuArnParameter } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
@@ -15,7 +15,7 @@ import {
 } from "../constructs/loadbalancing";
 
 interface GuEc2AppProps extends AppIdentity {
-  userData: string;
+  userData: GuUserData | string;
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
   applicationPort: number | GuApplicationPorts;
 
@@ -64,7 +64,7 @@ export class GuEc2App {
       },
       role: new GuInstanceRole(scope, { app: props.app }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }),
-      userData: props.userData,
+      userData: props.userData instanceof GuUserData ? props.userData.userData : props.userData,
       vpcSubnets: { subnets: privateSubnets },
     });
 
