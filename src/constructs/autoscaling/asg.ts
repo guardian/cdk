@@ -6,7 +6,7 @@ import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2
 import { Stage } from "../../constants";
 import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
-import type { AppIdentity } from "../core/identity";
+import { AppIdentity } from "../core/identity";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -104,7 +104,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, props),
     };
 
-    super(scope, id, mergedProps);
+    super(scope, AppIdentity.suffixText(props, id), mergedProps);
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
@@ -117,5 +117,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     cfnAsg.addDeletionOverride("UpdatePolicy");
 
     if (mergedProps.overrideId) cfnAsg.overrideLogicalId(id);
+
+    AppIdentity.taggedConstruct(props, this);
   }
 }

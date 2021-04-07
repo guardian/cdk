@@ -1,6 +1,7 @@
 interface Tag {
   Key: string;
   Value: unknown;
+  PropagateAtLaunch?: boolean;
 }
 
 export function alphabeticalTags(tags: Tag[]): Tag[] {
