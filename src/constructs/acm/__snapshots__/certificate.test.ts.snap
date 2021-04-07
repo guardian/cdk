@@ -1,6 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuCertificate class should create a new certificate from scratch 1`] = `
+exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
+Object {
+  "Mappings": Object {
+    "stagemapping": Object {
+      "CODE": Object {
+        "domainName": "code-guardian.com",
+      },
+      "PROD": Object {
+        "domainName": "prod-guardian.com",
+      },
+    },
+  },
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "TestCertificate6B4956B6": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
+
+exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
 Object {
   "Mappings": Object {
     "stagemapping": Object {
