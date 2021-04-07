@@ -4,10 +4,11 @@ import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import type { GuStack } from "../core";
+import { AppIdentity } from "../core/identity";
 import { GuMigratingResource } from "../core/migrating";
 import type { GuStatefulConstruct } from "../core/migrating";
 
-type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource;
+type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource & AppIdentity;
 
 interface GuDnsValidatedCertificateProps {
   domainName: string;
@@ -39,5 +40,6 @@ export class GuCertificate extends Certificate implements GuStatefulConstruct {
     this.applyRemovalPolicy(RemovalPolicy.RETAIN);
     this.isStatefulConstruct = true;
     GuMigratingResource.setLogicalId(this, scope, { existingLogicalId: props.existingLogicalId });
+    AppIdentity.taggedConstruct({ app: props.app }, this);
   }
 }
