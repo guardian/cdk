@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuSecurityGroupProps | @guardian/cdk - v7.0.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v7.0.0">
+	<title>GuSecurityGroupProps | @guardian/cdk - v6.4.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v6.4.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v7.0.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v6.4.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v7.0.0</a>
+					<a href="../modules.html">@guardian/cdk - v6.4.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
@@ -94,6 +94,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#allowalloutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_ec2.gusecuritygroupprops.html#app" class="tsd-kind-icon">app</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gusecuritygroupprops.html#disableinlinerules" class="tsd-kind-icon">disable<wbr>Inline<wbr>Rules</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_ec2.gusecuritygroupprops.html#egresses" class="tsd-kind-icon">egresses</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_ec2.gusecuritygroupprops.html#ingresses" class="tsd-kind-icon">ingresses</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_ec2.gusecuritygroupprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a></li>
@@ -140,7 +141,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from AppIdentity.app</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e001123/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/486946b/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -168,6 +169,36 @@
 						</dl>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="disableinlinerules" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> disable<wbr>Inline<wbr>Rules</h3>
+					<div class="tsd-signature tsd-kind-icon">disable<wbr>Inline<wbr>Rules<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroupprops.html">GuBaseSecurityGroupProps</a>.<a href="constructs_ec2.gubasesecuritygroupprops.html#disableinlinerules">disableInlineRules</a></p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-ec2/lib/security-group.d.ts:156</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether to disable inline ingress and egress rule optimization.</p>
+						</div>
+						<p>If this is set to true, ingress and egress rules will not be declared under the
+						SecurityGroup in cloudformation, but will be separate elements.</p>
+						<p>Inlining rules is an optimization for producing smaller stack templates. Sometimes
+						this is not desirable, for example when security group access is managed via tags.</p>
+						<p>The default value can be overriden globally by setting the context variable
+						&#39;@aws-cdk/aws-ec2.securityGroupDisableInlineRules&#39;.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>false</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="egresses" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> egresses</h3>
@@ -175,7 +206,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroupprops.html">GuBaseSecurityGroupProps</a>.<a href="constructs_ec2.gubasesecuritygroupprops.html#egresses">egresses</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e001123/src/constructs/ec2/security-groups/base.ts#L34">src/constructs/ec2/security-groups/base.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/486946b/src/constructs/ec2/security-groups/base.ts#L34">src/constructs/ec2/security-groups/base.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -186,7 +217,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroupprops.html">GuBaseSecurityGroupProps</a>.<a href="constructs_ec2.gubasesecuritygroupprops.html#ingresses">ingresses</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e001123/src/constructs/ec2/security-groups/base.ts#L33">src/constructs/ec2/security-groups/base.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/486946b/src/constructs/ec2/security-groups/base.ts#L33">src/constructs/ec2/security-groups/base.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -197,7 +228,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="constructs_ec2.gubasesecuritygroupprops.html">GuBaseSecurityGroupProps</a>.<a href="constructs_ec2.gubasesecuritygroupprops.html#overrideid">overrideId</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e001123/src/constructs/ec2/security-groups/base.ts#L32">src/constructs/ec2/security-groups/base.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/486946b/src/constructs/ec2/security-groups/base.ts#L32">src/constructs/ec2/security-groups/base.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -348,6 +379,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gusecuritygroupprops.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="constructs_ec2.gusecuritygroupprops.html#disableinlinerules" class="tsd-kind-icon">disable<wbr>Inline<wbr>Rules</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="constructs_ec2.gusecuritygroupprops.html#egresses" class="tsd-kind-icon">egresses</a>
