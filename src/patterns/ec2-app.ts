@@ -1,5 +1,7 @@
+import { HealthCheck } from "@aws-cdk/aws-autoscaling";
 import { Certificate } from "@aws-cdk/aws-certificatemanager";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { Duration } from "@aws-cdk/core";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
 import { GuArnParameter } from "../constructs/core";
@@ -61,6 +63,7 @@ export class GuEc2App {
         PROD: { minimumInstances: 3 },
       },
       role: new GuInstanceRole(scope, { app: props.app }),
+      healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }),
       userData: props.userData,
       vpcSubnets: { subnets: privateSubnets },
     });

@@ -63,6 +63,8 @@ Object {
   "Resources": Object {
     "AutoScalingGroupASG804C35BE": Object {
       "Properties": Object {
+        "HealthCheckGracePeriod": 120,
+        "HealthCheckType": "ELB",
         "LaunchConfigurationName": Object {
           "Ref": "AutoScalingGroupLaunchConfigDEEB160C",
         },
