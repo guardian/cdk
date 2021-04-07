@@ -124,7 +124,6 @@ describe("The GuApplicationTargetGroup class", () => {
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
       HealthCheckIntervalSeconds: 30,
       HealthCheckPath: "/healthcheck",
-      HealthCheckPort: "9000",
       HealthCheckProtocol: "HTTP",
       HealthCheckTimeoutSeconds: 10,
       HealthyThresholdCount: 2,
@@ -138,6 +137,7 @@ describe("The GuApplicationTargetGroup class", () => {
       vpc,
       healthCheck: {
         path: "/test",
+        port: "9000",
       },
     });
 
