@@ -98,376 +98,9 @@ Object {
             },
           },
         ],
-        "VPCZoneIdentifier": Object {
-          "Ref": "PrivateSubnets",
-        },
-      },
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-    },
-    "AutoScalingGroupInstanceProfile342FAC7C": Object {
-      "Properties": Object {
-        "Roles": Array [
+        "TargetGroupARNs": Array [
           Object {
-            "Ref": "AutoScalingGroupInstanceRoleDC70D128",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "AutoScalingGroupInstanceRoleDC70D128": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Test/AutoScalingGroup",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "AutoScalingGroupLaunchConfigDEEB160C": Object {
-      "DependsOn": Array [
-        "AutoScalingGroupInstanceRoleDC70D128",
-      ],
-      "Properties": Object {
-        "IamInstanceProfile": Object {
-          "Ref": "AutoScalingGroupInstanceProfile342FAC7C",
-        },
-        "ImageId": Object {
-          "Ref": "AMITestguec2app",
-        },
-        "InstanceType": Object {
-          "Ref": "InstanceTypeTestguec2app",
-        },
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "GuHttpsEgressSecurityGroupTestguec2app03766BDB",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": "#!/bin/dev foobarbaz",
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-    },
-    "GuHttpsEgressSecurityGroupTestguec2app03766BDB": Object {
-      "Properties": Object {
-        "GroupDescription": "Allow all outbound HTTPS traffic",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound HTTPS traffic",
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "test-gu-ec2-app",
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "VpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "Listener828B0E81": Object {
-      "Properties": Object {
-        "Certificates": Array [
-          Object {
-            "CertificateArn": Object {
-              "Ref": "CertArn",
-            },
-          },
-        ],
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "TargetGroup3D7CD9B8",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "LoadBalancerBE9EEC3A",
-        },
-        "Port": 443,
-        "Protocol": "HTTPS",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "LoadBalancerBE9EEC3A": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "true",
-          },
-        ],
-        "Scheme": "internal",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "LoadBalancerSecurityGroupA28D6DD7",
-              "GroupId",
-            ],
-          },
-        ],
-        "Subnets": Object {
-          "Ref": "PrivateSubnets",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "LoadBalancerSecurityGroupA28D6DD7": Object {
-      "Properties": Object {
-        "GroupDescription": "Automatically created Security Group for ELB TestLoadBalancerD84633F9",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "255.255.255.255/32",
-            "Description": "Disallow all traffic",
-            "FromPort": 252,
-            "IpProtocol": "icmp",
-            "ToPort": 86,
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow from anyone on port 443",
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "VpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "TargetGroup3D7CD9B8": Object {
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 30,
-        "HealthCheckPath": "/healthcheck",
-        "HealthCheckPort": "9000",
-        "HealthCheckProtocol": "HTTP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 80,
-        "Protocol": "HTTP",
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "TargetType": "instance",
-        "UnhealthyThresholdCount": 5,
-        "VpcId": Object {
-          "Ref": "VpcId",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-  },
-}
-`;
-
-exports[`the GuEC2App pattern should contain a load balancer, autoscaling group 1`] = `
-Object {
-  "Mappings": Object {
-    "stagemapping": Object {
-      "CODE": Object {
-        "maxInstances": 2,
-        "minInstances": 1,
-      },
-      "PROD": Object {
-        "maxInstances": 6,
-        "minInstances": 3,
-      },
-    },
-  },
-  "Parameters": Object {
-    "AMITestguec2app": Object {
-      "Description": "Amazon Machine Image ID for the app test-gu-ec2-app. Use this in conjunction with AMIgo to keep AMIs up to date.",
-      "Type": "AWS::EC2::Image::Id",
-    },
-    "CertArn": Object {
-      "AllowedPattern": "arn:aws:[a-z0-9]*:[a-z0-9\\\\-]*:[0-9]{12}:.*",
-      "ConstraintDescription": "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
-      "Description": "ARN of a TLS certificate to install on the load balancer",
-      "Type": "String",
-    },
-    "InstanceTypeTestguec2app": Object {
-      "Default": "t3.small",
-      "Description": "EC2 Instance Type for the app test-gu-ec2-app",
-      "Type": "String",
-    },
-    "PrivateSubnets": Object {
-      "Default": "/account/vpc/primary/subnets/private",
-      "Description": "A list of private subnets",
-      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
-    },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-    "VpcId": Object {
-      "Default": "/account/vpc/primary/id",
-      "Description": "Virtual Private Cloud to run EC2 instances within",
-      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
-    },
-  },
-  "Resources": Object {
-    "AutoScalingGroupASG804C35BE": Object {
-      "Properties": Object {
-        "LaunchConfigurationName": Object {
-          "Ref": "AutoScalingGroupLaunchConfigDEEB160C",
-        },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "stagemapping",
-            Object {
-              "Ref": "Stage",
-            },
-            "maxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "stagemapping",
-            Object {
-              "Ref": "Stage",
-            },
-            "minInstances",
-          ],
-        },
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "PropagateAtLaunch": true,
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Test/AutoScalingGroup",
-          },
-          Object {
-            "Key": "Stack",
-            "PropagateAtLaunch": true,
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Ref": "TargetGroup3D7CD9B8",
           },
         ],
         "VPCZoneIdentifier": Object {
@@ -599,6 +232,27 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "GuHttpsEgressSecurityGroupTestguec2appfromTestLoadBalancerSecurityGroupCEA299A63000490279E1": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupTestguec2app03766BDB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerSecurityGroupA28D6DD7",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
     "Listener828B0E81": Object {
       "Properties": Object {
         "Certificates": Array [
@@ -666,15 +320,6 @@ Object {
     "LoadBalancerSecurityGroupA28D6DD7": Object {
       "Properties": Object {
         "GroupDescription": "Automatically created Security Group for ELB TestLoadBalancerD84633F9",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "255.255.255.255/32",
-            "Description": "Disallow all traffic",
-            "FromPort": 252,
-            "IpProtocol": "icmp",
-            "ToPort": 86,
-          },
-        ],
         "SecurityGroupIngress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -706,6 +351,27 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "LoadBalancerSecurityGrouptoTestGuHttpsEgressSecurityGroupTestguec2appB6F862DC30009712F0F9": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupTestguec2app03766BDB",
+            "GroupId",
+          ],
+        },
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerSecurityGroupA28D6DD7",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
     "TargetGroup3D7CD9B8": Object {
       "Properties": Object {
         "HealthCheckIntervalSeconds": 30,
@@ -714,7 +380,7 @@ Object {
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 10,
         "HealthyThresholdCount": 2,
-        "Port": 80,
+        "Port": 3000,
         "Protocol": "HTTP",
         "Tags": Array [
           Object {
