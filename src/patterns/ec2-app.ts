@@ -18,20 +18,6 @@ interface GuEc2AppProps extends AppIdentity {
   userData: GuUserData | string;
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
   applicationPort: number | GuApplicationPorts;
-
-  // Ignore these
-  // autoscalingGroup: {
-  //   vpc?: string;
-  //   subnets?: string[];
-  //   role?: string;
-  //   capacity?: { min: number; max?: number };
-  //   healthcheck?: string;
-  //   targetGroup?: string;
-  //   additionalSecurityGroups?: string[];
-  //   associatePublicIpAddress?: boolean; // inferred from publicFacing
-  // };
-  //
-  // loadbalancer: { optional: { certificates: string[]; open: false } };
 }
 
 export enum GuApplicationPorts {
