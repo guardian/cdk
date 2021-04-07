@@ -8,13 +8,55 @@ import { AppIdentity } from "../core/identity";
 import { GuMigratingResource } from "../core/migrating";
 import type { GuStatefulConstruct } from "../core/migrating";
 
-type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource & AppIdentity;
+export type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource & AppIdentity;
 
-interface GuDnsValidatedCertificateProps {
+export interface GuDnsValidatedCertificateProps {
   domainName: string;
   hostedZoneId?: string;
 }
 
+/**
+ * Construct which creates an ACM Certificate.
+ *
+ * If your DNS is managed via Route 53, then supplying `hostedZoneId` props will allow AWS to automatically
+ * validate your certificate.
+ *
+ * If your DNS is not managed via Route 53, or you omit the `hostedZoneId` props, then the CloudFormation
+ * operation which adds this construct will pause until the relevant DNS record has been added manually.
+ *
+ * Example usage for creating a new certificate:
+ *
+ * ```typescript
+ * new GuCertificate(stack, "TestCertificate", {
+ *    app: "testing",
+ *    [Stage.CODE]: {
+ *      domainName: "code-guardian.com",
+ *      hostedZoneId: "id123",
+ *    },
+ *    [Stage.PROD]: {
+ *      domainName: "prod-guardian.com",
+ *      hostedZoneId: "id124",
+ *    },
+ *  });
+ *```
+ *
+ * Example usage for inheriting a certificate which was created via CloudFormation:
+ *
+ * ```typescript
+ * new GuCertificate(stack, "TestCertificate", {
+ *    app: "testing",
+ *    existingLogicalId: "MyCloudFormedCertificate",
+ *    [Stage.CODE]: {
+ *      domainName: "code-guardian.com",
+ *      hostedZoneId: "id123",
+ *    },
+ *    [Stage.PROD]: {
+ *      domainName: "prod-guardian.com",
+ *      hostedZoneId: "id124",
+ *    },
+ *  });
+ *```
+ */
 export class GuCertificate extends Certificate implements GuStatefulConstruct {
   isStatefulConstruct: true;
   constructor(scope: GuStack, id: string, props: GuCertificateProps) {

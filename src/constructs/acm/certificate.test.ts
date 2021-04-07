@@ -39,6 +39,7 @@ describe("The GuCertificate class", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuCertificate(stack, "TestCertificate", {
       app: "testing",
+      existingLogicalId: "MyCloudFormedCertificate",
       [Stage.CODE]: {
         domainName: "code-guardian.com",
         hostedZoneId: "id123",
@@ -47,7 +48,6 @@ describe("The GuCertificate class", () => {
         domainName: "prod-guardian.com",
         hostedZoneId: "id124",
       },
-      existingLogicalId: "MyCloudFormedCertificate",
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).toContain("MyCloudFormedCertificate");
