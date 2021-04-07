@@ -4,7 +4,7 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
-import type { GuStack, GuStageDependentValue } from "../core";
+import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import type { AppIdentity } from "../core/identity";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
@@ -59,27 +59,21 @@ interface AwsAsgCapacityProps {
 }
 
 function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDependentAsgProps): AwsAsgCapacityProps {
-  const minInstancesKey = "minInstances";
-  const maxInstancesKey = "maxInstances";
-  const minInstances: GuStageDependentValue<number> = {
-    variableName: minInstancesKey,
-    stageValues: {
-      [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
-      [Stage.PROD]: stageDependentProps.PROD.minimumInstances,
-    },
-  };
-  const maxInstances: GuStageDependentValue<number> = {
-    variableName: maxInstancesKey,
-    stageValues: {
-      [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
-      [Stage.PROD]: stageDependentProps.PROD.maximumInstances ?? stageDependentProps.PROD.minimumInstances * 2,
-    },
-  };
-  stack.setStageDependentValue(minInstances);
-  stack.setStageDependentValue(maxInstances);
   return {
-    minCapacity: stack.getStageDependentValue(minInstancesKey),
-    maxCapacity: stack.getStageDependentValue(maxInstancesKey),
+    minCapacity: stack.withStageDependentValue({
+      variableName: "minInstances",
+      stageValues: {
+        [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
+        [Stage.PROD]: stageDependentProps.PROD.minimumInstances,
+      },
+    }),
+    maxCapacity: stack.withStageDependentValue({
+      variableName: "maxInstances",
+      stageValues: {
+        [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
+        [Stage.PROD]: stageDependentProps.PROD.maximumInstances ?? stageDependentProps.PROD.minimumInstances * 2,
+      },
+    }),
   };
 }
 
