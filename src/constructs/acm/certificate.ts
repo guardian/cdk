@@ -14,17 +14,19 @@ interface GuDnsValidatedCertificateProps {
 
 export class GuCertificate extends Certificate {
   constructor(scope: GuStack, id: string, props: GuCertificateProps) {
-    scope.setStageDependentValue({
-      variableName: "domainName",
-      stageValues: { [Stage.CODE]: props.CODE.domainName, [Stage.PROD]: props.PROD.domainName },
-    });
-    scope.setStageDependentValue({
-      variableName: "hostedZoneId",
-      stageValues: { [Stage.CODE]: props.CODE.hostedZoneId, [Stage.PROD]: props.PROD.hostedZoneId },
-    });
-    const hostedZone = HostedZone.fromHostedZoneId(scope, "HostedZone", scope.getStageDependentValue("hostedZoneId"));
+    const hostedZone = HostedZone.fromHostedZoneId(
+      scope,
+      "HostedZone",
+      scope.withStageDependentValue({
+        variableName: "hostedZoneId",
+        stageValues: { [Stage.CODE]: props.CODE.hostedZoneId, [Stage.PROD]: props.PROD.hostedZoneId },
+      })
+    );
     const awsCertificateProps: CertificateProps = {
-      domainName: scope.getStageDependentValue("domainName"),
+      domainName: scope.withStageDependentValue({
+        variableName: "domainName",
+        stageValues: { [Stage.CODE]: props.CODE.domainName, [Stage.PROD]: props.PROD.domainName },
+      }),
       validation: CertificateValidation.fromDns(hostedZone),
     };
     super(scope, id, awsCertificateProps);
