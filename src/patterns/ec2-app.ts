@@ -17,7 +17,7 @@ import {
 interface GuEc2AppProps extends AppIdentity {
   userData: GuUserData | string;
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
-  applicationPort: number | GuApplicationPorts;
+  applicationPort: GuApplicationPorts | number;
 }
 
 export enum GuApplicationPorts {
