@@ -25,10 +25,20 @@ Object {
       "Description": "ARN of a TLS certificate to install on the load balancer",
       "Type": "String",
     },
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "InstanceTypeTestguec2app": Object {
       "Default": "t3.small",
       "Description": "EC2 Instance Type for the app test-gu-ec2-app",
       "Type": "String",
+    },
+    "LoggingStreamName": Object {
+      "Default": "/account/services/logging.stream.name",
+      "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
+      "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "PrivateSubnets": Object {
       "Default": "/account/vpc/primary/subnets/private",
@@ -113,62 +123,15 @@ Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "AutoScalingGroupInstanceRoleDC70D128",
+            "Ref": "InstanceRoleTest-gu-ec2-app",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "AutoScalingGroupInstanceRoleDC70D128": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Test/AutoScalingGroup",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
     "AutoScalingGroupLaunchConfigDEEB160C": Object {
       "DependsOn": Array [
-        "AutoScalingGroupInstanceRoleDC70D128",
+        "InstanceRoleTest-gu-ec2-app",
       ],
       "Properties": Object {
         "IamInstanceProfile": Object {
@@ -193,6 +156,68 @@ Object {
         },
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "DescribeEC2PolicyFF5F9295": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups",
+                "ec2:DescribeTags",
+                "ec2:DescribeInstances",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "describe-ec2-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTest-gu-ec2-app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GetDistributablePolicyTestguec2app0138FC03": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:s3:::",
+                    Object {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/test-stack/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-gu-ec2-app/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GetDistributablePolicyTestguec2app0138FC03",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTest-gu-ec2-app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "GuHttpsEgressSecurityGroupTestguec2app03766BDB": Object {
       "Properties": Object {
@@ -252,6 +277,96 @@ Object {
         "ToPort": 3000,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuLogShippingPolicy981BFE5A": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kinesis:Describe*",
+                "kinesis:Put*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:kinesis:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":stream/",
+                    Object {
+                      "Ref": "LoggingStreamName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTest-gu-ec2-app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "InstanceRoleTest-gu-ec2-app": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Path": "/",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "Listener828B0E81": Object {
       "Properties": Object {
@@ -371,6 +486,82 @@ Object {
         "ToPort": 3000,
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "ParameterStoreReadTestguec2app407A4CEB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/test-gu-ec2-app",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "parameter-store-read-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTest-gu-ec2-app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMRunCommandPolicy244E1613": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply",
+                "ssm:UpdateInstanceInformation",
+                "ssm:ListInstanceAssociations",
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeDocumentParameters",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ssm-run-command-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTest-gu-ec2-app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "TargetGroup3D7CD9B8": Object {
       "Properties": Object {

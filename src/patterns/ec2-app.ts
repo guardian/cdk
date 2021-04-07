@@ -5,6 +5,7 @@ import type { GuStack } from "../constructs/core";
 import { GuArnParameter } from "../constructs/core";
 import type { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
+import { GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationListener,
   GuApplicationLoadBalancer,
@@ -59,6 +60,7 @@ export class GuEc2App {
         CODE: { minimumInstances: 1 },
         PROD: { minimumInstances: 3 },
       },
+      role: new GuInstanceRole(scope, { app: props.app }),
       userData: props.userData,
       vpcSubnets: { subnets: privateSubnets },
     });
