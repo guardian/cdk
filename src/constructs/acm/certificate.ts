@@ -16,7 +16,7 @@ export interface GuDnsValidatedCertificateProps {
 }
 
 /**
- * Construct which creates an ACM Certificate.
+ * Construct which creates a DNS-validated ACM Certificate.
  *
  * If your DNS is managed via Route 53, then supplying `hostedZoneId` props will allow AWS to automatically
  * validate your certificate.
