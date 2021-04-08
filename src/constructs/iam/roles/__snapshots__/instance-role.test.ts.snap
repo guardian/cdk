@@ -274,16 +274,16 @@ Object {
         "PolicyName": "describe-ec2-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-first-app",
+            "Ref": "InstanceRoleMyfirstapp",
           },
           Object {
-            "Ref": "InstanceRoleMy-second-app",
+            "Ref": "InstanceRoleMysecondapp",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyMyfirstapp9CD90B92": Object {
+    "GetDistributablePolicyMyfirstappB56CBAB1": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -310,16 +310,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablePolicyMyfirstapp9CD90B92",
+        "PolicyName": "GetDistributablePolicyMyfirstappB56CBAB1",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-first-app",
+            "Ref": "InstanceRoleMyfirstapp",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyMysecondappA8D9FE69": Object {
+    "GetDistributablePolicyMysecondapp5096BFDB": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -346,10 +346,10 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablePolicyMysecondappA8D9FE69",
+        "PolicyName": "GetDistributablePolicyMysecondapp5096BFDB",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-second-app",
+            "Ref": "InstanceRoleMysecondapp",
           },
         ],
       },
@@ -391,16 +391,16 @@ Object {
         "PolicyName": "GuLogShippingPolicy981BFE5A",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-first-app",
+            "Ref": "InstanceRoleMyfirstapp",
           },
           Object {
-            "Ref": "InstanceRoleMy-second-app",
+            "Ref": "InstanceRoleMysecondapp",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRoleMy-first-app": Object {
+    "InstanceRoleMyfirstapp": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -448,7 +448,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "InstanceRoleMy-second-app": Object {
+    "InstanceRoleMysecondapp": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -496,7 +496,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreReadMyfirstappBCF3BB3A": Object {
+    "ParameterStoreReadMyfirstappE5C5C329": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -530,13 +530,13 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-first-app",
+            "Ref": "InstanceRoleMyfirstapp",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ParameterStoreReadMysecondapp7B80ABE2": Object {
+    "ParameterStoreReadMysecondapp76C0E32C": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -570,7 +570,7 @@ Object {
         "PolicyName": "parameter-store-read-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-second-app",
+            "Ref": "InstanceRoleMysecondapp",
           },
         ],
       },
@@ -606,10 +606,10 @@ Object {
         "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
-            "Ref": "InstanceRoleMy-first-app",
+            "Ref": "InstanceRoleMyfirstapp",
           },
           Object {
-            "Ref": "InstanceRoleMy-second-app",
+            "Ref": "InstanceRoleMysecondapp",
           },
         ],
       },
