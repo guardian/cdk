@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>constants | @guardian/cdk - v7.1.0</title>
+	<title>GuDnsValidatedCertificateProps | @guardian/cdk - v7.1.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v7.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,72 +55,60 @@
 					<a href="../modules.html">@guardian/cdk - v7.1.0</a>
 				</li>
 				<li>
-					<a href="constants.html">constants</a>
+					<a href="../modules/constructs_acm.html">constructs/acm</a>
+				</li>
+				<li>
+					<a href="constructs_acm.gudnsvalidatedcertificateprops.html">GuDnsValidatedCertificateProps</a>
 				</li>
 			</ul>
-			<h1>Module constants</h1>
+			<h1>Interface GuDnsValidatedCertificateProps</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">GuDnsValidatedCertificateProps</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumerations</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/constants.stage.html" class="tsd-kind-icon">Stage</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="constants.html#regexpattern" class="tsd-kind-icon">Regex<wbr>Pattern</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="constants.html#stages" class="tsd-kind-icon">Stages</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_acm.gudnsvalidatedcertificateprops.html#domainname" class="tsd-kind-icon">domain<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_acm.gudnsvalidatedcertificateprops.html#hostedzoneid" class="tsd-kind-icon">hosted<wbr>Zone<wbr>Id</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="regexpattern" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Regex<wbr>Pattern</h3>
-					<div class="tsd-signature tsd-kind-icon">Regex<wbr>Pattern<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>ACM_ARN<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>ARN<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>GUARDIAN_EMAIL<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>S3ARN<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="domainname" class="tsd-anchor"></a>
+					<h3>domain<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">domain<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/345995d/src/constants/regex-pattern.ts#L11">src/constants/regex-pattern.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/345995d/src/constructs/acm/certificate.ts#L14">src/constructs/acm/certificate.ts:14</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>ACM_<wbr>ARN<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-							</li>
-							<li class="tsd-parameter">
-								<h5>ARN<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-							</li>
-							<li class="tsd-parameter">
-								<h5>GUARDIAN_<wbr>EMAIL<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-							</li>
-							<li class="tsd-parameter">
-								<h5>S3ARN<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-							</li>
-						</ul>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="stages" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Stages</h3>
-					<div class="tsd-signature tsd-kind-icon">Stages<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="hostedzoneid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hosted<wbr>Zone<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">hosted<wbr>Zone<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/345995d/src/constants/stage.ts#L7">src/constants/stage.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/345995d/src/constructs/acm/certificate.ts#L15">src/constructs/acm/certificate.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -132,69 +120,81 @@
 					<li class=" ">
 						<a href="../modules.html">Modules</a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constants.html">constants</a>
+					</li>
 					<li class="current tsd-kind-module">
-						<a href="constants.html">constants</a>
+						<a href="../modules/constructs_acm.html">constructs/acm</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_acm.html">constructs/acm</a>
+						<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_autoscaling.html">constructs/autoscaling</a>
+						<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
+						<a href="../modules/constructs_core.html">constructs/core</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_core.html">constructs/core</a>
+						<a href="../modules/constructs_ec2.html">constructs/ec2</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_ec2.html">constructs/ec2</a>
+						<a href="../modules/constructs_iam.html">constructs/iam</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_iam.html">constructs/iam</a>
+						<a href="../modules/constructs_kinesis.html">constructs/kinesis</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_kinesis.html">constructs/kinesis</a>
+						<a href="../modules/constructs_lambda.html">constructs/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_lambda.html">constructs/lambda</a>
+						<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_loadbalancing.html">constructs/loadbalancing</a>
+						<a href="../modules/constructs_rds.html">constructs/rds</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_rds.html">constructs/rds</a>
+						<a href="../modules/constructs_sns.html">constructs/sns</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_sns.html">constructs/sns</a>
+						<a href="../modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="index.html">index</a>
+						<a href="../modules/utils_ec2.html">utils/ec2</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils_ec2.html">utils/ec2</a>
+						<a href="../modules/utils_lambda.html">utils/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils_lambda.html">utils/lambda</a>
+						<a href="../modules/utils_security_groups.html">utils/security-<wbr>groups</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils_security_groups.html">utils/security-<wbr>groups</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="utils_test.html">utils/test</a>
+						<a href="../modules/utils_test.html">utils/test</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/constants.stage.html" class="tsd-kind-icon">Stage</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/constructs_acm.gucertificate.html" class="tsd-kind-icon">Gu<wbr>Certificate</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="constants.html#regexpattern" class="tsd-kind-icon">Regex<wbr>Pattern</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_acm.gudnsvalidatedcertificateprops.html" class="tsd-kind-icon">Gu<wbr>Dns<wbr>Validated<wbr>Certificate<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_acm.gudnsvalidatedcertificateprops.html#domainname" class="tsd-kind-icon">domain<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_acm.gudnsvalidatedcertificateprops.html#hostedzoneid" class="tsd-kind-icon">hosted<wbr>Zone<wbr>Id</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="constants.html#stages" class="tsd-kind-icon">Stages</a>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/constructs_acm.html#gucertificateprops" class="tsd-kind-icon">Gu<wbr>Certificate<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>
@@ -213,6 +213,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
