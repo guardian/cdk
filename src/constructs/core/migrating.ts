@@ -1,4 +1,5 @@
 import type { CfnElement, IConstruct } from "@aws-cdk/core";
+import { Logger } from "../../utils/logger";
 import type { GuStack } from "./stack";
 
 export interface GuMigratingResource {
@@ -46,19 +47,19 @@ export const GuMigratingResource = {
       }
 
       if (isStateful) {
-        console.warn(
+        Logger.warn(
           `GuStack has 'migratedFromCloudFormation' set to true. ${id} is a stateful construct and 'existingLogicalId' has not been set. ${id}'s logicalId will be auto-generated and consequently AWS will create a new resource rather than inheriting an existing one. This is not advised as downstream services, such as DNS, will likely need updating.`
         );
       }
     } else {
       if (existingLogicalId) {
-        console.warn(
+        Logger.warn(
           `GuStack has 'migratedFromCloudFormation' set to false. ${id} has an 'existingLogicalId' set to ${existingLogicalId}. This will have no effect - the logicalId will be auto-generated. Set 'migratedFromCloudFormation' to true for 'existingLogicalId' to be observed.`
         );
       }
 
       if (isStateful) {
-        console.info(
+        Logger.info(
           `GuStack has 'migratedFromCloudFormation' set to false. ${id} is a stateful construct, it's logicalId will be auto-generated and AWS will create a new resource.`
         );
       }

@@ -2,6 +2,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import type { BucketProps } from "@aws-cdk/aws-s3";
 import { Bucket } from "@aws-cdk/aws-s3";
+import { Logger } from "../../utils/logger";
 import type { SynthedStack } from "../../utils/test";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuStatefulConstruct } from "./migrating";
@@ -23,11 +24,8 @@ We're calling it here to test the function in isolation.
  */
 
 describe("GuMigratingResource", () => {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function -- we are testing `console.info` being called, we don't need to see the message
-  const info = jest.spyOn(console, "info").mockImplementation(() => {});
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function -- we are testing `console.warn` being called, we don't need to see the message
-  const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+  const info = jest.spyOn(Logger, "info");
+  const warn = jest.spyOn(Logger, "warn");
 
   afterEach(() => {
     warn.mockReset();
