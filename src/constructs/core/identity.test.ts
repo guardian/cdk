@@ -23,9 +23,9 @@ describe("AppIdentity.suffixText", () => {
     expect(actual).toEqual(expected);
   });
 
-  it("should handle hyphens", () => {
+  it("should handle non-alphanumeric characters (e.g. hyphens)", () => {
     const actual = AppIdentity.suffixText({ app: "my-app" }, "InstanceType");
-    const expected = "InstanceTypeMy-app";
+    const expected = "InstanceTypeMyapp";
     expect(actual).toEqual(expected);
   });
 });
