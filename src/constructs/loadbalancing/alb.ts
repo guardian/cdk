@@ -43,7 +43,6 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
 
 export class GuApplicationTargetGroup extends ApplicationTargetGroup {
   static DefaultHealthCheck = {
-    port: "9000",
     path: "/healthcheck",
     protocol: Protocol.HTTP,
     healthyThresholdCount: 2,
