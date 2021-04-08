@@ -1,11 +1,13 @@
 import "@aws-cdk/assert/jest";
+import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { TrackingTag } from "../../constants/library-info";
 import type { SynthedStack } from "../../utils/test";
+import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
@@ -31,6 +33,44 @@ describe("The GuAutoScalingGroup", () => {
     },
     app: "testing",
   };
+
+  test("Uses the AppIdentity to create the logicalId and tag the resource", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "MyAutoScalingGroup", defaultProps);
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::AutoScaling::AutoScalingGroup",
+      /MyAutoScalingGroupTesting[A-Z0-9]+/
+    );
+
+    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+      Tags: alphabeticalTags([
+        {
+          Key: "App",
+          PropagateAtLaunch: true,
+          Value: "testing",
+        },
+        {
+          Key: "Stack",
+          PropagateAtLaunch: true,
+          Value: "test-stack",
+        },
+        {
+          Key: "Stage",
+          PropagateAtLaunch: true,
+          Value: {
+            Ref: "Stage",
+          },
+        },
+        {
+          Key: "Name",
+          PropagateAtLaunch: true,
+          Value: "Test/MyAutoScalingGroupTesting",
+        },
+        { ...TrackingTag, PropagateAtLaunch: true },
+      ]),
+    });
+  });
 
   test("adds the AMI parameter if no imageId prop provided", () => {
     const stack = simpleGuStackForTesting();
