@@ -19,7 +19,6 @@ interface GuInstanceRoleProps extends AppIdentity {
 export class GuInstanceRole extends GuRole {
   constructor(scope: GuStack, props: GuInstanceRoleProps) {
     super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
-      overrideId: true,
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });

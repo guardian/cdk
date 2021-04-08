@@ -7,6 +7,8 @@ import { Stage } from "../../constants";
 import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import { AppIdentity } from "../core/identity";
+import { GuMigratingResource } from "../core/migrating";
+import type { GuStatefulConstruct } from "../core/migrating";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -25,7 +27,8 @@ export interface GuAutoScalingGroupProps
       | "desiredCapacity"
       | "securityGroup"
     >,
-    AppIdentity {
+    AppIdentity,
+    GuMigratingResource {
   stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
@@ -33,7 +36,6 @@ export interface GuAutoScalingGroupProps
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
-  overrideId?: boolean;
 }
 
 type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
@@ -77,7 +79,9 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
   };
 }
 
-export class GuAutoScalingGroup extends AutoScalingGroup {
+export class GuAutoScalingGroup extends AutoScalingGroup implements GuStatefulConstruct {
+  public readonly isStatefulConstruct: true;
+
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
 
@@ -101,10 +105,11 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
 
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
-      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, props),
+      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app: props.app, vpc: props.vpc }),
     };
 
     super(scope, AppIdentity.suffixText(props, id), mergedProps);
+    this.isStatefulConstruct = true;
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
@@ -116,8 +121,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
 
-    if (mergedProps.overrideId) cfnAsg.overrideLogicalId(id);
-
+    GuMigratingResource.setLogicalId(this, scope, props);
     AppIdentity.taggedConstruct(props, this);
   }
 }

@@ -6,6 +6,7 @@ import { KinesisEventSource } from "@aws-cdk/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
+import type { GuMigratingResource } from "../constructs/core/migrating";
 import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuFunctionProps } from "../constructs/lambda";
@@ -40,8 +41,7 @@ import { toAwsErrorHandlingProps } from "../utils/lambda";
  * existingKinesisStream: { externalKinesisStreamName: "KinesisStreamFromAnotherStack" }
  * ```
  */
-export interface ExistingKinesisStream {
-  logicalIdFromCloudFormation?: string;
+export interface ExistingKinesisStream extends GuMigratingResource {
   externalKinesisStreamName?: string;
 }
 
@@ -104,11 +104,11 @@ export class GuKinesisLambda extends GuLambdaFunction {
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
     const kinesisProps: GuKinesisStreamProps = {
-      overrideId: !!props.existingKinesisStream?.logicalIdFromCloudFormation,
+      existingLogicalId: props.existingKinesisStream?.existingLogicalId,
       encryption: StreamEncryption.MANAGED,
       ...props.kinesisStreamProps,
     };
-    const streamId = props.existingKinesisStream?.logicalIdFromCloudFormation ?? "KinesisStream";
+    const streamId = props.existingKinesisStream?.existingLogicalId ?? "KinesisStream";
 
     const kinesisStream = props.existingKinesisStream?.externalKinesisStreamName
       ? Stream.fromStreamArn(

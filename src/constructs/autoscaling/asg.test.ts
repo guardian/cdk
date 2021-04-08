@@ -139,12 +139,12 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds any target groups passed through props", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
     const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
-      overrideId: true,
+      existingLogicalId: "MyTargetGroup",
     });
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
@@ -155,7 +155,7 @@ describe("The GuAutoScalingGroup", () => {
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
       TargetGroupARNs: [
         {
-          Ref: "TargetGroup",
+          Ref: "MyTargetGroup",
         },
       ],
     });
@@ -165,9 +165,9 @@ describe("The GuAutoScalingGroup", () => {
     const app = "Testing";
     const stack = simpleGuStackForTesting();
 
-    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, overrideId: true, app });
-    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, overrideId: true, app });
-    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, overrideId: true, app });
+    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, app });
+    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, app });
+    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, app });
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
@@ -180,13 +180,13 @@ describe("The GuAutoScalingGroup", () => {
           "Fn::GetAtt": [`GuHttpsEgressSecurityGroup${app}89CDDA4B`, "GroupId"],
         },
         {
-          "Fn::GetAtt": [`SecurityGroup${app}`, "GroupId"],
+          "Fn::GetAtt": [`SecurityGroup${app}A32D34F9`, "GroupId"],
         },
         {
-          "Fn::GetAtt": [`SecurityGroup1${app}`, "GroupId"],
+          "Fn::GetAtt": [`SecurityGroup1${app}CA3A17A4`, "GroupId"],
         },
         {
-          "Fn::GetAtt": [`SecurityGroup2${app}`, "GroupId"],
+          "Fn::GetAtt": [`SecurityGroup2${app}6436C75B`, "GroupId"],
         },
       ],
     });
@@ -210,13 +210,11 @@ describe("The GuAutoScalingGroup", () => {
     expect(Object.keys(Object.values(asgResource)[0])).not.toContain("UpdatePolicy");
   });
 
-  test("overrides the id with the overrideId prop set to true", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, overrideId: true });
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, existingLogicalId: "MyASG" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).toContain("AutoscalingGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", "MyASG");
   });
 
   test("does not override the id by default", () => {

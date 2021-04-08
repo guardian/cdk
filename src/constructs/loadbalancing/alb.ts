@@ -2,9 +2,7 @@ import type {
   ApplicationListenerProps,
   ApplicationLoadBalancerProps,
   ApplicationTargetGroupProps,
-  CfnListener,
   CfnLoadBalancer,
-  CfnTargetGroup,
 } from "@aws-cdk/aws-elasticloadbalancingv2";
 import {
   ApplicationListener,
@@ -19,29 +17,26 @@ import { RegexPattern } from "../../constants";
 import type { GuStack } from "../core";
 import { GuCertificateArnParameter } from "../core";
 import type { AppIdentity } from "../core/identity";
+import { GuMigratingResource } from "../core/migrating";
+import type { GuStatefulConstruct } from "../core/migrating";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
-  overrideId?: boolean;
-}
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, GuMigratingResource {}
 
-export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
+export class GuApplicationLoadBalancer extends ApplicationLoadBalancer implements GuStatefulConstruct {
+  public readonly isStatefulConstruct: true;
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
     super(scope, id, { deletionProtection: true, ...props });
+    this.isStatefulConstruct = true;
+    GuMigratingResource.setLogicalId(this, scope, props);
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
-
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
-      cfnLb.overrideLogicalId(id);
-
     cfnLb.addPropertyDeletionOverride("Type");
   }
 }
 
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps {
-  overrideId?: boolean;
-}
+export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, GuMigratingResource {}
 
-export class GuApplicationTargetGroup extends ApplicationTargetGroup {
+export class GuApplicationTargetGroup extends ApplicationTargetGroup implements GuStatefulConstruct {
   static DefaultHealthCheck = {
     path: "/healthcheck",
     protocol: Protocol.HTTP,
@@ -51,6 +46,8 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
     timeout: Duration.seconds(10),
   };
 
+  public readonly isStatefulConstruct: true;
+
   constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
     const mergedProps = {
       ...props,
@@ -58,22 +55,20 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
     };
 
     super(scope, id, mergedProps);
-
-    if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
-      (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
+    this.isStatefulConstruct = true;
+    GuMigratingResource.setLogicalId(this, scope, props);
   }
 }
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps {
-  overrideId?: boolean;
-}
+export interface GuApplicationListenerProps extends ApplicationListenerProps, GuMigratingResource {}
 
-export class GuApplicationListener extends ApplicationListener {
+export class GuApplicationListener extends ApplicationListener implements GuStatefulConstruct {
+  public readonly isStatefulConstruct: true;
+
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
-
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
-      (this.node.defaultChild as CfnListener).overrideLogicalId(id);
+    this.isStatefulConstruct = true;
+    GuMigratingResource.setLogicalId(this, scope, props);
   }
 }
 

@@ -1,4 +1,5 @@
 import "@aws-cdk/assert/jest";
+import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
@@ -14,43 +15,31 @@ describe("The GuClassicLoadBalancer class", () => {
     privateSubnetIds: [""],
   });
 
-  test("overrides the id with the overrideId prop", () => {
-    const stack = simpleGuStackForTesting();
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, overrideId: true });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ClassicLoadBalancer");
-  });
-
   test("has an auto-generated ID by default", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", /ClassicLoadBalancer.+/);
   });
 
-  test("overrides the id if the stack migrated value is true", () => {
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, existingLogicalId: "ClassicLB" });
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", "ClassicLB");
+  });
+
+  test("has an auto-generated logicalId by default", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ClassicLoadBalancer");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, overrideId: false });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ClassicLoadBalancer");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", /ClassicLoadBalancer.+/);
   });
 
   test("overrides any properties as required", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       vpc,
-      overrideId: true,
       propertiesToOverride: {
         AccessLoggingPolicy: {
           EmitInterval: 5,

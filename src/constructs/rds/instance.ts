@@ -1,17 +1,23 @@
 import { InstanceType } from "@aws-cdk/aws-ec2";
-import type { CfnDBInstance, DatabaseInstanceProps, IParameterGroup } from "@aws-cdk/aws-rds";
+import type { DatabaseInstanceProps, IParameterGroup } from "@aws-cdk/aws-rds";
 import { DatabaseInstance, ParameterGroup } from "@aws-cdk/aws-rds";
 import { Fn } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
+import { GuMigratingResource } from "../core/migrating";
+import type { GuStatefulConstruct } from "../core/migrating";
 
-export interface GuDatabaseInstanceProps extends Omit<DatabaseInstanceProps, "instanceType">, AppIdentity {
-  overrideId?: boolean;
+export interface GuDatabaseInstanceProps
+  extends Omit<DatabaseInstanceProps, "instanceType">,
+    AppIdentity,
+    GuMigratingResource {
   instanceType: string;
   parameters?: Record<string, string>;
 }
 
-export class GuDatabaseInstance extends DatabaseInstance {
+export class GuDatabaseInstance extends DatabaseInstance implements GuStatefulConstruct {
+  public readonly isStatefulConstruct: true;
+
   constructor(scope: GuStack, id: string, props: GuDatabaseInstanceProps) {
     // CDK just wants "t3.micro" format, whereas
     // some CFN yaml might have the older "db.t3.micro" with the "db." prefix
@@ -34,10 +40,8 @@ export class GuDatabaseInstance extends DatabaseInstance {
       instanceType,
       ...(parameterGroup && { parameterGroup }),
     });
-
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false)) {
-      (this.node.defaultChild as CfnDBInstance).overrideLogicalId(id);
-    }
+    this.isStatefulConstruct = true;
+    GuMigratingResource.setLogicalId(this, scope, props);
 
     parameterGroup && AppIdentity.taggedConstruct(props, parameterGroup);
     AppIdentity.taggedConstruct(props, this);

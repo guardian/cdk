@@ -1,7 +1,8 @@
-import type { CfnSecurityGroup, IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
+import type { IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
+import { GuMigratingResource } from "../../core/migrating";
 
 /**
  * A way to describe an ingress or egress rule for a security group.
@@ -28,8 +29,7 @@ export interface SecurityGroupAccessRule {
   description: string;
 }
 
-export interface GuBaseSecurityGroupProps extends SecurityGroupProps {
-  overrideId?: boolean;
+export interface GuBaseSecurityGroupProps extends SecurityGroupProps, GuMigratingResource {
   ingresses?: SecurityGroupAccessRule[];
   egresses?: SecurityGroupAccessRule[];
 }
@@ -49,10 +49,7 @@ export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdent
 export abstract class GuBaseSecurityGroup extends SecurityGroup {
   protected constructor(scope: GuStack, id: string, props: GuBaseSecurityGroupProps) {
     super(scope, id, props);
-
-    if (props.overrideId) {
-      (this.node.defaultChild as CfnSecurityGroup).overrideLogicalId(id);
-    }
+    GuMigratingResource.setLogicalId(this, scope, props);
 
     props.ingresses?.forEach(({ range, port, description }) => {
       const connection: Port = typeof port === "number" ? Port.tcp(port) : port;

@@ -4,6 +4,7 @@ import { CfnOutput } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
+import type { GuMigratingResource } from "../constructs/core/migrating";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";
@@ -35,8 +36,7 @@ import { GuSnsTopic } from "../constructs/sns";
  *  existingSnsTopic: { externalTopicName: "MySnsTopicNameFromAnotherStack" }
  * ```
  */
-export interface ExistingSnsTopic {
-  logicalIdFromCloudFormation?: string;
+export interface ExistingSnsTopic extends GuMigratingResource {
   externalTopicName?: string;
 }
 
@@ -85,7 +85,7 @@ export class GuSnsLambda extends GuLambdaFunction {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const topicId = props.existingSnsTopic?.logicalIdFromCloudFormation ?? "SnsIncomingEventsTopic";
+    const topicId = props.existingSnsTopic?.existingLogicalId ?? "SnsIncomingEventsTopic";
 
     const snsTopic = props.existingSnsTopic?.externalTopicName
       ? Topic.fromTopicArn(
@@ -96,7 +96,7 @@ export class GuSnsLambda extends GuLambdaFunction {
       : AppIdentity.taggedConstruct(
           props,
           new GuSnsTopic(scope, topicId, {
-            overrideId: !!props.existingSnsTopic?.logicalIdFromCloudFormation,
+            existingLogicalId: props.existingSnsTopic?.existingLogicalId,
           })
         );
     this.addEventSource(new SnsEventSource(snsTopic));

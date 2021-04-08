@@ -1,11 +1,10 @@
 import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
+import "../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "@aws-cdk/aws-rds";
 import { Stack } from "@aws-cdk/core";
 import { TrackingTag } from "../../constants/library-info";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
-import type { SynthedStack } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
@@ -107,11 +106,11 @@ describe("The GuDatabaseInstance class", () => {
     });
   });
 
-  it("overrides the id if the prop is true", () => {
-    const stack = simpleGuStackForTesting();
+  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
-      overrideId: true,
+      existingLogicalId: "MyDb",
       instanceType: "t3.small",
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
@@ -119,28 +118,10 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).toContain("DatabaseInstance");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::RDS::DBInstance", "MyDb");
   });
 
-  it("does not override the id if the prop is false", () => {
-    const stack = simpleGuStackForTesting();
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
-      vpc,
-      instanceType: "t3.small",
-      engine: DatabaseInstanceEngine.postgres({
-        version: PostgresEngineVersion.VER_11_8,
-      }),
-      app: "testing",
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).not.toContain("DatabaseInstance");
-  });
-
-  it("overrides the id if the stack migrated value is true", () => {
+  it("has an auto-generated logicalId by default", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
@@ -151,26 +132,7 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).toContain("DatabaseInstance");
-  });
-
-  it("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
-      vpc,
-      overrideId: false,
-      instanceType: "t3.small",
-      engine: DatabaseInstanceEngine.postgres({
-        version: PostgresEngineVersion.VER_11_8,
-      }),
-      app: "testing",
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).not.toContain("DatabaseInstance");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::RDS::DBInstance", /DatabaseInstance.+/);
   });
 
   test("sets the deletion protection value to true by default", () => {

@@ -1,21 +1,16 @@
-import type { CfnPolicy, PolicyProps } from "@aws-cdk/aws-iam";
+import type { PolicyProps } from "@aws-cdk/aws-iam";
 import { Effect, Policy, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../../core";
+import { GuMigratingResource } from "../../core/migrating";
 
-export interface GuPolicyProps extends PolicyProps {
-  overrideId?: boolean;
-}
+export interface GuPolicyProps extends PolicyProps, GuMigratingResource {}
 
 export type GuNoStatementsPolicyProps = Omit<GuPolicyProps, "statements">;
 
 export abstract class GuPolicy extends Policy {
   protected constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, props);
-
-    if (props.overrideId) {
-      const child = this.node.defaultChild as CfnPolicy;
-      child.overrideLogicalId(id);
-    }
+    GuMigratingResource.setLogicalId(this, scope, props);
   }
 }
 

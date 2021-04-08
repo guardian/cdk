@@ -1,4 +1,5 @@
 import "@aws-cdk/assert/jest";
+import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
@@ -21,44 +22,32 @@ describe("The GuApplicationLoadBalancer class", () => {
     publicSubnetIds: [""],
   });
 
-  test("overrides the id with the overrideId prop", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      vpc,
+      existingLogicalId: "AppLoadBalancer",
+    });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::LoadBalancer", "AppLoadBalancer");
   });
 
-  test("has an auto-generated ID by default", () => {
+  test("has an auto-generated logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: false });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      /ApplicationLoadBalancer.+/
+    );
   });
 
   test("deletes the Type property", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, existingLogicalId: "AppLoadBalancer" });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.ApplicationLoadBalancer.Properties)).not.toContain("Type");
+    expect(Object.keys(json.Resources.AppLoadBalancer.Properties)).not.toContain("Type");
   });
 
   test("sets the deletion protection value to true by default", () => {
@@ -83,36 +72,21 @@ describe("The GuApplicationTargetGroup class", () => {
     publicSubnetIds: [""],
   });
 
-  test("overrides the id if the prop is true", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: true });
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, existingLogicalId: "ApplicationTargetGrp" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::TargetGroup", "ApplicationTargetGrp");
   });
 
-  test("does not override the id if the prop is false", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
+  test("does not override the id if the stack migrated value is true but existingLogicalId is not set", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { vpc, overrideId: false });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::TargetGroup",
+      /^ApplicationTargetGroup[A-Z0-9]+$/
+    );
   });
 
   test("uses default health check properties", () => {
@@ -160,8 +134,8 @@ describe("The GuApplicationListener class", () => {
     publicSubnetIds: [""],
   });
 
-  test("overrides the id if the prop is true", () => {
-    const stack = simpleGuStackForTesting();
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
     const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
@@ -171,13 +145,12 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       loadBalancer,
-      overrideId: true,
+      existingLogicalId: "AppListener",
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationListener");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", "AppListener");
   });
 
   test("does not override the id if the prop is false", () => {
@@ -195,27 +168,8 @@ describe("The GuApplicationListener class", () => {
       certificates: [{ certificateArn: "" }],
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationListener");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
-    const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
-      vpc: vpc,
-      protocol: ApplicationProtocol.HTTP,
-    });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationListener");
+    expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", "AppListener");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", /ApplicationListener.+/);
   });
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
@@ -229,13 +183,12 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       loadBalancer,
-      overrideId: false,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationListener");
+    expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", "AppListener");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", /ApplicationListener.+/);
   });
 
   test("sets default props", () => {
