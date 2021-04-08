@@ -6,8 +6,8 @@ import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
-import type { SynthedStack } from "../../utils/test";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import type { Resource, SynthedStack } from "../../utils/test";
+import { alphabeticalTags, findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
@@ -194,10 +194,20 @@ describe("The GuAutoScalingGroup", () => {
 
   test("does not include the UpdatePolicy property", () => {
     const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, overrideId: true });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.AutoscalingGroup)).not.toContain("UpdatePolicy");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", /AutoscalingGroup.+/);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the `toHaveResourceOfTypeAndLogicalId` line above confirms `asgResource` will not be `undefined`
+    const asgResource: Resource = findResourceByTypeAndLogicalId(
+      stack,
+      "AWS::AutoScaling::AutoScalingGroup",
+      /AutoscalingGroup.+/
+    )!;
+
+    // This is checking the properties of the ASG resource
+    // TODO improve the syntax
+    expect(Object.keys(Object.values(asgResource)[0])).not.toContain("UpdatePolicy");
   });
 
   test("overrides the id with the overrideId prop set to true", () => {
