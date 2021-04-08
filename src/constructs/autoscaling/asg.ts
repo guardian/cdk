@@ -4,10 +4,12 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
+import type { WithDefault, WithDefaultByGuStackAndAppIdentity } from "../../utils/with-defaults";
 import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import { AppIdentity } from "../core/identity";
-import { GuHttpsEgressSecurityGroup } from "../ec2";
+import { GuHttpsEgressSecurityGroup, GuVpc } from "../ec2";
+import { GuInstanceRole } from "../iam";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
@@ -24,8 +26,10 @@ export interface GuAutoScalingGroupProps
       | "maxCapacity"
       | "desiredCapacity"
       | "securityGroup"
+      | "role"
     >,
     AppIdentity {
+  role?: GuInstanceRole;
   stageDependentProps: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
@@ -36,7 +40,31 @@ export interface GuAutoScalingGroupProps
   overrideId?: boolean;
 }
 
+export const GuAutoScalingGroupProps: WithDefaultByGuStackAndAppIdentity<GuAutoScalingGroupProps> = {
+  DEFAULT: (scope: GuStack, props: AppIdentity): GuAutoScalingGroupProps => {
+    return {
+      ...props,
+      vpc: GuVpc.fromIdParameter(scope, "VPC"),
+      role: new GuInstanceRole(scope, props),
+      stageDependentProps: GuStageDependentAsgProps.DEFAULT,
+      userData: UserData.forLinux(),
+      instanceType: new InstanceType(new GuInstanceTypeParameter(scope, props).valueAsString),
+    };
+  },
+};
+
 type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
+
+export const GuStageDependentAsgProps: WithDefault<GuStageDependentAsgProps> = {
+  DEFAULT: {
+    [Stage.CODE]: {
+      minimumInstances: 1,
+    },
+    [Stage.PROD]: {
+      minimumInstances: 3,
+    },
+  },
+};
 
 /**
  * `minimumInstances` determines the number of ec2 instances running under normal circumstances

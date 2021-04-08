@@ -2,7 +2,9 @@ import type { S3DownloadOptions } from "@aws-cdk/aws-ec2";
 import { UserData } from "@aws-cdk/aws-ec2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import type { GuPrivateS3ConfigurationProps } from "../../utils/ec2";
-import type { GuDistributionBucketParameter, GuStack } from "../core";
+import type { WithDefaultByGuStackAndAppIdentity } from "../../utils/with-defaults";
+import { GuDistributionBucketParameter } from "../core";
+import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 
 /**
@@ -16,10 +18,29 @@ export interface GuUserDataS3DistributableProps {
   executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
 
+export const GuUserDataS3DistributableProps: WithDefaultByGuStackAndAppIdentity<GuUserDataS3DistributableProps> = {
+  DEFAULT(scope: GuStack, props: AppIdentity): GuUserDataS3DistributableProps {
+    return {
+      bucket: GuDistributionBucketParameter.getInstance(scope),
+      fileName: `${props.app}.deb`,
+      executionStatement: `dpkg -i /${props.app}/${props.app}.deb`,
+    };
+  },
+};
+
 export interface GuUserDataProps extends AppIdentity {
   distributable: GuUserDataS3DistributableProps;
   configuration?: GuPrivateS3ConfigurationProps;
 }
+
+export const GuUserDataProps: WithDefaultByGuStackAndAppIdentity<GuUserDataProps> = {
+  DEFAULT(scope: GuStack, props: AppIdentity): GuUserDataProps {
+    return {
+      ...props,
+      distributable: GuUserDataS3DistributableProps.DEFAULT(scope, props),
+    };
+  },
+};
 
 /**
  * An abstraction over UserData to simplify its creation.
