@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuWazuhAccess | @guardian/cdk - v7.1.2</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v7.1.2">
+	<title>GuWazuhAccess | @guardian/cdk - v8.0.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v8.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v7.1.2</a>
+					<a href="../index.html" class="title">@guardian/cdk - v8.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v7.1.2</a>
+					<a href="../modules.html">@guardian/cdk - v8.0.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
@@ -68,6 +68,56 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A security group to allow a Wazuh agent on an EC2 instance to communicate with the outside.
+							This is implemented as a singleton, meaning only one resource will be created in a stack.
+						If there are multiple apps in the stack, they will re-use this resource.</p>
+					</div>
+					<p>The logicalId will always be &quot;WazuhSecurityGroup&quot;.</p>
+					<p>Will create a resource like this:</p>
+					<pre><code class="language-yaml"><span style="color: #800000">WazuhSecurityGroup</span><span style="color: #000000">:</span>
+<span style="color: #000000">  </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::EC2::SecurityGroup</span>
+<span style="color: #000000">  </span><span style="color: #800000">Properties</span><span style="color: #000000">:</span>
+<span style="color: #000000">    </span><span style="color: #800000">GroupDescription</span><span style="color: #000000">: </span><span style="color: #0000FF">Allow outbound traffic from wazuh agent to manager</span>
+<span style="color: #000000">    </span><span style="color: #800000">VpcId</span><span style="color: #000000">:</span>
+<span style="color: #000000">      </span><span style="color: #800000">Ref</span><span style="color: #000000">: </span><span style="color: #0000FF">VpcId</span>
+<span style="color: #000000">    </span><span style="color: #800000">SecurityGroupEgress</span><span style="color: #000000">:</span>
+<span style="color: #000000">    - </span><span style="color: #800000">Description</span><span style="color: #000000">: </span><span style="color: #0000FF">Wazuh event logging</span>
+<span style="color: #000000">      </span><span style="color: #800000">IpProtocol</span><span style="color: #000000">: </span><span style="color: #0000FF">tcp</span>
+<span style="color: #000000">      </span><span style="color: #800000">FromPort</span><span style="color: #000000">: </span><span style="color: #098658">1514</span>
+<span style="color: #000000">      </span><span style="color: #800000">ToPort</span><span style="color: #000000">: </span><span style="color: #098658">1514</span>
+<span style="color: #000000">      </span><span style="color: #800000">CidrIp</span><span style="color: #000000">: </span><span style="color: #0000FF">0.0.0.0/0</span>
+<span style="color: #000000">    - </span><span style="color: #800000">Description</span><span style="color: #000000">: </span><span style="color: #0000FF">Wazuh agent registration</span>
+<span style="color: #000000">      </span><span style="color: #800000">IpProtocol</span><span style="color: #000000">: </span><span style="color: #0000FF">tcp</span>
+<span style="color: #000000">      </span><span style="color: #800000">FromPort</span><span style="color: #000000">: </span><span style="color: #098658">1515</span>
+<span style="color: #000000">      </span><span style="color: #800000">ToPort</span><span style="color: #000000">: </span><span style="color: #098658">1515</span>
+<span style="color: #000000">      </span><span style="color: #800000">CidrIp</span><span style="color: #000000">: </span><span style="color: #0000FF">0.0.0.0/0</span>
+</code></pre>
+					<p>Which will then get used like this:</p>
+					<pre><code class="language-yaml"><span style="color: #800000">InstanceRoleForAppA</span><span style="color: #000000">:</span>
+<span style="color: #000000">  </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::IAM::Role</span>
+<span style="color: #000000">  </span><span style="color: #800000">Properties</span><span style="color: #000000">:</span>
+<span style="color: #000000">    </span><span style="color: #800000">SecurityGroups</span><span style="color: #000000">:</span>
+<span style="color: #000000">    - </span><span style="color: #800000">Ref</span><span style="color: #000000">: </span><span style="color: #0000FF">WazuhSecurityGroup</span>
+
+<span style="color: #800000">InstanceRoleForAppB</span><span style="color: #000000">:</span>
+<span style="color: #000000">  </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::IAM::Role</span>
+<span style="color: #000000">  </span><span style="color: #800000">Properties</span><span style="color: #000000">:</span>
+<span style="color: #000000">    </span><span style="color: #800000">SecurityGroups</span><span style="color: #000000">:</span>
+<span style="color: #000000">    - </span><span style="color: #800000">Ref</span><span style="color: #000000">: </span><span style="color: #0000FF">WazuhSecurityGroup</span>
+</code></pre>
+					<p>Usage within a stack:</p>
+					<pre><code class="language-typescript"><span style="color: #001080">GuWazuhAccess</span><span style="color: #000000">.</span><span style="color: #795E26">getInstance</span><span style="color: #000000">(</span><span style="color: #0000FF">this</span><span style="color: #000000">, </span><span style="color: #001080">vpc</span><span style="color: #000000">);</span>
+</code></pre>
+					<dl class="tsd-comment-tags">
+						<dt>see</dt>
+						<dd><p><a href="https://github.com/guardian/security-hq/blob/main/hq/markdown/wazuh.md">https://github.com/guardian/security-hq/blob/main/hq/markdown/wazuh.md</a></p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -157,7 +207,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="constructs_ec2.gubasesecuritygroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.gubasesecuritygroup.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/5450280/src/constructs/ec2/security-groups/wazuh.ts#L7">src/constructs/ec2/security-groups/wazuh.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/5a2b5bf/src/constructs/ec2/security-groups/wazuh.ts#L60">src/constructs/ec2/security-groups/wazuh.ts:60</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -428,7 +478,7 @@
 					<div class="tsd-signature tsd-kind-icon">instance<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="constructs_ec2.guwazuhaccess.html" class="tsd-signature-type" data-tsd-kind="Class">GuWazuhAccess</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/5450280/src/constructs/ec2/security-groups/wazuh.ts#L7">src/constructs/ec2/security-groups/wazuh.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/5a2b5bf/src/constructs/ec2/security-groups/wazuh.ts#L60">src/constructs/ec2/security-groups/wazuh.ts:60</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1129,16 +1179,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/5450280/src/constructs/ec2/security-groups/wazuh.ts#L22">src/constructs/ec2/security-groups/wazuh.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/5a2b5bf/src/constructs/ec2/security-groups/wazuh.ts#L106">src/constructs/ec2/security-groups/wazuh.ts:106</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>GuWazuhAccess is implemented as a singleton meaning only one instance will be created for the entire stack.
+									If there are multiple apps in the stack, they will re-use this resource.</p>
+								</div>
+								<p>Usage:</p>
+								<pre><code class="language-typescript"><span style="color: #001080">GuWazuhAccess</span><span style="color: #000000">.</span><span style="color: #795E26">getInstance</span><span style="color: #000000">(</span><span style="color: #0000FF">this</span><span style="color: #000000">, </span><span style="color: #001080">vpc</span><span style="color: #000000">);</span>
+</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>stack: <a href="constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the stack to add this security group to</p>
+									</div>
 								</li>
 								<li>
 									<h5>vpc: <span class="tsd-signature-type">IVpc</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the vpc to add this security group to</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="constructs_ec2.guwazuhaccess.html" class="tsd-signature-type" data-tsd-kind="Class">GuWazuhAccess</a></h4>
