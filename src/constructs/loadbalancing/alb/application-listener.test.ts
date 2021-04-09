@@ -7,6 +7,7 @@ import { Stack } from "@aws-cdk/core";
 import { RegexPattern } from "../../../constants";
 import type { SynthedStack } from "../../../utils/test";
 import { simpleGuStackForTesting } from "../../../utils/test";
+import type { GuStack } from "../../core";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationListener, GuHttpsApplicationListener } from "./application-listener";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
@@ -20,11 +21,14 @@ const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
 
 const app: AppIdentity = { app: "testing" };
 
+const getLoadBalancer = (stack: GuStack): GuApplicationLoadBalancer => {
+  return new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, ...app });
+};
+
 describe("The GuApplicationListener class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
       vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -32,7 +36,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });
@@ -46,7 +50,6 @@ describe("The GuApplicationListener class", () => {
   test("overrides the id if the prop is true", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -54,7 +57,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       overrideId: true,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
@@ -67,7 +70,6 @@ describe("The GuApplicationListener class", () => {
   test("does not override the id if the prop is false", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -75,7 +77,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });
@@ -87,7 +89,6 @@ describe("The GuApplicationListener class", () => {
   test("overrides the id if the stack migrated value is true", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -95,7 +96,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });
@@ -107,7 +108,6 @@ describe("The GuApplicationListener class", () => {
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -115,7 +115,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       overrideId: false,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
@@ -128,7 +128,6 @@ describe("The GuApplicationListener class", () => {
   test("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -136,7 +135,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
     });
@@ -150,7 +149,6 @@ describe("The GuApplicationListener class", () => {
   test("merges default and passed in props", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -158,7 +156,7 @@ describe("The GuApplicationListener class", () => {
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
       port: 80,
@@ -175,7 +173,6 @@ describe("The GuHttpsApplicationListener class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
       vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -183,7 +180,7 @@ describe("The GuHttpsApplicationListener class", () => {
 
     new GuHttpsApplicationListener(stack, "HttpsApplicationListener", {
       ...app,
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       targetGroup,
     });
 
@@ -196,14 +193,13 @@ describe("The GuHttpsApplicationListener class", () => {
   test("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
     });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       targetGroup,
       ...app,
     });
@@ -225,14 +221,13 @@ describe("The GuHttpsApplicationListener class", () => {
   test("creates certificate prop if no value passed in", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
     });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       targetGroup,
       ...app,
     });
@@ -260,7 +255,6 @@ describe("The GuHttpsApplicationListener class", () => {
   test("passing in an invalid ACM ARN", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -269,7 +263,7 @@ describe("The GuHttpsApplicationListener class", () => {
     expect(
       () =>
         new GuHttpsApplicationListener(stack, "ApplicationListener", {
-          loadBalancer,
+          loadBalancer: getLoadBalancer(stack),
           targetGroup,
           certificate: "test",
           ...app,
@@ -280,14 +274,13 @@ describe("The GuHttpsApplicationListener class", () => {
   test("does not create certificate prop if a value passed in", () => {
     const stack = simpleGuStackForTesting();
 
-    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
     const targetGroup = new GuApplicationTargetGroup(stack, "GrafanaInternalTargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
     });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer,
+      loadBalancer: getLoadBalancer(stack),
       targetGroup,
       certificate: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
       ...app,

@@ -1,21 +1,37 @@
 import "@aws-cdk/assert/jest";
+import "../../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import type { SynthedStack } from "../../../utils/test";
 import { simpleGuStackForTesting } from "../../../utils/test";
+import type { AppIdentity } from "../../core/identity";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 
+const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
+  vpcId: "test",
+  availabilityZones: [""],
+  publicSubnetIds: [""],
+});
+
+const app: AppIdentity = {
+  app: "testing",
+};
+
 describe("The GuApplicationLoadBalancer class", () => {
-  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
-    availabilityZones: [""],
-    publicSubnetIds: [""],
+  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+    const stack = simpleGuStackForTesting();
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      /^ApplicationLoadBalancerTesting.+/
+    );
   });
 
   test("overrides the id with the overrideId prop", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
@@ -23,7 +39,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("has an auto-generated ID by default", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
@@ -31,7 +47,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("overrides the id if the stack migrated value is true", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
@@ -39,7 +55,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("does not override the id if the stack migrated value is true but the override id value is false", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: false });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, overrideId: false });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
@@ -47,7 +63,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("deletes the Type property", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, overrideId: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, overrideId: true });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources.ApplicationLoadBalancer.Properties)).not.toContain("Type");
@@ -55,7 +71,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("sets the deletion protection value to true by default", () => {
     const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       LoadBalancerAttributes: [
