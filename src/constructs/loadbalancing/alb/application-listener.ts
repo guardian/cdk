@@ -12,11 +12,11 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps, Ap
 
 export class GuApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
-    const { app } = props;
+    const { app, overrideId } = props;
 
     super(scope, AppIdentity.suffixText({ app }, id), { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
 
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
+    if (overrideId || (scope.migratedFromCloudFormation && overrideId !== false))
       (this.node.defaultChild as CfnListener).overrideLogicalId(id);
 
     /*
@@ -39,12 +39,12 @@ export interface GuHttpsApplicationListenerProps
 
 export class GuHttpsApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
-    const { app } = props;
+    const { app, certificate, targetGroup } = props;
 
-    if (props.certificate) {
-      const isValid = new RegExp(RegexPattern.ACM_ARN).test(props.certificate);
+    if (certificate) {
+      const isValid = new RegExp(RegexPattern.ACM_ARN).test(certificate);
       if (!isValid) {
-        throw new Error(`${props.certificate} is not a valid ACM ARN`);
+        throw new Error(`${certificate} is not a valid ACM ARN`);
       }
     }
 
@@ -54,10 +54,10 @@ export class GuHttpsApplicationListener extends ApplicationListener {
       ...props,
       certificates: [
         {
-          certificateArn: props.certificate ?? new GuCertificateArnParameter(scope, props).valueAsString,
+          certificateArn: certificate ?? new GuCertificateArnParameter(scope, props).valueAsString,
         },
       ],
-      defaultAction: ListenerAction.forward([props.targetGroup]),
+      defaultAction: ListenerAction.forward([targetGroup]),
     };
 
     super(scope, AppIdentity.suffixText({ app }, id), mergedProps);
