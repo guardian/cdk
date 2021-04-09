@@ -2,6 +2,16 @@
 
 exports[`The GuLambdaErrorPercentageAlarm pattern should create the correct alarm resource with minimal config 1`] = `
 Object {
+  "Mappings": Object {
+    "stagemapping": Object {
+      "CODE": Object {
+        "alarmActionsEnabled": false,
+      },
+      "PROD": Object {
+        "alarmActionsEnabled": true,
+      },
+    },
+  },
   "Parameters": Object {
     "Stage": Object {
       "AllowedValues": Array [
@@ -160,6 +170,15 @@ Object {
     },
     "mylambdafunction8D341B54": Object {
       "Properties": Object {
+        "ActionsEnabled": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "alarmActionsEnabled",
+          ],
+        },
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
