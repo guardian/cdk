@@ -8,6 +8,7 @@ import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
 import type { SynthedStack } from "../../utils/test";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
@@ -20,7 +21,12 @@ describe("The GuAutoScalingGroup", () => {
     publicSubnetIds: [""],
   });
 
+  const app: AppIdentity = {
+    app: "testing",
+  };
+
   const defaultProps: GuAutoScalingGroupProps = {
+    ...app,
     vpc,
     userData: UserData.custom(["#!/bin/bash", "service some-dependency start", "service my-app start"].join("\n")),
     stageDependentProps: {
@@ -31,7 +37,6 @@ describe("The GuAutoScalingGroup", () => {
         minimumInstances: 3,
       },
     },
-    app: "testing",
   };
 
   test("Uses the AppIdentity to create the logicalId and tag the resource", () => {
@@ -142,6 +147,7 @@ describe("The GuAutoScalingGroup", () => {
     const stack = simpleGuStackForTesting();
 
     const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
+      ...app,
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
       overrideId: true,
