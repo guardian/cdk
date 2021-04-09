@@ -3,8 +3,9 @@ import "../../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
+import { TrackingTag } from "../../../constants/library-info";
 import type { SynthedStack } from "../../../utils/test";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { alphabeticalTags, simpleGuStackForTesting } from "../../../utils/test";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
@@ -27,6 +28,28 @@ describe("The GuApplicationTargetGroup class", () => {
       "AWS::ElasticLoadBalancingV2::TargetGroup",
       /^ApplicationTargetGroupTesting.+/
     );
+  });
+
+  it("should apply the App tag", () => {
+    const stack = simpleGuStackForTesting();
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      Tags: alphabeticalTags([
+        { Key: "App", Value: app.app },
+        {
+          Key: "Stack",
+          Value: stack.stack,
+        },
+        {
+          Key: "Stage",
+          Value: {
+            Ref: "Stage",
+          },
+        },
+        TrackingTag,
+      ]),
+    });
   });
 
   test("overrides the id if the prop is true", () => {

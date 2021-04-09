@@ -30,5 +30,7 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
 
     if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
       (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
+
+    AppIdentity.taggedConstruct({ app }, this);
   }
 }
