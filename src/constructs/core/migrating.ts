@@ -1,6 +1,17 @@
 import type { CfnElement, IConstruct } from "@aws-cdk/core";
 import { Logger } from "../../utils/logger";
-import type { GuStack } from "./stack";
+
+export interface GuMigratingStack {
+  /**
+   * A flag to symbolise if a stack is being migrated from a previous format (eg YAML) into guardian/cdk.
+   * A value of `true` means resources in the stack can have custom logicalIds set using the property `existingLogicalId` (where available).
+   * A value of `false` or `undefined` means the stack is brand new. Any resource that gets created will have an auto-generated logicalId.
+   * Ideally, for use only by [[ `GuStack` ]].
+   * @see GuMigratingResource
+   * @see GuStack
+   */
+  migratedFromCloudFormation?: boolean;
+}
 
 export interface GuMigratingResource {
   /**
@@ -12,8 +23,8 @@ export interface GuMigratingResource {
    * Otherwise it will be created as something like `DotcomLoadbalancerABCDEF`,
    * is a new resource, and require any DNS entries to be updated accordingly.
    *
-   * @requires `migratedFromCloudFormation` to be true in [[ GuStack ]]
-   * @see GuStackProps
+   * @see GuMigratingStack
+   * @see GuStack
    */
   existingLogicalId?: string;
 }
@@ -30,7 +41,7 @@ function isGuStatefulConstruct(construct: any): construct is GuStatefulConstruct
 export const GuMigratingResource = {
   setLogicalId<T extends GuStatefulConstruct | IConstruct>(
     construct: T,
-    { migratedFromCloudFormation }: GuStack,
+    { migratedFromCloudFormation }: GuMigratingStack,
     { existingLogicalId }: GuMigratingResource
   ): void {
     const overrideLogicalId = (logicalId: string) => {
