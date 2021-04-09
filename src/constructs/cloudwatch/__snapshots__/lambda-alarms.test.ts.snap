@@ -283,6 +283,7 @@ Object {
           },
         ],
         "Threshold": 80,
+        "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
