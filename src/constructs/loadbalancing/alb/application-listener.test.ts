@@ -1,4 +1,5 @@
 import "@aws-cdk/assert/jest";
+import "../../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
@@ -11,11 +12,35 @@ import { GuApplicationListener, GuHttpsApplicationListener } from "./application
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
+const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
+  vpcId: "test",
+  availabilityZones: [""],
+  publicSubnetIds: [""],
+});
+
+const app: AppIdentity = { app: "testing" };
+
 describe("The GuApplicationListener class", () => {
-  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
-    availabilityZones: [""],
-    publicSubnetIds: [""],
+  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+    const stack = simpleGuStackForTesting();
+
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
+      vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
+      loadBalancer,
+      defaultAction: ListenerAction.forward([targetGroup]),
+      certificates: [{ certificateArn: "" }],
+    });
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::Listener",
+      /ApplicationListenerTesting.+/
+    );
   });
 
   test("overrides the id if the prop is true", () => {
@@ -28,6 +53,7 @@ describe("The GuApplicationListener class", () => {
     });
 
     new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
       loadBalancer,
       overrideId: true,
       defaultAction: ListenerAction.forward([targetGroup]),
@@ -48,6 +74,7 @@ describe("The GuApplicationListener class", () => {
     });
 
     new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
       loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
@@ -67,6 +94,7 @@ describe("The GuApplicationListener class", () => {
     });
 
     new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
       loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
@@ -86,6 +114,7 @@ describe("The GuApplicationListener class", () => {
     });
 
     new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
       loadBalancer,
       overrideId: false,
       defaultAction: ListenerAction.forward([targetGroup]),
@@ -106,6 +135,7 @@ describe("The GuApplicationListener class", () => {
     });
 
     new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
       loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
@@ -127,6 +157,7 @@ describe("The GuApplicationListener class", () => {
     });
 
     new GuApplicationListener(stack, "ApplicationListener", {
+      ...app,
       loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [{ certificateArn: "" }],
@@ -141,13 +172,26 @@ describe("The GuApplicationListener class", () => {
 });
 
 describe("The GuHttpsApplicationListener class", () => {
-  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
-    availabilityZones: [""],
-    publicSubnetIds: [""],
-  });
+  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+    const stack = simpleGuStackForTesting();
 
-  const app: AppIdentity = { app: "testing" };
+    const loadBalancer = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
+      vpc,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    new GuHttpsApplicationListener(stack, "HttpsApplicationListener", {
+      ...app,
+      loadBalancer,
+      targetGroup,
+    });
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::Listener",
+      /^HttpsApplicationListenerTesting.+/
+    );
+  });
 
   test("sets default props", () => {
     const stack = simpleGuStackForTesting();
