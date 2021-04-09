@@ -2,6 +2,7 @@ import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
+import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { TrackingTag } from "../../../constants/library-info";
 import type { SynthedStack } from "../../../utils/test";
@@ -120,6 +121,30 @@ describe("The GuApplicationTargetGroup class", () => {
       HealthCheckTimeoutSeconds: 10,
       HealthyThresholdCount: 2,
       UnhealthyThresholdCount: 5,
+    });
+  });
+
+  test("uses HTTP protocol by default", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuApplicationTargetGroup(stack, "TargetGroup", { vpc, ...app });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      Protocol: "HTTP",
+    });
+  });
+
+  test("Can override default protocol with prop", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuApplicationTargetGroup(stack, "TargetGroup", {
+      vpc,
+      ...app,
+      protocol: ApplicationProtocol.HTTPS,
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      Protocol: "HTTPS",
     });
   });
 });

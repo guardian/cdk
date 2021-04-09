@@ -8,6 +8,7 @@ import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import { AppIdentity } from "../core/identity";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
+import { GuInstanceRole } from "../iam";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
@@ -26,7 +27,7 @@ export interface GuAutoScalingGroupProps
       | "securityGroup"
     >,
     AppIdentity {
-  stageDependentProps: GuStageDependentAsgProps;
+  stageDependentProps?: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
   machineImage?: MachineImage;
@@ -92,13 +93,18 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       };
     }
 
+    const defaultStageDependentProps = {
+      [Stage.CODE]: { minimumInstances: 1 },
+      [Stage.PROD]: { minimumInstances: 3 },
+    };
+
     const mergedProps = {
       ...props,
-      ...wireStageDependentProps(scope, props.stageDependentProps),
+      ...wireStageDependentProps(scope, props.stageDependentProps ?? defaultStageDependentProps),
+      role: props.role ?? new GuInstanceRole(scope, { app: props.app }),
       machineImage: { getImage: getImage },
       instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope, props).valueAsString),
       userData,
-
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, props),

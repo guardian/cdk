@@ -140,6 +140,21 @@ describe("The GuApplicationListener class", () => {
       Protocol: "HTTPS",
     });
   });
+
+  test("Can override default protocol with prop", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuApplicationListener(stack, "Listener", {
+      loadBalancer: getLoadBalancer(stack),
+      defaultTargetGroups: [getAppTargetGroup(stack)],
+      ...app,
+      protocol: ApplicationProtocol.HTTP,
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+      Protocol: "HTTP",
+    });
+  });
 });
 
 describe("The GuHttpsApplicationListener class", () => {
