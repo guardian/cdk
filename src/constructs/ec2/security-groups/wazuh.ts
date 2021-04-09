@@ -10,8 +10,14 @@ export class GuWazuhAccess extends GuBaseSecurityGroup {
   private constructor(scope: GuStack, vpc: IVpc) {
     super(scope, "WazuhSecurityGroup", {
       vpc,
-      description: "Wazuh agent registration and event logging",
-      overrideId: true,
+
+      /*
+      The group description of a security group is stateful.
+      Be careful about changing this!
+
+      See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html#cfn-ec2-securitygroup-groupdescription
+       */
+      description: "Allow outbound traffic from wazuh agent to manager",
       allowAllOutbound: false,
       egresses: [
         { range: Peer.anyIpv4(), port: 1514, description: "Wazuh event logging" },

@@ -18,7 +18,7 @@ describe("The GuWazuhAccess class", () => {
     GuWazuhAccess.getInstance(stack, vpc);
 
     expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      GroupDescription: "Wazuh agent registration and event logging",
+      GroupDescription: "Allow outbound traffic from wazuh agent to manager",
       SecurityGroupEgress: [
         {
           CidrIp: "0.0.0.0/0",
