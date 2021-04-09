@@ -1,4 +1,5 @@
 import "@aws-cdk/assert/jest";
+import "../../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../utils/test";
@@ -35,5 +36,19 @@ describe("The GuWazuhAccess class", () => {
         },
       ],
     });
+  });
+
+  it("has the logicalId WazuhSecurityGroup in a new stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: false });
+    GuWazuhAccess.getInstance(stack, vpc);
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
+  });
+
+  it("has the logicalId WazuhSecurityGroup in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    GuWazuhAccess.getInstance(stack, vpc);
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
   });
 });

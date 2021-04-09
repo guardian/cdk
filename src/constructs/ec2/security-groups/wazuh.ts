@@ -1,6 +1,7 @@
 import type { IVpc } from "@aws-cdk/aws-ec2";
 import { Peer } from "@aws-cdk/aws-ec2";
 import type { GuStack } from "../../core";
+import { GuMigratingResource } from "../../core/migrating";
 import { GuBaseSecurityGroup } from "./base";
 
 export class GuWazuhAccess extends GuBaseSecurityGroup {
@@ -17,6 +18,19 @@ export class GuWazuhAccess extends GuBaseSecurityGroup {
         { range: Peer.anyIpv4(), port: 1515, description: "Wazuh agent registration" },
       ],
     });
+
+    /*
+    Replacing in-use security groups is difficult as it requires careful orchestration with instances.
+    Fix the logicalId to "WazuhSecurityGroup" regardless of new or migrating stack.
+    This makes it:
+      - easier for YAML defined stacks to move to GuCDK as the resource will be kept
+      - easier for stacks already using GuCDK to upgrade versions
+     */
+    GuMigratingResource.setLogicalId(
+      this,
+      { migratedFromCloudFormation: true },
+      { existingLogicalId: "WazuhSecurityGroup" }
+    );
   }
 
   public static getInstance(stack: GuStack, vpc: IVpc): GuWazuhAccess {
