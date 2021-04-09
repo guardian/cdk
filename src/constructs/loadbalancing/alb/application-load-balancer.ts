@@ -19,5 +19,7 @@ export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
       cfnLb.overrideLogicalId(id);
 
     cfnLb.addPropertyDeletionOverride("Type");
+
+    AppIdentity.taggedConstruct({ app }, this);
   }
 }
