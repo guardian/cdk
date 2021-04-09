@@ -72,7 +72,15 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/utils_test.parameter.html" class="tsd-kind-icon">Parameter</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/utils_test.synthedstack.html" class="tsd-kind-icon">Synthed<wbr>Stack</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="utils_test.html#resource" class="tsd-kind-icon">Resource</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="utils_test.html#resourceproperty" class="tsd-kind-icon">Resource<wbr>Property</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -80,10 +88,34 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#alphabeticaltags" class="tsd-kind-icon">alphabetical<wbr>Tags</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#attachpolicytotestrole" class="tsd-kind-icon">attach<wbr>Policy<wbr>ToTest<wbr>Role</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#findresourcebytypeandlogicalid" class="tsd-kind-icon">find<wbr>Resource<wbr>ByType<wbr>And<wbr>Logical<wbr>Id</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="utils_test.html#simplegustackfortesting" class="tsd-kind-icon">simple<wbr>GuStack<wbr>For<wbr>Testing</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="resource" class="tsd-anchor"></a>
+					<h3>Resource</h3>
+					<div class="tsd-signature tsd-kind-icon">Resource<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>Properties<span class="tsd-signature-symbol">: </span><a href="utils_test.html#resourceproperty" class="tsd-signature-type" data-tsd-kind="Type alias">ResourceProperty</a><span class="tsd-signature-symbol">; </span>Type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>UpdatePolicy<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/c061c67/src/utils/test/synthed-stack.ts#L13">src/utils/test/synthed-stack.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="resourceproperty" class="tsd-anchor"></a>
+					<h3>Resource<wbr>Property</h3>
+					<div class="tsd-signature tsd-kind-icon">Resource<wbr>Property<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/c061c67/src/utils/test/synthed-stack.ts#L12">src/utils/test/synthed-stack.ts:12</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -98,7 +130,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/9040502/src/utils/test/alphabetical-tags.ts#L7">src/utils/test/alphabetical-tags.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c061c67/src/utils/test/alphabetical-tags.ts#L7">src/utils/test/alphabetical-tags.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -121,7 +153,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/9040502/src/utils/test/attach-policy-to-test-role.ts#L7">src/utils/test/attach-policy-to-test-role.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c061c67/src/utils/test/attach-policy-to-test-role.ts#L7">src/utils/test/attach-policy-to-test-role.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,6 +173,50 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="findresourcebytypeandlogicalid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> find<wbr>Resource<wbr>ByType<wbr>And<wbr>Logical<wbr>Id</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Resource<wbr>ByType<wbr>And<wbr>Logical<wbr>Id<span class="tsd-signature-symbol">(</span>stack<span class="tsd-signature-symbol">: </span><a href="../classes/constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, resourceType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, logicalIdPattern<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="utils_test.html#resource" class="tsd-signature-type" data-tsd-kind="Type alias">Resource</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c061c67/src/utils/test/synthed-stack.ts#L28">src/utils/test/synthed-stack.ts:28</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A helper function to find a resource of a particular type and logicalId within a stack.
+									Useful for when the logicalId is auto-generated.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>stack: <a href="../classes/constructs_core.gustack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the stack to search in</p>
+									</div>
+								</li>
+								<li>
+									<h5>resourceType: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the AWS resource type string, for example &quot;AWS::AutoScaling::AutoScalingGroup&quot;</p>
+									</div>
+								</li>
+								<li>
+									<h5>logicalIdPattern: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RegExp</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a string or regex pattern to match against the resource&#39;s logicalId</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="utils_test.html#resource" class="tsd-signature-type" data-tsd-kind="Type alias">Resource</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="simplegustackfortesting" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> simple<wbr>GuStack<wbr>For<wbr>Testing</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -150,7 +226,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/9040502/src/utils/test/simple-gu-stack.ts#L5">src/utils/test/simple-gu-stack.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c061c67/src/utils/test/simple-gu-stack.ts#L5">src/utils/test/simple-gu-stack.ts:5</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -227,13 +303,25 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/utils_test.parameter.html" class="tsd-kind-icon">Parameter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/utils_test.synthedstack.html" class="tsd-kind-icon">Synthed<wbr>Stack</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="utils_test.html#resource" class="tsd-kind-icon">Resource</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="utils_test.html#resourceproperty" class="tsd-kind-icon">Resource<wbr>Property</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="utils_test.html#alphabeticaltags" class="tsd-kind-icon">alphabetical<wbr>Tags</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="utils_test.html#attachpolicytotestrole" class="tsd-kind-icon">attach<wbr>Policy<wbr>ToTest<wbr>Role</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="utils_test.html#findresourcebytypeandlogicalid" class="tsd-kind-icon">find<wbr>Resource<wbr>ByType<wbr>And<wbr>Logical<wbr>Id</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="utils_test.html#simplegustackfortesting" class="tsd-kind-icon">simple<wbr>GuStack<wbr>For<wbr>Testing</a>
