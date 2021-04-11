@@ -1,5 +1,6 @@
 import type { CfnElement, IConstruct } from "@aws-cdk/core";
 import { Logger } from "../../utils/logger";
+import { isGuStatefulConstruct } from "../../utils/mixin";
 
 export interface GuMigratingStack {
   /**
@@ -10,7 +11,12 @@ export interface GuMigratingStack {
    * @see GuMigratingResource
    * @see GuStack
    */
-  migratedFromCloudFormation?: boolean;
+  migratedFromCloudFormation: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+export function isGuMigratingStack(construct: any): construct is GuMigratingStack {
+  return "migratedFromCloudFormation" in construct;
 }
 
 export interface GuMigratingResource {
@@ -29,17 +35,8 @@ export interface GuMigratingResource {
   existingLogicalId?: string;
 }
 
-export interface GuStatefulConstruct extends IConstruct {
-  isStatefulConstruct: true;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- user defined type guard
-function isGuStatefulConstruct(construct: any): construct is GuStatefulConstruct {
-  return "isStatefulConstruct" in construct;
-}
-
 export const GuMigratingResource = {
-  setLogicalId<T extends GuStatefulConstruct | IConstruct>(
+  setLogicalId<T extends IConstruct>(
     construct: T,
     { migratedFromCloudFormation }: GuMigratingStack,
     { existingLogicalId }: GuMigratingResource

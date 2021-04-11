@@ -3,9 +3,9 @@ import { SynthUtils } from "@aws-cdk/assert";
 import type { BucketProps } from "@aws-cdk/aws-s3";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Logger } from "../../utils/logger";
+import type { GuStatefulConstruct } from "../../utils/mixin";
 import type { SynthedStack } from "../../utils/test";
 import { simpleGuStackForTesting } from "../../utils/test";
-import type { GuStatefulConstruct } from "./migrating";
 import { GuMigratingResource } from "./migrating";
 import type { GuStack } from "./stack";
 
