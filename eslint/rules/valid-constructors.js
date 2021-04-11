@@ -40,7 +40,7 @@ const lintParameter = (param, node, context, { name, type, allowOptional, allowD
     });
   }
 
-  const currentName = param.name ?? param.left.name;
+  const currentName = param.name ?? param.left?.name ?? param.argument.name;
 
   if (currentName !== name) {
     return context.report({
