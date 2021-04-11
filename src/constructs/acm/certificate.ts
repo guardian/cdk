@@ -3,10 +3,10 @@ import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certi
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
 import { Stage } from "../../constants";
-import type { GuStatefulConstruct } from "../../utils/mixin";
+import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
-import { GuMigratingResource } from "../core/migrating";
+import type { GuMigratingResource } from "../core/migrating";
 
 export type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource & AppIdentity;
 
@@ -57,8 +57,7 @@ export interface GuDnsValidatedCertificateProps {
  *  });
  *```
  */
-export class GuCertificate extends Certificate implements GuStatefulConstruct {
-  isStatefulConstruct: true;
+export class GuCertificate extends GuStatefulMigratableConstruct(Certificate) {
   constructor(scope: GuStack, id: string, props: GuCertificateProps) {
     const maybeHostedZone =
       props.CODE.hostedZoneId && props.PROD.hostedZoneId
@@ -71,17 +70,16 @@ export class GuCertificate extends Certificate implements GuStatefulConstruct {
             })
           )
         : undefined;
-    const awsCertificateProps: CertificateProps = {
+    const awsCertificateProps: CertificateProps & GuMigratingResource = {
       domainName: scope.withStageDependentValue({
         variableName: "domainName",
         stageValues: { [Stage.CODE]: props.CODE.domainName, [Stage.PROD]: props.PROD.domainName },
       }),
       validation: CertificateValidation.fromDns(maybeHostedZone),
+      existingLogicalId: props.existingLogicalId,
     };
     super(scope, id, awsCertificateProps);
     this.applyRemovalPolicy(RemovalPolicy.RETAIN);
-    this.isStatefulConstruct = true;
-    GuMigratingResource.setLogicalId(this, scope, { existingLogicalId: props.existingLogicalId });
     AppIdentity.taggedConstruct({ app: props.app }, this);
   }
 }
