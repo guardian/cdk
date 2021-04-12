@@ -1,23 +1,20 @@
-import type { ApplicationListenerProps, CfnListener } from "@aws-cdk/aws-elasticloadbalancingv2";
+import type { ApplicationListenerProps } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { RegexPattern } from "../../../constants";
+import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import type { GuStack } from "../../core";
 import { GuCertificateArnParameter } from "../../core";
 import { AppIdentity } from "../../core/identity";
+import type { GuMigratingResource } from "../../core/migrating";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity {
-  overrideId?: boolean;
-}
+export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity, GuMigratingResource {}
 
-export class GuApplicationListener extends ApplicationListener {
+export class GuApplicationListener extends GuStatefulMigratableConstruct(ApplicationListener) {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
-    const { app, overrideId } = props;
+    const { app } = props;
 
     super(scope, AppIdentity.suffixText({ app }, id), { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
-
-    if (overrideId || (scope.migratedFromCloudFormation && overrideId !== false))
-      (this.node.defaultChild as CfnListener).overrideLogicalId(id);
 
     /*
     AWS::ElasticLoadBalancingV2::Listener resources cannot be tagged.
