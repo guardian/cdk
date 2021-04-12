@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
+import "../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
-import type { SynthedStack } from "../utils/test";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuSnsLambda } from "./sns-lambda";
 
@@ -22,8 +22,8 @@ describe("The GuSnsLambda pattern", () => {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
-  it("should inherit an existing SNS topic correctly if a logicalIdFromCloudFormation is passed via existingSnsTopic", () => {
-    const stack = simpleGuStackForTesting();
+  it("should inherit an existing SNS topic correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
       code: { bucket: "test-dist", key: "lambda.zip" },
@@ -31,12 +31,12 @@ describe("The GuSnsLambda pattern", () => {
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
-      existingSnsTopic: { logicalIdFromCloudFormation: "in-use-sns-topic" },
+      existingSnsTopic: { existingLogicalId: "in-use-sns-topic" },
       app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("in-use-sns-topic");
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
   });
 
   it("should not generate a new SNS Topic if an externalTopicName is passed via existingSnsTopic", () => {
