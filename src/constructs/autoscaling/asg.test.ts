@@ -173,9 +173,10 @@ describe("The GuAutoScalingGroup", () => {
     const app = "Testing";
     const stack = simpleGuStackForTesting();
 
-    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, overrideId: true, app });
-    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, overrideId: true, app });
-    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, overrideId: true, app });
+    // not passing `existingLogicalId`, so logicalId will be auto-generated
+    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, app });
+    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, app });
+    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, app });
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       ...defaultProps,
@@ -188,13 +189,13 @@ describe("The GuAutoScalingGroup", () => {
           "Fn::GetAtt": [`GuHttpsEgressSecurityGroup${app}89CDDA4B`, "GroupId"],
         },
         {
-          "Fn::GetAtt": [`SecurityGroup${app}`, "GroupId"],
+          "Fn::GetAtt": ["SecurityGroupTestingA32D34F9", "GroupId"], // auto-generated logicalId
         },
         {
-          "Fn::GetAtt": [`SecurityGroup1${app}`, "GroupId"],
+          "Fn::GetAtt": ["SecurityGroup1TestingCA3A17A4", "GroupId"], // auto-generated logicalId
         },
         {
-          "Fn::GetAtt": [`SecurityGroup2${app}`, "GroupId"],
+          "Fn::GetAtt": ["SecurityGroup2Testing6436C75B", "GroupId"], // auto-generated logicalId
         },
       ],
     });

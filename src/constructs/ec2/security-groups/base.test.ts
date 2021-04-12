@@ -1,9 +1,8 @@
 import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import "../../../utils/test/jest";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
 import { GuHttpsEgressSecurityGroup, GuPublicInternetAccessSecurityGroup, GuSecurityGroup } from "./base";
 
 describe("The GuSecurityGroup class", () => {
@@ -13,22 +12,18 @@ describe("The GuSecurityGroup class", () => {
     publicSubnetIds: [""],
   });
 
-  it("overrides the id if the prop is set to true", () => {
-    const stack = simpleGuStackForTesting();
+  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, existingLogicalId: "TestSG", app: "testing" });
 
-    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, overrideId: true, app: "testing" });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("TestSecurityGroupTesting");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "TestSG");
   });
 
-  it("does not overrides the id if the prop is set to false", () => {
+  test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
-
     new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, app: "testing" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("TestSecurityGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", /^TestSecurityGroup.+$/);
   });
 
   it("adds the ingresses passed in through props", () => {
