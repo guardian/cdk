@@ -3,19 +3,30 @@ import { ApplicationListener, ApplicationProtocol, ListenerAction } from "@aws-c
 import { RegexPattern } from "../../../constants";
 import type { GuStack } from "../../core";
 import { GuCertificateArnParameter } from "../../core";
-import type { AppIdentity } from "../../core/identity";
+import { AppIdentity } from "../../core/identity";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps {
+export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity {
   overrideId?: boolean;
 }
 
 export class GuApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
-    super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
+    const { app, overrideId } = props;
 
-    if (props.overrideId || (scope.migratedFromCloudFormation && props.overrideId !== false))
+    super(scope, AppIdentity.suffixText({ app }, id), { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
+
+    if (overrideId || (scope.migratedFromCloudFormation && overrideId !== false))
       (this.node.defaultChild as CfnListener).overrideLogicalId(id);
+
+    /*
+    AWS::ElasticLoadBalancingV2::Listener resources cannot be tagged.
+    Perform the call anyway for consistency across the project.
+    Who knows, maybe AWS will support it one day?!
+    If so, tests will fail and we can celebrate!
+    See https://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html#services-elasticloadbalancing
+     */
+    AppIdentity.taggedConstruct({ app }, this);
   }
 }
 
@@ -28,10 +39,12 @@ export interface GuHttpsApplicationListenerProps
 
 export class GuHttpsApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
-    if (props.certificate) {
-      const isValid = new RegExp(RegexPattern.ACM_ARN).test(props.certificate);
+    const { app, certificate, targetGroup } = props;
+
+    if (certificate) {
+      const isValid = new RegExp(RegexPattern.ACM_ARN).test(certificate);
       if (!isValid) {
-        throw new Error(`${props.certificate} is not a valid ACM ARN`);
+        throw new Error(`${certificate} is not a valid ACM ARN`);
       }
     }
 
@@ -41,12 +54,21 @@ export class GuHttpsApplicationListener extends ApplicationListener {
       ...props,
       certificates: [
         {
-          certificateArn: props.certificate ?? new GuCertificateArnParameter(scope, props).valueAsString,
+          certificateArn: certificate ?? new GuCertificateArnParameter(scope, props).valueAsString,
         },
       ],
-      defaultAction: ListenerAction.forward([props.targetGroup]),
+      defaultAction: ListenerAction.forward([targetGroup]),
     };
 
-    super(scope, id, mergedProps);
+    super(scope, AppIdentity.suffixText({ app }, id), mergedProps);
+
+    /*
+    AWS::ElasticLoadBalancingV2::Listener resources cannot be tagged.
+    Perform the call anyway for consistency across the project.
+    Who knows, maybe AWS will support it one day?!
+    If so, tests will fail and we can celebrate!
+    See https://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html#services-elasticloadbalancing
+     */
+    AppIdentity.taggedConstruct({ app }, this);
   }
 }
