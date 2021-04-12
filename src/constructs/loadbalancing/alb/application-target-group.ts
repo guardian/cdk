@@ -1,5 +1,5 @@
 import type { ApplicationTargetGroupProps, CfnTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { ApplicationTargetGroup, Protocol } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
@@ -22,6 +22,7 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
     const { app } = props;
 
     const mergedProps = {
+      protocol: ApplicationProtocol.HTTP, // We terminate HTTPS at the load balancer level, so load balancer to ASG/EC2 traffic can be over HTTP
       ...props,
       healthCheck: { ...GuApplicationTargetGroup.DefaultHealthCheck, ...props.healthCheck },
     };

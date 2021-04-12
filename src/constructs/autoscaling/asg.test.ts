@@ -10,6 +10,8 @@ import type { SynthedStack } from "../../utils/test";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
+import { GuAllowPolicy } from "../iam/policies";
+import { GuInstanceRole } from "../iam/roles";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
 import { GuAutoScalingGroup } from "./";
@@ -224,26 +226,6 @@ describe("The GuAutoScalingGroup", () => {
     expect(Object.keys(json.Resources)).not.toContain("AutoscalingGroup");
   });
 
-  test("adds the correct mappings when provided with minimal capacity config", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      stagemapping: {
-        CODE: {
-          minInstances: 1,
-          maxInstances: 2,
-        },
-        PROD: {
-          minInstances: 3,
-          maxInstances: 6,
-        },
-      },
-    });
-  });
-
   test("uses custom max capacities (if provided)", () => {
     const stack = simpleGuStackForTesting();
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
@@ -276,28 +258,128 @@ describe("The GuAutoScalingGroup", () => {
     });
   });
 
-  test("Uses Find In Map correctly to reference capacity mappings", () => {
+  test("has an instance role created by default with AssumeRole permissions", () => {
     const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      MinSize: {
-        "Fn::FindInMap": [
-          "stagemapping",
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      app: "TestApp",
+      userData: "SomeUserData",
+      vpc,
+    });
+
+    expect(stack).toHaveResource("AWS::IAM::Role", {
+      AssumeRolePolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
           {
-            Ref: "Stage",
+            Action: "sts:AssumeRole",
+            Effect: "Allow",
+            Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
           },
-          "minInstances",
         ],
       },
-      MaxSize: {
-        "Fn::FindInMap": [
-          "stagemapping",
-          {
-            Ref: "Stage",
-          },
-          "maxInstances",
+      Tags: alphabeticalTags([
+        { Key: "App", Value: "TestApp" },
+        { Key: "gu:cdk:version", Value: "TEST" },
+        { Key: "Stack", Value: "test-stack" },
+        { Key: "Stage", Value: { Ref: "Stage" } },
+      ]),
+    });
+  });
+
+  test("passing in an instance role overrides the default", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      app: "TestApp",
+      userData: "UserData",
+      vpc,
+      role: new GuInstanceRole(stack, {
+        app: "TestApp",
+        additionalPolicies: [
+          new GuAllowPolicy(stack, "SomePolicy", {
+            actions: ["some:Action"],
+            resources: ["some:Resource"],
+          }),
         ],
+      }),
+    });
+
+    expect(stack).toHaveResource("AWS::IAM::Role", {
+      AssumeRolePolicyDocument: {
+        Statement: [
+          {
+            Action: "sts:AssumeRole",
+            Effect: "Allow",
+            Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
+          },
+        ],
+        Version: "2012-10-17",
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: "some:Action",
+            Effect: "Allow",
+            Resource: "some:Resource",
+          },
+        ],
+      },
+    });
+  });
+
+  test("has sensible default scaling capacities per stage based on minimum capacity", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      app: "TestApp",
+      userData: "SomeUserData",
+      vpc,
+    });
+
+    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+      MinSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "minInstances"] },
+      MaxSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "maxInstances"] },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: { minInstances: 1, maxInstances: 2 },
+        PROD: { minInstances: 3, maxInstances: 6 },
+      },
+    });
+  });
+
+  test("scaling capacities can be overriden", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      app: "TestApp",
+      userData: "SomeUserData",
+      vpc,
+      stageDependentProps: {
+        [Stage.CODE]: { minimumInstances: 2 },
+        [Stage.PROD]: { minimumInstances: 5 },
+      },
+    });
+
+    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+      MinSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "minInstances"] },
+      MaxSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "maxInstances"] },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: { minInstances: 2, maxInstances: 4 },
+        PROD: { minInstances: 5, maxInstances: 10 },
       },
     });
   });
