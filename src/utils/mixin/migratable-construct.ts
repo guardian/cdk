@@ -61,7 +61,7 @@ export function GuMigratableConstruct<TBase extends AnyConstructor>(BaseClass: T
         // the parent AWS constructor presents a common signature of `scope`, `id`, `props`
         if (args.length === 3) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- mixin
-          const [scope, id, props] = args;
+          const [scope, id, maybeProps] = args;
 
           const isAMigratingStack = isGuMigratingStack(scope);
           const isIdAString = typeof id === "string";
@@ -74,13 +74,16 @@ export function GuMigratableConstruct<TBase extends AnyConstructor>(BaseClass: T
            */
           const looksLikeAConstruct = isAMigratingStack && isIdAString;
 
+          // `props` can be undefined
+          const existingLogicalId = maybeProps ? (maybeProps as GuMigratingResource).existingLogicalId : undefined;
+
           if (looksLikeAConstruct) {
             GuMigratingResource.setLogicalId(
               this,
               {
                 migratedFromCloudFormation: (scope as GuMigratingStack).migratedFromCloudFormation,
               },
-              props
+              { existingLogicalId }
             );
           }
         }
