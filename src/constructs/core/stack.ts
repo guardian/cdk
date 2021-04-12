@@ -9,7 +9,7 @@ import type { GuMigratingStack } from "./migrating";
 import type { GuParameter } from "./parameters";
 import { GuStageParameter } from "./parameters";
 
-export interface GuStackProps extends StackProps, GuMigratingStack {
+export interface GuStackProps extends StackProps, Partial<GuMigratingStack> {
   stack: string;
 }
 
@@ -40,7 +40,7 @@ export interface GuStackProps extends StackProps, GuMigratingStack {
  * }
  * ```
  */
-export class GuStack extends Stack implements StackStageIdentity {
+export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
   private readonly _stack: string;
   private readonly _stage: string;
 
