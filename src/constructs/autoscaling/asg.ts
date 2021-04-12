@@ -123,7 +123,6 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     cfnAsg.addDeletionOverride("UpdatePolicy");
 
     if (mergedProps.overrideId) cfnAsg.overrideLogicalId(id);
-
     AppIdentity.taggedConstruct(props, this);
   }
 }

@@ -1,0 +1,620 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`the GuEC2App pattern should produce a functional EC2 app with minimal arguments 1`] = `
+Object {
+  "Mappings": Object {
+    "stagemapping": Object {
+      "CODE": Object {
+        "maxInstances": 2,
+        "minInstances": 1,
+      },
+      "PROD": Object {
+        "maxInstances": 6,
+        "minInstances": 3,
+      },
+    },
+  },
+  "Parameters": Object {
+    "AMITestguec2app": Object {
+      "Description": "Amazon Machine Image ID for the app test-gu-ec2-app. Use this in conjunction with AMIgo to keep AMIs up to date.",
+      "Type": "AWS::EC2::Image::Id",
+    },
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "InstanceTypeTestguec2app": Object {
+      "Default": "t3.small",
+      "Description": "EC2 Instance Type for the app test-gu-ec2-app",
+      "Type": "String",
+    },
+    "LoggingStreamName": Object {
+      "Default": "/account/services/logging.stream.name",
+      "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+    "testguec2appCertArn": Object {
+      "AllowedPattern": "arn:aws:[a-z0-9]*:[a-z0-9\\\\-]*:[0-9]{12}:.*",
+      "ConstraintDescription": "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
+      "Description": "ARN of a TLS certificate to install on the load balancer",
+      "Type": "String",
+    },
+    "testguec2appPrivateSubnets": Object {
+      "Default": "/account/vpc/primary/subnets/private",
+      "Description": "A list of private subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+    },
+    "testguec2appVpcId": Object {
+      "Default": "/account/vpc/primary/id",
+      "Description": "Virtual Private Cloud to run EC2 instances within",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
+    },
+  },
+  "Resources": Object {
+    "DescribeEC2PolicyFF5F9295": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups",
+                "ec2:DescribeTags",
+                "ec2:DescribeInstances",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "describe-ec2-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTestguec2app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GetDistributablePolicyTestguec2app6A8D1854": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:s3:::",
+                    Object {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/test-stack/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-gu-ec2-app/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GetDistributablePolicyTestguec2app6A8D1854",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTestguec2app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuHttpsEgressSecurityGroupTestguec2appEBD7B195": Object {
+      "Properties": Object {
+        "GroupDescription": "Allow all outbound HTTPS traffic",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound HTTPS traffic",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "testguec2appVpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "GuHttpsEgressSecurityGroupTestguec2appfromTesttestguec2appLoadBalancerTestguec2appSecurityGroup0243C6D0300016F0F9FF": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "testguec2appLoadBalancerTestguec2appSecurityGroupA8C07B1F",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuLogShippingPolicy981BFE5A": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kinesis:Describe*",
+                "kinesis:Put*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:kinesis:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":stream/",
+                    Object {
+                      "Ref": "LoggingStreamName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTestguec2app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "InstanceRoleTestguec2app": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Path": "/",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ParameterStoreReadTestguec2app072DCDE1": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/test-gu-ec2-app",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "parameter-store-read-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTestguec2app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMRunCommandPolicy244E1613": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply",
+                "ssm:UpdateInstanceInformation",
+                "ssm:ListInstanceAssociations",
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeDocumentParameters",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ssm-run-command-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTestguec2app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "testguec2appAutoScalingGroupTestguec2appASG989EE423": Object {
+      "Properties": Object {
+        "HealthCheckGracePeriod": 120,
+        "HealthCheckType": "ELB",
+        "LaunchConfigurationName": Object {
+          "Ref": "testguec2appAutoScalingGroupTestguec2appLaunchConfig9D6B2C13",
+        },
+        "MaxSize": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "maxInstances",
+          ],
+        },
+        "MinSize": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "minInstances",
+          ],
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "PropagateAtLaunch": true,
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Test/test-gu-ec2-appAutoScalingGroupTestguec2app",
+          },
+          Object {
+            "Key": "Stack",
+            "PropagateAtLaunch": true,
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "PropagateAtLaunch": true,
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "TargetGroupARNs": Array [
+          Object {
+            "Ref": "testguec2appTargetGroupTestguec2app8516E88C",
+          },
+        ],
+        "VPCZoneIdentifier": Object {
+          "Ref": "testguec2appPrivateSubnets",
+        },
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+    },
+    "testguec2appAutoScalingGroupTestguec2appInstanceProfile5D0B8FC4": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleTestguec2app",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "testguec2appAutoScalingGroupTestguec2appLaunchConfig9D6B2C13": Object {
+      "DependsOn": Array [
+        "InstanceRoleTestguec2app",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "testguec2appAutoScalingGroupTestguec2appInstanceProfile5D0B8FC4",
+        },
+        "ImageId": Object {
+          "Ref": "AMITestguec2app",
+        },
+        "InstanceType": Object {
+          "Ref": "InstanceTypeTestguec2app",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/dev foobarbaz",
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "testguec2appListenerTestguec2app095B41D3": Object {
+      "Properties": Object {
+        "Certificates": Array [
+          Object {
+            "CertificateArn": Object {
+              "Ref": "testguec2appCertArn",
+            },
+          },
+        ],
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "testguec2appTargetGroupTestguec2app8516E88C",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "testguec2appLoadBalancerTestguec2app7FA2A1E4",
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "testguec2appLoadBalancerTestguec2app7FA2A1E4": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "true",
+          },
+        ],
+        "Scheme": "internal",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "testguec2appLoadBalancerTestguec2appSecurityGroupA8C07B1F",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Object {
+          "Ref": "testguec2appPrivateSubnets",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "testguec2appLoadBalancerTestguec2appSecurityGroupA8C07B1F": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB Testtestguec2appLoadBalancerTestguec2app15F701B4",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "testguec2appVpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "testguec2appLoadBalancerTestguec2appSecurityGrouptoTestGuHttpsEgressSecurityGroupTestguec2appE5EE51F53000FB3DCA9E": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
+            "GroupId",
+          ],
+        },
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "testguec2appLoadBalancerTestguec2appSecurityGroupA8C07B1F",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "testguec2appTargetGroupTestguec2app8516E88C": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckPath": "/healthcheck",
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 3000,
+        "Protocol": "HTTP",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "TargetType": "instance",
+        "UnhealthyThresholdCount": 5,
+        "VpcId": Object {
+          "Ref": "testguec2appVpcId",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+  },
+}
+`;
