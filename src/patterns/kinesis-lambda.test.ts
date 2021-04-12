@@ -32,8 +32,8 @@ describe("The GuKinesisLambda pattern", () => {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
-  it("should inherit an existing Kinesis stream correctly if logicalIdFromCloudFormation is passed in", () => {
-    const stack = simpleGuStackForTesting();
+  it("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
       retryBehaviour: StreamRetry.maxAttempts(1),
@@ -46,7 +46,7 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
-      existingKinesisStream: { logicalIdFromCloudFormation: "pre-existing-kinesis-stream" },
+      existingKinesisStream: { existingLogicalId: "pre-existing-kinesis-stream" },
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
