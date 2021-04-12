@@ -1,32 +1,29 @@
-import { SynthUtils } from "@aws-cdk/assert";
+import "../../../utils/test/jest";
 import "@aws-cdk/assert/jest";
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
 import { GuRole } from "./roles";
 
 describe("The GuRole class", () => {
-  it("overrides id if prop set to true", () => {
-    const stack = simpleGuStackForTesting();
+  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
     new GuRole(stack, "TestRole", {
-      overrideId: true,
+      existingLogicalId: "MyRole",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("TestRole");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Role", "MyRole");
   });
 
-  it("does not override id if prop set to false", () => {
+  test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
 
     new GuRole(stack, "TestRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("TestRole");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Role", /^TestRole.+$/);
   });
 
   it("returns a string value for the child ref", () => {
