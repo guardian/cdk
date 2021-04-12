@@ -24,7 +24,7 @@ jobs:
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           ./script/cd
       - name: post-release
-        uses: guardian/actions-merge-release-changes-to-protected-branch@v1.0.0
+        uses: guardian/actions-merge-release-changes-to-protected-branch@v1.1.0
         with:
           # This action will raise a PR to edit package.json.
           # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI,
