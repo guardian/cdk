@@ -51,6 +51,33 @@ describe("GuAllowPolicy", () => {
       },
     });
   });
+
+  test("auto-generates the logicalId by default", () => {
+    const stack = simpleGuStackForTesting();
+    attachPolicyToTestRole(
+      stack,
+      new GuAllowPolicy(stack, "AllowS3GetObject", {
+        actions: ["s3:GetObject"],
+        resources: ["*"],
+      })
+    );
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", /^AllowS3GetObject.+/);
+  });
+
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    attachPolicyToTestRole(
+      stack,
+      new GuAllowPolicy(stack, "AllowS3GetObject", {
+        actions: ["s3:GetObject"],
+        resources: ["*"],
+        existingLogicalId: "MyAwesomeAllowPolicy",
+      })
+    );
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", "MyAwesomeAllowPolicy");
+  });
 });
 
 describe("GuDenyPolicy", () => {
@@ -100,5 +127,32 @@ describe("GuDenyPolicy", () => {
         ],
       },
     });
+  });
+
+  test("auto-generates the logicalId by default", () => {
+    const stack = simpleGuStackForTesting();
+    attachPolicyToTestRole(
+      stack,
+      new GuDenyPolicy(stack, "DenyS3GetObject", {
+        actions: ["s3:GetObject"],
+        resources: ["*"],
+      })
+    );
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", /^DenyS3GetObject.+/);
+  });
+
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    attachPolicyToTestRole(
+      stack,
+      new GuDenyPolicy(stack, "DenyS3GetObject", {
+        actions: ["s3:GetObject"],
+        resources: ["*"],
+        existingLogicalId: "MyAwesomeDenyPolicy",
+      })
+    );
+
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", "MyAwesomeDenyPolicy");
   });
 });
