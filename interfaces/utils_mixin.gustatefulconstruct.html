@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Parameter | @guardian/cdk - v8.1.0</title>
+	<title>GuStatefulConstruct | @guardian/cdk - v8.1.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v8.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">@guardian/cdk - v8.1.0</a>
 				</li>
 				<li>
-					<a href="../modules/utils_test.html">utils/test</a>
+					<a href="../modules/utils_mixin.html">utils/mixin</a>
 				</li>
 				<li>
-					<a href="utils_test.parameter.html">Parameter</a>
+					<a href="utils_mixin.gustatefulconstruct.html">GuStatefulConstruct</a>
 				</li>
 			</ul>
-			<h1>Interface Parameter</h1>
+			<h1>Interface GuStatefulConstruct</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Parameter</span>
+						<span class="target">GuStatefulConstruct</span>
 					</li>
 				</ul>
 			</section>
@@ -83,10 +83,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_test.parameter.html#allowedvalues" class="tsd-kind-icon">Allowed<wbr>Values</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_test.parameter.html#default" class="tsd-kind-icon">Default</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_test.parameter.html#description" class="tsd-kind-icon">Description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_test.parameter.html#type" class="tsd-kind-icon">Type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_mixin.gustatefulconstruct.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,44 +92,20 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="allowedvalues" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> Allowed<wbr>Values</h3>
-					<div class="tsd-signature tsd-kind-icon">Allowed<wbr>Values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="isstatefulconstruct" class="tsd-anchor"></a>
+					<h3>is<wbr>Stateful<wbr>Construct</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Stateful<wbr>Construct<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/a1cda09/src/utils/test/synthed-stack.ts#L9">src/utils/test/synthed-stack.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/a1cda09/src/utils/mixin/migratable-construct-stateful.ts#L9">src/utils/mixin/migratable-construct-stateful.ts:9</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="default" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> Default</h3>
-					<div class="tsd-signature tsd-kind-icon">Default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/a1cda09/src/utils/test/synthed-stack.ts#L8">src/utils/test/synthed-stack.ts:8</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="description" class="tsd-anchor"></a>
-					<h3>Description</h3>
-					<div class="tsd-signature tsd-kind-icon">Description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/a1cda09/src/utils/test/synthed-stack.ts#L7">src/utils/test/synthed-stack.ts:7</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="type" class="tsd-anchor"></a>
-					<h3>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/a1cda09/src/utils/test/synthed-stack.ts#L6">src/utils/test/synthed-stack.ts:6</a></li>
-						</ul>
-					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A flag to signal to <code>GuMigratingResource</code> that a construct is stateful and care should be taken when migrating to GuCDK.
+							If one accidentally replaces a stateful resource, downstream services such as DNS may be impacted.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -187,13 +160,13 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/utils_lambda.html">utils/lambda</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/utils_mixin.html">utils/mixin</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/utils_security_groups.html">utils/security-<wbr>groups</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/utils_test.html">utils/test</a>
 					</li>
 				</ul>
@@ -203,44 +176,23 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="utils_test.parameter.html" class="tsd-kind-icon">Parameter</a>
+						<a href="utils_mixin.gustatefulconstruct.html" class="tsd-kind-icon">Gu<wbr>Stateful<wbr>Construct</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="utils_test.parameter.html#allowedvalues" class="tsd-kind-icon">Allowed<wbr>Values</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="utils_test.parameter.html#default" class="tsd-kind-icon">Default</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="utils_test.parameter.html#description" class="tsd-kind-icon">Description</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="utils_test.parameter.html#type" class="tsd-kind-icon">Type</a>
+								<a href="utils_mixin.gustatefulconstruct.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="utils_test.synthedstack.html" class="tsd-kind-icon">Synthed<wbr>Stack</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/utils_mixin.html#gumigratableconstruct" class="tsd-kind-icon">Gu<wbr>Migratable<wbr>Construct</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/utils_test.html#resource" class="tsd-kind-icon">Resource</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/utils_test.html#resourceproperty" class="tsd-kind-icon">Resource<wbr>Property</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/utils_mixin.html#gustatefulmigratableconstruct" class="tsd-kind-icon">Gu<wbr>Stateful<wbr>Migratable<wbr>Construct</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/utils_test.html#alphabeticaltags" class="tsd-kind-icon">alphabetical<wbr>Tags</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/utils_test.html#attachpolicytotestrole" class="tsd-kind-icon">attach<wbr>Policy<wbr>ToTest<wbr>Role</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/utils_test.html#findresourcebytypeandlogicalid" class="tsd-kind-icon">find<wbr>Resource<wbr>ByType<wbr>And<wbr>Logical<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/utils_test.html#simplegustackfortesting" class="tsd-kind-icon">simple<wbr>GuStack<wbr>For<wbr>Testing</a>
+						<a href="../modules/utils_mixin.html#isgustatefulconstruct" class="tsd-kind-icon">is<wbr>GuStateful<wbr>Construct</a>
 					</li>
 				</ul>
 			</nav>
