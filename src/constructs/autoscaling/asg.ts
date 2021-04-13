@@ -4,9 +4,11 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
+import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import { AppIdentity } from "../core/identity";
+import type { GuMigratingResource } from "../core/migrating";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
 import { GuInstanceRole } from "../iam";
 
@@ -26,7 +28,8 @@ export interface GuAutoScalingGroupProps
       | "desiredCapacity"
       | "securityGroup"
     >,
-    AppIdentity {
+    AppIdentity,
+    GuMigratingResource {
   stageDependentProps?: GuStageDependentAsgProps;
   instanceType?: InstanceType;
   imageId?: GuAmiParameter;
@@ -34,7 +37,6 @@ export interface GuAutoScalingGroupProps
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
-  overrideId?: boolean;
 }
 
 type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
@@ -78,7 +80,7 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
   };
 }
 
-export class GuAutoScalingGroup extends AutoScalingGroup {
+export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalingGroup) {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
 
@@ -107,7 +109,7 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
       userData,
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
-      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, props),
+      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app: props.app, vpc: props.vpc }),
     };
 
     super(scope, AppIdentity.suffixText(props, id), mergedProps);
@@ -121,8 +123,6 @@ export class GuAutoScalingGroup extends AutoScalingGroup {
     // leaves it to the default value, which is actually false.
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
-
-    if (mergedProps.overrideId) cfnAsg.overrideLogicalId(id);
 
     AppIdentity.taggedConstruct(props, this);
   }

@@ -6,12 +6,11 @@ import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { TrackingTag } from "../../constants/library-info";
-import type { SynthedStack } from "../../utils/test";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import type { Resource, SynthedStack } from "../../utils/test";
+import { alphabeticalTags, findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
-import { GuAllowPolicy } from "../iam/policies";
-import { GuInstanceRole } from "../iam/roles";
+import { GuAllowPolicy, GuInstanceRole } from "../iam";
 import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
 import { GuAutoScalingGroup } from "./";
@@ -202,28 +201,34 @@ describe("The GuAutoScalingGroup", () => {
 
   test("does not include the UpdatePolicy property", () => {
     const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, overrideId: true });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.AutoscalingGroup)).not.toContain("UpdatePolicy");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", /AutoscalingGroup.+/);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the `toHaveResourceOfTypeAndLogicalId` line above confirms `asgResource` will not be `undefined`
+    const asgResource: Resource = findResourceByTypeAndLogicalId(
+      stack,
+      "AWS::AutoScaling::AutoScalingGroup",
+      /AutoscalingGroup.+/
+    )!;
+
+    // This is checking the properties of the ASG resource
+    // TODO improve the syntax
+    expect(Object.keys(Object.values(asgResource)[0])).not.toContain("UpdatePolicy");
   });
 
-  test("overrides the id with the overrideId prop set to true", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, overrideId: true });
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, existingLogicalId: "MyASG" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).toContain("AutoscalingGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", "MyASG");
   });
 
-  test("does not override the id by default", () => {
+  test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Resources)).not.toContain("AutoscalingGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", /^AutoscalingGroup.+$/);
   });
 
   test("uses custom max capacities (if provided)", () => {
