@@ -1,7 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import { TrackingTagWithPropagate } from "../constants/library-info";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
-import { GuApplicationPorts, GuEc2App } from "./ec2-app";
+import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
@@ -33,66 +34,52 @@ describe("the GuEC2App pattern", function () {
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
       Tags: alphabeticalTags([
-        {
-          Key: "App",
-          PropagateAtLaunch: true,
-          Value: "PlayApp",
-        },
-        {
-          Key: "gu:cdk:version",
-          PropagateAtLaunch: true,
-          Value: "TEST",
-        },
-        {
-          Key: "Name",
-          PropagateAtLaunch: true,
-          Value: "Test/PlayAppAutoScalingGroupPlayApp",
-        },
-        {
-          Key: "Stack",
-          PropagateAtLaunch: true,
-          Value: "test-stack",
-        },
-        {
-          Key: "Stage",
-          PropagateAtLaunch: true,
-          Value: {
-            Ref: "Stage",
-          },
-        },
+        { Key: "App", PropagateAtLaunch: true, Value: "PlayApp" },
+        { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupPlayApp" },
+        { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
+        { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
+        TrackingTagWithPropagate,
       ]),
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
       Tags: alphabeticalTags([
-        {
-          Key: "App",
-          PropagateAtLaunch: true,
-          Value: "NodeApp",
-        },
-        {
-          Key: "gu:cdk:version",
-          PropagateAtLaunch: true,
-          Value: "TEST",
-        },
-        {
-          Key: "Name",
-          PropagateAtLaunch: true,
-          Value: "Test/NodeAppAutoScalingGroupNodeApp",
-        },
-        {
-          Key: "Stack",
-          PropagateAtLaunch: true,
-          Value: "test-stack",
-        },
-        {
-          Key: "Stage",
-          PropagateAtLaunch: true,
-          Value: {
-            Ref: "Stage",
-          },
-        },
+        { Key: "App", PropagateAtLaunch: true, Value: "NodeApp" },
+        { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupNodeApp" },
+        { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
+        { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
+        TrackingTagWithPropagate,
       ]),
+    });
+  });
+
+  describe("GuNodeApp", () => {
+    it("should set the port to the default of 3000 if not specified", function () {
+      const stack = simpleGuStackForTesting();
+      new GuNodeApp(stack, {
+        app: "NodeApp",
+        publicFacing: false,
+        userData: "#!/bin/dev foobarbaz",
+      });
+
+      expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
+        FromPort: 3000,
+      });
+    });
+  });
+
+  describe("GuPlayApp", () => {
+    it("should set the port to the default of 9000 if not specified", function () {
+      const stack = simpleGuStackForTesting();
+      new GuPlayApp(stack, {
+        app: "PlayApp",
+        publicFacing: false,
+        userData: "#!/bin/dev foobarbaz",
+      });
+
+      expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
+        FromPort: 9000,
+      });
     });
   });
 });

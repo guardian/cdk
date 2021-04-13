@@ -7,6 +7,7 @@ interface VpcFromIdProps extends Omit<VpcAttributes, "availabilityZones"> {
   availabilityZones?: string[];
 }
 
+// TODO: Migrate this to use `AppIdentity`
 interface VpcFromIdParameterProps extends Omit<VpcFromIdProps, "vpcId"> {
   app?: string;
 }
@@ -16,6 +17,7 @@ export enum SubnetType {
   PRIVATE = "Private",
 }
 
+// TODO: Migrate this to use `AppIdentity`
 export interface GuSubnetProps {
   type?: SubnetType;
   app?: string;

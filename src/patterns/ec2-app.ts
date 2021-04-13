@@ -5,7 +5,7 @@ import { Duration } from "@aws-cdk/core";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
 import { GuArnParameter } from "../constructs/core";
-import type { AppIdentity } from "../constructs/core/identity";
+import { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
 import { GuInstanceRole } from "../constructs/iam";
 import {
@@ -17,7 +17,11 @@ import {
 interface GuEc2AppProps extends AppIdentity {
   userData: GuUserData | string;
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
-  applicationPort: GuApplicationPorts | number;
+  applicationPort: number;
+}
+
+interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
+  applicationPort?: number;
 }
 
 export enum GuApplicationPorts {
@@ -30,23 +34,25 @@ This pattern is under development. Please don't attempt to use it yet.
  */
 export class GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppProps) {
-    const id = (id: string) => `${props.app}${id}`;
-
-    scope.tags.setTag(id("App"), props.app);
+    AppIdentity.taggedConstruct(props, scope);
 
     const { app } = props;
-    const vpc = GuVpc.fromIdParameter(scope, id("VPC"), { app });
+    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"), { app });
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
 
-    const certificateArn = new GuArnParameter(scope, id("CertArn"), {
+    const certificateArn = new GuArnParameter(scope, AppIdentity.suffixText(props, "CertArn"), {
       description: "ARN of a TLS certificate to install on the load balancer",
     });
 
-    const certificate = Certificate.fromCertificateArn(scope, id("Certificate"), certificateArn.valueAsString);
+    const certificate = Certificate.fromCertificateArn(
+      scope,
+      AppIdentity.suffixText(props, "Certificate"),
+      certificateArn.valueAsString
+    );
 
-    const asg = new GuAutoScalingGroup(scope, id("AutoScalingGroup"), {
+    const asg = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
+      app,
       vpc,
-      app: props.app,
       stageDependentProps: {
         CODE: { minimumInstances: 1 },
         PROD: { minimumInstances: 3 },
@@ -57,7 +63,7 @@ export class GuEc2App {
       vpcSubnets: { subnets: privateSubnets },
     });
 
-    const loadBalancer = new GuApplicationLoadBalancer(scope, id("LoadBalancer"), {
+    const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
       vpc,
       vpcSubnets: {
@@ -65,7 +71,7 @@ export class GuEc2App {
       },
     });
 
-    const targetGroup = new GuApplicationTargetGroup(scope, id("TargetGroup"), {
+    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
       app,
       vpc,
       protocol: ApplicationProtocol.HTTP,
@@ -73,11 +79,29 @@ export class GuEc2App {
       port: props.applicationPort,
     });
 
-    new GuApplicationListener(scope, id("Listener"), {
+    new GuApplicationListener(scope, "Listener", {
       app,
       loadBalancer: loadBalancer,
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [certificate],
     });
+  }
+}
+
+/*
+This pattern is under development. Please don't attempt to use it yet.
+ */
+export class GuPlayApp extends GuEc2App {
+  constructor(scope: GuStack, props: GuMaybePortProps) {
+    super(scope, { ...props, applicationPort: GuApplicationPorts.Play });
+  }
+}
+
+/*
+This pattern is under development. Please don't attempt to use it yet.
+ */
+export class GuNodeApp extends GuEc2App {
+  constructor(scope: GuStack, props: GuMaybePortProps) {
+    super(scope, { ...props, applicationPort: GuApplicationPorts.Node });
   }
 }

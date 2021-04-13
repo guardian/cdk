@@ -1,6 +1,7 @@
 # Generated / builds
 lib
 target
+coverage
 
 # IDEs
 .idea
