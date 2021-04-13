@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">DatabaseInstance</span>
+						<a href="" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">DatabaseInstance</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">DatabaseInstance</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">GuDatabaseInstance</span>
@@ -113,10 +113,11 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_rds.gudatabaseinstance.html#vpcplacement" class="tsd-kind-icon">vpc<wbr>Placement</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-external">
+						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="constructs_rds.gudatabaseinstance.html#instancearn" class="tsd-kind-icon">instance<wbr>Arn</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="constructs_rds.gudatabaseinstance.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited tsd-is-external">
@@ -167,9 +168,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides DatabaseInstance.constructor</p>
+								<p>Overrides GuStatefulMigratableConstruct(DatabaseInstance).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7cc5efc/src/constructs/rds/instance.ts#L14">src/constructs/rds/instance.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/060d18e/src/constructs/rds/instance.ts#L18">src/constructs/rds/instance.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -196,7 +197,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> connections</h3>
 					<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connections</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.connections</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).connections</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:636</li>
 						</ul>
@@ -217,7 +218,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> db<wbr>Instance<wbr>Endpoint<wbr>Address</h3>
 					<div class="tsd-signature tsd-kind-icon">db<wbr>Instance<wbr>Endpoint<wbr>Address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.dbInstanceEndpointAddress</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).dbInstanceEndpointAddress</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:820</li>
 						</ul>
@@ -238,7 +239,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> db<wbr>Instance<wbr>Endpoint<wbr>Port</h3>
 					<div class="tsd-signature tsd-kind-icon">db<wbr>Instance<wbr>Endpoint<wbr>Port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.dbInstanceEndpointPort</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).dbInstanceEndpointPort</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:826</li>
 						</ul>
@@ -259,7 +260,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagOptional">Optional</span> enable<wbr>Iam<wbr>Authentication</h3>
 					<div class="tsd-signature tsd-kind-icon">enable<wbr>Iam<wbr>Authentication<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.enableIamAuthentication</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).enableIamAuthentication</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:654</li>
 						</ul>
@@ -277,7 +278,7 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> engine</h3>
 					<div class="tsd-signature tsd-kind-icon">engine<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IInstanceEngine</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.engine</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).engine</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:737</li>
 						</ul>
@@ -300,7 +301,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> env</h3>
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.env</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).env</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:140</li>
 						</ul>
@@ -327,7 +328,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> instance<wbr>Endpoint</h3>
 					<div class="tsd-signature tsd-kind-icon">instance<wbr>Endpoint<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Endpoint</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.instanceEndpoint</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).instanceEndpoint</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:832</li>
 						</ul>
@@ -348,7 +349,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> instance<wbr>Identifier</h3>
 					<div class="tsd-signature tsd-kind-icon">instance<wbr>Identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.instanceIdentifier</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).instanceIdentifier</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:814</li>
 						</ul>
@@ -369,7 +370,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> instance<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">instance<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InstanceType</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.instanceType</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).instanceType</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:749</li>
 						</ul>
@@ -387,7 +388,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> new<wbr>Cfn<wbr>Props</h3>
 					<div class="tsd-signature tsd-kind-icon">new<wbr>Cfn<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CfnDBInstanceProps</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.newCfnProps</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).newCfnProps</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:645</li>
 						</ul>
@@ -405,7 +406,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> node</h3>
 					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.node</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).node</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:70</li>
 						</ul>
@@ -426,7 +427,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> physical<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.physicalName</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).physicalName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:152</li>
 						</ul>
@@ -453,7 +454,7 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> secret</h3>
 					<div class="tsd-signature tsd-kind-icon">secret<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ISecret</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.secret</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).secret</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:838</li>
 						</ul>
@@ -474,7 +475,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> source<wbr>Cfn<wbr>Props</h3>
 					<div class="tsd-signature tsd-kind-icon">source<wbr>Cfn<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CfnDBInstanceProps</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.sourceCfnProps</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).sourceCfnProps</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:745</li>
 						</ul>
@@ -492,7 +493,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> stack</h3>
 					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.stack</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).stack</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:127</li>
 						</ul>
@@ -513,7 +514,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> vpc</h3>
 					<div class="tsd-signature tsd-kind-icon">vpc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IVpc</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.vpc</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).vpc</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:630</li>
 						</ul>
@@ -534,7 +535,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> vpc<wbr>Placement</h3>
 					<div class="tsd-signature tsd-kind-icon">vpc<wbr>Placement<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SubnetSelection</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from DatabaseInstance.vpcPlacement</p>
+						<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).vpcPlacement</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:641</li>
 						</ul>
@@ -548,7 +549,7 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 					<a name="instancearn" class="tsd-anchor"></a>
@@ -577,6 +578,23 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="isstatefulconstruct" class="tsd-anchor"></a>
+					<h3>is<wbr>Stateful<wbr>Construct</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> isStatefulConstruct<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/060d18e/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-external">
 				<h2>Methods</h2>
@@ -589,7 +607,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance._enableCrossEnvironment</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance)._enableCrossEnvironment</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:167</li>
 								</ul>
@@ -619,7 +637,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.addProxy</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).addProxy</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:185</li>
 								</ul>
@@ -656,7 +674,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.addRotationMultiUser</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).addRotationMultiUser</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:765</li>
 								</ul>
@@ -693,7 +711,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.addRotationSingleUser</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).addRotationSingleUser</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:759</li>
 								</ul>
@@ -730,7 +748,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.applyRemovalPolicy</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).applyRemovalPolicy</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:181</li>
 								</ul>
@@ -770,7 +788,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.asSecretAttachmentTarget</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).asSecretAttachmentTarget</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:212</li>
 								</ul>
@@ -798,7 +816,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.generatePhysicalName</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).generatePhysicalName</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:185</li>
 								</ul>
@@ -823,7 +841,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.getResourceArnAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).getResourceArnAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:209</li>
 								</ul>
@@ -869,7 +887,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.getResourceNameAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).getResourceNameAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:196</li>
 								</ul>
@@ -908,7 +926,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.grantConnect</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).grantConnect</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:191</li>
 								</ul>
@@ -942,7 +960,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metric</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metric</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:329</li>
 								</ul>
@@ -979,7 +997,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metricCPUUtilization</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metricCPUUtilization</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:337</li>
 								</ul>
@@ -1014,7 +1032,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metricDatabaseConnections</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metricDatabaseConnections</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:345</li>
 								</ul>
@@ -1049,7 +1067,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metricFreeStorageSpace</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metricFreeStorageSpace</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:353</li>
 								</ul>
@@ -1084,7 +1102,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metricFreeableMemory</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metricFreeableMemory</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:361</li>
 								</ul>
@@ -1119,7 +1137,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metricReadIOPS</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metricReadIOPS</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:377</li>
 								</ul>
@@ -1154,7 +1172,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.metricWriteIOPS</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).metricWriteIOPS</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/rds-augmentations.generated.d.ts:369</li>
 								</ul>
@@ -1189,7 +1207,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.onEvent</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).onEvent</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:200</li>
 								</ul>
@@ -1228,7 +1246,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.onPrepare</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).onPrepare</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:97</li>
 								</ul>
@@ -1261,7 +1279,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.onSynthesize</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).onSynthesize</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
 								</ul>
@@ -1300,7 +1318,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.onValidate</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).onValidate</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:84</li>
 								</ul>
@@ -1331,7 +1349,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.prepare</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).prepare</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:130</li>
 								</ul>
@@ -1364,7 +1382,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.setLogRetention</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).setLogRetention</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:659</li>
 								</ul>
@@ -1389,7 +1407,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.synthesize</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).synthesize</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:140</li>
 								</ul>
@@ -1428,20 +1446,15 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.toString</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).toString</p>
 								<ul>
-									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
+									<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:125</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a string representation of this construct.</p>
+									<p>Returns a string representation of an object.</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>stability</dt>
-									<dd><p>stable</p>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
@@ -1456,7 +1469,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.validate</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).validate</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:117</li>
 								</ul>
@@ -1487,7 +1500,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.fromDatabaseInstanceAttributes</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).fromDatabaseInstanceAttributes</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-rds/lib/instance.d.ts:136</li>
 								</ul>
@@ -1527,7 +1540,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.isConstruct</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).isConstruct</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:64</li>
 								</ul>
@@ -1561,7 +1574,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from DatabaseInstance.isResource</p>
+								<p>Inherited from GuStatefulMigratableConstruct(DatabaseInstance).isResource</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:121</li>
 								</ul>
@@ -1713,6 +1726,9 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 								<a href="constructs_rds.gudatabaseinstance.html#instancearn" class="tsd-kind-icon">instance<wbr>Arn</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="constructs_rds.gudatabaseinstance.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="constructs_rds.gudatabaseinstance.html#_enablecrossenvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a>
