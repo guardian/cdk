@@ -73,6 +73,9 @@
 				<ul class="tsd-hierarchy">
 					<li>
 						<span class="tsd-signature-type">SecurityGroupProps</span>
+					</li>
+					<li>
+						<span class="tsd-signature-type">GuMigratingResource</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">GuBaseSecurityGroupProps</span>
@@ -97,8 +100,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gubasesecuritygroupprops.html#description" class="tsd-kind-icon">description</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gubasesecuritygroupprops.html#disableinlinerules" class="tsd-kind-icon">disable<wbr>Inline<wbr>Rules</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gubasesecuritygroupprops.html#egresses" class="tsd-kind-icon">egresses</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_ec2.gubasesecuritygroupprops.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gubasesecuritygroupprops.html#ingresses" class="tsd-kind-icon">ingresses</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_ec2.gubasesecuritygroupprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gubasesecuritygroupprops.html#securitygroupname" class="tsd-kind-icon">security<wbr>Group<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_ec2.gubasesecuritygroupprops.html#vpc" class="tsd-kind-icon">vpc</a></li>
 							</ul>
@@ -195,9 +198,39 @@
 					<div class="tsd-signature tsd-kind-icon">egresses<span class="tsd-signature-symbol">:</span> <a href="constructs_ec2.securitygroupaccessrule.html" class="tsd-signature-type" data-tsd-kind="Interface">SecurityGroupAccessRule</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4fcfcd4/src/constructs/ec2/security-groups/base.ts#L34">src/constructs/ec2/security-groups/base.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/3b15b58/src/constructs/ec2/security-groups/base.ts#L35">src/constructs/ec2/security-groups/base.ts:35</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="existinglogicalid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> existing<wbr>Logical<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">existing<wbr>Logical<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuMigratingResource.existingLogicalId</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/3b15b58/src/constructs/core/migrating.ts#L35">src/constructs/core/migrating.ts:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A string to use to override the logicalId AWS CDK auto-generates for a resource.
+								This is useful when migrating a pre-existing stack into guardian/cdk,
+								as it ensures resources are kept rather than recreated.
+								For example, imagine a YAML stack that creates a load balancer with logicalId <code>DotcomLoadbalancer</code>.
+								We would want to set <code>existingLogicalId</code> for the GuLoadBalancer in guardian/cdk to ensure it is preserved when moving to guardian/cdk.
+								Otherwise it will be created as something like <code>DotcomLoadbalancerABCDEF</code>,
+							is a new resource, and require any DNS entries to be updated accordingly.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>GuMigratingStack</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>GuStack</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="ingresses" class="tsd-anchor"></a>
@@ -205,17 +238,7 @@
 					<div class="tsd-signature tsd-kind-icon">ingresses<span class="tsd-signature-symbol">:</span> <a href="constructs_ec2.securitygroupaccessrule.html" class="tsd-signature-type" data-tsd-kind="Interface">SecurityGroupAccessRule</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4fcfcd4/src/constructs/ec2/security-groups/base.ts#L33">src/constructs/ec2/security-groups/base.ts:33</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="overrideid" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> override<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">override<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/4fcfcd4/src/constructs/ec2/security-groups/base.ts#L32">src/constructs/ec2/security-groups/base.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/3b15b58/src/constructs/ec2/security-groups/base.ts#L34">src/constructs/ec2/security-groups/base.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -373,11 +396,11 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="constructs_ec2.gubasesecuritygroupprops.html#egresses" class="tsd-kind-icon">egresses</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_ec2.gubasesecuritygroupprops.html#ingresses" class="tsd-kind-icon">ingresses</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_ec2.gubasesecuritygroupprops.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_ec2.gubasesecuritygroupprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a>
+								<a href="constructs_ec2.gubasesecuritygroupprops.html#ingresses" class="tsd-kind-icon">ingresses</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_ec2.gubasesecuritygroupprops.html#securitygroupname" class="tsd-kind-icon">security<wbr>Group<wbr>Name</a>
