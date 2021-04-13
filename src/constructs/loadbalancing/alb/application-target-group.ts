@@ -1,14 +1,14 @@
-import type { ApplicationTargetGroupProps, CfnTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
+import type { ApplicationTargetGroupProps } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
+import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
+import type { GuMigratingResource } from "../../core/migrating";
 
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity {
-  overrideId?: boolean;
-}
+export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity, GuMigratingResource {}
 
-export class GuApplicationTargetGroup extends ApplicationTargetGroup {
+export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(ApplicationTargetGroup) {
   static DefaultHealthCheck = {
     path: "/healthcheck",
     protocol: Protocol.HTTP,
@@ -28,9 +28,6 @@ export class GuApplicationTargetGroup extends ApplicationTargetGroup {
     };
 
     super(scope, AppIdentity.suffixText({ app }, id), mergedProps);
-
-    if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
-      (this.node.defaultChild as CfnTargetGroup).overrideLogicalId(id);
 
     AppIdentity.taggedConstruct({ app }, this);
   }

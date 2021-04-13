@@ -1,11 +1,9 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { TrackingTag } from "../../../constants/library-info";
-import type { SynthedStack } from "../../../utils/test";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../../utils/test";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationTargetGroup } from "./application-target-group";
@@ -53,36 +51,21 @@ describe("The GuApplicationTargetGroup class", () => {
     });
   });
 
-  test("overrides the id if the prop is true", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc, overrideId: true });
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc, existingLogicalId: "MyTargetGroup" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::TargetGroup", "MyTargetGroup");
   });
 
-  test("does not override the id if the prop is false", () => {
+  test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationTargetGroup");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc, overrideId: false });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationTargetGroup");
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::TargetGroup",
+      /^ApplicationTargetGroup.+$/
+    );
   });
 
   test("uses default health check properties", () => {

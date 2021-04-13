@@ -152,7 +152,6 @@ describe("The GuAutoScalingGroup", () => {
       ...app,
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
-      overrideId: true,
     });
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
@@ -163,7 +162,7 @@ describe("The GuAutoScalingGroup", () => {
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
       TargetGroupARNs: [
         {
-          Ref: "TargetGroup",
+          Ref: "TargetGroupTesting29B71ABC",
         },
       ],
     });
