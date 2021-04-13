@@ -1,15 +1,13 @@
 import { Topic } from "@aws-cdk/aws-sns";
-import type { CfnTopic, TopicProps } from "@aws-cdk/aws-sns";
+import type { TopicProps } from "@aws-cdk/aws-sns";
+import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
+import type { GuMigratingResource } from "../core/migrating";
 
-interface GuSnsTopicProps extends TopicProps {
-  overrideId?: boolean;
-}
+interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
 
-export class GuSnsTopic extends Topic {
+export class GuSnsTopic extends GuStatefulMigratableConstruct(Topic) {
   constructor(scope: GuStack, id: string, props?: GuSnsTopicProps) {
     super(scope, id, props);
-    const cfnSnsTopic = this.node.defaultChild as CfnTopic;
-    if (props?.overrideId) cfnSnsTopic.overrideLogicalId(id);
   }
 }

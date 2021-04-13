@@ -4,6 +4,7 @@ import { CfnOutput } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
+import type { GuMigratingResource } from "../constructs/core/migrating";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";
@@ -11,7 +12,7 @@ import { GuSnsTopic } from "../constructs/sns";
 /**
  * Used to provide information about an existing SNS topic to the [[`GuSnsLambda`]] pattern.
  *
- * Specify a `logicalIdFromCloudFormation` to inherit an SNS topic which has already
+ * Specify a `existingLogicalId` to inherit an SNS topic which has already
  * been created via a CloudFormation stack. This is necessary to avoid interruptions of
  * service when migrating stacks from CloudFormation to `cdk`.
  *
@@ -27,7 +28,7 @@ import { GuSnsTopic } from "../constructs/sns";
  * ```
  * Inherit the SNS topic (rather than creating a new one) using:
  * ```typescript
- *  existingSnsTopic: { logicalIdFromCloudFormation: "MyCloudFormedSnsTopic" }
+ *  existingSnsTopic: { existingLogicalId: "MyCloudFormedSnsTopic" }
  * ```
  *
  * Alternatively, reference an SNS topic which belongs to another stack using:
@@ -35,8 +36,7 @@ import { GuSnsTopic } from "../constructs/sns";
  *  existingSnsTopic: { externalTopicName: "MySnsTopicNameFromAnotherStack" }
  * ```
  */
-export interface ExistingSnsTopic {
-  logicalIdFromCloudFormation?: string;
+export interface ExistingSnsTopic extends GuMigratingResource {
   externalTopicName?: string;
 }
 
@@ -85,7 +85,7 @@ export class GuSnsLambda extends GuLambdaFunction {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const topicId = props.existingSnsTopic?.logicalIdFromCloudFormation ?? "SnsIncomingEventsTopic";
+    const topicId = props.existingSnsTopic?.existingLogicalId ?? "SnsIncomingEventsTopic";
 
     const snsTopic = props.existingSnsTopic?.externalTopicName
       ? Topic.fromTopicArn(
@@ -96,7 +96,7 @@ export class GuSnsLambda extends GuLambdaFunction {
       : AppIdentity.taggedConstruct(
           props,
           new GuSnsTopic(scope, topicId, {
-            overrideId: !!props.existingSnsTopic?.logicalIdFromCloudFormation,
+            existingLogicalId: props.existingSnsTopic?.existingLogicalId,
           })
         );
     this.addEventSource(new SnsEventSource(snsTopic));
