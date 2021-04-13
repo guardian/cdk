@@ -89,9 +89,9 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guassumerolepolicyprops.html#document" class="tsd-kind-icon">document</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_iam.guassumerolepolicyprops.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guassumerolepolicyprops.html#force" class="tsd-kind-icon">force</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guassumerolepolicyprops.html#groups" class="tsd-kind-icon">groups</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_iam.guassumerolepolicyprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guassumerolepolicyprops.html#policyname" class="tsd-kind-icon">policy<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_iam.guassumerolepolicyprops.html#resources" class="tsd-kind-icon">resources</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guassumerolepolicyprops.html#roles" class="tsd-kind-icon">roles</a></li>
@@ -128,6 +128,36 @@
 							</dd>
 							<dt>stability</dt>
 							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="existinglogicalid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> existing<wbr>Logical<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">existing<wbr>Logical<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuNoStatementsPolicyProps.existingLogicalId</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d58ef12/src/constructs/core/migrating.ts#L35">src/constructs/core/migrating.ts:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A string to use to override the logicalId AWS CDK auto-generates for a resource.
+								This is useful when migrating a pre-existing stack into guardian/cdk,
+								as it ensures resources are kept rather than recreated.
+								For example, imagine a YAML stack that creates a load balancer with logicalId <code>DotcomLoadbalancer</code>.
+								We would want to set <code>existingLogicalId</code> for the GuLoadBalancer in guardian/cdk to ensure it is preserved when moving to guardian/cdk.
+								Otherwise it will be created as something like <code>DotcomLoadbalancerABCDEF</code>,
+							is a new resource, and require any DNS entries to be updated accordingly.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>GuMigratingStack</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>GuStack</p>
 							</dd>
 						</dl>
 					</div>
@@ -190,17 +220,6 @@
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="overrideid" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> override<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">override<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from GuNoStatementsPolicyProps.overrideId</p>
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d69bdbe/src/constructs/iam/policies/base-policy.ts#L6">src/constructs/iam/policies/base-policy.ts:6</a></li>
-						</ul>
-					</aside>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="policyname" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> policy<wbr>Name</h3>
@@ -237,7 +256,7 @@
 					<div class="tsd-signature tsd-kind-icon">resources<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d69bdbe/src/constructs/iam/policies/assume-role.ts#L7">src/constructs/iam/policies/assume-role.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d58ef12/src/constructs/iam/policies/assume-role.ts#L7">src/constructs/iam/policies/assume-role.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -426,14 +445,14 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guassumerolepolicyprops.html#document" class="tsd-kind-icon">document</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_iam.guassumerolepolicyprops.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guassumerolepolicyprops.html#force" class="tsd-kind-icon">force</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guassumerolepolicyprops.html#groups" class="tsd-kind-icon">groups</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="constructs_iam.guassumerolepolicyprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guassumerolepolicyprops.html#policyname" class="tsd-kind-icon">policy<wbr>Name</a>
