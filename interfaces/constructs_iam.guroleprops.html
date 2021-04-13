@@ -73,6 +73,9 @@
 				<ul class="tsd-hierarchy">
 					<li>
 						<span class="tsd-signature-type">RoleProps</span>
+					</li>
+					<li>
+						<span class="tsd-signature-type">GuMigratingResource</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">GuRoleProps</span>
@@ -85,17 +88,17 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#assumedby" class="tsd-kind-icon">assumed<wbr>By</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_iam.guroleprops.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#externalid" class="tsd-kind-icon">external<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#externalids" class="tsd-kind-icon">external<wbr>Ids</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#inlinepolicies" class="tsd-kind-icon">inline<wbr>Policies</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#managedpolicies" class="tsd-kind-icon">managed<wbr>Policies</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#maxsessionduration" class="tsd-kind-icon">max<wbr>Session<wbr>Duration</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_iam.guroleprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#permissionsboundary" class="tsd-kind-icon">permissions<wbr>Boundary</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_iam.guroleprops.html#rolename" class="tsd-kind-icon">role<wbr>Name</a></li>
@@ -104,7 +107,7 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="assumedby" class="tsd-anchor"></a>
@@ -152,6 +155,36 @@
 							</dd>
 							<dt>stability</dt>
 							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="existinglogicalid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> existing<wbr>Logical<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">existing<wbr>Logical<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuMigratingResource.existingLogicalId</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/73d8e69/src/constructs/core/migrating.ts#L35">src/constructs/core/migrating.ts:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A string to use to override the logicalId AWS CDK auto-generates for a resource.
+								This is useful when migrating a pre-existing stack into guardian/cdk,
+								as it ensures resources are kept rather than recreated.
+								For example, imagine a YAML stack that creates a load balancer with logicalId <code>DotcomLoadbalancer</code>.
+								We would want to set <code>existingLogicalId</code> for the GuLoadBalancer in guardian/cdk to ensure it is preserved when moving to guardian/cdk.
+								Otherwise it will be created as something like <code>DotcomLoadbalancerABCDEF</code>,
+							is a new resource, and require any DNS entries to be updated accordingly.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>GuMigratingStack</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>GuStack</p>
 							</dd>
 						</dl>
 					</div>
@@ -310,16 +343,6 @@
 							</dd>
 						</dl>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="overrideid" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> override<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">override<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/d58ef12/src/constructs/iam/roles/roles.ts#L6">src/constructs/iam/roles/roles.ts:6</a></li>
-						</ul>
-					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="path" class="tsd-anchor"></a>
@@ -559,6 +582,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guroleprops.html#description" class="tsd-kind-icon">description</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_iam.guroleprops.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guroleprops.html#externalid" class="tsd-kind-icon">external<wbr>Id</a>
 							</li>
@@ -573,9 +599,6 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guroleprops.html#maxsessionduration" class="tsd-kind-icon">max<wbr>Session<wbr>Duration</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_iam.guroleprops.html#overrideid" class="tsd-kind-icon">override<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_iam.guroleprops.html#path" class="tsd-kind-icon">path</a>
@@ -614,7 +637,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
