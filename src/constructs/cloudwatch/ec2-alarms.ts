@@ -11,9 +11,10 @@ import { GuAlarm } from "./alarm";
  * the specified threshold.
  */
 export interface Gu5xxPercentageMonitoringProps
-  extends Omit<GuAlarmProps, "metric" | "threshold" | "treatMissingData">,
+  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData">,
     AppIdentity {
   tolerated5xxPercentage: number;
+  numberOfFiveMinutePeriodsToEvaluate?: number;
   noMonitoring?: false;
 }
 
@@ -21,7 +22,6 @@ interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps {
   loadBalancer: GuApplicationLoadBalancer;
 }
 
-// TODO - how should we handle evaluation periods
 export class Gu5xxPercentageAlarm extends GuAlarm {
   constructor(scope: GuStack, id: string, props: GuLoadBalancerAlarmProps) {
     const mathExpression = new MathExpression({
@@ -43,6 +43,7 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       alarmName: props.alarmName ?? defaultAlarmName,
       alarmDescription: props.alarmDescription ?? defaultDescription,
+      evaluationPeriods: props.numberOfFiveMinutePeriodsToEvaluate ?? 1,
     };
     super(scope, id, alarmProps);
   }

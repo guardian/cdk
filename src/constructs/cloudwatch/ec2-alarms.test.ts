@@ -24,7 +24,6 @@ describe("The Gu5xxPercentageAlarm construct", () => {
     const props = {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
-      evaluationPeriods: 1, //FIXME
     };
     new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -37,7 +36,6 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       alarmDescription: "test-custom-alarm-description",
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
-      evaluationPeriods: 1, //FIXME
     };
     new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
@@ -52,11 +50,24 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       alarmName: "test-custom-alarm-name",
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
-      evaluationPeriods: 1, //FIXME
     };
     new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       AlarmName: "test-custom-alarm-name",
+    });
+  });
+
+  it("should adjust the number of evaluation periods if a custom value is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const props = {
+      tolerated5xxPercentage: 1,
+      numberOfFiveMinutePeriodsToEvaluate: 3,
+      snsTopicName: "test-topic",
+    };
+    new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+      EvaluationPeriods: 3,
     });
   });
 });
