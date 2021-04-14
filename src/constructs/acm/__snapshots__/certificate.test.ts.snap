@@ -24,7 +24,7 @@ Object {
     },
   },
   "Resources": Object {
-    "TestCertificate6B4956B6": Object {
+    "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "DomainName": Object {
@@ -91,7 +91,7 @@ Object {
     },
   },
   "Resources": Object {
-    "TestCertificate6B4956B6": Object {
+    "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "DomainName": Object {

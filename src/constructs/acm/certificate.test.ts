@@ -7,7 +7,7 @@ import { GuCertificate } from "./certificate";
 describe("The GuCertificate class", () => {
   it("should create a new certificate when hosted zone ids are provided", () => {
     const stack = simpleGuStackForTesting();
-    new GuCertificate(stack, "TestCertificate", {
+    new GuCertificate(stack, {
       app: "testing",
       [Stage.CODE]: {
         domainName: "code-guardian.com",
@@ -23,7 +23,7 @@ describe("The GuCertificate class", () => {
 
   it("should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided", () => {
     const stack = simpleGuStackForTesting();
-    new GuCertificate(stack, "TestCertificate", {
+    new GuCertificate(stack, {
       app: "testing",
       [Stage.CODE]: {
         domainName: "code-guardian.com",
@@ -37,7 +37,7 @@ describe("The GuCertificate class", () => {
 
   it("should inherit a CloudFormed certificate correctly", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuCertificate(stack, "TestCertificate", {
+    new GuCertificate(stack, {
       app: "testing",
       existingLogicalId: "MyCloudFormedCertificate",
       [Stage.CODE]: {
