@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">ApplicationLoadBalancer</span>
+						<a href="" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">ApplicationLoadBalancer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ApplicationLoadBalancer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">GuApplicationLoadBalancer</span>
@@ -107,6 +107,12 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_loadbalancing.guapplicationloadbalancer.html#physicalname" class="tsd-kind-icon">physical<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationloadbalancer.html#stack" class="tsd-kind-icon">stack</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guapplicationloadbalancer.html#vpc" class="tsd-kind-icon">vpc</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="constructs_loadbalancing.guapplicationloadbalancer.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited tsd-is-external">
@@ -174,9 +180,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides ApplicationLoadBalancer.constructor</p>
+								<p>Overrides GuStatefulMigratableConstruct(ApplicationLoadBalancer).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/ffb5382/src/constructs/loadbalancing/alb/application-load-balancer.ts#L10">src/constructs/loadbalancing/alb/application-load-balancer.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/constructs/loadbalancing/alb/application-load-balancer.ts#L10">src/constructs/loadbalancing/alb/application-load-balancer.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -203,7 +209,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> connections</h3>
 					<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connections</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.connections</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).connections</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:74</li>
 						</ul>
@@ -221,7 +227,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> env</h3>
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.env</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).env</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:140</li>
 						</ul>
@@ -248,7 +254,7 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> ip<wbr>Address<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">ip<wbr>Address<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IpAddressType</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.ipAddressType</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).ipAddressType</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:80</li>
 						</ul>
@@ -269,7 +275,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> load<wbr>Balancer<wbr>Arn</h3>
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<wbr>Arn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.loadBalancerArn</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).loadBalancerArn</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:168</li>
 						</ul>
@@ -296,7 +302,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Id</h3>
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.loadBalancerCanonicalHostedZoneId</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).loadBalancerCanonicalHostedZoneId</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:128</li>
 						</ul>
@@ -323,7 +329,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> load<wbr>Balancer<wbr>Dns<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<wbr>Dns<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.loadBalancerDnsName</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).loadBalancerDnsName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:138</li>
 						</ul>
@@ -350,7 +356,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> load<wbr>Balancer<wbr>Full<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<wbr>Full<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.loadBalancerFullName</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).loadBalancerFullName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:148</li>
 						</ul>
@@ -377,7 +383,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> load<wbr>Balancer<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.loadBalancerName</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).loadBalancerName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:158</li>
 						</ul>
@@ -404,7 +410,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> load<wbr>Balancer<wbr>Security<wbr>Groups</h3>
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<wbr>Security<wbr>Groups<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.loadBalancerSecurityGroups</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).loadBalancerSecurityGroups</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:173</li>
 						</ul>
@@ -425,7 +431,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> node</h3>
 					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.node</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).node</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:70</li>
 						</ul>
@@ -446,7 +452,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> physical<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.physicalName</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).physicalName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:152</li>
 						</ul>
@@ -473,7 +479,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> stack</h3>
 					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.stack</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).stack</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:127</li>
 						</ul>
@@ -494,7 +500,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> vpc</h3>
 					<div class="tsd-signature tsd-kind-icon">vpc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IVpc</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ApplicationLoadBalancer.vpc</p>
+						<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).vpc</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:179</li>
 						</ul>
@@ -511,6 +517,26 @@
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="isstatefulconstruct" class="tsd-anchor"></a>
+					<h3>is<wbr>Stateful<wbr>Construct</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> isStatefulConstruct<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-external">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
@@ -522,7 +548,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer._enableCrossEnvironment</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer)._enableCrossEnvironment</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:167</li>
 								</ul>
@@ -552,7 +578,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.addListener</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).addListener</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:90</li>
 								</ul>
@@ -589,7 +615,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.addRedirect</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).addRedirect</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:96</li>
 								</ul>
@@ -623,7 +649,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.addSecurityGroup</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).addSecurityGroup</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:102</li>
 								</ul>
@@ -657,7 +683,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.applyRemovalPolicy</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).applyRemovalPolicy</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:181</li>
 								</ul>
@@ -697,7 +723,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.generatePhysicalName</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).generatePhysicalName</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:185</li>
 								</ul>
@@ -722,7 +748,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.getResourceArnAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).getResourceArnAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:209</li>
 								</ul>
@@ -768,7 +794,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.getResourceNameAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).getResourceNameAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:196</li>
 								</ul>
@@ -807,7 +833,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.logAccessLogs</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).logAccessLogs</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:196</li>
 								</ul>
@@ -846,7 +872,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metric</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metric</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:109</li>
 								</ul>
@@ -886,7 +912,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricActiveConnectionCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricActiveConnectionCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:116</li>
 								</ul>
@@ -923,7 +949,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricClientTlsNegotiationErrorCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricClientTlsNegotiationErrorCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:126</li>
 								</ul>
@@ -962,7 +988,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricConsumedLCUs</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricConsumedLCUs</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:133</li>
 								</ul>
@@ -999,7 +1025,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricElbAuthError</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricElbAuthError</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:257</li>
 								</ul>
@@ -1039,7 +1065,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricElbAuthFailure</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricElbAuthFailure</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:264</li>
 								</ul>
@@ -1076,7 +1102,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricElbAuthLatency</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricElbAuthLatency</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:273</li>
 								</ul>
@@ -1114,7 +1140,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricElbAuthSuccess</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricElbAuthSuccess</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:283</li>
 								</ul>
@@ -1153,7 +1179,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricHttpCodeElb</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricHttpCodeElb</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:163</li>
 								</ul>
@@ -1194,7 +1220,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricHttpCodeTarget</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricHttpCodeTarget</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:172</li>
 								</ul>
@@ -1235,7 +1261,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricHttpFixedResponseCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricHttpFixedResponseCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:140</li>
 								</ul>
@@ -1272,7 +1298,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricHttpRedirectCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricHttpRedirectCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:147</li>
 								</ul>
@@ -1309,7 +1335,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricHttpRedirectUrlLimitExceededCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricHttpRedirectUrlLimitExceededCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:154</li>
 								</ul>
@@ -1346,7 +1372,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricIpv6ProcessedBytes</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricIpv6ProcessedBytes</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:179</li>
 								</ul>
@@ -1383,7 +1409,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricIpv6RequestCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricIpv6RequestCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:186</li>
 								</ul>
@@ -1420,7 +1446,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricNewConnectionCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricNewConnectionCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:193</li>
 								</ul>
@@ -1457,7 +1483,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricProcessedBytes</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricProcessedBytes</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:200</li>
 								</ul>
@@ -1494,7 +1520,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricRejectedConnectionCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricRejectedConnectionCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:207</li>
 								</ul>
@@ -1531,7 +1557,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricRequestCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricRequestCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:216</li>
 								</ul>
@@ -1569,7 +1595,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricRuleEvaluations</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricRuleEvaluations</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:223</li>
 								</ul>
@@ -1606,7 +1632,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricTargetConnectionErrorCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricTargetConnectionErrorCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:230</li>
 								</ul>
@@ -1643,7 +1669,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricTargetResponseTime</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricTargetResponseTime</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:237</li>
 								</ul>
@@ -1680,7 +1706,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.metricTargetTLSNegotiationErrorCount</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).metricTargetTLSNegotiationErrorCount</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:246</li>
 								</ul>
@@ -1718,7 +1744,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.onPrepare</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).onPrepare</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:97</li>
 								</ul>
@@ -1751,7 +1777,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.onSynthesize</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).onSynthesize</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
 								</ul>
@@ -1790,7 +1816,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.onValidate</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).onValidate</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:84</li>
 								</ul>
@@ -1821,7 +1847,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.prepare</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).prepare</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:130</li>
 								</ul>
@@ -1854,7 +1880,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.removeAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).removeAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:209</li>
 								</ul>
@@ -1888,7 +1914,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.setAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).setAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:203</li>
 								</ul>
@@ -1928,7 +1954,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.synthesize</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).synthesize</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:140</li>
 								</ul>
@@ -1967,20 +1993,15 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.toString</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).toString</p>
 								<ul>
-									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
+									<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:125</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a string representation of this construct.</p>
+									<p>Returns a string representation of an object.</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>stability</dt>
-									<dd><p>stable</p>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
@@ -1995,7 +2016,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.validate</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).validate</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:117</li>
 								</ul>
@@ -2026,7 +2047,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer._queryContextProvider</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer)._queryContextProvider</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:118</li>
 								</ul>
@@ -2062,7 +2083,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).fromApplicationLoadBalancerAttributes</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:70</li>
 								</ul>
@@ -2102,7 +2123,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.fromLookup</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).fromLookup</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:64</li>
 								</ul>
@@ -2142,7 +2163,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.isConstruct</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).isConstruct</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:64</li>
 								</ul>
@@ -2176,7 +2197,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from ApplicationLoadBalancer.isResource</p>
+								<p>Inherited from GuStatefulMigratableConstruct(ApplicationLoadBalancer).isResource</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:121</li>
 								</ul>
@@ -2316,6 +2337,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="constructs_loadbalancing.guapplicationloadbalancer.html#vpc" class="tsd-kind-icon">vpc</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="constructs_loadbalancing.guapplicationloadbalancer.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="constructs_loadbalancing.guapplicationloadbalancer.html#_enablecrossenvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a>
