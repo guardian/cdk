@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuLambdaErrorPercentageMonitoringProps | @guardian/cdk - v8.2.0</title>
+	<title>Gu5xxPercentageMonitoringProps | @guardian/cdk - v8.2.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v8.2.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
 				</li>
 				<li>
-					<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html">GuLambdaErrorPercentageMonitoringProps</a>
+					<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html">Gu5xxPercentageMonitoringProps</a>
 				</li>
 			</ul>
-			<h1>Interface GuLambdaErrorPercentageMonitoringProps</h1>
+			<h1>Interface Gu5xxPercentageMonitoringProps</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Creates an alarm which is triggered whenever the error percentage specified is exceeded.</p>
+						<p>Creates an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
+						the specified threshold.</p>
 					</div>
 				</div>
 			</section>
@@ -79,10 +80,13 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><a href="constructs_cloudwatch.gualarmprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuAlarmProps</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;metric&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;threshold&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;comparisonOperator&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;evaluationPeriods&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;treatMissingData&quot;</span><span class="tsd-signature-symbol">&gt;</span>
+						<span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><a href="constructs_cloudwatch.gualarmprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuAlarmProps</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;evaluationPeriods&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;metric&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;period&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;threshold&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;treatMissingData&quot;</span><span class="tsd-signature-symbol">&gt;</span>
+					</li>
+					<li>
+						<span class="tsd-signature-type">AppIdentity</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">GuLambdaErrorPercentageMonitoringProps</span>
+								<span class="target">Gu5xxPercentageMonitoringProps</span>
 							</li>
 						</ul>
 					</li>
@@ -95,18 +99,19 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#actionsenabled" class="tsd-kind-icon">actions<wbr>Enabled</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#actionsenabledincode" class="tsd-kind-icon">actions<wbr>Enabled<wbr>InCode</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#alarmdescription" class="tsd-kind-icon">alarm<wbr>Description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#alarmname" class="tsd-kind-icon">alarm<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#datapointstoalarm" class="tsd-kind-icon">datapoints<wbr>ToAlarm</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#evaluatelowsamplecountpercentile" class="tsd-kind-icon">evaluate<wbr>Low<wbr>Sample<wbr>Count<wbr>Percentile</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#nomonitoring" class="tsd-kind-icon">no<wbr>Monitoring</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#numberoffiveminuteperiodstoevaluate" class="tsd-kind-icon">number<wbr>OfFive<wbr>Minute<wbr>Periods<wbr>ToEvaluate</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#period" class="tsd-kind-icon">period</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#snstopicname" class="tsd-kind-icon">sns<wbr>Topic<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#statistic" class="tsd-kind-icon">statistic</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#toleratederrorpercentage" class="tsd-kind-icon">tolerated<wbr>Error<wbr>Percentage</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#actionsenabled" class="tsd-kind-icon">actions<wbr>Enabled</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#actionsenabledincode" class="tsd-kind-icon">actions<wbr>Enabled<wbr>InCode</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#alarmdescription" class="tsd-kind-icon">alarm<wbr>Description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#alarmname" class="tsd-kind-icon">alarm<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#app" class="tsd-kind-icon">app</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#comparisonoperator" class="tsd-kind-icon">comparison<wbr>Operator</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#datapointstoalarm" class="tsd-kind-icon">datapoints<wbr>ToAlarm</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#evaluatelowsamplecountpercentile" class="tsd-kind-icon">evaluate<wbr>Low<wbr>Sample<wbr>Count<wbr>Percentile</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#nomonitoring" class="tsd-kind-icon">no<wbr>Monitoring</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#numberoffiveminuteperiodstoevaluate" class="tsd-kind-icon">number<wbr>OfFive<wbr>Minute<wbr>Periods<wbr>ToEvaluate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#snstopicname" class="tsd-kind-icon">sns<wbr>Topic<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#statistic" class="tsd-kind-icon">statistic</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#tolerated5xxpercentage" class="tsd-kind-icon">tolerated5xx<wbr>Percentage</a></li>
 							</ul>
 						</section>
 					</div>
@@ -197,6 +202,41 @@
 						</dl>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="app" class="tsd-anchor"></a>
+					<h3>app</h3>
+					<div class="tsd-signature tsd-kind-icon">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from AppIdentity.app</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="comparisonoperator" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> comparison<wbr>Operator</h3>
+					<div class="tsd-signature tsd-kind-icon">comparison<wbr>Operator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComparisonOperator</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.comparisonOperator</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-cloudwatch/lib/metric.d.ts:466</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Comparison to use to check if metric is breaching.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>GreaterThanOrEqualToThreshold</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="datapointstoalarm" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> datapoints<wbr>ToAlarm</h3>
@@ -260,7 +300,7 @@
 					<div class="tsd-signature tsd-kind-icon">no<wbr>Monitoring<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/cloudwatch/lambda-alarms.ts#L14">src/constructs/cloudwatch/lambda-alarms.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/cloudwatch/ec2-alarms.ts#L18">src/constructs/cloudwatch/ec2-alarms.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -270,36 +310,9 @@
 					<div class="tsd-signature tsd-kind-icon">number<wbr>OfFive<wbr>Minute<wbr>Periods<wbr>ToEvaluate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/cloudwatch/lambda-alarms.ts#L13">src/constructs/cloudwatch/lambda-alarms.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/cloudwatch/ec2-alarms.ts#L17">src/constructs/cloudwatch/ec2-alarms.ts:17</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-					<a name="period" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> period</h3>
-					<div class="tsd-signature tsd-kind-icon">period<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Duration</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from Omit.period</p>
-						<ul>
-							<li>Defined in node_modules/@aws-cdk/aws-cloudwatch/lib/metric.d.ts:427</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>(deprecated) The period over which the specified statistic is applied.</p>
-						</div>
-						<p>Cannot be used with <code>MathExpression</code> objects.</p>
-						<dl class="tsd-comment-tags">
-							<dt>default</dt>
-							<dd><ul>
-									<li>The period from the metric</li>
-								</ul>
-							</dd>
-							<dt>deprecated</dt>
-							<dd><p>Use <code>metric.with({ period: ... })</code> to encode the period into the Metric object</p>
-							</dd>
-						</dl>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="snstopicname" class="tsd-anchor"></a>
@@ -349,12 +362,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="toleratederrorpercentage" class="tsd-anchor"></a>
-					<h3>tolerated<wbr>Error<wbr>Percentage</h3>
-					<div class="tsd-signature tsd-kind-icon">tolerated<wbr>Error<wbr>Percentage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="tolerated5xxpercentage" class="tsd-anchor"></a>
+					<h3>tolerated5xx<wbr>Percentage</h3>
+					<div class="tsd-signature tsd-kind-icon">tolerated5xx<wbr>Percentage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/cloudwatch/lambda-alarms.ts#L12">src/constructs/cloudwatch/lambda-alarms.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f6dd30f/src/constructs/cloudwatch/ec2-alarms.ts#L16">src/constructs/cloudwatch/ec2-alarms.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -433,57 +446,60 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="../classes/constructs_cloudwatch.gulambdaerrorpercentagealarm.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Alarm</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html" class="tsd-kind-icon">Gu5xx<wbr>Percentage<wbr>Monitoring<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_cloudwatch.gualarmprops.html" class="tsd-kind-icon">Gu<wbr>Alarm<wbr>Props</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Monitoring<wbr>Props</a>
+						<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html" class="tsd-kind-icon">Gu5xx<wbr>Percentage<wbr>Monitoring<wbr>Props</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#actionsenabled" class="tsd-kind-icon">actions<wbr>Enabled</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#actionsenabled" class="tsd-kind-icon">actions<wbr>Enabled</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#actionsenabledincode" class="tsd-kind-icon">actions<wbr>Enabled<wbr>InCode</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#actionsenabledincode" class="tsd-kind-icon">actions<wbr>Enabled<wbr>InCode</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#alarmdescription" class="tsd-kind-icon">alarm<wbr>Description</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#alarmdescription" class="tsd-kind-icon">alarm<wbr>Description</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#alarmname" class="tsd-kind-icon">alarm<wbr>Name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#datapointstoalarm" class="tsd-kind-icon">datapoints<wbr>ToAlarm</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#evaluatelowsamplecountpercentile" class="tsd-kind-icon">evaluate<wbr>Low<wbr>Sample<wbr>Count<wbr>Percentile</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#nomonitoring" class="tsd-kind-icon">no<wbr>Monitoring</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#numberoffiveminuteperiodstoevaluate" class="tsd-kind-icon">number<wbr>OfFive<wbr>Minute<wbr>Periods<wbr>ToEvaluate</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#period" class="tsd-kind-icon">period</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#alarmname" class="tsd-kind-icon">alarm<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#snstopicname" class="tsd-kind-icon">sns<wbr>Topic<wbr>Name</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#app" class="tsd-kind-icon">app</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#statistic" class="tsd-kind-icon">statistic</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#comparisonoperator" class="tsd-kind-icon">comparison<wbr>Operator</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#datapointstoalarm" class="tsd-kind-icon">datapoints<wbr>ToAlarm</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#evaluatelowsamplecountpercentile" class="tsd-kind-icon">evaluate<wbr>Low<wbr>Sample<wbr>Count<wbr>Percentile</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html#toleratederrorpercentage" class="tsd-kind-icon">tolerated<wbr>Error<wbr>Percentage</a>
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#nomonitoring" class="tsd-kind-icon">no<wbr>Monitoring</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#numberoffiveminuteperiodstoevaluate" class="tsd-kind-icon">number<wbr>OfFive<wbr>Minute<wbr>Periods<wbr>ToEvaluate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#snstopicname" class="tsd-kind-icon">sns<wbr>Topic<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#statistic" class="tsd-kind-icon">statistic</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html#tolerated5xxpercentage" class="tsd-kind-icon">tolerated5xx<wbr>Percentage</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_cloudwatch.gualarmprops.html" class="tsd-kind-icon">Gu<wbr>Alarm<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-kind-icon">Gu<wbr>Lambda<wbr>Error<wbr>Percentage<wbr>Monitoring<wbr>Props</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="constructs_cloudwatch.nomonitoring.html" class="tsd-kind-icon">No<wbr>Monitoring</a>
 					</li>
