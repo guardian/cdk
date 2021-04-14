@@ -5,10 +5,14 @@ Object {
   "Mappings": Object {
     "stagemapping": Object {
       "CODE": Object {
+        "domainName": "code-guardian.com",
+        "hostedZoneId": "id123",
         "maxInstances": 2,
         "minInstances": 1,
       },
       "PROD": Object {
+        "domainName": "prod-guardian.com",
+        "hostedZoneId": "id124",
         "maxInstances": 6,
         "minInstances": 3,
       },
@@ -18,12 +22,6 @@ Object {
     "AMITestguec2app": Object {
       "Description": "Amazon Machine Image ID for the app test-gu-ec2-app. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
-    },
-    "CertArnTestguec2app": Object {
-      "AllowedPattern": "arn:aws:[a-z0-9]*:[a-z0-9\\\\-]*:[0-9]{12}:.*",
-      "ConstraintDescription": "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
-      "Description": "ARN of a TLS certificate to install on the load balancer",
-      "Type": "String",
     },
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -163,6 +161,65 @@ Object {
         },
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "CertificateTestguec2app86EE2D42": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "DomainValidationOptions": Array [
+          Object {
+            "DomainName": Object {
+              "Fn::FindInMap": Array [
+                "stagemapping",
+                Object {
+                  "Ref": "Stage",
+                },
+                "domainName",
+              ],
+            },
+            "HostedZoneId": Object {
+              "Fn::FindInMap": Array [
+                "stagemapping",
+                Object {
+                  "Ref": "Stage",
+                },
+                "hostedZoneId",
+              ],
+            },
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
     },
     "DescribeEC2PolicyFF5F9295": Object {
       "Properties": Object {
@@ -380,7 +437,7 @@ Object {
         "Certificates": Array [
           Object {
             "CertificateArn": Object {
-              "Ref": "CertArnTestguec2app",
+              "Ref": "CertificateTestguec2app86EE2D42",
             },
           },
         ],

@@ -1,10 +1,10 @@
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
-import { Certificate } from "@aws-cdk/aws-certificatemanager";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
+import type { GuCertificateProps } from "../constructs/acm";
+import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
-import { GuArnParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
 import { GuInstanceRole } from "../constructs/iam";
@@ -18,6 +18,7 @@ interface GuEc2AppProps extends AppIdentity {
   userData: GuUserData | string;
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
   applicationPort: number;
+  certificateProps: GuCertificateProps;
 }
 
 interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
@@ -40,15 +41,10 @@ export class GuEc2App {
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"), { app });
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
 
-    const certificateArn = new GuArnParameter(scope, AppIdentity.suffixText(props, "CertArn"), {
-      description: "ARN of a TLS certificate to install on the load balancer",
+    const certificate = new GuCertificate(scope, {
+      app,
+      ...props.certificateProps,
     });
-
-    const certificate = Certificate.fromCertificateArn(
-      scope,
-      AppIdentity.suffixText(props, "Certificate"),
-      certificateArn.valueAsString
-    );
 
     const asg = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,

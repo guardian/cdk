@@ -1,5 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import { Stage } from "../constants";
 import { TrackingTag } from "../constants/library-info";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
@@ -12,6 +13,16 @@ describe("the GuEC2App pattern", function () {
       app: "test-gu-ec2-app",
       publicFacing: false,
       userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "code-guardian.com",
+          hostedZoneId: "id123",
+        },
+        [Stage.PROD]: {
+          domainName: "prod-guardian.com",
+          hostedZoneId: "id124",
+        },
+      },
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
@@ -23,6 +34,16 @@ describe("the GuEC2App pattern", function () {
       app: "NodeApp",
       publicFacing: false,
       userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "code-guardian.com",
+          hostedZoneId: "id123",
+        },
+        [Stage.PROD]: {
+          domainName: "prod-guardian.com",
+          hostedZoneId: "id124",
+        },
+      },
     });
 
     new GuEc2App(stack, {
@@ -30,6 +51,16 @@ describe("the GuEC2App pattern", function () {
       app: "PlayApp",
       publicFacing: false,
       userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "code-guardian.com",
+          hostedZoneId: "id123",
+        },
+        [Stage.PROD]: {
+          domainName: "prod-guardian.com",
+          hostedZoneId: "id124",
+        },
+      },
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -60,6 +91,16 @@ describe("the GuEC2App pattern", function () {
         app: "NodeApp",
         publicFacing: false,
         userData: "#!/bin/dev foobarbaz",
+        certificateProps: {
+          [Stage.CODE]: {
+            domainName: "code-guardian.com",
+            hostedZoneId: "id123",
+          },
+          [Stage.PROD]: {
+            domainName: "prod-guardian.com",
+            hostedZoneId: "id124",
+          },
+        },
       });
 
       expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
@@ -75,6 +116,16 @@ describe("the GuEC2App pattern", function () {
         app: "PlayApp",
         publicFacing: false,
         userData: "#!/bin/dev foobarbaz",
+        certificateProps: {
+          [Stage.CODE]: {
+            domainName: "code-guardian.com",
+            hostedZoneId: "id123",
+          },
+          [Stage.PROD]: {
+            domainName: "prod-guardian.com",
+            hostedZoneId: "id124",
+          },
+        },
       });
 
       expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
