@@ -6,16 +6,17 @@ import type {
 } from "@aws-cdk/aws-elasticloadbalancing";
 import { LoadBalancer, LoadBalancingProtocol } from "@aws-cdk/aws-elasticloadbalancing";
 import { Duration } from "@aws-cdk/core";
+import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import { GuArnParameter } from "../core";
+import type { GuMigratingResource } from "../core/migrating";
 
-interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck"> {
-  overrideId?: boolean;
+interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource {
   propertiesToOverride?: Record<string, unknown>;
   healthCheck?: Partial<HealthCheck>;
 }
 
-export class GuClassicLoadBalancer extends LoadBalancer {
+export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(LoadBalancer) {
   static DefaultHealthCheck = {
     port: 9000,
     path: "/healthcheck",
@@ -35,9 +36,6 @@ export class GuClassicLoadBalancer extends LoadBalancer {
     super(scope, id, mergedProps);
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
-
-    if (mergedProps.overrideId || (scope.migratedFromCloudFormation && mergedProps.overrideId !== false))
-      cfnLb.overrideLogicalId(id);
 
     mergedProps.propertiesToOverride &&
       Object.entries(mergedProps.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));
