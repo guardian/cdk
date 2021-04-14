@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { TrackingTagWithPropagate } from "../constants/library-info";
+import { TrackingTag } from "../constants/library-info";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
@@ -38,7 +38,7 @@ describe("the GuEC2App pattern", function () {
         { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupPlayApp" },
         { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
         { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
-        TrackingTagWithPropagate,
+        { ...TrackingTag, PropagateAtLaunch: true },
       ]),
     });
 
@@ -48,7 +48,7 @@ describe("the GuEC2App pattern", function () {
         { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupNodeApp" },
         { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
         { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
-        TrackingTagWithPropagate,
+        { ...TrackingTag, PropagateAtLaunch: true },
       ]),
     });
   });
