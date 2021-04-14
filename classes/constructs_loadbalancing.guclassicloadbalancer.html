@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">LoadBalancer</span>
+						<a href="" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">LoadBalancer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">LoadBalancer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">GuClassicLoadBalancer</span>
@@ -108,9 +108,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="constructs_loadbalancing.guclassicloadbalancer.html#defaulthealthcheck" class="tsd-kind-icon">Default<wbr>Health<wbr>Check</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-external">
+						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="constructs_loadbalancing.guclassicloadbalancer.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="constructs_loadbalancing.guclassicloadbalancer.html#loadbalancercanonicalhostedzonename" class="tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="constructs_loadbalancing.guclassicloadbalancer.html#loadbalancercanonicalhostedzonenameid" class="tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name<wbr>Id</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="constructs_loadbalancing.guclassicloadbalancer.html#loadbalancerdnsname" class="tsd-kind-icon">load<wbr>Balancer<wbr>Dns<wbr>Name</a></li>
@@ -154,9 +155,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides LoadBalancer.constructor</p>
+								<p>Overrides GuStatefulMigratableConstruct(LoadBalancer).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/constructs/loadbalancing/elb.ts#L27">src/constructs/loadbalancing/elb.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/constructs/loadbalancing/elb.ts#L28">src/constructs/loadbalancing/elb.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -183,7 +184,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> connections</h3>
 					<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connections</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from LoadBalancer.connections</p>
+						<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).connections</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancing/lib/load-balancer.d.ts:251</li>
 						</ul>
@@ -204,7 +205,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> env</h3>
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from LoadBalancer.env</p>
+						<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).env</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:140</li>
 						</ul>
@@ -231,7 +232,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> listener<wbr>Ports</h3>
 					<div class="tsd-signature tsd-kind-icon">listener<wbr>Ports<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ListenerPort</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from LoadBalancer.listenerPorts</p>
+						<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).listenerPorts</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancing/lib/load-balancer.d.ts:257</li>
 						</ul>
@@ -252,7 +253,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> node</h3>
 					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from LoadBalancer.node</p>
+						<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).node</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:70</li>
 						</ul>
@@ -273,7 +274,7 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> physical<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from LoadBalancer.physicalName</p>
+						<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).physicalName</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:152</li>
 						</ul>
@@ -300,7 +301,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> stack</h3>
 					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from LoadBalancer.stack</p>
+						<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).stack</p>
 						<ul>
 							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:127</li>
 						</ul>
@@ -322,7 +323,7 @@
 					<div class="tsd-signature tsd-kind-icon">Default<wbr>Health<wbr>Check<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>healthyThreshold<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>protocol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancingProtocol</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">; </span>unhealthyThreshold<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/constructs/loadbalancing/elb.ts#L19">src/constructs/loadbalancing/elb.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/constructs/loadbalancing/elb.ts#L20">src/constructs/loadbalancing/elb.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -353,8 +354,25 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="isstatefulconstruct" class="tsd-anchor"></a>
+					<h3>is<wbr>Stateful<wbr>Construct</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> isStatefulConstruct<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 					<a name="loadbalancercanonicalhostedzonename" class="tsd-anchor"></a>
 					<h3>load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name</h3>
@@ -529,7 +547,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer._enableCrossEnvironment</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer)._enableCrossEnvironment</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:167</li>
 								</ul>
@@ -559,7 +577,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.addListener</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).addListener</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancing/lib/load-balancer.d.ts:273</li>
 								</ul>
@@ -594,7 +612,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.addTarget</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).addTarget</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/aws-elasticloadbalancing/lib/load-balancer.d.ts:277</li>
 								</ul>
@@ -625,7 +643,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.applyRemovalPolicy</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).applyRemovalPolicy</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:181</li>
 								</ul>
@@ -665,7 +683,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.generatePhysicalName</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).generatePhysicalName</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:185</li>
 								</ul>
@@ -690,7 +708,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.getResourceArnAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).getResourceArnAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:209</li>
 								</ul>
@@ -736,7 +754,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.getResourceNameAttribute</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).getResourceNameAttribute</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:196</li>
 								</ul>
@@ -775,7 +793,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.onPrepare</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).onPrepare</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:97</li>
 								</ul>
@@ -808,7 +826,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.onSynthesize</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).onSynthesize</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:107</li>
 								</ul>
@@ -847,7 +865,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.onValidate</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).onValidate</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:84</li>
 								</ul>
@@ -878,7 +896,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.prepare</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).prepare</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:130</li>
 								</ul>
@@ -911,7 +929,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.synthesize</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).synthesize</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:140</li>
 								</ul>
@@ -950,20 +968,15 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.toString</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).toString</p>
 								<ul>
-									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
+									<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:125</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a string representation of this construct.</p>
+									<p>Returns a string representation of an object.</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>stability</dt>
-									<dd><p>stable</p>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
@@ -978,7 +991,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.validate</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).validate</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:117</li>
 								</ul>
@@ -1009,7 +1022,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.isConstruct</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).isConstruct</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:64</li>
 								</ul>
@@ -1043,7 +1056,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from LoadBalancer.isResource</p>
+								<p>Inherited from GuStatefulMigratableConstruct(LoadBalancer).isResource</p>
 								<ul>
 									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:121</li>
 								</ul>
@@ -1171,6 +1184,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 								<a href="constructs_loadbalancing.guclassicloadbalancer.html#defaulthealthcheck" class="tsd-kind-icon">Default<wbr>Health<wbr>Check</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="constructs_loadbalancing.guclassicloadbalancer.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 								<a href="constructs_loadbalancing.guclassicloadbalancer.html#loadbalancercanonicalhostedzonename" class="tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name</a>

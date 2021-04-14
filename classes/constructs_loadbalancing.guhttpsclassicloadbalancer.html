@@ -104,9 +104,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#defaultlistener" class="tsd-kind-icon">Default<wbr>Listener</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-external">
+						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#loadbalancercanonicalhostedzonename" class="tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#loadbalancercanonicalhostedzonenameid" class="tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name<wbr>Id</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#loadbalancerdnsname" class="tsd-kind-icon">load<wbr>Balancer<wbr>Dns<wbr>Name</a></li>
@@ -152,7 +153,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="constructs_loadbalancing.guclassicloadbalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.guclassicloadbalancer.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/constructs/loadbalancing/elb.ts#L57">src/constructs/loadbalancing/elb.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/constructs/loadbalancing/elb.ts#L55">src/constructs/loadbalancing/elb.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -319,7 +320,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="constructs_loadbalancing.guclassicloadbalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.guclassicloadbalancer.html#defaulthealthcheck">DefaultHealthCheck</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/constructs/loadbalancing/elb.ts#L19">src/constructs/loadbalancing/elb.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/constructs/loadbalancing/elb.ts#L20">src/constructs/loadbalancing/elb.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -355,13 +356,30 @@
 					<div class="tsd-signature tsd-kind-icon">Default<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">LoadBalancerListener</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f063ffd/src/constructs/loadbalancing/elb.ts#L52">src/constructs/loadbalancing/elb.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/constructs/loadbalancing/elb.ts#L50">src/constructs/loadbalancing/elb.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+					<a name="isstatefulconstruct" class="tsd-anchor"></a>
+					<h3>is<wbr>Stateful<wbr>Construct</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> isStatefulConstruct<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/00c6328/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="loadbalancercanonicalhostedzonename" class="tsd-anchor"></a>
 					<h3>load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name</h3>
@@ -959,18 +977,13 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="constructs_loadbalancing.guclassicloadbalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.guclassicloadbalancer.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in node_modules/constructs/lib/construct.d.ts:363</li>
+									<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:125</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a string representation of this construct.</p>
+									<p>Returns a string representation of an object.</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>stability</dt>
-									<dd><p>stable</p>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
@@ -1187,6 +1200,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 								<a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#defaultlistener" class="tsd-kind-icon">Default<wbr>Listener</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+								<a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html#loadbalancercanonicalhostedzonename" class="tsd-kind-icon">load<wbr>Balancer<wbr>Canonical<wbr>Hosted<wbr>Zone<wbr>Name</a>
