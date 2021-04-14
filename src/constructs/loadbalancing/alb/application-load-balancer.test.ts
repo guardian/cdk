@@ -52,44 +52,30 @@ describe("The GuApplicationLoadBalancer class", () => {
     });
   });
 
-  test("overrides the id with the overrideId prop", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, overrideId: true });
+  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, existingLogicalId: "MyALB" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::LoadBalancer", "MyALB");
   });
 
-  test("has an auto-generated ID by default", () => {
+  test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
-  });
-
-  test("overrides the id if the stack migrated value is true", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("ApplicationLoadBalancer");
-  });
-
-  test("does not override the id if the stack migrated value is true but the override id value is false", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, overrideId: false });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).not.toContain("ApplicationLoadBalancer");
+    expect(stack).toHaveResourceOfTypeAndLogicalId(
+      "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      /^ApplicationLoadBalancer.+$/
+    );
   });
 
   test("deletes the Type property", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, overrideId: true });
+    // not using an auto-generated logicalId to make the expectation notation easier
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, existingLogicalId: "MyALB" });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.ApplicationLoadBalancer.Properties)).not.toContain("Type");
+    expect(Object.keys(json.Resources.MyALB.Properties)).not.toContain("Type");
   });
 
   test("sets the deletion protection value to true by default", () => {
