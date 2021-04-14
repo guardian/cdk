@@ -5,7 +5,7 @@ import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "../lambda";
 import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";
 
-describe("The GuLambdaErrorPercentageAlarm pattern", () => {
+describe("The GuLambdaErrorPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
