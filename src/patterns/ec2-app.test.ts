@@ -35,6 +35,16 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       publicFacing: false,
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "code-guardian.com",
+          hostedZoneId: "id123",
+        },
+        [Stage.PROD]: {
+          domainName: "prod-guardian.com",
+          hostedZoneId: "id124",
+        },
+      },
       userData: {
         distributable: {
           bucket: GuDistributionBucketParameter.getInstance(stack),

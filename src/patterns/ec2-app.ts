@@ -47,12 +47,6 @@ export class GuEc2App {
       ...props.certificateProps,
     });
 
-    const certificate = Certificate.fromCertificateArn(
-      scope,
-      AppIdentity.suffixText(props, "Certificate"),
-      certificateArn.valueAsString
-    );
-
     const maybePrivateConfigPolicy =
       typeof props.userData !== "string" && props.userData.configuration
         ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", props.userData.configuration)]
