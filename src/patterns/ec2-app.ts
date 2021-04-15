@@ -54,7 +54,7 @@ export class GuEc2App {
     const maybePrivateConfigPolicy =
       typeof props.userData !== "string" && props.userData.configuration
         ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", props.userData.configuration)]
-        : undefined;
+        : [];
 
     const asg = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,
