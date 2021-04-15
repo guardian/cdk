@@ -1,6 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { TrackingTag } from "../constants/library-info";
+import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../constructs/core";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
@@ -14,6 +15,64 @@ describe("the GuEC2App pattern", function () {
       userData: "#!/bin/dev foobarbaz",
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+
+  it("adds the correct permissions for apps which need to fetch private config from s3", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: app,
+      publicFacing: false,
+      userData: {
+        distributable: {
+          bucket: GuDistributionBucketParameter.getInstance(stack),
+          fileName: "my-app.deb",
+          executionStatement: `dpkg -i /${app}/my-app.deb`,
+        },
+        configuration: {
+          bucket: new GuPrivateConfigBucketParameter(stack),
+          files: ["secrets.json", "application.conf"],
+        },
+      },
+    });
+    expect(stack).toHaveResource("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Action: "s3:GetObject",
+            Resource: [
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      Ref: "PrivateConfigBucketName",
+                    },
+                    "/secrets.json",
+                  ],
+                ],
+              },
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      Ref: "PrivateConfigBucketName",
+                    },
+                    "/application.conf",
+                  ],
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
   });
 
   it("can handle multiple EC2 apps in a single stack", function () {
