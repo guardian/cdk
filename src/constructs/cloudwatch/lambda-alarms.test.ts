@@ -9,7 +9,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
@@ -26,7 +26,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
   it("should adjust the number of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
@@ -46,7 +46,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
   it("should use a custom description if one is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
@@ -67,7 +67,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
   it("should use a custom alarm name if one is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
