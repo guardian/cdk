@@ -5,7 +5,7 @@ import { Stage } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";
-import type { GuUserDataProps } from "./user-data";
+import type { GuUserDataPropsWithApp } from "./user-data";
 import { GuUserData } from "./user-data";
 
 describe("GuUserData", () => {
@@ -19,7 +19,7 @@ describe("GuUserData", () => {
     const stack = simpleGuStackForTesting();
     const app = "testing";
 
-    const props: GuUserDataProps = {
+    const props: GuUserDataPropsWithApp = {
       app,
       distributable: {
         bucket: GuDistributionBucketParameter.getInstance(stack),
@@ -70,7 +70,7 @@ describe("GuUserData", () => {
     const stack = simpleGuStackForTesting();
     const app = "testing";
 
-    const props: GuUserDataProps = {
+    const props: GuUserDataPropsWithApp = {
       app,
       distributable: {
         bucket: GuDistributionBucketParameter.getInstance(stack),

@@ -16,7 +16,8 @@ export interface GuUserDataS3DistributableProps {
   executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
 
-export interface GuUserDataProps extends AppIdentity {
+export type GuUserDataPropsWithApp = GuUserDataProps & AppIdentity;
+export interface GuUserDataProps {
   distributable: GuUserDataS3DistributableProps;
   configuration?: GuPrivateS3ConfigurationProps;
 }
@@ -65,7 +66,7 @@ export class GuUserData {
     });
   }
 
-  constructor(scope: GuStack, props: GuUserDataProps) {
+  constructor(scope: GuStack, props: GuUserDataPropsWithApp) {
     this._userData = UserData.forLinux();
 
     if (props.configuration) {

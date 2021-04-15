@@ -3,11 +3,12 @@ import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbal
 import { Duration } from "@aws-cdk/core";
 import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
+import type { GuUserDataProps } from "../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
-import { GuInstanceRole } from "../constructs/iam";
+import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationListener,
   GuApplicationLoadBalancer,
@@ -15,7 +16,7 @@ import {
 } from "../constructs/loadbalancing";
 
 interface GuEc2AppProps extends AppIdentity {
-  userData: GuUserData | string;
+  userData: GuUserDataProps | string;
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
   applicationPort: number;
   certificateProps: GuCertificateProps;
@@ -46,6 +47,17 @@ export class GuEc2App {
       ...props.certificateProps,
     });
 
+    const certificate = Certificate.fromCertificateArn(
+      scope,
+      AppIdentity.suffixText(props, "Certificate"),
+      certificateArn.valueAsString
+    );
+
+    const maybePrivateConfigPolicy =
+      typeof props.userData !== "string" && props.userData.configuration
+        ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", props.userData.configuration)]
+        : [];
+
     const asg = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,
       vpc,
@@ -53,9 +65,12 @@ export class GuEc2App {
         CODE: { minimumInstances: 1 },
         PROD: { minimumInstances: 3 },
       },
-      role: new GuInstanceRole(scope, { app: props.app }),
+      role: new GuInstanceRole(scope, { app: props.app, additionalPolicies: maybePrivateConfigPolicy }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
-      userData: props.userData instanceof GuUserData ? props.userData.userData : props.userData,
+      userData:
+        typeof props.userData !== "string"
+          ? new GuUserData(scope, { app, ...props.userData }).userData
+          : props.userData,
       vpcSubnets: { subnets: privateSubnets },
     });
 
