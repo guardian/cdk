@@ -69,3 +69,53 @@ cdk synth --app="ts-node ./bin/my-app.ts" > cloudformation.yaml
 ```
 
 For app with multiple stacks, you can specify a stack to see the YAML output.
+
+## 🧪 Testing
+It is recommended to set up [Jest snapshot testing](https://jestjs.io/docs/snapshot-testing) for your stack and have the test run during CI.
+
+Snapshot tests allow you to very quickly see the changes that will be made to the generated template.
+This is especially useful when upgrading the version of `@guardian/cdk`.
+
+## 🆙 Upgrading
+The `@guardian/cdk` library follows Semantic Versioning.
+
+If you have snapshot testing set up and running in CI, you should feel comfortable updating to any patch or minor release.
+You can use dependabot to automate this.
+
+By default, automatic version upgrade PRs will fail their snapshot tests.
+This is because `@guardian/cdk` adds a tracking tag (`gu:cdk:version`) to resources with the version number of the library.
+
+To reduce friction, `@guardian/cdk` ships a mock that can be used with Jest, which results in snapshots having a static value for this tag.
+
+### 🃏 Mocking `gu:cdk:version`
+We recommend setting up a global Jest mock for `gu:cdk:version`.
+This can be done with a few config changes.
+
+First, create `jest.setup.js` and add the global mock:
+
+```javascript
+jest.mock("@guardian/cdk/lib/constants/library-info");
+```
+
+Next, edit `jest.config.js` setting the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) property:
+
+```javascript
+module.exports = {
+  setupFilesAfterEnv: ["./jest.setup.js"],
+};
+```
+
+Finally, update your snapshots. The `gu:cdk:version` tag should now be:
+
+```json5
+{
+  "Key": "gu:cdk:version",
+  "PropagateAtLaunch": true,
+  "Value": "TEST", // <-- would otherwise be the version number of @guardian/cdk in use
+}
+```
+
+Note: This only affects tests. The `gu:cdk:version` tag in the final template created from a `cdk synth` will have the correct value.
+
+✨ With `gu:cdk:version` mocked, snapshot tests run during CI and dependabot automatically raising PRs to update `@guardian/cdk`,
+once CI passes, you can confidently merge PRs to adopt the AWS best practices encoded in `@guardian/cdk` ✨.
