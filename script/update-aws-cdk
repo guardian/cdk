@@ -3,7 +3,70 @@
 set -e
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+ROOT_DIR=$DIR/..
 
-"${DIR}"/check-yarn-lock
+checkYarnLock() {
+  "${DIR}"/check-yarn-lock
+}
 
-npm run update-aws-cdk
+ensureAtHeadOfOrigin() {
+  DEFAULT_BRANCH=main
+
+  CURRENT_BRANCH=$(git branch --show-current)
+  if [ $CURRENT_BRANCH != $DEFAULT_BRANCH ] ; then
+    echo "ERROR: Please switch to the branch $DEFAULT_BRANCH"
+    exit 1
+  fi
+
+  DIFF_WITH_ORIGIN=$(git rev-list --count origin/$DEFAULT_BRANCH...$DEFAULT_BRANCH)
+  if [ $DIFF_WITH_ORIGIN -ne 0 ] ; then
+    echo "ERROR: You are $DIFF_WITH_ORIGIN commits out of sync with origin/$DEFAULT_BRANCH. Please update first."
+    exit 1
+  fi
+
+  if ! git diff --quiet; then
+    echo "ERROR: There are local changes. Please stash them."
+    exit 1
+  fi
+}
+
+updateAwsCdk() {
+  npm run update-aws-cdk
+}
+
+checkForLocalChanges() {
+  if git diff --quiet; then
+    echo "No changes. No further action needed."
+    exit 0
+  fi
+}
+
+raisePR() {
+  LIBRARY_TO_CHECK="@aws-cdk/core"
+  INSTALLED_VERSION_NUMBER=$(jq -r ".dependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
+
+  BRANCH_NAME="update-aws-cdk-$INSTALLED_VERSION_NUMBER"
+  COMMIT_SUBJECT="chore(deps)!: Update aws-cdk libraries to $INSTALLED_VERSION_NUMBER"
+  COMMIT_BODY="BREAKING CHANGE: Update aws-cdk libraries to $INSTALLED_VERSION_NUMBER"
+
+  git checkout -b $BRANCH_NAME
+
+  for file in package.json package-lock.json integration-test/package.json; do
+    git add $file
+  done
+
+  git commit -m "$COMMIT_SUBJECT" -m "$COMMIT_BODY"
+
+  git push -u origin $BRANCH_NAME
+  gh pr create --title "$COMMIT_SUBJECT" --body "$COMMIT_BODY"
+}
+
+main() {
+  ensureAtHeadOfOrigin
+  checkYarnLock
+  updateAwsCdk
+  checkForLocalChanges
+  raisePR
+}
+
+main
