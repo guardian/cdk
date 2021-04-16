@@ -62,7 +62,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
     const props = {
       tolerated5xxPercentage: 1,
-      numberOfFiveMinutePeriodsToEvaluate: 3,
+      numberOfMinutesAboveThresholdBeforeAlarm: 3,
       snsTopicName: "test-topic",
     };
     new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });

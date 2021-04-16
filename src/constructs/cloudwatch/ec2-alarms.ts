@@ -1,5 +1,6 @@
 import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { HttpCodeElb, HttpCodeTarget } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 import type { GuApplicationLoadBalancer } from "../loadbalancing";
@@ -11,14 +12,13 @@ import { GuAlarm } from "./alarm";
  * the specified threshold.
  */
 export interface Gu5xxPercentageMonitoringProps
-  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData">,
-    AppIdentity {
+  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"> {
   tolerated5xxPercentage: number;
-  numberOfFiveMinutePeriodsToEvaluate?: number;
+  numberOfMinutesAboveThresholdBeforeAlarm?: number;
   noMonitoring?: false;
 }
 
-interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps {
+interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppIdentity {
   loadBalancer: GuApplicationLoadBalancer;
 }
 
@@ -32,6 +32,7 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
         m3: props.loadBalancer.metricRequestCount(),
       },
       label: `% of 5XX responses served for ${props.app} (load balancer and instances combined)`,
+      period: Duration.minutes(1),
     });
     const defaultAlarmName = `High 5XX error % from ${props.app} in ${scope.stage}`;
     const defaultDescription = `${props.app} exceeded ${props.tolerated5xxPercentage}% error rate`;
@@ -43,7 +44,7 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       alarmName: props.alarmName ?? defaultAlarmName,
       alarmDescription: props.alarmDescription ?? defaultDescription,
-      evaluationPeriods: props.numberOfFiveMinutePeriodsToEvaluate ?? 1,
+      evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
     super(scope, id, alarmProps);
   }

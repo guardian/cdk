@@ -10,6 +10,7 @@ import { Duration } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch";
 import { GuLambdaErrorPercentageAlarm } from "../cloudwatch";
 import type { GuStack } from "../core";
+import { GuDistributionBucketParameter } from "../core";
 import { AppIdentity } from "../core/identity";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
@@ -17,7 +18,13 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
 }
 
 export interface GuFunctionProps extends Omit<FunctionProps, "code">, AppIdentity {
-  code: { bucket: string; key: string };
+  // TODO can we reuse `GuUserDataS3DistributableProps` here?
+  code: {
+    /**
+     * The path to the lambda's distributable from the root of the [[`GuDistributionBucketParameter`]] bucket.
+     */
+    key: string;
+  };
   rules?: Array<{
     schedule: Schedule;
     description?: string;
@@ -41,7 +48,11 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 
 export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, props.code.bucket);
+    const bucket = Bucket.fromBucketName(
+      scope,
+      `${id}-bucket`,
+      GuDistributionBucketParameter.getInstance(scope).valueAsString
+    );
     const code = Code.fromBucket(bucket, props.code.key);
     super(scope, id, {
       ...props,

@@ -5,6 +5,8 @@ import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
 import type { GuUserDataProps } from "../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
+import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
+import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
@@ -20,6 +22,7 @@ interface GuEc2AppProps extends AppIdentity {
   publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
   applicationPort: number;
   certificateProps: GuCertificateProps;
+  monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
 }
 
 interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
@@ -90,6 +93,14 @@ export class GuEc2App {
       defaultAction: ListenerAction.forward([targetGroup]),
       certificates: [certificate],
     });
+
+    if (!props.monitoringConfiguration.noMonitoring) {
+      new Gu5xxPercentageAlarm(scope, "Alarm", {
+        app,
+        loadBalancer: loadBalancer,
+        ...props.monitoringConfiguration,
+      });
+    }
   }
 }
 

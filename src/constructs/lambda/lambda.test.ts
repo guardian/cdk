@@ -11,7 +11,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
@@ -19,7 +19,9 @@ describe("The GuLambdaFunction class", () => {
 
     expect(stack).toHaveResource("AWS::Lambda::Function", {
       Code: {
-        S3Bucket: "bucket1",
+        S3Bucket: {
+          Ref: "DistributionBucketName",
+        },
         S3Key: "folder/to/key",
       },
     });
@@ -29,7 +31,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
@@ -42,7 +44,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       rules: [
@@ -72,7 +74,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       apis: [
@@ -104,7 +106,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       errorPercentageMonitoring: {
@@ -121,7 +123,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       app: "testing",
@@ -142,7 +144,10 @@ describe("The GuLambdaFunction class", () => {
                     {
                       Ref: "AWS::Partition",
                     },
-                    ":s3:::bucket1",
+                    ":s3:::",
+                    {
+                      Ref: "DistributionBucketName",
+                    },
                   ],
                 ],
               },
@@ -154,7 +159,11 @@ describe("The GuLambdaFunction class", () => {
                     {
                       Ref: "AWS::Partition",
                     },
-                    ":s3:::bucket1/*",
+                    ":s3:::",
+                    {
+                      Ref: "DistributionBucketName",
+                    },
+                    "/*",
                   ],
                 ],
               },
@@ -170,7 +179,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       memorySize: 2048,
@@ -186,7 +195,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       app: "testing",
@@ -201,7 +210,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       timeout: Duration.seconds(60),
@@ -217,7 +226,7 @@ describe("The GuLambdaFunction class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
-      code: { bucket: "bucket1", key: "folder/to/key" },
+      code: { key: "folder/to/key" },
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       app: "testing",
