@@ -12,14 +12,13 @@ import { GuAlarm } from "./alarm";
  * the specified threshold.
  */
 export interface Gu5xxPercentageMonitoringProps
-  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData">,
-    AppIdentity {
+  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"> {
   tolerated5xxPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;
   noMonitoring?: false;
 }
 
-interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps {
+interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppIdentity {
   loadBalancer: GuApplicationLoadBalancer;
 }
 

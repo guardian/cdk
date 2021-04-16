@@ -12,6 +12,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
       publicFacing: false,
+      monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -24,6 +25,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       publicFacing: false,
+      monitoringConfiguration: { noMonitoring: true },
       userData: {
         distributable: {
           bucket: GuDistributionBucketParameter.getInstance(stack),
@@ -75,12 +77,29 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
+  it("creates an alarm if monitoringConfiguration is provided", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: app,
+      publicFacing: false,
+      monitoringConfiguration: {
+        tolerated5xxPercentage: 5,
+        snsTopicName: "test-topic",
+      },
+      userData: "",
+    });
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); //The shape of the alarm is tested at construct level
+  });
+
   it("can handle multiple EC2 apps in a single stack", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: "NodeApp",
       publicFacing: false,
+      monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
     });
 
@@ -88,6 +107,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Play,
       app: "PlayApp",
       publicFacing: false,
+      monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
     });
 
@@ -118,6 +138,7 @@ describe("the GuEC2App pattern", function () {
       new GuNodeApp(stack, {
         app: "NodeApp",
         publicFacing: false,
+        monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
       });
 
@@ -133,6 +154,7 @@ describe("the GuEC2App pattern", function () {
       new GuPlayApp(stack, {
         app: "PlayApp",
         publicFacing: false,
+        monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
       });
 
