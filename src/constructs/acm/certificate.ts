@@ -8,7 +8,8 @@ import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 
-export type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource & AppIdentity;
+export type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource;
+export type GuCertificatePropsWithApp = GuCertificateProps & AppIdentity;
 
 export interface GuDnsValidatedCertificateProps {
   domainName: string;
@@ -58,12 +59,12 @@ export interface GuDnsValidatedCertificateProps {
  *```
  */
 export class GuCertificate extends GuStatefulMigratableConstruct(Certificate) {
-  constructor(scope: GuStack, id: string, props: GuCertificateProps) {
+  constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
     const maybeHostedZone =
       props.CODE.hostedZoneId && props.PROD.hostedZoneId
         ? HostedZone.fromHostedZoneId(
             scope,
-            "HostedZone",
+            AppIdentity.suffixText({ app: props.app }, "HostedZone"),
             scope.withStageDependentValue({
               variableName: "hostedZoneId",
               stageValues: { [Stage.CODE]: props.CODE.hostedZoneId, [Stage.PROD]: props.PROD.hostedZoneId },
@@ -78,7 +79,7 @@ export class GuCertificate extends GuStatefulMigratableConstruct(Certificate) {
       validation: CertificateValidation.fromDns(maybeHostedZone),
       existingLogicalId: props.existingLogicalId,
     };
-    super(scope, id, awsCertificateProps);
+    super(scope, AppIdentity.suffixText({ app: props.app }, "Certificate"), awsCertificateProps);
     this.applyRemovalPolicy(RemovalPolicy.RETAIN);
     AppIdentity.taggedConstruct({ app: props.app }, this);
   }
