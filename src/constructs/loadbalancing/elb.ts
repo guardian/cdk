@@ -9,9 +9,10 @@ import { Duration } from "@aws-cdk/core";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import { GuArnParameter } from "../core";
+import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 
-interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource {
+interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource, AppIdentity {
   propertiesToOverride?: Record<string, unknown>;
   healthCheck?: Partial<HealthCheck>;
 }
@@ -33,7 +34,8 @@ export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(LoadBal
       healthCheck: { ...GuClassicLoadBalancer.DefaultHealthCheck, ...props.healthCheck },
     };
 
-    super(scope, id, mergedProps);
+    super(scope, AppIdentity.suffixText({ app: props.app }, id), mergedProps);
+    AppIdentity.taggedConstruct({ app: props.app }, this);
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 

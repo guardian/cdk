@@ -3,8 +3,10 @@ import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { TrackingTag } from "../../constants/library-info";
+import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
+import type { AppIdentity } from "../core/identity";
 import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
 
 describe("The GuClassicLoadBalancer class", () => {
@@ -15,26 +17,54 @@ describe("The GuClassicLoadBalancer class", () => {
     privateSubnetIds: [""],
   });
 
+  const app: AppIdentity = { app: "testing" };
+
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc, existingLogicalId: "MyCLB" });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc, existingLogicalId: "MyCLB" });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", "MyCLB");
   });
 
   test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { vpc });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId(
       "AWS::ElasticLoadBalancing::LoadBalancer",
-      /^ClassicLoadBalancer.+$/
+      /^ClassicLoadBalancerTesting.+$/
     );
+  });
+
+  test("applies the App tag", () => {
+    const stack = simpleGuStackForTesting();
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Tags: alphabeticalTags([
+        {
+          Key: "App",
+          Value: "testing",
+        },
+        {
+          Key: "Stack",
+          Value: "test-stack",
+        },
+        {
+          Key: "Stage",
+          Value: {
+            Ref: "Stage",
+          },
+        },
+        TrackingTag,
+      ]),
+    });
   });
 
   test("overrides any properties as required", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      ...app,
       vpc,
       propertiesToOverride: {
         AccessLoggingPolicy: {
@@ -55,6 +85,7 @@ describe("The GuClassicLoadBalancer class", () => {
   test("uses default health check properties", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      ...app,
       vpc,
     });
 
@@ -72,6 +103,7 @@ describe("The GuClassicLoadBalancer class", () => {
   test("merges any health check properties provided", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      ...app,
       vpc,
       healthCheck: {
         path: "/test",
@@ -98,9 +130,12 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
     privateSubnetIds: [""],
   });
 
+  const app: AppIdentity = { app: "testing" };
+
   test("uses default listener values", () => {
     const stack = simpleGuStackForTesting();
     new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      ...app,
       vpc,
     });
 
@@ -122,6 +157,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
   test("adds the CertificateARN parameter if no value provided", () => {
     const stack = simpleGuStackForTesting();
     new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      ...app,
       vpc,
     });
 
@@ -138,6 +174,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
   test("uses the certificate id provided", () => {
     const stack = simpleGuStackForTesting();
     new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      ...app,
       vpc,
       listener: {
         sslCertificateId: "certificateId",
@@ -164,6 +201,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
   test("merges any listener values provided", () => {
     const stack = simpleGuStackForTesting();
     new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+      ...app,
       vpc,
       listener: {
         internalPort: 3000,
