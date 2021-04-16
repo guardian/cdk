@@ -18,6 +18,7 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
 }
 
 export interface GuFunctionProps extends Omit<FunctionProps, "code">, AppIdentity {
+  // TODO can we reuse `GuUserDataS3DistributableProps` here?
   code: {
     /**
      * The path to the lambda's distributable from the root of the [[`GuDistributionBucketParameter`]] bucket.
