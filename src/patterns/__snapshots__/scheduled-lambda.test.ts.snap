@@ -3,6 +3,11 @@
 exports[`The GuScheduledLambda pattern should create the correct resources with minimal config 1`] = `
 Object {
   "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "Stage": Object {
       "AllowedValues": Array [
         "CODE",
@@ -21,7 +26,9 @@ Object {
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": "test-dist",
+          "S3Bucket": Object {
+            "Ref": "DistributionBucketName",
+          },
           "S3Key": "lambda.zip",
         },
         "FunctionName": "my-lambda-function",
@@ -78,7 +85,10 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":s3:::test-dist",
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
                     ],
                   ],
                 },
@@ -90,7 +100,11 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":s3:::test-dist/*",
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/*",
                     ],
                   ],
                 },
