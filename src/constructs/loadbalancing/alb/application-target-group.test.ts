@@ -3,7 +3,7 @@ import "../../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { TrackingTag } from "../../../constants/library-info";
+import { TrackingTag } from "../../../constants/tracking-tag";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../../utils/test";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationTargetGroup } from "./application-target-group";

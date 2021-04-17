@@ -3,7 +3,7 @@ import "../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "@aws-cdk/aws-rds";
 import { Stack } from "@aws-cdk/core";
-import { TrackingTag } from "../../constants/library-info";
+import { TrackingTag } from "../../constants/tracking-tag";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 

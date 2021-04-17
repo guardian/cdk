@@ -94,7 +94,7 @@ This can be done with a few config changes.
 First, create `jest.setup.js` and add the global mock:
 
 ```javascript
-jest.mock("@guardian/cdk/lib/constants/library-info");
+jest.mock("@guardian/cdk/lib/constants/tracking-tag");
 ```
 
 Next, edit `jest.config.js` setting the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) property:

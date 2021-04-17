@@ -1,7 +1,7 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import { Stage } from "../../constants";
-import { TrackingTag } from "../../constants/library-info";
+import { TrackingTag } from "../../constants/tracking-tag";
 import type { StackStageIdentity } from "./identity";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
