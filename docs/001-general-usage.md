@@ -64,7 +64,7 @@ This does, however require the use of `ts-node` to compile on the fly. This can 
 For apps with a single stack, the generated YAML will also be printed in the console.
 You can pipe this to disk:
 
-```console
+```bash
 cdk synth --app="ts-node ./bin/my-app.ts" > cloudformation.yaml
 ```
 
@@ -107,7 +107,7 @@ module.exports = {
 
 Finally, update your snapshots. The `gu:cdk:version` tag should now be:
 
-```json5
+```jsonc
 {
   "Key": "gu:cdk:version",
   "PropagateAtLaunch": true,
