@@ -25,14 +25,4 @@ describe("The GuRole class", () => {
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Role", /^TestRole.+$/);
   });
-
-  it("returns a string value for the child ref", () => {
-    const stack = simpleGuStackForTesting();
-
-    const role = new GuRole(stack, "TestRole", {
-      assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-    });
-
-    expect(typeof role.ref).toBe("string");
-  });
 });
