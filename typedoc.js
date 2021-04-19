@@ -4,7 +4,9 @@ const constructsDir = "src/constructs";
 const utilsDir = "src/utils";
 
 function getEntryPointsFromSubdirectories(directory) {
-  return readdirSync(directory).map((dir) => `${directory}/${dir}/index.ts`);
+  return readdirSync(directory, { withFileTypes: true })
+    .filter((dir) => dir.isDirectory())
+    .map(({ name }) => `${directory}/${name}/index.ts`);
 }
 
 module.exports = {
