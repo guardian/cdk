@@ -61,7 +61,7 @@
     "@aws-cdk/aws-rds": "1.98.0",
     "@aws-cdk/aws-s3": "1.98.0",
     "@aws-cdk/core": "1.98.0",
-    "aws-sdk": "^2.884.0",
+    "aws-sdk": "^2.888.0",
     "read-pkg-up": "7.0.1"
   },
   "config": {
