@@ -1,1 +1,1 @@
-jest.mock("./src/constants/library-info");
+jest.mock("./src/constants/tracking-tag");

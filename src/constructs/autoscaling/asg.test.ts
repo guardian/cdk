@@ -5,7 +5,7 @@ import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
-import { TrackingTag } from "../../constants/library-info";
+import { TrackingTag } from "../../constants/tracking-tag";
 import type { Resource, SynthedStack } from "../../utils/test";
 import { alphabeticalTags, findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";

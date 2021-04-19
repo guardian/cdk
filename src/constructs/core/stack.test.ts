@@ -4,7 +4,7 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { App } from "@aws-cdk/core";
 import { Stage, Stages } from "../../constants";
-import { TrackingTag } from "../../constants/library-info";
+import { TrackingTag } from "../../constants/tracking-tag";
 import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import { GuParameter } from "./parameters";

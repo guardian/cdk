@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Stage } from "../constants";
-import { TrackingTag } from "../constants/library-info";
+import { TrackingTag } from "../constants/tracking-tag";
 import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../constructs/core";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
