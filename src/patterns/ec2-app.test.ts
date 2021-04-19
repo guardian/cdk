@@ -2,7 +2,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Stage } from "../constants";
 import { TrackingTag } from "../constants/tracking-tag";
-import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../constructs/core";
+import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
@@ -49,7 +49,6 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       userData: {
         distributable: {
-          bucket: GuDistributionBucketParameter.getInstance(stack),
           fileName: "my-app.deb",
           executionStatement: `dpkg -i /${app}/my-app.deb`,
         },

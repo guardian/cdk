@@ -2,17 +2,21 @@ import type { S3DownloadOptions } from "@aws-cdk/aws-ec2";
 import { UserData } from "@aws-cdk/aws-ec2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import type { GuPrivateS3ConfigurationProps } from "../../utils/ec2";
-import type { GuDistributionBucketParameter, GuStack } from "../core";
+import { GuDistributionBucketParameter } from "../core";
+import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 
-/**
- * Where to download a distributable from.
- * We'll look for `fileName` on the path "bucket/stack/stage/app/<fileName>".
- * `executionStatement` will be something like "dpkg -i application.deb` or `service foo start`.
- */
 export interface GuUserDataS3DistributableProps {
-  bucket: GuDistributionBucketParameter;
+  /**
+   * Where to download a distributable from.
+   * We'll look for `fileName` on the path "bucket/stack/stage/app/<fileName>".
+   */
   fileName: string;
+
+  /**
+   * The command to run `fileName`.
+   * For example `dpkg -i application.deb` or `service foo start`.
+   */
   executionStatement: string; // TODO can we detect this and auto generate it? Maybe from the file extension?
 }
 
@@ -40,7 +44,7 @@ export class GuUserData {
     const bucketKey = [scope.stack, scope.stage, app, props.fileName].join("/");
 
     const bucket = Bucket.fromBucketAttributes(scope, "DistributionBucket", {
-      bucketName: props.bucket.valueAsString,
+      bucketName: GuDistributionBucketParameter.getInstance(scope).valueAsString,
     });
 
     this.addS3DownloadCommand({
