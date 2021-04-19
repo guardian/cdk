@@ -116,7 +116,7 @@
 				</a>
 				<p>For apps with a single stack, the generated YAML will also be printed in the console.
 				You can pipe this to disk:</p>
-				<pre><code class="language-console">cdk synth --app=&quot;ts-node ./bin/my-app.ts&quot; &gt; cloudformation.yaml
+				<pre><code class="language-bash"><span style="color: #000000">cdk synth --app=</span><span style="color: #A31515">&quot;ts-node ./bin/my-app.ts&quot;</span><span style="color: #000000"> &gt; cloudformation.yaml</span>
 </code></pre>
 				<p>For app with multiple stacks, you can specify a stack to see the YAML output.</p>
 				<a href="#🧪-testing" id="🧪-testing" style="color: inherit; text-decoration: none;">
@@ -148,11 +148,11 @@
 <span style="color: #000000">};</span>
 </code></pre>
 				<p>Finally, update your snapshots. The <code>gu:cdk:version</code> tag should now be:</p>
-				<pre><code class="language-json5">{
-  &quot;Key&quot;: &quot;gu:cdk:version&quot;,
-  &quot;PropagateAtLaunch&quot;: true,
-  &quot;Value&quot;: &quot;TEST&quot;, // &lt;-- would otherwise be the version number of @guardian/cdk in use
-}
+				<pre><code class="language-jsonc"><span style="color: #000000">{</span>
+<span style="color: #000000">  </span><span style="color: #0451A5">&quot;Key&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;gu:cdk:version&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0451A5">&quot;PropagateAtLaunch&quot;</span><span style="color: #000000">: </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0451A5">&quot;Value&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;TEST&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// &lt;-- would otherwise be the version number of @guardian/cdk in use</span>
+<span style="color: #000000">}</span>
 </code></pre>
 				<p>Note: This only affects tests. The <code>gu:cdk:version</code> tag in the final template created from a <code>cdk synth</code> will have the correct value.</p>
 				<p>✨ With <code>gu:cdk:version</code> mocked, snapshot tests run during CI and dependabot automatically raising PRs to update <code>@guardian/cdk</code>,
