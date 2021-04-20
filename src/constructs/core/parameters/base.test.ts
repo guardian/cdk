@@ -25,6 +25,7 @@ describe("The GuParameter class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Parameters.Parameter).toEqual({
+      Default: "/$STAGE/$STACK/$APP/parameter",
       Type: "AWS::SSM::Parameter::Value<Boolean>",
     });
   });
@@ -37,6 +38,7 @@ describe("The GuParameter class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Parameters.Parameter).toEqual({
+      Default: "/$STAGE/$STACK/$APP/parameter",
       Type: "AWS::SSM::Parameter::Value<String>",
     });
   });
@@ -49,9 +51,41 @@ describe("The GuParameter class", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Parameters.Parameter).toEqual({
+      Default: "/$STAGE/$STACK/$APP/parameter",
       Type: "AWS::SSM::Parameter::Value<Boolean>",
       Description: "This is a test",
     });
+  });
+
+  it("when from SSM, has a default SSM path to remind users that it's an SSM parameter", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuParameter(stack, "Parameter", { fromSSM: true });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toHaveProperty("Default");
+    expect(json.Parameters.Parameter.Default).toEqual("/$STAGE/$STACK/$APP/parameter");
+  });
+
+  it("default SSM path gets overridden by prop", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuParameter(stack, "Parameter", { fromSSM: true, default: "/FOO/BAR" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter.Default).toEqual("/FOO/BAR");
+  });
+
+  it("when not from SSM, has no default", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuParameter(stack, "Parameter", { fromSSM: false });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).not.toHaveProperty("Default");
   });
 });
 
