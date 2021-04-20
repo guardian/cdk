@@ -20,7 +20,7 @@ describe("The GuKinesisLambda pattern", () => {
     };
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -40,7 +40,7 @@ describe("The GuKinesisLambda pattern", () => {
     };
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -62,7 +62,7 @@ describe("The GuKinesisLambda pattern", () => {
       retryBehaviour: StreamRetry.maxAttempts(1),
     };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -100,7 +100,7 @@ describe("The GuKinesisLambda pattern", () => {
       retryBehaviour: StreamRetry.maxAttempts(1),
     };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -123,7 +123,7 @@ describe("The GuKinesisLambda pattern", () => {
     };
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -148,7 +148,7 @@ describe("The GuKinesisLambda pattern", () => {
     };
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -181,7 +181,7 @@ describe("The GuKinesisLambda pattern", () => {
       shardCount: 3,
     };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -213,7 +213,7 @@ describe("The GuKinesisLambda pattern", () => {
       enabled: false,
     };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -240,7 +240,7 @@ describe("The GuKinesisLambda pattern", () => {
       retryBehaviour: StreamRetry.maxAttempts(5),
     };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -263,7 +263,7 @@ describe("The GuKinesisLambda pattern", () => {
       retryBehaviour: StreamRetry.maxAge(Duration.minutes(5)),
     };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,

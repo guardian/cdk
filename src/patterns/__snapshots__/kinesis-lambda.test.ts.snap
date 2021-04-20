@@ -60,7 +60,18 @@ Object {
           "S3Bucket": Object {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "lambda.zip",
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "test-stack/",
+                Object {
+                  "Ref": "Stage",
+                },
+                "/testing/lambda.zip",
+              ],
+            ],
+          },
         },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",

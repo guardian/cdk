@@ -7,6 +7,7 @@ import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
+import { GuDistributable } from "../../types/distributable";
 import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch";
 import { GuLambdaErrorPercentageAlarm } from "../cloudwatch";
 import type { GuStack } from "../core";
@@ -17,14 +18,7 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
 }
 
-export interface GuFunctionProps extends Omit<FunctionProps, "code">, AppIdentity {
-  // TODO can we reuse `GuUserDataS3DistributableProps` here?
-  code: {
-    /**
-     * The path to the lambda's distributable from the root of the [[`GuDistributionBucketParameter`]] bucket.
-     */
-    key: string;
-  };
+export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   rules?: Array<{
     schedule: Schedule;
     description?: string;
@@ -48,16 +42,19 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 
 export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
+    const { app, fileName, runtime, memorySize, timeout } = props;
+
     const bucket = Bucket.fromBucketName(
       scope,
       `${id}-bucket`,
       GuDistributionBucketParameter.getInstance(scope).valueAsString
     );
-    const code = Code.fromBucket(bucket, props.code.key);
+    const objectKey = GuDistributable.getObjectKey(scope, { app }, { fileName });
+    const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
-      memorySize: defaultMemorySize(props.runtime, props.memorySize),
-      timeout: props.timeout ?? Duration.seconds(30),
+      memorySize: defaultMemorySize(runtime, memorySize),
+      timeout: timeout ?? Duration.seconds(30),
       code,
     });
 
