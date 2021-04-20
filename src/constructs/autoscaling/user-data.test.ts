@@ -3,7 +3,7 @@ import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuDistributionBucketParameter, GuPrivateConfigBucketParameter } from "../core";
+import { GuPrivateConfigBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";
 import type { GuUserDataPropsWithApp } from "./user-data";
 import { GuUserData } from "./user-data";
@@ -22,7 +22,6 @@ describe("GuUserData", () => {
     const props: GuUserDataPropsWithApp = {
       app,
       distributable: {
-        bucket: GuDistributionBucketParameter.getInstance(stack),
         fileName: "my-app.deb",
         executionStatement: `dpkg -i /${app}/my-app.deb`,
       },
@@ -73,7 +72,6 @@ describe("GuUserData", () => {
     const props: GuUserDataPropsWithApp = {
       app,
       distributable: {
-        bucket: GuDistributionBucketParameter.getInstance(stack),
         fileName: "my-app.deb",
         executionStatement: `dpkg -i /${app}/my-app.deb`,
       },
