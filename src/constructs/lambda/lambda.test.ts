@@ -1,6 +1,5 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
-import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../utils/test";
@@ -49,36 +48,6 @@ describe("The GuLambdaFunction class", () => {
     });
 
     expect(stack).not.toHaveResource("AWS::Events::Rule");
-  });
-
-  it("should add any rules passed in", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuLambdaFunction(stack, "lambda", {
-      fileName: "my-app.zip",
-      handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
-      rules: [
-        {
-          schedule: Schedule.rate(Duration.days(7)),
-          description: "run every week",
-        },
-        {
-          schedule: Schedule.expression("0 1 * * *"),
-          description: "run every hour (cron)",
-        },
-      ],
-      app: "testing",
-    });
-
-    expect(stack).toHaveResource("AWS::Events::Rule", {
-      Description: "run every week",
-      ScheduleExpression: "rate(7 days)",
-    });
-    expect(stack).toHaveResource("AWS::Events::Rule", {
-      Description: "run every hour (cron)",
-      ScheduleExpression: "0 1 * * *",
-    });
   });
 
   it("should add any apis passed in", () => {
