@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuLambdaFunction class should add any apis passed in 1`] = `
+exports[`The GuApiLambda pattern should create the correct resources with minimal config 1`] = `
 Object {
   "Outputs": Object {
     "lambdaapi2Endpoint9DFE39DE": Object {

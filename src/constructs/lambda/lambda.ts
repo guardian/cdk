@@ -1,5 +1,3 @@
-import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
-import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
 import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
@@ -11,12 +9,7 @@ import type { GuStack } from "../core";
 import { GuDistributionBucketParameter } from "../core";
 import { AppIdentity } from "../core/identity";
 
-interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
-  id: string;
-}
-
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
-  apis?: ApiProps[];
   errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;
 }
 
@@ -49,13 +42,6 @@ export class GuLambdaFunction extends Function {
       memorySize: defaultMemorySize(runtime, memorySize),
       timeout: timeout ?? Duration.seconds(30),
       code,
-    });
-
-    props.apis?.forEach((api) => {
-      new LambdaRestApi(this, api.id, {
-        handler: this,
-        ...api,
-      });
     });
 
     if (props.errorPercentageMonitoring) {

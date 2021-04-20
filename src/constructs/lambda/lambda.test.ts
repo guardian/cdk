@@ -1,4 +1,3 @@
-import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
@@ -48,38 +47,6 @@ describe("The GuLambdaFunction class", () => {
     });
 
     expect(stack).not.toHaveResource("AWS::Events::Rule");
-  });
-
-  it("should add any apis passed in", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuLambdaFunction(stack, "lambda", {
-      fileName: "my-app.zip",
-      handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
-      apis: [
-        {
-          id: "api",
-          description: "this is a test",
-        },
-        {
-          id: "api2",
-          description: "this is a test2",
-        },
-      ],
-      app: "testing",
-    });
-
-    expect(stack).toHaveResource("AWS::ApiGateway::RestApi", {
-      Description: "this is a test",
-      Name: "api",
-    });
-    expect(stack).toHaveResource("AWS::ApiGateway::RestApi", {
-      Description: "this is a test2",
-      Name: "api2",
-    });
-
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
   it("should add an alarm if errorPercentageMonitoring is passed in", () => {

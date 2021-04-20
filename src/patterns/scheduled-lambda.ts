@@ -50,7 +50,7 @@ import type { GuFunctionProps } from "../constructs/lambda";
  *  monitoringConfiguration: { noMonitoring: true }
  * ```
  */
-export interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "apis" | "errorPercentageMonitoring"> {
+export interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   rules: Array<{
     schedule: Schedule;
     description?: string;
