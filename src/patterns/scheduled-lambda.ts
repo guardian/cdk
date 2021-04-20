@@ -1,6 +1,5 @@
 import type { Schedule } from "@aws-cdk/aws-events";
-import type { GuLambdaErrorPercentageMonitoringProps } from "../constructs/cloudwatch/lambda-alarms";
-import type { NoMonitoring } from "../constructs/cloudwatch/no-monitoring";
+import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
