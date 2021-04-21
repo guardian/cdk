@@ -114,7 +114,6 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#allowalloutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#allowpublicsubnet" class="tsd-kind-icon">allow<wbr>Public<wbr>Subnet</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.gusnslambdaprops.html#app" class="tsd-kind-icon">app</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.gusnslambdaprops.html#code" class="tsd-kind-icon">code</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#codesigningconfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#currentversionoptions" class="tsd-kind-icon">current<wbr>Version<wbr>Options</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a></li>
@@ -124,6 +123,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#environmentencryption" class="tsd-kind-icon">environment<wbr>Encryption</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#events" class="tsd-kind-icon">events</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.gusnslambdaprops.html#existingsnstopic" class="tsd-kind-icon">existing<wbr>Sns<wbr>Topic</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.gusnslambdaprops.html#filename" class="tsd-kind-icon">file<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#filesystem" class="tsd-kind-icon">filesystem</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#functionname" class="tsd-kind-icon">function<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.gusnslambdaprops.html#handler" class="tsd-kind-icon">handler</a></li>
@@ -217,33 +217,9 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Omit.app</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="code" class="tsd-anchor"></a>
-					<h3>code</h3>
-					<div class="tsd-signature tsd-kind-icon">code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from Omit.code</p>
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/lambda/lambda.ts#L22">src/constructs/lambda/lambda.ts:22</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<div class="lead">
-										<p>The path to the lambda&#39;s distributable from the root of the <a href="../classes/constructs_core.gudistributionbucketparameter.html"><code>GuDistributionBucketParameter</code></a> bucket.</p>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="codesigningconfig" class="tsd-anchor"></a>
@@ -473,9 +449,26 @@
 					<div class="tsd-signature tsd-kind-icon">existing<wbr>Sns<wbr>Topic<span class="tsd-signature-symbol">:</span> <a href="index.existingsnstopic.html" class="tsd-signature-type" data-tsd-kind="Interface">ExistingSnsTopic</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/patterns/sns-lambda.ts#L71">src/patterns/sns-lambda.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/patterns/sns-lambda.ts#L71">src/patterns/sns-lambda.ts:71</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="filename" class="tsd-anchor"></a>
+					<h3>file<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">file<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.fileName</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/types/distributable.ts#L9">src/types/distributable.ts:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The filename for an executable package within the bucket <a href="../classes/constructs_core.gudistributionbucketparameter.html"><code>GuDistributionBucketParameter</code></a>.
+							We&#39;ll look for <code>fileName</code> on the path &quot;bucket/stack/stage/app/<fileName>&quot;.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="filesystem" class="tsd-anchor"></a>
@@ -753,7 +746,7 @@
 					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.nomonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuLambdaErrorPercentageMonitoringProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/patterns/sns-lambda.ts#L70">src/patterns/sns-lambda.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/patterns/sns-lambda.ts#L70">src/patterns/sns-lambda.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1248,9 +1241,6 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="index.gusnslambdaprops.html#app" class="tsd-kind-icon">app</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="index.gusnslambdaprops.html#code" class="tsd-kind-icon">code</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="index.gusnslambdaprops.html#codesigningconfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a>
 							</li>
@@ -1277,6 +1267,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="index.gusnslambdaprops.html#existingsnstopic" class="tsd-kind-icon">existing<wbr>Sns<wbr>Topic</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="index.gusnslambdaprops.html#filename" class="tsd-kind-icon">file<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="index.gusnslambdaprops.html#filesystem" class="tsd-kind-icon">filesystem</a>

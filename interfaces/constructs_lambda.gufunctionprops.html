@@ -72,6 +72,9 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
+						<span class="tsd-signature-type">GuDistributable</span>
+					</li>
+					<li>
 						<span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">FunctionProps</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;code&quot;</span><span class="tsd-signature-symbol">&gt;</span>
 					</li>
 					<li>
@@ -95,7 +98,6 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#allowpublicsubnet" class="tsd-kind-icon">allow<wbr>Public<wbr>Subnet</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_lambda.gufunctionprops.html#apis" class="tsd-kind-icon">apis</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_lambda.gufunctionprops.html#app" class="tsd-kind-icon">app</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_lambda.gufunctionprops.html#code" class="tsd-kind-icon">code</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#codesigningconfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#currentversionoptions" class="tsd-kind-icon">current<wbr>Version<wbr>Options</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#deadletterqueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a></li>
@@ -105,6 +107,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#environmentencryption" class="tsd-kind-icon">environment<wbr>Encryption</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_lambda.gufunctionprops.html#errorpercentagemonitoring" class="tsd-kind-icon">error<wbr>Percentage<wbr>Monitoring</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#events" class="tsd-kind-icon">events</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_lambda.gufunctionprops.html#filename" class="tsd-kind-icon">file<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#filesystem" class="tsd-kind-icon">filesystem</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#functionname" class="tsd-kind-icon">function<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.gufunctionprops.html#handler" class="tsd-kind-icon">handler</a></li>
@@ -197,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">apis<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApiProps</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/lambda/lambda.ts#L32">src/constructs/lambda/lambda.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/constructs/lambda/lambda.ts#L26">src/constructs/lambda/lambda.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,32 +211,9 @@
 					<aside class="tsd-sources">
 						<p>Inherited from AppIdentity.app</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="code" class="tsd-anchor"></a>
-					<h3>code</h3>
-					<div class="tsd-signature tsd-kind-icon">code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/lambda/lambda.ts#L22">src/constructs/lambda/lambda.ts:22</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<div class="lead">
-										<p>The path to the lambda&#39;s distributable from the root of the <a href="../classes/constructs_core.gudistributionbucketparameter.html"><code>GuDistributionBucketParameter</code></a> bucket.</p>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="codesigningconfig" class="tsd-anchor"></a>
@@ -436,7 +416,7 @@
 					<div class="tsd-signature tsd-kind-icon">error<wbr>Percentage<wbr>Monitoring<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.gulambdaerrorpercentagemonitoringprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuLambdaErrorPercentageMonitoringProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/lambda/lambda.ts#L33">src/constructs/lambda/lambda.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/constructs/lambda/lambda.ts#L27">src/constructs/lambda/lambda.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -465,6 +445,23 @@
 							<dd><p>stable</p>
 							</dd>
 						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="filename" class="tsd-anchor"></a>
+					<h3>file<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">file<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuDistributable.fileName</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/types/distributable.ts#L9">src/types/distributable.ts:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The filename for an executable package within the bucket <a href="../classes/constructs_core.gudistributionbucketparameter.html"><code>GuDistributionBucketParameter</code></a>.
+							We&#39;ll look for <code>fileName</code> on the path &quot;bucket/stack/stage/app/<fileName>&quot;.</p>
+						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
@@ -942,7 +939,7 @@
 					<div class="tsd-signature tsd-kind-icon">rules<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>description<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>schedule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Schedule</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/766c876/src/constructs/lambda/lambda.ts#L28">src/constructs/lambda/lambda.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/e681197/src/constructs/lambda/lambda.ts#L22">src/constructs/lambda/lambda.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1223,9 +1220,6 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="constructs_lambda.gufunctionprops.html#app" class="tsd-kind-icon">app</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="constructs_lambda.gufunctionprops.html#code" class="tsd-kind-icon">code</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_lambda.gufunctionprops.html#codesigningconfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a>
 							</li>
@@ -1252,6 +1246,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_lambda.gufunctionprops.html#events" class="tsd-kind-icon">events</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="constructs_lambda.gufunctionprops.html#filename" class="tsd-kind-icon">file<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="constructs_lambda.gufunctionprops.html#filesystem" class="tsd-kind-icon">filesystem</a>
