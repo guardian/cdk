@@ -39,7 +39,18 @@ Object {
           "S3Bucket": Object {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "folder/to/key",
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "test-stack/",
+                Object {
+                  "Ref": "Stage",
+                },
+                "/testing/lambda.zip",
+              ],
+            ],
+          },
         },
         "Handler": "handler.ts",
         "MemorySize": 512,

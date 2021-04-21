@@ -12,7 +12,7 @@ describe("The GuScheduledLambda pattern", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
@@ -27,7 +27,7 @@ describe("The GuScheduledLambda pattern", () => {
   it("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {
-      code: { bucket: "test-dist", key: "lambda.zip" },
+      fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
