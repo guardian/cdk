@@ -81,7 +81,7 @@ export interface ExistingKinesisStream extends GuMigratingResource {
  *  monitoringConfiguration: { noMonitoring: true } as NoMonitoring
  * ```
  */
-export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
+export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "apis" | "errorPercentageMonitoring"> {
   monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
   existingKinesisStream?: ExistingKinesisStream;
   errorHandlingConfiguration: StreamErrorHandlingProps;

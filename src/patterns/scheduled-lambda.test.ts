@@ -16,7 +16,7 @@ describe("The GuScheduledLambda pattern", () => {
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
-      schedule: Schedule.rate(Duration.minutes(1)),
+      rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
@@ -31,7 +31,7 @@ describe("The GuScheduledLambda pattern", () => {
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
-      schedule: Schedule.rate(Duration.minutes(1)),
+      rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
         snsTopicName: "alerts-topic",

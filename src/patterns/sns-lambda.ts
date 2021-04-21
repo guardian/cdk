@@ -66,7 +66,7 @@ export interface ExistingSnsTopic extends GuMigratingResource {
  *  monitoringConfiguration: { noMonitoring: true } as NoMonitoring
  * ```
  */
-export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "rules" | "apis" | "errorPercentageMonitoring"> {
+export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "apis" | "errorPercentageMonitoring"> {
   monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
   existingSnsTopic?: ExistingSnsTopic;
 }

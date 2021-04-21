@@ -1,8 +1,5 @@
 import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
 import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
-import type { Schedule } from "@aws-cdk/aws-events";
-import { Rule } from "@aws-cdk/aws-events";
-import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
@@ -19,10 +16,6 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
 }
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
-  rules?: Array<{
-    schedule: Schedule;
-    description?: string;
-  }>;
   apis?: ApiProps[];
   errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;
 }
@@ -56,16 +49,6 @@ export class GuLambdaFunction extends Function {
       memorySize: defaultMemorySize(runtime, memorySize),
       timeout: timeout ?? Duration.seconds(30),
       code,
-    });
-
-    props.rules?.forEach((rule, index) => {
-      const target = new LambdaFunction(this);
-      new Rule(this, `${id}-${rule.schedule.expressionString}-${index}`, {
-        schedule: rule.schedule,
-        targets: [target],
-        ...(rule.description && { description: rule.description }),
-        enabled: true,
-      });
     });
 
     props.apis?.forEach((api) => {
