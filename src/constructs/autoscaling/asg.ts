@@ -9,7 +9,7 @@ import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
-import { GuHttpsEgressSecurityGroup } from "../ec2";
+import { GuHttpsEgressSecurityGroup, GuWazuhAccess } from "../ec2";
 import { GuInstanceRole } from "../iam";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -116,6 +116,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalin
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
+    this.addSecurityGroup(GuWazuhAccess.getInstance(scope, props.vpc));
     mergedProps.additionalSecurityGroups?.forEach((sg) => this.addSecurityGroup(sg));
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
