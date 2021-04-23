@@ -187,6 +187,9 @@ describe("The GuAutoScalingGroup", () => {
           "Fn::GetAtt": [`GuHttpsEgressSecurityGroup${app}89CDDA4B`, "GroupId"],
         },
         {
+          "Fn::GetAtt": ["WazuhSecurityGroup", "GroupId"],
+        },
+        {
           "Fn::GetAtt": ["SecurityGroupTestingA32D34F9", "GroupId"], // auto-generated logicalId
         },
         {
