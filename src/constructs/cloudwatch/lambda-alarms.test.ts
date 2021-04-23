@@ -33,7 +33,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
     const props = {
       toleratedErrorPercentage: 65,
-      numberOfFiveMinutePeriodsToEvaluate: 12,
+      numberOfMinutesAboveThresholdBeforeAlarm: 12,
       snsTopicName: "alerts-topic",
       lambda: lambda,
     };
@@ -53,7 +53,6 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
     const props = {
       toleratedErrorPercentage: 65,
-      numberOfFiveMinutePeriodsToEvaluate: 12,
       snsTopicName: "alerts-topic",
       alarmDescription: "test-custom-alarm-description",
       lambda: lambda,
@@ -74,7 +73,6 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
     const props = {
       toleratedErrorPercentage: 65,
-      numberOfFiveMinutePeriodsToEvaluate: 12,
       snsTopicName: "alerts-topic",
       lambda: lambda,
       alarmName: "test-custom-alarm-name",
