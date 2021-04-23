@@ -1,4 +1,5 @@
 import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
+import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 import type { GuLambdaFunction } from "../lambda";
 import type { GuAlarmProps } from "./alarm";
@@ -10,7 +11,7 @@ import { GuAlarm } from "./alarm";
 export interface GuLambdaErrorPercentageMonitoringProps
   extends Omit<GuAlarmProps, "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData"> {
   toleratedErrorPercentage: number;
-  numberOfFiveMinutePeriodsToEvaluate?: number;
+  numberOfMinutesAboveThresholdBeforeAlarm?: number;
   noMonitoring?: false;
 }
 
@@ -24,6 +25,7 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
       expression: "100*m1/m2",
       usingMetrics: { m1: props.lambda.metricErrors(), m2: props.lambda.metricInvocations() },
       label: `Error % of ${props.lambda.functionName}`,
+      period: Duration.minutes(1),
     });
     const defaultAlarmName = `High error % from ${props.lambda.functionName} lambda in ${scope.stage}`;
     const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
@@ -33,7 +35,7 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: props.toleratedErrorPercentage,
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
-      evaluationPeriods: props.numberOfFiveMinutePeriodsToEvaluate ?? 1,
+      evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
       alarmName: props.alarmName ?? defaultAlarmName,
       alarmDescription: props.alarmDescription ?? defaultDescription,
     };
