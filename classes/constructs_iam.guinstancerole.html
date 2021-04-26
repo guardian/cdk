@@ -68,6 +68,23 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Creates an IAM role with common policies that are needed by most Guardian applications.</p>
+					</div>
+					<p>More specifically:</p>
+					<ol>
+						<li>Allows for <code>ssh</code> access to an EC2 instance via <a href="https://github.com/guardian/ssm-scala">ssm-scala</a> (instead of standard <code>ssh</code>).</li>
+						<li>Allows EC2 instances to communicate with Wazuh, for security monitoring.</li>
+						<li>Allows EC2 instances to download an artifact from AWS S3, for application deployment.</li>
+						<li>Allows EC2 instances to download private configuration from AWS Parameter Store.</li>
+						<li>Allows EC2 instances to write logs into our central ELK stack via Kinesis.</li>
+					</ol>
+					<p>If additional IAM permissions are required, create custom policies and pass them in via the <code>additionalPolicies</code> prop.</p>
+					<p>If log shipping is not required, opt out by setting the <code>withoutLogShipping</code> prop to <code>true</code>.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -152,7 +169,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="constructs_iam.gurole.html">GuRole</a>.<a href="constructs_iam.gurole.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6398f5/src/constructs/iam/roles/instance-role.ts#L19">src/constructs/iam/roles/instance-role.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/61b0c66/src/constructs/iam/roles/instance-role.ts#L33">src/constructs/iam/roles/instance-role.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>

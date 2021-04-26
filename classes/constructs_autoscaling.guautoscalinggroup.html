@@ -68,6 +68,25 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Construct which creates an Auto Scaling group.</p>
+					</div>
+					<p>By default, all EC2 instances in this group will use <a href="constructs_iam.guinstancerole.html"><code>GuInstanceRole</code></a>,
+					which provides common permissions (e.g. the ability to download an artifact and write logs to the account&#39;s logging Kinesis stream).</p>
+					<p>If additional IAM permissions are required, a custom role can be provided via the <code>role</code> prop.
+						You may wish to instantiate <a href="constructs_iam.guinstancerole.html"><code>GuInstanceRole</code></a> yourself as a basis for this custom role, as it allows custom permissions
+					to be passed in.</p>
+					<p>All EC2 instances in this group will be automatically associated with two security groups:</p>
+					<ol>
+						<li><a href="constructs_ec2.guhttpsegresssecuritygroup.html"><code>GuHttpsEgressSecurityGroup</code></a>, which allows outbound traffic over HTTPS.</li>
+						<li><a href="constructs_ec2.guwazuhaccess.html"><code>GuWazuhAccess</code></a>, which allows instances to communicate with Wazuh (for security monitoring).</li>
+					</ol>
+					<p>If additional ingress or egress rules are required, define custom security groups and pass them in via the
+					<code>additionalSecurityGroups</code> prop.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -167,7 +186,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides GuStatefulMigratableConstruct(AutoScalingGroup).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6398f5/src/constructs/autoscaling/asg.ts#L83">src/constructs/autoscaling/asg.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/61b0c66/src/constructs/autoscaling/asg.ts#L100">src/constructs/autoscaling/asg.ts:100</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -507,7 +526,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6398f5/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/61b0c66/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
