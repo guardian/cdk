@@ -17,6 +17,29 @@ interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthChec
   healthCheck?: Partial<HealthCheck>;
 }
 
+/**
+ * **IMPORTANT**: This construct should **only** be used if you are migrating an existing stack and you need to retain the load balancer.
+ * Please use [[`GuApplicationLoadBalancer`]] instead of [[`GuClassicLoadBalancer`]] wherever possible.
+ *
+ * In order to inherit an existing load balancer, the `migratedFromCloudFormation` prop on your stack must be set to `true`.
+ * You must also pass the logical id from your CloudFormation template to this construct via the `existingLogicalId` prop.
+ *
+ * By default, load balancers created via this construct will perform a healthcheck against `/healthcheck` on port 9000. All healthcheck
+ * defaults can be overridden via the `healthcheck` prop.
+ *
+ * For example, to use `/test` for the healthcheck path use:
+ *
+ * ```typescript
+ * new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+ *     // other props
+ *     healthCheck: {
+ *       path: "/test",
+ *     },
+ *   });
+ * ```
+ * If you are running an application which only accepts traffic over HTTPs, consider using [[`GuHttpsClassicLoadBalancer`]]
+ * to reduce the amount of boilerplate needed when configuring your load balancer.
+ */
 export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(LoadBalancer) {
   static DefaultHealthCheck = {
     port: 9000,
@@ -48,6 +71,34 @@ interface GuHttpsClassicLoadBalancerProps extends Omit<GuClassicLoadBalancerProp
   listener?: Partial<LoadBalancerListener>;
 }
 
+/**
+ * **IMPORTANT**: This construct should **only** be used if you are migrating an existing stack and you need to retain the load balancer.
+ * Please use [[`GuHttpsApplicationListener`]] instead of [[`GuHttpsClassicLoadBalancer`]] wherever possible.
+ *
+ * This construct creates a classic load balancer which accepts HTTPS traffic. It communicates with EC2 instances over port 9000
+ * by default. This default can be overridden via the listener prop, for example:
+ * ```typescript
+ * new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+ *     // other props
+ *     listener: {
+ *       internalPort: 3000,
+ *     },
+ *   });
+ * ```
+ *
+ * You can pass a certificate id to this construct via the listener interface, for example:
+ * ```typescript
+ * new GuHttpsClassicLoadBalancer(stack, "HttpsClassicLoadBalancer", {
+ *     // other props
+ *     listener: {
+ *       sslCertificateId: "certificateId",
+ *     },
+ *   });
+ * ```
+ * If certificate id is omitted the library will create a Parameter which allows you to pass in a certificate ARN.
+ *
+ * For more details on migrating an existing load balancer and general load balancer defaults, see [[`GuClassicLoadBalancer`]].
+ */
 export class GuHttpsClassicLoadBalancer extends GuClassicLoadBalancer {
   static DefaultListener: LoadBalancerListener = {
     internalPort: 9000,
