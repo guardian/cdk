@@ -84,7 +84,7 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
  * Construct which creates an Auto Scaling group.
  *
  * By default, all EC2 instances in this group will use [[`GuInstanceRole`]],
- * which provides common permissions (e.g. the ability to download an artifact and write logs to our central ELK stack).
+ * which provides common permissions (e.g. the ability to download an artifact and write logs to the account's logging Kinesis stream).
  *
  * If additional IAM permissions are required, a custom role can be provided via the `role` prop.
  * You may wish to instantiate [[`GuInstanceRole`]] yourself as a basis for this custom role, as it allows custom permissions
