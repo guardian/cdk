@@ -1,9 +1,8 @@
 import type { ApplicationListenerProps } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { RegexPattern } from "../../../constants";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
+import type { GuCertificate } from "../../acm";
 import type { GuStack } from "../../core";
-import { GuCertificateArnParameter } from "../../core";
 import { AppIdentity } from "../../core/identity";
 import type { GuMigratingResource } from "../../core/migrating";
 import type { GuApplicationTargetGroup } from "./application-target-group";
@@ -31,19 +30,12 @@ export interface GuHttpsApplicationListenerProps
   extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">,
     AppIdentity {
   targetGroup: GuApplicationTargetGroup;
-  certificate?: string;
+  certificate: GuCertificate;
 }
 
 export class GuHttpsApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
     const { app, certificate, targetGroup } = props;
-
-    if (certificate) {
-      const isValid = new RegExp(RegexPattern.ACM_ARN).test(certificate);
-      if (!isValid) {
-        throw new Error(`${certificate} is not a valid ACM ARN`);
-      }
-    }
 
     const mergedProps: GuApplicationListenerProps = {
       port: 443,
@@ -51,7 +43,7 @@ export class GuHttpsApplicationListener extends ApplicationListener {
       ...props,
       certificates: [
         {
-          certificateArn: certificate ?? new GuCertificateArnParameter(scope, props).valueAsString,
+          certificateArn: certificate.certificateArn,
         },
       ],
       defaultAction: ListenerAction.forward([targetGroup]),
