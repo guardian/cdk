@@ -86,6 +86,9 @@ export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
   }
 }
 
+/**
+ * Creates a security group which allows all outbound HTTPS traffic.
+ */
 // TODO should this be a singleton?
 export class GuHttpsEgressSecurityGroup extends GuSecurityGroup {
   constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {

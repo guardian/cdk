@@ -12,10 +12,24 @@ import {
 import { GuRole } from "./roles";
 
 interface GuInstanceRoleProps extends AppIdentity {
-  withoutLogShipping?: boolean; // optional to have log shipping added by default, you have to opt out
+  withoutLogShipping?: boolean;
   additionalPolicies?: GuPolicy[];
 }
 
+/**
+ * Creates an IAM role with common policies that are needed by most Guardian applications.
+ *
+ * More specifically:
+ * 1. Allows for `ssh` access to an EC2 instance via [ssm-scala](https://github.com/guardian/ssm-scala) (instead of standard `ssh`).
+ * 2. Allows EC2 instances to communicate with Wazuh, for security monitoring.
+ * 3. Allows EC2 instances to download an artifact from AWS S3, for application deployment.
+ * 4. Allows EC2 instances to download private configuration from AWS Parameter Store.
+ * 5. Allows EC2 instances to write logs into our central ELK stack via Kinesis.
+ *
+ * If additional IAM permissions are required, create custom policies and pass them in via the `additionalPolicies` prop.
+ *
+ * If log shipping is not required, opt out by setting the `withoutLogShipping` prop to `true`.
+ */
 export class GuInstanceRole extends GuRole {
   constructor(scope: GuStack, props: GuInstanceRoleProps) {
     super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
