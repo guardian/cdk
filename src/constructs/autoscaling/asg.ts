@@ -80,6 +80,23 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
   };
 }
 
+/**
+ * Construct which creates an Auto Scaling group.
+ *
+ * By default, all EC2 instances in this group will use [[`GuInstanceRole`]],
+ * which provides common permissions (e.g. the ability to download an artifact and write logs to our central ELK stack).
+ *
+ * If additional IAM permissions are required, a custom role can be provided via the `role` prop.
+ * You may wish to instantiate [[`GuInstanceRole`]] yourself as a basis for this custom role, as it allows custom permissions
+ * to be passed in.
+ *
+ * All EC2 instances in this group will be automatically associated with two security groups:
+ * 1. [[`GuHttpsEgressSecurityGroup`]], which allows outbound traffic over HTTPS.
+ * 2. [[`GuWazuhAccess`]], which allows instances to communicate with Wazuh (for security monitoring).
+ *
+ * If additional ingress or egress rules are required, define custom security groups and pass them in via the
+ * `additionalSecurityGroups` prop.
+ */
 export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalingGroup) {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
