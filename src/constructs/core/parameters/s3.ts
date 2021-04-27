@@ -1,6 +1,10 @@
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
 
+/**
+ * Creates a CloudFormation parameter which references the bucket used to store code artifacts.
+ * By default, the bucket name is stored in an SSM Parameter called `/account/services/artifact.bucket`.
+ */
 export class GuDistributionBucketParameter extends GuStringParameter {
   private static instance: GuDistributionBucketParameter | undefined;
 
