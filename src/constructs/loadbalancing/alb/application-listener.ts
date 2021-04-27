@@ -9,6 +9,20 @@ import type { GuApplicationTargetGroup } from "./application-target-group";
 
 export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity, GuMigratingResource {}
 
+/**
+ * Construct which creates a Listener.
+ *
+ * This construct should be used in conjunction with [[`GuApplicationLoadBalancer`]] and [[`GuApplicationTargetGroup`]]
+ * to route traffic to your application. For more details on these three components, see the
+ * [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components).
+ *
+ * In order to inherit an existing Listener, the `migratedFromCloudFormation` prop on your stack must
+ * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
+ * `existingLogicalId` prop.
+ *
+ * If you are running an application which only accepts traffic over HTTPS, consider using [[`GuHttpsApplicationListener`]]
+ * to reduce the amount of boilerplate needed when configuring your Listener.
+ */
 export class GuApplicationListener extends GuStatefulMigratableConstruct(ApplicationListener) {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     const { app } = props;
@@ -33,6 +47,13 @@ export interface GuHttpsApplicationListenerProps
   certificate: GuCertificate;
 }
 
+/**
+ * Construct which creates a Listener which accepts HTTPS traffic.
+ *
+ * You must pass a [[`GuCertificate`]] to this Listener via the `certificate` prop.
+ *
+ * For general details about Listeners, see [[`GuApplicationListener`]].
+ */
 export class GuHttpsApplicationListener extends ApplicationListener {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
     const { app, certificate, targetGroup } = props;

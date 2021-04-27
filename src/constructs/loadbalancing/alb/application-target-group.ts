@@ -8,6 +8,31 @@ import type { GuMigratingResource } from "../../core/migrating";
 
 export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity, GuMigratingResource {}
 
+/**
+ * Construct which creates a Target Group.
+ *
+ * This construct should be used in conjunction with [[`GuApplicationLoadBalancer`]] and [[`GuApplicationListener`]]
+ * to route traffic to your application. For more details on these three components, see the
+ * [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components).
+ *
+ * In order to inherit an existing Target Group, the `migratedFromCloudFormation` prop on your stack must
+ * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
+ * `existingLogicalId` prop.
+ *
+ * By default, Target Groups created via this construct will perform a healthcheck against `/healthcheck` on your application's
+ * traffic port (as specified via the `port` prop). All healthcheck defaults can be overridden via the `healthcheck` prop.
+ *
+ * For example, to use `/test` for the healthcheck path use:
+ *
+ * ```typescript
+ * new GuApplicationTargetGroup(stack, "TargetGroup", {
+ *     // other props
+ *     healthCheck: {
+ *       path: "/test",
+ *     },
+ *   });
+ * ```
+ */
 export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(ApplicationTargetGroup) {
   static DefaultHealthCheck = {
     path: "/healthcheck",
