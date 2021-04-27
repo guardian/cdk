@@ -68,6 +68,21 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Construct which creates a Lambda function.</p>
+					</div>
+					<p>This lambda relies on the code artifact residing in a standard location in S3. For more details on the bucket used,
+					see <a href="constructs_core.gudistributionbucketparameter.html"><code>GuDistributionBucketParameter</code></a>. By default, the path used will be <code>stack/stage/app/fileName</code>.</p>
+					<p>The default memory size of this Lambda will vary depending on the runtime chosen.
+						For Java runtimes (i.e. resource hungry Scala Lambdas!), 1024MB will be used. For all other runtimes,
+					the memory size defaults to 512MB. This can be overridden via the <code>memorySize</code> prop.</p>
+					<p>By default, the timeout for this lambda is 30 seconds. This can be overridden via the <code>timeout</code> prop.</p>
+					<p>Note that this construct creates a Lambda without a trigger/event source. Depending on your use-case, you may wish to
+					consider using a pattern which instantiates a Lambda with a trigger e.g. <a href="index.guscheduledlambda.html"><code>GuScheduledLambda</code></a>.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -192,7 +207,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Function.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/8a8a6d5/src/constructs/lambda/lambda.ts#L29">src/constructs/lambda/lambda.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/314af33/src/constructs/lambda/lambda.ts#L44">src/constructs/lambda/lambda.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
