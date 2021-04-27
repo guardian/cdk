@@ -4,6 +4,9 @@
 ## Does this change require changes to existing projects or CDK CLI?
 <!-- Consider whether this is something that will mean changes to projects that have already been migrated or to the CDK CLI tool. If changes are required, consider adding a checklist here and/or linking to related PRs --->
 
+## Does this change require changes to the library documentation?
+<!-- If you are adding a new construct or pattern, has new documentation been added? If you are amending defaults or changing behaviour, are the existing docs still valid? --->
+
 ## How to test
 <!-- Provide instructions to help others verify the change. This could take the form of "On PROD, do X and witness Y. On this branch, do X and witness Z. " -->
 
