@@ -9,17 +9,39 @@ import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
-import { GuVpc, SubnetType } from "../constructs/ec2";
+import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
+import { transformToSecurityGroupAccessRule } from "../utils/security-groups";
+
+const PUBLIC = "PUBLIC" as const;
+const INTERNAL = "INTERNAL" as const;
+const RESTRICTED = "RESTRICTED" as const;
+
+interface Access {
+  type: string;
+}
+
+interface PublicAccess extends Access {
+  type: typeof PUBLIC;
+}
+interface InternalAccess extends Access {
+  type: typeof INTERNAL;
+}
+interface RestrictedAccess extends Access {
+  type: typeof RESTRICTED;
+  cidrRanges: string[];
+}
+
+type AppAccess = PublicAccess | InternalAccess | RestrictedAccess;
 
 interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
-  publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
+  access: AppAccess;
   applicationPort: number;
   certificateProps: GuCertificateProps;
   monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
@@ -56,6 +78,7 @@ export class GuEc2App {
     AppIdentity.taggedConstruct(props, scope);
 
     const { app } = props;
+    const internetFacing = props.access.type !== INTERNAL;
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"), { app });
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
 
@@ -88,9 +111,17 @@ export class GuEc2App {
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
       vpc,
+      internetFacing,
       vpcSubnets: {
-        subnets: props.publicFacing ? GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC }) : privateSubnets,
+        subnets: internetFacing ? GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC }) : privateSubnets,
       },
+      ...(props.access.type === "RESTRICTED" && {
+        securityGroup: new GuSecurityGroup(scope, AppIdentity.suffixText({ app }, "SecurityGroup"), {
+          app,
+          vpc,
+          ingresses: transformToSecurityGroupAccessRule(Object.entries(props.access.cidrRanges), 443),
+        }),
+      }),
     });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {

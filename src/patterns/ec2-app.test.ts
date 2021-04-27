@@ -16,7 +16,7 @@ describe("the GuEC2App pattern", function () {
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
-      publicFacing: false,
+      access: { type: "RESTRICTED", cidrRanges: ["192.168.1.1/32", "8.8.8.8/32"] },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
@@ -39,7 +39,7 @@ describe("the GuEC2App pattern", function () {
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: app,
-      publicFacing: false,
+      access: { type: "PUBLIC" },
       certificateProps: {
         [Stage.CODE]: {
           domainName: "code-guardian.com",
@@ -107,7 +107,7 @@ describe("the GuEC2App pattern", function () {
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: app,
-      publicFacing: false,
+      access: { type: "PUBLIC" },
       certificateProps: {
         [Stage.CODE]: {
           domainName: "code-guardian.com",
@@ -125,6 +125,32 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); //The shape of the alarm is tested at construct level
+  });
+
+  it("requires IP addresses to whitelist if set as a restricted access application", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: app,
+      access: { type: "RESTRICTED", cidrRanges: ["192.168.1.1/32", "8.8.8.8/32"] },
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "code-guardian.com",
+          hostedZoneId: "id123",
+        },
+        [Stage.PROD]: {
+          domainName: "prod-guardian.com",
+          hostedZoneId: "id124",
+        },
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+    });
+
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      SecurityGroup: {},
+    });
   });
 
   it("sub-constructs can be accessed and modified after declaring the pattern", function () {
@@ -211,7 +237,7 @@ describe("the GuEC2App pattern", function () {
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: "NodeApp",
-      publicFacing: false,
+      access: { type: "PUBLIC" },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
@@ -229,7 +255,7 @@ describe("the GuEC2App pattern", function () {
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Play,
       app: "PlayApp",
-      publicFacing: false,
+      access: { type: "PUBLIC" },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
@@ -270,7 +296,7 @@ describe("the GuEC2App pattern", function () {
       const stack = simpleGuStackForTesting();
       new GuNodeApp(stack, {
         app: "NodeApp",
-        publicFacing: false,
+        access: { type: "PUBLIC" },
         monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
         certificateProps: {
@@ -296,7 +322,7 @@ describe("the GuEC2App pattern", function () {
       const stack = simpleGuStackForTesting();
       new GuPlayApp(stack, {
         app: "PlayApp",
-        publicFacing: false,
+        access: { type: "INTERNAL" },
         monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
         certificateProps: {
