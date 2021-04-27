@@ -68,6 +68,33 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p><strong>IMPORTANT</strong>: This construct should <strong>only</strong> be used if you are migrating an existing stack and you need to retain the load balancer.
+						Please use <a href="constructs_loadbalancing.guhttpsapplicationlistener.html"><code>GuHttpsApplicationListener</code></a> instead of <a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html"><code>GuHttpsClassicLoadBalancer</code></a> wherever possible.</p>
+					</div>
+					<p>This construct creates a classic load balancer which accepts HTTPS traffic. It communicates with EC2 instances over port 9000
+					by default. This default can be overridden via the listener prop, for example:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuHttpsClassicLoadBalancer</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;HttpsClassicLoadBalancer&quot;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// other props</span>
+<span style="color: #000000">    </span><span style="color: #001080">listener:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">internalPort:</span><span style="color: #000000"> </span><span style="color: #098658">3000</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  });</span>
+</code></pre>
+					<p>You can pass a certificate id to this construct via the listener interface, for example:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuHttpsClassicLoadBalancer</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;HttpsClassicLoadBalancer&quot;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// other props</span>
+<span style="color: #000000">    </span><span style="color: #001080">listener:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">sslCertificateId:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;certificateId&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  });</span>
+</code></pre>
+					<p>If certificate id is omitted the library will create a Parameter which allows you to pass in a certificate ARN.</p>
+					<p>For more details on migrating an existing load balancer and general load balancer defaults, see <a href="constructs_loadbalancing.guclassicloadbalancer.html"><code>GuClassicLoadBalancer</code></a>.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -153,7 +180,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="constructs_loadbalancing.guclassicloadbalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.guclassicloadbalancer.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/constructs/loadbalancing/elb.ts#L57">src/constructs/loadbalancing/elb.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/constructs/loadbalancing/elb.ts#L108">src/constructs/loadbalancing/elb.ts:108</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -320,7 +347,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="constructs_loadbalancing.guclassicloadbalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.guclassicloadbalancer.html#defaulthealthcheck">DefaultHealthCheck</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/constructs/loadbalancing/elb.ts#L21">src/constructs/loadbalancing/elb.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/constructs/loadbalancing/elb.ts#L44">src/constructs/loadbalancing/elb.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -356,7 +383,7 @@
 					<div class="tsd-signature tsd-kind-icon">Default<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">LoadBalancerListener</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/constructs/loadbalancing/elb.ts#L52">src/constructs/loadbalancing/elb.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/constructs/loadbalancing/elb.ts#L103">src/constructs/loadbalancing/elb.ts:103</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -373,7 +400,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>

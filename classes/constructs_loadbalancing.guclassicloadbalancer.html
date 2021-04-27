@@ -68,6 +68,28 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p><strong>IMPORTANT</strong>: This construct should <strong>only</strong> be used if you are migrating an existing stack and you need to retain the load balancer.
+						Please use <a href="constructs_loadbalancing.guapplicationloadbalancer.html"><code>GuApplicationLoadBalancer</code></a> instead of <a href="constructs_loadbalancing.guclassicloadbalancer.html"><code>GuClassicLoadBalancer</code></a> wherever possible.</p>
+					</div>
+					<p>In order to inherit an existing load balancer, the <code>migratedFromCloudFormation</code> prop on your stack must be set to <code>true</code>.
+					You must also pass the logical id from your CloudFormation template to this construct via the <code>existingLogicalId</code> prop.</p>
+					<p>By default, load balancers created via this construct will perform a healthcheck against <code>/healthcheck</code> on port 9000. All healthcheck
+					defaults can be overridden via the <code>healthcheck</code> prop.</p>
+					<p>For example, to use <code>/test</code> for the healthcheck path use:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuClassicLoadBalancer</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;ClassicLoadBalancer&quot;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// other props</span>
+<span style="color: #000000">    </span><span style="color: #001080">healthCheck:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">path:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;/test&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  });</span>
+</code></pre>
+					<p>If you are running an application which only accepts traffic over HTTPs, consider using <a href="constructs_loadbalancing.guhttpsclassicloadbalancer.html"><code>GuHttpsClassicLoadBalancer</code></a>
+					to reduce the amount of boilerplate needed when configuring your load balancer.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -157,7 +179,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides GuStatefulMigratableConstruct(LoadBalancer).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/constructs/loadbalancing/elb.ts#L29">src/constructs/loadbalancing/elb.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/constructs/loadbalancing/elb.ts#L52">src/constructs/loadbalancing/elb.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -323,7 +345,7 @@
 					<div class="tsd-signature tsd-kind-icon">Default<wbr>Health<wbr>Check<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>healthyThreshold<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>protocol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancingProtocol</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">; </span>unhealthyThreshold<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/constructs/loadbalancing/elb.ts#L21">src/constructs/loadbalancing/elb.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/constructs/loadbalancing/elb.ts#L44">src/constructs/loadbalancing/elb.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -366,7 +388,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/ae0d494/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/976636d/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
