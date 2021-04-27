@@ -10,25 +10,27 @@ import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
+const getCertificateProps = () => ({
+  [Stage.CODE]: {
+    domainName: "code-guardian.com",
+    hostedZoneId: "id123",
+  },
+  [Stage.PROD]: {
+    domainName: "prod-guardian.com",
+    hostedZoneId: "id124",
+  },
+});
+
 describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
-      access: { type: "RESTRICTED", cidrRanges: ["192.168.1.1/32", "8.8.8.8/32"] },
+      access: { type: "PUBLIC" },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
-      },
+      certificateProps: getCertificateProps(),
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
@@ -40,16 +42,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       access: { type: "PUBLIC" },
-      certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
-      },
+      certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: {
         distributable: {
@@ -108,16 +101,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       access: { type: "PUBLIC" },
-      certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
-      },
+      certificateProps: getCertificateProps(),
       monitoringConfiguration: {
         tolerated5xxPercentage: 5,
         snsTopicName: "test-topic",
@@ -127,29 +111,60 @@ describe("the GuEC2App pattern", function () {
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); //The shape of the alarm is tested at construct level
   });
 
-  it("requires IP addresses to whitelist if set as a restricted access application", function () {
+  it("creates the appropriate ingress rules for a restricted access application", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       access: { type: "RESTRICTED", cidrRanges: ["192.168.1.1/32", "8.8.8.8/32"] },
-      certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
-      },
+      certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
-      SecurityGroup: {},
+    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+      SecurityGroupIngress: [
+        {
+          CidrIp: "192.168.1.1/32",
+          Description: "0",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+        {
+          CidrIp: "8.8.8.8/32",
+          Description: "1",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+      ],
+    });
+  });
+
+  it("allows all connections if set to public", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: app,
+      access: { type: "PUBLIC" },
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+    });
+
+    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+      SecurityGroupIngress: [
+        {
+          CidrIp: "0.0.0.0/0",
+          Description: "Allow from anyone on port 443",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+      ],
     });
   });
 
@@ -240,16 +255,7 @@ describe("the GuEC2App pattern", function () {
       access: { type: "PUBLIC" },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
-      },
+      certificateProps: getCertificateProps(),
     });
 
     new GuEc2App(stack, {
@@ -258,16 +264,7 @@ describe("the GuEC2App pattern", function () {
       access: { type: "PUBLIC" },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
-      },
+      certificateProps: getCertificateProps(),
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {

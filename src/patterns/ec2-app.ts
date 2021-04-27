@@ -19,25 +19,31 @@ import {
 import { transformToSecurityGroupAccessRule } from "../utils/security-groups";
 
 const PUBLIC = "PUBLIC" as const;
-const INTERNAL = "INTERNAL" as const;
 const RESTRICTED = "RESTRICTED" as const;
 
 interface Access {
   type: string;
 }
 
+/*
+ * For when you want your application to be accessible to the world.
+ * Your application load balancer will have a public IP address that can be reached by anyone,
+ * so only use if you are aware and happy with the consequences!
+ * */
 interface PublicAccess extends Access {
   type: typeof PUBLIC;
 }
-interface InternalAccess extends Access {
-  type: typeof INTERNAL;
-}
+
+/*
+ * For when you want to restrict your application's access to a list of CIDR ranges.
+ *
+ * */
 interface RestrictedAccess extends Access {
   type: typeof RESTRICTED;
   cidrRanges: string[];
 }
 
-type AppAccess = PublicAccess | InternalAccess | RestrictedAccess;
+type AppAccess = PublicAccess | RestrictedAccess;
 
 interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
@@ -78,7 +84,6 @@ export class GuEc2App {
     AppIdentity.taggedConstruct(props, scope);
 
     const { app } = props;
-    const internetFacing = props.access.type !== INTERNAL;
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"), { app });
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
 
@@ -111,11 +116,9 @@ export class GuEc2App {
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
       vpc,
-      internetFacing,
-      vpcSubnets: {
-        subnets: internetFacing ? GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC }) : privateSubnets,
-      },
-      ...(props.access.type === "RESTRICTED" && {
+      internetFacing: true,
+      vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
+      ...(props.access.type === RESTRICTED && {
         securityGroup: new GuSecurityGroup(scope, AppIdentity.suffixText({ app }, "SecurityGroup"), {
           app,
           vpc,
@@ -134,6 +137,7 @@ export class GuEc2App {
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
+      open: props.access.type === PUBLIC, // this is true as default, which adds an ingress rule to allow all inbound traffic
       loadBalancer: loadBalancer,
       certificate: certificate,
       targetGroup: targetGroup,
