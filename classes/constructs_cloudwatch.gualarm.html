@@ -68,6 +68,17 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Creates a CloudWatch alarm which sends notifications to the specified SNS topic.</p>
+					</div>
+					<p>By default, alarm notifications will be silenced in the <code>CODE</code> environment. In order to override this behaviour
+					(e.g. for testing purposes whilst configuring a new alarm), set the <code>actionsEnabledInCode</code> prop to <code>true</code>.</p>
+					<p>This library provides an implementation of some commonly used alarms, which require less boilerplate than this construct,
+					for example <a href="constructs_cloudwatch.gu5xxpercentagealarm.html"><code>Gu5xxPercentageAlarm</code></a>. Prefer using these more specific implementations where possible.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -155,7 +166,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Alarm.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/aabaa86/src/constructs/cloudwatch/alarm.ts#L14">src/constructs/cloudwatch/alarm.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7cad7e2/src/constructs/cloudwatch/alarm.ts#L23">src/constructs/cloudwatch/alarm.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
