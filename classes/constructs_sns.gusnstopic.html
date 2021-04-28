@@ -68,6 +68,22 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Construct which creates an SNS Topic.</p>
+					</div>
+					<p>To inherit an SNS topic which has already been created via a CloudFormation stack, the <code>migratedFromCloudFormation</code>
+					prop on your stack must be set to <code>true</code>. You should also pass in the logical id via the <code>existingLogicalId</code> prop.</p>
+					<p>For example, when migrating a CloudFormation stack which includes the following resource:</p>
+					<pre><code class="language-yaml"><span style="color: #800000">MyCloudFormedSnsTopic</span><span style="color: #000000">:</span>
+<span style="color: #000000">  </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::SNS::Topic</span>
+</code></pre>
+					<p>Inherit the SNS topic (rather than creating a new one) using:</p>
+					<pre><code class="language-typescript"><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuSnsTopic</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;SnsTopic&quot;</span><span style="color: #000000">, { </span><span style="color: #001080">existingLogicalId:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;MyCloudFormedSnsTopic&quot;</span><span style="color: #000000"> });</span>
+</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -158,7 +174,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides GuStatefulMigratableConstruct(Topic).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7cad7e2/src/constructs/sns/sns-topic.ts#L9">src/constructs/sns/sns-topic.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/cd3bb7b/src/constructs/sns/sns-topic.ts#L25">src/constructs/sns/sns-topic.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -353,7 +369,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/7cad7e2/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/cd3bb7b/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
