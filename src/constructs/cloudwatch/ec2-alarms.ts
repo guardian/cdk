@@ -7,10 +7,6 @@ import type { GuApplicationLoadBalancer } from "../loadbalancing";
 import type { GuAlarmProps } from "./alarm";
 import { GuAlarm } from "./alarm";
 
-/**
- * Creates an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
- * the specified threshold.
- */
 export interface Gu5xxPercentageMonitoringProps
   extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"> {
   tolerated5xxPercentage: number;
@@ -22,6 +18,10 @@ interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppId
   loadBalancer: GuApplicationLoadBalancer;
 }
 
+/**
+ * Creates an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
+ * the specified threshold.
+ */
 export class Gu5xxPercentageAlarm extends GuAlarm {
   constructor(scope: GuStack, id: string, props: GuLoadBalancerAlarmProps) {
     const mathExpression = new MathExpression({
