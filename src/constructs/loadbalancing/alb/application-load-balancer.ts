@@ -1,5 +1,6 @@
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { ApplicationLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { CfnOutput } from "@aws-cdk/core";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
@@ -22,11 +23,19 @@ export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(App
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
     const { app } = props;
 
-    super(scope, AppIdentity.suffixText({ app }, id), { deletionProtection: true, ...props });
+    const idWithApp = AppIdentity.suffixText({ app }, id);
+
+    super(scope, idWithApp, { deletionProtection: true, ...props });
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
     cfnLb.addPropertyDeletionOverride("Type");
 
     AppIdentity.taggedConstruct({ app }, this);
+
+    new CfnOutput(this, `${idWithApp}-dnsName`, {
+      exportName: `${idWithApp}DnsName`,
+      description: `DNS entry for ${idWithApp}`,
+      value: this.loadBalancerDnsName,
+    });
   }
 }
