@@ -5,9 +5,6 @@ import type { GuLambdaFunction } from "../lambda";
 import type { GuAlarmProps } from "./alarm";
 import { GuAlarm } from "./alarm";
 
-/**
- * Creates an alarm which is triggered whenever the error percentage specified is exceeded.
- */
 export interface GuLambdaErrorPercentageMonitoringProps
   extends Omit<GuAlarmProps, "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData"> {
   toleratedErrorPercentage: number;
@@ -19,6 +16,9 @@ interface GuLambdaAlarmProps extends GuLambdaErrorPercentageMonitoringProps {
   lambda: GuLambdaFunction;
 }
 
+/**
+ * Creates an alarm which is triggered whenever the error percentage specified is exceeded.
+ */
 export class GuLambdaErrorPercentageAlarm extends GuAlarm {
   constructor(scope: GuStack, id: string, props: GuLambdaAlarmProps) {
     const mathExpression = new MathExpression({
