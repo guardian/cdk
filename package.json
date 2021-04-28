@@ -1,6 +1,6 @@
 {
   "name": "@guardian/cdk",
-  "version": "13.1.0",
+  "version": "14.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
