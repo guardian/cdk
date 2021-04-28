@@ -1,12 +1,11 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { RegexPattern } from "../../../constants";
-import type { SynthedStack } from "../../../utils/test";
+import { Stage } from "../../../constants";
 import { simpleGuStackForTesting } from "../../../utils/test";
+import { GuCertificate } from "../../acm";
 import type { GuStack } from "../../core";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationListener, GuHttpsApplicationListener } from "./application-listener";
@@ -23,6 +22,18 @@ const app: AppIdentity = { app: "testing" };
 
 const getLoadBalancer = (stack: GuStack): GuApplicationLoadBalancer => {
   return new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, ...app });
+};
+
+const getCertificate = (stack: GuStack): GuCertificate => {
+  return new GuCertificate(stack, {
+    ...app,
+    [Stage.CODE]: {
+      domainName: "code-guardian.com",
+    },
+    [Stage.PROD]: {
+      domainName: "prod-guardian.com",
+    },
+  });
 };
 
 const getAppTargetGroup = (stack: GuStack): GuApplicationTargetGroup => {
@@ -132,6 +143,7 @@ describe("The GuHttpsApplicationListener class", () => {
 
     new GuHttpsApplicationListener(stack, "HttpsApplicationListener", {
       ...app,
+      certificate: getCertificate(stack),
       loadBalancer: getLoadBalancer(stack),
       targetGroup: getAppTargetGroup(stack),
     });
@@ -146,6 +158,7 @@ describe("The GuHttpsApplicationListener class", () => {
     const stack = simpleGuStackForTesting();
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      certificate: getCertificate(stack),
       loadBalancer: getLoadBalancer(stack),
       targetGroup: getAppTargetGroup(stack),
       ...app,
@@ -165,67 +178,21 @@ describe("The GuHttpsApplicationListener class", () => {
     });
   });
 
-  test("creates certificate prop if no value passed in", () => {
+  test("wires up the certificate which is passed in correctly", () => {
     const stack = simpleGuStackForTesting();
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      certificate: getCertificate(stack),
       loadBalancer: getLoadBalancer(stack),
       targetGroup: getAppTargetGroup(stack),
       ...app,
     });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.TLSCertificateTesting).toEqual({
-      Type: "String",
-      AllowedPattern: RegexPattern.ACM_ARN,
-      ConstraintDescription: "Must be an ACM ARN resource",
-      Description: "The ARN of an ACM certificate for use on a load balancer",
-    });
-
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
       Certificates: [
         {
           CertificateArn: {
-            Ref: "TLSCertificateTesting",
+            Ref: "CertificateTesting28FCAC6D",
           },
-        },
-      ],
-    });
-  });
-
-  test("passing in an invalid ACM ARN", () => {
-    const stack = simpleGuStackForTesting();
-
-    expect(
-      () =>
-        new GuHttpsApplicationListener(stack, "ApplicationListener", {
-          loadBalancer: getLoadBalancer(stack),
-          targetGroup: getAppTargetGroup(stack),
-          certificate: "test",
-          ...app,
-        })
-    ).toThrowError(new Error("test is not a valid ACM ARN"));
-  });
-
-  test("does not create certificate prop if a value passed in", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      loadBalancer: getLoadBalancer(stack),
-      targetGroup: getAppTargetGroup(stack),
-      certificate: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
-      ...app,
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Parameters)).not.toContain("CertificateARN");
-
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
-      Certificates: [
-        {
-          CertificateArn: "arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc",
         },
       ],
     });

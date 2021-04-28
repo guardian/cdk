@@ -1,5 +1,5 @@
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
-import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
 import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
@@ -12,9 +12,9 @@ import { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
-  GuApplicationListener,
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
+  GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
 
 interface GuEc2AppProps extends AppIdentity {
@@ -87,11 +87,11 @@ export class GuEc2App {
       port: props.applicationPort,
     });
 
-    new GuApplicationListener(scope, "Listener", {
+    new GuHttpsApplicationListener(scope, "Listener", {
       app,
       loadBalancer: loadBalancer,
-      defaultAction: ListenerAction.forward([targetGroup]),
-      certificates: [certificate],
+      certificate: certificate,
+      targetGroup: targetGroup,
     });
 
     if (!props.monitoringConfiguration.noMonitoring) {
