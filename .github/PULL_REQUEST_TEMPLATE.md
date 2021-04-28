@@ -9,6 +9,7 @@
 
 ## How to test
 <!-- Provide instructions to help others verify the change. This could take the form of "On PROD, do X and witness Y. On this branch, do X and witness Z. " -->
+<!-- FYI you can use https://github.com/guardian/cdk-playground to test changes before publishing to NPM. -->
 
 ## How can we measure success?
 <!-- Do you expect errors to decrease? Do you expect user journeys to be simplified? What can be used to prove this? A filtered view of logs or analytics, etc? -->
