@@ -21,6 +21,9 @@ main() {
   preamble
 
   npm ci
+
+  ./script/what-version-next
+
   npm run build
   npm run lint
   npm run test:custom-lint-rule

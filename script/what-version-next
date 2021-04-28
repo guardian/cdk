@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+const semanticRelease = require("semantic-release");
+const { WritableStreamBuffer } = require("stream-buffers");
+
+const stdoutBuffer = new WritableStreamBuffer();
+const stderrBuffer = new WritableStreamBuffer();
+
+(async () => {
+  try {
+    const result = await semanticRelease(
+      {
+        ci: false,
+        dryRun: true,
+        plugins: ["@semantic-release/commit-analyzer"],
+        repositoryUrl: "https://github.com/guardian/cdk.git",
+        branches: [
+          "main",
+          { name: "*", preRelease: true }
+        ],
+      },
+      {
+        stdout: stdoutBuffer,
+        stderr: stderrBuffer,
+      }
+    );
+
+    if (result) {
+      console.log(JSON.stringify(result, null, 2));
+      const { lastRelease, commits, nextRelease, releases } = result;
+
+      console.log(
+        `Published ${nextRelease.type} release version ${nextRelease.version} containing ${commits.length} commits.`
+      );
+
+      if (lastRelease.version) {
+        console.log(`The last release was "${lastRelease.version}".`);
+      }
+
+      for (const release of releases) {
+        console.log(`The release was published with plugin "${release.pluginName}".`);
+      }
+    } else {
+      const logs = stdoutBuffer.getContentsAsString("utf8");
+      console.log(logs);
+
+      const errors = stderrBuffer.getContentsAsString("utf8");
+      console.log(errors);
+    }
+  } catch (err) {
+    console.error("The automated release failed with %O", err);
+  }
+})();
