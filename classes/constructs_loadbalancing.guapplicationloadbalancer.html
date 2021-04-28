@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuApplicationLoadBalancer | @guardian/cdk - v13.1.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v13.1.0">
+	<title>GuApplicationLoadBalancer | @guardian/cdk - v14.0.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v14.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v13.1.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v14.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v13.1.0</a>
+					<a href="../modules.html">@guardian/cdk - v14.0.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
@@ -68,6 +68,19 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Construct which creates an Application Load Balancer.</p>
+					</div>
+					<p>This construct should be used in conjunction with <a href="constructs_loadbalancing.guapplicationlistener.html"><code>GuApplicationListener</code></a> and <a href="constructs_loadbalancing.guapplicationtargetgroup.html"><code>GuApplicationTargetGroup</code></a>
+						to route traffic to your application. For more details on these three components, see the
+					<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components">AWS documentation</a>.</p>
+					<p>In order to inherit an existing Application Load Balancer, the <code>migratedFromCloudFormation</code> prop on your stack must
+						be set to <code>true</code>. You must also pass the logical id from your CloudFormation template to this construct via the
+					<code>existingLogicalId</code> prop.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -182,7 +195,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides GuStatefulMigratableConstruct(ApplicationLoadBalancer).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/314af33/src/constructs/loadbalancing/alb/application-load-balancer.ts#L10">src/constructs/loadbalancing/alb/application-load-balancer.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/aabaa86/src/constructs/loadbalancing/alb/application-load-balancer.ts#L21">src/constructs/loadbalancing/alb/application-load-balancer.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -529,7 +542,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/314af33/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/aabaa86/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>

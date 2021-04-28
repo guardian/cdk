@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuApplicationTargetGroup | @guardian/cdk - v13.1.0</title>
-	<meta name="description" content="Documentation for @guardian/cdk - v13.1.0">
+	<title>GuApplicationTargetGroup | @guardian/cdk - v14.0.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v14.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@guardian/cdk - v13.1.0</a>
+					<a href="../index.html" class="title">@guardian/cdk - v14.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@guardian/cdk - v13.1.0</a>
+					<a href="../modules.html">@guardian/cdk - v14.0.0</a>
 				</li>
 				<li>
 					<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
@@ -68,6 +68,29 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Construct which creates a Target Group.</p>
+					</div>
+					<p>This construct should be used in conjunction with <a href="constructs_loadbalancing.guapplicationloadbalancer.html"><code>GuApplicationLoadBalancer</code></a> and <a href="constructs_loadbalancing.guapplicationlistener.html"><code>GuApplicationListener</code></a>
+						to route traffic to your application. For more details on these three components, see the
+					<a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components">AWS documentation</a>.</p>
+					<p>In order to inherit an existing Target Group, the <code>migratedFromCloudFormation</code> prop on your stack must
+						be set to <code>true</code>. You must also pass the logical id from your CloudFormation template to this construct via the
+					<code>existingLogicalId</code> prop.</p>
+					<p>By default, Target Groups created via this construct will perform a healthcheck against <code>/healthcheck</code> on your application&#39;s
+					traffic port (as specified via the <code>port</code> prop). All healthcheck defaults can be overridden via the <code>healthcheck</code> prop.</p>
+					<p>For example, to use <code>/test</code> for the healthcheck path use:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuApplicationTargetGroup</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;TargetGroup&quot;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// other props</span>
+<span style="color: #000000">    </span><span style="color: #001080">healthCheck:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">path:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;/test&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  });</span>
+</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -163,7 +186,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides GuStatefulMigratableConstruct(ApplicationTargetGroup).constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/314af33/src/constructs/loadbalancing/alb/application-target-group.ts#L19">src/constructs/loadbalancing/alb/application-target-group.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/aabaa86/src/constructs/loadbalancing/alb/application-target-group.ts#L44">src/constructs/loadbalancing/alb/application-target-group.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -398,7 +421,7 @@
 					<div class="tsd-signature tsd-kind-icon">Default<wbr>Health<wbr>Check<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>healthyThresholdCount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>protocol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Protocol</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">; </span>unhealthyThresholdCount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/314af33/src/constructs/loadbalancing/alb/application-target-group.ts#L12">src/constructs/loadbalancing/alb/application-target-group.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/aabaa86/src/constructs/loadbalancing/alb/application-target-group.ts#L37">src/constructs/loadbalancing/alb/application-target-group.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -465,7 +488,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/314af33/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/aabaa86/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
