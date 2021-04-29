@@ -19,11 +19,8 @@ Object {
     },
   },
   "Outputs": Object {
-    "LoadBalancerTestguec2appLoadBalancerTestguec2appdnsName65B04412": Object {
+    "LoadBalancerTestguec2appDnsName": Object {
       "Description": "DNS entry for LoadBalancerTestguec2app",
-      "Export": Object {
-        "Name": "LoadBalancerTestguec2appDnsName",
-      },
       "Value": Object {
         "Fn::GetAtt": Array [
           "LoadBalancerTestguec2appC77A055C",

@@ -98,7 +98,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     expect(stack).toHaveOutput({
-      exportName: "ApplicationLoadBalancerTestingDnsName",
+      outputName: "ApplicationLoadBalancerTestingDnsName",
     });
   });
 });

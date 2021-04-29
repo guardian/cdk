@@ -32,10 +32,9 @@ export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(App
 
     AppIdentity.taggedConstruct({ app }, this);
 
-    new CfnOutput(this, `${idWithApp}-dnsName`, {
-      exportName: `${idWithApp}DnsName`,
+    new CfnOutput(this, `${idWithApp}-DnsName`, {
       description: `DNS entry for ${idWithApp}`,
       value: this.loadBalancerDnsName,
-    });
+    }).overrideLogicalId(`${idWithApp}DnsName`);
   }
 }

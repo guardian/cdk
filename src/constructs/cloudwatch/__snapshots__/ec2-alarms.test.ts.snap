@@ -13,11 +13,8 @@ Object {
     },
   },
   "Outputs": Object {
-    "ApplicationLoadBalancerTestingApplicationLoadBalancerTestingdnsName79AE3FFF": Object {
+    "ApplicationLoadBalancerTestingDnsName": Object {
       "Description": "DNS entry for ApplicationLoadBalancerTesting",
-      "Export": Object {
-        "Name": "ApplicationLoadBalancerTestingDnsName",
-      },
       "Value": Object {
         "Fn::GetAtt": Array [
           "ApplicationLoadBalancerTesting172A253B",
