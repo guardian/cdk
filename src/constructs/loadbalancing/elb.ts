@@ -15,6 +15,12 @@ import type { GuMigratingResource } from "../core/migrating";
 interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource, AppIdentity {
   propertiesToOverride?: Record<string, unknown>;
   healthCheck?: Partial<HealthCheck>;
+  /**
+   * If your CloudFormation does not define the Scheme of your Load Balancer, you must set this boolean to true to avoid
+   * resource [replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-scheme).
+   * If a Load Balancer is replaced it is likely to lead to downtime.
+   */
+  removeScheme?: boolean;
 }
 
 /**
@@ -61,6 +67,10 @@ export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(LoadBal
     AppIdentity.taggedConstruct({ app: props.app }, this);
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
+
+    if (props.removeScheme) {
+      cfnLb.addPropertyDeletionOverride("Scheme");
+    }
 
     mergedProps.propertiesToOverride &&
       Object.entries(mergedProps.propertiesToOverride).forEach(([key, value]) => cfnLb.addPropertyOverride(key, value));

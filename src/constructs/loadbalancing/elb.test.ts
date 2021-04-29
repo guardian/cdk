@@ -222,4 +222,16 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       ],
     });
   });
+
+  test("Removes Scheme if user asks us to", () => {
+    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      ...app,
+      vpc,
+      removeScheme: true,
+      existingLogicalId: "ClassicLoadBalancer",
+    });
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(Object.keys(json.Resources.ClassicLoadBalancer.Properties)).not.toContain("Scheme");
+  });
 });
