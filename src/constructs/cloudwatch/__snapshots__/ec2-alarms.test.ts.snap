@@ -12,6 +12,17 @@ Object {
       },
     },
   },
+  "Outputs": Object {
+    "ApplicationLoadBalancerTestingDnsName": Object {
+      "Description": "DNS entry for ApplicationLoadBalancerTesting",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ApplicationLoadBalancerTesting172A253B",
+          "DNSName",
+        ],
+      },
+    },
+  },
   "Parameters": Object {
     "Stage": Object {
       "AllowedValues": Array [

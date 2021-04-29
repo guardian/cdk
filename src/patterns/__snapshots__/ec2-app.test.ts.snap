@@ -18,6 +18,17 @@ Object {
       },
     },
   },
+  "Outputs": Object {
+    "LoadBalancerTestguec2appDnsName": Object {
+      "Description": "DNS entry for LoadBalancerTestguec2app",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "LoadBalancerTestguec2appC77A055C",
+          "DNSName",
+        ],
+      },
+    },
+  },
   "Parameters": Object {
     "AMITestguec2app": Object {
       "Description": "Amazon Machine Image ID for the app test-gu-ec2-app. Use this in conjunction with AMIgo to keep AMIs up to date.",

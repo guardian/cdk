@@ -91,4 +91,14 @@ describe("The GuApplicationLoadBalancer class", () => {
       ],
     });
   });
+
+  it("creates an cloudformation output of the dns name", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+
+    expect(stack).toHaveOutput({
+      outputName: "ApplicationLoadBalancerTestingDnsName",
+    });
+  });
 });
