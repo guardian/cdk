@@ -1,4 +1,5 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import { isSingletonPresentInStack } from "../../../utils/test";
 import type { GuStack } from "../../core";
 import { GuPolicy } from "./base-policy";
 
@@ -24,11 +25,7 @@ export class GuDescribeEC2Policy extends GuPolicy {
   }
 
   public static getInstance(stack: GuStack): GuDescribeEC2Policy {
-    // Resources can only live in the same App so return a new instance where necessary.
-    // See https://github.com/aws/aws-cdk/blob/0ea4b19afd639541e5f1d7c1783032ee480c307e/packages/%40aws-cdk/core/lib/private/refs.ts#L47-L50
-    const isSameStack = this.instance?.node.root === stack.node.root;
-
-    if (!this.instance || !isSameStack) {
+    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
       this.instance = new GuDescribeEC2Policy(stack);
     }
 
