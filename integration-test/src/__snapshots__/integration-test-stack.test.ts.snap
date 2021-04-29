@@ -3,6 +3,11 @@
 exports[`The Cdk stack matches the snapshot 1`] = `
 Object {
   "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "Stage": Object {
       "AllowedValues": Array [
         "CODE",
