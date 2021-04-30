@@ -16,7 +16,7 @@ You can read more about it in the [here][aws-cdk].
 ## Architecture
 ### Patterns
 Patterns are high level classes which compose a number of constructs to produce standard architectures.
-For example, you should be able to get all of the resources you need to deploy a new lambda function from one `GuLambdaStack` class.
+For example, you should be able to get all the resources you need to deploy a new lambda function from one `GuLambdaStack` class.
 
 We're still working on these right now but hope to start bringing you some of the most common Guardian stacks soon!
 
@@ -29,12 +29,12 @@ This library defines a number of constructs which are combined to create the hig
 
 If there is a pattern available for your use case, prefer to use that over composing constructs yourself.
 We welcome feedback and/or PRs to extend the functionality of patterns.
-Where you need to do something outside of currently available patterns, you can use the constructs to provide some level of abstraction.
+Where you need to do something outside the currently available patterns, you can use the constructs to provide some level of abstraction.
 In this case, consider whether it's worth defining a pattern.
 
 ### Decision Records
 [Architecture Decisions Records][adr] are files where we can document the decisions we make around any form of structure, architecture or approach.
-By documenting them in this way, we can preserve the thought process behind all of the decisions whilst also laying out formally the preferences for all developers working on the library.
+By documenting them in this way, we can preserve the thought process behind all the decisions whilst also laying out formally the preferences for all developers working on the library.
 
 The [docs/architecture-decision-records directory][directory-adr] contains the records for `@guardian/cdk`.
 
