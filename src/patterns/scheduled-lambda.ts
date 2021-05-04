@@ -5,6 +5,7 @@ import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../co
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
+import { latestJava, latestNode } from "../constructs/lambda/latest-runtimes";
 
 /**
  * Configuration options for the [[`GuScheduledLambda`]] pattern.
@@ -58,8 +59,13 @@ export interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "errorPerc
   monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
 }
 
+export type GuRuntimeSpecificScheduledLambdaProps = Omit<GuScheduledLambdaProps, "runtime">;
+
 /**
  * Pattern which creates all of the resources needed to invoke a lambda function on a schedule.
+ *
+ * Prefer using [[`GuJvmScheduledLambda`]] or [[`GuNodeScheduledLambda`]] where possible, as this will
+ * make it easier to keep up to date with Runtime upgrades.
  *
  * For all configuration options, see [[`GuScheduledLambdaProps`]].
  */
@@ -80,5 +86,23 @@ export class GuScheduledLambda extends GuLambdaFunction {
         enabled: true,
       });
     });
+  }
+}
+
+/**
+ * Creates a [[`GuScheduledLambda`]] with the latest Java runtime.
+ */
+export class GuJvmScheduledLambda extends GuScheduledLambda {
+  constructor(scope: GuStack, id: string, props: GuRuntimeSpecificScheduledLambdaProps) {
+    super(scope, id, { ...props, runtime: latestJava });
+  }
+}
+
+/**
+ * Creates a [[`GuScheduledLambda`]] with the latest Node runtime.
+ */
+export class GuNodeScheduledLambda extends GuScheduledLambda {
+  constructor(scope: GuStack, id: string, props: GuRuntimeSpecificScheduledLambdaProps) {
+    super(scope, id, { ...props, runtime: latestNode });
   }
 }
