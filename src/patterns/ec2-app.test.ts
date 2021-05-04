@@ -1,8 +1,12 @@
+import "../utils/test/jest";
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
+import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { TrackingTag } from "../constants/tracking-tag";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
+import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
 import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
@@ -121,6 +125,85 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); //The shape of the alarm is tested at construct level
+  });
+
+  it("sub-constructs can be accessed and modified after declaring the pattern", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    const pattern = new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: app,
+      publicFacing: false,
+      certificateProps: {
+        [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
+        [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "UserData from pattern declaration",
+    });
+
+    expect(pattern.autoScalingGroup.userData).toEqual({ lines: ["UserData from pattern declaration"] });
+
+    pattern.autoScalingGroup.addUserData("UserData from accessed construct");
+
+    expect(pattern.autoScalingGroup.userData).toEqual({
+      lines: ["UserData from pattern declaration", "UserData from accessed construct"],
+    });
+  });
+
+  it("users can override resources and constructs if desired", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    const pattern = new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: app,
+      publicFacing: true,
+      certificateProps: {
+        [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
+        [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "UserData from pattern declaration",
+    });
+
+    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+      SecurityGroupIngress: [
+        {
+          CidrIp: "0.0.0.0/0",
+          Description: "Allow from anyone on port 443",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+      ],
+    });
+
+    const cfnLb = pattern.loadBalancer.node.defaultChild as CfnLoadBalancer;
+
+    const sg = new GuSecurityGroup(stack, "SG", {
+      app,
+      vpc: Vpc.fromVpcAttributes(stack, "VPC", {
+        vpcId: "test",
+        availabilityZones: [""],
+        publicSubnetIds: [""],
+        privateSubnetIds: [""],
+      }),
+      ingresses: [{ port: Port.tcp(1234), range: Peer.ipv4("8.8.8.8/32"), description: "" }],
+    });
+
+    cfnLb.securityGroups = [sg.securityGroupId];
+
+    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+      SecurityGroupIngress: [
+        {
+          CidrIp: "8.8.8.8/32",
+          Description: "",
+          FromPort: 1234,
+          IpProtocol: "tcp",
+          ToPort: 1234,
+        },
+      ],
+    });
   });
 
   it("can handle multiple EC2 apps in a single stack", function () {

@@ -5,8 +5,8 @@ import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
 import type { GuUserDataProps } from "../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
-import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
 import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
+import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuVpc, SubnetType } from "../constructs/ec2";
@@ -38,6 +38,20 @@ export enum GuApplicationPorts {
 This pattern is under development. Please don't attempt to use it yet.
  */
 export class GuEc2App {
+  /*
+   * These are public for now, as this allows users to
+   * modify these constructs as desired to fit their
+   * specific needs.
+   * In the future, we might build functionality to better enable users
+   * to access in-pattern constructs, but this would allow teams to be unblocked
+   * in the short term.
+   * */
+  public readonly certificate: GuCertificate;
+  public readonly loadBalancer: GuApplicationLoadBalancer;
+  public readonly autoScalingGroup: GuAutoScalingGroup;
+  public readonly listener: GuHttpsApplicationListener;
+  public readonly targetGroup: GuApplicationTargetGroup;
+
   constructor(scope: GuStack, props: GuEc2AppProps) {
     AppIdentity.taggedConstruct(props, scope);
 
@@ -55,7 +69,7 @@ export class GuEc2App {
         ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", props.userData.configuration)]
         : [];
 
-    const asg = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
+    const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,
       vpc,
       stageDependentProps: {
@@ -83,11 +97,11 @@ export class GuEc2App {
       app,
       vpc,
       protocol: ApplicationProtocol.HTTP,
-      targets: [asg],
+      targets: [autoScalingGroup],
       port: props.applicationPort,
     });
 
-    new GuHttpsApplicationListener(scope, "Listener", {
+    const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
       loadBalancer: loadBalancer,
       certificate: certificate,
@@ -101,6 +115,12 @@ export class GuEc2App {
         ...props.monitoringConfiguration,
       });
     }
+
+    this.certificate = certificate;
+    this.loadBalancer = loadBalancer;
+    this.autoScalingGroup = autoScalingGroup;
+    this.listener = listener;
+    this.targetGroup = targetGroup;
   }
 }
 
