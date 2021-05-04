@@ -8,10 +8,13 @@ import { GuLambdaErrorPercentageAlarm } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { GuDistributionBucketParameter } from "../core";
 import { AppIdentity } from "../core/identity";
+import { latestJava, latestNode } from "./latest-runtimes";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;
 }
+
+export type GuRuntimeSpecificFunctionProps = Omit<GuFunctionProps, "runtime">;
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
   if (memorySize) {
@@ -40,6 +43,9 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  *
  * Note that this construct creates a Lambda without a trigger/event source. Depending on your use-case, you may wish to
  * consider using a pattern which instantiates a Lambda with a trigger e.g. [[`GuJvmScheduledLambda`]].
+ *
+ * If you need to create a lambda construct in isolation, use [[`GuJvmLambdaFunction`]] or [[`GuNodeLambdaFunction`]]
+ * where possible, as this will make it easier to keep up to date with Runtime upgrades.
  */
 export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
@@ -69,5 +75,23 @@ export class GuLambdaFunction extends Function {
     bucket.grantRead(this);
 
     AppIdentity.taggedConstruct(props, this);
+  }
+}
+
+/**
+ * Creates a [[`GuLambdaFunction`]] with the latest Java runtime.
+ */
+export class GuJvmLambdaFunction extends GuLambdaFunction {
+  constructor(scope: GuStack, id: string, props: GuRuntimeSpecificFunctionProps) {
+    super(scope, id, { ...props, runtime: latestJava });
+  }
+}
+
+/**
+ * Creates a [[`GuLambdaFunction`]] with the latest Node runtime.
+ */
+export class GuNodeLambdaFunction extends GuLambdaFunction {
+  constructor(scope: GuStack, id: string, props: GuRuntimeSpecificFunctionProps) {
+    super(scope, id, { ...props, runtime: latestNode });
   }
 }
