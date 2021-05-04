@@ -12,12 +12,16 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+      # somewhat arbitrary, this is to spread Dependabot PRs throughout the week to avoid Monday overload
+      day: "wednesday"      
     commit-message:
       prefix: "chore(deps): "
   - package-ecosystem: 'npm'
     directory: '/integration-test'
     schedule:
       interval: 'weekly'
+      # somewhat arbitrary, this is to spread Dependabot PRs throughout the week to avoid Monday overload
+      day: "wednesday"      
     commit-message:
       prefix: "chore(deps): "
     # The version of @aws-cdk/* libraries must match those from @guardian/cdk.
