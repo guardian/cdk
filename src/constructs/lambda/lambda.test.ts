@@ -1,8 +1,9 @@
 import "@aws-cdk/assert/jest";
+import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuLambdaFunction } from "./lambda";
+import { GuJvmLambdaFunction, GuLambdaFunction, GuNodeLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {
   it("should create the code object from the bucket and key passed in", () => {
@@ -182,5 +183,29 @@ describe("The GuLambdaFunction class", () => {
     expect(stack).toHaveResource("AWS::Lambda::Function", {
       Timeout: 30,
     });
+  });
+});
+
+describe("The GuJvmLambdaFunction class", () => {
+  it("should produce a sensible CFN snapshot with minimal configuration", () => {
+    const stack = simpleGuStackForTesting();
+    new GuJvmLambdaFunction(stack, "jvm-lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      app: "testing",
+    });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+});
+
+describe("The GuNodeLambdaFunction class", () => {
+  it("should produce a sensible CFN snapshot with minimal configuration", () => {
+    const stack = simpleGuStackForTesting();
+    new GuNodeLambdaFunction(stack, "node-lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      app: "testing",
+    });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });

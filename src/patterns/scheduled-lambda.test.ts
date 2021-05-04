@@ -5,7 +5,7 @@ import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
-import { GuScheduledLambda } from "./scheduled-lambda";
+import { GuJvmScheduledLambda, GuNodeScheduledLambda, GuScheduledLambda } from "./scheduled-lambda";
 
 describe("The GuScheduledLambda pattern", () => {
   it("should create the correct resources with minimal config", () => {
@@ -40,5 +40,33 @@ describe("The GuScheduledLambda pattern", () => {
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+  });
+});
+
+describe("The GuJvmScheduledLambda class", () => {
+  it("should produce a sensible CFN snapshot with minimal configuration", () => {
+    const stack = simpleGuStackForTesting();
+    new GuJvmScheduledLambda(stack, "jvm-lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      app: "testing",
+      rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
+      monitoringConfiguration: { noMonitoring: true },
+    });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+});
+
+describe("The GuNodeScheduledLambda class", () => {
+  it("should produce a sensible CFN snapshot with minimal configuration", () => {
+    const stack = simpleGuStackForTesting();
+    new GuNodeScheduledLambda(stack, "node-lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      app: "testing",
+      rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
+      monitoringConfiguration: { noMonitoring: true },
+    });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });
