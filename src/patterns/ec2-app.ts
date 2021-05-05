@@ -1,4 +1,6 @@
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
+import type { IPeer } from "@aws-cdk/aws-ec2";
+import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
 import type { GuCertificateProps } from "../constructs/acm";
@@ -9,7 +11,7 @@ import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
-import { GuVpc, SubnetType } from "../constructs/ec2";
+import { GuPublicInternetAccessSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationLoadBalancer,
@@ -17,9 +19,37 @@ import {
   GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
 
+export enum AccessScope {
+  PUBLIC,
+  RESTRICTED,
+}
+
+export interface Access {
+  scope: AccessScope;
+}
+
+/*
+ * For when you want your application to be accessible to the world (0.0.0.0/0).
+ * Your application load balancer will have a public IP address that can be reached by anyone,
+ * so only use if you are aware and happy with the consequences!
+ * */
+interface PublicAccess extends Access {
+  scope: AccessScope.PUBLIC;
+}
+
+/*
+ * For when you want to restrict your application's access to a list of CIDR ranges.
+ * */
+interface RestrictedAccess extends Access {
+  scope: AccessScope.RESTRICTED;
+  cidrRanges: IPeer[];
+}
+
+export type AppAccess = PublicAccess | RestrictedAccess;
+
 interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
-  publicFacing: boolean; // could also name it `internetFacing` to match GuApplicationLoadBalancer
+  access: AppAccess;
   applicationPort: number;
   certificateProps: GuCertificateProps;
   monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
@@ -34,9 +64,67 @@ export enum GuApplicationPorts {
   Play = 9000,
 }
 
+const OpenApplicationCidrError: Error = Error(`Your list of CIDR ranges includes 0.0.0.0/0, meaning all other ranges specified are unnecessary as
+your application is open to the world. Please either remove the open CIDR range or use the PUBLIC access scope.`);
+
+function validateRestrictedCidrRanges(access: RestrictedAccess) {
+  const openToWorld = access.cidrRanges.map((range) => range.uniqueId).includes("0.0.0.0/0");
+  if (openToWorld) throw OpenApplicationCidrError;
+}
+
+function restrictedCidrRanges(ranges: IPeer[]) {
+  return ranges.map((range) => ({
+    range,
+    port: Port.tcp(443),
+    description: `Allow access on port 443 from ${range.uniqueId}`,
+  }));
+}
+
 /*
-This pattern is under development. Please don't attempt to use it yet.
- */
+ * This pattern is under development. Please don't attempt to use it yet.
+ *
+ * Usage:
+ * ```typescript
+ * new GuEc2App(stack, {
+ *       applicationPort: GuApplicationPorts.Node,
+ *       app: "app-name",
+ *       // ONLY allows access to CIDR ranges provided
+ *       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
+ *       certificateProps:{
+ *           [Stage.CODE]: {
+ *             domainName: "code-guardian.com",
+ *             hostedZoneId: "id123",
+ *           },
+ *           [Stage.PROD]: {
+ *             domainName: "prod-guardian.com",
+ *             hostedZoneId: "id124",
+ *           },
+ *       },
+ *       monitoringConfiguration: { noMonitoring: true },
+ *       userData: "",
+ * });
+ *
+ * // For public-facing applications
+ * new GuEc2App(stack, {
+ *       applicationPort: GuApplicationPorts.Node,
+ *       app: "app-name",
+ *       // ONLY allows access to CIDR ranges provided
+ *       access: { scope: AccessScope.PUBLIC },
+ *       certificateProps:{
+ *           [Stage.CODE]: {
+ *             domainName: "code-guardian.com",
+ *             hostedZoneId: "id123",
+ *           },
+ *           [Stage.PROD]: {
+ *             domainName: "prod-guardian.com",
+ *             hostedZoneId: "id124",
+ *           },
+ *       },
+ *       monitoringConfiguration: { noMonitoring: true },
+ *       userData: "",
+ * });
+ * ```
+ * */
 export class GuEc2App {
   /*
    * These are public for now, as this allows users to
@@ -58,6 +146,8 @@ export class GuEc2App {
     const { app } = props;
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"), { app });
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
+
+    if (props.access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(props.access);
 
     const certificate = new GuCertificate(scope, {
       app,
@@ -88,9 +178,19 @@ export class GuEc2App {
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
       vpc,
-      vpcSubnets: {
-        subnets: props.publicFacing ? GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC }) : privateSubnets,
-      },
+      internetFacing: true,
+      vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
+      securityGroup:
+        props.access.scope === AccessScope.RESTRICTED
+          ? new GuSecurityGroup(scope, "SecurityGroup", {
+              app,
+              vpc,
+              ingresses: restrictedCidrRanges(props.access.cidrRanges),
+            })
+          : new GuPublicInternetAccessSecurityGroup(scope, "SecurityGroup", {
+              app,
+              vpc,
+            }),
     });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
@@ -103,6 +203,7 @@ export class GuEc2App {
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
+      open: props.access.scope === AccessScope.PUBLIC, // this is true as default, which adds an ingress rule to allow all inbound traffic
       loadBalancer: loadBalancer,
       certificate: certificate,
       targetGroup: targetGroup,
