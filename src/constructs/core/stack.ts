@@ -1,7 +1,9 @@
-import type { App, StackProps } from "@aws-cdk/core";
-import { Stack, Tags } from "@aws-cdk/core";
+import type { App, IConstruct, StackProps } from "@aws-cdk/core";
+import { CfnResource, Stack, Tags } from "@aws-cdk/core";
 import { Stage } from "../../constants";
+import { StatefulResourceTypes } from "../../constants/stateful-resource-types";
 import { TrackingTag } from "../../constants/tracking-tag";
+import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
@@ -119,5 +121,27 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
     this.addTag("Stack", this.stack);
     this.addTag("Stage", this.stage);
+  }
+
+  protected prepare(): void {
+    super.prepare();
+
+    /*
+    Log a message whenever a stateful resource is encountered in the stack.
+
+    Ideally we'd add a stack policy to stop the resource being deleted,
+    however this isn't currently supported in CDK.
+
+    See:
+      - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html
+      - https://github.com/aws/aws-cdk-rfcs/issues/72
+     */
+    this.node.findAll().forEach((construct: IConstruct) => {
+      if (CfnResource.isCfnResource(construct) && StatefulResourceTypes.includes(construct.cfnResourceType)) {
+        Logger.warn(
+          `The resource '${construct.node.path}' of type ${construct.cfnResourceType} is considered stateful by @guardian/cdk. Care should be taken when updating this resource to avoid accidental replacement as this could lead to downtime.`
+        );
+      }
+    });
   }
 }
