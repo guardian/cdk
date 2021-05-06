@@ -5,7 +5,7 @@
 The [AWS CDK CLI](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-typescript.html) provides a command to generate
 a starter project. From there, you can install this library and get started defining your new stack.
 
-The [Guardian CDK CLI](https://github.com/guardian/cdk-cli) can be used to generate the boiler plate for you stack and to migrate across parameters from existing cloudformation templates.
+The [Guardian CDK CLI](https://github.com/guardian/cdk-cli) can be used to generate the boiler plate for you stack and to migrate across parameters from existing CloudFormation templates.
 
 ## Comparing outputs
 
@@ -23,7 +23,7 @@ further change set details will give more information about the reason for the c
 
 ## Changes
 
-When comparing the output of your CDK and the original cloudformation, you'll likely see a number of changes due
+When comparing the output of your CDK and the original CloudFormation, you'll likely see a number of changes due
 to differing default values and the way that CDK constructs some resources for you. Below is a list of some of the
 differences that we've encountered so far with an explanation of why they've come about and what implications this has.
 
@@ -42,7 +42,7 @@ from the loadbalancer security group is created.
 
 ### AutoscalingGroup Availability Zones
 
-When defining an autoscaling group in cloudformation, an `AvailabilityZones` property was sometimes provided e.g.
+When defining an autoscaling group in CloudFormation, an `AvailabilityZones` property was sometimes provided e.g.
 
 ```yaml
 AvailabilityZones:
@@ -69,7 +69,7 @@ which suggests that the `AvailabilityZones` property is not required.
 
 ### Security Group Egress
 
-In cloudformation, many security groups did not define an egress, relying instead on the
+In CloudFormation, many security groups did not define an egress, relying instead on the
 default behaviour. That is not possible with CDK as you only have the option to either allow
 or disallow all outbound traffic. For some stacks, disabling all outbound traffic may be okay
 but for others it can cause issues. You can see what the current security group egress rules are
@@ -77,16 +77,22 @@ in the AWS console.
 
 ### LoadBalancer listeners for HTTP and HTTPS
 
-In cloudformation, for the LoadBalancer listeners typically only the `Protocol` value was set.
+In CloudFormation, for the LoadBalancer listeners typically only the `Protocol` value was set.
 This defines the protocol that a listener rule listens for. In CDK it is possible to define one
 or both of `internalProtocol` and `externalProtocol`. If you only define one then it defaults to
 be the same as the other. This becomes problematic when forwarding both HTTP and HTTPS traffic to
 the same port as it causes an error. When listening to both HTTP and HTTPS, forward both sets of
 traffic to the ASG using the same protocol.
 
+### ELB defaults
+
+In CloudFormation, the [`Scheme`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-scheme) property is not required on an `AWS::ElasticLoadBalancing::LoadBalancer`. However, AWS CDK appears to automatically add a default for this property and we have observed that this can lead to a resource replacement (which often causes downtime).
+
+If this property is added to your load balancer as part of the migration, it is important to follow the advice in [this PR](https://github.com/guardian/cdk/pull/510) to guard against resource replacement.
+
 ### RDS DatabaseInstance defaults
 
-By default, an instance of an RDS DatabaseInstance generates a Cloudformation template
+By default, an instance of an RDS DatabaseInstance generates a CloudFormation template
 with the following default keys and values:
 
 ```json
