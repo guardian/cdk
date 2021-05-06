@@ -12,6 +12,7 @@ import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuPublicInternetAccessSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
+import type { GuInstanceRoleProps } from "../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationLoadBalancer,
@@ -52,6 +53,7 @@ interface GuEc2AppProps extends AppIdentity {
   access: AppAccess;
   applicationPort: number;
   certificateProps: GuCertificateProps;
+  roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
 }
 
@@ -159,6 +161,11 @@ export class GuEc2App {
         ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", props.userData.configuration)]
         : [];
 
+    const mergedRoleConfiguration: GuInstanceRoleProps = {
+      withoutLogShipping: props.roleConfiguration?.withoutLogShipping,
+      additionalPolicies: maybePrivateConfigPolicy.concat(props.roleConfiguration?.additionalPolicies ?? []),
+    };
+
     const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,
       vpc,
@@ -166,7 +173,7 @@ export class GuEc2App {
         CODE: { minimumInstances: 1 },
         PROD: { minimumInstances: 3 },
       },
-      role: new GuInstanceRole(scope, { app: props.app, additionalPolicies: maybePrivateConfigPolicy }),
+      role: new GuInstanceRole(scope, { app: props.app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
       userData:
         typeof props.userData !== "string"
