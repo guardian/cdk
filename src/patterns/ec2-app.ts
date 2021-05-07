@@ -11,7 +11,7 @@ import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
-import { GuPublicInternetAccessSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
+import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationLoadBalancer,
@@ -180,17 +180,6 @@ export class GuEc2App {
       vpc,
       internetFacing: true,
       vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
-      securityGroup:
-        props.access.scope === AccessScope.RESTRICTED
-          ? new GuSecurityGroup(scope, "SecurityGroup", {
-              app,
-              vpc,
-              ingresses: restrictedCidrRanges(props.access.cidrRanges),
-            })
-          : new GuPublicInternetAccessSecurityGroup(scope, "SecurityGroup", {
-              app,
-              vpc,
-            }),
     });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
@@ -203,11 +192,23 @@ export class GuEc2App {
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
-      open: props.access.scope === AccessScope.PUBLIC, // this is true as default, which adds an ingress rule to allow all inbound traffic
+      // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
+      open: props.access.scope === AccessScope.PUBLIC,
       loadBalancer: loadBalancer,
       certificate: certificate,
       targetGroup: targetGroup,
     });
+
+    // Since AWS won't create a security group automatically when open=false, we need to add our own
+    if (props.access.scope === AccessScope.RESTRICTED) {
+      listener.connections.addSecurityGroup(
+        new GuSecurityGroup(scope, "SecurityGroup", {
+          app,
+          vpc,
+          ingresses: restrictedCidrRanges(props.access.cidrRanges),
+        })
+      );
+    }
 
     if (!props.monitoringConfiguration.noMonitoring) {
       new Gu5xxPercentageAlarm(scope, "Alarm", {

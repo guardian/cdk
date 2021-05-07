@@ -343,7 +343,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "GuHttpsEgressSecurityGroupTestguec2appfromTestSecurityGroupTestguec2app1CF2869E3000B9658665": Object {
+    "GuHttpsEgressSecurityGroupTestguec2appfromTestLoadBalancerTestguec2appSecurityGroup5F9E11C9300051FB63C7": Object {
       "Properties": Object {
         "Description": "Load balancer to target",
         "FromPort": 3000,
@@ -356,7 +356,7 @@ Object {
         "IpProtocol": "tcp",
         "SourceSecurityGroupId": Object {
           "Fn::GetAtt": Array [
-            "SecurityGroupTestguec2appAC0CD258",
+            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
             "GroupId",
           ],
         },
@@ -491,7 +491,7 @@ Object {
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "SecurityGroupTestguec2appAC0CD258",
+              "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
               "GroupId",
             ],
           },
@@ -521,6 +521,65 @@ Object {
         ],
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "LoadBalancerTestguec2appSecurityGroupCC6F85C1": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB TestLoadBalancerTestguec2app8CD12AE9",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "testguec2appVpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "LoadBalancerTestguec2appSecurityGrouptoTestGuHttpsEgressSecurityGroupTestguec2appE5EE51F53000FE644240": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
+            "GroupId",
+          ],
+        },
+        "FromPort": 3000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
     },
     "ParameterStoreReadTestguec2app072DCDE1": Object {
       "Properties": Object {
@@ -597,51 +656,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "SecurityGroupTestguec2appAC0CD258": Object {
-      "Properties": Object {
-        "GroupDescription": "Allow all inbound traffic via HTTPS",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all inbound traffic via HTTPS",
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "test-gu-ec2-app",
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "testguec2appVpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
     },
     "TargetGroupTestguec2app9F67D503": Object {
       "Properties": Object {
