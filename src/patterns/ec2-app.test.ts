@@ -168,31 +168,6 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
-  it("assume public application if no access specified", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
-      app,
-      access: { scope: AccessScope.PUBLIC },
-      certificateProps: getCertificateProps(),
-      monitoringConfiguration: { noMonitoring: true },
-      userData: "",
-    });
-
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
-  });
-
   it("errors if specifying open access as well as specific CIDR ranges", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
