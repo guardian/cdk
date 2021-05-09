@@ -112,6 +112,11 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "PropagateAtLaunch": true,
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
             "Value": "Test/AutoScalingGroupTestguec2app",
@@ -228,6 +233,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -325,6 +334,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
@@ -441,6 +454,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -509,6 +526,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -542,6 +563,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
@@ -676,6 +701,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -721,6 +750,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
