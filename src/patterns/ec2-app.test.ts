@@ -4,10 +4,9 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
-import { TrackingTag } from "../constants/tracking-tag";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
-import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
+import { simpleGuStackForTesting } from "../utils/test";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 const getCertificateProps = () => ({
@@ -308,24 +307,16 @@ describe("the GuEC2App pattern", function () {
       certificateProps: getCertificateProps(),
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      Tags: alphabeticalTags([
-        { Key: "App", PropagateAtLaunch: true, Value: "PlayApp" },
-        { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupPlayApp" },
-        { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
-        { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
-        { ...TrackingTag, PropagateAtLaunch: true },
-      ]),
+    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app: "PlayApp" },
+      propagateAtLaunch: true,
+      additionalTags: [{ Key: "Name", Value: "Test/AutoScalingGroupPlayApp" }],
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      Tags: alphabeticalTags([
-        { Key: "App", PropagateAtLaunch: true, Value: "NodeApp" },
-        { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupNodeApp" },
-        { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
-        { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
-        { ...TrackingTag, PropagateAtLaunch: true },
-      ]),
+    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app: "NodeApp" },
+      propagateAtLaunch: true,
+      additionalTags: [{ Key: "Name", Value: "Test/AutoScalingGroupNodeApp" }],
     });
   });
 

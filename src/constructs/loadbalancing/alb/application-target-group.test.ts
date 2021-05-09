@@ -3,8 +3,7 @@ import "../../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { TrackingTag } from "../../../constants/tracking-tag";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../../utils/test";
+import { simpleGuStackForTesting } from "../../../utils/test";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
@@ -33,21 +32,8 @@ describe("The GuApplicationTargetGroup class", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      Tags: alphabeticalTags([
-        { Key: "App", Value: app.app },
-        {
-          Key: "Stack",
-          Value: stack.stack,
-        },
-        {
-          Key: "Stage",
-          Value: {
-            Ref: "Stage",
-          },
-        },
-        TrackingTag,
-      ]),
+    expect(stack).toHaveGuTaggedResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      appIdentity: app,
     });
   });
 
