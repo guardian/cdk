@@ -3,8 +3,7 @@ import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
-import { TrackingTag } from "../../constants/tracking-tag";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
@@ -40,24 +39,8 @@ describe("The GuClassicLoadBalancer class", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
-      Tags: alphabeticalTags([
-        {
-          Key: "App",
-          Value: "testing",
-        },
-        {
-          Key: "Stack",
-          Value: "test-stack",
-        },
-        {
-          Key: "Stage",
-          Value: {
-            Ref: "Stage",
-          },
-        },
-        TrackingTag,
-      ]),
+    expect(stack).toHaveGuTaggedResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+      appIdentity: { app: "testing" },
     });
   });
 

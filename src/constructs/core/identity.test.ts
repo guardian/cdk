@@ -1,7 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { Topic } from "@aws-cdk/aws-sns";
 import { Stack } from "@aws-cdk/core";
-import { alphabeticalTags } from "../../utils/test";
 import { AppIdentity } from "./identity";
 
 describe("AppIdentity.suffixText", () => {
@@ -41,12 +40,12 @@ describe("AppIdentity.taggedConstruct", () => {
     AppIdentity.taggedConstruct(appIdentity, snsTopic);
 
     expect(stack).toHaveResource("AWS::SNS::Topic", {
-      Tags: alphabeticalTags([
+      Tags: [
         {
           Key: "App",
           Value: "testing",
         },
-      ]),
+      ],
     });
   });
 });
