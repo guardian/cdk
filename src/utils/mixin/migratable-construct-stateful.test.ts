@@ -1,9 +1,9 @@
 import type { BucketProps } from "@aws-cdk/aws-s3";
 import "../test/jest";
 import { Bucket } from "@aws-cdk/aws-s3";
+import { Annotations } from "@aws-cdk/core";
 import type { GuStack } from "../../constructs/core";
 import type { GuMigratingResource } from "../../constructs/core/migrating";
-import { Logger } from "../logger";
 import { simpleGuStackForTesting } from "../test";
 import { GuStatefulMigratableConstruct } from "./migratable-construct-stateful";
 
@@ -16,7 +16,7 @@ class StatefulTestGuMigratableConstruct extends GuStatefulMigratableConstruct(Bu
 }
 
 describe("The GuStatefulMigratableConstruct mixin", () => {
-  const info = jest.spyOn(Logger, "info");
+  const info = jest.spyOn(Annotations.prototype, "addInfo");
 
   beforeEach(() => {
     info.mockReset();
