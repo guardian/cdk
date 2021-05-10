@@ -178,6 +178,8 @@ export class GuEc2App {
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
       vpc,
+      // This is always set to true, as it determines the load balancer scheme as `internet-facing` rather than internal.
+      // This does not result in public access to the load balancer in itself however, as that is handled by the listener's `open` prop
       internetFacing: true,
       vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
     });
@@ -192,19 +194,21 @@ export class GuEc2App {
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
+      loadBalancer,
+      certificate,
+      targetGroup,
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: props.access.scope === AccessScope.PUBLIC,
-      loadBalancer: loadBalancer,
-      certificate: certificate,
-      targetGroup: targetGroup,
     });
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (props.access.scope === AccessScope.RESTRICTED) {
-      listener.connections.addSecurityGroup(
-        new GuSecurityGroup(scope, "SecurityGroup", {
+      loadBalancer.addSecurityGroup(
+        new GuSecurityGroup(scope, "RestrictedIngressSecurityGroup", {
           app,
           vpc,
+          description: "Allow restricted ingress from CIDR ranges",
+          allowAllOutbound: false,
           ingresses: restrictedCidrRanges(props.access.cidrRanges),
         })
       );
@@ -213,7 +217,7 @@ export class GuEc2App {
     if (!props.monitoringConfiguration.noMonitoring) {
       new Gu5xxPercentageAlarm(scope, "Alarm", {
         app,
-        loadBalancer: loadBalancer,
+        loadBalancer,
         ...props.monitoringConfiguration,
       });
     }
