@@ -159,32 +159,7 @@ describe("the GuEC2App pattern", function () {
       SecurityGroupIngress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
-  });
-
-  it("assume public application if no access specified", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
-      app,
-      access: { scope: AccessScope.PUBLIC },
-      certificateProps: getCertificateProps(),
-      monitoringConfiguration: { noMonitoring: true },
-      userData: "",
-    });
-
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
+          Description: "Allow from anyone on port 443",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,
@@ -246,18 +221,6 @@ describe("the GuEC2App pattern", function () {
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "UserData from pattern declaration",
-    });
-
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
     });
 
     const cfnLb = pattern.loadBalancer.node.defaultChild as CfnLoadBalancer;
