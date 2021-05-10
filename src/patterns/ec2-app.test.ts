@@ -6,7 +6,7 @@ import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
-import { simpleGuStackForTesting } from "../utils/test";
+import { simpleGuStackForTesting, SynthedStack } from "../utils/test";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 const getCertificateProps = () => ({
@@ -122,24 +122,40 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "192.168.1.1/32",
-          Description: "Allow access on port 443 from 192.168.1.1/32",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-        {
-          CidrIp: "8.8.8.8/32",
-          Description: "Allow access on port 443 from 8.8.8.8/32",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const loadBalancerKey = Object.keys(json.Resources).filter(
+      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    )[0];
+
+    const loadBalancer = json.Resources[loadBalancerKey];
+    const lbSecurityGroups = loadBalancer.Properties.SecurityGroups as [Record<string, any>];
+
+    expect(lbSecurityGroups.length).toEqual(1);
+
+    const lbSecurityGroupID = lbSecurityGroups[0]["Fn::GetAtt"][0] as string;
+    const lbSecurityGroup = json.Resources[lbSecurityGroupID];
+    console.log(lbSecurityGroup);
+
+    expect(lbSecurityGroup.Properties).toEqual(
+      expect.objectContaining({
+        SecurityGroupIngress: [
+          {
+            CidrIp: "192.168.1.1/32",
+            Description: "Allow access on port 443 from 192.168.1.1/32s",
+            FromPort: 443,
+            IpProtocol: "tcp",
+            ToPort: 443,
+          },
+          {
+            CidrIp: "8.8.8.8/32",
+            Description: "Allow access on port 443 from 8.8.8.8/32",
+            FromPort: 443,
+            IpProtocol: "tcp",
+            ToPort: 443,
+          },
+        ],
+      })
+    );
   });
 
   it("allows all connections if set to public", function () {
