@@ -2,7 +2,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import type { BucketProps } from "@aws-cdk/aws-s3";
 import { Bucket } from "@aws-cdk/aws-s3";
-import { Logger } from "../../utils/logger";
+import { Annotations } from "@aws-cdk/core";
 import type { GuStatefulConstruct } from "../../utils/mixin";
 import type { SynthedStack } from "../../utils/test";
 import { simpleGuStackForTesting } from "../../utils/test";
@@ -24,8 +24,8 @@ We're calling it here to test the function in isolation.
  */
 
 describe("GuMigratingResource", () => {
-  const info = jest.spyOn(Logger, "info");
-  const warn = jest.spyOn(Logger, "warn");
+  const info = jest.spyOn(Annotations.prototype, "addInfo");
+  const warn = jest.spyOn(Annotations.prototype, "addWarning");
 
   afterEach(() => {
     warn.mockReset();

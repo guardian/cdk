@@ -3,8 +3,7 @@ import "../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "@aws-cdk/aws-rds";
 import { Stack } from "@aws-cdk/core";
-import { TrackingTag } from "../../constants/tracking-tag";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
@@ -80,29 +79,15 @@ describe("The GuDatabaseInstance class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::RDS::DBParameterGroup", {
-      Description: "Parameter group for postgres11",
-      Family: "postgres11",
-      Parameters: {
-        max_connections: "100",
+    expect(stack).toHaveGuTaggedResource("AWS::RDS::DBParameterGroup", {
+      appIdentity: { app: "testing" },
+      resourceProperties: {
+        Description: "Parameter group for postgres11",
+        Family: "postgres11",
+        Parameters: {
+          max_connections: "100",
+        },
       },
-      Tags: alphabeticalTags([
-        {
-          Key: "App",
-          Value: "testing",
-        },
-        {
-          Key: "Stack",
-          Value: "test-stack",
-        },
-        {
-          Key: "Stage",
-          Value: {
-            Ref: "Stage",
-          },
-        },
-        TrackingTag,
-      ]),
     });
   });
 

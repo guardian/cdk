@@ -4,11 +4,10 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
-import { TrackingTag } from "../constants/tracking-tag";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { GuDynamoDBWritePolicy } from "../constructs/iam";
-import { alphabeticalTags, simpleGuStackForTesting } from "../utils/test";
+import { simpleGuStackForTesting } from "../utils/test";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 const getCertificateProps = () => ({
@@ -160,32 +159,7 @@ describe("the GuEC2App pattern", function () {
       SecurityGroupIngress: [
         {
           CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
-  });
-
-  it("assume public application if no access specified", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
-      app,
-      access: { scope: AccessScope.PUBLIC },
-      certificateProps: getCertificateProps(),
-      monitoringConfiguration: { noMonitoring: true },
-      userData: "",
-    });
-
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
+          Description: "Allow from anyone on port 443",
           FromPort: 443,
           IpProtocol: "tcp",
           ToPort: 443,
@@ -323,18 +297,6 @@ describe("the GuEC2App pattern", function () {
       userData: "UserData from pattern declaration",
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
-
     const cfnLb = pattern.loadBalancer.node.defaultChild as CfnLoadBalancer;
 
     const sg = new GuSecurityGroup(stack, "SG", {
@@ -383,24 +345,16 @@ describe("the GuEC2App pattern", function () {
       certificateProps: getCertificateProps(),
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      Tags: alphabeticalTags([
-        { Key: "App", PropagateAtLaunch: true, Value: "PlayApp" },
-        { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupPlayApp" },
-        { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
-        { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
-        { ...TrackingTag, PropagateAtLaunch: true },
-      ]),
+    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app: "PlayApp" },
+      propagateAtLaunch: true,
+      additionalTags: [{ Key: "Name", Value: "Test/AutoScalingGroupPlayApp" }],
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      Tags: alphabeticalTags([
-        { Key: "App", PropagateAtLaunch: true, Value: "NodeApp" },
-        { Key: "Name", PropagateAtLaunch: true, Value: "Test/AutoScalingGroupNodeApp" },
-        { Key: "Stack", PropagateAtLaunch: true, Value: "test-stack" },
-        { Key: "Stage", PropagateAtLaunch: true, Value: { Ref: "Stage" } },
-        { ...TrackingTag, PropagateAtLaunch: true },
-      ]),
+    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app: "NodeApp" },
+      propagateAtLaunch: true,
+      additionalTags: [{ Key: "Name", Value: "Test/AutoScalingGroupNodeApp" }],
     });
   });
 

@@ -1,11 +1,11 @@
 import "@aws-cdk/assert/jest";
 
 import { SynthUtils } from "@aws-cdk/assert";
+import "../../utils/test/jest";
 import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { App } from "@aws-cdk/core";
 import { Stage, Stages } from "../../constants";
-import { TrackingTag } from "../../constants/tracking-tag";
-import { alphabeticalTags, simpleGuStackForTesting } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import { GuParameter } from "./parameters";
 import { GuStack } from "./stack";
@@ -38,21 +38,7 @@ describe("The GuStack construct", () => {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Role", {
-      Tags: alphabeticalTags([
-        {
-          Key: "Stack",
-          Value: "test",
-        },
-        {
-          Key: "Stage",
-          Value: {
-            Ref: "Stage",
-          },
-        },
-        TrackingTag,
-      ]),
-    });
+    expect(stack).toHaveGuTaggedResource("AWS::IAM::Role");
   });
 
   it("should return a parameter that exists", () => {

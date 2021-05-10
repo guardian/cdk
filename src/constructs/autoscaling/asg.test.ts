@@ -5,9 +5,8 @@ import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
-import { TrackingTag } from "../../constants/tracking-tag";
 import type { Resource, SynthedStack } from "../../utils/test";
-import { alphabeticalTags, findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
+import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
 import { GuAllowPolicy, GuInstanceRole } from "../iam";
@@ -49,32 +48,16 @@ describe("The GuAutoScalingGroup", () => {
       /MyAutoScalingGroupTesting[A-Z0-9]+/
     );
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      Tags: alphabeticalTags([
-        {
-          Key: "App",
-          PropagateAtLaunch: true,
-          Value: "testing",
-        },
-        {
-          Key: "Stack",
-          PropagateAtLaunch: true,
-          Value: "test-stack",
-        },
-        {
-          Key: "Stage",
-          PropagateAtLaunch: true,
-          Value: {
-            Ref: "Stage",
-          },
-        },
+    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app: "testing" },
+      propagateAtLaunch: true,
+      additionalTags: [
         {
           Key: "Name",
           PropagateAtLaunch: true,
           Value: "Test/MyAutoScalingGroupTesting",
         },
-        { ...TrackingTag, PropagateAtLaunch: true },
-      ]),
+      ],
     });
   });
 
@@ -275,23 +258,20 @@ describe("The GuAutoScalingGroup", () => {
       vpc,
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Role", {
-      AssumeRolePolicyDocument: {
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Action: "sts:AssumeRole",
-            Effect: "Allow",
-            Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
-          },
-        ],
+    expect(stack).toHaveGuTaggedResource("AWS::IAM::Role", {
+      appIdentity: { app: "TestApp" },
+      resourceProperties: {
+        AssumeRolePolicyDocument: {
+          Version: "2012-10-17",
+          Statement: [
+            {
+              Action: "sts:AssumeRole",
+              Effect: "Allow",
+              Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
+            },
+          ],
+        },
       },
-      Tags: alphabeticalTags([
-        { Key: "App", Value: "TestApp" },
-        { Key: "gu:cdk:version", Value: "TEST" },
-        { Key: "Stack", Value: "test-stack" },
-        { Key: "Stage", Value: { Ref: "Stage" } },
-      ]),
     });
   });
 
