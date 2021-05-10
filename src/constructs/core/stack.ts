@@ -1,7 +1,12 @@
 import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
+import execa from "execa";
+import gitUrlParse from "git-url-parse";
 import { Stage } from "../../constants";
+import { ContextKeys } from "../../constants/context-keys";
+import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
+import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
 import type { GuStageDependentValue } from "./mappings";
 import { GuStageMapping } from "./mappings";
@@ -119,5 +124,30 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
     this.addTag("Stack", this.stack);
     this.addTag("Stage", this.stage);
+
+    this.tryAddRepositoryTag();
+  }
+
+  /**
+   * Adds a tag to resources in the stack for the repository name.
+   * The value is retrieved in the following order:
+   *   1. From the context
+   *   2. From git config
+   *
+   * @private
+   */
+  private tryAddRepositoryTag(): void {
+    try {
+      // a function to avoid creating a child process if value can be found in the context
+      const urlFromGitConfig: () => string = () => execa.sync("git", ["config", "--get", "remote.origin.url"]).stdout;
+      const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
+      const repositoryUrl: string = urlFromContext ?? urlFromGitConfig();
+      const repositoryName = gitUrlParse(repositoryUrl).full_name;
+      this.addTag(TagKeys.REPOSITORY_NAME, repositoryName);
+    } catch {
+      Logger.info(
+        `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
+      );
+    }
   }
 }

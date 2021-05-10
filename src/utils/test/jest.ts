@@ -2,6 +2,7 @@ import "@aws-cdk/assert/jest";
 import type { JestFriendlyAssertion, StackInspector } from "@aws-cdk/assert";
 import { HaveResourceAssertion } from "@aws-cdk/assert";
 import { expect as awsExpect } from "@aws-cdk/assert/lib/expect";
+import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
 import type { GuStack } from "../../constructs/core";
 import type { AppIdentity } from "../../constructs/core/identity";
@@ -72,6 +73,10 @@ expect.extend({
         },
       },
       TrackingTag,
+      {
+        Key: TagKeys.REPOSITORY_NAME,
+        Value: "guardian/cdk",
+      },
     ];
 
     const tagMap = new Map<string, Tag>();

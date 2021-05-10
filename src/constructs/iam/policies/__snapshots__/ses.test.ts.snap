@@ -93,6 +93,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },

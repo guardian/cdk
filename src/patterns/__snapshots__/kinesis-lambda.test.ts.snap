@@ -37,6 +37,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -91,6 +95,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
@@ -244,6 +252,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
