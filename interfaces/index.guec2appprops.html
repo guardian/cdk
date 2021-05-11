@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ExistingKinesisStream | @guardian/cdk - v15.1.0</title>
+	<title>GuEc2AppProps | @guardian/cdk - v15.1.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v15.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/index.html">index</a>
 				</li>
 				<li>
-					<a href="index.existingkinesisstream.html">ExistingKinesisStream</a>
+					<a href="index.guec2appprops.html">GuEc2AppProps</a>
 				</li>
 			</ul>
-			<h1>Interface ExistingKinesisStream</h1>
+			<h1>Interface GuEc2AppProps</h1>
 		</div>
 	</div>
 </header>
@@ -71,23 +71,13 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used to provide information about an existing Kinesis stream to the <a href="../classes/index.gukinesislambda.html"><code>GuKinesisLambda</code></a> pattern.</p>
+						<p>To grant applications additional IAM permissions, use the <code>roleConfiguration</code> prop. For example,
+						to allow your app to write to DynamoDB:</p>
 					</div>
-					<p>Specify a <code>existingLogicalId</code> to inherit a Kinesis stream which has already
-						been created via a CloudFormation stack. This is necessary to avoid data loss and interruptions of
-					service when migrating stacks from CloudFormation to <code>cdk</code>.</p>
-					<p>Specify an <code>externalKinesisStreamName</code> to link the lambda to a Kinesis stream owned by a different stack
-					(or created outside of version control).</p>
-					<p><strong>Example Usage</strong></p>
-					<p>When migrating a CloudFormation stack which includes the following resource:</p>
-					<pre><code class="language-yaml"><span style="color: #800000">MyCloudFormedKinesisStream</span><span style="color: #000000">:</span>
-<span style="color: #000000">  </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::Kinesis::Stream</span>
-</code></pre>
-					<p>Inherit the Kinesis stream (rather than creating a new one) using:</p>
-					<pre><code class="language-typescript"><span style="color: #000000">existingKinesisStream: { existingLogicalId: </span><span style="color: #A31515">&quot;MyCloudFormedKinesisStream&quot;</span><span style="color: #000000"> }</span>
-</code></pre>
-					<p>Alternatively, reference a Kinesis stream which belongs to another stack or pattern using:</p>
-					<pre><code class="language-typescript"><span style="color: #000000">existingKinesisStream: { externalKinesisStreamName: </span><span style="color: #A31515">&quot;KinesisStreamFromAnotherStack&quot;</span><span style="color: #000000"> }</span>
+					<pre><code class="language-typescript"><span style="color: #008000">// other props</span>
+<span style="color: #000000">roleConfiguration: {</span>
+<span style="color: #000000">  additionalPolicies: [</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuDynamoDBWritePolicy</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;DynamoTable&quot;</span><span style="color: #000000">, { </span><span style="color: #001080">tableName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;my-dynamo-table&quot;</span><span style="color: #000000"> })],</span>
+<span style="color: #000000">}</span>
 </code></pre>
 				</div>
 			</section>
@@ -95,10 +85,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">GuMigratingResource</span>
+						<span class="tsd-signature-type">AppIdentity</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">ExistingKinesisStream</span>
+								<span class="target">GuEc2AppProps</span>
 							</li>
 						</ul>
 					</li>
@@ -111,8 +101,13 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.existingkinesisstream.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.existingkinesisstream.html#externalkinesisstreamname" class="tsd-kind-icon">external<wbr>Kinesis<wbr>Stream<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.guec2appprops.html#access" class="tsd-kind-icon">access</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.guec2appprops.html#app" class="tsd-kind-icon">app</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.guec2appprops.html#applicationport" class="tsd-kind-icon">application<wbr>Port</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.guec2appprops.html#certificateprops" class="tsd-kind-icon">certificate<wbr>Props</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.guec2appprops.html#monitoringconfiguration" class="tsd-kind-icon">monitoring<wbr>Configuration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.guec2appprops.html#roleconfiguration" class="tsd-kind-icon">role<wbr>Configuration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.guec2appprops.html#userdata" class="tsd-kind-icon">user<wbr>Data</a></li>
 							</ul>
 						</section>
 					</div>
@@ -120,43 +115,74 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="existinglogicalid" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> existing<wbr>Logical<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">existing<wbr>Logical<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="access" class="tsd-anchor"></a>
+					<h3>access</h3>
+					<div class="tsd-signature tsd-kind-icon">access<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#appaccess" class="tsd-signature-type" data-tsd-kind="Type alias">AppAccess</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from GuMigratingResource.existingLogicalId</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/constructs/core/migrating.ts#L35">src/constructs/core/migrating.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/ec2-app.ts#L64">src/patterns/ec2-app.ts:64</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A string to use to override the logicalId AWS CDK auto-generates for a resource.
-								This is useful when migrating a pre-existing stack into guardian/cdk,
-								as it ensures resources are kept rather than recreated.
-								For example, imagine a YAML stack that creates a load balancer with logicalId <code>DotcomLoadbalancer</code>.
-								We would want to set <code>existingLogicalId</code> for the GuLoadBalancer in guardian/cdk to ensure it is preserved when moving to guardian/cdk.
-								Otherwise it will be created as something like <code>DotcomLoadbalancerABCDEF</code>,
-							is a new resource, and require any DNS entries to be updated accordingly.</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>GuMigratingStack</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>GuStack</p>
-							</dd>
-						</dl>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="app" class="tsd-anchor"></a>
+					<h3>app</h3>
+					<div class="tsd-signature tsd-kind-icon">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from AppIdentity.app</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+						</ul>
+					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="externalkinesisstreamname" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> external<wbr>Kinesis<wbr>Stream<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">external<wbr>Kinesis<wbr>Stream<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="applicationport" class="tsd-anchor"></a>
+					<h3>application<wbr>Port</h3>
+					<div class="tsd-signature tsd-kind-icon">application<wbr>Port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/kinesis-lambda.ts#L45">src/patterns/kinesis-lambda.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/ec2-app.ts#L65">src/patterns/ec2-app.ts:65</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="certificateprops" class="tsd-anchor"></a>
+					<h3>certificate<wbr>Props</h3>
+					<div class="tsd-signature tsd-kind-icon">certificate<wbr>Props<span class="tsd-signature-symbol">:</span> <a href="../modules/constructs_acm.html#gucertificateprops" class="tsd-signature-type" data-tsd-kind="Type alias">GuCertificateProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/ec2-app.ts#L66">src/patterns/ec2-app.ts:66</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="monitoringconfiguration" class="tsd-anchor"></a>
+					<h3>monitoring<wbr>Configuration</h3>
+					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.nomonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html" class="tsd-signature-type" data-tsd-kind="Interface">Gu5xxPercentageMonitoringProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/ec2-app.ts#L68">src/patterns/ec2-app.ts:68</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="roleconfiguration" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> role<wbr>Configuration</h3>
+					<div class="tsd-signature tsd-kind-icon">role<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_iam.guinstanceroleprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuInstanceRoleProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/ec2-app.ts#L67">src/patterns/ec2-app.ts:67</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="userdata" class="tsd-anchor"></a>
+					<h3>user<wbr>Data</h3>
+					<div class="tsd-signature tsd-kind-icon">user<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="constructs_autoscaling.guuserdataprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuUserDataProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f1bafc0/src/patterns/ec2-app.ts#L63">src/patterns/ec2-app.ts:63</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -253,27 +279,42 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.access.html" class="tsd-kind-icon">Access</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.existingkinesisstream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.existingsnstopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.existingkinesisstream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
+						<a href="index.guec2appprops.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App<wbr>Props</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.guec2appprops.html#access" class="tsd-kind-icon">access</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="index.existingkinesisstream.html#existinglogicalid" class="tsd-kind-icon">existing<wbr>Logical<wbr>Id</a>
+								<a href="index.guec2appprops.html#app" class="tsd-kind-icon">app</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.existingkinesisstream.html#externalkinesisstreamname" class="tsd-kind-icon">external<wbr>Kinesis<wbr>Stream<wbr>Name</a>
+								<a href="index.guec2appprops.html#applicationport" class="tsd-kind-icon">application<wbr>Port</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.guec2appprops.html#certificateprops" class="tsd-kind-icon">certificate<wbr>Props</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.guec2appprops.html#monitoringconfiguration" class="tsd-kind-icon">monitoring<wbr>Configuration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.guec2appprops.html#roleconfiguration" class="tsd-kind-icon">role<wbr>Configuration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.guec2appprops.html#userdata" class="tsd-kind-icon">user<wbr>Data</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.existingsnstopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.guec2appprops.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App<wbr>Props</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.gukinesislambdaprops.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda<wbr>Props</a>
 					</li>
