@@ -115,6 +115,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -165,6 +169,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
@@ -249,6 +257,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
@@ -437,6 +449,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -450,7 +466,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB9373eeef9ed08d134e870f1057489fa78a0f": Object {
+    "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491": Object {
       "DependsOn": Array [
         "lambdaapi2proxyANY3F8E1D36",
         "lambdaapi2proxyE68FDFBC",
@@ -467,7 +483,7 @@ Object {
     "lambdaapi2DeploymentStageprodCC9E3016": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB9373eeef9ed08d134e870f1057489fa78a0f",
+          "Ref": "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491",
         },
         "RestApiId": Object {
           "Ref": "lambdaapi239350ECC",
@@ -481,6 +497,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
@@ -778,6 +798,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -829,6 +853,10 @@ Object {
             "Value": "TEST",
           },
           Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -842,7 +870,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B58563248bfce6018e332697b729bf0efbba": Object {
+    "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e": Object {
       "DependsOn": Array [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -859,7 +887,7 @@ Object {
     "lambdaapiDeploymentStageprod9598BC2F": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B58563248bfce6018e332697b729bf0efbba",
+          "Ref": "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e",
         },
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
@@ -873,6 +901,10 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
           Object {
             "Key": "Stack",
