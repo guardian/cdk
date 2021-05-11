@@ -6,6 +6,7 @@ import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
+import type { SynthedStack } from "../utils/test";
 import { simpleGuStackForTesting } from "../utils/test";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
@@ -27,6 +28,19 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.PUBLIC },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: getCertificateProps(),
+    });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+
+  it("can produce a restricted EC2 app locked to specific CIDR ranges", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("1.2.3.4/5")] },
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
@@ -122,24 +136,48 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      SecurityGroupIngress: [
-        {
-          CidrIp: "192.168.1.1/32",
-          Description: "Allow access on port 443 from 192.168.1.1/32",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-        {
-          CidrIp: "8.8.8.8/32",
-          Description: "Allow access on port 443 from 8.8.8.8/32",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const securityGroupKey = Object.keys(json.Resources).filter((resource) =>
+      // This will fail if we ever change the security group ID,
+      //if there's a cleaner way of identifying the security group we should do it
+      resource.toLowerCase().startsWith("restrictedingresssecuritygroup")
+    )[0];
+    const securityGroup = json.Resources[securityGroupKey];
+    const loadBalancerKey = Object.keys(json.Resources).filter(
+      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    )[0];
+    const loadBalancer = json.Resources[loadBalancerKey];
+    const lbSecurityGroups = loadBalancer.Properties.SecurityGroups as Array<{
+      "Fn::GetAtt": [id: string, param: string];
+    }>;
+    const securityGroupIsAttachedToLoadBalancer = lbSecurityGroups.filter(
+      (sg) => sg["Fn::GetAtt"][0] === securityGroupKey
+    );
+
+    // This asserts that the load balancer has the security group attached to it
+    expect(securityGroupIsAttachedToLoadBalancer).toBeTruthy();
+
+    // This asserts that said security group has the expected ingress rules
+    expect(securityGroup.Properties).toEqual(
+      expect.objectContaining({
+        SecurityGroupIngress: [
+          {
+            CidrIp: "192.168.1.1/32",
+            Description: "Allow access on port 443 from 192.168.1.1/32",
+            FromPort: 443,
+            IpProtocol: "tcp",
+            ToPort: 443,
+          },
+          {
+            CidrIp: "8.8.8.8/32",
+            Description: "Allow access on port 443 from 8.8.8.8/32",
+            FromPort: 443,
+            IpProtocol: "tcp",
+            ToPort: 443,
+          },
+        ],
+      })
+    );
   });
 
   it("allows all connections if set to public", function () {
