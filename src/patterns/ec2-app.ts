@@ -48,7 +48,18 @@ interface RestrictedAccess extends Access {
 
 export type AppAccess = PublicAccess | RestrictedAccess;
 
-interface GuEc2AppProps extends AppIdentity {
+/**
+ * To grant applications additional IAM permissions, use the `roleConfiguration` prop. For example,
+ * to allow your app to write to DynamoDB:
+ *
+ * ```typescript
+ * // other props
+ * roleConfiguration: {
+ *   additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
+ * }
+ * ```
+ */
+export interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
   access: AppAccess;
   applicationPort: number;
