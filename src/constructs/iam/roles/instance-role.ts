@@ -11,10 +11,12 @@ import {
 } from "../policies";
 import { GuRole } from "./roles";
 
-interface GuInstanceRoleProps extends AppIdentity {
+export interface GuInstanceRoleProps {
   withoutLogShipping?: boolean;
   additionalPolicies?: GuPolicy[];
 }
+
+export type GuInstanceRolePropsWithApp = GuInstanceRoleProps & AppIdentity;
 
 /**
  * Creates an IAM role with common policies that are needed by most Guardian applications.
@@ -31,7 +33,7 @@ interface GuInstanceRoleProps extends AppIdentity {
  * If log shipping is not required, opt out by setting the `withoutLogShipping` prop to `true`.
  */
 export class GuInstanceRole extends GuRole {
-  constructor(scope: GuStack, props: GuInstanceRoleProps) {
+  constructor(scope: GuStack, props: GuInstanceRolePropsWithApp) {
     super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),

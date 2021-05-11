@@ -6,6 +6,7 @@ import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
+import { GuDynamoDBWritePolicy } from "../constructs/iam";
 import type { SynthedStack } from "../utils/test";
 import { simpleGuStackForTesting } from "../utils/test";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
@@ -219,6 +220,80 @@ describe("the GuEC2App pattern", function () {
           userData: "",
         })
     ).toThrowError();
+  });
+
+  it("correctly wires up custom role configuration", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      access: { scope: AccessScope.PUBLIC },
+      app: app,
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      roleConfiguration: {
+        withoutLogShipping: true,
+        additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
+      },
+    });
+    expect(stack).not.toHaveResource("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: ["kinesis:Describe*", "kinesis:Put*"],
+            Effect: "Allow",
+            Resource: {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:kinesis:",
+                  {
+                    Ref: "AWS::Region",
+                  },
+                  ":",
+                  {
+                    Ref: "AWS::AccountId",
+                  },
+                  ":stream/",
+                  {
+                    Ref: "LoggingStreamName",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+      },
+    });
+    expect(stack).toHaveResource("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: ["dynamodb:BatchWriteItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"],
+            Effect: "Allow",
+            Resource: {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    Ref: "AWS::Region",
+                  },
+                  ":",
+                  {
+                    Ref: "AWS::AccountId",
+                  },
+                  ":table/my-dynamo-table",
+                ],
+              ],
+            },
+          },
+        ],
+      },
+    });
   });
 
   it("sub-constructs can be accessed and modified after declaring the pattern", function () {
