@@ -77,7 +77,8 @@ export enum GuApplicationPorts {
   Play = 9000,
 }
 
-const OpenApplicationCidrError: Error = Error(`Your list of CIDR ranges includes 0.0.0.0/0, meaning all other ranges specified are unnecessary as
+const OpenApplicationCidrError: Error =
+  Error(`Your list of CIDR ranges includes 0.0.0.0/0, meaning all other ranges specified are unnecessary as
 your application is open to the world. Please either remove the open CIDR range or use the PUBLIC access scope.`);
 
 function validateRestrictedCidrRanges(access: RestrictedAccess) {
