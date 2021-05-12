@@ -51,7 +51,7 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
       const ssmClient = new SSM();
       const response = await ssmClient.getParameter(request.apiRequest).promise();
       console.log("Response:", JSON.stringify(response, null, 4));
-      data = { ...flatten((response as unknown) as Record<string, string>) };
+      data = { ...flatten(response as unknown as Record<string, string>) };
     }
 
     console.log("data: ", data);
