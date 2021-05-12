@@ -78,7 +78,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
   withStageDependentValue<T extends string | number | boolean>(stageDependentValue: GuStageDependentValue<T>): T {
     this.mappings.setValue(Stage.CODE, stageDependentValue.variableName, stageDependentValue.stageValues.CODE);
     this.mappings.setValue(Stage.PROD, stageDependentValue.variableName, stageDependentValue.stageValues.PROD);
-    return (this.mappings.findInMap(this.stage, stageDependentValue.variableName) as unknown) as T;
+    return this.mappings.findInMap(this.stage, stageDependentValue.variableName) as unknown as T;
   }
 
   /**
