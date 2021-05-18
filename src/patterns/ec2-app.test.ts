@@ -222,6 +222,38 @@ describe("the GuEC2App pattern", function () {
     ).toThrowError();
   });
 
+  it("can configure ASG scaling by stage if desired", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      access: { scope: AccessScope.PUBLIC },
+      app: app,
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      scaling: {
+        CODE: { minimumInstances: 3 },
+        PROD: { minimumInstances: 5, maximumInstances: 12 },
+      },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      stagemapping: {
+        CODE: expect.objectContaining({
+          minInstances: 3,
+          maxInstances: 6,
+        }) as Record<string, number>,
+        PROD: expect.objectContaining({
+          minInstances: 5,
+          maxInstances: 12,
+        }) as Record<string, number>,
+      },
+    });
+  });
+
   it("correctly wires up custom role configuration", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
