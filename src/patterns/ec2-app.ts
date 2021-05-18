@@ -29,19 +29,32 @@ export interface Access {
   scope: AccessScope;
 }
 
-/*
+/**
  * For when you want your application to be accessible to the world (0.0.0.0/0).
  * Your application load balancer will have a public IP address that can be reached by anyone,
  * so only use if you are aware and happy with the consequences!
- * */
-interface PublicAccess extends Access {
+ *
+ * Example usage:
+ * ```typescript
+ * { scope: AccessScope.PUBLIC }
+ * ```
+ */
+export interface PublicAccess extends Access {
   scope: AccessScope.PUBLIC;
 }
 
-/*
+/**
  * For when you want to restrict your application's access to a list of CIDR ranges.
- * */
-interface RestrictedAccess extends Access {
+ *
+ * Example usage:
+ * ```typescript
+ * {
+ *   scope: AccessScope.RESTRICTED,
+ *   cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")]
+ * }
+ * ```
+ */
+export interface RestrictedAccess extends Access {
   scope: AccessScope.RESTRICTED;
   cidrRanges: IPeer[];
 }
@@ -49,7 +62,9 @@ interface RestrictedAccess extends Access {
 export type AppAccess = PublicAccess | RestrictedAccess;
 
 /**
- * To grant applications additional IAM permissions, use the `roleConfiguration` prop. For example,
+ * Configuration options for the [[`GuEc2App`]] pattern.
+ *
+ * To grant EC2 instances additional IAM permissions, use the `roleConfiguration` prop. For example,
  * to allow your app to write to DynamoDB:
  *
  * ```typescript
@@ -57,6 +72,22 @@ export type AppAccess = PublicAccess | RestrictedAccess;
  * roleConfiguration: {
  *   additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
  * }
+ * ```
+ *
+ * To create an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
+ * the specified threshold, use:
+ * ```typescript
+ * // other props
+ * monitoringConfiguration: {
+ *   tolerated5xxPercentage: 1,
+ *   snsTopicName: "alerts-topic-for-my-team",
+ * }
+ * ```
+ *
+ * To opt out of creating alarms, use:
+ *```typescript
+ * // other props
+ * monitoringConfiguration: { noMonitoring: true }
  * ```
  */
 export interface GuEc2AppProps extends AppIdentity {
@@ -94,51 +125,82 @@ function restrictedCidrRanges(ranges: IPeer[]) {
   }));
 }
 
-/*
- * This pattern is under development. Please don't attempt to use it yet.
+/**
+ * Pattern which creates all of the resources needed to run an application on EC2 instances.
+ * For convenience, you may wish to use [[`GuPlayApp`]] or [[`GuNodeApp`]], which extend this class.
  *
- * Usage:
+ * This pattern will grant your EC2 instances a number of commonly needed IAM permissions. For more information on
+ * this, see [[`GuInstanceRole`]]. To add additional permissions to your EC2 instances, see [[`GuEc2AppProps`]].
+ *
+ * This pattern will automatically create security groups/rules which allow for:
+ * 1. Incoming traffic over HTTPS (from the whole internet or from the specified CIDR ranges, depending on the
+ * [[`AppAccess`]] specified).
+ * 2. Communication between the load balancer and the EC2 instances over HTTP, via the specified application port.
+ * 3. Outbound traffic from your EC2 instances over HTTPs (to enable communication with third-party APIs).
+ *
+ * The pattern will run a single EC2 instance in `CODE` and three EC2 instances in `PROD`.
+ *
+ * Example usage for a public facing app (open to the internet):
  * ```typescript
  * new GuEc2App(stack, {
- *       applicationPort: GuApplicationPorts.Node,
- *       app: "app-name",
- *       // ONLY allows access to CIDR ranges provided
- *       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
- *       certificateProps:{
- *           [Stage.CODE]: {
- *             domainName: "code-guardian.com",
- *             hostedZoneId: "id123",
- *           },
- *           [Stage.PROD]: {
- *             domainName: "prod-guardian.com",
- *             hostedZoneId: "id124",
- *           },
- *       },
- *       monitoringConfiguration: { noMonitoring: true },
- *       userData: "",
- * });
- *
- * // For public-facing applications
- * new GuEc2App(stack, {
- *       applicationPort: GuApplicationPorts.Node,
- *       app: "app-name",
- *       // ONLY allows access to CIDR ranges provided
- *       access: { scope: AccessScope.PUBLIC },
- *       certificateProps:{
- *           [Stage.CODE]: {
- *             domainName: "code-guardian.com",
- *             hostedZoneId: "id123",
- *           },
- *           [Stage.PROD]: {
- *             domainName: "prod-guardian.com",
- *             hostedZoneId: "id124",
- *           },
- *       },
- *       monitoringConfiguration: { noMonitoring: true },
- *       userData: "",
+ *   applicationPort: 1234,
+ *   app: "app-name",
+ *   access: { scope: AccessScope.PUBLIC },
+ *   certificateProps:{
+ *     [Stage.CODE]: {
+ *       domainName: "code-guardian.com",
+ *       hostedZoneId: "id123",
+ *     },
+ *     [Stage.PROD]: {
+ *       domainName: "prod-guardian.com",
+ *       hostedZoneId: "id124",
+ *     },
+ *   },
+ *   monitoringConfiguration: {
+ *     tolerated5xxPercentage: 1,
+ *     snsTopicName: "alerts-topic-for-my-team",
+ *   },
+ *   userData: {
+ *     distributable: {
+ *       fileName: "app-name.deb",
+ *       executionStatement: `dpkg -i /app-name/app-name.deb`,
+ *     }
+ *   },
  * });
  * ```
- * */
+ *
+ * Example usage for an app which is locked down to specific IP ranges:
+ * ```typescript
+ * new GuEc2App(stack, {
+ *   applicationPort: 1234,
+ *   app: "app-name",
+ *   access: {
+ *     scope: AccessScope.RESTRICTED,
+ *     cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")],
+ *   },
+ *   certificateProps:{
+ *     [Stage.CODE]: {
+ *       domainName: "code-guardian.com",
+ *       hostedZoneId: "id123",
+ *     },
+ *     [Stage.PROD]: {
+ *       domainName: "prod-guardian.com",
+ *       hostedZoneId: "id124",
+ *     },
+ *   },
+ *   monitoringConfiguration: {
+ *     tolerated5xxPercentage: 1,
+ *     snsTopicName: "alerts-topic-for-my-team",
+ *   },
+ *   userData: {
+ *     distributable: {
+ *       fileName: "app-name.deb",
+ *       executionStatement: `dpkg -i /app-name/app-name.deb`,
+ *     }
+ *   },
+ * });
+ * ```
+ */
 export class GuEc2App {
   /*
    * These are public for now, as this allows users to
@@ -249,8 +311,10 @@ export class GuEc2App {
   }
 }
 
-/*
-This pattern is under development. Please don't attempt to use it yet.
+/**
+ * Creates an instance of [[`GuEc2App`]] with Play's [[GuApplicationPorts | default application port]].
+ *
+ * For all configuration options, see [[`GuEc2AppProps`]].
  */
 export class GuPlayApp extends GuEc2App {
   constructor(scope: GuStack, props: GuMaybePortProps) {
@@ -258,8 +322,10 @@ export class GuPlayApp extends GuEc2App {
   }
 }
 
-/*
-This pattern is under development. Please don't attempt to use it yet.
+/**
+ * Creates an instance of [[`GuEc2App`]] with Node's [[GuApplicationPorts | default application port]].
+ *
+ * For all configuration options, see [[`GuEc2AppProps`]].
  */
 export class GuNodeApp extends GuEc2App {
   constructor(scope: GuStack, props: GuMaybePortProps) {
