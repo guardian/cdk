@@ -6,7 +6,6 @@ import { Duration } from "@aws-cdk/core";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
-import type { GuStack } from "../constructs/core";
 import { GuSSMParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
@@ -66,8 +65,7 @@ export interface RestrictedAccess extends Access {
 export type AppAccess = PublicAccess | RestrictedAccess;
 
 export interface AccessLoggingProps {
-  // This provides a hint & incentive to users to use a recommended path
-  bucketSSMPath: string | "/account/services/access-logging/bucket";
+  enabled: boolean;
   prefix?: string;
 }
 
@@ -109,7 +107,8 @@ export interface AccessLoggingProps {
  * }
  * ```
  *
- * To enable access logging for your load balancer, you can specify the bucket and prefix to write the logs to.
+ * To enable access logging for your load balancer, you can specify the prefix to write the logs to.
+ * The S3 bucket used to hold these access logs must be specified in SSM at `/account/services/access-logging/bucket`
  * You must specify a region in your stack declaration if you are to use this prop, as specified here:
  * https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix
  * For example:
@@ -117,9 +116,19 @@ export interface AccessLoggingProps {
  * {
  *   // other props
  *   accessLogging: {
- *     // Recommended path: `/account/services/access-logging/bucket`
- *     bucket: "/SSM/PATH/TO/ACCESS_LOGGING_BUCKET",
+ *     enabled: true,
  *     prefix: "my-application-logs"
+ *   }
+ * }
+ *
+ * If you would like to enable access logging at the root of the S3 bucket (ie without a prefix), you can omit the prefix
+ * For example:
+ * ```
+ *  * ```typescript
+ * {
+ *   // other props
+ *   accessLogging: {
+ *     enabled: true,
  *   }
  * }
  * ```
@@ -336,8 +345,8 @@ export class GuEc2App {
       vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
     });
 
-    if (props.accessLogging) {
-      const accessLoggingBucket = new GuSSMParameter(scope, { parameter: props.accessLogging.bucketSSMPath });
+    if (props.accessLogging?.enabled) {
+      const accessLoggingBucket = new GuSSMParameter(scope, { parameter: "/account/services/access-logging/bucket" });
 
       loadBalancer.logAccessLogs(
         Bucket.fromBucketName(

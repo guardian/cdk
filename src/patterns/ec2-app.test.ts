@@ -438,10 +438,7 @@ describe("the GuEC2App pattern", function () {
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
-      accessLogging: {
-        bucketSSMPath: "/path/to/access-logging-bucket",
-        prefix: "access-logging-prefix",
-      },
+      accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
@@ -465,6 +462,33 @@ describe("the GuEC2App pattern", function () {
         },
         { Key: "access_logs.s3.prefix", Value: "access-logging-prefix" },
       ])
+    );
+  });
+
+  it("can disable access logging if desired", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      accessLogging: { enabled: false },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const lbKey = Object.keys(json.Resources).find(
+      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    );
+    expect(lbKey).toBeTruthy();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We assert above that this is truthy
+    const loadBalancer = json.Resources[lbKey!];
+
+    expect(loadBalancer.Properties.LoadBalancerAttributes).toEqual(
+      expect.not.arrayContaining([{ Key: "access_logs.s3.enabled", Value: "true" }])
     );
   });
 
