@@ -1,13 +1,13 @@
 import { SnsEventSource } from "@aws-cdk/aws-lambda-event-sources";
 import { Topic } from "@aws-cdk/aws-sns";
 import { CfnOutput } from "@aws-cdk/core";
-import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
-import type { GuMigratingResource } from "../constructs/core/migrating";
-import type { GuFunctionProps } from "../constructs/lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";
+import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
+import type { GuStack } from "../constructs/core";
+import type { GuMigratingResource } from "../constructs/core/migrating";
+import type { GuFunctionProps } from "../constructs/lambda";
 
 /**
  * Used to provide information about an existing SNS topic to the [[`GuSnsLambda`]] pattern.

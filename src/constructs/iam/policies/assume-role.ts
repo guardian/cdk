@@ -1,7 +1,7 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import { GuPolicy } from "./base-policy";
 import type { GuStack } from "../../core";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
-import { GuPolicy } from "./base-policy";
 
 export interface GuAssumeRolePolicyProps extends GuNoStatementsPolicyProps {
   resources: string[];

@@ -1,16 +1,16 @@
-import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
-import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
-import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
-import type { GuStack } from "../core";
 import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
 import { AppIdentity } from "../core/identity";
-import type { GuMigratingResource } from "../core/migrating";
 import { GuHttpsEgressSecurityGroup, GuWazuhAccess } from "../ec2";
 import { GuInstanceRole } from "../iam";
+import type { GuStack } from "../core";
+import type { GuMigratingResource } from "../core/migrating";
+import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-autoscaling";
+import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
+import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends

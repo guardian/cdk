@@ -1,12 +1,12 @@
 import { Certificate, CertificateValidation } from "@aws-cdk/aws-certificatemanager";
-import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
-import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
+import type { GuStack } from "../core";
 import type { GuMigratingResource } from "../core/migrating";
+import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
 
 export type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource;
 export type GuCertificatePropsWithApp = GuCertificateProps & AppIdentity;

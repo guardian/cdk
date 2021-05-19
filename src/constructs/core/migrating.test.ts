@@ -1,13 +1,13 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import type { BucketProps } from "@aws-cdk/aws-s3";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Annotations } from "@aws-cdk/core";
-import type { GuStatefulConstruct } from "../../utils/mixin";
-import type { SynthedStack } from "../../utils/test";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuMigratingResource } from "./migrating";
+import type { GuStatefulConstruct } from "../../utils/mixin";
+import type { SynthedStack } from "../../utils/test";
 import type { GuStack } from "./stack";
+import type { BucketProps } from "@aws-cdk/aws-s3";
 
 class TestGuStatefulConstruct extends Bucket implements GuStatefulConstruct {
   isStatefulConstruct: true;

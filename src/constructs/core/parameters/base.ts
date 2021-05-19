@@ -1,8 +1,8 @@
-import type { CfnParameterProps } from "@aws-cdk/core";
 import { CfnParameter } from "@aws-cdk/core";
 import { RegexPattern } from "../../../constants";
 import type { AppIdentity } from "../identity";
 import type { GuStack } from "../stack";
+import type { CfnParameterProps } from "@aws-cdk/core";
 
 export interface GuParameterProps extends CfnParameterProps {
   fromSSM?: boolean;

@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import type { SynthedStack } from "../../../utils/test";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuLogShippingPolicy } from "./log-shipping";
+import type { SynthedStack } from "../../../utils/test";
 
 describe("The GuLogShippingPolicy singleton class", () => {
   it("creates a policy restricted to a kinesis stream defined in a parameter", () => {

@@ -1,6 +1,6 @@
 import { isSingletonPresentInStack } from "../../../utils/test";
-import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
+import type { GuStack } from "../stack";
 
 export class GuLoggingStreamNameParameter extends GuStringParameter {
   private static instance: GuStringParameter | undefined;

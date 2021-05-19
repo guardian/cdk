@@ -2,10 +2,10 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { ComparisonOperator } from "@aws-cdk/aws-cloudwatch";
 import { Runtime } from "@aws-cdk/aws-lambda";
-import type { SynthedStack } from "../../utils/test";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "../lambda";
 import { GuAlarm } from "./alarm";
+import type { SynthedStack } from "../../utils/test";
 
 describe("The GuAlarm class", () => {
   it("should create a CloudWatch alarm", () => {

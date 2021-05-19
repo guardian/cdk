@@ -1,10 +1,10 @@
-import type { BucketProps } from "@aws-cdk/aws-s3";
 import "../test/jest";
 import { Bucket } from "@aws-cdk/aws-s3";
-import type { GuStack } from "../../constructs/core";
 import { GuMigratingResource } from "../../constructs/core/migrating";
 import { simpleGuStackForTesting } from "../test";
 import { GuMigratableConstruct } from "./migratable-construct";
+import type { GuStack } from "../../constructs/core";
+import type { BucketProps } from "@aws-cdk/aws-s3";
 
 interface TestGuMigratableConstructProps extends BucketProps, GuMigratingResource {}
 

@@ -1,9 +1,9 @@
-import type { IVpc } from "@aws-cdk/aws-ec2";
 import { Peer } from "@aws-cdk/aws-ec2";
 import { isSingletonPresentInStack } from "../../../utils/test";
-import type { GuStack } from "../../core";
 import { GuMigratingResource } from "../../core/migrating";
 import { GuBaseSecurityGroup } from "./base";
+import type { GuStack } from "../../core";
+import type { IVpc } from "@aws-cdk/aws-ec2";
 
 /**
  * A security group to allow a Wazuh agent on an EC2 instance to communicate with the outside.

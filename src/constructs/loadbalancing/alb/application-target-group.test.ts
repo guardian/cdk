@@ -4,8 +4,8 @@ import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { AppIdentity } from "../../core/identity";
 import { GuApplicationTargetGroup } from "./application-target-group";
+import type { AppIdentity } from "../../core/identity";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",

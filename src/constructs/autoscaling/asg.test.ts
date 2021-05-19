@@ -5,14 +5,14 @@ import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
-import type { Resource, SynthedStack } from "../../utils/test";
 import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
-import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
 import { GuAllowPolicy, GuInstanceRole } from "../iam";
 import { GuApplicationTargetGroup } from "../loadbalancing";
-import type { GuAutoScalingGroupProps } from "./asg";
 import { GuAutoScalingGroup } from "./";
+import type { Resource, SynthedStack } from "../../utils/test";
+import type { AppIdentity } from "../core/identity";
+import type { GuAutoScalingGroupProps } from "./asg";
 
 describe("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {

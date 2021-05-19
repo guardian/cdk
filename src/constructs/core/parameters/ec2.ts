@@ -1,7 +1,7 @@
 import { AppIdentity } from "../identity";
+import { GuParameter } from "./base";
 import type { GuStack } from "../stack";
 import type { GuNoTypeParameterPropsWithAppIdentity } from "./base";
-import { GuParameter } from "./base";
 
 export class GuInstanceTypeParameter extends GuParameter {
   constructor(scope: GuStack, props: GuNoTypeParameterPropsWithAppIdentity) {

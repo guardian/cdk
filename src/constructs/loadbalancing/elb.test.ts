@@ -4,9 +4,9 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../utils/test";
+import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
 import type { SynthedStack } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
-import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
 
 describe("The GuClassicLoadBalancer class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {

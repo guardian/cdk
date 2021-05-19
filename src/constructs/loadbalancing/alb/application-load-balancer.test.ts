@@ -3,10 +3,10 @@ import "../../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
-import type { SynthedStack } from "../../../utils/test";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { AppIdentity } from "../../core/identity";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
+import type { SynthedStack } from "../../../utils/test";
+import type { AppIdentity } from "../../core/identity";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",

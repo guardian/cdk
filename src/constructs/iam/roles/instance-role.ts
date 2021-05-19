@@ -1,7 +1,5 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
-import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
-import type { GuPolicy } from "../policies";
 import {
   GuDescribeEC2Policy,
   GuGetDistributablePolicy,
@@ -10,6 +8,8 @@ import {
   GuSSMRunCommandPolicy,
 } from "../policies";
 import { GuRole } from "./roles";
+import type { GuStack } from "../../core";
+import type { GuPolicy } from "../policies";
 
 export interface GuInstanceRoleProps {
   withoutLogShipping?: boolean;

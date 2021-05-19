@@ -1,9 +1,9 @@
 import { request } from "https";
 import { parse } from "url";
-// eslint-disable-next-line import/no-unresolved -- this comes from @types/aws-lambda, but eslint can't seem to read it properly
-import type { CloudFormationCustomResourceEvent, Context } from "aws-lambda";
 import SSM from "aws-sdk/clients/ssm";
 import type { CustomResourceGetParameterProps } from "../interfaces";
+// eslint-disable-next-line import/no-unresolved -- this comes from @types/aws-lambda, but eslint can't seem to read it properly
+import type { CloudFormationCustomResourceEvent, Context } from "aws-lambda";
 
 /* eslint-disable -- This function is copied straight from AWS */
 // https://github.com/aws/aws-cdk/blob/95438b56bfdc90e94f969f6998e5b5b680cbd7a8/packages/%40aws-cdk/custom-resources/lib/aws-custom-resource/runtime/index.ts#L16-L29

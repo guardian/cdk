@@ -1,4 +1,3 @@
-import type { App, StackProps } from "@aws-cdk/core";
 import { Stack, Tags } from "@aws-cdk/core";
 import execa from "execa";
 import gitUrlParse from "git-url-parse";
@@ -7,12 +6,13 @@ import { ContextKeys } from "../../constants/context-keys";
 import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
 import { Logger } from "../../utils/logger";
+import { GuStageMapping } from "./mappings";
+import { GuStageParameter } from "./parameters";
 import type { StackStageIdentity } from "./identity";
 import type { GuStageDependentValue } from "./mappings";
-import { GuStageMapping } from "./mappings";
 import type { GuMigratingStack } from "./migrating";
 import type { GuParameter } from "./parameters";
-import { GuStageParameter } from "./parameters";
+import type { App, StackProps } from "@aws-cdk/core";
 
 export interface GuStackProps extends StackProps, Partial<GuMigratingStack> {
   stack: string;
