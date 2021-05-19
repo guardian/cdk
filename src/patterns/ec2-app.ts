@@ -136,7 +136,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  * 1. Incoming traffic over HTTPS (from the whole internet or from the specified CIDR ranges, depending on the
  * [[`AppAccess`]] specified).
  * 2. Communication between the load balancer and the EC2 instances over HTTP, via the specified application port.
- * 3. Outbound traffic from your EC2 instances over HTTPs (to enable communication with third-party APIs).
+ * 3. Outbound traffic from your EC2 instances over HTTPS (to enable communication with third-party APIs).
  *
  * The pattern will run a single EC2 instance in `CODE` and three EC2 instances in `PROD`.
  *
@@ -169,7 +169,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  * });
  * ```
  *
- * Example usage for an app which is locked down to specific IP ranges:
+ * Example usage for an app which is restricted to specific CIDR ranges:
  * ```typescript
  * new GuEc2App(stack, {
  *   applicationPort: 1234,
