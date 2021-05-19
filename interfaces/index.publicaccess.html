@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GuStatefulConstruct | @guardian/cdk - v15.1.1</title>
+	<title>PublicAccess | @guardian/cdk - v15.1.1</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v15.1.1">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,24 +55,41 @@
 					<a href="../modules.html">@guardian/cdk - v15.1.1</a>
 				</li>
 				<li>
-					<a href="../modules/utils_mixin.html">utils/mixin</a>
+					<a href="../modules/index.html">index</a>
 				</li>
 				<li>
-					<a href="utils_mixin.gustatefulconstruct.html">GuStatefulConstruct</a>
+					<a href="index.publicaccess.html">PublicAccess</a>
 				</li>
 			</ul>
-			<h1>Interface GuStatefulConstruct</h1>
+			<h1>Interface PublicAccess</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>For when you want your application to be accessible to the world (0.0.0.0/0).
+							Your application load balancer will have a public IP address that can be reached by anyone,
+						so only use if you are aware and happy with the consequences!</p>
+					</div>
+					<p>Example usage:</p>
+					<pre><code class="language-typescript"><span style="color: #000000">{ scope: </span><span style="color: #001080">AccessScope</span><span style="color: #000000">.</span><span style="color: #0070C1">PUBLIC</span><span style="color: #000000"> }</span>
+</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GuStatefulConstruct</span>
+						<a href="index.access.html" class="tsd-signature-type" data-tsd-kind="Interface">Access</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">PublicAccess</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -83,7 +100,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="utils_mixin.gustatefulconstruct.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="index.publicaccess.html#scope" class="tsd-kind-icon">scope</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,21 +108,16 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="isstatefulconstruct" class="tsd-anchor"></a>
-					<h3>is<wbr>Stateful<wbr>Construct</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Stateful<wbr>Construct<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+					<a name="scope" class="tsd-anchor"></a>
+					<h3>scope</h3>
+					<div class="tsd-signature tsd-kind-icon">scope<span class="tsd-signature-symbol">:</span> <a href="../enums/index.accessscope.html#public" class="tsd-signature-type" data-tsd-kind="Enumeration member">PUBLIC</a></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="index.access.html">Access</a>.<a href="index.access.html#scope">scope</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/utils/mixin/migratable-construct-stateful.ts#L9">src/utils/mixin/migratable-construct-stateful.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L43">src/patterns/ec2-app.ts:43</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A flag to signal to <code>GuMigratingResource</code> that a construct is stateful and care should be taken when migrating to GuCDK.
-							If one accidentally replaces a stateful resource, downstream services such as DNS may be impacted.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -151,7 +163,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/constructs_sns.html">constructs/sns</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -160,7 +172,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/utils_lambda.html">utils/lambda</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/utils_mixin.html">utils/mixin</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -173,26 +185,68 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/index.accessscope.html" class="tsd-kind-icon">Access<wbr>Scope</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/index.guapplicationports.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Ports</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.guec2app.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.gukinesislambda.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.gunodeapp.html" class="tsd-kind-icon">Gu<wbr>Node<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.guplayapp.html" class="tsd-kind-icon">Gu<wbr>Play<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.guscheduledlambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.gusnslambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.access.html" class="tsd-kind-icon">Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.existingkinesisstream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.existingsnstopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.guec2appprops.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.gukinesislambdaprops.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.guscheduledlambdaprops.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.gusnslambdaprops.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="utils_mixin.gustatefulconstruct.html" class="tsd-kind-icon">Gu<wbr>Stateful<wbr>Construct</a>
+						<a href="index.publicaccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="utils_mixin.gustatefulconstruct.html#isstatefulconstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="index.publicaccess.html#scope" class="tsd-kind-icon">scope</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/utils_mixin.html#gumigratableconstruct" class="tsd-kind-icon">Gu<wbr>Migratable<wbr>Construct</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.restrictedaccess.html" class="tsd-kind-icon">Restricted<wbr>Access</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/utils_mixin.html#gustatefulmigratableconstruct" class="tsd-kind-icon">Gu<wbr>Stateful<wbr>Migratable<wbr>Construct</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/utils_mixin.html#isgustatefulconstruct" class="tsd-kind-icon">is<wbr>GuStateful<wbr>Construct</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/index.html#appaccess" class="tsd-kind-icon">App<wbr>Access</a>
 					</li>
 				</ul>
 			</nav>

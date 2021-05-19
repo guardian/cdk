@@ -71,13 +71,26 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>To grant applications additional IAM permissions, use the <code>roleConfiguration</code> prop. For example,
-						to allow your app to write to DynamoDB:</p>
+						<p>Configuration options for the <a href="../classes/index.guec2app.html"><code>GuEc2App</code></a> pattern.</p>
 					</div>
+					<p>To grant EC2 instances additional IAM permissions, use the <code>roleConfiguration</code> prop. For example,
+					to allow your app to write to DynamoDB:</p>
 					<pre><code class="language-typescript"><span style="color: #008000">// other props</span>
 <span style="color: #000000">roleConfiguration: {</span>
 <span style="color: #000000">  additionalPolicies: [</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuDynamoDBWritePolicy</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;DynamoTable&quot;</span><span style="color: #000000">, { </span><span style="color: #001080">tableName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;my-dynamo-table&quot;</span><span style="color: #000000"> })],</span>
 <span style="color: #000000">}</span>
+</code></pre>
+					<p>To create an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
+					the specified threshold, use:</p>
+					<pre><code class="language-typescript"><span style="color: #008000">// other props</span>
+<span style="color: #000000">monitoringConfiguration: {</span>
+<span style="color: #000000">  tolerated5xxPercentage: </span><span style="color: #098658">1</span><span style="color: #000000">,</span>
+<span style="color: #000000">  snsTopicName: </span><span style="color: #A31515">&quot;alerts-topic-for-my-team&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">}</span>
+</code></pre>
+					<p>To opt out of creating alarms, use:</p>
+					<pre><code class="language-typescript"><span style="color: #008000">// other props</span>
+<span style="color: #000000">monitoringConfiguration: { noMonitoring: </span><span style="color: #0000FF">true</span><span style="color: #000000"> }</span>
 </code></pre>
 				</div>
 			</section>
@@ -121,7 +134,7 @@
 					<div class="tsd-signature tsd-kind-icon">access<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#appaccess" class="tsd-signature-type" data-tsd-kind="Type alias">AppAccess</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L64">src/patterns/ec2-app.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L95">src/patterns/ec2-app.ts:95</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -132,7 +145,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from AppIdentity.app</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -142,7 +155,7 @@
 					<div class="tsd-signature tsd-kind-icon">application<wbr>Port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L65">src/patterns/ec2-app.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L96">src/patterns/ec2-app.ts:96</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -152,7 +165,7 @@
 					<div class="tsd-signature tsd-kind-icon">certificate<wbr>Props<span class="tsd-signature-symbol">:</span> <a href="../modules/constructs_acm.html#gucertificateprops" class="tsd-signature-type" data-tsd-kind="Type alias">GuCertificateProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L66">src/patterns/ec2-app.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L97">src/patterns/ec2-app.ts:97</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -162,7 +175,7 @@
 					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.nomonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="constructs_cloudwatch.gu5xxpercentagemonitoringprops.html" class="tsd-signature-type" data-tsd-kind="Interface">Gu5xxPercentageMonitoringProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L68">src/patterns/ec2-app.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L99">src/patterns/ec2-app.ts:99</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -172,7 +185,7 @@
 					<div class="tsd-signature tsd-kind-icon">role<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_iam.guinstanceroleprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuInstanceRoleProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L67">src/patterns/ec2-app.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L98">src/patterns/ec2-app.ts:98</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -182,7 +195,7 @@
 					<div class="tsd-signature tsd-kind-icon">user<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="constructs_autoscaling.guuserdataprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuUserDataProps</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L63">src/patterns/ec2-app.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L94">src/patterns/ec2-app.ts:94</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -323,6 +336,12 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.gusnslambdaprops.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.publicaccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.restrictedaccess.html" class="tsd-kind-icon">Restricted<wbr>Access</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/index.html#appaccess" class="tsd-kind-icon">App<wbr>Access</a>

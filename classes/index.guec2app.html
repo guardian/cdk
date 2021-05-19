@@ -68,6 +68,104 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Pattern which creates all of the resources needed to run an application on EC2 instances.
+						For convenience, you may wish to use <a href="index.guplayapp.html"><code>GuPlayApp</code></a> or <a href="index.gunodeapp.html"><code>GuNodeApp</code></a>, which extend this class.</p>
+					</div>
+					<p>This pattern will grant your EC2 instances a number of commonly needed IAM permissions. For more information on
+					this, see <a href="constructs_iam.guinstancerole.html"><code>GuInstanceRole</code></a>. To add additional permissions to your EC2 instances, see <a href="../interfaces/index.guec2appprops.html"><code>GuEc2AppProps</code></a>.</p>
+					<p>This pattern will automatically create security groups/rules which allow for:</p>
+					<ol>
+						<li>Incoming traffic over HTTPS (from the whole internet or from the specified CIDR ranges, depending on the
+						<a href="../modules/index.html#appaccess"><code>AppAccess</code></a> specified).</li>
+						<li>Communication between the load balancer and the EC2 instances over HTTP, via the specified application port.</li>
+						<li>Outbound traffic from your EC2 instances over HTTPS (to enable communication with third-party APIs).</li>
+					</ol>
+					<p>The pattern will run a single EC2 instance in <code>CODE</code> and three EC2 instances in <code>PROD</code>.</p>
+					<p>Example usage for a public facing app (open to the internet):</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuEc2App</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #001080">applicationPort:</span><span style="color: #000000"> </span><span style="color: #098658">1234</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">app:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;app-name&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">access:</span><span style="color: #000000"> { </span><span style="color: #001080">scope:</span><span style="color: #000000"> </span><span style="color: #001080">AccessScope</span><span style="color: #000000">.</span><span style="color: #0070C1">PUBLIC</span><span style="color: #000000"> },</span>
+<span style="color: #000000">  </span><span style="color: #001080">certificateProps:</span><span style="color: #000000">{</span>
+<span style="color: #000000">    </span><span style="color: #001080">[Stage.</span><span style="color: #0070C1">CODE</span><span style="color: #001080">]:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">domainName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;code-guardian.com&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">hostedZoneId:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;id123&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">    </span><span style="color: #001080">[Stage.</span><span style="color: #0070C1">PROD</span><span style="color: #001080">]:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">domainName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;prod-guardian.com&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">hostedZoneId:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;id124&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  </span><span style="color: #001080">monitoringConfiguration:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">tolerated5xxPercentage:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #001080">snsTopicName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;alerts-topic-for-my-team&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  </span><span style="color: #001080">userData:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">distributable:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">fileName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;app-name.deb&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">executionStatement:</span><span style="color: #000000"> </span><span style="color: #A31515">`dpkg -i /app-name/app-name.deb`</span><span style="color: #000000">,</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">});</span>
+</code></pre>
+					<p>Example usage for an app which is restricted to specific CIDR ranges:</p>
+					<pre><code class="language-typescript"><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuEc2App</span><span style="color: #000000">(</span><span style="color: #001080">stack</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #001080">applicationPort:</span><span style="color: #000000"> </span><span style="color: #098658">1234</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">app:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;app-name&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">access:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">scope:</span><span style="color: #000000"> </span><span style="color: #001080">AccessScope</span><span style="color: #000000">.</span><span style="color: #0070C1">RESTRICTED</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #001080">cidrRanges:</span><span style="color: #000000"> [</span><span style="color: #001080">Peer</span><span style="color: #000000">.</span><span style="color: #795E26">ipv4</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;192.168.1.1/32&quot;</span><span style="color: #000000">), </span><span style="color: #001080">Peer</span><span style="color: #000000">.</span><span style="color: #795E26">ipv4</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;8.8.8.8/32&quot;</span><span style="color: #000000">)],</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  </span><span style="color: #001080">certificateProps:</span><span style="color: #000000">{</span>
+<span style="color: #000000">    </span><span style="color: #001080">[Stage.</span><span style="color: #0070C1">CODE</span><span style="color: #001080">]:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">domainName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;code-guardian.com&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">hostedZoneId:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;id123&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">    </span><span style="color: #001080">[Stage.</span><span style="color: #0070C1">PROD</span><span style="color: #001080">]:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">domainName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;prod-guardian.com&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">hostedZoneId:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;id124&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  </span><span style="color: #001080">monitoringConfiguration:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">tolerated5xxPercentage:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #001080">snsTopicName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;alerts-topic-for-my-team&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  </span><span style="color: #001080">userData:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">distributable:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #001080">fileName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;app-name.deb&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">executionStatement:</span><span style="color: #000000"> </span><span style="color: #A31515">`dpkg -i /app-name/app-name.deb`</span><span style="color: #000000">,</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">});</span>
+</code></pre>
+					<a href="#customising-the-infrastructure-generated-by-this-pattern" id="customising-the-infrastructure-generated-by-this-pattern" style="color: inherit; text-decoration: none;">
+						<h3>Customising the infrastructure generated by this pattern</h3>
+					</a>
+					<p>Although we allow users to customise many aspects of their infrastructure via <a href="../interfaces/index.guec2appprops.html"><code>GuEc2AppProps</code></a>, it&#39;s possible
+						that there are less common use-cases which are currently unsupported via the API. In these circumstances escape
+					hatches can be used to override specific resources in the stack.</p>
+					<p>In order to do this:</p>
+					<ol>
+						<li>Create desired resource using Guardian or AWS constructs, for example:<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sg</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuSecurityGroup</span><span style="color: #000000">(</span>
+<span style="color: #008000">// custom parameters</span>
+<span style="color: #000000">);</span>
+</code></pre>
+						</li>
+						<li>Access the CloudFormation version of the resource that you wish to customise, for example:<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pattern</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GuEc2App</span><span style="color: #000000">(</span>
+<span style="color: #008000">// all parameters</span>
+<span style="color: #000000">)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">cfnLb</span><span style="color: #000000"> = </span><span style="color: #001080">pattern</span><span style="color: #000000">.</span><span style="color: #001080">loadBalancer</span><span style="color: #000000">.</span><span style="color: #001080">node</span><span style="color: #000000">.</span><span style="color: #001080">defaultChild</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #267F99">CfnLoadBalancer</span><span style="color: #000000">;</span>
+</code></pre>
+						</li>
+						<li>Replace the resource generated by the pattern with your bespoke resource, for example:<pre><code class="language-typescript"><span style="color: #001080">cfnLb</span><span style="color: #000000">.</span><span style="color: #001080">securityGroups</span><span style="color: #000000"> = [</span><span style="color: #001080">sg</span><span style="color: #000000">.</span><span style="color: #001080">securityGroupId</span><span style="color: #000000">];</span>
+</code></pre>
+						</li>
+					</ol>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -119,7 +217,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L155">src/patterns/ec2-app.ts:155</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L243">src/patterns/ec2-app.ts:243</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -144,7 +242,7 @@
 					<div class="tsd-signature tsd-kind-icon">auto<wbr>Scaling<wbr>Group<span class="tsd-signature-symbol">:</span> <a href="constructs_autoscaling.guautoscalinggroup.html" class="tsd-signature-type" data-tsd-kind="Class">GuAutoScalingGroup</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L153">src/patterns/ec2-app.ts:153</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L241">src/patterns/ec2-app.ts:241</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -154,7 +252,7 @@
 					<div class="tsd-signature tsd-kind-icon">certificate<span class="tsd-signature-symbol">:</span> <a href="constructs_acm.gucertificate.html" class="tsd-signature-type" data-tsd-kind="Class">GuCertificate</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L151">src/patterns/ec2-app.ts:151</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L239">src/patterns/ec2-app.ts:239</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -164,7 +262,7 @@
 					<div class="tsd-signature tsd-kind-icon">listener<span class="tsd-signature-symbol">:</span> <a href="constructs_loadbalancing.guhttpsapplicationlistener.html" class="tsd-signature-type" data-tsd-kind="Class">GuHttpsApplicationListener</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L154">src/patterns/ec2-app.ts:154</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L242">src/patterns/ec2-app.ts:242</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -174,7 +272,7 @@
 					<div class="tsd-signature tsd-kind-icon">load<wbr>Balancer<span class="tsd-signature-symbol">:</span> <a href="constructs_loadbalancing.guapplicationloadbalancer.html" class="tsd-signature-type" data-tsd-kind="Class">GuApplicationLoadBalancer</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L152">src/patterns/ec2-app.ts:152</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L240">src/patterns/ec2-app.ts:240</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -184,7 +282,7 @@
 					<div class="tsd-signature tsd-kind-icon">target<wbr>Group<span class="tsd-signature-symbol">:</span> <a href="constructs_loadbalancing.guapplicationtargetgroup.html" class="tsd-signature-type" data-tsd-kind="Class">GuApplicationTargetGroup</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0cb1e7/src/patterns/ec2-app.ts#L155">src/patterns/ec2-app.ts:155</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/1f8c02d/src/patterns/ec2-app.ts#L243">src/patterns/ec2-app.ts:243</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -322,6 +420,12 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/index.gusnslambdaprops.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.publicaccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.restrictedaccess.html" class="tsd-kind-icon">Restricted<wbr>Access</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/index.html#appaccess" class="tsd-kind-icon">App<wbr>Access</a>
