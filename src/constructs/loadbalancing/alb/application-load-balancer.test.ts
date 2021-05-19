@@ -55,11 +55,15 @@ describe("The GuApplicationLoadBalancer class", () => {
     );
   });
 
-  test("deletes the Type property", () => {
+  test("deletes the Type property if the removeType prop is set to true", () => {
     // not using an auto-generated logicalId to make the expectation notation easier
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, existingLogicalId: "MyALB" });
-
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+      existingLogicalId: "MyALB",
+      removeType: true,
+    });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources.MyALB.Properties)).not.toContain("Type");
   });
