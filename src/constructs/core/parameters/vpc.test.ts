@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import type { SynthedStack } from "../../../utils/test";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuSubnetListParameter, GuVpcParameter } from "./vpc";
+import type { SynthedStack } from "../../../utils/test";
 
 describe("The GuSubnetListParameter class", () => {
   it("should combine override and prop values", () => {

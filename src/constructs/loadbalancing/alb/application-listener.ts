@@ -1,11 +1,11 @@
-import type { ApplicationListenerProps } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
+import { AppIdentity } from "../../core/identity";
 import type { GuCertificate } from "../../acm";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
 import type { GuMigratingResource } from "../../core/migrating";
 import type { GuApplicationTargetGroup } from "./application-target-group";
+import type { ApplicationListenerProps } from "@aws-cdk/aws-elasticloadbalancingv2";
 
 export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity, GuMigratingResource {}
 

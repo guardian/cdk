@@ -3,9 +3,9 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
-import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledLambda } from "./scheduled-lambda";
+import type { NoMonitoring } from "../constructs/cloudwatch";
 
 describe("The GuScheduledLambda pattern", () => {
   it("should create the correct resources with minimal config", () => {

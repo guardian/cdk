@@ -1,6 +1,6 @@
 import { Stage, Stages } from "../../../constants";
-import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
+import type { GuStack } from "../stack";
 
 export class GuStageParameter extends GuStringParameter {
   constructor(scope: GuStack) {

@@ -1,10 +1,10 @@
-import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
 import { Alarm } from "@aws-cdk/aws-cloudwatch";
 import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
-import type { ITopic } from "@aws-cdk/aws-sns";
 import { Topic } from "@aws-cdk/aws-sns";
 import { Stage } from "../../constants";
 import type { GuStack, GuStageDependentValue } from "../core";
+import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
+import type { ITopic } from "@aws-cdk/aws-sns";
 
 export interface GuAlarmProps extends AlarmProps {
   snsTopicName: string;

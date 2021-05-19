@@ -1,9 +1,9 @@
-import type { IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import { GuMigratableConstruct } from "../../../utils/mixin";
-import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
+import type { GuStack } from "../../core";
 import type { GuMigratingResource } from "../../core/migrating";
+import type { IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 
 /**
  * A way to describe an ingress or egress rule for a security group.

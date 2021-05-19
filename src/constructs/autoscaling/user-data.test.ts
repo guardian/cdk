@@ -5,8 +5,8 @@ import { Stage } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuPrivateConfigBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";
-import type { GuUserDataPropsWithApp } from "./user-data";
 import { GuUserData } from "./user-data";
+import type { GuUserDataPropsWithApp } from "./user-data";
 
 describe("GuUserData", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {

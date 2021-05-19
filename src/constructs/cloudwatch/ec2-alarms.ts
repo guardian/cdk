@@ -1,11 +1,11 @@
 import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { HttpCodeElb, HttpCodeTarget } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
+import { GuAlarm } from "./alarm";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 import type { GuApplicationLoadBalancer } from "../loadbalancing";
 import type { GuAlarmProps } from "./alarm";
-import { GuAlarm } from "./alarm";
 
 export interface Gu5xxPercentageMonitoringProps
   extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"> {

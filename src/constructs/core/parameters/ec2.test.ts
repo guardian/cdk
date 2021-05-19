@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
 import { GuInstanceTypeParameter } from "./ec2";
+import type { SynthedStack } from "../../../utils/test";
 
 describe("The GuInstanceTypeParameter class", () => {
   it("should combine default, override and prop values", () => {

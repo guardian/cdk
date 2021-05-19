@@ -1,6 +1,6 @@
+import { GuParameter } from "./base";
 import type { GuStack } from "../stack";
 import type { GuNoTypeParameterProps } from "./base";
-import { GuParameter } from "./base";
 
 export class GuSubnetListParameter extends GuParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {

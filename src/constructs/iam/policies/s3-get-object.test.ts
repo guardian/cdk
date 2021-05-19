@@ -1,9 +1,9 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
 import { GuDistributionBucketParameter } from "../../core";
 import { GuGetDistributablePolicy, GuGetS3ObjectsPolicy } from "./s3-get-object";
+import type { SynthedStack } from "../../../utils/test";
 
 describe("The GuGetS3ObjectPolicy class", () => {
   it("sets default props", () => {

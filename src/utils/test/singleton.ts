@@ -1,5 +1,5 @@
-import type { Stack } from "@aws-cdk/core/lib/stack";
 import type { GuStack } from "../../constructs/core";
+import type { Stack } from "@aws-cdk/core/lib/stack";
 
 /**
  * Check if an element exists in a [[`GuStack`]].

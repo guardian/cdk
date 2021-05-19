@@ -1,6 +1,6 @@
 import { isSingletonPresentInStack } from "../../../utils/test";
-import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
+import type { GuStack } from "../stack";
 
 /**
  * Creates a CloudFormation parameter which references the bucket used to store code artifacts.

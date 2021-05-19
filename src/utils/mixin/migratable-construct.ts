@@ -1,6 +1,6 @@
 import { Construct } from "@aws-cdk/core";
-import type { GuMigratingStack } from "../../constructs/core/migrating";
 import { GuMigratingResource, isGuMigratingStack } from "../../constructs/core/migrating";
+import type { GuMigratingStack } from "../../constructs/core/migrating";
 import type { AnyConstructor } from "./types";
 
 /**
