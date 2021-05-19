@@ -3,7 +3,7 @@ import "../../../utils/test/jest";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import { GuHttpsEgressSecurityGroup, GuPublicInternetAccessSecurityGroup, GuSecurityGroup } from "./base";
+import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "./base";
 
 describe("The GuSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -101,36 +101,6 @@ describe("The GuSecurityGroup class", () => {
         app: "testing",
       });
     }).toThrow(new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
-  });
-});
-
-describe("The GuPublicInternetAccessSecurityGroup class", () => {
-  const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
-    availabilityZones: [""],
-    publicSubnetIds: [""],
-  });
-
-  it("adds global access on 443 by default", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuPublicInternetAccessSecurityGroup(stack, "InternetAccessGroup", {
-      vpc,
-      app: "testing",
-    });
-
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
-      GroupDescription: "Allow all inbound traffic via HTTPS",
-      SecurityGroupIngress: [
-        {
-          CidrIp: "0.0.0.0/0",
-          Description: "Allow all inbound traffic via HTTPS",
-          FromPort: 443,
-          IpProtocol: "tcp",
-          ToPort: 443,
-        },
-      ],
-    });
   });
 });
 

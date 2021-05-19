@@ -75,17 +75,6 @@ export class GuSecurityGroup extends GuBaseSecurityGroup {
   }
 }
 
-// TODO should this be a singleton?
-export class GuPublicInternetAccessSecurityGroup extends GuSecurityGroup {
-  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
-    super(scope, id, {
-      ...props,
-      ingresses: [{ range: Peer.anyIpv4(), port: 443, description: "Allow all inbound traffic via HTTPS" }],
-      description: "Allow all inbound traffic via HTTPS",
-    });
-  }
-}
-
 /**
  * Creates a security group which allows all outbound HTTPS traffic.
  */
