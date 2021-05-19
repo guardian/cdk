@@ -86,9 +86,23 @@ traffic to the ASG using the same protocol.
 
 ### ELB defaults
 
-In CloudFormation, the [`Scheme`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-scheme) property is not required on an `AWS::ElasticLoadBalancing::LoadBalancer`. However, AWS CDK appears to automatically add a default for this property and we have observed that this can lead to a resource replacement (which often causes downtime).
+In CloudFormation, the [`Scheme`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-scheme)
+property is not required on an `AWS::ElasticLoadBalancing::LoadBalancer`. However, AWS CDK appears to automatically add
+a default for this property and we have observed that this can lead to a resource replacement (which often causes
+downtime).
 
-If this property is added to your load balancer as part of the migration, it is important to follow the advice in [this PR](https://github.com/guardian/cdk/pull/510) to guard against resource replacement.
+If this property is added to your load balancer as part of the migration, it is important to follow the advice in
+[this PR](https://github.com/guardian/cdk/pull/510) to guard against resource replacement.
+
+### ALB defaults
+
+In CloudFormation, the [`Type`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-type)
+property is not required on an `AWS::ElasticLoadBalancingV2::LoadBalancer`. However, AWS CDK appears to automatically
+add a default for this property and we have observed that this can lead to a resource replacement (which often causes
+downtime).
+
+If this property is added to your load balancer as part of the migration, it is important to follow the advice in
+[this PR](https://github.com/guardian/cdk/pull/576) to guard against resource replacement.
 
 ### RDS DatabaseInstance defaults
 
