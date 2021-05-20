@@ -141,8 +141,8 @@ export interface GuEc2AppProps extends AppIdentity {
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
   scaling?: {
-    [Stage.CODE]: GuAsgCapacityProps;
-    [Stage.PROD]: GuAsgCapacityProps;
+    [Stage.CODE]?: GuAsgCapacityProps;
+    [Stage.PROD]?: GuAsgCapacityProps;
   };
   accessLogging?: AccessLoggingProps;
 }
@@ -319,12 +319,12 @@ export class GuEc2App {
       vpc,
       stageDependentProps: {
         CODE: {
-          minimumInstances: props.scaling?.CODE.minimumInstances ?? 1,
-          maximumInstances: props.scaling?.CODE.maximumInstances,
+          minimumInstances: props.scaling?.CODE?.minimumInstances ?? 1,
+          maximumInstances: props.scaling?.CODE?.maximumInstances,
         },
         PROD: {
-          minimumInstances: props.scaling?.PROD.minimumInstances ?? 3,
-          maximumInstances: props.scaling?.PROD.maximumInstances,
+          minimumInstances: props.scaling?.PROD?.minimumInstances ?? 3,
+          maximumInstances: props.scaling?.PROD?.maximumInstances,
         },
       },
       role: new GuInstanceRole(scope, { app: props.app, ...mergedRoleConfiguration }),
