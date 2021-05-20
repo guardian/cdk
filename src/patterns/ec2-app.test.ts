@@ -441,28 +441,14 @@ describe("the GuEC2App pattern", function () {
       accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    const lbKey = Object.keys(json.Resources).find(
-      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
-    );
-    expect(lbKey).toBeTruthy();
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We assert above that this is truthy
-    const loadBalancer = json.Resources[lbKey!];
-
-    expect(loadBalancer.Properties.LoadBalancerAttributes).toEqual(
-      expect.arrayContaining([
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: [
         { Key: "deletion_protection.enabled", Value: "true" },
         { Key: "access_logs.s3.enabled", Value: "true" },
-        {
-          Key: "access_logs.s3.bucket",
-          Value: {
-            "Fn::GetAtt": [expect.stringContaining("GuSSMParameter"), "Parameter.Value"],
-          },
-        },
+        { Key: "access_logs.s3.bucket", Value: { Ref: "AccessLoggingBucket" } },
         { Key: "access_logs.s3.prefix", Value: "access-logging-prefix" },
-      ])
-    );
+      ],
+    });
   });
 
   it("can disable access logging if desired", function () {
