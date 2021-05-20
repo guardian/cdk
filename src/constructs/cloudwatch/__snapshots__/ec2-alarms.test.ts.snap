@@ -79,6 +79,7 @@ Object {
             },
           },
         ],
+        "Type": "application",
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },

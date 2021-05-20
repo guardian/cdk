@@ -6,7 +6,14 @@ import type { GuStack } from "../../core";
 import type { GuMigratingResource } from "../../core/migrating";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {}
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {
+  /**
+   * If your CloudFormation does not define the Type of your Load Balancer, you must set this boolean to true to avoid
+   * resource [replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-type).
+   * If a Load Balancer is replaced it is likely to lead to downtime.
+   */
+  removeType?: boolean;
+}
 
 /**
  * Construct which creates an Application Load Balancer.
@@ -27,8 +34,10 @@ export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(App
 
     super(scope, idWithApp, { deletionProtection: true, ...props });
 
-    const cfnLb = this.node.defaultChild as CfnLoadBalancer;
-    cfnLb.addPropertyDeletionOverride("Type");
+    if (props.removeType) {
+      const cfnLb = this.node.defaultChild as CfnLoadBalancer;
+      cfnLb.addPropertyDeletionOverride("Type");
+    }
 
     AppIdentity.taggedConstruct({ app }, this);
 
