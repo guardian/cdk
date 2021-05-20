@@ -13,8 +13,9 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
+import type { Stage } from "../constants";
 import type { GuCertificateProps } from "../constructs/acm";
-import type { GuUserDataProps } from "../constructs/autoscaling";
+import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
 import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import type { GuInstanceRoleProps } from "../constructs/iam";
@@ -89,6 +90,15 @@ export type AppAccess = PublicAccess | RestrictedAccess;
  * // other props
  * monitoringConfiguration: { noMonitoring: true }
  * ```
+ *
+ * To configure your scaling policies for AutoScalingGroups, use the `scaling` prop. For example:
+ * ```typescript
+ * // other props
+ * scaling: {
+ *   CODE: { minimumInstances: 3 },
+ *   PROD: { minimumInstances: 5, maximumInstances: 12 }
+ * }
+ * ```
  */
 export interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
@@ -97,6 +107,10 @@ export interface GuEc2AppProps extends AppIdentity {
   certificateProps: GuCertificateProps;
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
+  scaling?: {
+    [Stage.CODE]: GuAsgCapacityProps;
+    [Stage.PROD]: GuAsgCapacityProps;
+  };
 }
 
 interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
@@ -270,8 +284,14 @@ export class GuEc2App {
       app,
       vpc,
       stageDependentProps: {
-        CODE: { minimumInstances: 1 },
-        PROD: { minimumInstances: 3 },
+        CODE: {
+          minimumInstances: props.scaling?.CODE.minimumInstances ?? 1,
+          maximumInstances: props.scaling?.CODE.maximumInstances,
+        },
+        PROD: {
+          minimumInstances: props.scaling?.PROD.minimumInstances ?? 3,
+          maximumInstances: props.scaling?.PROD.maximumInstances,
+        },
       },
       role: new GuInstanceRole(scope, { app: props.app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
