@@ -1,10 +1,12 @@
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
 import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
+import { GuSSMParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
@@ -62,6 +64,11 @@ export interface RestrictedAccess extends Access {
 
 export type AppAccess = PublicAccess | RestrictedAccess;
 
+export interface AccessLoggingProps {
+  enabled: boolean;
+  prefix?: string;
+}
+
 /**
  * Configuration options for the [[`GuEc2App`]] pattern.
  *
@@ -99,6 +106,32 @@ export type AppAccess = PublicAccess | RestrictedAccess;
  *   PROD: { minimumInstances: 5, maximumInstances: 12 }
  * }
  * ```
+ *
+ * To enable access logging for your load balancer, you can specify the prefix to write the logs to.
+ * The S3 bucket used to hold these access logs must be specified in SSM at `/account/services/access-logging/bucket`
+ * You must specify a region in your stack declaration if you are to use this prop, as specified here:
+ * https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix
+ * For example:
+ * ```typescript
+ * {
+ *   // other props
+ *   accessLogging: {
+ *     enabled: true,
+ *     prefix: "my-application-logs"
+ *   }
+ * }
+ *
+ * If you would like to enable access logging at the root of the S3 bucket (ie without a prefix), you can omit the prefix
+ * For example:
+ * ```
+ *  * ```typescript
+ * {
+ *   // other props
+ *   accessLogging: {
+ *     enabled: true,
+ *   }
+ * }
+ * ```
  */
 export interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
@@ -111,6 +144,7 @@ export interface GuEc2AppProps extends AppIdentity {
     [Stage.CODE]: GuAsgCapacityProps;
     [Stage.PROD]: GuAsgCapacityProps;
   };
+  accessLogging?: AccessLoggingProps;
 }
 
 interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
@@ -310,6 +344,19 @@ export class GuEc2App {
       internetFacing: true,
       vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
     });
+
+    if (props.accessLogging?.enabled) {
+      const accessLoggingBucket = new GuSSMParameter(scope, { parameter: "/account/services/access-logging/bucket" });
+
+      loadBalancer.logAccessLogs(
+        Bucket.fromBucketName(
+          scope,
+          AppIdentity.suffixText(props, "AccessLoggingBucket"),
+          accessLoggingBucket.getValue()
+        ),
+        props.accessLogging.prefix
+      );
+    }
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
       app,

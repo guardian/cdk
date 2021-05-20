@@ -428,6 +428,70 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
+  it("can be configured with access logging", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      accessLogging: { enabled: true, prefix: "access-logging-prefix" },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const lbKey = Object.keys(json.Resources).find(
+      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    );
+    expect(lbKey).toBeTruthy();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We assert above that this is truthy
+    const loadBalancer = json.Resources[lbKey!];
+
+    expect(loadBalancer.Properties.LoadBalancerAttributes).toEqual(
+      expect.arrayContaining([
+        { Key: "deletion_protection.enabled", Value: "true" },
+        { Key: "access_logs.s3.enabled", Value: "true" },
+        {
+          Key: "access_logs.s3.bucket",
+          Value: {
+            "Fn::GetAtt": [expect.stringContaining("GuSSMParameter"), "Parameter.Value"],
+          },
+        },
+        { Key: "access_logs.s3.prefix", Value: "access-logging-prefix" },
+      ])
+    );
+  });
+
+  it("can disable access logging if desired", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      accessLogging: { enabled: false },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const lbKey = Object.keys(json.Resources).find(
+      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    );
+    expect(lbKey).toBeTruthy();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We assert above that this is truthy
+    const loadBalancer = json.Resources[lbKey!];
+
+    expect(loadBalancer.Properties.LoadBalancerAttributes).toEqual(
+      expect.not.arrayContaining([{ Key: "access_logs.s3.enabled", Value: "true" }])
+    );
+  });
+
   describe("GuNodeApp", () => {
     it("should set the port to the default of 3000 if not specified", function () {
       const stack = simpleGuStackForTesting();
