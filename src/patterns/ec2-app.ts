@@ -6,7 +6,7 @@ import { Duration } from "@aws-cdk/core";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
-import { GuSSMParameter } from "../constructs/core";
+import { GuStringParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
@@ -346,13 +346,17 @@ export class GuEc2App {
     });
 
     if (props.accessLogging?.enabled) {
-      const accessLoggingBucket = new GuSSMParameter(scope, { parameter: "/account/services/access-logging/bucket" });
+      const accessLoggingBucket = new GuStringParameter(scope, "AccessLoggingBucket", {
+        description: "S3 bucket to store your access logs",
+        default: "/account/services/access-logging/bucket",
+        fromSSM: true,
+      });
 
       loadBalancer.logAccessLogs(
         Bucket.fromBucketName(
           scope,
           AppIdentity.suffixText(props, "AccessLoggingBucket"),
-          accessLoggingBucket.getValue()
+          accessLoggingBucket.valueAsString
         ),
         props.accessLogging.prefix
       );
