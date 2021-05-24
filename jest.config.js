@@ -16,4 +16,9 @@ module.exports = {
     - #448
    */
   modulePathIgnorePatterns: ["<rootDir>/lib"],
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.test.json",
+    },
+  },
 };
