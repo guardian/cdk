@@ -108,7 +108,7 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
-  it("creates an alarm if monitoringConfiguration is provided", function () {
+  it("creates alarms if monitoringConfiguration is provided", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
@@ -122,7 +122,9 @@ describe("the GuEC2App pattern", function () {
       },
       userData: "",
     });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); //The shape of the alarm is tested at construct level
+    //The shape of the alarms is tested at construct level
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyHostsAlarm.+/);
   });
 
   it("creates the appropriate ingress rules for a restricted access application", function () {

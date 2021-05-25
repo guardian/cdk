@@ -4,7 +4,7 @@ import { Duration } from "@aws-cdk/core";
 import { GuAlarm } from "./alarm";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
-import type { GuApplicationLoadBalancer } from "../loadbalancing";
+import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAlarmProps } from "./alarm";
 
 export interface Gu5xxPercentageMonitoringProps
@@ -18,12 +18,17 @@ interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppId
   loadBalancer: GuApplicationLoadBalancer;
 }
 
+interface GuTargetGroupAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, AppIdentity {
+  noMonitoring?: false;
+  targetGroup: GuApplicationTargetGroup;
+}
+
 /**
  * Creates an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
  * the specified threshold.
  */
 export class Gu5xxPercentageAlarm extends GuAlarm {
-  constructor(scope: GuStack, id: string, props: GuLoadBalancerAlarmProps) {
+  constructor(scope: GuStack, props: GuLoadBalancerAlarmProps) {
     const mathExpression = new MathExpression({
       expression: "100*(m1+m2)/m3",
       usingMetrics: {
@@ -46,6 +51,28 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, id, alarmProps);
+    super(scope, "High5xxPercentageAlarm", alarmProps);
+  }
+}
+
+/**
+ * Creates an alarm which is triggered whenever there have been unhealthy hosts for a consistent period.
+ */
+export class GuUnhealthyHostsAlarm extends GuAlarm {
+  constructor(scope: GuStack, props: GuTargetGroupAlarmProps) {
+    const alarmName = `${props.app} has unhealthy hosts in ${scope.stage}`;
+    const alarmDescription = `${props.app} has had unhealthy hosts for more than an hour`;
+    const alarmProps = {
+      ...props,
+      alarmName: alarmName,
+      alarmDescription: alarmDescription,
+      metric: props.targetGroup.metricUnhealthyHostCount(),
+      treatMissingData: TreatMissingData.NOT_BREACHING,
+      threshold: 1,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      period: Duration.hours(1),
+      evaluationPeriods: 1,
+    };
+    super(scope, "UnhealthyHostsAlarm", alarmProps);
   }
 }

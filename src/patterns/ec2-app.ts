@@ -5,7 +5,7 @@ import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
-import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
+import { Gu5xxPercentageAlarm, GuUnhealthyHostsAlarm } from "../constructs/cloudwatch";
 import { GuStringParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
@@ -393,10 +393,15 @@ export class GuEc2App {
     }
 
     if (!props.monitoringConfiguration.noMonitoring) {
-      new Gu5xxPercentageAlarm(scope, "Alarm", {
+      new Gu5xxPercentageAlarm(scope, {
         app,
         loadBalancer,
         ...props.monitoringConfiguration,
+      });
+      new GuUnhealthyHostsAlarm(scope, {
+        app,
+        targetGroup,
+        snsTopicName: props.monitoringConfiguration.snsTopicName,
       });
     }
 

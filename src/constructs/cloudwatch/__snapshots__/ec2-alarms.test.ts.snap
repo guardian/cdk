@@ -123,7 +123,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "testAF53AC38": Object {
+    "High5xxPercentageAlarm01AF21CD": Object {
       "Properties": Object {
         "ActionsEnabled": Object {
           "Fn::FindInMap": Array [
@@ -242,6 +242,312 @@ Object {
             "ReturnData": false,
           },
         ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+  },
+}
+`;
+
+exports[`The GuUnhealthyHostsAlarm construct should create the correct alarm resource with minimal config 1`] = `
+Object {
+  "Mappings": Object {
+    "stagemapping": Object {
+      "CODE": Object {
+        "alarmActionsEnabled": false,
+      },
+      "PROD": Object {
+        "alarmActionsEnabled": true,
+      },
+    },
+  },
+  "Outputs": Object {
+    "ApplicationLoadBalancerTestingDnsName": Object {
+      "Description": "DNS entry for ApplicationLoadBalancerTesting",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ApplicationLoadBalancerTesting172A253B",
+          "DNSName",
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "ApplicationListener62E539D0": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "ApplicationTargetGroupTesting080C2FF2",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ApplicationLoadBalancerTesting172A253B",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ApplicationLoadBalancerTesting172A253B": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "true",
+          },
+        ],
+        "Scheme": "internal",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ApplicationLoadBalancerTestingSecurityGroup883A01A4",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          "",
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "ApplicationLoadBalancerTestingSecurityGroup883A01A4": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB TestApplicationLoadBalancerTesting8F9EA5A8",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "VpcId": "test",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ApplicationTargetGroupTesting080C2FF2": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckPath": "/healthcheck",
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "UnhealthyThresholdCount": 5,
+        "VpcId": "test",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "UnhealthyHostsAlarmE3387D4B": Object {
+      "Properties": Object {
+        "ActionsEnabled": Object {
+          "Fn::FindInMap": Array [
+            "stagemapping",
+            Object {
+              "Ref": "Stage",
+            },
+            "alarmActionsEnabled",
+          ],
+        },
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "testing has had unhealthy hosts for more than an hour",
+        "AlarmName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "testing has unhealthy hosts in ",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "LoadBalancer",
+            "Value": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  Object {
+                    "Fn::Select": Array [
+                      1,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ApplicationListener62E539D0",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  Object {
+                    "Fn::Select": Array [
+                      2,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ApplicationListener62E539D0",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  Object {
+                    "Fn::Select": Array [
+                      3,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ApplicationListener62E539D0",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              ],
+            },
+          },
+          Object {
+            "Name": "TargetGroup",
+            "Value": Object {
+              "Fn::GetAtt": Array [
+                "ApplicationTargetGroupTesting080C2FF2",
+                "TargetGroupFullName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "UnHealthyHostCount",
+        "Namespace": "AWS/ApplicationELB",
+        "Period": 3600,
+        "Statistic": "Average",
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },

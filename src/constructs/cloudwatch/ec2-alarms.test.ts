@@ -1,10 +1,11 @@
-import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import "@aws-cdk/assert/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
+import { ApplicationListener, ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuApplicationLoadBalancer } from "../loadbalancing";
-import { Gu5xxPercentageAlarm } from "./ec2-alarms";
+import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
+import { Gu5xxPercentageAlarm, GuUnhealthyHostsAlarm } from "./ec2-alarms";
 import type { AppIdentity } from "../core/identity";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -25,7 +26,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
+    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
@@ -37,7 +38,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
+    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       AlarmDescription: "test-custom-alarm-description",
     });
@@ -51,7 +52,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
+    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       AlarmName: "test-custom-alarm-name",
     });
@@ -65,9 +66,25 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       numberOfMinutesAboveThresholdBeforeAlarm: 3,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, "test", { ...app, loadBalancer: alb, ...props });
+    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
       EvaluationPeriods: 3,
     });
+  });
+});
+
+describe("The GuUnhealthyHostsAlarm construct", () => {
+  it("should create the correct alarm resource with minimal config", () => {
+    const stack = simpleGuStackForTesting();
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const targetGroup = new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
+    new ApplicationListener(stack, "ApplicationListener", {
+      protocol: ApplicationProtocol.HTTP,
+      ...app,
+      loadBalancer: alb,
+      defaultTargetGroups: [targetGroup],
+    });
+    new GuUnhealthyHostsAlarm(stack, { ...app, targetGroup: targetGroup, snsTopicName: "test-topic" });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });
