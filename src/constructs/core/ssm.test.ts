@@ -3,6 +3,16 @@ import { simpleGuStackForTesting } from "../../utils/test";
 import { GuSSMIdentityParameter, GuSSMParameter } from "./ssm";
 
 describe("SSM:", () => {
+  /*
+  `GuSSMParameter.lambdaRuntime` reads from the compiled JS file.
+  As we're not testing the execution of the runtime here, we can safely mock the result.
+   */
+  const lambdaRuntime = jest.spyOn(GuSSMParameter, "lambdaRuntime", "get").mockImplementation(() => "mocked");
+
+  afterAll(() => {
+    lambdaRuntime.mockReset();
+  });
+
   describe("The GuSSMIdentityParameter construct", () => {
     it("requires the scope and parameter name", function () {
       const stack = simpleGuStackForTesting({ stack: "some-stack" });

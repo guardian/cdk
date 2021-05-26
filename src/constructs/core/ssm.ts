@@ -31,12 +31,16 @@ export class GuSSMParameter extends Construct implements IGrantable {
       : `${prefix}-${stripped(parameter)}-${randomNumberBetweenOneAndTenThousand}`;
   };
 
+  static get lambdaRuntime(): string {
+    return readFileSync(join(__dirname, "/custom-resources/runtime/lambda.js")).toString();
+  }
+
   constructor(scope: GuStack, props: GuSSMParameterProps) {
     super(scope, GuSSMParameter.id("GuSSMParameter", props.parameter));
     const { parameter } = props;
 
     const provider = new SingletonFunction(scope, GuSSMParameter.id("Provider", parameter), {
-      code: Code.fromInline(readFileSync(join(__dirname, "/custom-resources/runtime/lambda.js")).toString()),
+      code: Code.fromInline(GuSSMParameter.lambdaRuntime),
       runtime: Runtime.NODEJS_12_X,
       handler: "index.handler",
       uuid: "eda001a3-b7c8-469d-bc13-787c4e13cfd9",
