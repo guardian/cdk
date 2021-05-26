@@ -123,7 +123,7 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "High5xxPercentageAlarm01AF21CD": Object {
+    "High5xxPercentageAlarmTesting9E960B0F": Object {
       "Properties": Object {
         "ActionsEnabled": Object {
           "Fn::FindInMap": Array [
@@ -439,7 +439,7 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "UnhealthyHostsAlarmE3387D4B": Object {
+    "UnhealthyHostsAlarmTesting8569AD5C": Object {
       "Properties": Object {
         "ActionsEnabled": Object {
           "Fn::FindInMap": Array [

@@ -1,9 +1,9 @@
 import { ComparisonOperator, MathExpression, Statistic, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { HttpCodeElb, HttpCodeTarget } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
+import { AppIdentity } from "../core/identity";
 import { GuAlarm } from "./alarm";
 import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
 import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAlarmProps } from "./alarm";
 
@@ -51,7 +51,7 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, "High5xxPercentageAlarm", alarmProps);
+    super(scope, AppIdentity.suffixText(props, "High5xxPercentageAlarm"), alarmProps);
   }
 }
 
@@ -79,6 +79,6 @@ export class GuUnhealthyHostsAlarm extends GuAlarm {
       datapointsToAlarm: 6,
       evaluationPeriods: 12,
     };
-    super(scope, "UnhealthyHostsAlarm", alarmProps);
+    super(scope, AppIdentity.suffixText(props, "UnhealthyHostsAlarm"), alarmProps);
   }
 }
