@@ -1,4 +1,4 @@
-import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
+import { ComparisonOperator, MathExpression, Statistic, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { HttpCodeElb, HttpCodeTarget } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
 import { GuAlarm } from "./alarm";
@@ -72,6 +72,7 @@ export class GuUnhealthyHostsAlarm extends GuAlarm {
       alarmDescription: alarmDescription,
       metric: props.targetGroup.metricUnhealthyHostCount(),
       treatMissingData: TreatMissingData.NOT_BREACHING,
+      statistic: Statistic.MAXIMUM,
       threshold: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       period: Duration.minutes(5),

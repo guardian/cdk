@@ -552,7 +552,7 @@ Object {
         "MetricName": "UnHealthyHostCount",
         "Namespace": "AWS/ApplicationELB",
         "Period": 300,
-        "Statistic": "Average",
+        "Statistic": "Maximum",
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
