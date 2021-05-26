@@ -468,12 +468,16 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "testing has had unhealthy hosts for more than an hour",
+        "AlarmDescription": "testing's instances have failed healthchecks several times over the last hour.
+      This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
+      scaling or handling traffic spikes.
+
+      Check testing's application logs or ssh onto an unhealthy instance in order to debug these problems.",
         "AlarmName": Object {
           "Fn::Join": Array [
             "",
             Array [
-              "testing has unhealthy hosts in ",
+              "Unhealthy instances for testing in ",
               Object {
                 "Ref": "Stage",
               },
@@ -481,6 +485,7 @@ Object {
           ],
         },
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 6,
         "Dimensions": Array [
           Object {
             "Name": "LoadBalancer",
@@ -543,10 +548,10 @@ Object {
             },
           },
         ],
-        "EvaluationPeriods": 1,
+        "EvaluationPeriods": 12,
         "MetricName": "UnHealthyHostCount",
         "Namespace": "AWS/ApplicationELB",
-        "Period": 3600,
+        "Period": 300,
         "Statistic": "Average",
         "Threshold": 1,
         "TreatMissingData": "notBreaching",

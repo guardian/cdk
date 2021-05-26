@@ -56,12 +56,16 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
 }
 
 /**
- * Creates an alarm which is triggered whenever there have been unhealthy hosts for a consistent period.
+ * Creates an alarm which is triggered whenever there have been several healthcheck failures within a single hour.
  */
 export class GuUnhealthyHostsAlarm extends GuAlarm {
   constructor(scope: GuStack, props: GuTargetGroupAlarmProps) {
-    const alarmName = `${props.app} has unhealthy hosts in ${scope.stage}`;
-    const alarmDescription = `${props.app} has had unhealthy hosts for more than an hour`;
+    const alarmName = `Unhealthy instances for ${props.app} in ${scope.stage}`;
+    const alarmDescription = `${props.app}'s instances have failed healthchecks several times over the last hour.
+      This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
+      scaling or handling traffic spikes.
+
+      Check ${props.app}'s application logs or ssh onto an unhealthy instance in order to debug these problems.`;
     const alarmProps = {
       ...props,
       alarmName: alarmName,
@@ -70,8 +74,9 @@ export class GuUnhealthyHostsAlarm extends GuAlarm {
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      period: Duration.hours(1),
-      evaluationPeriods: 1,
+      period: Duration.minutes(5),
+      datapointsToAlarm: 6,
+      evaluationPeriods: 12,
     };
     super(scope, "UnhealthyHostsAlarm", alarmProps);
   }
