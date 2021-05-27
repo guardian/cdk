@@ -89,13 +89,15 @@ export interface Alarms {
  * }
  * ```
  *
- * To create an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
- * the specified threshold, use:
+ * To create alarms (recommended), use:
  * ```typescript
  * // other props
  * monitoringConfiguration: {
- *   tolerated5xxPercentage: 1,
  *   snsTopicName: "alerts-topic-for-my-team",
+ *   http5xxAlarm: {
+ *     tolerated5xxPercentage: 1,
+ *   },
+ *   unhealthyInstancesAlarm: true,
  * }
  * ```
  *
@@ -212,9 +214,12 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *     },
  *   },
  *   monitoringConfiguration: {
- *     tolerated5xxPercentage: 1,
  *     snsTopicName: "alerts-topic-for-my-team",
- *   },
+ *     http5xxAlarm: {
+ *       tolerated5xxPercentage: 1,
+ *     },
+ *     unhealthyInstancesAlarm: true,
+ *   }
  *   userData: {
  *     distributable: {
  *       fileName: "app-name.deb",
@@ -244,9 +249,12 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *     },
  *   },
  *   monitoringConfiguration: {
- *     tolerated5xxPercentage: 1,
  *     snsTopicName: "alerts-topic-for-my-team",
- *   },
+ *     http5xxAlarm: {
+ *       tolerated5xxPercentage: 1,
+ *     },
+ *     unhealthyInstancesAlarm: true,
+ *   }
  *   userData: {
  *     distributable: {
  *       fileName: "app-name.deb",
