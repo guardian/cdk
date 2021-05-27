@@ -5,7 +5,7 @@ import { ApplicationListener, ApplicationProtocol } from "@aws-cdk/aws-elasticlo
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
-import { Gu5xxPercentageAlarm, GuUnhealthyHostsAlarm } from "./ec2-alarms";
+import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
 import type { AppIdentity } from "../core/identity";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -73,7 +73,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
   });
 });
 
-describe("The GuUnhealthyHostsAlarm construct", () => {
+describe("The GuUnhealthyInstancesAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
@@ -84,7 +84,7 @@ describe("The GuUnhealthyHostsAlarm construct", () => {
       loadBalancer: alb,
       defaultTargetGroups: [targetGroup],
     });
-    new GuUnhealthyHostsAlarm(stack, { ...app, targetGroup: targetGroup, snsTopicName: "test-topic" });
+    new GuUnhealthyInstancesAlarm(stack, { ...app, targetGroup: targetGroup, snsTopicName: "test-topic" });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });

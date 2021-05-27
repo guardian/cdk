@@ -7,19 +7,20 @@ import type { GuStack } from "../core";
 import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAlarmProps } from "./alarm";
 
-export interface Gu5xxPercentageMonitoringProps
-  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"> {
+export interface Http5xxAlarmProps
+  extends Omit<
+    GuAlarmProps,
+    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"
+  > {
   tolerated5xxPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;
-  noMonitoring?: false;
 }
 
-interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppIdentity {
+interface Gu5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps, AppIdentity {
   loadBalancer: GuApplicationLoadBalancer;
 }
 
-interface GuTargetGroupAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, AppIdentity {
-  noMonitoring?: false;
+interface GuUnhealthyInstancesAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, AppIdentity {
   targetGroup: GuApplicationTargetGroup;
 }
 
@@ -28,7 +29,7 @@ interface GuTargetGroupAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Ap
  * the specified threshold.
  */
 export class Gu5xxPercentageAlarm extends GuAlarm {
-  constructor(scope: GuStack, props: GuLoadBalancerAlarmProps) {
+  constructor(scope: GuStack, props: Gu5xxPercentageAlarmProps) {
     const mathExpression = new MathExpression({
       expression: "100*(m1+m2)/m3",
       usingMetrics: {
@@ -58,8 +59,8 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
 /**
  * Creates an alarm which is triggered whenever there have been several healthcheck failures within a single hour.
  */
-export class GuUnhealthyHostsAlarm extends GuAlarm {
-  constructor(scope: GuStack, props: GuTargetGroupAlarmProps) {
+export class GuUnhealthyInstancesAlarm extends GuAlarm {
+  constructor(scope: GuStack, props: GuUnhealthyInstancesAlarmProps) {
     const alarmName = `Unhealthy instances for ${props.app} in ${scope.stage}`;
     const alarmDescription = `${props.app}'s instances have failed healthchecks several times over the last hour.
       This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
@@ -79,6 +80,6 @@ export class GuUnhealthyHostsAlarm extends GuAlarm {
       datapointsToAlarm: 6,
       evaluationPeriods: 12,
     };
-    super(scope, AppIdentity.suffixText(props, "UnhealthyHostsAlarm"), alarmProps);
+    super(scope, AppIdentity.suffixText(props, "UnhealthyInstancesAlarm"), alarmProps);
   }
 }

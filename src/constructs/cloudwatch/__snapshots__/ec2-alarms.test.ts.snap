@@ -251,7 +251,7 @@ Object {
 }
 `;
 
-exports[`The GuUnhealthyHostsAlarm construct should create the correct alarm resource with minimal config 1`] = `
+exports[`The GuUnhealthyInstancesAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
   "Mappings": Object {
     "stagemapping": Object {
@@ -439,7 +439,7 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "UnhealthyHostsAlarmTesting8569AD5C": Object {
+    "UnhealthyInstancesAlarmTestingD3AE50F4": Object {
       "Properties": Object {
         "ActionsEnabled": Object {
           "Fn::FindInMap": Array [

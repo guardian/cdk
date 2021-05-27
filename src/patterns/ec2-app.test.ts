@@ -108,7 +108,7 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
-  it("creates alarms if monitoringConfiguration is provided", function () {
+  it("creates a High5xxPercentageAlarm if the relevant monitoringConfiguration is provided", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
@@ -117,14 +117,54 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       certificateProps: getCertificateProps(),
       monitoringConfiguration: {
-        tolerated5xxPercentage: 5,
         snsTopicName: "test-topic",
+        http5xxAlarm: {
+          tolerated5xxPercentage: 5,
+        },
+        unhealthyInstancesAlarm: false,
       },
       userData: "",
     });
-    //The shape of the alarms is tested at construct level
+    //The shape of this alarm is tested at construct level
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyHostsAlarm.+/);
+  });
+
+  it("creates an UnhealthyInstancesAlarm if the user enables it", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app,
+      access: { scope: AccessScope.PUBLIC },
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: {
+        snsTopicName: "test-topic",
+        http5xxAlarm: false,
+        unhealthyInstancesAlarm: true,
+      },
+      userData: "",
+    });
+    //The shape of this alarm is tested at construct level
+    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
+  });
+
+  it("Skips alarm creation if the user explicitly opts-out", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app,
+      access: { scope: AccessScope.PUBLIC },
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: {
+        snsTopicName: "test-topic",
+        http5xxAlarm: false,
+        unhealthyInstancesAlarm: false,
+      },
+      userData: "",
+    });
+    expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
+    expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
   });
 
   it("creates the appropriate ingress rules for a restricted access application", function () {

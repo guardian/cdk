@@ -5,7 +5,7 @@ import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
-import { Gu5xxPercentageAlarm, GuUnhealthyHostsAlarm } from "../constructs/cloudwatch";
+import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
 import { GuStringParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
@@ -18,7 +18,7 @@ import {
 import type { Stage } from "../constants";
 import type { GuCertificateProps } from "../constructs/acm";
 import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
-import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
+import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import type { GuInstanceRoleProps } from "../constructs/iam";
 import type { IPeer } from "@aws-cdk/aws-ec2";
@@ -67,6 +67,13 @@ export type AppAccess = PublicAccess | RestrictedAccess;
 export interface AccessLoggingProps {
   enabled: boolean;
   prefix?: string;
+}
+
+export interface Alarms {
+  snsTopicName: string;
+  http5xxAlarm: false | Http5xxAlarmProps;
+  unhealthyInstancesAlarm: boolean;
+  noMonitoring?: false;
 }
 
 /**
@@ -139,7 +146,7 @@ export interface GuEc2AppProps extends AppIdentity {
   applicationPort: number;
   certificateProps: GuCertificateProps;
   roleConfiguration?: GuInstanceRoleProps;
-  monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
+  monitoringConfiguration: Alarms | NoMonitoring;
   scaling?: {
     [Stage.CODE]: GuAsgCapacityProps;
     [Stage.PROD]: GuAsgCapacityProps;
@@ -393,16 +400,21 @@ export class GuEc2App {
     }
 
     if (!props.monitoringConfiguration.noMonitoring) {
-      new Gu5xxPercentageAlarm(scope, {
-        app,
-        loadBalancer,
-        ...props.monitoringConfiguration,
-      });
-      new GuUnhealthyHostsAlarm(scope, {
-        app,
-        targetGroup,
-        snsTopicName: props.monitoringConfiguration.snsTopicName,
-      });
+      if (props.monitoringConfiguration.http5xxAlarm) {
+        new Gu5xxPercentageAlarm(scope, {
+          app,
+          loadBalancer,
+          snsTopicName: props.monitoringConfiguration.snsTopicName,
+          ...props.monitoringConfiguration.http5xxAlarm,
+        });
+      }
+      if (props.monitoringConfiguration.unhealthyInstancesAlarm) {
+        new GuUnhealthyInstancesAlarm(scope, {
+          app,
+          targetGroup,
+          snsTopicName: props.monitoringConfiguration.snsTopicName,
+        });
+      }
     }
 
     this.certificate = certificate;
