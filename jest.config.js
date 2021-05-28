@@ -6,7 +6,7 @@ module.exports = {
   setupFilesAfterEnv: ["./jest.setup.js"],
 
   // ignore this file as it's used to demonstrate custom lint rule and Jest flags unused declarations
-  testPathIgnorePatterns: ["<rootDir>/eslint/rules/valid-constructors.test.ts"],
+  testPathIgnorePatterns: ["<rootDir>/tools/eslint/rules/valid-constructors.test.ts"],
 
   /*
   Ignore `lib` to prevent a 'duplicate manual mock found" warning
