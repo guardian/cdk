@@ -2,7 +2,8 @@ import { HealthCheck } from "@aws-cdk/aws-autoscaling";
 import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
-import { Duration } from "@aws-cdk/core";
+import { Duration, Tags } from "@aws-cdk/core";
+import { TagKeys } from "../constants/tag-keys";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
@@ -335,6 +336,12 @@ export class GuEc2App {
           : props.userData,
       vpcSubnets: { subnets: privateSubnets },
     });
+
+    // We are selectively tagging the ASG so that we can expose the number of stacks using this pattern
+    //  based on which autoscaling groups possess this tag. It may become useful or necessary to tag all resources in the future,
+    //  but we have decided that this is sufficient for now.
+    // TODO: Do we need to tag all resources with this value? What would the use-cases be?
+    Tags.of(autoScalingGroup).add(TagKeys.PATTERN_NAME, this.constructor.name, { applyToLaunchedInstances: true });
 
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,

@@ -107,6 +107,11 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:cdk:pattern-name",
+            "PropagateAtLaunch": true,
+            "Value": "GuEc2App",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
             "Value": "TEST",
@@ -963,6 +968,11 @@ Object {
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:cdk:pattern-name",
+            "PropagateAtLaunch": true,
+            "Value": "GuEc2App",
           },
           Object {
             "Key": "gu:cdk:version",
