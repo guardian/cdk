@@ -31,7 +31,7 @@ export class GuAlarm extends Alarm {
     };
     super(scope, id, { ...props, actionsEnabled: scope.withStageDependentValue(actionsEnabled) });
     const topicArn: string = `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicName}`;
-    const snsTopic: ITopic = Topic.fromTopicArn(scope, "sns-topic-for-alarm-notifications", topicArn);
+    const snsTopic: ITopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, topicArn);
     this.addAlarmAction(new SnsAction(snsTopic));
   }
 }

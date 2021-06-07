@@ -6,7 +6,7 @@ import { Duration, Tags } from "@aws-cdk/core";
 import { TagKeys } from "../constants/tag-keys";
 import { GuCertificate } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
-import { Gu5xxPercentageAlarm } from "../constructs/cloudwatch";
+import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
 import { GuStringParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
@@ -19,7 +19,7 @@ import {
 import type { Stage } from "../constants";
 import type { GuCertificateProps } from "../constructs/acm";
 import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
-import type { Gu5xxPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
+import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import type { GuInstanceRoleProps } from "../constructs/iam";
 import type { IPeer } from "@aws-cdk/aws-ec2";
@@ -70,6 +70,13 @@ export interface AccessLoggingProps {
   prefix?: string;
 }
 
+export interface Alarms {
+  snsTopicName: string;
+  http5xxAlarm: false | Http5xxAlarmProps;
+  unhealthyInstancesAlarm: boolean;
+  noMonitoring?: false;
+}
+
 /**
  * Configuration options for the [[`GuEc2App`]] pattern.
  *
@@ -83,13 +90,15 @@ export interface AccessLoggingProps {
  * }
  * ```
  *
- * To create an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
- * the specified threshold, use:
+ * To create alarms (recommended), use:
  * ```typescript
  * // other props
  * monitoringConfiguration: {
- *   tolerated5xxPercentage: 1,
  *   snsTopicName: "alerts-topic-for-my-team",
+ *   http5xxAlarm: {
+ *     tolerated5xxPercentage: 1,
+ *   },
+ *   unhealthyInstancesAlarm: true,
  * }
  * ```
  *
@@ -140,7 +149,7 @@ export interface GuEc2AppProps extends AppIdentity {
   applicationPort: number;
   certificateProps: GuCertificateProps;
   roleConfiguration?: GuInstanceRoleProps;
-  monitoringConfiguration: NoMonitoring | Gu5xxPercentageMonitoringProps;
+  monitoringConfiguration: Alarms | NoMonitoring;
   scaling?: {
     [Stage.CODE]: GuAsgCapacityProps;
     [Stage.PROD]: GuAsgCapacityProps;
@@ -206,9 +215,12 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *     },
  *   },
  *   monitoringConfiguration: {
- *     tolerated5xxPercentage: 1,
  *     snsTopicName: "alerts-topic-for-my-team",
- *   },
+ *     http5xxAlarm: {
+ *       tolerated5xxPercentage: 1,
+ *     },
+ *     unhealthyInstancesAlarm: true,
+ *   }
  *   userData: {
  *     distributable: {
  *       fileName: "app-name.deb",
@@ -238,9 +250,12 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *     },
  *   },
  *   monitoringConfiguration: {
- *     tolerated5xxPercentage: 1,
  *     snsTopicName: "alerts-topic-for-my-team",
- *   },
+ *     http5xxAlarm: {
+ *       tolerated5xxPercentage: 1,
+ *     },
+ *     unhealthyInstancesAlarm: true,
+ *   }
  *   userData: {
  *     distributable: {
  *       fileName: "app-name.deb",
@@ -400,11 +415,21 @@ export class GuEc2App {
     }
 
     if (!props.monitoringConfiguration.noMonitoring) {
-      new Gu5xxPercentageAlarm(scope, "Alarm", {
-        app,
-        loadBalancer,
-        ...props.monitoringConfiguration,
-      });
+      if (props.monitoringConfiguration.http5xxAlarm) {
+        new Gu5xxPercentageAlarm(scope, {
+          app,
+          loadBalancer,
+          snsTopicName: props.monitoringConfiguration.snsTopicName,
+          ...props.monitoringConfiguration.http5xxAlarm,
+        });
+      }
+      if (props.monitoringConfiguration.unhealthyInstancesAlarm) {
+        new GuUnhealthyInstancesAlarm(scope, {
+          app,
+          targetGroup,
+          snsTopicName: props.monitoringConfiguration.snsTopicName,
+        });
+      }
     }
 
     this.certificate = certificate;

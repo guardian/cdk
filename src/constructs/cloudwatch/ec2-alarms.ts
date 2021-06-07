@@ -1,21 +1,27 @@
-import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
+import { ComparisonOperator, MathExpression, Statistic, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { HttpCodeElb, HttpCodeTarget } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
+import { AppIdentity } from "../core/identity";
 import { GuAlarm } from "./alarm";
 import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
-import type { GuApplicationLoadBalancer } from "../loadbalancing";
+import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAlarmProps } from "./alarm";
 
-export interface Gu5xxPercentageMonitoringProps
-  extends Omit<GuAlarmProps, "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"> {
+export interface Http5xxAlarmProps
+  extends Omit<
+    GuAlarmProps,
+    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"
+  > {
   tolerated5xxPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;
-  noMonitoring?: false;
 }
 
-interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppIdentity {
+interface Gu5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps, AppIdentity {
   loadBalancer: GuApplicationLoadBalancer;
+}
+
+interface GuUnhealthyInstancesAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, AppIdentity {
+  targetGroup: GuApplicationTargetGroup;
 }
 
 /**
@@ -23,7 +29,7 @@ interface GuLoadBalancerAlarmProps extends Gu5xxPercentageMonitoringProps, AppId
  * the specified threshold.
  */
 export class Gu5xxPercentageAlarm extends GuAlarm {
-  constructor(scope: GuStack, id: string, props: GuLoadBalancerAlarmProps) {
+  constructor(scope: GuStack, props: Gu5xxPercentageAlarmProps) {
     const mathExpression = new MathExpression({
       expression: "100*(m1+m2)/m3",
       usingMetrics: {
@@ -46,6 +52,34 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, id, alarmProps);
+    super(scope, AppIdentity.suffixText(props, "High5xxPercentageAlarm"), alarmProps);
+  }
+}
+
+/**
+ * Creates an alarm which is triggered whenever there have been several healthcheck failures within a single hour.
+ */
+export class GuUnhealthyInstancesAlarm extends GuAlarm {
+  constructor(scope: GuStack, props: GuUnhealthyInstancesAlarmProps) {
+    const alarmName = `Unhealthy instances for ${props.app} in ${scope.stage}`;
+    const alarmDescription = `${props.app}'s instances have failed healthchecks several times over the last hour.
+      This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
+      scaling or handling traffic spikes.
+
+      Check ${props.app}'s application logs or ssh onto an unhealthy instance in order to debug these problems.`;
+    const alarmProps = {
+      ...props,
+      alarmName: alarmName,
+      alarmDescription: alarmDescription,
+      metric: props.targetGroup.metricUnhealthyHostCount(),
+      treatMissingData: TreatMissingData.NOT_BREACHING,
+      statistic: Statistic.MAXIMUM,
+      threshold: 1,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      period: Duration.minutes(5),
+      datapointsToAlarm: 6,
+      evaluationPeriods: 12,
+    };
+    super(scope, AppIdentity.suffixText(props, "UnhealthyInstancesAlarm"), alarmProps);
   }
 }
