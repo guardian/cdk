@@ -3,6 +3,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import { Stage } from "../constants";
+import { TagKeys } from "../constants/tag-keys";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { GuDynamoDBWritePolicy } from "../constructs/iam";
@@ -418,13 +419,19 @@ describe("the GuEC2App pattern", function () {
     expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "PlayApp" },
       propagateAtLaunch: true,
-      additionalTags: [{ Key: "Name", Value: "Test/AutoScalingGroupPlayApp" }],
+      additionalTags: [
+        { Key: "Name", Value: "Test/AutoScalingGroupPlayApp" },
+        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+      ],
     });
 
     expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "NodeApp" },
       propagateAtLaunch: true,
-      additionalTags: [{ Key: "Name", Value: "Test/AutoScalingGroupNodeApp" }],
+      additionalTags: [
+        { Key: "Name", Value: "Test/AutoScalingGroupNodeApp" },
+        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+      ],
     });
   });
 
@@ -476,6 +483,29 @@ describe("the GuEC2App pattern", function () {
     expect(loadBalancer.Properties.LoadBalancerAttributes).toEqual(
       expect.not.arrayContaining([{ Key: "access_logs.s3.enabled", Value: "true" }])
     );
+  });
+
+  it("adds a tag to aid visibility of stacks using the pattern", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "App";
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      certificateProps: getCertificateProps(),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      accessLogging: { enabled: false },
+    });
+
+    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app },
+      propagateAtLaunch: true,
+      additionalTags: [
+        { Key: "Name", Value: "Test/AutoScalingGroupApp" },
+        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+      ],
+    });
   });
 
   describe("GuNodeApp", () => {
