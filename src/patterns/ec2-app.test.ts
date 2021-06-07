@@ -1,15 +1,18 @@
 import "../utils/test/jest";
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { TagKeys } from "../constants/tag-keys";
+import type { GuStack } from "../constructs/core";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { GuDynamoDBWritePolicy } from "../constructs/iam";
-import { simpleGuStackForTesting } from "../utils/test";
 import type { SynthedStack } from "../utils/test";
+import { simpleGuStackForTesting } from "../utils/test";
+import type { GuEc2AppProps } from "./ec2-app";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 const getCertificateProps = () => ({
@@ -22,6 +25,21 @@ const getCertificateProps = () => ({
     hostedZoneId: "id124",
   },
 });
+
+function simpleEc2AppForTesting(stack: GuStack, app: string, props: Partial<GuEc2AppProps>) {
+  return new GuEc2App(stack, {
+    applicationPort: GuApplicationPorts.Node,
+    app: app,
+    access: { scope: AccessScope.PUBLIC },
+    certificateProps: {
+      [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
+      [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
+    },
+    monitoringConfiguration: { noMonitoring: true },
+    userData: "UserData from pattern declaration",
+    ...props,
+  });
+}
 
 describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
@@ -392,6 +410,33 @@ describe("the GuEC2App pattern", function () {
 
     expect(pattern.autoScalingGroup.userData).toEqual({
       lines: ["UserData from pattern declaration", "UserData from accessed construct"],
+    });
+  });
+
+  it("users can optionally configure block devices", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    simpleEc2AppForTesting(stack, app, {
+      blockDevices: [
+        {
+          deviceName: "/dev/sda1",
+          volume: BlockDeviceVolume.ebs(8, {
+            volumeType: EbsDeviceVolumeType.GP2,
+          }),
+        },
+      ],
+    });
+
+    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+      BlockDeviceMappings: [
+        {
+          DeviceName: "/dev/sda1",
+          Ebs: {
+            VolumeSize: 8,
+            VolumeType: "gp2",
+          },
+        },
+      ],
     });
   });
 

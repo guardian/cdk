@@ -156,9 +156,7 @@ export interface GuEc2AppProps extends AppIdentity {
     [Stage.PROD]?: GuAsgCapacityProps;
   };
   accessLogging?: AccessLoggingProps;
-  autoScalingGroup?: {
-    blockDevices?: BlockDevice[];
-  };
+  blockDevices?: BlockDevice[];
 }
 
 interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
@@ -354,7 +352,7 @@ export class GuEc2App {
           ? new GuUserData(scope, { app, ...props.userData }).userData
           : props.userData,
       vpcSubnets: { subnets: privateSubnets },
-      ...(props.autoScalingGroup?.blockDevices && { ...props.autoScalingGroup.blockDevices }),
+      ...(props.blockDevices && { blockDevices: props.blockDevices }),
     });
 
     // We are selectively tagging the ASG so that we can expose the number of stacks using this pattern
