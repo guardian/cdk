@@ -20,7 +20,11 @@ describe("The GuClassicLoadBalancer class", () => {
 
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc, existingLogicalId: "MyCLB" });
+    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
+      ...app,
+      vpc,
+      existingLogicalId: { logicalId: "MyCLB", reason: "testing" },
+    });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", "MyCLB");
   });
@@ -212,7 +216,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       ...app,
       vpc,
       removeScheme: true,
-      existingLogicalId: "ClassicLoadBalancer",
+      existingLogicalId: { logicalId: "ClassicLoadBalancer", reason: "testing" },
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources.ClassicLoadBalancer.Properties)).not.toContain("Scheme");

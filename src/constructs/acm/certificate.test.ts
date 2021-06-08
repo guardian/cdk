@@ -39,7 +39,7 @@ describe("The GuCertificate class", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuCertificate(stack, {
       app: "testing",
-      existingLogicalId: "MyCloudFormedCertificate",
+      existingLogicalId: { logicalId: "MyCloudFormedCertificate", reason: "testing" },
       [Stage.CODE]: {
         domainName: "code-guardian.com",
         hostedZoneId: "id123",

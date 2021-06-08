@@ -23,7 +23,7 @@ describe("The GuMigratableConstruct mixin", () => {
 
   it("should call GuMigratingResource.setLogicalId when the stack is being migrated and existingLogicalId is set", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new TestGuMigratableConstruct(stack, "MyBucket", { existingLogicalId: "Hello" });
+    new TestGuMigratableConstruct(stack, "MyBucket", { existingLogicalId: { logicalId: "Hello", reason: "testing" } });
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", "Hello");
@@ -31,7 +31,7 @@ describe("The GuMigratableConstruct mixin", () => {
 
   it("should call GuMigratingResource.setLogicalId when the stack is not being migrated and existingLogicalId is set", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: false });
-    new TestGuMigratableConstruct(stack, "MyBucket", { existingLogicalId: "Hello" });
+    new TestGuMigratableConstruct(stack, "MyBucket", { existingLogicalId: { logicalId: "Hello", reason: "testing" } });
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", /^MyBucket.+/);

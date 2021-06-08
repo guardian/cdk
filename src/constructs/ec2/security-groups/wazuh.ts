@@ -88,7 +88,12 @@ export class GuWazuhAccess extends GuBaseSecurityGroup {
     GuMigratingResource.setLogicalId(
       this,
       { migratedFromCloudFormation: true },
-      { existingLogicalId: "WazuhSecurityGroup" }
+      {
+        existingLogicalId: {
+          logicalId: "WazuhSecurityGroup",
+          reason: "Avoid tricky security group replacement during a YAML to GuCDK migration.",
+        },
+      }
     );
   }
 

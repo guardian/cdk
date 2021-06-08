@@ -12,7 +12,7 @@ describe("The GuSnsTopic construct", () => {
 
   it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuSnsTopic(stack, "my-sns-topic", { existingLogicalId: "TheSnsTopic" });
+    new GuSnsTopic(stack, "my-sns-topic", { existingLogicalId: { logicalId: "TheSnsTopic", reason: "testing" } });
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::SNS::Topic", "TheSnsTopic");
   });
 });

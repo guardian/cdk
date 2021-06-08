@@ -31,7 +31,7 @@ describe("The GuSnsLambda pattern", () => {
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
-      existingSnsTopic: { existingLogicalId: "in-use-sns-topic" },
+      existingSnsTopic: { existingLogicalId: { logicalId: "in-use-sns-topic", reason: "testing" } },
       app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);

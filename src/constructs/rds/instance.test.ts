@@ -95,7 +95,7 @@ describe("The GuDatabaseInstance class", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
-      existingLogicalId: "MyDb",
+      existingLogicalId: { logicalId: "MyDb", reason: "testing" },
       instanceType: "t3.small",
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,

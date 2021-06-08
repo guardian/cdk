@@ -52,7 +52,9 @@ describe("GuMigratingResource", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     const construct = new Bucket(stack, "MyBucket");
 
-    GuMigratingResource.setLogicalId(construct, stack, { existingLogicalId: "my-pre-existing-bucket" });
+    GuMigratingResource.setLogicalId(construct, stack, {
+      existingLogicalId: { logicalId: "my-pre-existing-bucket", reason: "testing" },
+    });
 
     expect(warn).toHaveBeenCalledTimes(0);
     expect(info).toHaveBeenCalledTimes(0);
@@ -81,7 +83,9 @@ describe("GuMigratingResource", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: false });
     const construct = new Bucket(stack, "MyBucket");
 
-    GuMigratingResource.setLogicalId(construct, stack, { existingLogicalId: "my-pre-existing-bucket" });
+    GuMigratingResource.setLogicalId(construct, stack, {
+      existingLogicalId: { logicalId: "my-pre-existing-bucket", reason: "testing" },
+    });
 
     expect(info).toHaveBeenCalledTimes(0);
     expect(warn).toHaveBeenCalledTimes(1);

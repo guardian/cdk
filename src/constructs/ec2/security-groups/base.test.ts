@@ -14,7 +14,11 @@ describe("The GuSecurityGroup class", () => {
 
   it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, existingLogicalId: "TestSG", app: "testing" });
+    new GuSecurityGroup(stack, "TestSecurityGroup", {
+      vpc,
+      existingLogicalId: { logicalId: "TestSG", reason: "testing" },
+      app: "testing",
+    });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "TestSG");
   });

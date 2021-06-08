@@ -9,7 +9,7 @@ describe("The GuRole class", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
 
     new GuRole(stack, "TestRole", {
-      existingLogicalId: "MyRole",
+      existingLogicalId: { logicalId: "MyRole", reason: "testing" },
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 

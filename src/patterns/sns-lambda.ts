@@ -85,7 +85,7 @@ export class GuSnsLambda extends GuLambdaFunction {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const topicId = props.existingSnsTopic?.existingLogicalId ?? "SnsIncomingEventsTopic";
+    const topicId = props.existingSnsTopic?.existingLogicalId?.logicalId ?? "SnsIncomingEventsTopic";
 
     const snsTopic = props.existingSnsTopic?.externalTopicName
       ? Topic.fromTopicArn(

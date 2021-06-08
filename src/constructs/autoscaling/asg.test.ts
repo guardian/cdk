@@ -205,7 +205,10 @@ describe("The GuAutoScalingGroup", () => {
 
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, existingLogicalId: "MyASG" });
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      ...defaultProps,
+      existingLogicalId: { logicalId: "MyASG", reason: "testing" },
+    });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", "MyASG");
   });

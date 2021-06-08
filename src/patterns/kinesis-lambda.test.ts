@@ -46,7 +46,7 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
-      existingKinesisStream: { existingLogicalId: "pre-existing-kinesis-stream" },
+      existingKinesisStream: { existingLogicalId: { logicalId: "pre-existing-kinesis-stream", reason: "testing" } },
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);

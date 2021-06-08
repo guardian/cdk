@@ -32,7 +32,17 @@ export interface GuMigratingResource {
    * @see GuMigratingStack
    * @see GuStack
    */
-  existingLogicalId?: string;
+  existingLogicalId?: {
+    /**
+     * The logical ID to use in the synthesised template for this resource.
+     */
+    logicalId: string;
+
+    /**
+     * A short description to help developers understand why this resource's logical ID is being set.
+     */
+    reason: string;
+  };
 }
 
 export const GuMigratingResource = {
@@ -51,7 +61,7 @@ export const GuMigratingResource = {
 
     if (migratedFromCloudFormation) {
       if (existingLogicalId) {
-        return overrideLogicalId(existingLogicalId);
+        return overrideLogicalId(existingLogicalId.logicalId);
       }
 
       if (isStateful) {
@@ -62,7 +72,7 @@ export const GuMigratingResource = {
     } else {
       if (existingLogicalId) {
         Annotations.of(construct).addWarning(
-          `GuStack has 'migratedFromCloudFormation' set to false. ${id} has an 'existingLogicalId' set to ${existingLogicalId}. This will have no effect - the logicalId will be auto-generated. Set 'migratedFromCloudFormation' to true for 'existingLogicalId' to be observed.`
+          `GuStack has 'migratedFromCloudFormation' set to false. ${id} has an 'existingLogicalId' set to ${existingLogicalId.logicalId}. This will have no effect - the logicalId will be auto-generated. Set 'migratedFromCloudFormation' to true for 'existingLogicalId' to be observed.`
         );
       }
 

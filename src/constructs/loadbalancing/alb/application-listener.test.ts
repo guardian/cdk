@@ -67,7 +67,7 @@ describe("The GuApplicationListener class", () => {
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
       loadBalancer: getLoadBalancer(stack),
-      existingLogicalId: "AppListener",
+      existingLogicalId: { logicalId: "AppListener", reason: "testing" },
       defaultAction: ListenerAction.forward([getAppTargetGroup(stack)]),
       certificates: [{ certificateArn: "" }],
     });
