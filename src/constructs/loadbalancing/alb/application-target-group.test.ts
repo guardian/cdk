@@ -39,7 +39,11 @@ describe("The GuApplicationTargetGroup class", () => {
 
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc, existingLogicalId: "MyTargetGroup" });
+    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
+      ...app,
+      vpc,
+      existingLogicalId: { logicalId: "MyTargetGroup", reason: "testing" },
+    });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::TargetGroup", "MyTargetGroup");
   });

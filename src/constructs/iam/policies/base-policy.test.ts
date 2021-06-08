@@ -72,7 +72,7 @@ describe("GuAllowPolicy", () => {
       new GuAllowPolicy(stack, "AllowS3GetObject", {
         actions: ["s3:GetObject"],
         resources: ["*"],
-        existingLogicalId: "MyAwesomeAllowPolicy",
+        existingLogicalId: { logicalId: "MyAwesomeAllowPolicy", reason: "testing" },
       })
     );
 
@@ -149,7 +149,7 @@ describe("GuDenyPolicy", () => {
       new GuDenyPolicy(stack, "DenyS3GetObject", {
         actions: ["s3:GetObject"],
         resources: ["*"],
-        existingLogicalId: "MyAwesomeDenyPolicy",
+        existingLogicalId: { logicalId: "MyAwesomeDenyPolicy", reason: "testing" },
       })
     );
 

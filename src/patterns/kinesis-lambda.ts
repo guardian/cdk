@@ -108,7 +108,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
       encryption: StreamEncryption.MANAGED,
       ...props.kinesisStreamProps,
     };
-    const streamId = props.existingKinesisStream?.existingLogicalId ?? "KinesisStream";
+    const streamId = props.existingKinesisStream?.existingLogicalId?.logicalId ?? "KinesisStream";
 
     const kinesisStream = props.existingKinesisStream?.externalKinesisStreamName
       ? Stream.fromStreamArn(
