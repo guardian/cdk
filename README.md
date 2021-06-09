@@ -11,7 +11,7 @@ Welcome to the Guardian CDK library! This library contains a number of reusable 
 ## Wait, what is CDK?
 > The AWS Cloud Development Kit (AWS CDK) is an open-source software development framework to define cloud infrastructure in code and provision it through AWS CloudFormation.
 
-You can read more about it in the [here][aws-cdk].
+You can read more about it in the [AWS CDK repository][aws-cdk].
 
 ## Architecture
 ### Patterns
