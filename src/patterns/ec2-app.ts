@@ -1,28 +1,28 @@
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
 import { Port } from "@aws-cdk/aws-ec2";
+import type { IPeer } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration, Tags } from "@aws-cdk/core";
+import type { Stage } from "../constants";
 import { TagKeys } from "../constants/tag-keys";
 import { GuCertificate } from "../constructs/acm";
+import type { GuCertificateProps } from "../constructs/acm";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
+import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
 import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
+import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import { GuStringParameter } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
+import type { GuInstanceRoleProps } from "../constructs/iam";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
-import type { Stage } from "../constants";
-import type { GuCertificateProps } from "../constructs/acm";
-import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
-import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
-import type { GuStack } from "../constructs/core";
-import type { GuInstanceRoleProps } from "../constructs/iam";
-import type { IPeer } from "@aws-cdk/aws-ec2";
 
 export enum AccessScope {
   PUBLIC,

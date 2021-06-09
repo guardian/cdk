@@ -2,15 +2,15 @@ import "../utils/test/jest";
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
+import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { TagKeys } from "../constants/tag-keys";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { GuDynamoDBWritePolicy } from "../constructs/iam";
 import { simpleGuStackForTesting } from "../utils/test";
-import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 import type { SynthedStack } from "../utils/test";
-import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 const getCertificateProps = () => ({
   [Stage.CODE]: {

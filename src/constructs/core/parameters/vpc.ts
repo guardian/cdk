@@ -1,5 +1,5 @@
-import { GuParameter } from "./base";
 import type { GuStack } from "../stack";
+import { GuParameter } from "./base";
 import type { GuNoTypeParameterProps } from "./base";
 
 export class GuSubnetListParameter extends GuParameter {

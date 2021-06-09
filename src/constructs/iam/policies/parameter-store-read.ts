@@ -1,7 +1,7 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
 import { GuPolicy } from "./base-policy";
-import type { GuStack } from "../../core";
 
 export class GuParameterStoreReadPolicy extends GuPolicy {
   constructor(scope: GuStack, props: AppIdentity) {

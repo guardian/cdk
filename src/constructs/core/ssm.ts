@@ -1,14 +1,14 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 import { Policy, PolicyStatement } from "@aws-cdk/aws-iam";
+import type { IGrantable, IPrincipal } from "@aws-cdk/aws-iam";
 import { Code, Runtime, SingletonFunction } from "@aws-cdk/aws-lambda";
 import { Construct, CustomResource, Duration } from "@aws-cdk/core";
+import type { Reference } from "@aws-cdk/core";
 import { AwsCustomResourcePolicy } from "@aws-cdk/custom-resources";
 import type { CustomResourceGetParameterProps } from "./custom-resources/interfaces";
 import type { AppIdentity } from "./identity";
 import type { GuStack } from "./stack";
-import type { IGrantable, IPrincipal } from "@aws-cdk/aws-iam";
-import type { Reference } from "@aws-cdk/core";
 
 export interface GuSSMParameterProps {
   parameter: string;

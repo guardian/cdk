@@ -1,5 +1,5 @@
-import { GuAllowPolicy } from "./base-policy";
 import type { GuStack } from "../../core";
+import { GuAllowPolicy } from "./base-policy";
 import type { GuAllowPolicyProps } from "./base-policy";
 
 abstract class GuCloudwatchPolicy extends GuAllowPolicy {

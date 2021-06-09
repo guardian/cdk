@@ -1,5 +1,5 @@
-import { GuAllowPolicy } from "./base-policy";
 import type { GuStack } from "../../core";
+import { GuAllowPolicy } from "./base-policy";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 
 interface GuDynamoDBPolicyProps {

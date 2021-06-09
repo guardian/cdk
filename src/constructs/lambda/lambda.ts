@@ -1,13 +1,13 @@
 import { Code, Function, RuntimeFamily } from "@aws-cdk/aws-lambda";
+import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
 import { GuDistributable } from "../../types/distributable";
 import { GuLambdaErrorPercentageAlarm } from "../cloudwatch";
-import { GuDistributionBucketParameter } from "../core";
-import { AppIdentity } from "../core/identity";
 import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch";
+import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
-import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
+import { AppIdentity } from "../core/identity";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;

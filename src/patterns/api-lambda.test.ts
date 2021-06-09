@@ -1,9 +1,9 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
+import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuApiLambda } from "./api-lambda";
-import type { NoMonitoring } from "../constructs/cloudwatch";
 
 describe("The GuApiLambda pattern", () => {
   it("should create the correct resources with minimal config", () => {

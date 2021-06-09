@@ -1,10 +1,10 @@
 import { ComparisonOperator, MathExpression, Statistic, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { HttpCodeElb, HttpCodeTarget } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Duration } from "@aws-cdk/core";
-import { AppIdentity } from "../core/identity";
-import { GuAlarm } from "./alarm";
 import type { GuStack } from "../core";
+import { AppIdentity } from "../core/identity";
 import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
+import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
 
 export interface Http5xxAlarmProps
