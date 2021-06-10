@@ -1,7 +1,7 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuVpc, SubnetType } from "./vpc";
 import type { SynthedStack } from "../../utils/test";
+import { GuVpc, SubnetType } from "./vpc";
 
 describe("The GuVpc class", () => {
   describe("subnets method", () => {

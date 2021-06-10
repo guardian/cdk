@@ -4,9 +4,9 @@ import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationListener, ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../utils/test";
+import type { AppIdentity } from "../core/identity";
 import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
-import type { AppIdentity } from "../core/identity";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",

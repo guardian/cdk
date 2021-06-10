@@ -1,6 +1,6 @@
 import { RegexPattern } from "../../../constants";
-import { GuStringParameter } from "./base";
 import type { GuStack } from "../stack";
+import { GuStringParameter } from "./base";
 
 export class GuGuardianEmailSenderParameter extends GuStringParameter {
   constructor(scope: GuStack) {

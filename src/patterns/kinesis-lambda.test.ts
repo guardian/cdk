@@ -1,15 +1,15 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
 import { StreamEncryption } from "@aws-cdk/aws-kinesis";
+import type { StreamProps } from "@aws-cdk/aws-kinesis";
 import { Runtime, StartingPosition } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
-import { StreamRetry } from "../utils/lambda";
-import { simpleGuStackForTesting } from "../utils/test";
-import { GuKinesisLambda } from "./kinesis-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
+import { StreamRetry } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
+import { simpleGuStackForTesting } from "../utils/test";
 import type { SynthedStack } from "../utils/test";
-import type { StreamProps } from "@aws-cdk/aws-kinesis";
+import { GuKinesisLambda } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {
   it("should create the correct resources for a new stack with minimal config", () => {

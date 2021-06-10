@@ -1,9 +1,9 @@
 import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
-import { GuLambdaFunction } from "../constructs/lambda";
+import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
+import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
-import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;

@@ -8,9 +8,9 @@ import { Stage, Stages } from "../../constants";
 import { ContextKeys } from "../../constants/context-keys";
 import { TagKeys } from "../../constants/tag-keys";
 import { simpleGuStackForTesting } from "../../utils/test";
+import type { SynthedStack } from "../../utils/test";
 import { GuParameter } from "./parameters";
 import { GuStack } from "./stack";
-import type { SynthedStack } from "../../utils/test";
 
 describe("The GuStack construct", () => {
   it("requires passing the stack value as props", function () {

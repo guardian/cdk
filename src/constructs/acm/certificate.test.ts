@@ -1,8 +1,8 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import { Stage } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuCertificate } from "./certificate";
 import type { SynthedStack } from "../../utils/test";
+import { GuCertificate } from "./certificate";
 
 describe("The GuCertificate class", () => {
   it("should create a new certificate when hosted zone ids are provided", () => {

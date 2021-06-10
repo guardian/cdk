@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import { GuArnParameter, GuParameter, GuStringParameter } from "./base";
 import type { SynthedStack } from "../../../utils/test";
+import { GuArnParameter, GuParameter, GuStringParameter } from "./base";
 
 describe("The GuParameter class", () => {
   it("sets the type as passed through by default", () => {

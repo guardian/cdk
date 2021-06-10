@@ -1,7 +1,7 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { isSingletonPresentInStack } from "../../../utils/test";
-import { GuPolicy } from "./base-policy";
 import type { GuStack } from "../../core";
+import { GuPolicy } from "./base-policy";
 
 export class GuDescribeEC2Policy extends GuPolicy {
   private static instance: GuPolicy | undefined;

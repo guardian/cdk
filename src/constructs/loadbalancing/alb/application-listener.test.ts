@@ -6,11 +6,11 @@ import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../../constants";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuCertificate } from "../../acm";
+import type { GuStack } from "../../core";
+import type { AppIdentity } from "../../core/identity";
 import { GuApplicationListener, GuHttpsApplicationListener } from "./application-listener";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 import { GuApplicationTargetGroup } from "./application-target-group";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",

@@ -1,6 +1,6 @@
 import { GuGuardianEmailSenderParameter } from "../../core";
-import { GuAllowPolicy } from "./base-policy";
 import type { GuStack } from "../../core";
+import { GuAllowPolicy } from "./base-policy";
 
 export class GuSESSenderPolicy extends GuAllowPolicy {
   constructor(scope: GuStack) {

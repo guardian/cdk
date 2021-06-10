@@ -1,6 +1,6 @@
 import { AppIdentity } from "../identity";
-import { GuParameter } from "./base";
 import type { GuStack } from "../stack";
+import { GuParameter } from "./base";
 import type { GuNoTypeParameterPropsWithAppIdentity } from "./base";
 
 export class GuInstanceTypeParameter extends GuParameter {

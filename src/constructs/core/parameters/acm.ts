@@ -1,7 +1,7 @@
 import { RegexPattern } from "../../../constants";
 import { AppIdentity } from "../identity";
-import { GuStringParameter } from "./base";
 import type { GuStack } from "../stack";
+import { GuStringParameter } from "./base";
 
 export class GuCertificateArnParameter extends GuStringParameter {
   constructor(scope: GuStack, props: AppIdentity) {

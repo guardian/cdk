@@ -1,6 +1,6 @@
 import { Annotations } from "@aws-cdk/core";
-import { isGuStatefulConstruct } from "../../utils/mixin";
 import type { CfnElement, IConstruct } from "@aws-cdk/core";
+import { isGuStatefulConstruct } from "../../utils/mixin";
 
 export interface GuMigratingStack {
   /**

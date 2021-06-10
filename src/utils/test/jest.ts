@@ -1,12 +1,12 @@
 import "@aws-cdk/assert/jest";
 import { HaveResourceAssertion } from "@aws-cdk/assert";
+import type { JestFriendlyAssertion, StackInspector } from "@aws-cdk/assert";
 import { expect as awsExpect } from "@aws-cdk/assert/lib/expect";
 import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
-import { findResourceByTypeAndLogicalId } from "./synthed-stack";
 import type { GuStack } from "../../constructs/core";
 import type { AppIdentity } from "../../constructs/core/identity";
-import type { JestFriendlyAssertion, StackInspector } from "@aws-cdk/assert";
+import { findResourceByTypeAndLogicalId } from "./synthed-stack";
 
 interface Tag {
   Key: string;

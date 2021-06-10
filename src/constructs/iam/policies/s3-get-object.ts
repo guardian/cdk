@@ -1,8 +1,8 @@
+import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
 import { GuDistributionBucketParameter } from "../../core";
+import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
 import { GuAllowPolicy } from "./base-policy";
-import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
-import type { GuStack } from "../../core";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 
 export interface GuGetS3ObjectPolicyProps extends GuNoStatementsPolicyProps {

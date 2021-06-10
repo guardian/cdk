@@ -1,8 +1,8 @@
 import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { Duration } from "@aws-cdk/core";
-import { GuAlarm } from "./alarm";
 import type { GuStack } from "../core";
 import type { GuLambdaFunction } from "../lambda";
+import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
 
 export interface GuLambdaErrorPercentageMonitoringProps

@@ -1,6 +1,6 @@
 import { isSingletonPresentInStack } from "../../../utils/test";
-import { GuAllowPolicy } from "./base-policy";
 import type { GuStack } from "../../core";
+import { GuAllowPolicy } from "./base-policy";
 
 export class GuSSMRunCommandPolicy extends GuAllowPolicy {
   private static instance: GuSSMRunCommandPolicy | undefined;

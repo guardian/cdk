@@ -1,18 +1,18 @@
 import { Stream, StreamEncryption } from "@aws-cdk/aws-kinesis";
+import type { StreamProps } from "@aws-cdk/aws-kinesis";
 import { StartingPosition } from "@aws-cdk/aws-lambda";
 import { KinesisEventSource } from "@aws-cdk/aws-lambda-event-sources";
-import { AppIdentity } from "../constructs/core/identity";
-import { GuKinesisStream } from "../constructs/kinesis";
-import { GuLambdaFunction } from "../constructs/lambda";
-import { toAwsErrorHandlingProps } from "../utils/lambda";
+import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
+import { AppIdentity } from "../constructs/core/identity";
 import type { GuMigratingResource } from "../constructs/core/migrating";
+import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuKinesisStreamProps } from "../constructs/kinesis";
+import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
+import { toAwsErrorHandlingProps } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
-import type { StreamProps } from "@aws-cdk/aws-kinesis";
-import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources";
 
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
