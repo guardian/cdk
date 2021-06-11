@@ -1,23 +1,24 @@
+import type { BlockDevice } from "@aws-cdk/aws-autoscaling";
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
-import { Port } from "@aws-cdk/aws-ec2";
 import type { IPeer } from "@aws-cdk/aws-ec2";
+import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration, Tags } from "@aws-cdk/core";
 import type { Stage } from "../constants";
 import { TagKeys } from "../constants/tag-keys";
-import { GuCertificate } from "../constructs/acm";
 import type { GuCertificateProps } from "../constructs/acm";
-import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
+import { GuCertificate } from "../constructs/acm";
 import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
-import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
+import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
-import { GuStringParameter } from "../constructs/core";
+import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
+import { GuStringParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
-import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import type { GuInstanceRoleProps } from "../constructs/iam";
+import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
@@ -155,6 +156,7 @@ export interface GuEc2AppProps extends AppIdentity {
     [Stage.PROD]?: GuAsgCapacityProps;
   };
   accessLogging?: AccessLoggingProps;
+  blockDevices?: BlockDevice[];
 }
 
 interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
@@ -350,6 +352,7 @@ export class GuEc2App {
           ? new GuUserData(scope, { app, ...props.userData }).userData
           : props.userData,
       vpcSubnets: { subnets: privateSubnets },
+      ...(props.blockDevices && { blockDevices: props.blockDevices }),
     });
 
     // We are selectively tagging the ASG so that we can expose the number of stacks using this pattern
