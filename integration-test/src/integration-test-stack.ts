@@ -1,5 +1,5 @@
-import { GuDistributionBucketParameter, GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "@aws-cdk/core";
+import { GuDistributionBucketParameter, GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 
 export class IntegrationTestStack extends GuStack {
