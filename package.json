@@ -56,7 +56,7 @@
     "@aws-cdk/aws-rds": "1.107.0",
     "@aws-cdk/aws-s3": "1.107.0",
     "@aws-cdk/core": "1.107.0",
-    "aws-sdk": "^2.919.0",
+    "aws-sdk": "^2.929.0",
     "execa": "^5.1.1",
     "git-url-parse": "^11.4.4",
     "read-pkg-up": "7.0.1"
