@@ -18,6 +18,35 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
   }
 }
 
+/**
+ * Creates an `AWS::IAM::Policy` to grant `s3:GetObject` permission to the account's distribution bucket.
+ * The permission is tightly scoped to the path to the app (`bucket/stack/stage/app/*`) and will look something like:
+ *
+ * ```yaml
+ * GetDistributablePolicyTestingF9D43A3E:
+ *     Type: AWS::IAM::Policy
+ *     Properties:
+ *       PolicyDocument:
+ *         Version: "2012-10-17"
+ *         Statement:
+ *           - Action: s3:GetObject
+ *             Effect: Allow
+ *             Resource:
+ *               Fn::Join:
+ *                 - ""
+ *                 - - 'arn:aws:s3:::'
+ *                   - Ref: DistributionBucketName
+ *                   - /STACK/
+ *                   - Ref: Stage
+ *                   - /APP/*
+ *       PolicyName: GetDistributablePolicyTestingF9D43A3E
+ * ```
+ *
+ * If necessary, an `AWS::SSM::Parameter<String>` parameter will be added to the template,
+ * with a default value of `/account/services/artifact.bucket` which is the recommended Parameter Store location.
+ *
+ * @see GuDistributionBucketParameter
+ */
 export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
   constructor(scope: GuStack, props: AppIdentity) {
     const path = [scope.stack, scope.stage, props.app, "*"].join("/");
