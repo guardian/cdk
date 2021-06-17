@@ -68,6 +68,39 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Creates an <code>AWS::IAM::Policy</code> to grant <code>s3:GetObject</code> permission to the account&#39;s distribution bucket.
+						The permission is tightly scoped to the path to the app (<code>bucket/stack/stage/app/*</code>) and will look something like:</p>
+					</div>
+					<pre><code class="language-yaml"><span style="color: #800000">GetDistributablePolicyTestingF9D43A3E</span><span style="color: #000000">:</span>
+<span style="color: #000000">    </span><span style="color: #800000">Type</span><span style="color: #000000">: </span><span style="color: #0000FF">AWS::IAM::Policy</span>
+<span style="color: #000000">    </span><span style="color: #800000">Properties</span><span style="color: #000000">:</span>
+<span style="color: #000000">      </span><span style="color: #800000">PolicyDocument</span><span style="color: #000000">:</span>
+<span style="color: #000000">        </span><span style="color: #800000">Version</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;2012-10-17&quot;</span>
+<span style="color: #000000">        </span><span style="color: #800000">Statement</span><span style="color: #000000">:</span>
+<span style="color: #000000">          - </span><span style="color: #800000">Action</span><span style="color: #000000">: </span><span style="color: #0000FF">s3:GetObject</span>
+<span style="color: #000000">            </span><span style="color: #800000">Effect</span><span style="color: #000000">: </span><span style="color: #0000FF">Allow</span>
+<span style="color: #000000">            </span><span style="color: #800000">Resource</span><span style="color: #000000">:</span>
+<span style="color: #000000">              </span><span style="color: #800000">Fn::Join</span><span style="color: #000000">:</span>
+<span style="color: #000000">                - </span><span style="color: #A31515">&quot;&quot;</span>
+<span style="color: #000000">                - - </span><span style="color: #0000FF">&#039;arn:aws:s3:::&#039;</span>
+<span style="color: #000000">                  - </span><span style="color: #800000">Ref</span><span style="color: #000000">: </span><span style="color: #0000FF">DistributionBucketName</span>
+<span style="color: #000000">                  - </span><span style="color: #0000FF">/STACK/</span>
+<span style="color: #000000">                  - </span><span style="color: #800000">Ref</span><span style="color: #000000">: </span><span style="color: #0000FF">Stage</span>
+<span style="color: #000000">                  - </span><span style="color: #0000FF">/APP/*</span>
+<span style="color: #000000">      </span><span style="color: #800000">PolicyName</span><span style="color: #000000">: </span><span style="color: #0000FF">GetDistributablePolicyTestingF9D43A3E</span>
+</code></pre>
+					<p>If necessary, an <code>AWS::SSM::Parameter&lt;String&gt;</code> parameter will be added to the template,
+					with a default value of <code>/account/services/artifact.bucket</code> which is the recommended Parameter Store location.</p>
+					<dl class="tsd-comment-tags">
+						<dt>see</dt>
+						<dd><p>GuDistributionBucketParameter</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -148,7 +181,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="constructs_iam.gugets3objectspolicy.html">GuGetS3ObjectsPolicy</a>.<a href="constructs_iam.gugets3objectspolicy.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/guardian/cdk/blob/9099e14/src/constructs/iam/policies/s3-get-object.ts#L21">src/constructs/iam/policies/s3-get-object.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/2e8fc79/src/constructs/iam/policies/s3-get-object.ts#L50">src/constructs/iam/policies/s3-get-object.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
