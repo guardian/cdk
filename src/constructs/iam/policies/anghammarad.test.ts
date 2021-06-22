@@ -3,10 +3,10 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import type { SynthedStack } from "../../../utils/test";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import type { GuStack } from "../../core";
-import { AnghammaradTopicParameter } from "../../core/parameters/anghammarad";
-import { AnghammaradSenderPolicy } from "./anghammarad";
+import { GuAnghammaradTopicParameter } from "../../core";
+import { GuAnghammaradSenderPolicy } from "./anghammarad";
 
-describe("AnghammaradSenderPolicy", () => {
+describe("GuAnghammaradSenderPolicy", () => {
   const getParams = (stack: GuStack) => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     return Object.keys(json.Parameters);
@@ -19,7 +19,7 @@ describe("AnghammaradSenderPolicy", () => {
     expect(getParams(stack)).toEqual(["Stage"]);
 
     // add the policy
-    attachPolicyToTestRole(stack, AnghammaradSenderPolicy.getInstance(stack));
+    attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
     expect(getParams(stack)).toEqual(["Stage", "AnghammaradSnsArn"]);
   });
 
@@ -30,17 +30,17 @@ describe("AnghammaradSenderPolicy", () => {
     expect(getParams(stack)).toEqual(["Stage"]);
 
     // explicitly add an AnghammaradTopicParameter
-    AnghammaradTopicParameter.getInstance(stack);
+    GuAnghammaradTopicParameter.getInstance(stack);
     expect(getParams(stack)).toEqual(["Stage", "AnghammaradSnsArn"]);
 
     // add the policy
-    attachPolicyToTestRole(stack, AnghammaradSenderPolicy.getInstance(stack));
+    attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
     expect(getParams(stack)).toEqual(["Stage", "AnghammaradSnsArn"]);
   });
 
   it("should define a policy that would allow writing to SNS", () => {
     const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, AnghammaradSenderPolicy.getInstance(stack));
+    attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
 
     expect(stack).toHaveResource("AWS::IAM::Policy", {
       PolicyDocument: {
