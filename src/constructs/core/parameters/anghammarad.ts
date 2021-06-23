@@ -8,8 +8,8 @@ import { GuStringParameter } from "./base";
  *
  * @see https://github.com/guardian/anghammarad
  */
-export class AnghammaradTopicParameter extends GuStringParameter {
-  private static instance: AnghammaradTopicParameter | undefined;
+export class GuAnghammaradTopicParameter extends GuStringParameter {
+  private static instance: GuAnghammaradTopicParameter | undefined;
 
   private constructor(scope: GuStack) {
     super(scope, "AnghammaradSnsArn", {
@@ -25,9 +25,9 @@ export class AnghammaradTopicParameter extends GuStringParameter {
    *
    * @param stack the stack to operate on
    */
-  public static getInstance(stack: GuStack): AnghammaradTopicParameter {
+  public static getInstance(stack: GuStack): GuAnghammaradTopicParameter {
     if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new AnghammaradTopicParameter(stack);
+      this.instance = new GuAnghammaradTopicParameter(stack);
     }
 
     return this.instance;
