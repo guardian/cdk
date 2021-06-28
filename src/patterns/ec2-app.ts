@@ -26,8 +26,9 @@ import {
 } from "../constructs/loadbalancing";
 
 export enum AccessScope {
-  PUBLIC,
-  RESTRICTED,
+  PUBLIC = "Public",
+  RESTRICTED = "Restricted",
+  INTERNAL = "Internal",
 }
 
 export interface Access {
@@ -49,7 +50,8 @@ export interface PublicAccess extends Access {
 }
 
 /**
- * For when you want to restrict your application's access to a list of CIDR ranges.
+ * For when you want to restrict your application's access to a list of CIDR ranges. For example,
+ * if you want limit access to users connecting from Guardian offices only.
  *
  * Example usage:
  * ```typescript
@@ -64,7 +66,26 @@ export interface RestrictedAccess extends Access {
   cidrRanges: IPeer[];
 }
 
-export type AppAccess = PublicAccess | RestrictedAccess;
+/**
+ * For when you want to restrict your application's access to services running inside your VPC.
+ *
+ * Note that if your account uses Direct Connect or VPC Peering, then incoming traffic from these sources
+ * can also be allowed.
+ *
+ * Example usage:
+ * ```typescript
+ * {
+ *   scope: AccessScope.INTERNAL,
+ *   cidrRanges: [Peer.ipv4("10.0.0.0/8")]
+ * }
+ * ```
+ */
+export interface InternalAccess extends Access {
+  scope: AccessScope.INTERNAL;
+  cidrRanges: IPeer[];
+}
+
+export type AppAccess = PublicAccess | RestrictedAccess | InternalAccess;
 
 export interface AccessLoggingProps {
   enabled: boolean;
@@ -172,9 +193,19 @@ const OpenApplicationCidrError: Error =
   Error(`Your list of CIDR ranges includes 0.0.0.0/0, meaning all other ranges specified are unnecessary as
 your application is open to the world. Please either remove the open CIDR range or use the PUBLIC access scope.`);
 
+const PublicCidrError: Error =
+  Error(`Your list of CIDR ranges includes a public ip, which will not be able to reach an internal load balancer.
+  Please either remove the public CIDR range or use the RESTRICTED access scope.`);
+
 function validateRestrictedCidrRanges(access: RestrictedAccess) {
   const openToWorld = access.cidrRanges.map((range) => range.uniqueId).includes("0.0.0.0/0");
   if (openToWorld) throw OpenApplicationCidrError;
+}
+
+function validateInternalCidrRanges(access: InternalAccess) {
+  const publicCidrRanges = access.cidrRanges.filter((range) => !range.uniqueId.startsWith("10."));
+  const containsPublicIps = publicCidrRanges.length > 0;
+  if (containsPublicIps) throw PublicCidrError;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -316,6 +347,7 @@ export class GuEc2App {
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
 
     if (props.access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(props.access);
+    if (props.access.scope === AccessScope.INTERNAL) validateInternalCidrRanges(props.access);
 
     const certificate = new GuCertificate(scope, {
       app,
@@ -364,10 +396,14 @@ export class GuEc2App {
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
       vpc,
-      // This is always set to true, as it determines the load balancer scheme as `internet-facing` rather than internal.
-      // This does not result in public access to the load balancer in itself however, as that is handled by the listener's `open` prop
-      internetFacing: true,
-      vpcSubnets: { subnets: GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }) },
+      // Setting internetFacing to true does not necessarily allow public access to the load balancer itself. That is handled by the listener's `open` prop.
+      internetFacing: props.access.scope !== AccessScope.INTERNAL,
+      vpcSubnets: {
+        subnets:
+          props.access.scope === AccessScope.INTERNAL
+            ? privateSubnets
+            : GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }),
+      },
     });
 
     if (props.accessLogging?.enabled) {
@@ -405,9 +441,9 @@ export class GuEc2App {
     });
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
-    if (props.access.scope === AccessScope.RESTRICTED) {
+    if (props.access.scope !== AccessScope.PUBLIC) {
       loadBalancer.addSecurityGroup(
-        new GuSecurityGroup(scope, "RestrictedIngressSecurityGroup", {
+        new GuSecurityGroup(scope, `${props.access.scope}IngressSecurityGroup`, {
           app,
           vpc,
           description: "Allow restricted ingress from CIDR ranges",
