@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AccessLoggingProps | @guardian/cdk - v19.3.0</title>
+	<title>InternalAccess | @guardian/cdk - v19.3.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v19.3.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,21 +58,41 @@
 					<a href="../modules/index.html">index</a>
 				</li>
 				<li>
-					<a href="index.accessloggingprops.html">AccessLoggingProps</a>
+					<a href="index.internalaccess.html">InternalAccess</a>
 				</li>
 			</ul>
-			<h1>Interface AccessLoggingProps</h1>
+			<h1>Interface InternalAccess</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>For when you want to restrict your application&#39;s access to services running inside your VPC.</p>
+					</div>
+					<p>Note that if your account uses Direct Connect or VPC Peering, then incoming traffic from these sources
+					can also be allowed.</p>
+					<p>Example usage:</p>
+					<pre><code class="language-typescript"><span style="color: #000000">{</span>
+<span style="color: #000000">  scope: </span><span style="color: #001080">AccessScope</span><span style="color: #000000">.</span><span style="color: #0070C1">INTERNAL</span><span style="color: #000000">,</span>
+<span style="color: #000000">  cidrRanges: [</span><span style="color: #001080">Peer</span><span style="color: #000000">.</span><span style="color: #795E26">ipv4</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;10.0.0.0/8&quot;</span><span style="color: #000000">)]</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AccessLoggingProps</span>
+						<a href="index.access.html" class="tsd-signature-type" data-tsd-kind="Interface">Access</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">InternalAccess</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -83,8 +103,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.accessloggingprops.html#enabled" class="tsd-kind-icon">enabled</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.accessloggingprops.html#prefix" class="tsd-kind-icon">prefix</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.internalaccess.html#cidrranges" class="tsd-kind-icon">cidr<wbr>Ranges</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="index.internalaccess.html#scope" class="tsd-kind-icon">scope</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,22 +113,23 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="enabled" class="tsd-anchor"></a>
-					<h3>enabled</h3>
-					<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="cidrranges" class="tsd-anchor"></a>
+					<h3>cidr<wbr>Ranges</h3>
+					<div class="tsd-signature tsd-kind-icon">cidr<wbr>Ranges<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPeer</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/c8419d0/src/patterns/ec2-app.ts#L91">src/patterns/ec2-app.ts:91</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/c8419d0/src/patterns/ec2-app.ts#L85">src/patterns/ec2-app.ts:85</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="prefix" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> prefix</h3>
-					<div class="tsd-signature tsd-kind-icon">prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+					<a name="scope" class="tsd-anchor"></a>
+					<h3>scope</h3>
+					<div class="tsd-signature tsd-kind-icon">scope<span class="tsd-signature-symbol">:</span> <a href="../enums/index.accessscope.html#internal" class="tsd-signature-type" data-tsd-kind="Enumeration member">INTERNAL</a></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="index.access.html">Access</a>.<a href="index.access.html#scope">scope</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/c8419d0/src/patterns/ec2-app.ts#L92">src/patterns/ec2-app.ts:92</a></li>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/c8419d0/src/patterns/ec2-app.ts#L84">src/patterns/ec2-app.ts:84</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,21 +229,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.access.html" class="tsd-kind-icon">Access</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.accessloggingprops.html" class="tsd-kind-icon">Access<wbr>Logging<wbr>Props</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.accessloggingprops.html#enabled" class="tsd-kind-icon">enabled</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.accessloggingprops.html#prefix" class="tsd-kind-icon">prefix</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.alarms.html" class="tsd-kind-icon">Alarms</a>
 					</li>
@@ -244,9 +253,21 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.gusnslambdaprops.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.internalaccess.html" class="tsd-kind-icon">Internal<wbr>Access</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.internalaccess.html#cidrranges" class="tsd-kind-icon">cidr<wbr>Ranges</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
+								<a href="index.internalaccess.html#scope" class="tsd-kind-icon">scope</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="index.publicaccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
 					</li>
