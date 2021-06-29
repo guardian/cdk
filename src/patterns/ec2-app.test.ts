@@ -68,7 +68,7 @@ describe("the GuEC2App pattern", function () {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
-  it("can produce an EC2 app with an internal load balancer", function () {
+  it("can produce an EC2 app with an internal load balancer (located in private subnets)", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
       applicationPort: GuApplicationPorts.Node,
@@ -78,7 +78,12 @@ describe("the GuEC2App pattern", function () {
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      Scheme: "internal",
+      Subnets: {
+        Ref: "testguec2appPrivateSubnets",
+      },
+    });
   });
 
   it("adds the correct permissions for apps which need to fetch private config from s3", function () {
