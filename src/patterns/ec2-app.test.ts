@@ -68,6 +68,24 @@ describe("the GuEC2App pattern", function () {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
+  it("can produce an EC2 app with an internal load balancer (located in private subnets)", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("10.0.0.0/8")] },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: getCertificateProps(),
+    });
+    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      Scheme: "internal",
+      Subnets: {
+        Ref: "testguec2appPrivateSubnets",
+      },
+    });
+  });
+
   it("adds the correct permissions for apps which need to fetch private config from s3", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
@@ -275,6 +293,22 @@ describe("the GuEC2App pattern", function () {
         new GuEc2App(stack, {
           applicationPort: GuApplicationPorts.Node,
           access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("0.0.0.0/0"), Peer.ipv4("1.2.3.4/32")] },
+          app: app,
+          certificateProps: getCertificateProps(),
+          monitoringConfiguration: { noMonitoring: true },
+          userData: "",
+        })
+    ).toThrowError();
+  });
+
+  it("errors if specifying public CIDR ranges with internal access scope", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    expect(
+      () =>
+        new GuEc2App(stack, {
+          applicationPort: GuApplicationPorts.Node,
+          access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("93.1.2.3/12")] },
           app: app,
           certificateProps: getCertificateProps(),
           monitoringConfiguration: { noMonitoring: true },
