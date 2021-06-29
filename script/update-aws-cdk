@@ -35,7 +35,7 @@ updateAwsCdk() {
 }
 
 installAwsCdkUpdates() {
-  npm install && cd integration-test && npm install
+  npm install && cd integration-test && npm install && cd ..
 }
 
 checkForLocalChanges() {
