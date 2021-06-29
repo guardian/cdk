@@ -34,6 +34,10 @@ updateAwsCdk() {
   npm run update-aws-cdk
 }
 
+installAwsCdkUpdates() {
+  npm install && cd integration-test && npm install && cd ..
+}
+
 checkForLocalChanges() {
   if git diff --quiet; then
     echo "No changes. No further action needed."
@@ -51,7 +55,7 @@ raisePR() {
 
   git checkout -b $BRANCH_NAME
 
-  for file in package.json package-lock.json integration-test/package.json; do
+  for file in package.json package-lock.json integration-test/package.json integration-test/package-lock.json; do
     git add $file
   done
 
@@ -65,6 +69,7 @@ main() {
   ensureAtHeadOfOrigin
   checkYarnLock
   updateAwsCdk
+  installAwsCdkUpdates
   checkForLocalChanges
   raisePR
 }
