@@ -11,12 +11,3 @@ export class GuStageParameter extends GuStringParameter {
     });
   }
 }
-
-export class GuStackParameter extends GuStringParameter {
-  constructor(scope: GuStack) {
-    super(scope, "Stack", {
-      description: "Name of this stack",
-      default: "deploy",
-    });
-  }
-}
