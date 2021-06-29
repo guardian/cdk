@@ -1,2 +1,6 @@
 # Output directory for generated cloudformation.
 cdk.out
+
+# Reinstalling dependencies based on a lockfile doesn't seem to work cleanly (perhaps due to installing dependencies from file?).
+# We don't care too much about deterministic builds anyway, as this is just an integration test.
+package-lock.json

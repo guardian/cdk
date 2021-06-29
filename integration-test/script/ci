@@ -2,7 +2,7 @@
 
 set -e
 
-npm ci
+npm install --no-package-lock
 
 npm run build
 npm run lint
