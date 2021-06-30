@@ -55,7 +55,7 @@ raisePR() {
 
   git checkout -b $BRANCH_NAME
 
-  for file in package.json package-lock.json integration-test/package.json integration-test/package-lock.json; do
+  for file in package.json package-lock.json integration-test/package.json; do
     git add $file
   done
 
