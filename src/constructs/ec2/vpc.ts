@@ -7,10 +7,7 @@ interface VpcFromIdProps extends Omit<VpcAttributes, "availabilityZones"> {
   availabilityZones?: string[];
 }
 
-// TODO: Migrate this to use `AppIdentity`
-interface VpcFromIdParameterProps extends Omit<VpcFromIdProps, "vpcId"> {
-  app?: string;
-}
+type VpcFromIdParameterProps = Omit<VpcFromIdProps, "vpcId">;
 
 export enum SubnetType {
   PUBLIC = "Public",
@@ -68,12 +65,7 @@ export class GuVpc {
   }
 
   static fromIdParameter(scope: GuStack, id: string, props?: VpcFromIdParameterProps): IVpc {
-    const vpc = new GuVpcParameter(scope, `${maybeApp(props)}VpcId`, {
-      description: "Virtual Private Cloud to run EC2 instances within",
-      default: "/account/vpc/primary/id",
-      fromSSM: true,
-    });
-
+    const vpc = GuVpcParameter.getInstance(scope);
     return GuVpc.fromId(scope, id, { ...props, vpcId: vpc.valueAsString });
   }
 }
