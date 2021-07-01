@@ -343,7 +343,7 @@ export class GuEc2App {
     AppIdentity.taggedConstruct(props, scope);
 
     const { app } = props;
-    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"), { app });
+    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"));
     const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
 
     if (props.access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(props.access);
