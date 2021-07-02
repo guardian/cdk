@@ -22,7 +22,7 @@ describe("The GuVpc class", () => {
     test("adds the parameter with default type as private", () => {
       const stack = simpleGuStackForTesting();
 
-      GuVpc.subnetsfromParameter(stack);
+      GuVpc.subnetsFromParameter(stack);
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
@@ -36,7 +36,7 @@ describe("The GuVpc class", () => {
     test("adds a public subnets parameter if the type is public", () => {
       const stack = simpleGuStackForTesting();
 
-      GuVpc.subnetsfromParameter(stack, { type: SubnetType.PUBLIC });
+      GuVpc.subnetsFromParameter(stack, { type: SubnetType.PUBLIC });
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 

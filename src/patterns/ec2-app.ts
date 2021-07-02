@@ -344,7 +344,7 @@ export class GuEc2App {
 
     const { app } = props;
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"));
-    const privateSubnets = GuVpc.subnetsfromParameter(scope, { type: SubnetType.PRIVATE, app });
+    const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
     if (props.access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(props.access);
     if (props.access.scope === AccessScope.INTERNAL) validateInternalCidrRanges(props.access);
@@ -402,7 +402,7 @@ export class GuEc2App {
         subnets:
           props.access.scope === AccessScope.INTERNAL
             ? privateSubnets
-            : GuVpc.subnetsfromParameter(scope, { type: SubnetType.PUBLIC, app }),
+            : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       },
     });
 

@@ -45,7 +45,7 @@ export class GuVpc {
     );
   }
 
-  static subnetsfromParameter(scope: GuStack, props?: GuSubnetProps): ISubnet[] {
+  static subnetsFromParameter(scope: GuStack, props?: GuSubnetProps): ISubnet[] {
     const type = props?.type ?? SubnetType.PRIVATE;
 
     const subnets = new GuSubnetListParameter(scope, `${maybeApp(props)}${type}Subnets`, {
