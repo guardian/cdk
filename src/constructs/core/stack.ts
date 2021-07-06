@@ -118,7 +118,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     this.params = new Map<string, GuParameter>();
 
     this._stack = props.stack;
-    this._stage = new GuStageParameter(this).valueAsString;
+    this._stage = GuStageParameter.getInstance(this).valueAsString;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);
 
