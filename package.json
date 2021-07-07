@@ -7,6 +7,9 @@
   "files": [
     "lib"
   ],
+  "bin": {
+    "gu-cdk": "bin/gu-cdk"
+  },
   "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
@@ -28,6 +31,7 @@
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^26.0.24",
     "@types/node": "16.3.2",
+    "@types/yargs": "^17.0.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -60,7 +64,8 @@
     "aws-sdk": "^2.945.0",
     "execa": "^5.1.1",
     "git-url-parse": "^11.5.0",
-    "read-pkg-up": "7.0.1"
+    "read-pkg-up": "7.0.1",
+    "yargs": "^17.0.1"
   },
   "config": {
     "commitizen": {
