@@ -23,7 +23,8 @@
     "release": "semantic-release",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target",
-    "update-aws-cdk": "ncu \"/^@?aws-cdk(/.*)?$/\" --upgrade --deep"
+    "update-aws-cdk": "ncu \"/^@?aws-cdk(/.*)?$/\" --upgrade --deep",
+    "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.6.0",
@@ -42,6 +43,7 @@
     "semantic-release": "^17.4.4",
     "serve": "^12.0.0",
     "ts-jest": "^26.5.6",
+    "ts-node": "^10.0.0",
     "typedoc": "^0.21.4",
     "typescript": "~4.3.4"
   },
