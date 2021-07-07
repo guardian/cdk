@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "include": [
     "src/**/*",
-    "eslint/rules/valid-constructors.test.ts"
+    "tools/eslint/rules/valid-constructors.test.ts"
   ],
   "exclude": [
     "node_modules"

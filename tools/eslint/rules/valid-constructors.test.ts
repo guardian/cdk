@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- testing file */
 
-import type { GuStack } from "../../src/constructs/core";
+import type { GuStack } from "../../../src/constructs/core";
 
 interface MyProps {
   name: string;

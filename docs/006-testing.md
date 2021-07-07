@@ -31,7 +31,7 @@ This stack isn't user facing. Accidentally causing destruction there is ok - bet
 
 <!-- only links below here -->
 [internal-testing-adr]: ./architecture-decision-records/004-testing.md
-[internal-integration-project]: ../integration-test
-[internal-integration-project-stack]: ../integration-test/src/integration-test-stack.ts
+[internal-integration-project]: ../tools/integration-test
+[internal-integration-project-stack]: ../tools/integration-test/src/integration-test-stack.ts
 
 [cdk-playground]: https://github.com/guardian/cdk-playground

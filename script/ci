@@ -12,7 +12,7 @@ preamble() {
 
 runIntegrationTest() {
   (
-    cd "$ROOT_DIR/integration-test"
+    cd "$ROOT_DIR/tools/integration-test"
     ./script/ci
   )
 }
