@@ -28,7 +28,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "15.12.5",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.29.0",
+    "eslint": "^7.30.0",
     "eslint-plugin-custom-rules": "file:eslint",
     "gh-pages": "^3.2.3",
     "jest": "^26.4.2",
