@@ -9,6 +9,7 @@ interface VpcFromIdProps extends Omit<VpcAttributes, "availabilityZones"> {
 
 type VpcFromIdParameterProps = Omit<VpcFromIdProps, "vpcId">;
 
+// TODO convert to boolean
 export enum SubnetType {
   PUBLIC = "Public",
   PRIVATE = "Private",
@@ -50,6 +51,8 @@ export class GuVpc {
 
     const subnets = new GuSubnetListParameter(scope, `${maybeApp(props)}${type}Subnets`, {
       description: `A list of ${type.toLowerCase()} subnets`,
+
+      // TODO use `SSM_PARAMETER_PATHS.PrimaryVpcPrivateSubnets` or `SSM_PARAMETER_PATHS.PrimaryVpcPublicSubnets`
       default: `/account/vpc/primary/subnets/${type.toLowerCase()}`,
       fromSSM: true,
     });

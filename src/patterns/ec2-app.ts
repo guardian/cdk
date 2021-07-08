@@ -6,6 +6,7 @@ import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration, Tags } from "@aws-cdk/core";
 import type { Stage } from "../constants";
+import { SSM_PARAMETER_PATHS } from "../constants/ssm-parameter-paths";
 import { TagKeys } from "../constants/tag-keys";
 import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
@@ -408,8 +409,8 @@ export class GuEc2App {
 
     if (props.accessLogging?.enabled) {
       const accessLoggingBucket = new GuStringParameter(scope, "AccessLoggingBucket", {
-        description: "S3 bucket to store your access logs",
-        default: "/account/services/access-logging/bucket",
+        description: SSM_PARAMETER_PATHS.AccessLoggingBucket.description,
+        default: SSM_PARAMETER_PATHS.AccessLoggingBucket.path,
         fromSSM: true,
       });
 

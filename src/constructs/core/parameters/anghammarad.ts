@@ -1,3 +1,4 @@
+import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
 import { isSingletonPresentInStack } from "../../../utils/test";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
@@ -14,8 +15,8 @@ export class GuAnghammaradTopicParameter extends GuStringParameter {
   private constructor(scope: GuStack) {
     super(scope, "AnghammaradSnsArn", {
       fromSSM: true,
-      default: "/account/services/anghammarad.topic.arn",
-      description: "SSM parameter containing the ARN of the Anghammarad SNS topic",
+      default: SSM_PARAMETER_PATHS.Anghammarad.path,
+      description: SSM_PARAMETER_PATHS.Anghammarad.description,
     });
   }
 

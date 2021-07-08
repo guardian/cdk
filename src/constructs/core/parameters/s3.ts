@@ -1,3 +1,4 @@
+import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
 import { isSingletonPresentInStack } from "../../../utils/test";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
@@ -11,8 +12,8 @@ export class GuDistributionBucketParameter extends GuStringParameter {
 
   private constructor(scope: GuStack) {
     super(scope, "DistributionBucketName", {
-      description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      default: "/account/services/artifact.bucket",
+      description: SSM_PARAMETER_PATHS.DistributionBucket.description,
+      default: SSM_PARAMETER_PATHS.DistributionBucket.path,
       fromSSM: true,
     });
   }
@@ -31,8 +32,8 @@ export class GuPrivateConfigBucketParameter extends GuStringParameter {
 
   constructor(scope: GuStack) {
     super(scope, GuPrivateConfigBucketParameter.parameterName, {
-      description: "SSM parameter containing the S3 bucket name holding the app's private configuration",
-      default: "/account/services/private.config.bucket",
+      description: SSM_PARAMETER_PATHS.ConfigurationBucket.description,
+      default: SSM_PARAMETER_PATHS.ConfigurationBucket.path,
       fromSSM: true,
     });
   }
