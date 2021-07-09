@@ -17,6 +17,11 @@ Object {
       "Description": "Stage name",
       "Type": "String",
     },
+    "VpcId": Object {
+      "Default": "/account/vpc/primary/id",
+      "Description": "Virtual Private Cloud to run EC2 instances within",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
+    },
   },
 }
 `;
