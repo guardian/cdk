@@ -27,7 +27,7 @@
     "@types/aws-lambda": "^8.10.78",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^26.0.24",
-    "@types/node": "16.0.1",
+    "@types/node": "16.3.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
