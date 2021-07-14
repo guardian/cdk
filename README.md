@@ -105,6 +105,7 @@ To release a new version:
    - Release a new version to npm and update `package.json`.
 1. Enjoy a comment on your PR to inform you that your change has been released.
 
+For more information, see the docs on [testing][docs-testing].
 
 <!-- only links below here -->
 [badge-cd]: https://github.com/guardian/cdk/actions/workflows/cd.yaml/badge.svg
@@ -113,6 +114,8 @@ To release a new version:
 [directory-adr]: ./docs/architecture-decision-records
 [directory-docs]: ./docs
 [directory-script]: ./script
+
+[docs-testing]: ./docs/006-testing.md
 
 [internal-cd-file]: https://github.com/guardian/cdk/actions/workflows/cd.yaml
 [internal-discussions]: https://github.com/guardian/cdk/discussions

@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - beta
 jobs:
   CD:
     runs-on: ubuntu-latest
@@ -25,11 +26,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        # see https://github.com/tschaub/gh-pages/issues/345
-        run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          ./script/cd
-      - name: post-release
+        run: ./script/cd
+
+      # Only performed if `main` is updated
+      # See https://docs.github.com/en/actions/reference/environment-variables#determining-when-to-use-default-environment-variables-or-contexts
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        name: post-release
         uses: guardian/actions-merge-release-changes-to-protected-branch@v1.1.0
         with:
           # This action will raise a PR to edit package.json.
