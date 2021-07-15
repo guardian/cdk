@@ -1,16 +1,11 @@
 import readPkgUp from "read-pkg-up";
+import { getAwsCdkCoreVersion, getAwsCdkDependencies } from "../utils/package-json";
+
+const valueOrUnknown = (value: string | undefined) => value ?? "unknown";
 
 const packageJson = readPkgUp.sync({ cwd: __dirname })?.packageJson;
 
-const version = packageJson?.version ?? "unknown";
-
-const dependencies = packageJson?.dependencies ?? {};
-
-const awsCdkDependencies: Record<string, string> = Object.fromEntries(
-  Object.entries(dependencies).filter(([dependency]) => dependency.startsWith("@aws-cdk"))
-);
-
-const awsCdkCoreVersion = awsCdkDependencies["@aws-cdk/core"];
+const version = valueOrUnknown(packageJson?.version);
 
 export const LibraryInfo = {
   /**
@@ -22,10 +17,10 @@ export const LibraryInfo = {
    * The version of the `@aws-cdk` libraries used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_VERSION: awsCdkCoreVersion,
+  AWS_CDK_VERSION: valueOrUnknown(getAwsCdkCoreVersion(packageJson ?? {})),
 
   /**
    * A complete list of the `@aws-cdk` libraries used by `@guardian/cdk`.
    */
-  AWS_CDK_VERSIONS: awsCdkDependencies,
+  AWS_CDK_VERSIONS: getAwsCdkDependencies(packageJson ?? {}),
 };
