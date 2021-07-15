@@ -27,8 +27,18 @@ const parseCommandLineArguments = () => {
   );
 };
 
+// A CLI command can return...
+type CliCommandResponse = Promise<
+  // ...a simple message to be printed
+  | string
+  // ...or a blob of JSON to be printed via `JSON.stringify`
+  | Record<string, unknown>
+  // ...or an exit code
+  | number
+>;
+
 parseCommandLineArguments()
-  .then((argv) => {
+  .then((argv): CliCommandResponse => {
     const command = argv._[0];
     const { verbose } = argv;
     switch (command) {
@@ -36,6 +46,15 @@ parseCommandLineArguments()
         return awsCdkVersionCommand(verbose);
       default:
         throw new Error(`Unknown command: ${command}`);
+    }
+  })
+  .then((commandResponse) => {
+    if (typeof commandResponse === "number") {
+      process.exitCode = commandResponse;
+    } else if (typeof commandResponse === "string") {
+      console.log(commandResponse);
+    } else {
+      console.log(JSON.stringify(commandResponse));
     }
   })
   .catch((err) => {
