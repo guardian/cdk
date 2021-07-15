@@ -6,10 +6,12 @@ import type { CliCommandResponse } from "../types/command";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
+import { checkPackageJson } from "./commands/check-package-json";
 
 const Commands = {
   AwsCdkVersion: "aws-cdk-version",
   AccountReadiness: "account-readiness",
+  CheckPackageJson: "check-package-json",
 };
 
 const parseCommandLineArguments = () => {
@@ -26,6 +28,14 @@ const parseCommandLineArguments = () => {
       .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
       .command(Commands.AwsCdkVersion, "Print the version of @aws-cdk libraries being used")
       .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready")
+      .command(Commands.CheckPackageJson, "Check a package.json file for compatibility with GuCDK", (yargs) =>
+        yargs.option("directory", {
+          type: "string",
+          description: "The location of the package.json file to check",
+          default: process.cwd(),
+          defaultDescription: "The current working directory",
+        })
+      )
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
       .help()
@@ -42,6 +52,10 @@ parseCommandLineArguments()
         return awsCdkVersionCommand();
       case Commands.AccountReadiness:
         return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
+      case Commands.CheckPackageJson: {
+        const { directory } = argv;
+        return checkPackageJson(directory);
+      }
       default:
         throw new Error(`Unknown command: ${command}`);
     }
