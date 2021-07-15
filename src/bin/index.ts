@@ -2,10 +2,13 @@
 
 import yargs from "yargs";
 import { LibraryInfo } from "../constants/library-info";
+import { awsCredentialProviderChain } from "./aws-credential-provider";
+import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
 
 const Commands = {
   AwsCdkVersion: "aws-cdk-version",
+  AccountReadiness: "account-readiness",
 };
 
 const parseCommandLineArguments = () => {
@@ -19,7 +22,10 @@ const parseCommandLineArguments = () => {
     yargs
       .usage("$0 COMMAND [args]")
       .option("verbose", { type: "boolean", default: false, description: "Show verbose output" })
+      .option("profile", { type: "string", description: "AWS profile" })
+      .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
       .command(Commands.AwsCdkVersion, "Print the version of @aws-cdk libraries being used")
+      .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready")
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
       .help()
@@ -40,10 +46,12 @@ type CliCommandResponse = Promise<
 parseCommandLineArguments()
   .then((argv): CliCommandResponse => {
     const command = argv._[0];
-    const { verbose } = argv;
+    const { verbose, profile, region } = argv;
     switch (command) {
       case Commands.AwsCdkVersion:
         return awsCdkVersionCommand(verbose);
+      case Commands.AccountReadiness:
+        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region, verbose });
       default:
         throw new Error(`Unknown command: ${command}`);
     }
