@@ -1,3 +1,4 @@
+import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
 import { isSingletonPresentInStack } from "../../../utils/test";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
@@ -7,8 +8,8 @@ export class GuLoggingStreamNameParameter extends GuStringParameter {
 
   private constructor(scope: GuStack) {
     super(scope, "LoggingStreamName", {
-      description: "SSM parameter containing the Name (not ARN) on the kinesis stream",
-      default: "/account/services/logging.stream.name",
+      description: SSM_PARAMETER_PATHS.LoggingStreamName.description,
+      default: SSM_PARAMETER_PATHS.LoggingStreamName.path,
       fromSSM: true,
     });
   }
