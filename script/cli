@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+EXTRA_ARGS=""
+if [[ $# -gt 0 ]] ; then
+  # npm requires `--` for argument passing
+  # see https://docs.npmjs.com/cli/v6/commands/npm-run-script
+  EXTRA_ARGS="-- $*"
+fi
+
+# shellcheck disable=SC2086
+npm run cli:dev $EXTRA_ARGS
