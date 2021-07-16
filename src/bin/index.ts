@@ -2,6 +2,7 @@
 
 import yargs from "yargs";
 import { LibraryInfo } from "../constants/library-info";
+import type { CliCommandResponse } from "../types/command";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
@@ -32,16 +33,6 @@ const parseCommandLineArguments = () => {
       .alias("h", "help").argv
   );
 };
-
-// A CLI command can return...
-type CliCommandResponse = Promise<
-  // ...a simple message to be printed
-  | string
-  // ...or a blob of JSON to be printed via `JSON.stringify`
-  | Record<string, unknown>
-  // ...or an exit code
-  | number
->;
 
 parseCommandLineArguments()
   .then((argv): CliCommandResponse => {
