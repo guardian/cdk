@@ -7,6 +7,9 @@
   "files": [
     "lib"
   ],
+  "bin": {
+    "gu-cdk": "bin/gu-cdk"
+  },
   "repository": "github:guardian/cdk",
   "scripts": {
     "build": "tsc",
@@ -20,7 +23,8 @@
     "release": "semantic-release",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target",
-    "update-aws-cdk": "ncu \"/^@?aws-cdk(/.*)?$/\" --upgrade --deep"
+    "update-aws-cdk": "ncu \"/^@?aws-cdk(/.*)?$/\" --upgrade --deep",
+    "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.6.0",
@@ -28,6 +32,7 @@
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^26.0.24",
     "@types/node": "16.3.2",
+    "@types/yargs": "^17.0.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -38,6 +43,7 @@
     "semantic-release": "^17.4.4",
     "serve": "^12.0.0",
     "ts-jest": "^26.5.6",
+    "ts-node": "^10.0.0",
     "typedoc": "^0.21.4",
     "typescript": "~4.3.4"
   },
@@ -60,7 +66,8 @@
     "aws-sdk": "^2.945.0",
     "execa": "^5.1.1",
     "git-url-parse": "^11.5.0",
-    "read-pkg-up": "7.0.1"
+    "read-pkg-up": "7.0.1",
+    "yargs": "^17.0.1"
   },
   "config": {
     "commitizen": {
