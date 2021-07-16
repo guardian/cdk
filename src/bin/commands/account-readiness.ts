@@ -1,6 +1,7 @@
 import type { CredentialProviderChain } from "aws-sdk";
 import AWS from "aws-sdk";
 import { SSM_PARAMETER_PATHS } from "../../constants/ssm-parameter-paths";
+import type { CliCommandResponse } from "../../types/command";
 
 export const accountReadinessCommand = async ({
   credentialProvider,
@@ -10,7 +11,7 @@ export const accountReadinessCommand = async ({
   credentialProvider: CredentialProviderChain;
   region: string;
   verbose: boolean;
-}) => {
+}): CliCommandResponse => {
   const ssm = new AWS.SSM({
     credentialProvider,
     region,
