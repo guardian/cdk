@@ -9,4 +9,11 @@ npm run build
 npm run test
 npm run lint
 npm run release
-npm run release:docs
+
+# Update the docs site only when `main` is updated
+if [ $GITHUB_REF = "refs/heads/main" ]; then
+  # see https://github.com/tschaub/gh-pages/issues/345
+  git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+
+  npm run release:docs
+fi

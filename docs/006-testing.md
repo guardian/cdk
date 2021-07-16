@@ -29,9 +29,32 @@ You can use the [CDK Playground][cdk-playground] stack to test your changes agai
 
 This stack isn't user facing. Accidentally causing destruction there is ok - better there than on theguardian.com!
 
+### Would your change update the layout of the NPM package?
+It can sometimes be necessary to update the layout of the NPM package.
+
+These changes can be quite difficult to simulate locally using `npm link` or similar.
+
+For this reason, it can be helpful to publish a beta version to NPM. To do so:
+  1. Update the `beta` branch
+  1. Wait for the robots (GitHub Actions) to run and release a beta version
+
+You can now install and test your changes with:
+
+```
+npm install @guardian/cdk@beta
+```
+
+Once you're happy with your changes, raise a PR into `main` as normal.
+
+NOTE: The `beta` branch is just like any other branch - it may not be up to date with `main`.
+It's wise to rebase it with `main` before working on it.
+
+For more information, see the [semantic-release docs][semantic-release-docs]
+
 <!-- only links below here -->
 [internal-testing-adr]: ./architecture-decision-records/004-testing.md
 [internal-integration-project]: ../tools/integration-test
 [internal-integration-project-stack]: ../tools/integration-test/src/integration-test-stack.ts
 
 [cdk-playground]: https://github.com/guardian/cdk-playground
+[semantic-release-docs]: https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/distribution-channels.md

@@ -44,7 +44,7 @@ find useful scripts within the [`script`][directory-script] directory for common
 
 - `./script/setup` to install dependencies
 - `./script/start` to run the Jest unit tests in watch mode
-- `./script/docs` to generate documentation and view in the browser
+- `./script/start-docs` to generate documentation and view in the browser
 - `./script/lint` to lint the code using ESLint
 - `./script/test` to run the Jest unit tests
 - `./script/build` to compile TypeScript to JS
@@ -105,6 +105,7 @@ To release a new version:
    - Release a new version to npm and update `package.json`.
 1. Enjoy a comment on your PR to inform you that your change has been released.
 
+For more information, see the docs on [testing][docs-testing].
 
 <!-- only links below here -->
 [badge-cd]: https://github.com/guardian/cdk/actions/workflows/cd.yaml/badge.svg
@@ -113,6 +114,8 @@ To release a new version:
 [directory-adr]: ./docs/architecture-decision-records
 [directory-docs]: ./docs
 [directory-script]: ./script
+
+[docs-testing]: ./docs/006-testing.md
 
 [internal-cd-file]: https://github.com/guardian/cdk/actions/workflows/cd.yaml
 [internal-discussions]: https://github.com/guardian/cdk/discussions
