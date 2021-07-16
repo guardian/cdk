@@ -1,0 +1,1479 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>GuKinesisLambdaProps | @guardian/cdk - v22.0.1</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v22.0.1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@guardian/cdk - v22.0.1</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">@guardian/cdk - v22.0.1</a>
+				</li>
+				<li>
+					<a href="../modules/index.html">index</a>
+				</li>
+				<li>
+					<a href="index.GuKinesisLambdaProps.html">GuKinesisLambdaProps</a>
+				</li>
+			</ul>
+			<h1>Interface GuKinesisLambdaProps</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Configuration options for the <a href="../classes/index.GuKinesisLambda.html"><code>GuKinesisLambda</code></a> pattern.</p>
+					</div>
+					<p>For all lambda function configuration options, see <a href="constructs_lambda.GuFunctionProps.html"><code>GuFunctionProps</code></a>.</p>
+					<p>The <code>existingKinesisStream</code> property can be used to inherit or reference a Kinesis stream which
+						has been created outside of this pattern (i.e. via CloudFormation, or via a different <code>cdk</code> pattern, or stack).
+						For more details and example usage, see <a href="index.ExistingKinesisStream.html"><code>ExistingKinesisStream</code></a>.
+					If this property is omitted, the <a href="../classes/index.GuKinesisLambda.html"><code>GuKinesisLambda</code></a> pattern will create a new stream.</p>
+					<p>If you have specific stream configuration requirements (e.g. data retention period), these can be set via
+					<code>kinesisStreamProps</code>.</p>
+					<p>If you need to override the default stream processing options (e.g. batch size and parallelization), pass
+					<a href="../modules/utils_lambda.html#StreamProcessingProps"><code>StreamProcessingProps</code></a> via <code>processingProps</code>.</p>
+					<p>You must provide <code>errorHandlingConfiguration</code> to this pattern. Retry conditions can be configured
+					via <a href="utils_lambda.StreamErrorHandlingProps.html"><code>StreamErrorHandlingProps</code></a>.</p>
+					<p>It is advisable to configure an alarm based on the lambda&#39;s error percentage.
+					To do this, add the <code>monitoringConfiguration</code> property. The required properties for this are:</p>
+					<pre><code class="language-typescript"><span style="color: #000000">monitoringConfiguration: {</span>
+<span style="color: #000000">  toleratedErrorPercentage: &lt;</span><span style="color: #267F99">sensible_error_percentage_threshold</span><span style="color: #000000">&gt;,</span>
+<span style="color: #000000">  snsTopicName: </span><span style="color: #A31515">&quot;my-topic-for-cloudwatch-alerts&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">}</span>
+</code></pre>
+					<p>Other alarm properties (e.g. alarm name and description) will be pre-populated with sensible defaults.
+					For a full list of optional properties, see <a href="constructs_cloudwatch.GuLambdaErrorPercentageMonitoringProps.html"><code>GuLambdaErrorPercentageMonitoringProps</code></a>.</p>
+					<p>If your team do not use CloudWatch, it&#39;s possible to opt-out with the following configuration:</p>
+					<pre><code class="language-typescript"><span style="color: #000000"> monitoringConfiguration: { noMonitoring: </span><span style="color: #0000FF">true</span><span style="color: #000000"> } </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #267F99">NoMonitoring</span>
+</code></pre>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><a href="constructs_lambda.GuFunctionProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuFunctionProps</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;errorPercentageMonitoring&quot;</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">GuKinesisLambdaProps</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#allowAllOutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#allowPublicSubnet" class="tsd-kind-icon">allow<wbr>Public<wbr>Subnet</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.GuKinesisLambdaProps.html#app" class="tsd-kind-icon">app</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#codeSigningConfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#currentVersionOptions" class="tsd-kind-icon">current<wbr>Version<wbr>Options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#deadLetterQueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#deadLetterQueueEnabled" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>Enabled</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#environment" class="tsd-kind-icon">environment</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#environmentEncryption" class="tsd-kind-icon">environment<wbr>Encryption</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.GuKinesisLambdaProps.html#errorHandlingConfiguration" class="tsd-kind-icon">error<wbr>Handling<wbr>Configuration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#events" class="tsd-kind-icon">events</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.GuKinesisLambdaProps.html#existingKinesisStream" class="tsd-kind-icon">existing<wbr>Kinesis<wbr>Stream</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="index.GuKinesisLambdaProps.html#fileName" class="tsd-kind-icon">file<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#filesystem" class="tsd-kind-icon">filesystem</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#functionName" class="tsd-kind-icon">function<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#handler" class="tsd-kind-icon">handler</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#initialPolicy" class="tsd-kind-icon">initial<wbr>Policy</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.GuKinesisLambdaProps.html#kinesisStreamProps" class="tsd-kind-icon">kinesis<wbr>Stream<wbr>Props</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#layers" class="tsd-kind-icon">layers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#logRetention" class="tsd-kind-icon">log<wbr>Retention</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#logRetentionRetryOptions" class="tsd-kind-icon">log<wbr>Retention<wbr>Retry<wbr>Options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#logRetentionRole" class="tsd-kind-icon">log<wbr>Retention<wbr>Role</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#maxEventAge" class="tsd-kind-icon">max<wbr>Event<wbr>Age</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#memorySize" class="tsd-kind-icon">memory<wbr>Size</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.GuKinesisLambdaProps.html#monitoringConfiguration" class="tsd-kind-icon">monitoring<wbr>Configuration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#onFailure" class="tsd-kind-icon">on<wbr>Failure</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#onSuccess" class="tsd-kind-icon">on<wbr>Success</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.GuKinesisLambdaProps.html#processingProps" class="tsd-kind-icon">processing<wbr>Props</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#profiling" class="tsd-kind-icon">profiling</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#profilingGroup" class="tsd-kind-icon">profiling<wbr>Group</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#reservedConcurrentExecutions" class="tsd-kind-icon">reserved<wbr>Concurrent<wbr>Executions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#retryAttempts" class="tsd-kind-icon">retry<wbr>Attempts</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#role" class="tsd-kind-icon">role</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#runtime" class="tsd-kind-icon">runtime</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#securityGroup" class="tsd-kind-icon">security<wbr>Group</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#securityGroups" class="tsd-kind-icon">security<wbr>Groups</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#timeout" class="tsd-kind-icon">timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#tracing" class="tsd-kind-icon">tracing</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#vpc" class="tsd-kind-icon">vpc</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="index.GuKinesisLambdaProps.html#vpcSubnets" class="tsd-kind-icon">vpc<wbr>Subnets</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="allowAllOutbound" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> allow<wbr>All<wbr>Outbound</h3>
+					<div class="tsd-signature tsd-kind-icon">allow<wbr>All<wbr>Outbound<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.allowAllOutbound</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:182</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether to allow the Lambda to send all network traffic.</p>
+						</div>
+						<p>If set to false, you must individually add traffic rules to allow the
+						Lambda to connect to network targets.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>true</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="allowPublicSubnet" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> allow<wbr>Public<wbr>Subnet</h3>
+					<div class="tsd-signature tsd-kind-icon">allow<wbr>Public<wbr>Subnet<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.allowPublicSubnet</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:301</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Lambda Functions in a public subnet can NOT access the internet.</p>
+						</div>
+						<p>Use this property to acknowledge this limitation and still place the function in a public subnet.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>false</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="https://stackoverflow.com/questions/52992085/why-cant-an-aws-lambda-function-inside-a-public-subnet-in-a-vpc-connect-to-the/52994841#52994841">https://stackoverflow.com/questions/52992085/why-cant-an-aws-lambda-function-inside-a-public-subnet-in-a-vpc-connect-to-the/52994841#52994841</a></p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="app" class="tsd-anchor"></a>
+					<h3>app</h3>
+					<div class="tsd-signature tsd-kind-icon">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.app</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="codeSigningConfig" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> code<wbr>Signing<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">code<wbr>Signing<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ICodeSigningConfig</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.codeSigningConfig</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:315</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Code signing config associated with this function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>Not Sign the Code</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="currentVersionOptions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> current<wbr>Version<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">current<wbr>Version<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">VersionOptions</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.currentVersionOptions</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:284</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Options for the <code>lambda.Version</code> resource automatically created by the <code>fn.currentVersion</code> method.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>default options as described in <code>VersionOptions</code></li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="deadLetterQueue" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> dead<wbr>Letter<wbr>Queue</h3>
+					<div class="tsd-signature tsd-kind-icon">dead<wbr>Letter<wbr>Queue<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IQueue</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.deadLetterQueue</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:199</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The SQS queue to use if DLQ is enabled.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>SQS queue with 14 day retention period if <code>deadLetterQueueEnabled</code> is <code>true</code></li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="deadLetterQueueEnabled" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> dead<wbr>Letter<wbr>Queue<wbr>Enabled</h3>
+					<div class="tsd-signature tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>Enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.deadLetterQueueEnabled</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:192</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enabled DLQ.</p>
+						</div>
+						<p>If <code>deadLetterQueue</code> is undefined,
+						an SQS queue with default options will be defined for your Function.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>false unless <code>deadLetterQueue</code> is set, which implies DLQ is enabled.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="description" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.description</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:59</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A description of the function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No description.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="environment" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> environment</h3>
+					<div class="tsd-signature tsd-kind-icon">environment<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.environment</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:80</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Key-value pairs that Lambda caches and makes available for your Lambda functions.</p>
+						</div>
+						<p>Use environment variables to apply configuration changes, such
+							as test and production environment configurations, without changing your
+						Lambda function source code.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No environment variables.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-index-signature">
+								<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="environmentEncryption" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> environment<wbr>Encryption</h3>
+					<div class="tsd-signature tsd-kind-icon">environment<wbr>Encryption<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IKey</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.environmentEncryption</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:308</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The AWS KMS key that&#39;s used to encrypt your function&#39;s environment variables.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>AWS Lambda creates and uses an AWS managed customer master key (CMK).</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="errorHandlingConfiguration" class="tsd-anchor"></a>
+					<h3>error<wbr>Handling<wbr>Configuration</h3>
+					<div class="tsd-signature tsd-kind-icon">error<wbr>Handling<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="utils_lambda.StreamErrorHandlingProps.html" class="tsd-signature-type" data-tsd-kind="Interface">StreamErrorHandlingProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/patterns/kinesis-lambda.ts#L87">src/patterns/kinesis-lambda.ts:87</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="events" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> events</h3>
+					<div class="tsd-signature tsd-kind-icon">events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IEventSource</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.events</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:250</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Event sources for this function.</p>
+						</div>
+						<p>You can also add event sources using <code>addEventSource</code>.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No event sources.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="existingKinesisStream" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> existing<wbr>Kinesis<wbr>Stream</h3>
+					<div class="tsd-signature tsd-kind-icon">existing<wbr>Kinesis<wbr>Stream<span class="tsd-signature-symbol">:</span> <a href="index.ExistingKinesisStream.html" class="tsd-signature-type" data-tsd-kind="Interface">ExistingKinesisStream</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/patterns/kinesis-lambda.ts#L86">src/patterns/kinesis-lambda.ts:86</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="fileName" class="tsd-anchor"></a>
+					<h3>file<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">file<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.fileName</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/types/distributable.ts#L9">src/types/distributable.ts:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The filename for an executable package within the bucket <a href="../classes/constructs_core.GuDistributionBucketParameter.html"><code>GuDistributionBucketParameter</code></a>.
+							We&#39;ll look for <code>fileName</code> on the path &quot;bucket/stack/stage/app/<fileName>&quot;.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="filesystem" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> filesystem</h3>
+					<div class="tsd-signature tsd-kind-icon">filesystem<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FileSystem</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.filesystem</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:291</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The filesystem configuration for the lambda function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>will not mount any filesystem</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="functionName" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> function<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">function<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.functionName</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:90</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A name for the function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>AWS CloudFormation generates a unique physical ID and uses that
+									ID for the function&#39;s name. For more information, see Name Type.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="handler" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> handler</h3>
+					<div class="tsd-signature tsd-kind-icon">handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.handler</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:357</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The name of the method within your code that Lambda calls to execute your function.</p>
+						</div>
+						<p>The format includes the file name. It can also include
+							namespaces and other qualifiers, depending on the runtime.
+						For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-features.html#gettingstarted-features-programmingmodel">https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-features.html#gettingstarted-features-programmingmodel</a>.</p>
+						<p>Use <code>Handler.FROM_IMAGE</code> when defining a function from a Docker image.</p>
+						<p>NOTE: If you specify your source code as inline text by specifying the
+							ZipFile property within the Code property, specify index.function_name as
+						the handler.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="initialPolicy" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> initial<wbr>Policy</h3>
+					<div class="tsd-signature tsd-kind-icon">initial<wbr>Policy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.initialPolicy</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:110</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Initial policy statements to add to the created Lambda Role.</p>
+						</div>
+						<p>You can call <code>addToRolePolicy</code> to the created lambda to add statements post creation.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No policy statements are added to the created Lambda role.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="kinesisStreamProps" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> kinesis<wbr>Stream<wbr>Props</h3>
+					<div class="tsd-signature tsd-kind-icon">kinesis<wbr>Stream<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StreamProps</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/patterns/kinesis-lambda.ts#L88">src/patterns/kinesis-lambda.ts:88</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="layers" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> layers</h3>
+					<div class="tsd-signature tsd-kind-icon">layers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ILayerVersion</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.layers</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:233</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A list of layers to add to the function&#39;s execution environment.</p>
+						</div>
+						<p>You can configure your Lambda function to pull in
+							additional code during initialization in the form of layers. Layers are packages of libraries or other dependencies
+						that can be used by multiple functions.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No layers.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="logRetention" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> log<wbr>Retention</h3>
+					<div class="tsd-signature tsd-kind-icon">log<wbr>Retention<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RetentionDays</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.logRetention</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:261</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The number of days log events are kept in CloudWatch Logs.</p>
+						</div>
+						<p>When updating
+							this property, unsetting it doesn&#39;t remove the log retention policy. To
+						remove the retention policy, set the value to <code>INFINITE</code>.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>logs.RetentionDays.INFINITE</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="logRetentionRetryOptions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> log<wbr>Retention<wbr>Retry<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">log<wbr>Retention<wbr>Retry<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">LogRetentionRetryOptions</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.logRetentionRetryOptions</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:277</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When log retention is specified, a custom resource attempts to create the CloudWatch log group.</p>
+						</div>
+						<p>These options control the retry policy when interacting with CloudWatch APIs.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>Default AWS SDK retry options.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="logRetentionRole" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> log<wbr>Retention<wbr>Role</h3>
+					<div class="tsd-signature tsd-kind-icon">log<wbr>Retention<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IRole</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.logRetentionRole</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:268</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The IAM role for the Lambda function associated with the custom resource that sets the retention policy.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>A new role is created.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="maxEventAge" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> max<wbr>Event<wbr>Age</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>Event<wbr>Age<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Duration</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.maxEventAge</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/event-invoke-config.d.ts:34</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The maximum age of a request that Lambda sends to a function for processing.</p>
+						</div>
+						<p>Minimum: 60 seconds
+						Maximum: 6 hours</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>Duration.hours(6)</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="memorySize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> memory<wbr>Size</h3>
+					<div class="tsd-signature tsd-kind-icon">memory<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.memorySize</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:101</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The amount of memory, in MB, that is allocated to your Lambda function.</p>
+						</div>
+						<p>Lambda uses this value to proportionally allocate the amount of CPU
+							power. For more information, see Resource Model in the AWS Lambda
+						Developer Guide.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>128</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="monitoringConfiguration" class="tsd-anchor"></a>
+					<h3>monitoring<wbr>Configuration</h3>
+					<div class="tsd-signature tsd-kind-icon">monitoring<wbr>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.NoMonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="constructs_cloudwatch.GuLambdaErrorPercentageMonitoringProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuLambdaErrorPercentageMonitoringProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/patterns/kinesis-lambda.ts#L85">src/patterns/kinesis-lambda.ts:85</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="onFailure" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> on<wbr>Failure</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Failure<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IDestination</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.onFailure</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/event-invoke-config.d.ts:17</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The destination for failed invocations.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>no destination</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="onSuccess" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> on<wbr>Success</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Success<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IDestination</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.onSuccess</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/event-invoke-config.d.ts:24</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The destination for successful invocations.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>no destination</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="processingProps" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> processing<wbr>Props</h3>
+					<div class="tsd-signature tsd-kind-icon">processing<wbr>Props<span class="tsd-signature-symbol">:</span> <a href="../modules/utils_lambda.html#StreamProcessingProps" class="tsd-signature-type" data-tsd-kind="Type alias">StreamProcessingProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/patterns/kinesis-lambda.ts#L89">src/patterns/kinesis-lambda.ts:89</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="profiling" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> profiling</h3>
+					<div class="tsd-signature tsd-kind-icon">profiling<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.profiling</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:214</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enable profiling.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No profiling.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html">https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html</a></p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="profilingGroup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> profiling<wbr>Group</h3>
+					<div class="tsd-signature tsd-kind-icon">profiling<wbr>Group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IProfilingGroup</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.profilingGroup</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:222</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Profiling Group.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>A new profiling group will be created if <code>profiling</code> is set.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html">https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html</a></p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="reservedConcurrentExecutions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> reserved<wbr>Concurrent<wbr>Executions</h3>
+					<div class="tsd-signature tsd-kind-icon">reserved<wbr>Concurrent<wbr>Executions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.reservedConcurrentExecutions</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:241</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The maximum of concurrent executions you want to reserve for the function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>No specific limit - account limit.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html</a></p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="retryAttempts" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> retry<wbr>Attempts</h3>
+					<div class="tsd-signature tsd-kind-icon">retry<wbr>Attempts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.retryAttempts</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/event-invoke-config.d.ts:44</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The maximum number of times to retry when the function returns an error.</p>
+						</div>
+						<p>Minimum: 0
+						Maximum: 2</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>2</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="role" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> role</h3>
+					<div class="tsd-signature tsd-kind-icon">role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IRole</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.role</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:128</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Lambda execution role.</p>
+						</div>
+						<p>This is the role that will be assumed by the function upon execution.
+							It controls the permissions that the function will have. The Role must
+						be assumable by the &#39;lambda.amazonaws.com&#39; service principal.</p>
+						<p>The default Role automatically has permissions granted for Lambda execution. If you
+						provide a Role, you must add the relevant AWS managed policies yourself.</p>
+						<p>The relevant managed policies are &quot;service-role/AWSLambdaBasicExecutionRole&quot; and
+						&quot;service-role/AWSLambdaVPCAccessExecutionRole&quot;.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>A unique role will be generated for this lambda function.
+									Both supplied and generated roles can always be changed by calling <code>addToRolePolicy</code>.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="runtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> runtime</h3>
+					<div class="tsd-signature tsd-kind-icon">runtime<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Runtime</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.runtime</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:331</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The runtime environment for the Lambda function that you are uploading.</p>
+						</div>
+						<p>For valid values, see the Runtime property in the AWS Lambda Developer
+						Guide.</p>
+						<p>Use <code>Runtime.FROM_IMAGE</code> when when defining a function from a Docker image.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="securityGroup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> security<wbr>Group</h3>
+					<div class="tsd-signature tsd-kind-icon">security<wbr>Group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ISecurityGroup</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.securityGroup</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:161</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>(deprecated) What security group to associate with the Lambda&#39;s network interfaces. This property is being deprecated, consider using securityGroups instead.</p>
+						</div>
+						<p>Only used if &#39;vpc&#39; is supplied.</p>
+						<p>Use securityGroups property instead.
+						Function constructor will throw an error if both are specified.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>If the function is placed within a VPC and a security group is
+										not specified, either by this or securityGroups prop, a dedicated security
+									group will be created for this function.</li>
+								</ul>
+							</dd>
+							<dt>deprecated</dt>
+							<dd><ul>
+									<li>This property is deprecated, use securityGroups instead</li>
+								</ul>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="securityGroups" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> security<wbr>Groups</h3>
+					<div class="tsd-signature tsd-kind-icon">security<wbr>Groups<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.securityGroups</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:172</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The list of security groups to associate with the Lambda&#39;s network interfaces.</p>
+						</div>
+						<p>Only used if &#39;vpc&#39; is supplied.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>If the function is placed within a VPC and a security group is
+										not specified, either by this or securityGroup prop, a dedicated security
+									group will be created for this function.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="timeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Duration</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.timeout</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:69</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The function execution time (in seconds) after which Lambda terminates the function.</p>
+						</div>
+						<p>Because the execution time affects cost, set this value
+						based on the function&#39;s expected execution time.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>Duration.seconds(3)</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="tracing" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> tracing</h3>
+					<div class="tsd-signature tsd-kind-icon">tracing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Tracing</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.tracing</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:206</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enable AWS X-Ray Tracing for Lambda Function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>Tracing.Disabled</p>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="vpc" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> vpc</h3>
+					<div class="tsd-signature tsd-kind-icon">vpc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IVpc</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.vpc</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:137</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>VPC network to place Lambda network interfaces.</p>
+						</div>
+						<p>Specify this if the Lambda function needs to access resources in a VPC.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>Function is not placed within a VPC.</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="vpcSubnets" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> vpc<wbr>Subnets</h3>
+					<div class="tsd-signature tsd-kind-icon">vpc<wbr>Subnets<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SubnetSelection</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Omit.vpcSubnets</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-lambda/lib/function.d.ts:147</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Where to place the network interfaces within the VPC.</p>
+						</div>
+						<p>Only used if &#39;vpc&#39; is supplied. Note: internet access for Lambdas
+						requires a NAT gateway, so picking Public subnets is not allowed.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><ul>
+									<li>the Vpc default strategy if not specified</li>
+								</ul>
+							</dd>
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constants.html">constants</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_acm.html">constructs/acm</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_core.html">constructs/core</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_ec2.html">constructs/ec2</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_iam.html">constructs/iam</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_kinesis.html">constructs/kinesis</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_lambda.html">constructs/lambda</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_rds.html">constructs/rds</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_s3.html">constructs/s3</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_sns.html">constructs/sns</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/index.html">index</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_ec2.html">utils/ec2</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_lambda.html">utils/lambda</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_mixin.html">utils/mixin</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_security_groups.html">utils/security-<wbr>groups</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_test.html">utils/test</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/index.AccessScope.html" class="tsd-kind-icon">Access<wbr>Scope</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/index.GuApplicationPorts.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Ports</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.GuEc2App.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.GuKinesisLambda.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.GuNodeApp.html" class="tsd-kind-icon">Gu<wbr>Node<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.GuPlayApp.html" class="tsd-kind-icon">Gu<wbr>Play<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.GuScheduledLambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/index.GuSnsLambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.Access.html" class="tsd-kind-icon">Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.AccessLoggingProps.html" class="tsd-kind-icon">Access<wbr>Logging<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.Alarms.html" class="tsd-kind-icon">Alarms</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.ExistingKinesisStream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.ExistingSnsTopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.GuEc2AppProps.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App<wbr>Props</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.GuKinesisLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#allowAllOutbound" class="tsd-kind-icon">allow<wbr>All<wbr>Outbound</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#allowPublicSubnet" class="tsd-kind-icon">allow<wbr>Public<wbr>Subnet</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="index.GuKinesisLambdaProps.html#app" class="tsd-kind-icon">app</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#codeSigningConfig" class="tsd-kind-icon">code<wbr>Signing<wbr>Config</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#currentVersionOptions" class="tsd-kind-icon">current<wbr>Version<wbr>Options</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#deadLetterQueue" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#deadLetterQueueEnabled" class="tsd-kind-icon">dead<wbr>Letter<wbr>Queue<wbr>Enabled</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#environment" class="tsd-kind-icon">environment</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#environmentEncryption" class="tsd-kind-icon">environment<wbr>Encryption</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.GuKinesisLambdaProps.html#errorHandlingConfiguration" class="tsd-kind-icon">error<wbr>Handling<wbr>Configuration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#events" class="tsd-kind-icon">events</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.GuKinesisLambdaProps.html#existingKinesisStream" class="tsd-kind-icon">existing<wbr>Kinesis<wbr>Stream</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="index.GuKinesisLambdaProps.html#fileName" class="tsd-kind-icon">file<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#filesystem" class="tsd-kind-icon">filesystem</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#functionName" class="tsd-kind-icon">function<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#handler" class="tsd-kind-icon">handler</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#initialPolicy" class="tsd-kind-icon">initial<wbr>Policy</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.GuKinesisLambdaProps.html#kinesisStreamProps" class="tsd-kind-icon">kinesis<wbr>Stream<wbr>Props</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#layers" class="tsd-kind-icon">layers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#logRetention" class="tsd-kind-icon">log<wbr>Retention</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#logRetentionRetryOptions" class="tsd-kind-icon">log<wbr>Retention<wbr>Retry<wbr>Options</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#logRetentionRole" class="tsd-kind-icon">log<wbr>Retention<wbr>Role</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#maxEventAge" class="tsd-kind-icon">max<wbr>Event<wbr>Age</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#memorySize" class="tsd-kind-icon">memory<wbr>Size</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.GuKinesisLambdaProps.html#monitoringConfiguration" class="tsd-kind-icon">monitoring<wbr>Configuration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#onFailure" class="tsd-kind-icon">on<wbr>Failure</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#onSuccess" class="tsd-kind-icon">on<wbr>Success</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.GuKinesisLambdaProps.html#processingProps" class="tsd-kind-icon">processing<wbr>Props</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#profiling" class="tsd-kind-icon">profiling</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#profilingGroup" class="tsd-kind-icon">profiling<wbr>Group</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#reservedConcurrentExecutions" class="tsd-kind-icon">reserved<wbr>Concurrent<wbr>Executions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#retryAttempts" class="tsd-kind-icon">retry<wbr>Attempts</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#role" class="tsd-kind-icon">role</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#runtime" class="tsd-kind-icon">runtime</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#securityGroup" class="tsd-kind-icon">security<wbr>Group</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#securityGroups" class="tsd-kind-icon">security<wbr>Groups</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#timeout" class="tsd-kind-icon">timeout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#tracing" class="tsd-kind-icon">tracing</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#vpc" class="tsd-kind-icon">vpc</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="index.GuKinesisLambdaProps.html#vpcSubnets" class="tsd-kind-icon">vpc<wbr>Subnets</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.GuScheduledLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.GuSnsLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.InternalAccess.html" class="tsd-kind-icon">Internal<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.PublicAccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="index.RestrictedAccess.html" class="tsd-kind-icon">Restricted<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/index.html#AppAccess" class="tsd-kind-icon">App<wbr>Access</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

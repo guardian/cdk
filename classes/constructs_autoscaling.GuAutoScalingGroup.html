@@ -1,0 +1,1959 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>GuAutoScalingGroup | @guardian/cdk - v22.0.1</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v22.0.1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@guardian/cdk - v22.0.1</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">@guardian/cdk - v22.0.1</a>
+				</li>
+				<li>
+					<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
+				</li>
+				<li>
+					<a href="constructs_autoscaling.GuAutoScalingGroup.html">GuAutoScalingGroup</a>
+				</li>
+			</ul>
+			<h1>Class GuAutoScalingGroup</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Construct which creates an Auto Scaling group.</p>
+					</div>
+					<p>By default, all EC2 instances in this group will use <a href="constructs_iam.GuInstanceRole.html"><code>GuInstanceRole</code></a>,
+					which provides common permissions (e.g. the ability to download an artifact and write logs to the account&#39;s logging Kinesis stream).</p>
+					<p>If additional IAM permissions are required, a custom role can be provided via the <code>role</code> prop.
+						You may wish to instantiate <a href="constructs_iam.GuInstanceRole.html"><code>GuInstanceRole</code></a> yourself as a basis for this custom role, as it allows custom permissions
+					to be passed in.</p>
+					<p>All EC2 instances in this group will be automatically associated with two security groups:</p>
+					<ol>
+						<li><a href="constructs_ec2.GuHttpsEgressSecurityGroup.html"><code>GuHttpsEgressSecurityGroup</code></a>, which allows outbound traffic over HTTPS.</li>
+						<li><a href="constructs_ec2.GuWazuhAccess.html"><code>GuWazuhAccess</code></a>, which allows instances to communicate with Wazuh (for security monitoring).</li>
+					</ol>
+					<p>If additional ingress or egress rules are required, define custom security groups and pass them in via the
+					<code>additionalSecurityGroups</code> prop.</p>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<a href="" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">AutoScalingGroup</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">AutoScalingGroup</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">GuAutoScalingGroup</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="constructs_autoscaling.GuAutoScalingGroup.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited tsd-is-external">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#albTargetGroup" class="tsd-kind-icon">alb<wbr>Target<wbr>Group</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#autoScalingGroupArn" class="tsd-kind-icon">auto<wbr>Scaling<wbr>Group<wbr>Arn</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#autoScalingGroupName" class="tsd-kind-icon">auto<wbr>Scaling<wbr>Group<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#connections" class="tsd-kind-icon">connections</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#env" class="tsd-kind-icon">env</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#grantPrincipal" class="tsd-kind-icon">grant<wbr>Principal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#maxInstanceLifetime" class="tsd-kind-icon">max<wbr>Instance<wbr>Lifetime</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#newInstancesProtectedFromScaleIn" class="tsd-kind-icon">new<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#node" class="tsd-kind-icon">node</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#osType" class="tsd-kind-icon">os<wbr>Type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#physicalName" class="tsd-kind-icon">physical<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#role" class="tsd-kind-icon">role</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#spotPrice" class="tsd-kind-icon">spot<wbr>Price</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#userData" class="tsd-kind-icon">user<wbr>Data</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="constructs_autoscaling.GuAutoScalingGroup.html#isStatefulConstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited tsd-is-external">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#_enableCrossEnvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#addLifecycleHook" class="tsd-kind-icon">add<wbr>Lifecycle<wbr>Hook</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#addSecurityGroup" class="tsd-kind-icon">add<wbr>Security<wbr>Group</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#addToRolePolicy" class="tsd-kind-icon">add<wbr>ToRole<wbr>Policy</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#addUserData" class="tsd-kind-icon">add<wbr>User<wbr>Data</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#applyCloudFormationInit" class="tsd-kind-icon">apply<wbr>Cloud<wbr>Formation<wbr>Init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#applyRemovalPolicy" class="tsd-kind-icon">apply<wbr>Removal<wbr>Policy</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#areNewInstancesProtectedFromScaleIn" class="tsd-kind-icon">are<wbr>New<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#attachToApplicationTargetGroup" class="tsd-kind-icon">attach<wbr>ToApplication<wbr>Target<wbr>Group</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#attachToClassicLB" class="tsd-kind-icon">attach<wbr>ToClassicLB</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#attachToNetworkTargetGroup" class="tsd-kind-icon">attach<wbr>ToNetwork<wbr>Target<wbr>Group</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#generatePhysicalName" class="tsd-kind-icon">generate<wbr>Physical<wbr>Name</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#getResourceArnAttribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#getResourceNameAttribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#onPrepare" class="tsd-kind-icon">on<wbr>Prepare</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#onSynthesize" class="tsd-kind-icon">on<wbr>Synthesize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#onValidate" class="tsd-kind-icon">on<wbr>Validate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#prepare" class="tsd-kind-icon">prepare</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#protectNewInstancesFromScaleIn" class="tsd-kind-icon">protect<wbr>New<wbr>Instances<wbr>From<wbr>Scale<wbr>In</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnCpuUtilization" class="tsd-kind-icon">scale<wbr>OnCpu<wbr>Utilization</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnIncomingBytes" class="tsd-kind-icon">scale<wbr>OnIncoming<wbr>Bytes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnMetric" class="tsd-kind-icon">scale<wbr>OnMetric</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnOutgoingBytes" class="tsd-kind-icon">scale<wbr>OnOutgoing<wbr>Bytes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnRequestCount" class="tsd-kind-icon">scale<wbr>OnRequest<wbr>Count</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnSchedule" class="tsd-kind-icon">scale<wbr>OnSchedule</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleToTrackMetric" class="tsd-kind-icon">scale<wbr>ToTrack<wbr>Metric</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#synthesize" class="tsd-kind-icon">synthesize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#toString" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#validate" class="tsd-kind-icon">validate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#fromAutoScalingGroupName" class="tsd-kind-icon">from<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Name</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#isConstruct" class="tsd-kind-icon">is<wbr>Construct</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="constructs_autoscaling.GuAutoScalingGroup.html#isResource" class="tsd-kind-icon">is<wbr>Resource</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>GuAuto<wbr>Scaling<wbr>Group<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><a href="../interfaces/constructs_autoscaling.GuAutoScalingGroupProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuAutoScalingGroupProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="constructs_autoscaling.GuAutoScalingGroup.html" class="tsd-signature-type" data-tsd-kind="Class">GuAutoScalingGroup</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides GuStatefulMigratableConstruct(AutoScalingGroup).constructor</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/constructs/autoscaling/asg.ts#L101">src/constructs/autoscaling/asg.ts:101</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scope: <a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></h5>
+								</li>
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <a href="../interfaces/constructs_autoscaling.GuAutoScalingGroupProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuAutoScalingGroupProps</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="constructs_autoscaling.GuAutoScalingGroup.html" class="tsd-signature-type" data-tsd-kind="Class">GuAutoScalingGroup</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-external">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="albTargetGroup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagOptional">Optional</span> alb<wbr>Target<wbr>Group</h3>
+					<div class="tsd-signature tsd-kind-icon">alb<wbr>Target<wbr>Group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApplicationTargetGroup</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).albTargetGroup</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:671</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="autoScalingGroupArn" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> auto<wbr>Scaling<wbr>Group<wbr>Arn</h3>
+					<div class="tsd-signature tsd-kind-icon">auto<wbr>Scaling<wbr>Group<wbr>Arn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).autoScalingGroupArn</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:780</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Arn of the AutoScalingGroup.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="autoScalingGroupName" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> auto<wbr>Scaling<wbr>Group<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">auto<wbr>Scaling<wbr>Group<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).autoScalingGroupName</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:774</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Name of the AutoScalingGroup.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="connections" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> connections</h3>
+					<div class="tsd-signature tsd-kind-icon">connections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connections</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).connections</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:756</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Allows specify security group connections for instances of this fleet.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="env" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> env</h3>
+					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResourceEnvironment</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).env</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:140</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The environment this resource belongs to.</p>
+						</div>
+						<p>For resources that are created and managed by the CDK
+							(generally, those created by creating new class instances like Role, Bucket, etc.),
+							this is always the same as the environment of the stack they belong to;
+							however, for imported resources
+							(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
+						that might be different than the stack they were imported into.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="grantPrincipal" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> grant<wbr>Principal</h3>
+					<div class="tsd-signature tsd-kind-icon">grant<wbr>Principal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPrincipal</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).grantPrincipal</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:768</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The principal to grant permissions to.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="maxInstanceLifetime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> max<wbr>Instance<wbr>Lifetime</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>Instance<wbr>Lifetime<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Duration</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).maxInstanceLifetime</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:801</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The maximum amount of time that an instance can be in service.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="newInstancesProtectedFromScaleIn" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagOptional">Optional</span> new<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In</h3>
+					<div class="tsd-signature tsd-kind-icon">new<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).newInstancesProtectedFromScaleIn</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:812</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="node" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> node</h3>
+					<div class="tsd-signature tsd-kind-icon">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ConstructNode</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).node</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:77</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The construct tree node associated with this construct.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="osType" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> os<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">os<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">OperatingSystemType</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).osType</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:750</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The type of OS instances of this fleet are running.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="physicalName" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> physical<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">physical<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).physicalName</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:152</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Returns a string-encoded token that resolves to the physical name that should be passed to the CloudFormation resource.</p>
+						</div>
+						<p>This value will resolve to one of the following:</p>
+						<ul>
+							<li>a concrete value (e.g. <code>&quot;my-awesome-bucket&quot;</code>)</li>
+							<li><code>undefined</code>, when a name should be generated by CloudFormation</li>
+							<li>a concrete name generated automatically during synthesis, in
+							cross-environment scenarios.</li>
+						</ul>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="role" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> role</h3>
+					<div class="tsd-signature tsd-kind-icon">role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IRole</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).role</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:762</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The IAM role assumed by instances of this fleet.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="spotPrice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> spot<wbr>Price</h3>
+					<div class="tsd-signature tsd-kind-icon">spot<wbr>Price<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).spotPrice</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:795</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The maximum spot price configured for the autoscaling group.</p>
+						</div>
+						<p><code>undefined</code>
+						indicates that this group uses on-demand capacity.</p>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="stack" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> stack</h3>
+					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Stack</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).stack</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:127</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The stack in which this resource is defined.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="userData" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> user<wbr>Data</h3>
+					<div class="tsd-signature tsd-kind-icon">user<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">UserData</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).userData</p>
+						<ul>
+							<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:786</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>UserData for the instances.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>stability</dt>
+							<dd><p>stable</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="isStatefulConstruct" class="tsd-anchor"></a>
+					<h3>is<wbr>Stateful<wbr>Construct</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> isStatefulConstruct<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/b7fa6d4/src/utils/mixin/migratable-construct-stateful.ts#L53">src/utils/mixin/migratable-construct-stateful.ts:53</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-external">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="_enableCrossEnvironment" class="tsd-anchor"></a>
+					<h3>_enable<wbr>Cross<wbr>Environment</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_enable<wbr>Cross<wbr>Environment<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup)._enableCrossEnvironment</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:167</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when this resource is referenced across environments
+										(account/region) to order to request that a physical name will be generated
+										for this resource during synthesis, so the resource can be referenced
+									through it&#39;s absolute name/arn.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>internal</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="addLifecycleHook" class="tsd-anchor"></a>
+					<h3>add<wbr>Lifecycle<wbr>Hook</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Lifecycle<wbr>Hook<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BasicLifecycleHookProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LifecycleHook</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).addLifecycleHook</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:678</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Send a message to either an SQS queue or SNS topic when instances launch or terminate.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">BasicLifecycleHookProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">LifecycleHook</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="addSecurityGroup" class="tsd-anchor"></a>
+					<h3>add<wbr>Security<wbr>Group</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Security<wbr>Group<span class="tsd-signature-symbol">(</span>securityGroup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).addSecurityGroup</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:823</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add the security group to all instances via the launch configuration security groups array.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>securityGroup: <span class="tsd-signature-type">ISecurityGroup</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>: The security group to add.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="addToRolePolicy" class="tsd-anchor"></a>
+					<h3>add<wbr>ToRole<wbr>Policy</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>ToRole<wbr>Policy<span class="tsd-signature-symbol">(</span>statement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).addToRolePolicy</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:856</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds a statement to the IAM role assumed by instances of this fleet.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>statement: <span class="tsd-signature-type">PolicyStatement</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="addUserData" class="tsd-anchor"></a>
+					<h3>add<wbr>User<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>User<wbr>Data<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>commands<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).addUserData</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:850</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add command to the startup script of fleet instances.</p>
+								</div>
+								<p>The command must be in the scripting language supported by the fleet&#39;s OS (i.e. Linux/Windows).
+								Does nothing for imported ASGs.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>commands: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="applyCloudFormationInit" class="tsd-anchor"></a>
+					<h3>apply<wbr>Cloud<wbr>Formation<wbr>Init</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">apply<wbr>Cloud<wbr>Formation<wbr>Init<span class="tsd-signature-symbol">(</span>init<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CloudFormationInit</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ApplyCloudFormationInitOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).applyCloudFormationInit</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:869</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Use a CloudFormation Init configuration at instance startup.</p>
+								</div>
+								<p>This does the following:</p>
+								<ul>
+									<li>Attaches the CloudFormation Init metadata to the AutoScalingGroup resource.</li>
+									<li>Add commands to the UserData to run <code>cfn-init</code> and <code>cfn-signal</code>.</li>
+									<li>Update the instance&#39;s CreationPolicy to wait for <code>cfn-init</code> to finish
+									before reporting success.</li>
+								</ul>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>init: <span class="tsd-signature-type">CloudFormationInit</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">ApplyCloudFormationInitOptions</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="applyRemovalPolicy" class="tsd-anchor"></a>
+					<h3>apply<wbr>Removal<wbr>Policy</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">apply<wbr>Removal<wbr>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RemovalPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).applyRemovalPolicy</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:181</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Apply the given removal policy to this resource.</p>
+								</div>
+								<p>The Removal Policy controls what happens to this resource when it stops
+									being managed by CloudFormation, either because you&#39;ve removed it from the
+									CDK application or because you&#39;ve made a change that requires the resource
+								to be replaced.</p>
+								<p>The resource can be deleted (<code>RemovalPolicy.DELETE</code>), or left in your AWS
+								account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>policy: <span class="tsd-signature-type">RemovalPolicy</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="areNewInstancesProtectedFromScaleIn" class="tsd-anchor"></a>
+					<h3>are<wbr>New<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">are<wbr>New<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).areNewInstancesProtectedFromScaleIn</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:881</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns <code>true</code> if newly-launched instances are protected from scale-in.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="attachToApplicationTargetGroup" class="tsd-anchor"></a>
+					<h3>attach<wbr>ToApplication<wbr>Target<wbr>Group</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">attach<wbr>ToApplication<wbr>Target<wbr>Group<span class="tsd-signature-symbol">(</span>targetGroup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IApplicationTargetGroup</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancerTargetProps</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).attachToApplicationTargetGroup</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:835</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attach to ELBv2 Application Target Group.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>targetGroup: <span class="tsd-signature-type">IApplicationTargetGroup</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">LoadBalancerTargetProps</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="attachToClassicLB" class="tsd-anchor"></a>
+					<h3>attach<wbr>ToClassicLB</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">attach<wbr>ToClassicLB<span class="tsd-signature-symbol">(</span>loadBalancer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).attachToClassicLB</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:829</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attach to a classic load balancer.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>loadBalancer: <span class="tsd-signature-type">LoadBalancer</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="attachToNetworkTargetGroup" class="tsd-anchor"></a>
+					<h3>attach<wbr>ToNetwork<wbr>Target<wbr>Group</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">attach<wbr>ToNetwork<wbr>Target<wbr>Group<span class="tsd-signature-symbol">(</span>targetGroup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">INetworkTargetGroup</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancerTargetProps</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).attachToNetworkTargetGroup</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:841</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attach to ELBv2 Application Target Group.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>targetGroup: <span class="tsd-signature-type">INetworkTargetGroup</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">LoadBalancerTargetProps</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="generatePhysicalName" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> generate<wbr>Physical<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">generate<wbr>Physical<wbr>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).generatePhysicalName</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:185</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="getResourceArnAttribute" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> get<wbr>Resource<wbr>Arn<wbr>Attribute</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute<span class="tsd-signature-symbol">(</span>arnAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, arnComponents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArnComponents</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).getResourceArnAttribute</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:209</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an environment-sensitive token that should be used for the resource&#39;s &quot;ARN&quot; attribute (e.g. <code>bucket.bucketArn</code>).</p>
+								</div>
+								<p>Normally, this token will resolve to <code>arnAttr</code>, but if the resource is
+									referenced across environments, <code>arnComponents</code> will be used to synthesize
+									a concrete ARN with the resource&#39;s physical name. Make sure to reference
+								<code>this.physicalName</code> in <code>arnComponents</code>.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>arnAttr: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The CFN attribute which resolves to the ARN of the resource.</p>
+									</div>
+								</li>
+								<li>
+									<h5>arnComponents: <span class="tsd-signature-type">ArnComponents</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The format of the ARN of this resource.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="getResourceNameAttribute" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> get<wbr>Resource<wbr>Name<wbr>Attribute</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute<span class="tsd-signature-symbol">(</span>nameAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).getResourceNameAttribute</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:196</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an environment-sensitive token that should be used for the resource&#39;s &quot;name&quot; attribute (e.g. <code>bucket.bucketName</code>).</p>
+								</div>
+								<p>Normally, this token will resolve to <code>nameAttr</code>, but if the resource is
+									referenced across environments, it will be resolved to <code>this.physicalName</code>,
+								which will be a concrete name.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nameAttr: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The CFN attribute which resolves to the resource&#39;s name.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="onPrepare" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> on<wbr>Prepare</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Prepare<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).onPrepare</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:104</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Perform final modifications before synthesis.</p>
+								</div>
+								<p>This method can be implemented by derived constructs in order to perform
+									final changes before synthesis. prepare() will be called after child
+								constructs have been prepared.</p>
+								<p>This is an advanced framework feature. Only use this if you
+								understand the implications.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="onSynthesize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> on<wbr>Synthesize</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Synthesize<span class="tsd-signature-symbol">(</span>session<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ISynthesisSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).onSynthesize</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:114</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Allows this construct to emit artifacts into the cloud assembly during synthesis.</p>
+								</div>
+								<p>This method is usually implemented by framework-level constructs such as <code>Stack</code> and <code>Asset</code>
+								as they participate in synthesizing the cloud assembly.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>session: <span class="tsd-signature-type">ISynthesisSession</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The synthesis session.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="onValidate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> on<wbr>Validate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Validate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).onValidate</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:91</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Validate the current construct.</p>
+								</div>
+								<p>This method can be implemented by derived constructs in order to perform
+								validation logic. It is called on all constructs before synthesis.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>An array of validation error messages, or an empty array if the construct is valid.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="prepare" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> prepare</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">prepare<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).prepare</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:137</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Perform final modifications before synthesis.</p>
+								</div>
+								<p>This method can be implemented by derived constructs in order to perform
+									final changes before synthesis. prepare() will be called after child
+								constructs have been prepared.</p>
+								<p>This is an advanced framework feature. Only use this if you
+								understand the implications.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="protectNewInstancesFromScaleIn" class="tsd-anchor"></a>
+					<h3>protect<wbr>New<wbr>Instances<wbr>From<wbr>Scale<wbr>In</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">protect<wbr>New<wbr>Instances<wbr>From<wbr>Scale<wbr>In<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).protectNewInstancesFromScaleIn</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:875</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Ensures newly-launched instances are protected from scale-in.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleOnCpuUtilization" class="tsd-anchor"></a>
+					<h3>scale<wbr>OnCpu<wbr>Utilization</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>OnCpu<wbr>Utilization<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CpuUtilizationScalingProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TargetTrackingScalingPolicy</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleOnCpuUtilization</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:690</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in to achieve a target CPU utilization.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">CpuUtilizationScalingProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TargetTrackingScalingPolicy</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleOnIncomingBytes" class="tsd-anchor"></a>
+					<h3>scale<wbr>OnIncoming<wbr>Bytes</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>OnIncoming<wbr>Bytes<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NetworkUtilizationScalingProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TargetTrackingScalingPolicy</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleOnIncomingBytes</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:696</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in to achieve a target network ingress rate.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">NetworkUtilizationScalingProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TargetTrackingScalingPolicy</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleOnMetric" class="tsd-anchor"></a>
+					<h3>scale<wbr>OnMetric</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>OnMetric<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BasicStepScalingPolicyProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StepScalingPolicy</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleOnMetric</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:723</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in, in response to a metric.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">BasicStepScalingPolicyProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StepScalingPolicy</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleOnOutgoingBytes" class="tsd-anchor"></a>
+					<h3>scale<wbr>OnOutgoing<wbr>Bytes</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>OnOutgoing<wbr>Bytes<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NetworkUtilizationScalingProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TargetTrackingScalingPolicy</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleOnOutgoingBytes</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:702</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in to achieve a target network egress rate.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">NetworkUtilizationScalingProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TargetTrackingScalingPolicy</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleOnRequestCount" class="tsd-anchor"></a>
+					<h3>scale<wbr>OnRequest<wbr>Count</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>OnRequest<wbr>Count<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestCountScalingProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TargetTrackingScalingPolicy</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleOnRequestCount</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:711</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in to achieve a target request handling rate.</p>
+								</div>
+								<p>The AutoScalingGroup must have been attached to an Application Load Balancer
+								in order to be able to call this.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">RequestCountScalingProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TargetTrackingScalingPolicy</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleOnSchedule" class="tsd-anchor"></a>
+					<h3>scale<wbr>OnSchedule</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>OnSchedule<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BasicScheduledActionProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ScheduledAction</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleOnSchedule</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:684</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in based on time.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">BasicScheduledActionProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ScheduledAction</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="scaleToTrackMetric" class="tsd-anchor"></a>
+					<h3>scale<wbr>ToTrack<wbr>Metric</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">scale<wbr>ToTrack<wbr>Metric<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MetricTargetTrackingProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TargetTrackingScalingPolicy</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).scaleToTrackMetric</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:717</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Scale out or in in order to keep a metric around a target value.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">MetricTargetTrackingProps</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TargetTrackingScalingPolicy</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="synthesize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> synthesize</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">synthesize<span class="tsd-signature-symbol">(</span>session<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ISynthesisSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).synthesize</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:147</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Allows this construct to emit artifacts into the cloud assembly during synthesis.</p>
+								</div>
+								<p>This method is usually implemented by framework-level constructs such as <code>Stack</code> and <code>Asset</code>
+								as they participate in synthesizing the cloud assembly.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>session: <span class="tsd-signature-type">ISynthesisSession</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The synthesis session.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="toString" class="tsd-anchor"></a>
+					<h3>to<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).toString</p>
+								<ul>
+									<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:125</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a string representation of an object.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="validate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> validate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">validate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).validate</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:124</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Validate the current construct.</p>
+								</div>
+								<p>This method can be implemented by derived constructs in order to perform
+								validation logic. It is called on all constructs before synthesis.</p>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>An array of validation error messages, or an empty array if the construct is valid.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="fromAutoScalingGroupName" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Name<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, autoScalingGroupName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IAutoScalingGroup</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).fromAutoScalingGroupName</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/aws-autoscaling/lib/auto-scaling-group.d.ts:744</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scope: <span class="tsd-signature-type">Construct</span></h5>
+								</li>
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>autoScalingGroupName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IAutoScalingGroup</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="isConstruct" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Construct</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Construct<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).isConstruct</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/construct-compat.d.ts:71</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return whether the given object is a Construct.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="isResource" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Resource</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">CfnResource</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from GuStatefulMigratableConstruct(AutoScalingGroup).isResource</p>
+								<ul>
+									<li>Defined in node_modules/@aws-cdk/core/lib/resource.d.ts:121</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check whether the given construct is a Resource.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>stability</dt>
+									<dd><p>stable</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>construct: <span class="tsd-signature-type">IConstruct</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">CfnResource</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constants.html">constants</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_acm.html">constructs/acm</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_core.html">constructs/core</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_ec2.html">constructs/ec2</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_iam.html">constructs/iam</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_kinesis.html">constructs/kinesis</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_lambda.html">constructs/lambda</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_rds.html">constructs/rds</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_s3.html">constructs/s3</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_sns.html">constructs/sns</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/index.html">index</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_ec2.html">utils/ec2</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_lambda.html">utils/lambda</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_mixin.html">utils/mixin</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_security_groups.html">utils/security-<wbr>groups</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_test.html">utils/test</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-module">
+						<a href="constructs_autoscaling.GuAutoScalingGroup.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#albTargetGroup" class="tsd-kind-icon">alb<wbr>Target<wbr>Group</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#autoScalingGroupArn" class="tsd-kind-icon">auto<wbr>Scaling<wbr>Group<wbr>Arn</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#autoScalingGroupName" class="tsd-kind-icon">auto<wbr>Scaling<wbr>Group<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#connections" class="tsd-kind-icon">connections</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#env" class="tsd-kind-icon">env</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#grantPrincipal" class="tsd-kind-icon">grant<wbr>Principal</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#maxInstanceLifetime" class="tsd-kind-icon">max<wbr>Instance<wbr>Lifetime</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#newInstancesProtectedFromScaleIn" class="tsd-kind-icon">new<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#node" class="tsd-kind-icon">node</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#osType" class="tsd-kind-icon">os<wbr>Type</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#physicalName" class="tsd-kind-icon">physical<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#role" class="tsd-kind-icon">role</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#spotPrice" class="tsd-kind-icon">spot<wbr>Price</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#stack" class="tsd-kind-icon">stack</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#userData" class="tsd-kind-icon">user<wbr>Data</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#isStatefulConstruct" class="tsd-kind-icon">is<wbr>Stateful<wbr>Construct</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#_enableCrossEnvironment" class="tsd-kind-icon">_enable<wbr>Cross<wbr>Environment</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#addLifecycleHook" class="tsd-kind-icon">add<wbr>Lifecycle<wbr>Hook</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#addSecurityGroup" class="tsd-kind-icon">add<wbr>Security<wbr>Group</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#addToRolePolicy" class="tsd-kind-icon">add<wbr>ToRole<wbr>Policy</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#addUserData" class="tsd-kind-icon">add<wbr>User<wbr>Data</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#applyCloudFormationInit" class="tsd-kind-icon">apply<wbr>Cloud<wbr>Formation<wbr>Init</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#applyRemovalPolicy" class="tsd-kind-icon">apply<wbr>Removal<wbr>Policy</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#areNewInstancesProtectedFromScaleIn" class="tsd-kind-icon">are<wbr>New<wbr>Instances<wbr>Protected<wbr>From<wbr>Scale<wbr>In</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#attachToApplicationTargetGroup" class="tsd-kind-icon">attach<wbr>ToApplication<wbr>Target<wbr>Group</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#attachToClassicLB" class="tsd-kind-icon">attach<wbr>ToClassicLB</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#attachToNetworkTargetGroup" class="tsd-kind-icon">attach<wbr>ToNetwork<wbr>Target<wbr>Group</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#generatePhysicalName" class="tsd-kind-icon">generate<wbr>Physical<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#getResourceArnAttribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Arn<wbr>Attribute</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#getResourceNameAttribute" class="tsd-kind-icon">get<wbr>Resource<wbr>Name<wbr>Attribute</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#onPrepare" class="tsd-kind-icon">on<wbr>Prepare</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#onSynthesize" class="tsd-kind-icon">on<wbr>Synthesize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#onValidate" class="tsd-kind-icon">on<wbr>Validate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#prepare" class="tsd-kind-icon">prepare</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#protectNewInstancesFromScaleIn" class="tsd-kind-icon">protect<wbr>New<wbr>Instances<wbr>From<wbr>Scale<wbr>In</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnCpuUtilization" class="tsd-kind-icon">scale<wbr>OnCpu<wbr>Utilization</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnIncomingBytes" class="tsd-kind-icon">scale<wbr>OnIncoming<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnMetric" class="tsd-kind-icon">scale<wbr>OnMetric</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnOutgoingBytes" class="tsd-kind-icon">scale<wbr>OnOutgoing<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnRequestCount" class="tsd-kind-icon">scale<wbr>OnRequest<wbr>Count</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleOnSchedule" class="tsd-kind-icon">scale<wbr>OnSchedule</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#scaleToTrackMetric" class="tsd-kind-icon">scale<wbr>ToTrack<wbr>Metric</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#synthesize" class="tsd-kind-icon">synthesize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#toString" class="tsd-kind-icon">to<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#validate" class="tsd-kind-icon">validate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#fromAutoScalingGroupName" class="tsd-kind-icon">from<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#isConstruct" class="tsd-kind-icon">is<wbr>Construct</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="constructs_autoscaling.GuAutoScalingGroup.html#isResource" class="tsd-kind-icon">is<wbr>Resource</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="constructs_autoscaling.GuUserData.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/constructs_autoscaling.GuAsgCapacityProps.html" class="tsd-kind-icon">Gu<wbr>Asg<wbr>Capacity<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/constructs_autoscaling.GuAutoScalingGroupProps.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/constructs_autoscaling.GuUserDataProps.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/constructs_autoscaling.html#GuUserDataPropsWithApp" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>Props<wbr>With<wbr>App</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
