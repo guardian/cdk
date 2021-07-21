@@ -22,7 +22,6 @@ const parseCommandLineArguments = () => {
   return Promise.resolve(
     yargs
       .usage("$0 COMMAND [args]")
-      .option("verbose", { type: "boolean", default: false, description: "Show verbose output" })
       .option("profile", { type: "string", description: "AWS profile" })
       .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
       .command(Commands.AwsCdkVersion, "Print the version of @aws-cdk libraries being used")
@@ -37,12 +36,12 @@ const parseCommandLineArguments = () => {
 parseCommandLineArguments()
   .then((argv): CliCommandResponse => {
     const command = argv._[0];
-    const { verbose, profile, region } = argv;
+    const { profile, region } = argv;
     switch (command) {
       case Commands.AwsCdkVersion:
-        return awsCdkVersionCommand(verbose);
+        return awsCdkVersionCommand();
       case Commands.AccountReadiness:
-        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region, verbose });
+        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
       default:
         throw new Error(`Unknown command: ${command}`);
     }
