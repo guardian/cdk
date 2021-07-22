@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^0.6.0",
-    "@types/aws-lambda": "^8.10.78",
+    "@types/aws-lambda": "^8.10.80",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^26.0.24",
     "@types/node": "16.4.0",
