@@ -101,7 +101,7 @@ To release a new version:
 1. Raise a PR. The PR title must follow the [Angular][angular-commits] / [Karma][karma-commits] format. Don't worry, CI checks this!
 1. Once reviewed and approved, merge your PR.
 1. Wait for the robots to:
-   - Use your structured commit (we squash commits!) to automatically determine the next version number (following [semantic versioning][sem-ver]).
+   - Use your structured commit to automatically determine the next version number (following [semantic versioning][sem-ver]).
    - Release a new version to npm and update `package.json`.
 1. Enjoy a comment on your PR to inform you that your change has been released.
 
