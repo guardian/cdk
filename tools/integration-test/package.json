@@ -19,7 +19,7 @@
     "@guardian/eslint-config-typescript": "^0.6.0",
     "@types/jest": "^26.0.22",
     "@types/node": "16.4.0",
-    "aws-cdk": "1.110.1",
+    "aws-cdk": "1.115.0",
     "eslint": "^7.23.0",
     "eslint-plugin-custom-rules": "file:../eslint",
     "jest": "^27.0.6",
