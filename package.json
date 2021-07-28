@@ -31,7 +31,7 @@
     "@types/aws-lambda": "^8.10.80",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^26.0.24",
-    "@types/node": "16.4.0",
+    "@types/node": "16.4.5",
     "@types/yargs": "^17.0.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.31.0",
