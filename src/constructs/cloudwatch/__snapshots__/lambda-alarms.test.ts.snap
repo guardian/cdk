@@ -52,6 +52,15 @@ Object {
             ],
           },
         },
+        "Environment": Object {
+          "Variables": Object {
+            "APP": "testing",
+            "STACK": "test-stack",
+            "STAGE": Object {
+              "Ref": "Stage",
+            },
+          },
+        },
         "Handler": "handler.ts",
         "MemorySize": 512,
         "Role": Object {

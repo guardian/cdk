@@ -49,6 +49,12 @@ export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout } = props;
 
+    const defaultEnvironmentVariables = {
+      STACK: scope.stack,
+      STAGE: scope.stage,
+      APP: app,
+    };
+
     const bucket = Bucket.fromBucketName(
       scope,
       `${id}-bucket`,
@@ -58,6 +64,10 @@ export class GuLambdaFunction extends Function {
     const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
+      environment: {
+        ...props.environment,
+        ...defaultEnvironmentVariables,
+      },
       memorySize: defaultMemorySize(runtime, memorySize),
       timeout: timeout ?? Duration.seconds(30),
       code,
