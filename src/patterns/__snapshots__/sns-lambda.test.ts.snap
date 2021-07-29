@@ -81,6 +81,15 @@ Object {
             ],
           },
         },
+        "Environment": Object {
+          "Variables": Object {
+            "APP": "testing",
+            "STACK": "test-stack",
+            "STAGE": Object {
+              "Ref": "Stage",
+            },
+          },
+        },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
         "MemorySize": 512,

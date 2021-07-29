@@ -40,7 +40,8 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  * By default, the timeout for this lambda is 30 seconds. This can be overridden via the `timeout` prop.
  *
  * By default the Lambda is granted permission to read from the SSM parameter store subtree specific to this lambda
- * (i.e. it can read all keys under <stage>/<stack>/<app>/).
+ * (i.e. it can read all keys under <stage>/<stack>/<app>/). The lambda has STACK/STAGE/APP environment variables
+ * which can be used to determine its identity.
  *
  * Note that this construct creates a Lambda without a trigger/event source. Depending on your use-case, you may wish to
  * consider using a pattern which instantiates a Lambda with a trigger e.g. [[`GuScheduledLambda`]].
@@ -48,6 +49,12 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 export class GuLambdaFunction extends Function {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout } = props;
+
+    const defaultEnvironmentVariables = {
+      STACK: scope.stack,
+      STAGE: scope.stage,
+      APP: app,
+    };
 
     const bucket = Bucket.fromBucketName(
       scope,
@@ -58,6 +65,10 @@ export class GuLambdaFunction extends Function {
     const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
+      environment: {
+        ...props.environment,
+        ...defaultEnvironmentVariables,
+      },
       memorySize: defaultMemorySize(runtime, memorySize),
       timeout: timeout ?? Duration.seconds(30),
       code,
