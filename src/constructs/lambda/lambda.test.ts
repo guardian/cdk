@@ -76,7 +76,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    expect(stack).toHaveResourceLike("AWS::IAM::Policy", {
       PolicyDocument: {
         Statement: [
           {

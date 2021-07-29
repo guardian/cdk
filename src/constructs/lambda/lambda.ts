@@ -8,6 +8,7 @@ import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch";
 import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
+import { GuParameterStoreReadPolicyStatement } from "../iam";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;
@@ -38,6 +39,9 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  *
  * By default, the timeout for this lambda is 30 seconds. This can be overridden via the `timeout` prop.
  *
+ * By default the Lambda is granted permission to read from the SSM parameter store subtree specific to this lambda
+ * (i.e. it can read all keys under <stage>/<stack>/<app>/).
+ *
  * Note that this construct creates a Lambda without a trigger/event source. Depending on your use-case, you may wish to
  * consider using a pattern which instantiates a Lambda with a trigger e.g. [[`GuScheduledLambda`]].
  */
@@ -67,6 +71,9 @@ export class GuLambdaFunction extends Function {
     }
 
     bucket.grantRead(this);
+
+    const ssmParamReadPolicy = new GuParameterStoreReadPolicyStatement(scope, props);
+    this.addToRolePolicy(ssmParamReadPolicy);
 
     AppIdentity.taggedConstruct(props, this);
   }

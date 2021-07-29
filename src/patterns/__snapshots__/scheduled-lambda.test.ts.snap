@@ -125,6 +125,30 @@ Object {
                 },
               ],
             },
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/testing",
+                  ],
+                ],
+              },
+            },
           ],
           "Version": "2012-10-17",
         },
