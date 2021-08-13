@@ -66,7 +66,8 @@ parseCommandLineArguments()
     } else if (typeof commandResponse === "string") {
       console.log(commandResponse);
     } else {
-      console.log(JSON.stringify(commandResponse));
+      const responseWithVersionInfo = { "@guardian/cdk": { version: LibraryInfo.VERSION }, ...commandResponse };
+      console.log(JSON.stringify(responseWithVersionInfo));
     }
   })
   .catch((err) => {
