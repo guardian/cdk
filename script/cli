@@ -10,4 +10,4 @@ if [[ $# -gt 0 ]] ; then
 fi
 
 # shellcheck disable=SC2086
-npm run cli:dev $EXTRA_ARGS
+npm run --silent cli:dev $EXTRA_ARGS
