@@ -66,12 +66,12 @@ describe("The GuApplicationTargetGroup class", () => {
     });
 
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckIntervalSeconds: 30,
+      HealthCheckIntervalSeconds: 10,
       HealthCheckPath: "/healthcheck",
       HealthCheckProtocol: "HTTP",
       HealthCheckTimeoutSeconds: 10,
-      HealthyThresholdCount: 2,
-      UnhealthyThresholdCount: 5,
+      HealthyThresholdCount: 5,
+      UnhealthyThresholdCount: 2,
     });
   });
 
@@ -87,13 +87,13 @@ describe("The GuApplicationTargetGroup class", () => {
     });
 
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckIntervalSeconds: 30,
+      HealthCheckIntervalSeconds: 10,
       HealthCheckPath: "/test",
       HealthCheckPort: "9000",
       HealthCheckProtocol: "HTTP",
       HealthCheckTimeoutSeconds: 10,
-      HealthyThresholdCount: 2,
-      UnhealthyThresholdCount: 5,
+      HealthyThresholdCount: 5,
+      UnhealthyThresholdCount: 2,
     });
   });
 

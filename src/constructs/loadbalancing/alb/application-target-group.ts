@@ -37,9 +37,9 @@ export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(Appl
   static DefaultHealthCheck = {
     path: "/healthcheck",
     protocol: Protocol.HTTP,
-    healthyThresholdCount: 2,
-    unhealthyThresholdCount: 5,
-    interval: Duration.seconds(30),
+    healthyThresholdCount: 5,
+    unhealthyThresholdCount: 2,
+    interval: Duration.seconds(10),
     timeout: Duration.seconds(10),
   };
 
@@ -48,6 +48,7 @@ export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(Appl
 
     const mergedProps = {
       protocol: ApplicationProtocol.HTTP, // We terminate HTTPS at the load balancer level, so load balancer to ASG/EC2 traffic can be over HTTP
+      deregistrationDelay: Duration.seconds(30),
       ...props,
       healthCheck: { ...GuApplicationTargetGroup.DefaultHealthCheck, ...props.healthCheck },
     };

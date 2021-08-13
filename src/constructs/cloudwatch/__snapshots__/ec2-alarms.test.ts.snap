@@ -403,11 +403,11 @@ Object {
     },
     "ApplicationTargetGroupTesting080C2FF2": Object {
       "Properties": Object {
-        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
+        "HealthyThresholdCount": 5,
         "Port": 80,
         "Protocol": "HTTP",
         "Tags": Array [
@@ -434,7 +434,13 @@ Object {
             },
           },
         ],
-        "UnhealthyThresholdCount": 5,
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "30",
+          },
+        ],
+        "UnhealthyThresholdCount": 2,
         "VpcId": "test",
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
