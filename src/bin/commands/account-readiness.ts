@@ -1,6 +1,7 @@
 import type { CredentialProviderChain } from "aws-sdk";
 import AWS from "aws-sdk";
 import chalk from "chalk";
+import { LibraryInfo } from "../../constants/library-info";
 import { SSM_PARAMETER_PATHS } from "../../constants/ssm-parameter-paths";
 import type { CliCommandResponse } from "../../types/command";
 
@@ -26,8 +27,12 @@ export const accountReadinessCommand = async ({
   const notFoundInDetail = ssmParams.filter((_) => notFoundParameters.includes(_.path));
   const foundInDetail = ssmParams.filter((_) => !notFoundParameters.includes(_.path));
 
+  console.log(
+    `AWS account has ${chalk.bold(`${foundInDetail.length}/${ssmParams.length}`)} params in region ${region}\n`
+  );
+
   if (foundInDetail.length > 0) {
-    console.log(chalk.bold("Existing required parameters:"));
+    console.log("Existing required parameters:");
     console.log(
       foundInDetail
         .map((param) => {
@@ -39,10 +44,8 @@ export const accountReadinessCommand = async ({
     );
   }
 
-  if (notFoundInDetail.length <= 0) {
-    return chalk.green("AWS account contains all required parameters!");
-  } else {
-    console.log(chalk.bold("Missing required parameters:"));
+  if (notFoundInDetail.length > 0) {
+    console.log("Missing required parameters:");
     console.log(
       notFoundInDetail
         .map((param) => {
@@ -53,7 +56,9 @@ export const accountReadinessCommand = async ({
       "\n"
     );
     return chalk.red(
-      `AWS account requires the above ${notFoundInDetail.length} required parameters to work with @guardian/cdk`
+      `AWS account requires the above ${notFoundInDetail.length} required parameters to work with @guardian/cdk v${LibraryInfo.VERSION}`
     );
+  } else {
+    return 0;
   }
 };
