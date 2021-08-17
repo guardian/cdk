@@ -771,11 +771,11 @@ Object {
     },
     "TargetGroupTestguec2app9F67D503": Object {
       "Properties": Object {
-        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
+        "HealthyThresholdCount": 5,
         "Port": 3000,
         "Protocol": "HTTP",
         "Tags": Array [
@@ -802,8 +802,14 @@ Object {
             },
           },
         ],
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "30",
+          },
+        ],
         "TargetType": "instance",
-        "UnhealthyThresholdCount": 5,
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "VpcId",
         },
@@ -1553,11 +1559,11 @@ Object {
     },
     "TargetGroupTestguec2app9F67D503": Object {
       "Properties": Object {
-        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
+        "HealthyThresholdCount": 5,
         "Port": 3000,
         "Protocol": "HTTP",
         "Tags": Array [
@@ -1584,8 +1590,14 @@ Object {
             },
           },
         ],
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "30",
+          },
+        ],
         "TargetType": "instance",
-        "UnhealthyThresholdCount": 5,
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "VpcId",
         },
