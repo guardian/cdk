@@ -28,37 +28,35 @@ export const accountReadinessCommand = async ({
   const foundInDetail = ssmParams.filter((_) => !notFoundParameters.includes(_.path));
 
   console.log(
-    `AWS account has ${chalk.bold(`${foundInDetail.length}/${ssmParams.length}`)} params in region ${region}\n`
+    `AWS account has ${chalk.bold(`${foundInDetail.length}/${ssmParams.length}`)} SSM parameters in region ${region}`
   );
 
   if (foundInDetail.length > 0) {
-    console.log("Existing required parameters:");
-    console.log(
-      foundInDetail
-        .map((param) => {
-          const dimDescription = chalk.dim(`(${param.description})`);
-          return ` ✅ ${chalk.yellowBright(param.path)} ${dimDescription}`;
-        })
-        .join("\n"),
-      "\n"
-    );
+    console.log("\nExisting required parameters:");
+
+    foundInDetail.forEach(({ path, description }) => {
+      console.log(` ✅ ${chalk.yellowBright(path)} ${chalk.dim(`(${description})`)}`);
+    });
   }
 
   if (notFoundInDetail.length > 0) {
-    console.log("Missing required parameters:");
-    console.log(
-      notFoundInDetail
-        .map((param) => {
-          const dimDescription = chalk.dim(`(${param.description})`);
-          return ` ❌ ${chalk.yellowBright(param.path)} ${dimDescription}`;
-        })
-        .join("\n"),
-      "\n"
-    );
-    return chalk.red(
-      `AWS account requires the above ${notFoundInDetail.length} required parameters to work with @guardian/cdk v${LibraryInfo.VERSION}`
-    );
-  } else {
+    console.log("\nMissing required parameters:");
+
+    notFoundInDetail.forEach(({ path, description }) => {
+      console.log(` ❌ ${chalk.yellowBright(path)} ${chalk.dim(`(${description})`)}`);
+    });
+  }
+
+  if (notFoundInDetail.length === 0) {
+    // no action needed
     return 0;
+  } else {
+    console.log(
+      chalk.red(
+        `\nAWS account requires the above ${notFoundInDetail.length} SSM parameters to work with @guardian/cdk v${LibraryInfo.VERSION}`
+      )
+    );
+
+    return 1;
   }
 };
