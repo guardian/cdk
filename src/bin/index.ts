@@ -2,7 +2,7 @@
 
 import yargs from "yargs";
 import { LibraryInfo } from "../constants/library-info";
-import type { CliCommandResponse } from "../types/command";
+import type { CliCommandResponse } from "../types/cli";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";

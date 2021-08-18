@@ -2,7 +2,7 @@ import { access, readFile } from "fs/promises";
 import path from "path";
 import type { PackageJson } from "read-pkg-up";
 import { LibraryInfo } from "../../constants/library-info";
-import type { CliCommandResponse } from "../../types/command";
+import type { CliCommandResponse } from "../../types/cli";
 import { getAwsCdkDependencies } from "../../utils/package-json";
 
 const filterVersionMismatch = (deps: Record<string, string>) =>

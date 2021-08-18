@@ -1,15 +1,8 @@
-import type { CredentialProviderChain } from "aws-sdk";
-import type { CliCommandResponse } from "../../../types/command";
+import type { AwsAccountReadiness, CliCommandResponse } from "../../../types/cli";
 import { ssmParamReadiness } from "./ssm";
 
-export const accountReadinessCommand = async ({
-  credentialProvider,
-  region,
-}: {
-  credentialProvider: CredentialProviderChain;
-  region: string;
-}): CliCommandResponse => {
-  const ssmParamReadinessResponse = await ssmParamReadiness({ credentialProvider, region });
+export const accountReadinessCommand = async (props: AwsAccountReadiness): CliCommandResponse => {
+  const ssmParamReadinessResponse = await ssmParamReadiness(props);
   const vpcReadinessResponse = 1 - 1; // TODO: Implement
 
   if (ssmParamReadinessResponse !== 0 || vpcReadinessResponse !== 0) {
