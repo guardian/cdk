@@ -38,4 +38,8 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/subnets/public`,
     description: "A list of public subnets",
   },
+  FastlyCustomerId: {
+    path: "/account/external/fastly/customer.id",
+    description: "SSM parameter containing the Fastly Customer ID",
+  },
 };

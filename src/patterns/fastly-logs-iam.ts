@@ -1,29 +1,30 @@
-import type { GuStack } from "../../core";
-import { GuPutS3ObjectsPolicy } from "../constructs/iam/policies/s3-put-object";
-
-//export class GuApiLambda extends GuLambdaFunction {
-//   constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
-//     super(scope, id, {
-//       ...props,
-//       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
-//     });
-
-//     props.apis.forEach((api) => {
-//       new LambdaRestApi(this, api.id, {
-//         handler: this,
-//         ...api,
-//       });
-//     });
-//   }
-// }
+import { AccountPrincipal } from "@aws-cdk/aws-iam";
+import type { GuStack } from "../constructs/core";
+import { GuFastlyCustomerIdParameter } from "../constructs/core/parameters/fastly";
+import { GuPutS3ObjectsPolicy, GuRole } from "../constructs/iam";
 
 interface GuFastlyLogsIamProps {
   bucketName: string;
   path: string;
 }
 
+/*
+TODO: docs
+ */
 export class GuFastlyLogsIam {
   constructor(scope: GuStack, id: string, props: GuFastlyLogsIamProps) {
-    const policy = new GuPutS3ObjectsPolicy(scope, id, props);
+    const policy = new GuPutS3ObjectsPolicy(scope, id, {
+      bucketName: props.bucketName,
+      paths: [props.path],
+    });
+
+    const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
+
+    const role = new GuRole(scope, id, {
+      assumedBy: new AccountPrincipal("717331877981"), //TODO: make this configurable? this is public but managing changes will be easier in configurable
+      externalIds: [fastlyCustomerId],
+    });
+
+    policy.attachToRole(role);
   }
 }
