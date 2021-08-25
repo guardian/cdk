@@ -27,7 +27,7 @@
     "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "^0.6.0",
+    "@guardian/eslint-config-typescript": "^0.6.1",
     "@types/aws-lambda": "^8.10.82",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^27.0.0",
