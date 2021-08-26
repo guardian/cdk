@@ -69,7 +69,7 @@ describe("The GuApplicationTargetGroup class", () => {
       HealthCheckIntervalSeconds: 10,
       HealthCheckPath: "/healthcheck",
       HealthCheckProtocol: "HTTP",
-      HealthCheckTimeoutSeconds: 10,
+      HealthCheckTimeoutSeconds: 5,
       HealthyThresholdCount: 5,
       UnhealthyThresholdCount: 2,
     });
@@ -91,7 +91,7 @@ describe("The GuApplicationTargetGroup class", () => {
       HealthCheckPath: "/test",
       HealthCheckPort: "9000",
       HealthCheckProtocol: "HTTP",
-      HealthCheckTimeoutSeconds: 10,
+      HealthCheckTimeoutSeconds: 5,
       HealthyThresholdCount: 5,
       UnhealthyThresholdCount: 2,
     });
