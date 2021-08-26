@@ -2,7 +2,7 @@ import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stack } from "@aws-cdk/core";
+import { Duration, Stack } from "@aws-cdk/core";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import type { AppIdentity } from "../../core/identity";
 import { GuApplicationTargetGroup } from "./application-target-group";
@@ -69,7 +69,7 @@ describe("The GuApplicationTargetGroup class", () => {
       HealthCheckIntervalSeconds: 10,
       HealthCheckPath: "/healthcheck",
       HealthCheckProtocol: "HTTP",
-      HealthCheckTimeoutSeconds: 10,
+      HealthCheckTimeoutSeconds: 5,
       HealthyThresholdCount: 5,
       UnhealthyThresholdCount: 2,
     });
@@ -91,7 +91,7 @@ describe("The GuApplicationTargetGroup class", () => {
       HealthCheckPath: "/test",
       HealthCheckPort: "9000",
       HealthCheckProtocol: "HTTP",
-      HealthCheckTimeoutSeconds: 10,
+      HealthCheckTimeoutSeconds: 5,
       HealthyThresholdCount: 5,
       UnhealthyThresholdCount: 2,
     });
@@ -119,5 +119,20 @@ describe("The GuApplicationTargetGroup class", () => {
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
       Protocol: "HTTPS",
     });
+  });
+
+  test("An illegal healthcheck is flagged", () => {
+    const stack = simpleGuStackForTesting();
+
+    expect(() => {
+      new GuApplicationTargetGroup(stack, "TargetGroup", {
+        ...app,
+        vpc,
+        healthCheck: {
+          interval: Duration.seconds(10),
+          timeout: Duration.seconds(10),
+        },
+      });
+    }).toThrow(new Error("Illegal healthcheck configuration: timeout (10) must be lower than interval (10)"));
   });
 });

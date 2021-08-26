@@ -1,6 +1,6 @@
 import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { ApplicationTargetGroupProps } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Duration } from "@aws-cdk/core";
+import type { ApplicationTargetGroupProps, HealthCheck } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { Annotations, Duration } from "@aws-cdk/core";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import type { GuStack } from "../../core";
 import { AppIdentity } from "../../core/identity";
@@ -34,19 +34,22 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
  * ```
  */
 export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(ApplicationTargetGroup) {
-  static DefaultHealthCheck = {
+  private static defaultHealthcheckInterval = Duration.seconds(10);
+  private static defaultHealthcheckTimeout = Duration.seconds(5);
+
+  static DefaultHealthCheck: HealthCheck = {
     path: "/healthcheck",
     protocol: Protocol.HTTP,
     healthyThresholdCount: 5,
     unhealthyThresholdCount: 2,
-    interval: Duration.seconds(10),
-    timeout: Duration.seconds(10),
+    interval: GuApplicationTargetGroup.defaultHealthcheckInterval,
+    timeout: GuApplicationTargetGroup.defaultHealthcheckTimeout,
   };
 
   constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
     const { app } = props;
 
-    const mergedProps = {
+    const mergedProps: ApplicationTargetGroupProps = {
       protocol: ApplicationProtocol.HTTP, // We terminate HTTPS at the load balancer level, so load balancer to ASG/EC2 traffic can be over HTTP
       deregistrationDelay: Duration.seconds(30),
       ...props,
@@ -54,6 +57,19 @@ export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(Appl
     };
 
     super(scope, AppIdentity.suffixText({ app }, id), mergedProps);
+
+    const interval = mergedProps.healthCheck?.interval ?? GuApplicationTargetGroup.defaultHealthcheckInterval;
+    const timeout = mergedProps.healthCheck?.timeout ?? GuApplicationTargetGroup.defaultHealthcheckTimeout;
+
+    /*
+    The healthcheck `timeout` must be lower than `interval`
+    See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb-health-check.html#cfn-elb-healthcheck-timeout
+     */
+    if (timeout.toSeconds() >= interval.toSeconds()) {
+      const message = `Illegal healthcheck configuration: timeout (${timeout.toSeconds()}) must be lower than interval (${interval.toSeconds()})`;
+      Annotations.of(this).addError(message); // adds a useful message to the console to aid debugging
+      throw new Error(message);
+    }
 
     AppIdentity.taggedConstruct({ app }, this);
   }

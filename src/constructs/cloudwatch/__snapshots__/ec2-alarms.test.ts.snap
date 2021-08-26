@@ -406,7 +406,7 @@ Object {
         "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
-        "HealthCheckTimeoutSeconds": 10,
+        "HealthCheckTimeoutSeconds": 5,
         "HealthyThresholdCount": 5,
         "Port": 80,
         "Protocol": "HTTP",
