@@ -1,4 +1,4 @@
-import  { AccountPrincipal } from "@aws-cdk/aws-iam";
+import { AccountPrincipal } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../constructs/core";
 import { GuFastlyCustomerIdParameter } from "../constructs/core/parameters/fastly";
 import { GuPutS3ObjectsPolicy, GuRole } from "../constructs/iam";
@@ -7,6 +7,10 @@ interface GuFastlyLogsIamProps {
   bucketName: string;
   path?: string;
 }
+
+// Fastly's AWS account ID is used as an external ID when creating the IAM role
+// See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
+const FASTLY_AWS_ACCOUNT_ID = "717331877981";
 
 /*
 TODO: docs
@@ -21,7 +25,7 @@ export class GuFastlyLogsIam {
     const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
 
     const role = new GuRole(scope, `${id}FastlyLogsIamRole`, {
-      assumedBy: new AccountPrincipal("717331877981"), //TODO: make this configurable? this is public but managing changes will be easier in configurable
+      assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
       externalIds: [fastlyCustomerId],
     });
 
