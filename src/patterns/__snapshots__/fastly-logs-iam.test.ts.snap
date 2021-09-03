@@ -19,7 +19,7 @@ Object {
     },
   },
   "Resources": Object {
-    "iampolicy6C93E3BF": Object {
+    "iamFastlyLogsIamPolicy3B32A60D": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -31,16 +31,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "iampolicy6C93E3BF",
+        "PolicyName": "iamFastlyLogsIamPolicy3B32A60D",
         "Roles": Array [
           Object {
-            "Ref": "iamrole10180D71",
+            "Ref": "iamFastlyLogsIamRoleC0DF33B9",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "iamrole10180D71": Object {
+    "iamFastlyLogsIamRoleC0DF33B9": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
