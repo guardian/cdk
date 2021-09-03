@@ -1,11 +1,13 @@
+
 import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
 import { isSingletonPresentInStack } from "../../../utils/test";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
 
 /**
- * Creates a CloudFormation parameter which references the bucket used to store code artifacts.
- * By default, the bucket name is stored in an SSM Parameter called `/account/services/artifact.bucket`.
+ * Creates a CloudFormation parameter which contains the Fastly customer ID to use in
+ * setting up a Fastly logging role. By default, the customer ID is stored in an SSM
+ * Parameter called `/account/external/fastly/customer.id`.
  */
 export class GuFastlyCustomerIdParameter extends GuStringParameter {
   private static instance: GuFastlyCustomerIdParameter | undefined;
