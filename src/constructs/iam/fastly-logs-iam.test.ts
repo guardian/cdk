@@ -6,7 +6,7 @@ import { GuFastlyLogsIam } from "./fastly-logs-iam";
 describe("The GuFastlyLogsIam pattern", () => {
   it("correctly wires up the policy", () => {
     const stack = simpleGuStackForTesting();
-    new GuFastlyLogsIam(stack, "iam", {
+    new GuFastlyLogsIam(stack, "FastlyS3LoggingIam", {
       bucketName: "test",
       path: "",
     });
