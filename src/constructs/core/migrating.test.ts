@@ -3,7 +3,7 @@ import { SynthUtils } from "@aws-cdk/assert";
 import { Bucket } from "@aws-cdk/aws-s3";
 import type { BucketProps } from "@aws-cdk/aws-s3";
 import { Annotations } from "@aws-cdk/core";
-import type { GuStatefulConstruct } from "../../utils/mixin";
+import type { GuStatefulConstruct } from "../../types/migrating";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import { GuMigratingResource } from "./migrating";
