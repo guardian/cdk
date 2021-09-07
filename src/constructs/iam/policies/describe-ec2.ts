@@ -1,5 +1,5 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
-import { isSingletonPresentInStack } from "../../../utils/test";
+import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
 import { GuPolicy } from "./base-policy";
 
