@@ -1,5 +1,5 @@
 import { Stage, Stages } from "../../../constants";
-import { isSingletonPresentInStack } from "../../../utils/test";
+import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
 

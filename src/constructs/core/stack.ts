@@ -6,11 +6,11 @@ import { Stage } from "../../constants";
 import { ContextKeys } from "../../constants/context-keys";
 import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
+import type { GuMigratingStack } from "../../types/migrating";
 import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
 import { GuStageMapping } from "./mappings";
 import type { GuStageDependentValue } from "./mappings";
-import type { GuMigratingStack } from "./migrating";
 import { GuStageParameter } from "./parameters";
 import type { GuParameter } from "./parameters";
 

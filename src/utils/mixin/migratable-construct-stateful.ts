@@ -1,18 +1,6 @@
+import type { GuStatefulConstruct } from "../../types/migrating";
 import { GuMigratableConstruct } from "./migratable-construct";
 import type { AnyConstructor } from "./types";
-
-export interface GuStatefulConstruct {
-  /**
-   * A flag to signal to `GuMigratingResource` that a construct is stateful and care should be taken when migrating to GuCDK.
-   * If one accidentally replaces a stateful resource, downstream services such as DNS may be impacted.
-   */
-  isStatefulConstruct: true;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
-export function isGuStatefulConstruct(construct: any): construct is GuStatefulConstruct {
-  return "isStatefulConstruct" in construct;
-}
 
 /**
  * A mixin to add the property `isStatefulConstruct` to a class and execute logic to conditionally override a construct's logicalId when synthesised.
