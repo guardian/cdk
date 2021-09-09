@@ -1,9 +1,15 @@
 import { Alarm, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
 import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
-import type { ISecurityGroup } from "@aws-cdk/aws-ec2";
+import type { ISecurityGroup, IVpc } from "@aws-cdk/aws-ec2";
 import type { IRepository } from "@aws-cdk/aws-ecr";
-import type { ICluster } from "@aws-cdk/aws-ecs";
-import { Compatibility, ContainerImage, FargatePlatformVersion, LogDrivers, TaskDefinition } from "@aws-cdk/aws-ecs";
+import {
+  Cluster,
+  Compatibility,
+  ContainerImage,
+  FargatePlatformVersion,
+  LogDrivers,
+  TaskDefinition,
+} from "@aws-cdk/aws-ecs";
 import type { Schedule } from "@aws-cdk/aws-events";
 import { Rule } from "@aws-cdk/aws-events";
 import { SfnStateMachine } from "@aws-cdk/aws-events-targets";
@@ -17,7 +23,7 @@ import type { GuStack } from "../constructs/core";
 import type { Identity } from "../constructs/core/identity";
 
 export interface GuScheduledEcsTaskProps extends Identity {
-  cluster: ICluster;
+  vpc: IVpc;
   schedule: Schedule;
   taskTimeoutInMinutes?: number;
   cpu?: number;
@@ -54,6 +60,13 @@ export class GuScheduledEcsTask {
 
     const cpu = props.cpu ?? 2048;
     const memory = props.memory ?? 4096;
+
+    const cluster = new Cluster(scope, `${props.app}-cluster`, {
+      clusterName: `${props.app}-cluster-${props.stage}`,
+      enableFargateCapacityProviders: true,
+      vpc: props.vpc,
+    });
+
     const taskDefinition = new TaskDefinition(scope, "TaskDefinition", {
       compatibility: Compatibility.FARGATE,
       cpu: cpu.toString(),
@@ -73,13 +86,13 @@ export class GuScheduledEcsTask {
     });
 
     const fetchArtifact = new PolicyStatement();
-    fetchArtifact.addActions("s3:GetObject", "s3:HeadObject");
+    fetchArtifact.addActions("s3:GetObject");
     fetchArtifact.addResources(`arn:aws:s3:::${distBucket}/*`);
     taskDefinition.addToTaskRolePolicy(fetchArtifact);
     (props.customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
     const task = new EcsRunTask(scope, "task", {
-      cluster: props.cluster,
+      cluster: cluster,
       launchTarget: new EcsFargateLaunchTarget({
         platformVersion: FargatePlatformVersion.LATEST,
       }),
