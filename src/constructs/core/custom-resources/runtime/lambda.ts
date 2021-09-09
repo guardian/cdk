@@ -58,9 +58,18 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
     await respond("SUCCESS", "OK", physicalResourceId, data);
   } catch (e) {
     console.log(e);
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- e.message is valid, see docs above
-    await respond("FAILED", e.message || "Internal Error", context.logStreamName, {});
+
+    const errorMessage = (error: unknown) => {
+      if (typeof error === "string") {
+        return error;
+      }
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return "Internal Error";
+    };
+
+    await respond("FAILED", errorMessage(e), context.logStreamName, {});
   }
 
   function respond(responseStatus: string, reason: string, physicalResourceId: string, data: Record<string, string>) {
