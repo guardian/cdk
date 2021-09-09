@@ -1,6 +1,5 @@
 import { Construct } from "@aws-cdk/core";
 import { GuMigratingResource } from "../../constructs/core/migrating";
-import type { GuMigratingStack } from "../../types/migrating";
 import { isGuMigratingStack } from "../../types/migrating";
 import type { AnyConstructor } from "./types";
 
@@ -64,25 +63,15 @@ export function GuMigratableConstruct<TBase extends AnyConstructor>(BaseClass: T
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- mixin
           const [scope, id, maybeProps] = args;
 
-          const isAMigratingStack = isGuMigratingStack(scope);
-          const isIdAString = typeof id === "string";
+          // Unsure `args` are of the correct type
+          if (isGuMigratingStack(scope) && typeof id === "string") {
+            // `props` can be undefined
+            const existingLogicalId = maybeProps ? (maybeProps as GuMigratingResource).existingLogicalId : undefined;
 
-          /*
-          A test for `props` would be to check if it's a `GuMigratingResource`.
-          That is, is `existingLogicalId` present.
-          However, this would be `false` if `existingLogicalId` is `undefined`
-          and `GuMigratingResource.setLogicalId` won't get called.
-           */
-          const looksLikeAConstruct = isAMigratingStack && isIdAString;
-
-          // `props` can be undefined
-          const existingLogicalId = maybeProps ? (maybeProps as GuMigratingResource).existingLogicalId : undefined;
-
-          if (looksLikeAConstruct) {
             GuMigratingResource.setLogicalId(
               this,
               {
-                migratedFromCloudFormation: (scope as GuMigratingStack).migratedFromCloudFormation,
+                migratedFromCloudFormation: scope.migratedFromCloudFormation,
               },
               { existingLogicalId }
             );
