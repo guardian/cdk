@@ -1,6 +1,6 @@
 import type { BlockDevice } from "@aws-cdk/aws-autoscaling";
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
-import type { IPeer } from "@aws-cdk/aws-ec2";
+import type { IPeer, IVpc } from "@aws-cdk/aws-ec2";
 import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
@@ -334,6 +334,7 @@ export class GuEc2App {
    * to access in-pattern constructs, but this would allow teams to be unblocked
    * in the short term.
    * */
+  public readonly vpc: IVpc;
   public readonly certificate: GuCertificate;
   public readonly loadBalancer: GuApplicationLoadBalancer;
   public readonly autoScalingGroup: GuAutoScalingGroup;
@@ -472,6 +473,7 @@ export class GuEc2App {
       }
     }
 
+    this.vpc = vpc;
     this.certificate = certificate;
     this.loadBalancer = loadBalancer;
     this.autoScalingGroup = autoScalingGroup;
