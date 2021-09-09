@@ -63,7 +63,7 @@ export function GuMigratableConstruct<TBase extends AnyConstructor>(BaseClass: T
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- mixin
           const [scope, id, maybeProps] = args;
 
-          // Unsure `args` are of the correct type
+          // Ensure `args` are of the correct type
           if (isGuMigratingStack(scope) && typeof id === "string") {
             // `props` can be undefined
             const existingLogicalId = maybeProps ? (maybeProps as GuMigratingResource).existingLogicalId : undefined;
