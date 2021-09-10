@@ -145,13 +145,13 @@ export class GuScheduledEcsTask {
     const cpu = props.cpu ?? 2048;
     const memory = props.memory ?? 4096;
 
-    const cluster = new Cluster(scope, `${props.app}-${props.stage}-cluster`, {
+    const cluster = new Cluster(scope, `${props.app}-cluster`, {
       clusterName: `${props.app}-cluster-${props.stage}`,
       enableFargateCapacityProviders: true,
       vpc: props.vpc,
     });
 
-    const taskDefinition = new TaskDefinition(scope, `${props.app}-${props.stage}-task-definition`, {
+    const taskDefinition = new TaskDefinition(scope, `${props.app}-task-definition`, {
       compatibility: Compatibility.FARGATE,
       cpu: cpu.toString(),
       memoryMiB: memory.toString(),
@@ -175,7 +175,7 @@ export class GuScheduledEcsTask {
     taskDefinition.addToTaskRolePolicy(fetchArtifact);
     (props.customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
-    const task = new EcsRunTask(scope, `${props.app}-${props.stage}-task`, {
+    const task = new EcsRunTask(scope, `${props.app}-task`, {
       cluster: cluster,
       launchTarget: new EcsFargateLaunchTarget({
         platformVersion: FargatePlatformVersion.LATEST,
@@ -187,12 +187,12 @@ export class GuScheduledEcsTask {
       securityGroups: props.securityGroups ?? [],
     });
 
-    const stateMachine = new StateMachine(scope, `${props.app}-${props.stage}-state-machine`, {
+    const stateMachine = new StateMachine(scope, `${props.app}-state-machine`, {
       definition: task,
       stateMachineName: `${props.app}-${props.stage}`,
     });
 
-    new Rule(scope, `${props.app}-${props.stage}-schedule-rule`, {
+    new Rule(scope, `${props.app}-schedule-rule`, {
       schedule: props.schedule,
       targets: [new SfnStateMachine(stateMachine)],
     });
