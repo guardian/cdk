@@ -39,11 +39,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "InstanceTypeTestguec2app": Object {
-      "Default": "t3.small",
-      "Description": "EC2 Instance Type for the app test-gu-ec2-app",
-      "Type": "String",
-    },
     "LoggingStreamName": Object {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
@@ -171,9 +166,7 @@ Object {
         "ImageId": Object {
           "Ref": "AMITestguec2app",
         },
-        "InstanceType": Object {
-          "Ref": "InstanceTypeTestguec2app",
-        },
+        "InstanceType": "t4g.medium",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -908,11 +901,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "InstanceTypeTestguec2app": Object {
-      "Default": "t3.small",
-      "Description": "EC2 Instance Type for the app test-gu-ec2-app",
-      "Type": "String",
-    },
     "LoggingStreamName": Object {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
@@ -1040,9 +1028,7 @@ Object {
         "ImageId": Object {
           "Ref": "AMITestguec2app",
         },
-        "InstanceType": Object {
-          "Ref": "InstanceTypeTestguec2app",
-        },
+        "InstanceType": "t4g.medium",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
