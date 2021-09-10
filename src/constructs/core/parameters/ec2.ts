@@ -3,17 +3,6 @@ import type { GuStack } from "../stack";
 import { GuParameter } from "./base";
 import type { GuNoTypeParameterPropsWithAppIdentity } from "./base";
 
-export class GuInstanceTypeParameter extends GuParameter {
-  constructor(scope: GuStack, props: GuNoTypeParameterPropsWithAppIdentity) {
-    super(scope, AppIdentity.suffixText(props, "InstanceType"), {
-      type: "String",
-      description: `EC2 Instance Type for the app ${props.app}`,
-      default: "t3.small",
-      ...props,
-    });
-  }
-}
-
 export class GuAmiParameter extends GuParameter {
   constructor(scope: GuStack, props: GuNoTypeParameterPropsWithAppIdentity) {
     super(scope, AppIdentity.suffixText(props, "AMI"), {
