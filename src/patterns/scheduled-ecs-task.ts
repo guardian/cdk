@@ -21,6 +21,7 @@ import { CfnOutput, Duration } from "@aws-cdk/core";
 import { GuDistributionBucketParameter } from "../constructs/core";
 import type { GuStack } from "../constructs/core";
 import type { Identity } from "../constructs/core/identity";
+import { AppIdentity } from "../constructs/core/identity";
 import { GuGetDistributablePolicyStatement } from "../constructs/iam";
 
 /**
@@ -144,10 +145,16 @@ const getContainer = (config: ContainerConfiguration) => {
  */
 export class GuScheduledEcsTask {
   constructor(scope: GuStack, props: GuScheduledEcsTaskProps) {
+    AppIdentity.taggedConstruct({ app: props.app }, scope);
+
     const timeout = props.taskTimeoutInMinutes ?? 15;
 
-    const cpu = props.cpu ?? 2048;
-    const memory = props.memory ?? 4096;
+    // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
+    const defaultCpu = 2048; // 2 cores and from 4-16GB memory
+    const defaultMemory = 4096; // 4GB
+
+    const cpu = props.cpu ?? defaultCpu;
+    const memory = props.memory ?? defaultMemory;
 
     const cluster = new Cluster(scope, `${props.app}-cluster`, {
       clusterName: `${props.app}-cluster-${props.stage}`,
