@@ -45,11 +45,19 @@ import { GuGetDistributablePolicyStatement } from "../constructs/iam";
  * }
  * ```
  */
-interface ContainerConfiguration {
+
+type RepositoryContainer = {
+  repository: IRepository;
+  version: string;
+  type: "repository";
+};
+
+type RegistryContainer = {
   id?: string;
-  repository?: IRepository;
-  version?: string;
-}
+  type: "registry";
+};
+
+type ContainerConfiguration = RepositoryContainer | RegistryContainer;
 
 /**
  * Configuration options for the [[`GuScheduledEcsTask`]] pattern.
@@ -117,11 +125,8 @@ export interface GuScheduledEcsTaskProps extends Identity {
  * be fetched from docker hub).
  */
 const getContainer = (config: ContainerConfiguration) => {
-  const ecrContainer =
-    config.id && config.repository && ContainerImage.fromEcrRepository(config.repository, config.version);
-
-  if (ecrContainer) {
-    return ecrContainer;
+  if (config.type === "repository") {
+    return ContainerImage.fromEcrRepository(config.repository, config.version);
   } else {
     return ContainerImage.fromRegistry(config.id ?? "ubuntu:focal");
   }
@@ -139,8 +144,6 @@ const getContainer = (config: ContainerConfiguration) => {
  */
 export class GuScheduledEcsTask {
   constructor(scope: GuStack, props: GuScheduledEcsTaskProps) {
-    const distBucket = GuDistributionBucketParameter.getInstance(scope).valueAsString;
-
     const timeout = props.taskTimeoutInMinutes ?? 15;
 
     const cpu = props.cpu ?? 2048;
