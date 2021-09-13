@@ -18,7 +18,7 @@ import { Topic } from "@aws-cdk/aws-sns";
 import { IntegrationPattern, StateMachine } from "@aws-cdk/aws-stepfunctions";
 import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-tasks";
 import { CfnOutput, Duration } from "@aws-cdk/core";
-import {GuLambdaErrorPercentageMonitoringProps, NoMonitoring} from "../constructs/cloudwatch";
+import type { NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import type { Identity } from "../constructs/core/identity";
 import { AppIdentity } from "../constructs/core/identity";
