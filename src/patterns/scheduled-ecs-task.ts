@@ -18,6 +18,7 @@ import { Topic } from "@aws-cdk/aws-sns";
 import { IntegrationPattern, StateMachine } from "@aws-cdk/aws-stepfunctions";
 import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-tasks";
 import { CfnOutput, Duration } from "@aws-cdk/core";
+import {GuLambdaErrorPercentageMonitoringProps, NoMonitoring} from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import type { Identity } from "../constructs/core/identity";
 import { AppIdentity } from "../constructs/core/identity";
@@ -58,6 +59,8 @@ type RegistryContainer = {
 };
 
 type ContainerConfiguration = RepositoryContainer | RegistryContainer;
+
+type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: false };
 
 /**
  * Configuration options for the [[`GuScheduledEcsTask`]] pattern.
@@ -115,7 +118,7 @@ export interface GuScheduledEcsTaskProps extends Identity {
   cpu?: number;
   memory?: number;
   taskCommand?: string;
-  alarmSnsTopicArn?: string;
+  monitoringConfiguration: NoMonitoring | GuEcsTaskMonitoringProps;
   securityGroups?: ISecurityGroup[];
   customTaskPolicies?: PolicyStatement[];
 }
@@ -206,7 +209,7 @@ export class GuScheduledEcsTask {
       targets: [new SfnStateMachine(stateMachine)],
     });
 
-    if (props.alarmSnsTopicArn) {
+    if (!props.monitoringConfiguration.noMonitoring) {
       const alarmTopic = Topic.fromTopicArn(scope, AppIdentity.suffixText(props, "AlarmTopic"), props.alarmSnsTopicArn);
       const alarms = [
         {

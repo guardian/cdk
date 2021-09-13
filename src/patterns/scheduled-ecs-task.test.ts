@@ -4,17 +4,18 @@ import { SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Duration } from "@aws-cdk/core";
-import {GuStack} from "../constructs/core";
+import { GuStack } from "../constructs/core";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 
-
-const vpc = (stack: GuStack) => Vpc.fromVpcAttributes(stack, "VPC", {
-  vpcId: "test",
-  availabilityZones: [""],
-  publicSubnetIds: [""],
-  privateSubnetIds: ["abc-123"],
-});
+const vpc = (stack: GuStack) => {
+  return Vpc.fromVpcAttributes(stack, "VPC", {
+    vpcId: "test",
+    availabilityZones: [""],
+    publicSubnetIds: [""],
+    privateSubnetIds: ["abc-123"],
+  });
+};
 
 const securityGroup = (stack: GuStack) => SecurityGroup.fromSecurityGroupId(stack, "hehe", "id-123");
 const testPolicy = new PolicyStatement({
@@ -30,6 +31,7 @@ describe("The GuScheduledEcsTask pattern", () => {
     new GuScheduledEcsTask(stack, {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
+      monitoringConfiguration: { noMonitoring: true },
       vpc: vpc(stack),
       stack: "test",
       stage: "TEST",
@@ -45,6 +47,7 @@ describe("The GuScheduledEcsTask pattern", () => {
     new GuScheduledEcsTask(stack, {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
+      monitoringConfiguration: { noMonitoring: true },
       vpc: vpc(stack),
       stack: "test",
       stage: "TEST",
@@ -67,7 +70,7 @@ describe("The GuScheduledEcsTask pattern", () => {
       taskTimeoutInMinutes: 60,
       cpu: 1024,
       memory: 1024,
-      alarmSnsTopicArn: "arn:something:else:here:we:goalarm-topic",
+      monitoringConfiguration: { snsTopicArn: "arn:something:else:here:we:goalarm-topic", noMonitoring: false },
       taskCommand: `echo "yo ho row ho it's a pirates life for me"`,
       securityGroups: [securityGroup(stack)],
       customTaskPolicies: [testPolicy],
