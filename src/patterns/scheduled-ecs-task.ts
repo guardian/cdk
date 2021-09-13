@@ -123,10 +123,9 @@ export interface GuScheduledEcsTaskProps extends Identity {
   customTaskPolicies?: PolicyStatement[];
 }
 
-
-const isRepositoryContainer = (config: ContainerConfiguration): config is RepositoryContainer =>  {
+const isRepositoryContainer = (config: ContainerConfiguration): config is RepositoryContainer => {
   return (config as RepositoryContainer).version !== undefined;
-}
+};
 
 /**
  * Containers can be specified either via a repository and version or by container id (in which case it will
@@ -137,6 +136,7 @@ const getContainer = (config: ContainerConfiguration) => {
     return ContainerImage.fromEcrRepository(config.repository, config.version);
   } else {
     return ContainerImage.fromRegistry(config.id ?? "ubuntu:focal");
+  }
 };
 
 /**
@@ -214,7 +214,11 @@ export class GuScheduledEcsTask {
     });
 
     if (!props.monitoringConfiguration.noMonitoring) {
-      const alarmTopic = Topic.fromTopicArn(scope, AppIdentity.suffixText(props, "AlarmTopic"), props.alarmSnsTopicArn);
+      const alarmTopic = Topic.fromTopicArn(
+        scope,
+        AppIdentity.suffixText(props, "AlarmTopic"),
+        props.monitoringConfiguration.snsTopicArn
+      );
       const alarms = [
         {
           name: "ExecutionsFailedAlarm",
