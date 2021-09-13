@@ -8,14 +8,13 @@ import { GuStack } from "../constructs/core";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 
-const vpc = (stack: GuStack) => {
-  return Vpc.fromVpcAttributes(stack, "VPC", {
+const vpc = (stack: GuStack) =>
+  Vpc.fromVpcAttributes(stack, "VPC", {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
     privateSubnetIds: ["abc-123"],
   });
-};
 
 const securityGroup = (stack: GuStack) => SecurityGroup.fromSecurityGroupId(stack, "hehe", "id-123");
 const testPolicy = new PolicyStatement({

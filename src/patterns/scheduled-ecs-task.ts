@@ -173,7 +173,7 @@ export class GuScheduledEcsTask {
     taskDefinition.addContainer(AppIdentity.suffixText(props, "ScheduledTaskContainer"), {
       image: getContainer(props.containerConfiguration),
       entryPoint: props.taskCommand ? ["/bin/sh"] : undefined,
-      command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined,
+      command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined, // if unset, falls back to CMD in docker file, or no command will be run
       cpu,
       memoryLimitMiB: props.memory,
       logging: LogDrivers.awsLogs({
