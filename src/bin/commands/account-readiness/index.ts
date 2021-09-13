@@ -2,12 +2,11 @@ import type { AwsAccountReadiness, CliCommandResponse } from "../../../types/cli
 import { ssmParamReadiness } from "./ssm";
 
 export const accountReadinessCommand = async (props: AwsAccountReadiness): CliCommandResponse => {
-  const ssmParamReadinessResponse = await ssmParamReadiness(props);
-  const vpcReadinessResponse = 1 - 1; // TODO: Implement
+  // Got a new AWS account readiness command? Add it to this list and ✨
+  const commandResponses: number[] = await Promise.all([ssmParamReadiness(props)]);
 
-  if (ssmParamReadinessResponse !== 0 || vpcReadinessResponse !== 0) {
-    return 1;
-  } else {
-    return 0;
-  }
+  const totalFailedCommands = commandResponses.filter((_) => _ !== 0);
+  const allCommandsSuccessful = totalFailedCommands.length === 0;
+
+  return allCommandsSuccessful ? 0 : 1;
 };
