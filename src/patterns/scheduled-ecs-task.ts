@@ -156,19 +156,19 @@ export class GuScheduledEcsTask {
     const cpu = props.cpu ?? defaultCpu;
     const memory = props.memory ?? defaultMemory;
 
-    const cluster = new Cluster(scope, `${props.app}-cluster`, {
+    const cluster = new Cluster(scope, AppIdentity.suffixText(props, "Cluster"), {
       clusterName: `${props.app}-cluster-${props.stage}`,
       enableFargateCapacityProviders: true,
       vpc: props.vpc,
     });
 
-    const taskDefinition = new TaskDefinition(scope, `${props.app}-task-definition`, {
+    const taskDefinition = new TaskDefinition(scope, AppIdentity.suffixText(props, "TaskDefinition"), {
       compatibility: Compatibility.FARGATE,
       cpu: cpu.toString(),
       memoryMiB: memory.toString(),
     });
 
-    taskDefinition.addContainer("scheduled-task-container", {
+    taskDefinition.addContainer(AppIdentity.suffixText(props, "ScheduledTaskContainer"), {
       image: getContainer(props.containerConfiguration),
       entryPoint: props.taskCommand ? ["/bin/sh"] : undefined,
       command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined,
@@ -197,18 +197,18 @@ export class GuScheduledEcsTask {
       securityGroups: props.securityGroups ?? [],
     });
 
-    const stateMachine = new StateMachine(scope, `${props.app}-state-machine`, {
+    const stateMachine = new StateMachine(scope, AppIdentity.suffixText(props, "StateMachine"), {
       definition: task,
       stateMachineName: `${props.app}-${props.stage}`,
     });
 
-    new Rule(scope, `${props.app}-schedule-rule`, {
+    new Rule(scope, AppIdentity.suffixText(props, "ScheduleRule"), {
       schedule: props.schedule,
       targets: [new SfnStateMachine(stateMachine)],
     });
 
     if (props.alarmSnsTopicArn) {
-      const alarmTopic = Topic.fromTopicArn(scope, `${props.app}-alarm-topic`, props.alarmSnsTopicArn);
+      const alarmTopic = Topic.fromTopicArn(scope, AppIdentity.suffixText(props, "AlarmTopic"), props.alarmSnsTopicArn);
       const alarms = [
         {
           name: "ExecutionsFailedAlarm",
@@ -242,7 +242,7 @@ export class GuScheduledEcsTask {
       });
     }
 
-    new CfnOutput(scope, "StateMachineArn", {
+    new CfnOutput(scope, AppIdentity.suffixText(props, "StateMachineArnOutput"), {
       value: stateMachine.stateMachineArn,
     });
   }
