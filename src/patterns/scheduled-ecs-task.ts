@@ -13,7 +13,7 @@ import {
 import type { Schedule } from "@aws-cdk/aws-events";
 import { Rule } from "@aws-cdk/aws-events";
 import { SfnStateMachine } from "@aws-cdk/aws-events-targets";
-import { PolicyStatement } from "@aws-cdk/aws-iam";
+import type { PolicyStatement } from "@aws-cdk/aws-iam";
 import { Topic } from "@aws-cdk/aws-sns";
 import { IntegrationPattern, StateMachine } from "@aws-cdk/aws-stepfunctions";
 import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-tasks";
@@ -21,6 +21,7 @@ import { CfnOutput, Duration } from "@aws-cdk/core";
 import { GuDistributionBucketParameter } from "../constructs/core";
 import type { GuStack } from "../constructs/core";
 import type { Identity } from "../constructs/core/identity";
+import { GuGetDistributablePolicyStatement } from "../constructs/iam";
 
 /**
  * Configuration to determine what container to use for the task
@@ -169,10 +170,9 @@ export class GuScheduledEcsTask {
       }),
     });
 
-    const fetchArtifact = new PolicyStatement();
-    fetchArtifact.addActions("s3:GetObject");
-    fetchArtifact.addResources(`arn:aws:s3:::${distBucket}/*`);
-    taskDefinition.addToTaskRolePolicy(fetchArtifact);
+    const distPolicy = new GuGetDistributablePolicyStatement(scope, { app: props.app });
+
+    taskDefinition.addToTaskRolePolicy(distPolicy);
     (props.customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
     const task = new EcsRunTask(scope, `${props.app}-task`, {

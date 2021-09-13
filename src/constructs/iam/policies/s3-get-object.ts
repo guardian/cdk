@@ -1,3 +1,4 @@
+import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
 import { GuDistributionBucketParameter } from "../../core";
 import type { GuStack } from "../../core";
@@ -56,6 +57,17 @@ export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
       paths: [path],
     });
     AppIdentity.taggedConstruct(props, this);
+  }
+}
+
+export class GuGetDistributablePolicyStatement extends PolicyStatement {
+  constructor(scope: GuStack, props: AppIdentity) {
+    const path = [scope.stack, scope.stage, props.app, "*"].join("/");
+    super({
+      effect: Effect.ALLOW,
+      actions: ["s3:GetObject"],
+      resources: [`arn:aws:s3:::${GuDistributionBucketParameter.getInstance(scope).valueAsString}/${path}`],
+    });
   }
 }
 
