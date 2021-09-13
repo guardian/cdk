@@ -26,7 +26,6 @@ describe("The GuScheduledEcsTask pattern", () => {
       app: "ecs-test",
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
-    expect(stack).toHaveResource("AWS::IAM::Policy");
   });
 
   it("should create the correct resources with lots of config", () => {
@@ -62,6 +61,6 @@ describe("The GuScheduledEcsTask pattern", () => {
       customTaskPolicies: [testPolicy],
     });
 
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });
