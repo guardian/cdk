@@ -4,7 +4,7 @@ import { SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Duration } from "@aws-cdk/core";
-import { GuStack } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 
