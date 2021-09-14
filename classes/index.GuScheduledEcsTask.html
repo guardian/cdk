@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PublicAccess | @guardian/cdk - v25.1.0</title>
+	<title>GuScheduledEcsTask | @guardian/cdk - v25.1.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v25.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/index.html">index</a>
 				</li>
 				<li>
-					<a href="index.PublicAccess.html">PublicAccess</a>
+					<a href="index.GuScheduledEcsTask.html">GuScheduledEcsTask</a>
 				</li>
 			</ul>
-			<h1>Interface PublicAccess</h1>
+			<h1>Class GuScheduledEcsTask</h1>
 		</div>
 	</div>
 </header>
@@ -71,25 +71,19 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>For when you want your application to be accessible to the world (0.0.0.0/0).
-							Your application load balancer will have a public IP address that can be reached by anyone,
-						so only use if you are aware and happy with the consequences!</p>
+						<p>Pattern which creates all of the resources needed to invoke a fargate task on a schedule.</p>
 					</div>
-					<p>Example usage:</p>
-					<pre><code class="language-typescript"><span style="color: #000000">{ scope: </span><span style="color: #001080">AccessScope</span><span style="color: #000000">.</span><span style="color: #0070C1">PUBLIC</span><span style="color: #000000"> }</span>
-</code></pre>
+					<p>The task will be wrapped in a step function to allow for easier triggering and alarming on failure.</p>
+					<p>For all configuration options, see <a href="../interfaces/index.GuScheduledEcsTaskProps.html"><code>GuScheduledEcsTaskProps</code></a>.</p>
+					<p>Note that if your task reliably completes in less than 15 minutes then you should probably use a <a href="index.GuScheduledLambda.html"><code>GuScheduledLambda</code></a> instead. This
+					pattern was mainly created to work around the 15 minute lambda timeout.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="index.Access.html" class="tsd-signature-type" data-tsd-kind="Interface">Access</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">PublicAccess</span>
-							</li>
-						</ul>
+						<span class="target">GuScheduledEcsTask</span>
 					</li>
 				</ul>
 			</section>
@@ -98,26 +92,41 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="index.PublicAccess.html#scope" class="tsd-kind-icon">scope</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="index.GuScheduledEcsTask.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="scope" class="tsd-anchor"></a>
-					<h3>scope</h3>
-					<div class="tsd-signature tsd-kind-icon">scope<span class="tsd-signature-symbol">:</span> <a href="../enums/index.AccessScope.html#PUBLIC" class="tsd-signature-type" data-tsd-kind="Enumeration member">PUBLIC</a></div>
-					<aside class="tsd-sources">
-						<p>Overrides <a href="index.Access.html">Access</a>.<a href="index.Access.html#scope">scope</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/guardian/cdk/blob/abff02d/src/patterns/ec2-app.ts#L50">src/patterns/ec2-app.ts:50</a></li>
-						</ul>
-					</aside>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>GuScheduled<wbr>Ecs<wbr>Task<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, props<span class="tsd-signature-symbol">: </span><a href="../interfaces/index.GuScheduledEcsTaskProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuScheduledEcsTaskProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.GuScheduledEcsTask.html" class="tsd-signature-type" data-tsd-kind="Class">GuScheduledEcsTask</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/guardian/cdk/blob/abff02d/src/patterns/scheduled-ecs-task.ts#L149">src/patterns/scheduled-ecs-task.ts:149</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scope: <a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a></h5>
+								</li>
+								<li>
+									<h5>props: <a href="../interfaces/index.GuScheduledEcsTaskProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuScheduledEcsTaskProps</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="index.GuScheduledEcsTask.html" class="tsd-signature-type" data-tsd-kind="Class">GuScheduledEcsTask</a></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -195,73 +204,73 @@
 						<a href="../enums/index.GuApplicationPorts.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Ports</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuEc2App.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App</a>
+						<a href="index.GuEc2App.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuKinesisLambda.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda</a>
+						<a href="index.GuKinesisLambda.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuNodeApp.html" class="tsd-kind-icon">Gu<wbr>Node<wbr>App</a>
+						<a href="index.GuNodeApp.html" class="tsd-kind-icon">Gu<wbr>Node<wbr>App</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuPlayApp.html" class="tsd-kind-icon">Gu<wbr>Play<wbr>App</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuScheduledEcsTask.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Ecs<wbr>Task</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuScheduledLambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/index.GuSnsLambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.Access.html" class="tsd-kind-icon">Access</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.AccessLoggingProps.html" class="tsd-kind-icon">Access<wbr>Logging<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.Alarms.html" class="tsd-kind-icon">Alarms</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.ExistingKinesisStream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.ExistingSnsTopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.GuEc2AppProps.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.GuKinesisLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.GuScheduledEcsTaskProps.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Ecs<wbr>Task<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.GuScheduledLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.GuSnsLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.InternalAccess.html" class="tsd-kind-icon">Internal<wbr>Access</a>
+						<a href="index.GuPlayApp.html" class="tsd-kind-icon">Gu<wbr>Play<wbr>App</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.PublicAccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
+					<li class="current tsd-kind-class tsd-parent-kind-module">
+						<a href="index.GuScheduledEcsTask.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Ecs<wbr>Task</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="index.PublicAccess.html#scope" class="tsd-kind-icon">scope</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="index.GuScheduledEcsTask.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="index.GuScheduledLambda.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="index.GuSnsLambda.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.RestrictedAccess.html" class="tsd-kind-icon">Restricted<wbr>Access</a>
+						<a href="../interfaces/index.Access.html" class="tsd-kind-icon">Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.AccessLoggingProps.html" class="tsd-kind-icon">Access<wbr>Logging<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.Alarms.html" class="tsd-kind-icon">Alarms</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.ExistingKinesisStream.html" class="tsd-kind-icon">Existing<wbr>Kinesis<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.ExistingSnsTopic.html" class="tsd-kind-icon">Existing<wbr>Sns<wbr>Topic</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.GuEc2AppProps.html" class="tsd-kind-icon">Gu<wbr>Ec2<wbr>App<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.GuKinesisLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Kinesis<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.GuScheduledEcsTaskProps.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Ecs<wbr>Task<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.GuScheduledLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Scheduled<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.GuSnsLambdaProps.html" class="tsd-kind-icon">Gu<wbr>Sns<wbr>Lambda<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.InternalAccess.html" class="tsd-kind-icon">Internal<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.PublicAccess.html" class="tsd-kind-icon">Public<wbr>Access</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/index.RestrictedAccess.html" class="tsd-kind-icon">Restricted<wbr>Access</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/index.html#AppAccess" class="tsd-kind-icon">App<wbr>Access</a>
@@ -284,13 +293,13 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 		</div>
 	</div>
