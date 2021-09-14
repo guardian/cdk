@@ -123,16 +123,12 @@ export interface GuScheduledEcsTaskProps extends Identity {
   customTaskPolicies?: PolicyStatement[];
 }
 
-const isRepositoryContainer = (config: ContainerConfiguration): config is RepositoryContainer => {
-  return (config as RepositoryContainer).version !== undefined;
-};
-
 /**
  * Containers can be specified either via a repository and version or by container id (in which case it will
  * be fetched from docker hub).
  */
 const getContainer = (config: ContainerConfiguration) => {
-  if (isRepositoryContainer(config)) {
+  if (config.type == "repository") {
     return ContainerImage.fromEcrRepository(config.repository, config.version);
   } else {
     return ContainerImage.fromRegistry(config.id ?? "ubuntu:focal");
