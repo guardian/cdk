@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
@@ -28,6 +28,7 @@ describe("The GuAutoScalingGroup", () => {
   const defaultProps: GuAutoScalingGroupProps = {
     ...app,
     vpc,
+    instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
     userData: UserData.custom(["#!/bin/bash", "service some-dependency start", "service my-app start"].join("\n")),
     stageDependentProps: {
       [Stage.CODE]: {
@@ -81,34 +82,10 @@ describe("The GuAutoScalingGroup", () => {
     });
   });
 
-  test("adds the instanceType parameter if none provided", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters["InstanceTypeTesting"]).toEqual({
-      Type: "String",
-      Description: "EC2 Instance Type for the app testing",
-      Default: "t3.small",
-    });
-
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
-      InstanceType: {
-        Ref: "InstanceTypeTesting",
-      },
-    });
-  });
-
-  test("does not create the instanceType parameter if value is provided", () => {
+  test("correctly sets up the instance type in the launch configuration", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(Object.keys(json.Parameters)).not.toContain(InstanceType);
 
     expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
       InstanceType: "t3.small",
@@ -258,6 +235,7 @@ describe("The GuAutoScalingGroup", () => {
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
       userData: "SomeUserData",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
     });
 
@@ -284,6 +262,7 @@ describe("The GuAutoScalingGroup", () => {
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
       userData: "UserData",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       role: new GuInstanceRole(stack, {
         app: "TestApp",
@@ -329,6 +308,7 @@ describe("The GuAutoScalingGroup", () => {
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
       userData: "SomeUserData",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
     });
 
@@ -353,6 +333,7 @@ describe("The GuAutoScalingGroup", () => {
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
       userData: "SomeUserData",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       stageDependentProps: {
         [Stage.CODE]: { minimumInstances: 2 },

@@ -1,8 +1,7 @@
-import "../utils/test/jest";
-import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import "@aws-cdk/assert/jest";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
-import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
 import { TagKeys } from "../constants/tag-keys";
@@ -12,6 +11,7 @@ import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { GuDynamoDBWritePolicy } from "../constructs/iam";
 import type { SynthedStack } from "../utils/test";
 import { simpleGuStackForTesting } from "../utils/test";
+import "../utils/test/jest";
 import type { GuEc2AppProps } from "./ec2-app";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
@@ -31,6 +31,7 @@ function simpleEc2AppForTesting(stack: GuStack, app: string, props: Partial<GuEc
     applicationPort: GuApplicationPorts.Node,
     app: app,
     access: { scope: AccessScope.PUBLIC },
+    instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
     certificateProps: {
       [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
       [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
@@ -48,6 +49,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
@@ -61,6 +63,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("1.2.3.4/5")] },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
@@ -74,6 +77,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("10.0.0.0/8")] },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
@@ -93,6 +97,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app,
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: {
@@ -152,6 +157,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app,
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: {
         snsTopicName: "test-topic",
@@ -173,6 +179,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app,
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: {
         snsTopicName: "test-topic",
@@ -192,6 +199,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app,
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: {
         snsTopicName: "test-topic",
@@ -211,6 +219,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -267,6 +276,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -294,6 +304,7 @@ describe("the GuEC2App pattern", function () {
           applicationPort: GuApplicationPorts.Node,
           access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("0.0.0.0/0"), Peer.ipv4("1.2.3.4/32")] },
           app: app,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
           certificateProps: getCertificateProps(),
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
@@ -310,6 +321,7 @@ describe("the GuEC2App pattern", function () {
           applicationPort: GuApplicationPorts.Node,
           access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("93.1.2.3/12")] },
           app: app,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
           certificateProps: getCertificateProps(),
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
@@ -324,6 +336,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       access: { scope: AccessScope.PUBLIC },
       app: app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -356,6 +369,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       access: { scope: AccessScope.PUBLIC },
       app: app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -430,6 +444,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
         [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
@@ -481,6 +496,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app,
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
         [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
@@ -523,6 +539,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       app: "NodeApp",
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
@@ -532,6 +549,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Play,
       app: "PlayApp",
       access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: getCertificateProps(),
@@ -563,6 +581,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       access: { scope: AccessScope.PUBLIC },
       app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -586,6 +605,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       access: { scope: AccessScope.PUBLIC },
       app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -613,6 +633,7 @@ describe("the GuEC2App pattern", function () {
       applicationPort: GuApplicationPorts.Node,
       access: { scope: AccessScope.PUBLIC },
       app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -635,6 +656,7 @@ describe("the GuEC2App pattern", function () {
       new GuNodeApp(stack, {
         app: "NodeApp",
         access: { scope: AccessScope.PUBLIC },
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
         monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
         certificateProps: {
@@ -661,6 +683,7 @@ describe("the GuEC2App pattern", function () {
       new GuPlayApp(stack, {
         app: "PlayApp",
         access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
         monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
         certificateProps: {

@@ -1,6 +1,6 @@
 import type { BlockDevice } from "@aws-cdk/aws-autoscaling";
 import { HealthCheck } from "@aws-cdk/aws-autoscaling";
-import type { IPeer, IVpc } from "@aws-cdk/aws-ec2";
+import type { InstanceType, IPeer, IVpc } from "@aws-cdk/aws-ec2";
 import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
@@ -173,6 +173,7 @@ export interface GuEc2AppProps extends AppIdentity {
   certificateProps: GuCertificateProps;
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: Alarms | NoMonitoring;
+  instanceType: InstanceType;
   scaling?: {
     [Stage.CODE]?: GuAsgCapacityProps;
     [Stage.PROD]?: GuAsgCapacityProps;
@@ -238,6 +239,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *   applicationPort: 1234,
  *   app: "app-name",
  *   access: { scope: AccessScope.PUBLIC },
+ *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
  *   certificateProps:{
  *     [Stage.CODE]: {
  *       domainName: "code-guardian.com",
@@ -273,6 +275,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *     scope: AccessScope.RESTRICTED,
  *     cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")],
  *   },
+ *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
  *   certificateProps:{
  *     [Stage.CODE]: {
  *       domainName: "code-guardian.com",
@@ -369,6 +372,7 @@ export class GuEc2App {
     const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,
       vpc,
+      instanceType: props.instanceType,
       stageDependentProps: {
         CODE: {
           minimumInstances: props.scaling?.CODE?.minimumInstances ?? 1,

@@ -1,11 +1,11 @@
 import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-autoscaling";
-import { InstanceType, OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
+import { OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
-import { GuAmiParameter, GuInstanceTypeParameter } from "../core";
+import { GuAmiParameter } from "../core";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
@@ -21,7 +21,6 @@ export interface GuAutoScalingGroupProps
       | "imageId"
       | "osType"
       | "machineImage"
-      | "instanceType"
       | "userData"
       | "minCapacity"
       | "maxCapacity"
@@ -31,7 +30,6 @@ export interface GuAutoScalingGroupProps
     AppIdentity,
     GuMigratingResource {
   stageDependentProps?: GuStageDependentAsgProps;
-  instanceType?: InstanceType;
   imageId?: GuAmiParameter;
   machineImage?: MachineImage;
   userData: UserData | string;
@@ -122,7 +120,6 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalin
       ...wireStageDependentProps(scope, props.stageDependentProps ?? defaultStageDependentProps),
       role: props.role ?? new GuInstanceRole(scope, { app: props.app }),
       machineImage: { getImage: getImage },
-      instanceType: props.instanceType ?? new InstanceType(new GuInstanceTypeParameter(scope, props).valueAsString),
       userData,
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.

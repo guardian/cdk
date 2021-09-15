@@ -1,5 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, Vpc } from "@aws-cdk/aws-ec2";
 import { Stack } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
@@ -32,6 +32,7 @@ describe("GuUserData", () => {
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       vpc,
       userData,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       stageDependentProps: {
         [Stage.CODE]: {
           minimumInstances: 1,
@@ -86,6 +87,7 @@ describe("GuUserData", () => {
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       vpc,
       userData,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       stageDependentProps: {
         [Stage.CODE]: {
           minimumInstances: 1,
