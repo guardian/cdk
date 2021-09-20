@@ -1,3 +1,10 @@
+import type { CredentialProviderChain } from "aws-sdk";
+
+export interface AwsAccountReadiness {
+  credentialProvider: CredentialProviderChain;
+  region: string;
+}
+
 // A CLI command can return...
 export type CliCommandResponse = Promise<
   // ...a simple message to be printed

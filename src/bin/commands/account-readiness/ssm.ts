@@ -1,17 +1,10 @@
-import type { CredentialProviderChain } from "aws-sdk";
 import AWS from "aws-sdk";
 import chalk from "chalk";
-import { LibraryInfo } from "../../constants/library-info";
-import { SSM_PARAMETER_PATHS } from "../../constants/ssm-parameter-paths";
-import type { CliCommandResponse } from "../../types/command";
+import { LibraryInfo } from "../../../constants/library-info";
+import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
+import type { AwsAccountReadiness } from "../../../types/cli";
 
-export const accountReadinessCommand = async ({
-  credentialProvider,
-  region,
-}: {
-  credentialProvider: CredentialProviderChain;
-  region: string;
-}): CliCommandResponse => {
+export const ssmParamReadiness = async ({ credentialProvider, region }: AwsAccountReadiness): Promise<number> => {
   const ssm = new AWS.SSM({
     credentialProvider,
     region,
