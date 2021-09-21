@@ -830,10 +830,6 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "App",
-            "Value": "test-gu-ec2-app",
-          },
-          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -1610,10 +1606,6 @@ Object {
           },
         ],
         "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "test-gu-ec2-app",
-          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
