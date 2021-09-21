@@ -31,10 +31,6 @@ Object {
         "ClusterName": "ecs-test-cluster-TEST",
         "Tags": Array [
           Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
-          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -150,10 +146,6 @@ Object {
         "StateMachineName": "ecs-test-TEST",
         "Tags": Array [
           Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
-          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -190,10 +182,6 @@ Object {
           "Version": "2012-10-17",
         },
         "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -265,10 +253,6 @@ Object {
           "Version": "2012-10-17",
         },
         "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -521,10 +505,6 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
-          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -567,10 +547,6 @@ Object {
           "Version": "2012-10-17",
         },
         "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -645,10 +621,6 @@ Object {
           "Version": "2012-10-17",
         },
         "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",

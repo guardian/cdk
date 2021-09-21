@@ -147,7 +147,6 @@ const getContainer = (config: ContainerConfiguration) => {
  */
 export class GuScheduledEcsTask {
   constructor(scope: GuStack, props: GuScheduledEcsTaskProps) {
-
     const timeout = props.taskTimeoutInMinutes ?? 15;
 
     // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
