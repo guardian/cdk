@@ -147,7 +147,6 @@ const getContainer = (config: ContainerConfiguration) => {
  */
 export class GuScheduledEcsTask {
   constructor(scope: GuStack, props: GuScheduledEcsTaskProps) {
-    AppIdentity.taggedConstruct({ app: props.app }, scope);
 
     const timeout = props.taskTimeoutInMinutes ?? 15;
 
