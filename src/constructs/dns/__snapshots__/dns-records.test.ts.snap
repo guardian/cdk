@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuCname construct should create the correct resources with minimal config 1`] = `
+Object {
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "TestRecord": Object {
+      "Properties": Object {
+        "Name": "banana.example.com",
+        "RecordType": "CNAME",
+        "ResourceRecords": Array [
+          "apple.example.com",
+        ],
+        "Stage": Object {
+          "Ref": "Stage",
+        },
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`The GuDnsRecordSet construct should create the correct resources with minimal config 1`] = `
+Object {
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "TestRecord": Object {
+      "Properties": Object {
+        "Name": "banana.example.com",
+        "RecordType": "CNAME",
+        "ResourceRecords": Array [
+          "apple.example.com",
+        ],
+        "Stage": Object {
+          "Ref": "Stage",
+        },
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+  },
+}
+`;
