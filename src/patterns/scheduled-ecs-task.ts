@@ -147,8 +147,6 @@ const getContainer = (config: ContainerConfiguration) => {
  */
 export class GuScheduledEcsTask {
   constructor(scope: GuStack, props: GuScheduledEcsTaskProps) {
-    AppIdentity.taggedConstruct({ app: props.app }, scope);
-
     const timeout = props.taskTimeoutInMinutes ?? 15;
 
     // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
@@ -204,7 +202,7 @@ export class GuScheduledEcsTask {
       stateMachineName: `${props.app}-${props.stage}`,
     });
 
-    new Rule(scope, AppIdentity.suffixText(props, "ScheduleRule"), {
+    const rule = new Rule(scope, AppIdentity.suffixText(props, "ScheduleRule"), {
       schedule: props.schedule,
       targets: [new SfnStateMachine(stateMachine)],
     });
@@ -245,8 +243,14 @@ export class GuScheduledEcsTask {
           treatMissingData: TreatMissingData.NOT_BREACHING,
         });
         alarm.addAlarmAction(new SnsAction(alarmTopic));
+        AppIdentity.taggedConstruct({ app: props.app }, alarm);
       });
     }
+
+    // Tag all constructs with correct app tag
+    [cluster, task, taskDefinition, stateMachine, rule].forEach((c) =>
+      AppIdentity.taggedConstruct({ app: props.app }, c)
+    );
 
     new CfnOutput(scope, AppIdentity.suffixText(props, "StateMachineArnOutput"), {
       value: stateMachine.stateMachineArn,
