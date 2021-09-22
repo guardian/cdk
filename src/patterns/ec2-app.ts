@@ -345,8 +345,6 @@ export class GuEc2App {
   public readonly targetGroup: GuApplicationTargetGroup;
 
   constructor(scope: GuStack, props: GuEc2AppProps) {
-    AppIdentity.taggedConstruct(props, scope);
-
     const { app } = props;
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"));
     const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
