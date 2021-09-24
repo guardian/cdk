@@ -47,20 +47,20 @@ import { GuGetDistributablePolicyStatement } from "../constructs/iam";
  * ```
  */
 
-type RepositoryContainer = {
+export type RepositoryContainer = {
   repository: IRepository;
   version: string;
   type: "repository";
 };
 
-type RegistryContainer = {
+export type RegistryContainer = {
   id?: string;
   type: "registry";
 };
 
-type ContainerConfiguration = RepositoryContainer | RegistryContainer;
+export type ContainerConfiguration = RepositoryContainer | RegistryContainer;
 
-type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: false };
+export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: false };
 
 /**
  * Configuration options for the [[`GuScheduledEcsTask`]] pattern.
