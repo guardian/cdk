@@ -215,7 +215,7 @@ export class GuScheduledEcsTask {
       );
       const alarms = [
         {
-          name: "ExecutionsFailedAlarm",
+          name: `${props.app}-execution-failed`,
           description: `${props.app}-${props.stage} job failed `,
           metric: stateMachine.metricFailed({
             period: Duration.hours(1),
@@ -223,7 +223,7 @@ export class GuScheduledEcsTask {
           }),
         },
         {
-          name: "TimeoutAlarm",
+          name: `${props.app}-timeout`,
           description: `${props.app}-${props.stage} job timed out `,
           metric: stateMachine.metricTimedOut({
             period: Duration.hours(1),
