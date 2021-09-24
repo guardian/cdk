@@ -1,4 +1,4 @@
-import { CfnResource } from "@aws-cdk/core";
+import { CfnResource, Duration } from "@aws-cdk/core";
 import type { GuStack } from "../core";
 
 export enum RecordType {
@@ -9,7 +9,7 @@ export interface GuDnsRecordSetProps {
   name: string;
   recordType: RecordType;
   resourceRecords: string[];
-  ttl?: number;
+  ttl: Duration;
 }
 
 /**
@@ -25,7 +25,7 @@ export class GuDnsRecordSet {
         Name: props.name,
         ResourceRecords: props.resourceRecords,
         RecordType: props.recordType,
-        TTL: props.ttl ?? 3600,
+        TTL: props.ttl.toSeconds(),
         Stage: scope.stage,
       },
     });
@@ -37,8 +37,8 @@ export interface GuCnameProps {
   name: string;
   /** The record your CNAME should point to, for example your Load Balancer DNS name */
   resourceRecord: string;
-  /** The time to live in seconds for the DNS record - this will be set to 3600 seconds (1 hour) by default */
-  ttl?: number;
+  /** The time to live for the DNS record - this will be set 1 hour by default */
+  ttl?: Duration;
 }
 
 /**
@@ -51,6 +51,7 @@ export class GuCname extends GuDnsRecordSet {
     super(scope, id, {
       recordType: RecordType.CNAME,
       resourceRecords: [props.resourceRecord],
+      ttl: props.ttl ?? Duration.hours(1),
       ...props,
     });
   }
