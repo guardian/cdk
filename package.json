@@ -72,7 +72,7 @@
     "execa": "^5.1.1",
     "git-url-parse": "^11.6.0",
     "read-pkg-up": "7.0.1",
-    "yargs": "^17.2.0"
+    "yargs": "^17.2.1"
   },
   "config": {
     "commitizen": {
