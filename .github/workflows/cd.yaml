@@ -7,21 +7,12 @@ on:
 jobs:
   CD:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.15.1]
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.0
+      - name: Setup node
+        uses: guardian/actions-setup-node@v2.4.1
         with:
-          node-version: ${{ matrix.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: npm
       - name: CD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
