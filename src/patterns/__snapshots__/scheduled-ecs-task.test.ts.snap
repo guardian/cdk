@@ -69,32 +69,6 @@ Object {
       },
       "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
     },
-    "ExecutionsFailedAlarmCA489332": Object {
-      "Properties": Object {
-        "ActionsEnabled": true,
-        "AlarmActions": Array [
-          "arn:something:else:here:we:goalarm-topic",
-        ],
-        "AlarmDescription": "ecs-test-TEST job failed ",
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "StateMachineArn",
-            "Value": Object {
-              "Ref": "StateMachineEcstest84BB1B77",
-            },
-          },
-        ],
-        "EvaluationPeriods": 1,
-        "MetricName": "ExecutionsFailed",
-        "Namespace": "AWS/States",
-        "Period": 3600,
-        "Statistic": "Sum",
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
     "ScheduleRuleEcstest07F5BBD2": Object {
       "Properties": Object {
         "ScheduleExpression": "rate(1 minute)",
@@ -712,7 +686,33 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TimeoutAlarm4022815E": Object {
+    "ecstestexecutionfailedC93F511B": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          "arn:something:else:here:we:goalarm-topic",
+        ],
+        "AlarmDescription": "ecs-test-TEST job failed ",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "StateMachineArn",
+            "Value": Object {
+              "Ref": "StateMachineEcstest84BB1B77",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ExecutionsFailed",
+        "Namespace": "AWS/States",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ecstesttimeoutFE335653": Object {
       "Properties": Object {
         "ActionsEnabled": true,
         "AlarmActions": Array [
