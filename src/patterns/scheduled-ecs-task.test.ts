@@ -1,5 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import type { IVpc } from "@aws-cdk/aws-ec2";
 import { SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
@@ -7,8 +8,9 @@ import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../constructs/core";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledEcsTask } from "./scheduled-ecs-task";
+import "../utils/test/jest";
 
-const vpc = (stack: GuStack) =>
+const makeVpc = (stack: GuStack) =>
   Vpc.fromVpcAttributes(stack, "VPC", {
     vpcId: "test",
     availabilityZones: [""],
@@ -16,7 +18,8 @@ const vpc = (stack: GuStack) =>
     privateSubnetIds: ["abc-123"],
   });
 
-const securityGroup = (stack: GuStack) => SecurityGroup.fromSecurityGroupId(stack, "hehe", "id-123");
+const securityGroup = (stack: GuStack, app?: string) =>
+  SecurityGroup.fromSecurityGroupId(stack, `hehe-${app ?? ""}`, "id-123");
 const testPolicy = new PolicyStatement({
   effect: Effect.ALLOW,
   actions: ["s3:GetObject"],
@@ -31,7 +34,7 @@ describe("The GuScheduledEcsTask pattern", () => {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
-      vpc: vpc(stack),
+      vpc: makeVpc(stack),
       stack: "test",
       stage: "TEST",
       app: "ecs-test",
@@ -47,7 +50,7 @@ describe("The GuScheduledEcsTask pattern", () => {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
-      vpc: vpc(stack),
+      vpc: makeVpc(stack),
       stack: "test",
       stage: "TEST",
       app: "ecs-test",
@@ -56,25 +59,41 @@ describe("The GuScheduledEcsTask pattern", () => {
     expect(stack).toHaveResourceLike("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
   });
 
-  it("should create the correct resources with lots of config", () => {
-    const stack = simpleGuStackForTesting();
-
+  const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc) => {
     new GuScheduledEcsTask(stack, {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
-      vpc: vpc(stack),
+      vpc,
       stack: "test",
       stage: "TEST",
-      app: "ecs-test",
+      app: app,
       taskTimeoutInMinutes: 60,
       cpu: 1024,
       memory: 1024,
       monitoringConfiguration: { snsTopicArn: "arn:something:else:here:we:goalarm-topic", noMonitoring: false },
       taskCommand: `echo "yo ho row ho it's a pirates life for me"`,
-      securityGroups: [securityGroup(stack)],
+      securityGroups: [securityGroup(stack, app)],
       customTaskPolicies: [testPolicy],
     });
+  };
+
+  it("should create the correct resources with lots of config", () => {
+    const stack = simpleGuStackForTesting();
+
+    generateComplexStack(stack, "ecs-test", makeVpc(stack));
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+
+  it("should support having more than one scheduled task in the same stack", () => {
+    const stack = simpleGuStackForTesting();
+
+    const vpc = makeVpc(stack);
+
+    generateComplexStack(stack, "ecs-test2", vpc);
+    generateComplexStack(stack, "ecs-test", vpc);
+
+    expect(stack).toHaveGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test" } });
+    expect(stack).toHaveGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test2" } });
   });
 });
