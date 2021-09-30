@@ -1,4 +1,5 @@
 import type { CredentialProviderChain } from "aws-sdk";
+import type { SubnetList, Vpc } from "aws-sdk/clients/ec2";
 
 export interface AwsAccountReadiness {
   credentialProvider: CredentialProviderChain;
@@ -14,3 +15,8 @@ export type CliCommandResponse = Promise<
   // ...or an exit code
   | number
 >;
+
+export interface VpcInDetail extends Vpc {
+  subnets: SubnetList;
+  isUsed: boolean;
+}
