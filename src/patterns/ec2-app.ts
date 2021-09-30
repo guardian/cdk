@@ -256,7 +256,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *       tolerated5xxPercentage: 1,
  *     },
  *     unhealthyInstancesAlarm: true,
- *   }
+ *   },
  *   userData: {
  *     distributable: {
  *       fileName: "app-name.deb",
