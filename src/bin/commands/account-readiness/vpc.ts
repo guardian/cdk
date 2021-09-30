@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import chalk from "chalk";
+import { LibraryInfo } from "../../../constants/library-info";
 import type { AwsAccountReadiness } from "../../../types/cli";
 import { doesDefaultVpcSsmParameterExist, getSsmParametersForVpc, getVpcsInDetail } from "../../../utils/cli/vpc";
 
@@ -48,7 +49,45 @@ export const vpcReadiness = async ({ credentialProvider, region }: AwsAccountRea
   }));
   console.table(vpcsForLogging);
 
-  console.groupEnd();
+  console.group(chalk.bold("\nDefault VPC checks"));
+
+  const defaultVpcs: string[] = vpcs
+    .filter((vpc) => vpc.IsDefault)
+    .map((vpc) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- a VPC always has an ID, the type in CDK is odd!
+      return vpc.VpcId!;
+    });
+
+  const isDefaultVpcInUse: boolean = !!inUseVpcs.find((vpc) => vpc.IsDefault);
+
+  const ssmParametersMatchingDefaultVpc = ssmParamsFromAccount.filter(
+    ({ Value }) => Value && defaultVpcs.includes(Value)
+  );
+
+  const isDefaultVpcInSsmParameters = ssmParametersMatchingDefaultVpc.length > 0;
+
+  if (isDefaultVpcInUse) {
+    console.warn(
+      `⚠️ The default VPC is in use. Whilst you're still able to use ${LibraryInfo.NAME}, it's recommended to use a custom VPC. See the docs for more information.`
+    );
+  }
+
+  if (isDefaultVpcInSsmParameters) {
+    console.warn(
+      `⚠️ The default VPC is referenced within SSM Parameters. Whilst you're still able to use ${LibraryInfo.NAME}, it's recommended to use a custom VPC. See the docs for more information.`
+    );
+
+    console.table(ssmParametersMatchingDefaultVpc);
+  }
+
+  if (!isDefaultVpcInUse && !isDefaultVpcInSsmParameters) {
+    console.log(
+      `✅ The default VPC is not in use in ${region} and is not referenced by any SSM Parameters. No action needed.`
+    );
+  }
+
+  console.groupEnd(); // Default VPC checks
+  console.groupEnd(); // VPC Summary
 
   if (!usingDeprecatedSsmParameter && hasExpectedSsmParameters) {
     return Promise.resolve(0);

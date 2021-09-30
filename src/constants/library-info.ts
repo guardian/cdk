@@ -9,6 +9,11 @@ const version = valueOrUnknown(packageJson?.version);
 
 export const LibraryInfo = {
   /**
+   * The name of this package
+   */
+  NAME: "@guardian/cdk",
+
+  /**
    * The current version of `@guardian/cdk`.
    */
   VERSION: version,
