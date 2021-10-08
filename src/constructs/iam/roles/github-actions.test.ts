@@ -39,7 +39,7 @@ describe("The GitHubActionsRole construct", () => {
             Action: "sts:AssumeRoleWithWebIdentity",
             Condition: {
               StringLike: {
-                "vstoken.actions.githubusercontent.com:sub": "repo:guardian/platform-*",
+                "token.actions.githubusercontent.com:sub": "repo:guardian/platform-*",
               },
             },
           },

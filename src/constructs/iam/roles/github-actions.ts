@@ -4,7 +4,7 @@ import type { GuStack } from "../../core";
 import type { GuPolicy } from "../policies";
 import { GuRole } from "./roles";
 
-const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN = "vstoken.actions.githubusercontent.com";
+const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN = "token.actions.githubusercontent.com";
 
 /*
 Thumbprint of `GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN`.
