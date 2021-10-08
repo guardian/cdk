@@ -2,7 +2,7 @@ import { Certificate, CertificateValidation } from "@aws-cdk/aws-certificatemana
 import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
-import { Stage } from "../../constants";
+import { mapStages, Stage } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
@@ -71,10 +71,11 @@ export class GuCertificate extends GuStatefulMigratableConstruct(Certificate) {
             })
           )
         : undefined;
+
     const awsCertificateProps: CertificateProps & GuMigratingResource = {
       domainName: scope.withStageDependentValue({
         variableName: "domainName",
-        stageValues: { [Stage.CODE]: props.CODE.domainName, [Stage.PROD]: props.PROD.domainName },
+        stageValues: mapStages(props, (t) => t.domainName),
       }),
       validation: CertificateValidation.fromDns(maybeHostedZone),
       existingLogicalId: props.existingLogicalId,
