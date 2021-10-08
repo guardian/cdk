@@ -53,7 +53,7 @@ Object {
         "ThumbprintList": Array [
           "a031c46782e6e6c662c2c87c76da9aa62ccabd8e",
         ],
-        "Url": "https://vstoken.actions.githubusercontent.com",
+        "Url": "https://token.actions.githubusercontent.com",
       },
       "Type": "AWS::IAM::OIDCProvider",
     },
@@ -65,7 +65,7 @@ Object {
               "Action": "sts:AssumeRoleWithWebIdentity",
               "Condition": Object {
                 "StringLike": Object {
-                  "vstoken.actions.githubusercontent.com:sub": "repo:guardian/*",
+                  "token.actions.githubusercontent.com:sub": "repo:guardian/*",
                 },
               },
               "Effect": "Allow",
