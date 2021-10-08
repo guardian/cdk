@@ -32,7 +32,7 @@ function simpleEc2AppForTesting(stack: GuStack, app: string, props: Partial<GuEc
     app: app,
     access: { scope: AccessScope.PUBLIC },
     instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-    certificateProps: {
+    domainNameProps: {
       [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
       [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
     },
@@ -52,7 +52,7 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
@@ -66,7 +66,7 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
@@ -80,7 +80,7 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
     });
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Scheme: "internal",
@@ -98,7 +98,7 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: {
         distributable: {
@@ -158,7 +158,7 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: {
         snsTopicName: "test-topic",
         http5xxAlarm: {
@@ -180,7 +180,7 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: {
         snsTopicName: "test-topic",
         http5xxAlarm: false,
@@ -200,7 +200,7 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: {
         snsTopicName: "test-topic",
         http5xxAlarm: false,
@@ -220,7 +220,7 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
     });
@@ -277,7 +277,7 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
     });
@@ -305,7 +305,7 @@ describe("the GuEC2App pattern", function () {
           access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("0.0.0.0/0"), Peer.ipv4("1.2.3.4/32")] },
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-          certificateProps: getCertificateProps(),
+          domainNameProps: getCertificateProps(),
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
         })
@@ -322,7 +322,7 @@ describe("the GuEC2App pattern", function () {
           access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("93.1.2.3/12")] },
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-          certificateProps: getCertificateProps(),
+          domainNameProps: getCertificateProps(),
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
         })
@@ -337,7 +337,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
       scaling: {
@@ -370,7 +370,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
       roleConfiguration: {
@@ -445,7 +445,7 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: {
+      domainNameProps: {
         [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
         [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
       },
@@ -497,7 +497,7 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: {
+      domainNameProps: {
         [Stage.CODE]: { domainName: "code-guardian.com", hostedZoneId: "id123" },
         [Stage.PROD]: { domainName: "prod-guardian.com", hostedZoneId: "id124" },
       },
@@ -542,7 +542,7 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
     });
 
     new GuEc2App(stack, {
@@ -552,7 +552,7 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
     });
 
     expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -582,7 +582,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
       accessLogging: { enabled: true, prefix: "access-logging-prefix" },
@@ -606,7 +606,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
       accessLogging: { enabled: false },
@@ -634,7 +634,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      domainNameProps: getCertificateProps(),
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
       accessLogging: { enabled: false },
@@ -659,7 +659,7 @@ describe("the GuEC2App pattern", function () {
         instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
         monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
-        certificateProps: {
+        domainNameProps: {
           [Stage.CODE]: {
             domainName: "code-guardian.com",
             hostedZoneId: "id123",
@@ -686,7 +686,7 @@ describe("the GuEC2App pattern", function () {
         instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
         monitoringConfiguration: { noMonitoring: true },
         userData: "#!/bin/dev foobarbaz",
-        certificateProps: {
+        domainNameProps: {
           [Stage.CODE]: {
             domainName: "code-guardian.com",
             hostedZoneId: "id123",

@@ -5,10 +5,9 @@ import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration, Tags } from "@aws-cdk/core";
-import type { Stage } from "../constants";
+import { Stage } from "../constants";
 import { SSM_PARAMETER_PATHS } from "../constants/ssm-parameter-paths";
 import { TagKeys } from "../constants/tag-keys";
-import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
 import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
@@ -17,6 +16,7 @@ import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/c
 import type { GuStack } from "../constructs/core";
 import { GuStringParameter } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
+import { GuCname } from "../constructs/dns";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
 import type { GuInstanceRoleProps } from "../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
@@ -25,6 +25,7 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
+import type { GuDomainNameProps } from "../types/domain-names";
 
 export enum AccessScope {
   PUBLIC = "Public",
@@ -170,7 +171,7 @@ export interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
   access: AppAccess;
   applicationPort: number;
-  certificateProps: GuCertificateProps;
+  domainNameProps: GuDomainNameProps;
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: Alarms | NoMonitoring;
   instanceType: InstanceType;
@@ -354,7 +355,7 @@ export class GuEc2App {
 
     const certificate = new GuCertificate(scope, {
       app,
-      ...props.certificateProps,
+      ...props.domainNameProps,
     });
 
     const maybePrivateConfigPolicy =
@@ -426,6 +427,19 @@ export class GuEc2App {
         props.accessLogging.prefix
       );
     }
+
+    const domainName = scope.withStageDependentValue({
+      variableName: "domainName",
+      stageValues: {
+        [Stage.CODE]: props.domainNameProps.CODE.domainName,
+        [Stage.PROD]: props.domainNameProps.PROD.domainName,
+      },
+    });
+
+    new GuCname(scope, AppIdentity.suffixText(props, "LoadBalancerCName"), {
+      name: domainName,
+      resourceRecord: loadBalancer.loadBalancerDnsName,
+    });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
       app,
