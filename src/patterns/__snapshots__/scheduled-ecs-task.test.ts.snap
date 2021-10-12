@@ -111,7 +111,7 @@ Object {
                   "Arn",
                 ],
               },
-              "\\",\\"TaskDefinition\\":\\"TestTaskDefinitionEcstestE38B88C8\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
+              "\\",\\"TaskDefinition\\":\\"test-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
             ],
           ],
         },
@@ -487,7 +487,7 @@ Object {
             "Arn",
           ],
         },
-        "Family": "TestTaskDefinitionEcstestE38B88C8",
+        "Family": "test-TEST-ecs-test",
         "Memory": "1024",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": Array [
