@@ -166,6 +166,7 @@ export class GuScheduledEcsTask {
       compatibility: Compatibility.FARGATE,
       cpu: cpu.toString(),
       memoryMiB: memory.toString(),
+      family: `${props.stack}-${props.app}-${props.stage}`,
     });
 
     taskDefinition.addContainer(AppIdentity.suffixText(props, "ScheduledTaskContainer"), {
