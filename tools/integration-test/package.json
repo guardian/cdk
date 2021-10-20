@@ -20,7 +20,7 @@
     "@types/jest": "^27.0.1",
     "@types/node": "16.10.5",
     "aws-cdk": "1.127.0",
-    "eslint": "^7.23.0",
+    "eslint": "^8.0.1",
     "eslint-plugin-custom-rules": "file:../eslint",
     "jest": "^27.0.6",
     "prettier": "^2.2.1",
