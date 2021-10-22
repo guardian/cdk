@@ -4,6 +4,7 @@ import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
@@ -58,7 +59,7 @@ export interface GuDnsValidatedCertificateProps {
  *  });
  *```
  */
-export class GuCertificate extends GuStatefulMigratableConstruct(Certificate) {
+export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Certificate)) {
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
     const maybeHostedZone =
       props.CODE.hostedZoneId && props.PROD.hostedZoneId
@@ -71,16 +72,16 @@ export class GuCertificate extends GuStatefulMigratableConstruct(Certificate) {
             })
           )
         : undefined;
-    const awsCertificateProps: CertificateProps & GuMigratingResource = {
+    const awsCertificateProps: CertificateProps & GuMigratingResource & AppIdentity = {
       domainName: scope.withStageDependentValue({
         variableName: "domainName",
         stageValues: { [Stage.CODE]: props.CODE.domainName, [Stage.PROD]: props.PROD.domainName },
       }),
       validation: CertificateValidation.fromDns(maybeHostedZone),
       existingLogicalId: props.existingLogicalId,
+      app: props.app,
     };
-    super(scope, AppIdentity.suffixText({ app: props.app }, "Certificate"), awsCertificateProps);
+    super(scope, "Certificate", awsCertificateProps);
     this.applyRemovalPolicy(RemovalPolicy.RETAIN);
-    AppIdentity.taggedConstruct({ app: props.app }, this);
   }
 }
