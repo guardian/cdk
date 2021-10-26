@@ -33,20 +33,25 @@ interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResource {}
  * Construct which creates a Virtual Private Cloud.
  *
  * The VPC is provisioned with a public and private subnet for each availability
- * zone, with IPs spread evenly across these.
+ * zone, with IPs spread evenly across these. Instances in private subnets
+ * cannot be accessed directly over the internet. You should locate services in
+ * instances in the private subnets, and provide HTTP(S) as required via load
+ * balancers living in the public subnets.
  *
  * A CIDR block is a combined IP and network mask that specifies the IP
  * addresses in your VPC. For testing purposes any (AWS supported) CIDR block
  * will do, but for production you should:
  *
- * - use a /21 network mask (providing 2048 IPs, which is plenty for most
+ * - use a /21 network mask (providing up to 2048 IPs, which is plenty for most
  *   accounts)
  * - ask Enterprise Tech for an IP address to go with this range (so that
- *   peering with other company VPCs is possible without IP
- *   clashes)
+ *   peering with other company VPCs is possible without IP clashes)
  *
  * A managed NAT is created for each private subnet to allow access to the
  * internet.
+ *
+ * For more information on VPCs and AWS see:
+ * https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html.
  */
 export class GuVpc extends GuStatefulMigratableConstruct(Vpc) {
   constructor(scope: GuStack, id: string, props?: GuVpcProps) {
