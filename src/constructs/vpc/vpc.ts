@@ -32,6 +32,12 @@ interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResource {}
 /**
  * Construct which creates a Virtual Private Cloud.
  *
+ * NOTE: this construct requires an
+ * [environment](https://docs.aws.amazon.com/cdk/latest/guide/environments.html)
+ * to be set to function correctly. Without this, an environment-agnostic
+ * template will be produced, which will only use two AZs even if the region
+ * contains more than that.
+ *
  * The VPC is provisioned with a public and private subnet for each availability
  * zone, with IPs spread evenly across these. Instances in private subnets
  * cannot be accessed directly over the internet. You should locate services in
