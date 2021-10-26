@@ -11,7 +11,7 @@ describe("The GuVpc construct", () => {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
-  it("should optionally create VPC SSM parameters", () => {
+  it("should create VPC SSM parameters by default", () => {
     const stack = simpleGuStackForTesting();
     new GuVpc(stack, "MyVpc", { ssmParameters: true });
     expect(stack).toHaveResourceLike("AWS::SSM::Parameter", {
