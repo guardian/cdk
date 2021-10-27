@@ -18,7 +18,7 @@
   "devDependencies": {
     "@guardian/eslint-config-typescript": "0.7.0",
     "@types/jest": "^27.0.1",
-    "@types/node": "16.11.1",
+    "@types/node": "16.11.6",
     "aws-cdk": "1.127.0",
     "eslint": "^7.23.0",
     "eslint-plugin-custom-rules": "file:../eslint",
