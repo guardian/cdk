@@ -6,7 +6,7 @@ import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import type { GuMigratingResource } from "../core/migrating";
 
-interface GuVpcCustomProps {
+export interface GuVpcCustomProps {
   /**
    * Whether to add SSM Parameters containing VPC metadata, which are expected
    * to exist by many other Guardian CDK patterns.
@@ -27,7 +27,7 @@ interface GuVpcCustomProps {
   ssmParametersNamespace?: string;
 }
 
-interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResource {}
+export interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResource {}
 
 /**
  * Construct which creates a Virtual Private Cloud.
