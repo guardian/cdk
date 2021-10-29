@@ -3,6 +3,7 @@ import { DatabaseInstance, ParameterGroup } from "@aws-cdk/aws-rds";
 import type { DatabaseInstanceProps, IParameterGroup } from "@aws-cdk/aws-rds";
 import { Fn } from "@aws-cdk/core";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
@@ -15,7 +16,7 @@ export interface GuDatabaseInstanceProps
   parameters?: Record<string, string>;
 }
 
-export class GuDatabaseInstance extends GuStatefulMigratableConstruct(DatabaseInstance) {
+export class GuDatabaseInstance extends GuStatefulMigratableConstruct(GuAppAwareConstruct(DatabaseInstance)) {
   constructor(scope: GuStack, id: string, props: GuDatabaseInstanceProps) {
     // CDK just wants "t3.micro" format, whereas
     // some CFN yaml might have the older "db.t3.micro" with the "db." prefix
@@ -40,6 +41,5 @@ export class GuDatabaseInstance extends GuStatefulMigratableConstruct(DatabaseIn
     });
 
     parameterGroup && AppIdentity.taggedConstruct(props, parameterGroup);
-    AppIdentity.taggedConstruct(props, this);
   }
 }

@@ -118,6 +118,7 @@ describe("The GuDatabaseInstance class", () => {
     });
 
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::RDS::DBInstance", /^DatabaseInstance.+$/);
+    expect(stack).toHaveGuTaggedResource("AWS::RDS::DBInstance", { appIdentity: { app: "testing" } });
   });
 
   test("sets the deletion protection value to true by default", () => {
