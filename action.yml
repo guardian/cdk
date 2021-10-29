@@ -1,0 +1,54 @@
+# A composite GitHub Action, performing CI of GuCDK infrastructure.
+#
+# Supports npm and yarn.
+# Usage when using npm:
+# - uses: guardian/cdk@main
+#
+# Usage when using yarn:
+# - uses: guardian/cdk@main
+#   with:
+#     packageManager: yarn
+#     lockfile: cdk/yarn.lock
+#
+# See https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+
+name: CI for GuCDK
+description: CI for infrastructure defined using GuCDK
+inputs:
+  packageManager:
+    description: 'Which node package manager to use'
+    default: 'npm'
+    required: false
+  lockfile:
+    description: 'Location of the lockfile for the GuCDK project'
+    default: 'cdk/package-lock.json'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - uses: guardian/actions-setup-node@v2.4.1
+      with:
+        cache: ${{ inputs.packageManager }}
+        cache-dependency-path: ${{ inputs.lockfile }}
+    - name: CI for CDK
+      shell: bash
+      working-directory: cdk
+      env:
+        PACKAGE_MANAGER: ${{ inputs.packageManager }}
+      run: |
+        if [ "$PACKAGE_MANAGER" = "npm" ]; then
+          npm ci
+          npm run build
+          npm run lint
+          npm run test
+          npm run synth
+        elif [ "$PACKAGE_MANAGER" = "yarn" ]; then
+          yarn install --frozen-lockfile
+          yarn build
+          yarn lint
+          yarn test
+          yarn synth
+        else
+          echo "$PACKAGE_MANAGER is not supported. Contributions welcomed though!"
+          exit 1
+        fi
