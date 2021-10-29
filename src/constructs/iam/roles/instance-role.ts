@@ -1,6 +1,7 @@
 import { ServicePrincipal } from "@aws-cdk/aws-iam";
+import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core/identity";
 import {
   GuDescribeEC2Policy,
   GuGetDistributablePolicy,
@@ -32,12 +33,12 @@ export type GuInstanceRolePropsWithApp = GuInstanceRoleProps & AppIdentity;
  *
  * If log shipping is not required, opt out by setting the `withoutLogShipping` prop to `true`.
  */
-export class GuInstanceRole extends GuRole {
+export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
   constructor(scope: GuStack, props: GuInstanceRolePropsWithApp) {
-    super(scope, AppIdentity.suffixText(props, "InstanceRole"), {
+    super(scope, "InstanceRole", {
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      // not setting existingLogicalId results in the logicalId always being auto-generated
+      ...props,
     });
 
     const sharedPolicies = [
@@ -54,7 +55,5 @@ export class GuInstanceRole extends GuRole {
     ];
 
     policies.forEach((p) => p.attachToRole(this));
-
-    AppIdentity.taggedConstruct(props, this);
   }
 }
