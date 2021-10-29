@@ -1,8 +1,9 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
+import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import { GuDistributionBucketParameter } from "../../core";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core/identity";
 import { GuAllowPolicy } from "./base-policy";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 
@@ -48,15 +49,14 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
  *
  * @see GuDistributionBucketParameter
  */
-export class GuGetDistributablePolicy extends GuGetS3ObjectsPolicy {
+export class GuGetDistributablePolicy extends GuAppAwareConstruct(GuGetS3ObjectsPolicy) {
   constructor(scope: GuStack, props: AppIdentity) {
     const path = [scope.stack, scope.stage, props.app, "*"].join("/");
-    super(scope, AppIdentity.suffixText(props, "GetDistributablePolicy"), {
+    super(scope, "GetDistributablePolicy", {
       ...props,
       bucketName: GuDistributionBucketParameter.getInstance(scope).valueAsString,
       paths: [path],
     });
-    AppIdentity.taggedConstruct(props, this);
   }
 }
 
