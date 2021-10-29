@@ -2,8 +2,9 @@ import { ApplicationLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { CfnOutput } from "@aws-cdk/core";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
+import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core/identity";
 import type { GuMigratingResource } from "../../core/migrating";
 
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {
@@ -26,24 +27,20 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
  * `existingLogicalId` prop.
  */
-export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(ApplicationLoadBalancer) {
+export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(
+  GuAppAwareConstruct(ApplicationLoadBalancer)
+) {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
-    const { app } = props;
-
-    const idWithApp = AppIdentity.suffixText({ app }, id);
-
-    super(scope, idWithApp, { deletionProtection: true, ...props });
+    super(scope, id, { deletionProtection: true, ...props });
 
     if (props.removeType) {
       const cfnLb = this.node.defaultChild as CfnLoadBalancer;
       cfnLb.addPropertyDeletionOverride("Type");
     }
 
-    AppIdentity.taggedConstruct({ app }, this);
-
-    new CfnOutput(this, `${idWithApp}-DnsName`, {
-      description: `DNS entry for ${idWithApp}`,
+    new CfnOutput(this, `${this.idWithApp}-DnsName`, {
+      description: `DNS entry for ${this.idWithApp}`,
       value: this.loadBalancerDnsName,
-    }).overrideLogicalId(`${idWithApp}DnsName`);
+    }).overrideLogicalId(`${this.idWithApp}DnsName`);
   }
 }

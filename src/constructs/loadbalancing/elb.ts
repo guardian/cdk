@@ -7,9 +7,10 @@ import type {
 } from "@aws-cdk/aws-elasticloadbalancing";
 import { Duration } from "@aws-cdk/core";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuArnParameter } from "../core";
 import type { GuStack } from "../core";
-import { AppIdentity } from "../core/identity";
+import type { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 
 interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource, AppIdentity {
@@ -46,7 +47,7 @@ interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthChec
  * If you are running an application which only accepts traffic over HTTPs, consider using [[`GuHttpsClassicLoadBalancer`]]
  * to reduce the amount of boilerplate needed when configuring your load balancer.
  */
-export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(LoadBalancer) {
+export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(GuAppAwareConstruct(LoadBalancer)) {
   static DefaultHealthCheck = {
     port: 9000,
     path: "/healthcheck",
@@ -63,8 +64,7 @@ export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(LoadBal
       healthCheck: { ...GuClassicLoadBalancer.DefaultHealthCheck, ...props.healthCheck },
     };
 
-    super(scope, AppIdentity.suffixText({ app: props.app }, id), mergedProps);
-    AppIdentity.taggedConstruct({ app: props.app }, this);
+    super(scope, id, mergedProps);
 
     const cfnLb = this.node.defaultChild as CfnLoadBalancer;
 
