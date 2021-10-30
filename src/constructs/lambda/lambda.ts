@@ -3,11 +3,12 @@ import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
 import { GuDistributable } from "../../types/distributable";
+import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuLambdaErrorPercentageAlarm } from "../cloudwatch";
 import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch";
 import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
-import { AppIdentity } from "../core/identity";
+import type { AppIdentity } from "../core/identity";
 import { GuParameterStoreReadPolicyStatement } from "../iam";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
@@ -46,7 +47,7 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  * Note that this construct creates a Lambda without a trigger/event source. Depending on your use-case, you may wish to
  * consider using a pattern which instantiates a Lambda with a trigger e.g. [[`GuScheduledLambda`]].
  */
-export class GuLambdaFunction extends Function {
+export class GuLambdaFunction extends GuAppAwareConstruct(Function) {
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout } = props;
 
@@ -85,7 +86,5 @@ export class GuLambdaFunction extends Function {
 
     const ssmParamReadPolicy = new GuParameterStoreReadPolicyStatement(scope, props);
     this.addToRolePolicy(ssmParamReadPolicy);
-
-    AppIdentity.taggedConstruct(props, this);
   }
 }

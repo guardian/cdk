@@ -29,10 +29,10 @@ Object {
     },
   },
   "Resources": Object {
-    "lambda8B5974B5": Object {
+    "lambdaTestingDF42012E": Object {
       "DependsOn": Array [
-        "lambdaServiceRoleDefaultPolicyBF6FA5E7",
-        "lambdaServiceRole494E4CA6",
+        "lambdaTestingServiceRoleDefaultPolicy6824E72F",
+        "lambdaTestingServiceRoleA8ACCBD2",
       ],
       "Properties": Object {
         "Code": Object {
@@ -65,7 +65,7 @@ Object {
         "MemorySize": 512,
         "Role": Object {
           "Fn::GetAtt": Array [
-            "lambdaServiceRole494E4CA6",
+            "lambdaTestingServiceRoleA8ACCBD2",
             "Arn",
           ],
         },
@@ -98,7 +98,7 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "lambdaServiceRole494E4CA6": Object {
+    "lambdaTestingServiceRoleA8ACCBD2": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -153,7 +153,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
+    "lambdaTestingServiceRoleDefaultPolicy6824E72F": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -225,10 +225,10 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "PolicyName": "lambdaTestingServiceRoleDefaultPolicy6824E72F",
         "Roles": Array [
           Object {
-            "Ref": "lambdaServiceRole494E4CA6",
+            "Ref": "lambdaTestingServiceRoleA8ACCBD2",
           },
         ],
       },
@@ -268,7 +268,7 @@ Object {
             "",
             Array [
               Object {
-                "Ref": "lambda8B5974B5",
+                "Ref": "lambdaTestingDF42012E",
               },
               " exceeded 80% error rate",
             ],
@@ -280,7 +280,7 @@ Object {
             Array [
               "High error % from ",
               Object {
-                "Ref": "lambda8B5974B5",
+                "Ref": "lambdaTestingDF42012E",
               },
               " lambda in ",
               Object {
@@ -301,7 +301,7 @@ Object {
                 Array [
                   "Error % of ",
                   Object {
-                    "Ref": "lambda8B5974B5",
+                    "Ref": "lambdaTestingDF42012E",
                   },
                 ],
               ],
@@ -315,7 +315,7 @@ Object {
                   Object {
                     "Name": "FunctionName",
                     "Value": Object {
-                      "Ref": "lambda8B5974B5",
+                      "Ref": "lambdaTestingDF42012E",
                     },
                   },
                 ],
@@ -335,7 +335,7 @@ Object {
                   Object {
                     "Name": "FunctionName",
                     "Value": Object {
-                      "Ref": "lambda8B5974B5",
+                      "Ref": "lambdaTestingDF42012E",
                     },
                   },
                 ],
