@@ -1,10 +1,12 @@
 import { Topic } from "@aws-cdk/aws-sns";
 import type { TopicProps } from "@aws-cdk/aws-sns";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";
+import type { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 
-interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
+interface GuSnsTopicProps extends TopicProps, GuMigratingResource, AppIdentity {}
 
 /**
  * Construct which creates an SNS Topic.
@@ -22,8 +24,8 @@ interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
  *  new GuSnsTopic(stack, "SnsTopic", { existingLogicalId: "MyCloudFormedSnsTopic" });
  * ```
  */
-export class GuSnsTopic extends GuStatefulMigratableConstruct(Topic) {
-  constructor(scope: GuStack, id: string, props?: GuSnsTopicProps) {
+export class GuSnsTopic extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Topic)) {
+  constructor(scope: GuStack, id: string, props: GuSnsTopicProps) {
     super(scope, id, props);
   }
 }

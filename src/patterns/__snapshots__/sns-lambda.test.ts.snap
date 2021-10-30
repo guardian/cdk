@@ -6,7 +6,7 @@ Object {
     "mylambdafunctionTestingTopicName16F8329F": Object {
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SnsIncomingEventsTopic308392EC",
+          "SnsIncomingEventsTopicTesting17610EEB",
           "TopicName",
         ],
       },
@@ -29,7 +29,7 @@ Object {
     },
   },
   "Resources": Object {
-    "SnsIncomingEventsTopic308392EC": Object {
+    "SnsIncomingEventsTopicTesting17610EEB": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -128,7 +128,7 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mylambdafunctionTestingAllowInvokeTestSnsIncomingEventsTopicFE4AC0FA2DD1E419": Object {
+    "mylambdafunctionTestingAllowInvokeTestSnsIncomingEventsTopicTesting9FFEA7D4BC7157D6": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -139,7 +139,7 @@ Object {
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": Object {
-          "Ref": "SnsIncomingEventsTopic308392EC",
+          "Ref": "SnsIncomingEventsTopicTesting17610EEB",
         },
       },
       "Type": "AWS::Lambda::Permission",
@@ -280,7 +280,7 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mylambdafunctionTestingSnsIncomingEventsTopic7B5CEAE1": Object {
+    "mylambdafunctionTestingSnsIncomingEventsTopicTestingD3D048E6": Object {
       "Properties": Object {
         "Endpoint": Object {
           "Fn::GetAtt": Array [
@@ -290,7 +290,7 @@ Object {
         },
         "Protocol": "lambda",
         "TopicArn": Object {
-          "Ref": "SnsIncomingEventsTopic308392EC",
+          "Ref": "SnsIncomingEventsTopicTesting17610EEB",
         },
       },
       "Type": "AWS::SNS::Subscription",

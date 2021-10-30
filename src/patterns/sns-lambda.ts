@@ -3,7 +3,6 @@ import { Topic } from "@aws-cdk/aws-sns";
 import { CfnOutput } from "@aws-cdk/core";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
-import { AppIdentity } from "../constructs/core/identity";
 import type { GuMigratingResource } from "../constructs/core/migrating";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
@@ -93,12 +92,10 @@ export class GuSnsLambda extends GuLambdaFunction {
           topicId,
           `arn:aws:sns:${scope.region}:${scope.account}:${props.existingSnsTopic.externalTopicName}`
         )
-      : AppIdentity.taggedConstruct(
-          props,
-          new GuSnsTopic(scope, topicId, {
-            existingLogicalId: props.existingSnsTopic?.existingLogicalId,
-          })
-        );
+      : new GuSnsTopic(scope, topicId, {
+          app: props.app,
+          existingLogicalId: props.existingSnsTopic?.existingLogicalId,
+        });
     this.addEventSource(new SnsEventSource(snsTopic));
     new CfnOutput(this, "TopicName", { value: snsTopic.topicName });
   }
