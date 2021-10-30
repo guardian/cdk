@@ -3,7 +3,7 @@
 exports[`The GuSnsLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
   "Outputs": Object {
-    "mylambdafunctionTopicNameA4E69772": Object {
+    "mylambdafunctionTestingTopicName16F8329F": Object {
       "Value": Object {
         "Fn::GetAtt": Array [
           "SnsIncomingEventsTopic308392EC",
@@ -58,10 +58,10 @@ Object {
       },
       "Type": "AWS::SNS::Topic",
     },
-    "mylambdafunction8D341B54": Object {
+    "mylambdafunctionTesting9BE73C37": Object {
       "DependsOn": Array [
-        "mylambdafunctionServiceRoleDefaultPolicy769897D4",
-        "mylambdafunctionServiceRoleE82C2E25",
+        "mylambdafunctionTestingServiceRoleDefaultPolicy39A11B79",
+        "mylambdafunctionTestingServiceRole279EB564",
       ],
       "Properties": Object {
         "Code": Object {
@@ -95,7 +95,7 @@ Object {
         "MemorySize": 512,
         "Role": Object {
           "Fn::GetAtt": Array [
-            "mylambdafunctionServiceRoleE82C2E25",
+            "mylambdafunctionTestingServiceRole279EB564",
             "Arn",
           ],
         },
@@ -128,12 +128,12 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mylambdafunctionAllowInvokeTestSnsIncomingEventsTopicFE4AC0FA7C8D8231": Object {
+    "mylambdafunctionTestingAllowInvokeTestSnsIncomingEventsTopicFE4AC0FA2DD1E419": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "mylambdafunction8D341B54",
+            "mylambdafunctionTesting9BE73C37",
             "Arn",
           ],
         },
@@ -144,7 +144,62 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "mylambdafunctionServiceRoleDefaultPolicy769897D4": Object {
+    "mylambdafunctionTestingServiceRole279EB564": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mylambdafunctionTestingServiceRoleDefaultPolicy39A11B79": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -216,75 +271,20 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mylambdafunctionServiceRoleDefaultPolicy769897D4",
+        "PolicyName": "mylambdafunctionTestingServiceRoleDefaultPolicy39A11B79",
         "Roles": Array [
           Object {
-            "Ref": "mylambdafunctionServiceRoleE82C2E25",
+            "Ref": "mylambdafunctionTestingServiceRole279EB564",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mylambdafunctionServiceRoleE82C2E25": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "testing",
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mylambdafunctionSnsIncomingEventsTopic6726218D": Object {
+    "mylambdafunctionTestingSnsIncomingEventsTopic7B5CEAE1": Object {
       "Properties": Object {
         "Endpoint": Object {
           "Fn::GetAtt": Array [
-            "mylambdafunction8D341B54",
+            "mylambdafunctionTesting9BE73C37",
             "Arn",
           ],
         },

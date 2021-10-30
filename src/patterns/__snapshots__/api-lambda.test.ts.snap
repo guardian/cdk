@@ -3,14 +3,14 @@
 exports[`The GuApiLambda pattern should create the correct resources with minimal config 1`] = `
 Object {
   "Outputs": Object {
-    "lambdaapi2Endpoint9DFE39DE": Object {
+    "lambdaTestingapi2Endpoint37091F13": Object {
       "Value": Object {
         "Fn::Join": Array [
           "",
           Array [
             "https://",
             Object {
-              "Ref": "lambdaapi239350ECC",
+              "Ref": "lambdaTestingapi28AB84DCC",
             },
             ".execute-api.",
             Object {
@@ -22,21 +22,21 @@ Object {
             },
             "/",
             Object {
-              "Ref": "lambdaapi2DeploymentStageprodCC9E3016",
+              "Ref": "lambdaTestingapi2DeploymentStageprod16764D97",
             },
             "/",
           ],
         ],
       },
     },
-    "lambdaapiEndpoint3B6C471A": Object {
+    "lambdaTestingapiEndpoint0007E52B": Object {
       "Value": Object {
         "Fn::Join": Array [
           "",
           Array [
             "https://",
             Object {
-              "Ref": "lambdaapiC1812993",
+              "Ref": "lambdaTestingapi99365783",
             },
             ".execute-api.",
             Object {
@@ -48,7 +48,7 @@ Object {
             },
             "/",
             Object {
-              "Ref": "lambdaapiDeploymentStageprod9598BC2F",
+              "Ref": "lambdaTestingapiDeploymentStageprodA162DA5C",
             },
             "/",
           ],
@@ -73,10 +73,10 @@ Object {
     },
   },
   "Resources": Object {
-    "lambda8B5974B5": Object {
+    "lambdaTestingDF42012E": Object {
       "DependsOn": Array [
-        "lambdaServiceRoleDefaultPolicyBF6FA5E7",
-        "lambdaServiceRole494E4CA6",
+        "lambdaTestingServiceRoleDefaultPolicy6824E72F",
+        "lambdaTestingServiceRoleA8ACCBD2",
       ],
       "Properties": Object {
         "Code": Object {
@@ -109,7 +109,7 @@ Object {
         "MemorySize": 512,
         "Role": Object {
           "Fn::GetAtt": Array [
-            "lambdaServiceRole494E4CA6",
+            "lambdaTestingServiceRoleA8ACCBD2",
             "Arn",
           ],
         },
@@ -142,7 +142,7 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "lambdaServiceRole494E4CA6": Object {
+    "lambdaTestingServiceRoleA8ACCBD2": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -197,7 +197,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
+    "lambdaTestingServiceRoleDefaultPolicy6824E72F": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -269,16 +269,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
+        "PolicyName": "lambdaTestingServiceRoleDefaultPolicy6824E72F",
         "Roles": Array [
           Object {
-            "Ref": "lambdaServiceRole494E4CA6",
+            "Ref": "lambdaTestingServiceRoleA8ACCBD2",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "lambdaapi239350ECC": Object {
+    "lambdaTestingapi28AB84DCC": Object {
       "Properties": Object {
         "Description": "this is a test2",
         "Name": "api2",
@@ -309,12 +309,12 @@ Object {
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "lambdaapi2ANYApiPermissionTestTestlambdaapi29FEAC710ANYB2B37DB0": Object {
+    "lambdaTestingapi2ANYApiPermissionTestTestlambdaTestingapi2CC5FC6E4ANY6FBA4345": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "lambda8B5974B5",
+            "lambdaTestingDF42012E",
             "Arn",
           ],
         },
@@ -337,7 +337,7 @@ Object {
               },
               ":",
               Object {
-                "Ref": "lambdaapi239350ECC",
+                "Ref": "lambdaTestingapi28AB84DCC",
               },
               "/test-invoke-stage/*/",
             ],
@@ -346,12 +346,12 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapi2ANYApiPermissionTestlambdaapi29FEAC710ANY878BC567": Object {
+    "lambdaTestingapi2ANYApiPermissionTestlambdaTestingapi2CC5FC6E4ANY75AF3556": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "lambda8B5974B5",
+            "lambdaTestingDF42012E",
             "Arn",
           ],
         },
@@ -374,11 +374,11 @@ Object {
               },
               ":",
               Object {
-                "Ref": "lambdaapi239350ECC",
+                "Ref": "lambdaTestingapi28AB84DCC",
               },
               "/",
               Object {
-                "Ref": "lambdaapi2DeploymentStageprodCC9E3016",
+                "Ref": "lambdaTestingapi2DeploymentStageprod16764D97",
               },
               "/*/",
             ],
@@ -387,7 +387,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapi2ANYFE9D5EA6": Object {
+    "lambdaTestingapi2ANYCA940789": Object {
       "Properties": Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
@@ -409,7 +409,7 @@ Object {
                 ":lambda:path/2015-03-31/functions/",
                 Object {
                   "Fn::GetAtt": Array [
-                    "lambda8B5974B5",
+                    "lambdaTestingDF42012E",
                     "Arn",
                   ],
                 },
@@ -420,31 +420,31 @@ Object {
         },
         "ResourceId": Object {
           "Fn::GetAtt": Array [
-            "lambdaapi239350ECC",
+            "lambdaTestingapi28AB84DCC",
             "RootResourceId",
           ],
         },
         "RestApiId": Object {
-          "Ref": "lambdaapi239350ECC",
+          "Ref": "lambdaTestingapi28AB84DCC",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapi2AccountFAF30ECB": Object {
+    "lambdaTestingapi2Account89F5AA25": Object {
       "DependsOn": Array [
-        "lambdaapi239350ECC",
+        "lambdaTestingapi28AB84DCC",
       ],
       "Properties": Object {
         "CloudWatchRoleArn": Object {
           "Fn::GetAtt": Array [
-            "lambdaapi2CloudWatchRole72740AA5",
+            "lambdaTestingapi2CloudWatchRoleFB24C031",
             "Arn",
           ],
         },
       },
       "Type": "AWS::ApiGateway::Account",
     },
-    "lambdaapi2CloudWatchRole72740AA5": Object {
+    "lambdaTestingapi2CloudWatchRoleFB24C031": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -499,27 +499,27 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491": Object {
+    "lambdaTestingapi2DeploymentB6FE91DAdef4920dcc3d3fcf9957608836763dd1": Object {
       "DependsOn": Array [
-        "lambdaapi2proxyANY3F8E1D36",
-        "lambdaapi2proxyE68FDFBC",
-        "lambdaapi2ANYFE9D5EA6",
+        "lambdaTestingapi2proxyANY688199AE",
+        "lambdaTestingapi2proxy2151564D",
+        "lambdaTestingapi2ANYCA940789",
       ],
       "Properties": Object {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": Object {
-          "Ref": "lambdaapi239350ECC",
+          "Ref": "lambdaTestingapi28AB84DCC",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "lambdaapi2DeploymentStageprodCC9E3016": Object {
+    "lambdaTestingapi2DeploymentStageprod16764D97": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491",
+          "Ref": "lambdaTestingapi2DeploymentB6FE91DAdef4920dcc3d3fcf9957608836763dd1",
         },
         "RestApiId": Object {
-          "Ref": "lambdaapi239350ECC",
+          "Ref": "lambdaTestingapi28AB84DCC",
         },
         "StageName": "prod",
         "Tags": Array [
@@ -549,7 +549,22 @@ Object {
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "lambdaapi2proxyANY3F8E1D36": Object {
+    "lambdaTestingapi2proxy2151564D": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "lambdaTestingapi28AB84DCC",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "lambdaTestingapi28AB84DCC",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "lambdaTestingapi2proxyANY688199AE": Object {
       "Properties": Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
@@ -571,7 +586,7 @@ Object {
                 ":lambda:path/2015-03-31/functions/",
                 Object {
                   "Fn::GetAtt": Array [
-                    "lambda8B5974B5",
+                    "lambdaTestingDF42012E",
                     "Arn",
                   ],
                 },
@@ -581,20 +596,20 @@ Object {
           },
         },
         "ResourceId": Object {
-          "Ref": "lambdaapi2proxyE68FDFBC",
+          "Ref": "lambdaTestingapi2proxy2151564D",
         },
         "RestApiId": Object {
-          "Ref": "lambdaapi239350ECC",
+          "Ref": "lambdaTestingapi28AB84DCC",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapi2proxyANYApiPermissionTestTestlambdaapi29FEAC710ANYproxy20D9E3C9": Object {
+    "lambdaTestingapi2proxyANYApiPermissionTestTestlambdaTestingapi2CC5FC6E4ANYproxyFB60773A": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "lambda8B5974B5",
+            "lambdaTestingDF42012E",
             "Arn",
           ],
         },
@@ -617,7 +632,7 @@ Object {
               },
               ":",
               Object {
-                "Ref": "lambdaapi239350ECC",
+                "Ref": "lambdaTestingapi28AB84DCC",
               },
               "/test-invoke-stage/*/*",
             ],
@@ -626,12 +641,12 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapi2proxyANYApiPermissionTestlambdaapi29FEAC710ANYproxy33429FF8": Object {
+    "lambdaTestingapi2proxyANYApiPermissionTestlambdaTestingapi2CC5FC6E4ANYproxyD0B026C9": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "lambda8B5974B5",
+            "lambdaTestingDF42012E",
             "Arn",
           ],
         },
@@ -654,11 +669,11 @@ Object {
               },
               ":",
               Object {
-                "Ref": "lambdaapi239350ECC",
+                "Ref": "lambdaTestingapi28AB84DCC",
               },
               "/",
               Object {
-                "Ref": "lambdaapi2DeploymentStageprodCC9E3016",
+                "Ref": "lambdaTestingapi2DeploymentStageprod16764D97",
               },
               "/*/*",
             ],
@@ -667,157 +682,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapi2proxyE68FDFBC": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "lambdaapi239350ECC",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "{proxy+}",
-        "RestApiId": Object {
-          "Ref": "lambdaapi239350ECC",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "lambdaapiANY4EBCADD1": Object {
-      "Properties": Object {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "lambda8B5974B5",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": Object {
-          "Fn::GetAtt": Array [
-            "lambdaapiC1812993",
-            "RootResourceId",
-          ],
-        },
-        "RestApiId": Object {
-          "Ref": "lambdaapiC1812993",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "lambdaapiANYApiPermissionTestTestlambdaapi0E958EEBANY3DF279D1": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "lambda8B5974B5",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "lambdaapiC1812993",
-              },
-              "/test-invoke-stage/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "lambdaapiANYApiPermissionTestlambdaapi0E958EEBANYA0BDE5E2": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "lambda8B5974B5",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "lambdaapiC1812993",
-              },
-              "/",
-              Object {
-                "Ref": "lambdaapiDeploymentStageprod9598BC2F",
-              },
-              "/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "lambdaapiAccountAF0DCB01": Object {
-      "DependsOn": Array [
-        "lambdaapiC1812993",
-      ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "lambdaapiCloudWatchRole7E36513A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-    },
-    "lambdaapiC1812993": Object {
+    "lambdaTestingapi99365783": Object {
       "Properties": Object {
         "Description": "this is a test",
         "Name": "api",
@@ -848,7 +713,142 @@ Object {
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "lambdaapiCloudWatchRole7E36513A": Object {
+    "lambdaTestingapiANYApiPermissionTestTestlambdaTestingapi60071196ANY7CB94407": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "lambdaTestingDF42012E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "lambdaTestingapi99365783",
+              },
+              "/test-invoke-stage/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "lambdaTestingapiANYApiPermissionTestlambdaTestingapi60071196ANY5401B9F6": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "lambdaTestingDF42012E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "lambdaTestingapi99365783",
+              },
+              "/",
+              Object {
+                "Ref": "lambdaTestingapiDeploymentStageprodA162DA5C",
+              },
+              "/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "lambdaTestingapiANYFBEBECB5": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "lambdaTestingDF42012E",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": Object {
+          "Fn::GetAtt": Array [
+            "lambdaTestingapi99365783",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": Object {
+          "Ref": "lambdaTestingapi99365783",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "lambdaTestingapiAccountFD257ED4": Object {
+      "DependsOn": Array [
+        "lambdaTestingapi99365783",
+      ],
+      "Properties": Object {
+        "CloudWatchRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "lambdaTestingapiCloudWatchRole3F985611",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+    },
+    "lambdaTestingapiCloudWatchRole3F985611": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -903,27 +903,27 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e": Object {
+    "lambdaTestingapiDeployment85E67007560f44a30e5b46e321b636da2609b66f": Object {
       "DependsOn": Array [
-        "lambdaapiproxyANYA94E968A",
-        "lambdaapiproxyB573C729",
-        "lambdaapiANY4EBCADD1",
+        "lambdaTestingapiproxyANY0AC28039",
+        "lambdaTestingapiproxyB770BAF0",
+        "lambdaTestingapiANYFBEBECB5",
       ],
       "Properties": Object {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": Object {
-          "Ref": "lambdaapiC1812993",
+          "Ref": "lambdaTestingapi99365783",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "lambdaapiDeploymentStageprod9598BC2F": Object {
+    "lambdaTestingapiDeploymentStageprodA162DA5C": Object {
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e",
+          "Ref": "lambdaTestingapiDeployment85E67007560f44a30e5b46e321b636da2609b66f",
         },
         "RestApiId": Object {
-          "Ref": "lambdaapiC1812993",
+          "Ref": "lambdaTestingapi99365783",
         },
         "StageName": "prod",
         "Tags": Array [
@@ -953,7 +953,7 @@ Object {
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "lambdaapiproxyANYA94E968A": Object {
+    "lambdaTestingapiproxyANY0AC28039": Object {
       "Properties": Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
@@ -975,7 +975,7 @@ Object {
                 ":lambda:path/2015-03-31/functions/",
                 Object {
                   "Fn::GetAtt": Array [
-                    "lambda8B5974B5",
+                    "lambdaTestingDF42012E",
                     "Arn",
                   ],
                 },
@@ -985,20 +985,20 @@ Object {
           },
         },
         "ResourceId": Object {
-          "Ref": "lambdaapiproxyB573C729",
+          "Ref": "lambdaTestingapiproxyB770BAF0",
         },
         "RestApiId": Object {
-          "Ref": "lambdaapiC1812993",
+          "Ref": "lambdaTestingapi99365783",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiproxyANYApiPermissionTestTestlambdaapi0E958EEBANYproxy716A4EB4": Object {
+    "lambdaTestingapiproxyANYApiPermissionTestTestlambdaTestingapi60071196ANYproxy49D7C76F": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "lambda8B5974B5",
+            "lambdaTestingDF42012E",
             "Arn",
           ],
         },
@@ -1021,7 +1021,7 @@ Object {
               },
               ":",
               Object {
-                "Ref": "lambdaapiC1812993",
+                "Ref": "lambdaTestingapi99365783",
               },
               "/test-invoke-stage/*/*",
             ],
@@ -1030,12 +1030,12 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyANYApiPermissionTestlambdaapi0E958EEBANYproxy81BB250D": Object {
+    "lambdaTestingapiproxyANYApiPermissionTestlambdaTestingapi60071196ANYproxy997A0B24": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "lambda8B5974B5",
+            "lambdaTestingDF42012E",
             "Arn",
           ],
         },
@@ -1058,11 +1058,11 @@ Object {
               },
               ":",
               Object {
-                "Ref": "lambdaapiC1812993",
+                "Ref": "lambdaTestingapi99365783",
               },
               "/",
               Object {
-                "Ref": "lambdaapiDeploymentStageprod9598BC2F",
+                "Ref": "lambdaTestingapiDeploymentStageprodA162DA5C",
               },
               "/*/*",
             ],
@@ -1071,17 +1071,17 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyB573C729": Object {
+    "lambdaTestingapiproxyB770BAF0": Object {
       "Properties": Object {
         "ParentId": Object {
           "Fn::GetAtt": Array [
-            "lambdaapiC1812993",
+            "lambdaTestingapi99365783",
             "RootResourceId",
           ],
         },
         "PathPart": "{proxy+}",
         "RestApiId": Object {
-          "Ref": "lambdaapiC1812993",
+          "Ref": "lambdaTestingapi99365783",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
