@@ -19,7 +19,7 @@ Object {
     },
   },
   "Resources": Object {
-    "KinesisStream46752A3E": Object {
+    "KinesisStreamTesting925D0A07": Object {
       "Properties": Object {
         "RetentionPeriodHours": 24,
         "ShardCount": 1,
@@ -124,13 +124,13 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mylambdafunctionTestingKinesisEventSourceTestKinesisStream4CAC6550AE2B7BAE": Object {
+    "mylambdafunctionTestingKinesisEventSourceTestKinesisStreamTestingBDE3BACB9316F9D2": Object {
       "Properties": Object {
         "BatchSize": 100,
         "BisectBatchOnFunctionError": false,
         "EventSourceArn": Object {
           "Fn::GetAtt": Array [
-            "KinesisStream46752A3E",
+            "KinesisStreamTesting925D0A07",
             "Arn",
           ],
         },
@@ -277,7 +277,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "KinesisStream46752A3E",
+                  "KinesisStreamTesting925D0A07",
                   "Arn",
                 ],
               },
@@ -287,7 +287,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "KinesisStream46752A3E",
+                  "KinesisStreamTesting925D0A07",
                   "Arn",
                 ],
               },
