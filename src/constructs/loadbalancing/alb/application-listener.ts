@@ -1,9 +1,10 @@
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import type { ApplicationListenerProps } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
+import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core/identity";
 import type { GuMigratingResource } from "../../core/migrating";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
@@ -23,20 +24,9 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps, Ap
  * If you are running an application which only accepts traffic over HTTPS, consider using [[`GuHttpsApplicationListener`]]
  * to reduce the amount of boilerplate needed when configuring your Listener.
  */
-export class GuApplicationListener extends GuStatefulMigratableConstruct(ApplicationListener) {
+export class GuApplicationListener extends GuStatefulMigratableConstruct(GuAppAwareConstruct(ApplicationListener)) {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
-    const { app } = props;
-
-    super(scope, AppIdentity.suffixText({ app }, id), { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
-
-    /*
-    AWS::ElasticLoadBalancingV2::Listener resources cannot be tagged.
-    Perform the call anyway for consistency across the project.
-    Who knows, maybe AWS will support it one day?!
-    If so, tests will fail and we can celebrate!
-    See https://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html#services-elasticloadbalancing
-     */
-    AppIdentity.taggedConstruct({ app }, this);
+    super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
   }
 }
 
@@ -54,9 +44,9 @@ export interface GuHttpsApplicationListenerProps
  *
  * For general details about Listeners, see [[`GuApplicationListener`]].
  */
-export class GuHttpsApplicationListener extends ApplicationListener {
+export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationListener) {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
-    const { app, certificate, targetGroup } = props;
+    const { certificate, targetGroup } = props;
 
     const mergedProps: GuApplicationListenerProps = {
       port: 443,
@@ -70,15 +60,6 @@ export class GuHttpsApplicationListener extends ApplicationListener {
       defaultAction: ListenerAction.forward([targetGroup]),
     };
 
-    super(scope, AppIdentity.suffixText({ app }, id), mergedProps);
-
-    /*
-    AWS::ElasticLoadBalancingV2::Listener resources cannot be tagged.
-    Perform the call anyway for consistency across the project.
-    Who knows, maybe AWS will support it one day?!
-    If so, tests will fail and we can celebrate!
-    See https://docs.aws.amazon.com/ARG/latest/userguide/supported-resources.html#services-elasticloadbalancing
-     */
-    AppIdentity.taggedConstruct({ app }, this);
+    super(scope, id, mergedProps);
   }
 }

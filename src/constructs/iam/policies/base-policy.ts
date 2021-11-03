@@ -8,8 +8,8 @@ export interface GuPolicyProps extends PolicyProps, GuMigratingResource {}
 
 export type GuNoStatementsPolicyProps = Omit<GuPolicyProps, "statements">;
 
-export abstract class GuPolicy extends GuMigratableConstruct(Policy) {
-  protected constructor(scope: GuStack, id: string, props: GuPolicyProps) {
+export class GuPolicy extends GuMigratableConstruct(Policy) {
+  constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, props);
   }
 }

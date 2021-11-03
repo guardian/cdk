@@ -5,9 +5,10 @@ import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
 import type { GuStack } from "../core";
-import { AppIdentity } from "../core/identity";
+import type { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 import { GuHttpsEgressSecurityGroup, GuWazuhAccess } from "../ec2";
 import { GuInstanceRole } from "../iam";
@@ -95,7 +96,7 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
  * If additional ingress or egress rules are required, define custom security groups and pass them in via the
  * `additionalSecurityGroups` prop.
  */
-export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalingGroup) {
+export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAwareConstruct(AutoScalingGroup)) {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
 
@@ -126,7 +127,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalin
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app: props.app, vpc: props.vpc }),
     };
 
-    super(scope, AppIdentity.suffixText(props, id), mergedProps);
+    super(scope, id, mergedProps);
 
     mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
 
@@ -138,7 +139,5 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(AutoScalin
     // leaves it to the default value, which is actually false.
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
-
-    AppIdentity.taggedConstruct(props, this);
   }
 }

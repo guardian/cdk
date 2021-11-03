@@ -1,8 +1,9 @@
 import { Peer, Port, SecurityGroup } from "@aws-cdk/aws-ec2";
 import type { IPeer, SecurityGroupProps } from "@aws-cdk/aws-ec2";
 import { GuMigratableConstruct } from "../../../utils/mixin";
+import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core/identity";
 import type { GuMigratingResource } from "../../core/migrating";
 
 /**
@@ -47,8 +48,8 @@ export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdent
  * - [[GuPublicInternetAccessSecurityGroup]]
  * - [[GuHttpsEgressSecurityGroup]]
  */
-export abstract class GuBaseSecurityGroup extends GuMigratableConstruct(SecurityGroup) {
-  protected constructor(scope: GuStack, id: string, props: GuBaseSecurityGroupProps) {
+export class GuBaseSecurityGroup extends GuMigratableConstruct(SecurityGroup) {
+  constructor(scope: GuStack, id: string, props: GuBaseSecurityGroupProps) {
     super(scope, id, props);
 
     props.ingresses?.forEach(({ range, port, description }) => {
@@ -68,10 +69,9 @@ export abstract class GuBaseSecurityGroup extends GuMigratableConstruct(Security
   }
 }
 
-export class GuSecurityGroup extends GuBaseSecurityGroup {
+export class GuSecurityGroup extends GuAppAwareConstruct(GuBaseSecurityGroup) {
   constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
-    super(scope, AppIdentity.suffixText(props, id), props);
-    AppIdentity.taggedConstruct(props, this);
+    super(scope, id, props);
   }
 }
 

@@ -1,6 +1,7 @@
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
-import { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core/identity";
 import { GuPolicy } from "./base-policy";
 
 export class GuParameterStoreReadPolicyStatement extends PolicyStatement {
@@ -13,13 +14,12 @@ export class GuParameterStoreReadPolicyStatement extends PolicyStatement {
   }
 }
 
-export class GuParameterStoreReadPolicy extends GuPolicy {
+export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
   constructor(scope: GuStack, props: AppIdentity) {
-    super(scope, AppIdentity.suffixText(props, "ParameterStoreRead"), {
+    super(scope, "ParameterStoreRead", {
       policyName: "parameter-store-read-policy",
       statements: [new GuParameterStoreReadPolicyStatement(scope, props)],
+      ...props,
     });
-
-    AppIdentity.taggedConstruct(props, this);
   }
 }
