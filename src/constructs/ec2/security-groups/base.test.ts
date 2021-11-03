@@ -12,7 +12,7 @@ describe("The GuSecurityGroup class", () => {
     publicSubnetIds: [""],
   });
 
-  it("applies the Stage, Stage and App tags", () => {
+  it("applies the Stack, Stage and App tags", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
