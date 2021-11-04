@@ -47,6 +47,8 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  * consider using a pattern which instantiates a Lambda with a trigger e.g. [[`GuScheduledLambda`]].
  */
 export class GuLambdaFunction extends Function {
+  public readonly app: string;
+
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout } = props;
 
@@ -73,6 +75,8 @@ export class GuLambdaFunction extends Function {
       timeout: timeout ?? Duration.seconds(30),
       code,
     });
+
+    this.app = app;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {

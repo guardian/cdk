@@ -17,6 +17,7 @@ describe("The GuAlarm class", () => {
       app: "testing",
     });
     new GuAlarm(stack, "alarm", {
+      app: "testing",
       alarmName: `Alarm in ${stack.stage}`,
       alarmDescription: "It's broken",
       metric: lambda.metricErrors(),
@@ -37,6 +38,7 @@ describe("The GuAlarm class", () => {
       app: "testing",
     });
     new GuAlarm(stack, "alarm", {
+      app: "testing",
       alarmName: `Alarm in ${stack.stage}`,
       alarmDescription: "It's broken",
       metric: lambda.metricErrors(),
@@ -76,6 +78,7 @@ describe("The GuAlarm class", () => {
       app: "testing",
     });
     new GuAlarm(stack, "alarm", {
+      app: "testing",
       alarmName: `Alarm in ${stack.stage}`,
       alarmDescription: "It's broken",
       metric: lambda.metricErrors(),
@@ -86,7 +89,7 @@ describe("The GuAlarm class", () => {
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(json.Mappings).toEqual({
-      stagemapping: {
+      testing: {
         CODE: {
           alarmActionsEnabled: false,
         },
@@ -106,6 +109,7 @@ describe("The GuAlarm class", () => {
       app: "testing",
     });
     new GuAlarm(stack, "alarm", {
+      app: "testing",
       actionsEnabledInCode: true,
       alarmName: `Alarm in ${stack.stage}`,
       alarmDescription: "It's broken",
@@ -117,7 +121,7 @@ describe("The GuAlarm class", () => {
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(json.Mappings).toEqual({
-      stagemapping: {
+      testing: {
         CODE: {
           alarmActionsEnabled: true,
         },

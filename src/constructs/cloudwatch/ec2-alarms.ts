@@ -10,7 +10,7 @@ import type { GuAlarmProps } from "./alarm";
 export interface Http5xxAlarmProps
   extends Omit<
     GuAlarmProps,
-    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData"
+    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
   > {
   tolerated5xxPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;

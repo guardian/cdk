@@ -60,9 +60,14 @@ interface AwsAsgCapacityProps {
   maxCapacity: number;
 }
 
-function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDependentAsgProps): AwsAsgCapacityProps {
+function wireStageDependentProps(
+  stack: GuStack,
+  app: string,
+  stageDependentProps: GuStageDependentAsgProps
+): AwsAsgCapacityProps {
   return {
     minCapacity: stack.withStageDependentValue({
+      app,
       variableName: "minInstances",
       stageValues: {
         [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
@@ -70,6 +75,7 @@ function wireStageDependentProps(stack: GuStack, stageDependentProps: GuStageDep
       },
     }),
     maxCapacity: stack.withStageDependentValue({
+      app,
       variableName: "maxInstances",
       stageValues: {
         [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
@@ -118,7 +124,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
 
     const mergedProps = {
       ...props,
-      ...wireStageDependentProps(scope, props.stageDependentProps ?? defaultStageDependentProps),
+      ...wireStageDependentProps(scope, props.app, props.stageDependentProps ?? defaultStageDependentProps),
       role: props.role ?? new GuInstanceRole(scope, { app: props.app }),
       machineImage: { getImage: getImage },
       userData,

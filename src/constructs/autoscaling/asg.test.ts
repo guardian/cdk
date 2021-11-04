@@ -216,7 +216,7 @@ describe("The GuAutoScalingGroup", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Mappings).toEqual({
-      stagemapping: {
+      [app.app]: {
         CODE: {
           minInstances: 1,
           maxInstances: 5,
@@ -313,14 +313,14 @@ describe("The GuAutoScalingGroup", () => {
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      MinSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "minInstances"] },
-      MaxSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "maxInstances"] },
+      MinSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "minInstances"] },
+      MaxSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "maxInstances"] },
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Mappings).toEqual({
-      stagemapping: {
+      TestApp: {
         CODE: { minInstances: 1, maxInstances: 2 },
         PROD: { minInstances: 3, maxInstances: 6 },
       },
@@ -342,14 +342,14 @@ describe("The GuAutoScalingGroup", () => {
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      MinSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "minInstances"] },
-      MaxSize: { "Fn::FindInMap": ["stagemapping", { Ref: "Stage" }, "maxInstances"] },
+      MinSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "minInstances"] },
+      MaxSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "maxInstances"] },
     });
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Mappings).toEqual({
-      stagemapping: {
+      TestApp: {
         CODE: { minInstances: 2, maxInstances: 4 },
         PROD: { minInstances: 5, maxInstances: 10 },
       },

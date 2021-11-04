@@ -4,9 +4,10 @@ import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
 import { Topic } from "@aws-cdk/aws-sns";
 import type { ITopic } from "@aws-cdk/aws-sns";
 import { Stage } from "../../constants";
-import type { GuStack, GuStageDependentValue } from "../core";
+import type { GuStack } from "../core";
+import type { AppIdentity } from "../core/identity";
 
-export interface GuAlarmProps extends AlarmProps {
+export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;
   actionsEnabledInCode?: boolean;
 }
@@ -22,14 +23,17 @@ export interface GuAlarmProps extends AlarmProps {
  */
 export class GuAlarm extends Alarm {
   constructor(scope: GuStack, id: string, props: GuAlarmProps) {
-    const actionsEnabled: GuStageDependentValue<boolean> = {
-      variableName: "alarmActionsEnabled",
-      stageValues: {
-        [Stage.CODE]: props.actionsEnabledInCode ?? false,
-        [Stage.PROD]: true,
-      },
-    };
-    super(scope, id, { ...props, actionsEnabled: scope.withStageDependentValue(actionsEnabled) });
+    super(scope, id, {
+      ...props,
+      actionsEnabled: scope.withStageDependentValue({
+        app: props.app,
+        variableName: "alarmActionsEnabled",
+        stageValues: {
+          [Stage.CODE]: props.actionsEnabledInCode ?? false,
+          [Stage.PROD]: true,
+        },
+      }),
+    });
     const topicArn: string = `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicName}`;
     const snsTopic: ITopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, topicArn);
     this.addAlarmAction(new SnsAction(snsTopic));

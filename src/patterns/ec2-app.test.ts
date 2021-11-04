@@ -349,15 +349,19 @@ describe("the GuEC2App pattern", function () {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     expect(json.Mappings).toEqual({
-      stagemapping: {
-        CODE: expect.objectContaining({
+      testguec2app: {
+        CODE: {
+          hostedZoneId: "id123",
+          domainName: "code-guardian.com",
           minInstances: 3,
           maxInstances: 6,
-        }) as Record<string, number>,
-        PROD: expect.objectContaining({
+        },
+        PROD: {
+          hostedZoneId: "id124",
+          domainName: "prod-guardian.com",
           minInstances: 5,
           maxInstances: 12,
-        }) as Record<string, number>,
+        },
       },
     });
   });
