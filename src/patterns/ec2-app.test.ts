@@ -542,7 +542,18 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "node-app.code.example.com",
+        },
+        [Stage.PROD]: {
+          domainName: "node-app.example.com",
+        },
+      },
+      scaling: {
+        CODE: { minimumInstances: 0 },
+        PROD: { minimumInstances: 1 },
+      },
     });
 
     new GuEc2App(stack, {
@@ -552,7 +563,47 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        [Stage.CODE]: {
+          domainName: "play-app.code.example.com",
+        },
+        [Stage.PROD]: {
+          domainName: "play-app.example.com",
+        },
+      },
+      scaling: {
+        CODE: { minimumInstances: 1 },
+        PROD: { minimumInstances: 3 },
+      },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      NodeApp: {
+        CODE: {
+          domainName: "node-app.code.example.com",
+          minInstances: 0,
+          maxInstances: 0,
+        },
+        PROD: {
+          domainName: "node-app.example.com",
+          minInstances: 1,
+          maxInstances: 2,
+        },
+      },
+      PlayApp: {
+        CODE: {
+          domainName: "play-app.code.example.com",
+          minInstances: 1,
+          maxInstances: 2,
+        },
+        PROD: {
+          domainName: "play-app.example.com",
+          minInstances: 3,
+          maxInstances: 6,
+        },
+      },
     });
 
     expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
