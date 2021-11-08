@@ -48,6 +48,7 @@ find useful scripts within the [`script`][directory-script] directory for common
 - `./script/lint` to lint the code using ESLint
 - `./script/test` to run the Jest unit tests
 - `./script/build` to compile TypeScript to JS
+- `./script/cli-docs` to update the CLI documentation in this file
 
 There are also some other commands defined in `package.json`:
 
@@ -90,6 +91,29 @@ If they don't, please let us know about your use-case so that we can consider su
 Alternatively, PRs are always welcome!
 
 There are more details on using the CDK library in [docs][directory-docs]
+
+### Using the `@guardian/cdk` CLI
+
+<!-- cli -->
+```
+@guardian/cdk COMMAND [args]
+
+Commands:
+  @guardian/cdk aws-cdk-version     Print the version of @aws-cdk libraries being
+                               used
+  @guardian/cdk account-readiness   Perform checks on an AWS account to see if it is
+                               GuCDK ready
+  @guardian/cdk check-package-json  Check a package.json file for compatibility with
+                               GuCDK
+
+Options:
+      --profile  AWS profile                                            [string]
+      --region   AWS region                      [string] [default: "eu-west-1"]
+      --version  Show version number                                   [boolean]
+  -h, --help     Show help                                             [boolean]
+
+```
+<!-- clistop -->
 
 ## Releasing
 
