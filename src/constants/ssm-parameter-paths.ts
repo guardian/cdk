@@ -26,6 +26,10 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
     path: "/account/services/private.config.bucket",
     description: "SSM parameter containing the S3 bucket name holding the app's private configuration",
   },
+  AlarmTopic: {
+    path: "/account/services/alarm.topic.name",
+    description: "SSM parameter containing the Name (not ARN) of an SNS topic to use for alarms",
+  },
   PrimaryVpcId: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/id`,
     description: "Virtual Private Cloud to run EC2 instances within",
