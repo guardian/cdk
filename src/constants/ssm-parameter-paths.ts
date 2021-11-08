@@ -28,7 +28,13 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
   },
   AlarmTopic: {
     path: "/account/services/alarm.topic.name",
-    description: "SSM parameter containing the Name (not ARN) of an SNS topic to use for alarms",
+    description:
+      "SSM parameter containing the Name (not ARN) of an SNS topic to use for alarms. Alarms are for things that require an immediate response.",
+  },
+  NotificationTopic: {
+    path: "/account/services/notification.topic.name",
+    description:
+      "SSM parameter containing the Name (not ARN) of an SNS topic to use for notifications. Unlike alarms, notifications do not require an immediate response. Note, if you are notifying from code directly then you are probably better off going via Anghammarad.",
   },
   PrimaryVpcId: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/id`,
