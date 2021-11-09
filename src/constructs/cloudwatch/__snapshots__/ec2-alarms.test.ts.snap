@@ -439,6 +439,10 @@ Object {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "30",
           },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
         ],
         "UnhealthyThresholdCount": 2,
         "VpcId": "test",
