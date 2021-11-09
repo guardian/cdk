@@ -46,3 +46,50 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
     super(scope, id, alarmProps);
   }
 }
+
+export interface GuLambdaThrottlingMonitoringProps
+  extends Omit<
+    GuAlarmProps,
+    "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
+  > {
+  /**
+   * Sum of thottled invocations above which to alarm.
+   *
+   * @defaultValue 0
+   */
+  toleratedThrottlingCount?: number;
+
+  /**
+   * Evaluation period in minutes for alarm.
+   *
+   * @defaultValue 1
+   */
+  numberOfMinutesAboveThresholdBeforeAlarm?: number;
+
+  noMonitoring?: false;
+}
+
+interface GuLambdaThrottlingAlarmProps extends GuLambdaThrottlingMonitoringProps {
+  lambda: GuLambdaFunction;
+}
+
+export class GuLambdaThrottlingAlarm extends GuAlarm {
+  constructor(scope: GuStack, id: string, props: GuLambdaThrottlingAlarmProps) {
+    super(scope, id, {
+      ...props,
+      app: props.lambda.app,
+      alarmName:
+        props.alarmName ?? `Lambda throttling alarm for ${props.lambda.functionName} lambda in ${scope.stage}.`,
+      alarmDescription:
+        props.alarmDescription ?? "Alarm when lambda is throttled (which causes requests to fail with a 429).",
+      threshold: props.toleratedThrottlingCount ?? 0,
+      evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
+      metric: props.lambda.metricThrottles({
+        period: Duration.seconds(60),
+        statistic: "sum",
+      }),
+      treatMissingData: TreatMissingData.NOT_BREACHING,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
+    });
+  }
+}
