@@ -34,3 +34,7 @@ jobs:
         uses: guardian/actions-merge-release-changes-to-protected-branch@v1.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          # `guardian/actions-merge-release-changes-to-protected-branch` doesn't support v2 of `package-lock.json`
+          # We need to update it.
+          # In the meantime, allow all changes.
+          additional-changes: '{"package-lock.json": "*", ".github/workflows/ci.yaml": "*"}'
