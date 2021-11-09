@@ -3,7 +3,7 @@
 exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specific CIDR ranges 1`] = `
 Object {
   "Mappings": Object {
-    "stagemapping": Object {
+    "testguec2app": Object {
       "CODE": Object {
         "domainName": "code-guardian.com",
         "hostedZoneId": "id123",
@@ -79,7 +79,7 @@ Object {
         },
         "MaxSize": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testguec2app",
             Object {
               "Ref": "Stage",
             },
@@ -88,7 +88,7 @@ Object {
         },
         "MinSize": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testguec2app",
             Object {
               "Ref": "Stage",
             },
@@ -192,7 +192,7 @@ Object {
       "Properties": Object {
         "DomainName": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testguec2app",
             Object {
               "Ref": "Stage",
             },
@@ -203,7 +203,7 @@ Object {
           Object {
             "DomainName": Object {
               "Fn::FindInMap": Array [
-                "stagemapping",
+                "testguec2app",
                 Object {
                   "Ref": "Stage",
                 },
@@ -212,7 +212,7 @@ Object {
             },
             "HostedZoneId": Object {
               "Fn::FindInMap": Array [
-                "stagemapping",
+                "testguec2app",
                 Object {
                   "Ref": "Stage",
                 },
@@ -861,7 +861,7 @@ Object {
 exports[`the GuEC2App pattern should produce a functional EC2 app with minimal arguments 1`] = `
 Object {
   "Mappings": Object {
-    "stagemapping": Object {
+    "testguec2app": Object {
       "CODE": Object {
         "domainName": "code-guardian.com",
         "hostedZoneId": "id123",
@@ -937,7 +937,7 @@ Object {
         },
         "MaxSize": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testguec2app",
             Object {
               "Ref": "Stage",
             },
@@ -946,7 +946,7 @@ Object {
         },
         "MinSize": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testguec2app",
             Object {
               "Ref": "Stage",
             },
@@ -1050,7 +1050,7 @@ Object {
       "Properties": Object {
         "DomainName": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testguec2app",
             Object {
               "Ref": "Stage",
             },
@@ -1061,7 +1061,7 @@ Object {
           Object {
             "DomainName": Object {
               "Fn::FindInMap": Array [
-                "stagemapping",
+                "testguec2app",
                 Object {
                   "Ref": "Stage",
                 },
@@ -1070,7 +1070,7 @@ Object {
             },
             "HostedZoneId": Object {
               "Fn::FindInMap": Array [
-                "stagemapping",
+                "testguec2app",
                 Object {
                   "Ref": "Stage",
                 },

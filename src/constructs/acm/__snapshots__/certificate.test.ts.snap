@@ -3,7 +3,7 @@
 exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
 Object {
   "Mappings": Object {
-    "stagemapping": Object {
+    "testing": Object {
       "CODE": Object {
         "domainName": "code-guardian.com",
       },
@@ -29,7 +29,7 @@ Object {
       "Properties": Object {
         "DomainName": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testing",
             Object {
               "Ref": "Stage",
             },
@@ -72,7 +72,7 @@ Object {
 exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
 Object {
   "Mappings": Object {
-    "stagemapping": Object {
+    "testing": Object {
       "CODE": Object {
         "domainName": "code-guardian.com",
         "hostedZoneId": "id123",
@@ -100,7 +100,7 @@ Object {
       "Properties": Object {
         "DomainName": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testing",
             Object {
               "Ref": "Stage",
             },
@@ -111,7 +111,7 @@ Object {
           Object {
             "DomainName": Object {
               "Fn::FindInMap": Array [
-                "stagemapping",
+                "testing",
                 Object {
                   "Ref": "Stage",
                 },
@@ -120,7 +120,7 @@ Object {
             },
             "HostedZoneId": Object {
               "Fn::FindInMap": Array [
-                "stagemapping",
+                "testing",
                 Object {
                   "Ref": "Stage",
                 },

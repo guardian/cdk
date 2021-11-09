@@ -2,7 +2,6 @@ import { Stack, Tags } from "@aws-cdk/core";
 import type { App, StackProps } from "@aws-cdk/core";
 import execa from "execa";
 import gitUrlParse from "git-url-parse";
-import { Stage } from "../../constants";
 import { ContextKeys } from "../../constants/context-keys";
 import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
@@ -10,7 +9,7 @@ import type { GuMigratingStack } from "../../types/migrating";
 import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
 import { GuStageMapping } from "./mappings";
-import type { GuStageDependentValue } from "./mappings";
+import type { GuMappingValue, GuStageMappingValue } from "./mappings";
 import { GuStageParameter } from "./parameters";
 import type { GuParameter } from "./parameters";
 
@@ -75,10 +74,8 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
    * as Parameters are not resolved at synth-time. This helper function creates CloudFormation
    * Mappings to work around this limitation.
    */
-  withStageDependentValue<T extends string | number | boolean>(stageDependentValue: GuStageDependentValue<T>): T {
-    this.mappings.setValue(Stage.CODE, stageDependentValue.variableName, stageDependentValue.stageValues.CODE);
-    this.mappings.setValue(Stage.PROD, stageDependentValue.variableName, stageDependentValue.stageValues.PROD);
-    return this.mappings.findInMap(this.stage, stageDependentValue.variableName) as unknown as T;
+  withStageDependentValue<T extends GuMappingValue>(mappingValue: GuStageMappingValue<T>): T {
+    return this.mappings.withValue(mappingValue);
   }
 
   /**

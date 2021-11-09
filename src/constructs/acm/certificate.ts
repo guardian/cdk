@@ -67,15 +67,23 @@ export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConst
             scope,
             AppIdentity.suffixText({ app: props.app }, "HostedZone"),
             scope.withStageDependentValue({
+              app: props.app,
               variableName: "hostedZoneId",
-              stageValues: { [Stage.CODE]: props.CODE.hostedZoneId, [Stage.PROD]: props.PROD.hostedZoneId },
+              stageValues: {
+                [Stage.CODE]: props.CODE.hostedZoneId,
+                [Stage.PROD]: props.PROD.hostedZoneId,
+              },
             })
           )
         : undefined;
     const awsCertificateProps: CertificateProps & GuMigratingResource & AppIdentity = {
       domainName: scope.withStageDependentValue({
+        app: props.app,
         variableName: "domainName",
-        stageValues: { [Stage.CODE]: props.CODE.domainName, [Stage.PROD]: props.PROD.domainName },
+        stageValues: {
+          [Stage.CODE]: props.CODE.domainName,
+          [Stage.PROD]: props.PROD.domainName,
+        },
       }),
       validation: CertificateValidation.fromDns(maybeHostedZone),
       existingLogicalId: props.existingLogicalId,

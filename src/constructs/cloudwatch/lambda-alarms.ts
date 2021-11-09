@@ -6,7 +6,10 @@ import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
 
 export interface GuLambdaErrorPercentageMonitoringProps
-  extends Omit<GuAlarmProps, "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData"> {
+  extends Omit<
+    GuAlarmProps,
+    "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
+  > {
   toleratedErrorPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;
   noMonitoring?: false;
@@ -29,8 +32,9 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
     });
     const defaultAlarmName = `High error % from ${props.lambda.functionName} lambda in ${scope.stage}`;
     const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
-    const alarmProps = {
+    const alarmProps: GuAlarmProps = {
       ...props,
+      app: props.lambda.app,
       metric: mathExpression,
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: props.toleratedErrorPercentage,

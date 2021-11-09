@@ -3,7 +3,7 @@
 exports[`The Gu5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
   "Mappings": Object {
-    "stagemapping": Object {
+    "testing": Object {
       "CODE": Object {
         "alarmActionsEnabled": false,
       },
@@ -127,7 +127,7 @@ Object {
       "Properties": Object {
         "ActionsEnabled": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testing",
             Object {
               "Ref": "Stage",
             },
@@ -254,7 +254,7 @@ Object {
 exports[`The GuUnhealthyInstancesAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
   "Mappings": Object {
-    "stagemapping": Object {
+    "testing": Object {
       "CODE": Object {
         "alarmActionsEnabled": false,
       },
@@ -449,7 +449,7 @@ Object {
       "Properties": Object {
         "ActionsEnabled": Object {
           "Fn::FindInMap": Array [
-            "stagemapping",
+            "testing",
             Object {
               "Ref": "Stage",
             },
