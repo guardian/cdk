@@ -38,4 +38,4 @@ jobs:
           # `guardian/actions-merge-release-changes-to-protected-branch` doesn't support v2 of `package-lock.json`
           # We need to update it.
           # In the meantime, allow all changes.
-          additional-changes: '{".github/workflows/ci.yaml": "*"}'
+          additional-changes: '{".github/workflows/ci.yaml": "*", "script/check-aws-cdk": "*"}'
