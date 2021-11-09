@@ -31,10 +31,11 @@ jobs:
     needs: [CI]
     steps:
       - name: Validate, approve and merge release PRs
-        uses: guardian/actions-merge-release-changes-to-protected-branch@v1.1.1
+        uses: guardian/actions-merge-release-changes-to-protected-branch@aa-npm-lockfile-version
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-lockfile-version: 2
           # `guardian/actions-merge-release-changes-to-protected-branch` doesn't support v2 of `package-lock.json`
           # We need to update it.
           # In the meantime, allow all changes.
-          additional-changes: '{"package-lock.json": "*", ".github/workflows/ci.yaml": "*"}'
+          additional-changes: '{".github/workflows/ci.yaml": "*"}'
