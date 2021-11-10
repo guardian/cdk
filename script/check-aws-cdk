@@ -5,7 +5,7 @@ set -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 LIBRARY_TO_CHECK="@aws-cdk/core"
-TOLERANCE=10
+TOLERANCE=5
 
 VERSIONS=$(npm view $LIBRARY_TO_CHECK versions --json)
 
