@@ -5,4 +5,5 @@ export * from "./ec2";
 export * from "./identity";
 export * from "./s3";
 export * from "./ses";
+export * from "./sns";
 export * from "./vpc";

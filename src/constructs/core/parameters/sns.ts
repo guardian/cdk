@@ -5,14 +5,14 @@ import { GuStringParameter } from "./base";
 
 /**
  * Creates a CloudFormation parameter which references an SNS topic to send
- * alarms to. By default, the bucket name is stored in an SSM Parameter called
- * `/account/services/alarm.topic.name`.
+ * alarms to. By default, the topic ARN is stored in an SSM Parameter called
+ * `/account/services/alarm.topic.arn`.
  */
 export class GuAlarmTopicParameter extends GuStringParameter {
   private static instance: GuAlarmTopicParameter | undefined;
 
   private constructor(scope: GuStack) {
-    super(scope, "AlarmTopicName", {
+    super(scope, "AlarmTopicArn", {
       description: SSM_PARAMETER_PATHS.AlarmTopic.description,
       default: SSM_PARAMETER_PATHS.AlarmTopic.path,
       fromSSM: true,
@@ -30,14 +30,17 @@ export class GuAlarmTopicParameter extends GuStringParameter {
 
 /**
  * Creates a CloudFormation parameter which references an SNS topic to send
- * notifications to. By default, the bucket name is stored in an SSM Parameter
- * called `/account/services/alarm.topic.name`.
+ * notifications to. By default, the topic ARN is stored in an SSM Parameter
+ * called `/account/services/alarm.topic.arn`.
+ *
+ * Note, if you are notifying from code directly then you are probably better
+ * off going via Anghammarad.
  */
 export class GuNotificationTopicParameter extends GuStringParameter {
   private static instance: GuNotificationTopicParameter | undefined;
 
   private constructor(scope: GuStack) {
-    super(scope, "NotificationTopicName", {
+    super(scope, "NotificationTopicArn", {
       description: SSM_PARAMETER_PATHS.NotificationTopic.description,
       default: SSM_PARAMETER_PATHS.NotificationTopic.path,
       fromSSM: true,

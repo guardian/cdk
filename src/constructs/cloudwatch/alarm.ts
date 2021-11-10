@@ -2,13 +2,27 @@ import { Alarm } from "@aws-cdk/aws-cloudwatch";
 import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
 import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
 import { Topic } from "@aws-cdk/aws-sns";
-import type { ITopic } from "@aws-cdk/aws-sns";
 import { Stage } from "../../constants";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
+import { GuAlarmTopicParameter } from "../core/parameters/sns";
 
 export interface GuAlarmProps extends AlarmProps, AppIdentity {
-  snsTopicName: string;
+  /**
+   * Topic ARN.
+   *
+   * @default account alarm topic - see {@link GuAlarmTopicParameter}.".
+   */
+  snsTopicArn?: string;
+
+  /**
+   * Topic Name.
+   *
+   * @deprecated prefer {@link GuAlarmProps.snsTopicArn} instead.
+   * @default account alarm topic - see {@link GuAlarmTopicParameter}.
+   */
+  snsTopicName?: string;
+
   actionsEnabledInCode?: boolean;
 }
 
@@ -34,8 +48,14 @@ export class GuAlarm extends Alarm {
         },
       }),
     });
-    const topicArn: string = `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicName}`;
-    const snsTopic: ITopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, topicArn);
+
+    const arnFromName = props.snsTopicName
+      ? `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicName}`
+      : undefined;
+
+    const snsTopicArn = props.snsTopicArn ?? arnFromName ?? GuAlarmTopicParameter.getInstance(scope).valueAsString;
+    const snsTopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, snsTopicArn);
+
     this.addAlarmAction(new SnsAction(snsTopic));
   }
 }

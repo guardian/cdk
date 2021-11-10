@@ -27,14 +27,14 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
     description: "SSM parameter containing the S3 bucket name holding the app's private configuration",
   },
   AlarmTopic: {
-    path: "/account/services/alarm.topic.name",
+    path: "/account/services/alarm.topic.arn",
     description:
-      "SSM parameter containing the Name (not ARN) of an SNS topic to use for alarms. Alarms are for things that require an immediate response.",
+      "SSM parameter containing the ARN of an SNS topic to use for alarms. Alarms are for things that require an immediate response.",
   },
   NotificationTopic: {
-    path: "/account/services/notification.topic.name",
+    path: "/account/services/notification.topic.arn",
     description:
-      "SSM parameter containing the Name (not ARN) of an SNS topic to use for notifications. Unlike alarms, notifications do not require an immediate response. Note, if you are notifying from code directly then you are probably better off going via Anghammarad.",
+      "SSM parameter containing the ARN of an SNS topic to use for notifications. Unlike alarms, notifications do not require an immediate response. Note, if you are notifying from code directly then you are probably better off going via Anghammarad.",
   },
   PrimaryVpcId: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/id`,
