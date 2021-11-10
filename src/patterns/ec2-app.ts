@@ -8,7 +8,6 @@ import { Duration, Tags } from "@aws-cdk/core";
 import type { Stage } from "../constants";
 import { SSM_PARAMETER_PATHS } from "../constants/ssm-parameter-paths";
 import { TagKeys } from "../constants/tag-keys";
-import type { GuCertificateProps } from "../constructs/acm";
 import { GuCertificate } from "../constructs/acm";
 import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
@@ -25,6 +24,7 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../constructs/loadbalancing";
+import type { GuDomainNameProps } from "../types/domain-names";
 
 export enum AccessScope {
   PUBLIC = "Public",
@@ -170,7 +170,7 @@ export interface GuEc2AppProps extends AppIdentity {
   userData: GuUserDataProps | string;
   access: AppAccess;
   applicationPort: number;
-  certificateProps: GuCertificateProps;
+  certificateProps: GuDomainNameProps;
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: Alarms | NoMonitoring;
   instanceType: InstanceType;
