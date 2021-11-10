@@ -57,7 +57,7 @@
     "@aws-cdk/aws-ecs": "1.127.0",
     "@aws-cdk/aws-elasticloadbalancing": "1.127.0",
     "@aws-cdk/aws-elasticloadbalancingv2": "1.127.0",
-    "@aws-cdk/aws-events-targets": "1.127.0",
+    "@aws-cdk/aws-events-targets": "1.132.0",
     "@aws-cdk/aws-iam": "1.127.0",
     "@aws-cdk/aws-kinesis": "1.127.0",
     "@aws-cdk/aws-lambda": "1.127.0",
