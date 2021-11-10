@@ -31,7 +31,7 @@ jobs:
     needs: [CI]
     steps:
       - name: Validate, approve and merge release PRs
-        uses: guardian/actions-merge-release-changes-to-protected-branch@1.2.0
+        uses: guardian/actions-merge-release-changes-to-protected-branch@v1.2.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           npm-lockfile-version: 2
