@@ -5,6 +5,21 @@ import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "../lambda";
 import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";
 
+describe("GuLambdaThrottlingAlarm construct", () => {
+  it("should match snapshot", () => {
+    const stack = simpleGuStackForTesting();
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "lambda.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      app: "testing",
+      throttlingMonitoring: { snsTopicName: "alerts-topic" },
+    });
+
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+});
+
 describe("The GuLambdaErrorPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
     const stack = simpleGuStackForTesting();

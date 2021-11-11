@@ -3,15 +3,27 @@ import type { FunctionProps, Runtime } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration } from "@aws-cdk/core";
 import { GuDistributable } from "../../types/distributable";
-import { GuLambdaErrorPercentageAlarm } from "../cloudwatch";
-import type { GuLambdaErrorPercentageMonitoringProps } from "../cloudwatch";
+import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
+import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitoringProps } from "../cloudwatch";
 import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import { GuParameterStoreReadPolicyStatement } from "../iam";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
+  /**
+   * Alarm if error percentage exceeds a threshold.
+   */
   errorPercentageMonitoring?: GuLambdaErrorPercentageMonitoringProps;
+
+  /**
+   * Alarm if throttling occurs. Note, it is also worth considering a
+   * concurrency limit (the `reservedConcurrentExecutions` prop) if you are
+   * concerned about throttling.
+   *
+   * @see https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html
+   */
+  throttlingMonitoring?: GuLambdaThrottlingMonitoringProps;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -81,6 +93,13 @@ export class GuLambdaFunction extends Function {
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
         ...props.errorPercentageMonitoring,
+        lambda: this,
+      });
+    }
+
+    if (props.throttlingMonitoring) {
+      new GuLambdaThrottlingAlarm(scope, `${id}-ThrottlingAlarmForLambda`, {
+        ...props.throttlingMonitoring,
         lambda: this,
       });
     }
