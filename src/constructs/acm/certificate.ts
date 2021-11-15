@@ -3,19 +3,14 @@ import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certi
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
 import { Stage } from "../../constants";
+import type { GuDomainNameProps } from "../../types/domain-names";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 
-export type GuCertificateProps = Record<Stage, GuDnsValidatedCertificateProps> & GuMigratingResource;
-export type GuCertificatePropsWithApp = GuCertificateProps & AppIdentity;
-
-export interface GuDnsValidatedCertificateProps {
-  domainName: string;
-  hostedZoneId?: string;
-}
+export type GuCertificatePropsWithApp = GuDomainNameProps & AppIdentity & GuMigratingResource;
 
 /**
  * Construct which creates a DNS-validated ACM Certificate.
