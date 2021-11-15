@@ -121,6 +121,7 @@ export interface GuScheduledEcsTaskProps extends Identity {
   monitoringConfiguration: NoMonitoring | GuEcsTaskMonitoringProps;
   securityGroups?: ISecurityGroup[];
   customTaskPolicies?: PolicyStatement[];
+  scheduleEnabled?: boolean;
 }
 
 /**
@@ -206,6 +207,7 @@ export class GuScheduledEcsTask {
     const rule = new Rule(scope, AppIdentity.suffixText(props, "ScheduleRule"), {
       schedule: props.schedule,
       targets: [new SfnStateMachine(stateMachine)],
+      enabled: props.scheduleEnabled === undefined ? true : props.scheduleEnabled,
     });
 
     if (!props.monitoringConfiguration.noMonitoring) {
