@@ -1,5 +1,5 @@
-import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
+import "@aws-cdk/assert/jest";
 import type { IVpc } from "@aws-cdk/aws-ec2";
 import { SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Schedule } from "@aws-cdk/aws-events";
@@ -7,8 +7,8 @@ import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../constructs/core";
 import { simpleGuStackForTesting } from "../utils/test";
-import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 import "../utils/test/jest";
+import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 
 const makeVpc = (stack: GuStack) =>
   Vpc.fromVpcAttributes(stack, "VPC", {
@@ -57,6 +57,24 @@ describe("The GuScheduledEcsTask pattern", () => {
     });
 
     expect(stack).toHaveResourceLike("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
+    expect(stack).toHaveResourceLike("AWS::Events::Rule", { State: "ENABLED" });
+  });
+
+  it("should be disabled when scheduleEnabled is set to false", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuScheduledEcsTask(stack, {
+      schedule: Schedule.rate(Duration.minutes(1)),
+      containerConfiguration: { id: "node:10", type: "registry" },
+      monitoringConfiguration: { noMonitoring: true },
+      vpc: makeVpc(stack),
+      stack: "test",
+      stage: "TEST",
+      app: "ecs-test",
+      scheduleEnabled: false,
+    });
+
+    expect(stack).toHaveResourceLike("AWS::Events::Rule", { State: "DISABLED" });
   });
 
   const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc) => {
