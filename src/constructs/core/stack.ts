@@ -13,8 +13,16 @@ import type { GuMappingValue, GuStageMappingValue } from "./mappings";
 import { GuStageParameter } from "./parameters";
 import type { GuParameter } from "./parameters";
 
-export interface GuStackProps extends StackProps, Partial<GuMigratingStack> {
+export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuMigratingStack> {
+  /**
+   * The Guardian stack being used (as defined in your riff-raff.yaml).
+   * This will be applied as a tag to all of your resources.
+   */
   stack: string;
+  /**
+   * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
+   */
+  cloudFormationStackName?: string;
 }
 
 /**
@@ -108,7 +116,11 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
-    super(app, id, props);
+    const mergedProps = {
+      ...props,
+      stackName: props.cloudFormationStackName,
+    };
+    super(app, id, mergedProps);
 
     this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
 
