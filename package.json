@@ -67,7 +67,7 @@
     "@aws-cdk/aws-stepfunctions": "1.132.0",
     "@aws-cdk/aws-stepfunctions-tasks": "1.132.0",
     "@aws-cdk/core": "1.132.0",
-    "aws-sdk": "^2.1025.0",
+    "aws-sdk": "^2.1030.0",
     "chalk": "^4.1.2",
     "execa": "^5.1.1",
     "git-url-parse": "^11.6.0",
