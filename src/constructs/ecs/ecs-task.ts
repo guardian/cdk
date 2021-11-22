@@ -13,6 +13,7 @@ import {
 import type { PolicyStatement } from "@aws-cdk/aws-iam";
 import { Topic } from "@aws-cdk/aws-sns";
 import { IntegrationPattern, StateMachine } from "@aws-cdk/aws-stepfunctions";
+import type { TaskEnvironmentVariable } from "@aws-cdk/aws-stepfunctions-tasks";
 import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-tasks";
 import { CfnOutput, Duration } from "@aws-cdk/core";
 import type { NoMonitoring } from "../cloudwatch";
@@ -95,6 +96,7 @@ export interface GuEcsTaskProps extends Identity {
   monitoringConfiguration: NoMonitoring | GuEcsTaskMonitoringProps;
   securityGroups?: ISecurityGroup[];
   customTaskPolicies?: PolicyStatement[];
+  environmentOverrides?: TaskEnvironmentVariable[];
 }
 
 /**
@@ -145,7 +147,7 @@ export class GuEcsTask {
       family: `${props.stack}-${props.stage}-${props.app}`,
     });
 
-    taskDefinition.addContainer(`${id}-TaskContainer`, {
+    const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
       image: getContainer(props.containerConfiguration),
       entryPoint: props.taskCommand ? ["/bin/sh"] : undefined,
       command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined, // if unset, falls back to CMD in docker file, or no command will be run
@@ -172,6 +174,12 @@ export class GuEcsTask {
       resultPath: "DISCARD",
       timeout: Duration.minutes(timeout),
       securityGroups: props.securityGroups ?? [],
+      containerOverrides: [
+        {
+          containerDefinition: containerDefinition,
+          environment: props.environmentOverrides,
+        },
+      ],
     });
 
     this.stateMachine = new StateMachine(scope, `${id}-StateMachine`, {
