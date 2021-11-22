@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuScheduledEcsTask pattern should create the correct resources with lots of config 1`] = `
+exports[`The GuEcsTask pattern should create the correct resources with lots of config 1`] = `
 Object {
   "Outputs": Object {
     "StateMachineArnOutputEcstest": Object {
@@ -69,27 +69,6 @@ Object {
       },
       "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
     },
-    "ScheduleRuleEcstest07F5BBD2": Object {
-      "Properties": Object {
-        "ScheduleExpression": "rate(1 minute)",
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Ref": "StateMachineEcstest84BB1B77",
-            },
-            "Id": "Target0",
-            "RoleArn": Object {
-              "Fn::GetAtt": Array [
-                "StateMachineEcstestEventsRole50FE033D",
-                "Arn",
-              ],
-            },
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
     "StateMachineEcstest84BB1B77": Object {
       "DependsOn": Array [
         "StateMachineEcstestRoleDefaultPolicy1EED542B",
@@ -148,70 +127,6 @@ Object {
         ],
       },
       "Type": "AWS::StepFunctions::StateMachine",
-    },
-    "StateMachineEcstestEventsRole50FE033D": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "events.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "StateMachineEcstestEventsRoleDefaultPolicy2A914AF8": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "states:StartExecution",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "StateMachineEcstest84BB1B77",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "StateMachineEcstestEventsRoleDefaultPolicy2A914AF8",
-        "Roles": Array [
-          Object {
-            "Ref": "StateMachineEcstestEventsRole50FE033D",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
     "StateMachineEcstestRoleAFD3E1C6": Object {
       "Properties": Object {
@@ -468,7 +383,7 @@ Object {
               "LogDriver": "awslogs",
               "Options": Object {
                 "awslogs-group": Object {
-                  "Ref": "TaskDefinitionEcstestScheduledTaskContainerEcstestLogGroup1508FA51",
+                  "Ref": "TaskDefinitionEcstestTaskContainerEcstestLogGroupE23928B1",
                 },
                 "awslogs-region": Object {
                   "Ref": "AWS::Region",
@@ -477,7 +392,7 @@ Object {
               },
             },
             "Memory": 1024,
-            "Name": "ScheduledTaskContainerEcstest",
+            "Name": "TaskContainerEcstest",
           },
         ],
         "Cpu": "1024",
@@ -579,7 +494,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "TaskDefinitionEcstestScheduledTaskContainerEcstestLogGroup1508FA51",
+                  "TaskDefinitionEcstestTaskContainerEcstestLogGroupE23928B1",
                   "Arn",
                 ],
               },
@@ -596,7 +511,7 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TaskDefinitionEcstestScheduledTaskContainerEcstestLogGroup1508FA51": Object {
+    "TaskDefinitionEcstestTaskContainerEcstestLogGroupE23928B1": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "RetentionInDays": 14,
