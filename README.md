@@ -92,6 +92,17 @@ Alternatively, PRs are always welcome!
 
 There are more details on using the CDK library in [docs][directory-docs]
 
+### From AWS CDK to Guardian CDK
+
+If you are migrating from aws-cdk to @guardian/cdk, you will need to make sure that  the version of aws-cdk you are using is what is expected. If you run
+
+```
+npx @guardian/cdk@latest check-package-json
+```
+
+then the output is a json object, and you should set your aws-cdk version to the value of `versionExpected`.
+
+
 ### Using the `@guardian/cdk` CLI
 
 <!-- cli -->
