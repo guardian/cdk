@@ -28,7 +28,7 @@ describe("The GuEcsTask pattern", () => {
   it("should use the specified container", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuEcsTask(stack, {
+    new GuEcsTask(stack, "test-ecs-task", {
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
       vpc: makeVpc(stack),
@@ -41,7 +41,7 @@ describe("The GuEcsTask pattern", () => {
   });
 
   const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc) => {
-    new GuEcsTask(stack, {
+    new GuEcsTask(stack, `test-ecs-task-${app}`, {
       containerConfiguration: { id: "node:10", type: "registry" },
       vpc,
       stack: "test",

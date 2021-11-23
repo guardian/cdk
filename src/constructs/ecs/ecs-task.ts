@@ -122,7 +122,7 @@ const getContainer = (config: ContainerConfiguration) => {
 export class GuEcsTask {
   stateMachine: StateMachine;
 
-  constructor(scope: GuStack, props: GuEcsTaskProps) {
+  constructor(scope: GuStack, id: string, props: GuEcsTaskProps) {
     const timeout = props.taskTimeoutInMinutes ?? 15;
 
     // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
@@ -132,20 +132,20 @@ export class GuEcsTask {
     const cpu = props.cpu ?? defaultCpu;
     const memory = props.memory ?? defaultMemory;
 
-    const cluster = new Cluster(scope, AppIdentity.suffixText(props, "Cluster"), {
+    const cluster = new Cluster(scope, `${id}-Cluster`, {
       clusterName: `${props.app}-cluster-${props.stage}`,
       enableFargateCapacityProviders: true,
       vpc: props.vpc,
     });
 
-    const taskDefinition = new TaskDefinition(scope, AppIdentity.suffixText(props, "TaskDefinition"), {
+    const taskDefinition = new TaskDefinition(scope, `${id}-TaskDefinition`, {
       compatibility: Compatibility.FARGATE,
       cpu: cpu.toString(),
       memoryMiB: memory.toString(),
       family: `${props.stack}-${props.stage}-${props.app}`,
     });
 
-    taskDefinition.addContainer(AppIdentity.suffixText(props, "TaskContainer"), {
+    taskDefinition.addContainer(`${id}-TaskContainer`, {
       image: getContainer(props.containerConfiguration),
       entryPoint: props.taskCommand ? ["/bin/sh"] : undefined,
       command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined, // if unset, falls back to CMD in docker file, or no command will be run
@@ -162,7 +162,7 @@ export class GuEcsTask {
     taskDefinition.addToTaskRolePolicy(distPolicy);
     (props.customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
-    const task = new EcsRunTask(scope, `${props.app}-task`, {
+    const task = new EcsRunTask(scope, `${id}-task`, {
       cluster: cluster,
       launchTarget: new EcsFargateLaunchTarget({
         platformVersion: FargatePlatformVersion.LATEST,
@@ -174,7 +174,7 @@ export class GuEcsTask {
       securityGroups: props.securityGroups ?? [],
     });
 
-    this.stateMachine = new StateMachine(scope, AppIdentity.suffixText(props, "StateMachine"), {
+    this.stateMachine = new StateMachine(scope, `${id}-StateMachine`, {
       definition: task,
       stateMachineName: `${props.app}-${props.stage}`,
     });
@@ -224,7 +224,7 @@ export class GuEcsTask {
       AppIdentity.taggedConstruct({ app: props.app }, c)
     );
 
-    new CfnOutput(scope, AppIdentity.suffixText(props, "StateMachineArnOutput"), {
+    new CfnOutput(scope, `${id}-StateMachineArnOutput`, {
       value: this.stateMachine.stateMachineArn,
     });
   }

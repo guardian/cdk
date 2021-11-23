@@ -19,7 +19,7 @@ describe("The GuScheduledEcsTask pattern", () => {
   it("should use the specified schedule", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuScheduledEcsTask(stack, {
+    new GuScheduledEcsTask(stack, "test", {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },

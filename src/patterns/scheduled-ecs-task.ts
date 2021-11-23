@@ -5,6 +5,7 @@ import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";
 import type { GuEcsTaskProps } from "../constructs/ecs/ecs-task";
 import { GuEcsTask } from "../constructs/ecs/ecs-task";
+import { GuAppAwareConstruct } from "../utils/mixin/app-aware-construct";
 
 /**
  * Configuration options for the [[`GuScheduledEcsTask`]] pattern.
@@ -47,15 +48,14 @@ export interface GuScheduledEcsTaskProps extends GuEcsTaskProps {
  * Note that if your task reliably completes in less than 15 minutes then you should probably use a [[`GuScheduledLambda`]] instead. This
  * pattern was mainly created to work around the 15 minute lambda timeout.
  */
-export class GuScheduledEcsTask extends GuEcsTask {
-  constructor(scope: GuStack, props: GuScheduledEcsTaskProps) {
-    super(scope, props);
+export class GuScheduledEcsTask extends GuAppAwareConstruct(GuEcsTask) {
+  constructor(scope: GuStack, id: string, props: GuScheduledEcsTaskProps) {
+    super(scope, id, props);
 
-    const rule = new Rule(scope, AppIdentity.suffixText(props, "ScheduleRule"), {
+    new Rule(scope, `${id}-ScheduleRule`, {
       schedule: props.schedule,
       targets: [new SfnStateMachine(this.stateMachine)],
       enabled: true,
     });
-    AppIdentity.taggedConstruct({ app: props.app }, rule);
   }
 }

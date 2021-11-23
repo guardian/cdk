@@ -3,9 +3,9 @@
 exports[`The GuEcsTask pattern should create the correct resources with lots of config 1`] = `
 Object {
   "Outputs": Object {
-    "StateMachineArnOutputEcstest": Object {
+    "testecstaskecstestStateMachineArnOutput": Object {
       "Value": Object {
-        "Ref": "StateMachineEcstest84BB1B77",
+        "Ref": "testecstaskecstestStateMachineC0B6383F",
       },
     },
   },
@@ -26,7 +26,72 @@ Object {
     },
   },
   "Resources": Object {
-    "ClusterEcstest1892FB90": Object {
+    "ecstestexecutionfailedC93F511B": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          "arn:something:else:here:we:goalarm-topic",
+        ],
+        "AlarmDescription": "ecs-test-TEST job failed ",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "StateMachineArn",
+            "Value": Object {
+              "Ref": "testecstaskecstestStateMachineC0B6383F",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ExecutionsFailed",
+        "Namespace": "AWS/States",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ecstesttimeoutFE335653": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          "arn:something:else:here:we:goalarm-topic",
+        ],
+        "AlarmDescription": "ecs-test-TEST job timed out ",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "StateMachineArn",
+            "Value": Object {
+              "Ref": "testecstaskecstestStateMachineC0B6383F",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ExecutionsTimedOut",
+        "Namespace": "AWS/States",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "testecstaskecstestCluster71BC62CB": Object {
+      "Properties": Object {
+        "CapacityProviders": Array [
+          "FARGATE",
+          "FARGATE_SPOT",
+        ],
+        "Cluster": Object {
+          "Ref": "testecstaskecstestClusterCBD4036C",
+        },
+        "DefaultCapacityProviderStrategy": Array [],
+      },
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+    },
+    "testecstaskecstestClusterCBD4036C": Object {
       "Properties": Object {
         "ClusterName": "ecs-test-cluster-TEST",
         "Tags": Array [
@@ -56,37 +121,24 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
-    "ClusterEcstestAB072685": Object {
-      "Properties": Object {
-        "CapacityProviders": Array [
-          "FARGATE",
-          "FARGATE_SPOT",
-        ],
-        "Cluster": Object {
-          "Ref": "ClusterEcstest1892FB90",
-        },
-        "DefaultCapacityProviderStrategy": Array [],
-      },
-      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
-    },
-    "StateMachineEcstest84BB1B77": Object {
+    "testecstaskecstestStateMachineC0B6383F": Object {
       "DependsOn": Array [
-        "StateMachineEcstestRoleDefaultPolicy1EED542B",
-        "StateMachineEcstestRoleAFD3E1C6",
+        "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5",
+        "testecstaskecstestStateMachineRole93D08A02",
       ],
       "Properties": Object {
         "DefinitionString": Object {
           "Fn::Join": Array [
             "",
             Array [
-              "{\\"StartAt\\":\\"ecs-test-task\\",\\"States\\":{\\"ecs-test-task\\":{\\"End\\":true,\\"Type\\":\\"Task\\",\\"TimeoutSeconds\\":3600,\\"ResultPath\\":null,\\"Resource\\":\\"arn:",
+              "{\\"StartAt\\":\\"test-ecs-task-ecs-test-task\\",\\"States\\":{\\"test-ecs-task-ecs-test-task\\":{\\"End\\":true,\\"Type\\":\\"Task\\",\\"TimeoutSeconds\\":3600,\\"ResultPath\\":null,\\"Resource\\":\\"arn:",
               Object {
                 "Ref": "AWS::Partition",
               },
               ":states:::ecs:runTask.sync\\",\\"Parameters\\":{\\"Cluster\\":\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "ClusterEcstest1892FB90",
+                  "testecstaskecstestClusterCBD4036C",
                   "Arn",
                 ],
               },
@@ -96,7 +148,7 @@ Object {
         },
         "RoleArn": Object {
           "Fn::GetAtt": Array [
-            "StateMachineEcstestRoleAFD3E1C6",
+            "testecstaskecstestStateMachineRole93D08A02",
             "Arn",
           ],
         },
@@ -128,7 +180,7 @@ Object {
       },
       "Type": "AWS::StepFunctions::StateMachine",
     },
-    "StateMachineEcstestRoleAFD3E1C6": Object {
+    "testecstaskecstestStateMachineRole93D08A02": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -180,7 +232,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "StateMachineEcstestRoleDefaultPolicy1EED542B": Object {
+    "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -199,7 +251,7 @@ Object {
                           "Fn::Split": Array [
                             ":",
                             Object {
-                              "Ref": "TaskDefinitionEcstest258379BD",
+                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
                         },
@@ -213,7 +265,7 @@ Object {
                           "Fn::Split": Array [
                             ":",
                             Object {
-                              "Ref": "TaskDefinitionEcstest258379BD",
+                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
                         },
@@ -227,7 +279,7 @@ Object {
                           "Fn::Split": Array [
                             ":",
                             Object {
-                              "Ref": "TaskDefinitionEcstest258379BD",
+                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
                         },
@@ -241,7 +293,7 @@ Object {
                           "Fn::Split": Array [
                             ":",
                             Object {
-                              "Ref": "TaskDefinitionEcstest258379BD",
+                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
                         },
@@ -261,7 +313,7 @@ Object {
                                   "Fn::Split": Array [
                                     ":",
                                     Object {
-                                      "Ref": "TaskDefinitionEcstest258379BD",
+                                      "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                                     },
                                   ],
                                 },
@@ -285,7 +337,7 @@ Object {
                                   "Fn::Split": Array [
                                     ":",
                                     Object {
-                                      "Ref": "TaskDefinitionEcstest258379BD",
+                                      "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                                     },
                                   ],
                                 },
@@ -313,13 +365,13 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "TaskDefinitionEcstestTaskRoleD5169AE2",
+                    "testecstaskecstestTaskDefinitionTaskRole4D626B6F",
                     "Arn",
                   ],
                 },
                 Object {
                   "Fn::GetAtt": Array [
-                    "TaskDefinitionEcstestExecutionRole9D2A7D47",
+                    "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",
                     "Arn",
                   ],
                 },
@@ -356,16 +408,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "StateMachineEcstestRoleDefaultPolicy1EED542B",
+        "PolicyName": "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5",
         "Roles": Array [
           Object {
-            "Ref": "StateMachineEcstestRoleAFD3E1C6",
+            "Ref": "testecstaskecstestStateMachineRole93D08A02",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TaskDefinitionEcstest258379BD": Object {
+    "testecstaskecstestTaskDefinition4BF687D5": Object {
       "Properties": Object {
         "ContainerDefinitions": Array [
           Object {
@@ -383,7 +435,7 @@ Object {
               "LogDriver": "awslogs",
               "Options": Object {
                 "awslogs-group": Object {
-                  "Ref": "TaskDefinitionEcstestTaskContainerEcstestLogGroupE23928B1",
+                  "Ref": "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A",
                 },
                 "awslogs-region": Object {
                   "Ref": "AWS::Region",
@@ -392,13 +444,13 @@ Object {
               },
             },
             "Memory": 1024,
-            "Name": "TaskContainerEcstest",
+            "Name": "test-ecs-task-ecs-test-TaskContainer",
           },
         ],
         "Cpu": "1024",
         "ExecutionRoleArn": Object {
           "Fn::GetAtt": Array [
-            "TaskDefinitionEcstestExecutionRole9D2A7D47",
+            "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",
             "Arn",
           ],
         },
@@ -434,55 +486,14 @@ Object {
         ],
         "TaskRoleArn": Object {
           "Fn::GetAtt": Array [
-            "TaskDefinitionEcstestTaskRoleD5169AE2",
+            "testecstaskecstestTaskDefinitionTaskRole4D626B6F",
             "Arn",
           ],
         },
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
-    "TaskDefinitionEcstestExecutionRole9D2A7D47": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "Value": "ecs-test",
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "TaskDefinitionEcstestExecutionRoleDefaultPolicy562096CB": Object {
+    "testecstaskecstestTaskDefinitionExecutionRoleDefaultPolicy85ED5386": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -494,7 +505,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "TaskDefinitionEcstestTaskContainerEcstestLogGroupE23928B1",
+                  "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A",
                   "Arn",
                 ],
               },
@@ -502,24 +513,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "TaskDefinitionEcstestExecutionRoleDefaultPolicy562096CB",
+        "PolicyName": "testecstaskecstestTaskDefinitionExecutionRoleDefaultPolicy85ED5386",
         "Roles": Array [
           Object {
-            "Ref": "TaskDefinitionEcstestExecutionRole9D2A7D47",
+            "Ref": "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TaskDefinitionEcstestTaskContainerEcstestLogGroupE23928B1": Object {
-      "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "RetentionInDays": 14,
-      },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "TaskDefinitionEcstestTaskRoleD5169AE2": Object {
+    "testecstaskecstestTaskDefinitionExecutionRoleF588BC50": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -560,7 +563,48 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "TaskDefinitionEcstestTaskRoleDefaultPolicyC6A4D178": Object {
+    "testecstaskecstestTaskDefinitionTaskRole4D626B6F": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "ecs-test",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "testecstaskecstestTaskDefinitionTaskRoleDefaultPolicy65D034C8": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -592,66 +636,22 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "TaskDefinitionEcstestTaskRoleDefaultPolicyC6A4D178",
+        "PolicyName": "testecstaskecstestTaskDefinitionTaskRoleDefaultPolicy65D034C8",
         "Roles": Array [
           Object {
-            "Ref": "TaskDefinitionEcstestTaskRoleD5169AE2",
+            "Ref": "testecstaskecstestTaskDefinitionTaskRole4D626B6F",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ecstestexecutionfailedC93F511B": Object {
+    "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A": Object {
+      "DeletionPolicy": "Retain",
       "Properties": Object {
-        "ActionsEnabled": true,
-        "AlarmActions": Array [
-          "arn:something:else:here:we:goalarm-topic",
-        ],
-        "AlarmDescription": "ecs-test-TEST job failed ",
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "StateMachineArn",
-            "Value": Object {
-              "Ref": "StateMachineEcstest84BB1B77",
-            },
-          },
-        ],
-        "EvaluationPeriods": 1,
-        "MetricName": "ExecutionsFailed",
-        "Namespace": "AWS/States",
-        "Period": 3600,
-        "Statistic": "Sum",
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching",
+        "RetentionInDays": 14,
       },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "ecstesttimeoutFE335653": Object {
-      "Properties": Object {
-        "ActionsEnabled": true,
-        "AlarmActions": Array [
-          "arn:something:else:here:we:goalarm-topic",
-        ],
-        "AlarmDescription": "ecs-test-TEST job timed out ",
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
-            "Name": "StateMachineArn",
-            "Value": Object {
-              "Ref": "StateMachineEcstest84BB1B77",
-            },
-          },
-        ],
-        "EvaluationPeriods": 1,
-        "MetricName": "ExecutionsTimedOut",
-        "Namespace": "AWS/States",
-        "Period": 3600,
-        "Statistic": "Sum",
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }
