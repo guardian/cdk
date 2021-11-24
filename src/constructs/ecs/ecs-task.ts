@@ -13,6 +13,7 @@ import {
 import type { PolicyStatement } from "@aws-cdk/aws-iam";
 import { Topic } from "@aws-cdk/aws-sns";
 import { IntegrationPattern, StateMachine } from "@aws-cdk/aws-stepfunctions";
+import type { TaskEnvironmentVariable } from "@aws-cdk/aws-stepfunctions-tasks";
 import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-tasks";
 import { CfnOutput, Duration } from "@aws-cdk/core";
 import type { NoMonitoring } from "../cloudwatch";
@@ -84,6 +85,20 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
  * You can also set the memory and cpu units for your task. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
  * for further details.
  *
+ * If you want to pass input from the step function into your EcsTask you can do so via the `environmentOverrides` prop, which allows you to wire up
+ * step function input JSON to environment variables set on the container. For example,
+ * const props = {
+ *  ...otherProps
+ *   environmentOverrides: [
+      {
+        name: "VERSION",
+        value: JsonPath.stringAt("$.version"),
+      },
+    }
+ * With the above override, your task will attempt to find a `version` property in the JSON input passed to the step function, and apply it to the
+ * VERSION environment variable. Alternatively, you could hard code a value for the variable in CDK.
+ * See https://docs.aws.amazon.com/step-functions/latest/dg/connect-ecs.html for further detail and  other override options - this construct currently
+ * only supports environment variables.
  */
 export interface GuEcsTaskProps extends Identity {
   vpc: IVpc;
@@ -95,6 +110,7 @@ export interface GuEcsTaskProps extends Identity {
   monitoringConfiguration: NoMonitoring | GuEcsTaskMonitoringProps;
   securityGroups?: ISecurityGroup[];
   customTaskPolicies?: PolicyStatement[];
+  environmentOverrides?: TaskEnvironmentVariable[];
 }
 
 /**
@@ -145,7 +161,7 @@ export class GuEcsTask {
       family: `${props.stack}-${props.stage}-${props.app}`,
     });
 
-    taskDefinition.addContainer(`${id}-TaskContainer`, {
+    const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
       image: getContainer(props.containerConfiguration),
       entryPoint: props.taskCommand ? ["/bin/sh"] : undefined,
       command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined, // if unset, falls back to CMD in docker file, or no command will be run
@@ -172,6 +188,12 @@ export class GuEcsTask {
       resultPath: "DISCARD",
       timeout: Duration.minutes(timeout),
       securityGroups: props.securityGroups ?? [],
+      containerOverrides: [
+        {
+          containerDefinition: containerDefinition,
+          environment: props.environmentOverrides,
+        },
+      ],
     });
 
     this.stateMachine = new StateMachine(scope, `${id}-StateMachine`, {
