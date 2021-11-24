@@ -142,7 +142,7 @@ Object {
                   "Arn",
                 ],
               },
-              "\\",\\"TaskDefinition\\":\\"test-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"TaskContainerEcstest\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
+              "\\",\\"TaskDefinition\\":\\"test-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"test-ecs-task-ecs-test-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
             ],
           ],
         },
