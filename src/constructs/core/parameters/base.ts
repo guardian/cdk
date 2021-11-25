@@ -32,6 +32,12 @@ export class GuStringParameter extends GuParameter {
   }
 }
 
+export class GuNumberParameter extends GuParameter {
+  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+    super(scope, id, { ...props, type: "Number" });
+  }
+}
+
 export class GuArnParameter extends GuStringParameter {
   constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, {

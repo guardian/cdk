@@ -2,7 +2,7 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import type { SynthedStack } from "../../../utils/test";
-import { GuArnParameter, GuParameter, GuStringParameter } from "./base";
+import { GuArnParameter, GuNumberParameter, GuParameter, GuStringParameter } from "./base";
 
 describe("The GuParameter class", () => {
   it("sets the type as passed through by default", () => {
@@ -99,6 +99,21 @@ describe("The GuStringParameter class", () => {
 
     expect(json.Parameters.Parameter).toEqual({
       Type: "String",
+      Description: "This is a test",
+    });
+  });
+});
+
+describe("The GuNumberParameter class", () => {
+  it("should set the type to number", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuNumberParameter(stack, "Parameter", { description: "This is a test" });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Parameters.Parameter).toEqual({
+      Type: "Number",
       Description: "This is a test",
     });
   });
