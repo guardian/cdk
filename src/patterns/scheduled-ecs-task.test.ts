@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import "../utils/test/jest";
-import { IVpc, Vpc } from "@aws-cdk/aws-ec2";
+import { Vpc } from "@aws-cdk/aws-ec2";
 import { Schedule } from "@aws-cdk/aws-events";
 import { Duration } from "@aws-cdk/core";
 import type { GuStack } from "../constructs/core";
