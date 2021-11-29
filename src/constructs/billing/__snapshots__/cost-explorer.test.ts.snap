@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuCostAnomalyEmailMonitor construct should create the correct resources with minimal config 1`] = `
+Object {
+  "Parameters": Object {
+    "EmailRecipient": Object {
+      "AllowedPattern": "^[a-zA-Z]+(\\\\.[a-zA-Z]+)*@theguardian.com$",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CostAnomalyMonitor": Object {
+      "Properties": Object {
+        "MonitorName": "CostAnomalyMonitor",
+        "MonitorType": "DIMENSIONAL",
+      },
+      "Type": "AWS::CE::AnomalyMonitor",
+    },
+    "CostAnomalyMonitorSubscription": Object {
+      "Properties": Object {
+        "Frequency": "IMMEDIATE",
+        "MonitorArnList": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "CostAnomalyMonitor",
+              "MonitorArn",
+            ],
+          },
+        ],
+        "Subscribers": Array [
+          Object {
+            "Address": Object {
+              "Ref": "EmailRecipient",
+            },
+            "Type": "EMAIL",
+          },
+        ],
+        "SubscriptionName": "CostAnomalyMonitorSubscription",
+        "Threshold": 50,
+      },
+      "Type": "AWS::CE::AnomalySubscription",
+    },
+  },
+}
+`;
