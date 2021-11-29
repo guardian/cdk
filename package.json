@@ -1,7 +1,7 @@
 {
   "name": "@guardian/cdk",
   "description": "Generic Guardian flavoured AWS CDK components",
-  "version": "31.1.0",
+  "version": "31.2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -40,7 +40,7 @@
     "jest": "^27.3.1",
     "npm-check-updates": "^12.0.2",
     "prettier": "^2.4.1",
-    "semantic-release": "^18.0.0",
+    "semantic-release": "^18.0.1",
     "serve": "^13.0.2",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
@@ -62,7 +62,7 @@
     "@aws-cdk/aws-kinesis": "1.132.0",
     "@aws-cdk/aws-lambda": "1.132.0",
     "@aws-cdk/aws-lambda-event-sources": "1.132.0",
-    "@aws-cdk/aws-rds": "1.132.0",
+    "@aws-cdk/aws-rds": "1.134.0",
     "@aws-cdk/aws-s3": "1.132.0",
     "@aws-cdk/aws-stepfunctions": "1.132.0",
     "@aws-cdk/aws-stepfunctions-tasks": "1.132.0",
