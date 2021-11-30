@@ -54,7 +54,6 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
  */
 export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
   private readonly _stack: string;
-  private readonly _stage: string;
 
   private _mappings?: GuStageMapping;
   private params: Map<string, GuParameter>;
@@ -62,7 +61,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    return this._stage;
+    return GuStageParameter.getInstance(this).valueAsString;
   }
 
   get stack(): string {
@@ -127,7 +126,6 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     this.params = new Map<string, GuParameter>();
 
     this._stack = props.stack;
-    this._stage = GuStageParameter.getInstance(this).valueAsString;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);
 
