@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- testing file */
 
-import type { GuStack } from "../../../src/constructs/core";
+import type { GuStack, GuStackForInfrastructure } from "../../../src/constructs/core";
 
 interface MyProps {
   name: string;
@@ -48,5 +48,11 @@ class YetAnotherThreeParamConstructor {
 class PrivateConstructor {
   private constructor(number: number) {
     console.log(number);
+  }
+}
+
+class InfraConstructor {
+  constructor(scope: GuStackForInfrastructure) {
+    console.log(scope);
   }
 }

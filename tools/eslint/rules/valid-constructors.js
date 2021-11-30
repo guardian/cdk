@@ -3,7 +3,7 @@ RULES
 1. Private constructors don't get linted
 2. Must be 1, 2 or 3 parameters
 3. First parameter must be called scope
-4. First parameter must be of type GuStack
+4. First parameter must be of type GuStack or GuStackForInfrastructure
 5. If 2 parameters:
    - The second parameter must be called props
    - The second parameter must be a custom type
@@ -54,20 +54,30 @@ const lintParameter = (param, node, context, { name, type, allowOptional, allowD
   const customType =
     param.typeAnnotation?.typeAnnotation.typeName?.name ?? param.left?.typeAnnotation.typeAnnotation.typeName.name;
 
-  const currentType = type.startsWith("TS") ? tsType : customType;
+  if (type instanceof RegExp) {
+    if (!type.test(customType)) {
+      return context.report({
+        node,
+        loc: param.typeAnnotation.loc,
+        message: `The ${position} parameter in a constructor must match ${type.toString()} (currently ${customType})`,
+      });
+    }
+  } else {
+    const currentType = type.startsWith("TS") ? tsType : customType;
 
-  if (currentType !== type) {
-    return context.report({
-      node,
-      loc: param.typeAnnotation.loc,
-      message: `The ${position} parameter in a constructor must be of type ${type} (currently ${currentType})`,
-    });
+    if (currentType !== type) {
+      return context.report({
+        node,
+        loc: param.typeAnnotation.loc,
+        message: `The ${position} parameter in a constructor must be of type ${type} (currently ${currentType})`,
+      });
+    }
   }
 };
 
 const scopeParamSpec = {
   name: "scope",
-  type: "GuStack",
+  type: new RegExp("^(GuStackForInfrastructure|GuStack)$"),
   allowOptional: false,
   allowDefault: false,
   position: "first",
