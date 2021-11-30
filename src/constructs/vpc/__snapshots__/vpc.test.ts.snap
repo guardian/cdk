@@ -2,17 +2,6 @@
 
 exports[`The GuVpc construct should match snapshot 1`] = `
 Object {
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "MyVpcF9F0CA6F": Object {
       "Properties": Object {
@@ -39,9 +28,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
       },
@@ -68,9 +55,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
       },
@@ -131,9 +116,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -181,9 +164,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -225,9 +206,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -286,9 +265,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -369,9 +346,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
       },
@@ -407,9 +382,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
       },
@@ -447,9 +420,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -497,9 +468,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -545,9 +514,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
       },
@@ -583,9 +550,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
       },
@@ -612,9 +577,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -673,9 +636,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "INFRA",
           },
         ],
         "VpcId": Object {
@@ -724,9 +685,7 @@ Object {
         "Name": "/account/vpc/primary/subnets/private",
         "Tags": Object {
           "Stack": "test-stack",
-          "Stage": Object {
-            "Ref": "Stage",
-          },
+          "Stage": "INFRA",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },
@@ -753,9 +712,7 @@ Object {
         "Name": "/account/vpc/primary/subnets/public",
         "Tags": Object {
           "Stack": "test-stack",
-          "Stage": Object {
-            "Ref": "Stage",
-          },
+          "Stage": "INFRA",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },
@@ -782,9 +739,7 @@ Object {
         "Name": "/account/vpc/primary/id",
         "Tags": Object {
           "Stack": "test-stack",
-          "Stage": Object {
-            "Ref": "Stage",
-          },
+          "Stage": "INFRA",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },

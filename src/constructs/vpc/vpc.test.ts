@@ -1,18 +1,25 @@
 import "@aws-cdk/assert/jest";
 import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { App } from "@aws-cdk/core";
+import { GuStackForInfrastructure } from "../core";
 import { GuVpc } from "./vpc";
 
 describe("The GuVpc construct", () => {
+  const simpleInfraStack = () => {
+    return new GuStackForInfrastructure(new App(), "Test", {
+      stack: "test-stack",
+    });
+  };
+
   it("should match snapshot", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleInfraStack();
     new GuVpc(stack, "MyVpc");
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
   it("should create VPC SSM parameters by default", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleInfraStack();
     new GuVpc(stack, "MyVpc", { ssmParameters: true });
     expect(stack).toHaveResourceLike("AWS::SSM::Parameter", {
       Name: "/account/vpc/primary/id",
@@ -28,7 +35,7 @@ describe("The GuVpc construct", () => {
   });
 
   it("should not create VPC SSM parameters if set to false", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleInfraStack();
     new GuVpc(stack, "MyVpc", { ssmParameters: false });
 
     expect(stack).toCountResources("AWS::SSM::Parameter", 0);

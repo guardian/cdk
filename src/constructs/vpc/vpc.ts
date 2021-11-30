@@ -3,7 +3,7 @@ import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "@aws-cdk/aws-ec2"
 import { StringListParameter, StringParameter } from "@aws-cdk/aws-ssm";
 import { VPC_SSM_PARAMETER_PREFIX } from "../../constants/ssm-parameter-paths";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
-import type { GuStack } from "../core";
+import type { GuStackForInfrastructure } from "../core";
 import type { GuMigratingResource } from "../core/migrating";
 
 export interface GuVpcCustomProps {
@@ -60,7 +60,7 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResou
  * https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html.
  */
 export class GuVpc extends GuStatefulMigratableConstruct(Vpc) {
-  constructor(scope: GuStack, id: string, props?: GuVpcProps) {
+  constructor(scope: GuStackForInfrastructure, id: string, props?: GuVpcProps) {
     const defaultVpcProps: VpcProps = {
       gatewayEndpoints: {
         s3: {
