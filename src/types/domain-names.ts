@@ -1,8 +1,8 @@
-import type { Stage } from "../constants";
-
-export type GuDomainNameProps = Record<Stage, GuDomainName>;
+import type { StageAwareValue } from "./stage";
 
 export interface GuDomainName {
   domainName: string;
   hostedZoneId?: string;
 }
+
+export type GuDomainNameProps = StageAwareValue<GuDomainName>;

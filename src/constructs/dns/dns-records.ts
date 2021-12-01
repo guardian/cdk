@@ -1,7 +1,8 @@
 import type { Duration } from "@aws-cdk/core";
 import { CfnResource } from "@aws-cdk/core";
-import { Stage } from "../../constants";
+import { Stage, StageForInfrastructure } from "../../constants";
 import type { GuDomainNameProps } from "../../types/domain-names";
+import { StageAwareValue } from "../../types/stage";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 
@@ -72,10 +73,14 @@ export class GuCname extends GuDnsRecordSet {
     const domainName = scope.withStageDependentValue({
       app: props.app,
       variableName: "domainName",
-      stageValues: {
-        [Stage.CODE]: props.domainNameProps.CODE.domainName,
-        [Stage.PROD]: props.domainNameProps.PROD.domainName,
-      },
+      stageValues: StageAwareValue.isStageValue(props.domainNameProps)
+        ? {
+            [Stage.CODE]: props.domainNameProps.CODE.domainName,
+            [Stage.PROD]: props.domainNameProps.PROD.domainName,
+          }
+        : {
+            [StageForInfrastructure]: props.domainNameProps.INFRA.domainName,
+          },
     });
     super(scope, id, {
       name: domainName,

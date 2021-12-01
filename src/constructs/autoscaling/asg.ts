@@ -3,7 +3,8 @@ import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-au
 import { OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../../constants";
+import { Stage, StageForInfrastructure } from "../../constants";
+import { StageAwareValue } from "../../types/stage";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
@@ -38,7 +39,7 @@ export interface GuAutoScalingGroupProps
   targetGroup?: ApplicationTargetGroup;
 }
 
-type GuStageDependentAsgProps = Record<Stage, GuAsgCapacityProps>;
+type GuStageDependentAsgProps = StageAwareValue<GuAsgCapacityProps>;
 
 /**
  * `minimumInstances` determines the number of ec2 instances running under normal circumstances
@@ -69,18 +70,25 @@ function wireStageDependentProps(
     minCapacity: stack.withStageDependentValue({
       app,
       variableName: "minInstances",
-      stageValues: {
-        [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
-        [Stage.PROD]: stageDependentProps.PROD.minimumInstances,
-      },
+      stageValues: StageAwareValue.isStageValue(stageDependentProps)
+        ? {
+            [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
+            [Stage.PROD]: stageDependentProps.PROD.minimumInstances,
+          }
+        : { [StageForInfrastructure]: stageDependentProps.INFRA.minimumInstances },
     }),
     maxCapacity: stack.withStageDependentValue({
       app,
       variableName: "maxInstances",
-      stageValues: {
-        [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
-        [Stage.PROD]: stageDependentProps.PROD.maximumInstances ?? stageDependentProps.PROD.minimumInstances * 2,
-      },
+      stageValues: StageAwareValue.isStageValue(stageDependentProps)
+        ? {
+            [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
+            [Stage.PROD]: stageDependentProps.PROD.maximumInstances ?? stageDependentProps.PROD.minimumInstances * 2,
+          }
+        : {
+            [StageForInfrastructure]:
+              stageDependentProps.INFRA.maximumInstances ?? stageDependentProps.INFRA.minimumInstances * 2,
+          },
     }),
   };
 }
