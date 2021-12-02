@@ -3,7 +3,7 @@ import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
 import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
 import { Topic } from "@aws-cdk/aws-sns";
 import type { ITopic } from "@aws-cdk/aws-sns";
-import { Stage } from "../../constants";
+import { Stage, StageForInfrastructure } from "../../constants";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 
@@ -28,10 +28,13 @@ export class GuAlarm extends Alarm {
       actionsEnabled: scope.withStageDependentValue({
         app: props.app,
         variableName: "alarmActionsEnabled",
-        stageValues: {
-          [Stage.CODE]: props.actionsEnabledInCode ?? false,
-          [Stage.PROD]: true,
-        },
+        stageValues:
+          scope.stage === StageForInfrastructure
+            ? { [StageForInfrastructure]: true }
+            : {
+                [Stage.CODE]: props.actionsEnabledInCode ?? false,
+                [Stage.PROD]: true,
+              },
       }),
     });
     const topicArn: string = `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicName}`;

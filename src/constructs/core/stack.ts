@@ -1,7 +1,8 @@
-import { Stack, Tags } from "@aws-cdk/core";
+import { Annotations, Stack, Tags } from "@aws-cdk/core";
 import type { App, StackProps } from "@aws-cdk/core";
 import execa from "execa";
 import gitUrlParse from "git-url-parse";
+import { StageForInfrastructure } from "../../constants";
 import { ContextKeys } from "../../constants/context-keys";
 import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
@@ -54,7 +55,6 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
  */
 export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
   private readonly _stack: string;
-  private readonly _stage: string;
 
   private _mappings?: GuStageMapping;
   private params: Map<string, GuParameter>;
@@ -62,7 +62,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    return this._stage;
+    return GuStageParameter.getInstance(this).valueAsString;
   }
 
   get stack(): string {
@@ -83,6 +83,13 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
    * Mappings to work around this limitation.
    */
   withStageDependentValue<T extends GuMappingValue>(mappingValue: GuStageMappingValue<T>): T {
+    const isInfraStageProvided = Object.keys(mappingValue.stageValues).includes(StageForInfrastructure);
+    if (isInfraStageProvided) {
+      Annotations.of(this).addWarning(
+        `GuStack does not have a stage of ${StageForInfrastructure}. Setting a mapping value for it has no impact.`
+      );
+    }
+
     return this.mappings.withValue(mappingValue);
   }
 
@@ -127,7 +134,6 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     this.params = new Map<string, GuParameter>();
 
     this._stack = props.stack;
-    this._stage = GuStageParameter.getInstance(this).valueAsString;
 
     this.addTag(TrackingTag.Key, TrackingTag.Value);
 
@@ -158,5 +164,28 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
       );
     }
+  }
+}
+
+/**
+ * A GuStack but designed for infrastructure as `Stage` will always be `INFRA`.
+ */
+export class GuStackForInfrastructure extends GuStack {
+  override get stage(): string {
+    return StageForInfrastructure;
+  }
+
+  /**
+   * A helper function to switch between different values depending on the Stage being CloudFormed.
+   *
+   * As GuInfrastructureStack has a single stage (INFRA), calling withStageDependentValue is unnecessary complexity.
+   * Consider using a standard variable in code instead.
+   *
+   * Note: Specifying a stage other than `INFRA` will raise an exception.
+   */
+  override withStageDependentValue<T extends GuMappingValue>(mappingValue: GuStageMappingValue<T>): T {
+    // Yep, we're just calling the super class's implementation...
+    // We're overriding to add some helpful documentation in the doc string.
+    return super.withStageDependentValue(mappingValue);
   }
 }

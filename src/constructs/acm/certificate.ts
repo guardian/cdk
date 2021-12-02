@@ -2,8 +2,9 @@ import { Certificate, CertificateValidation } from "@aws-cdk/aws-certificatemana
 import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
-import { Stage } from "../../constants";
+import { Stage, StageForInfrastructure } from "../../constants";
 import type { GuDomainNameProps } from "../../types/domain-names";
+import { StageAwareValue } from "../../types/stage";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";
@@ -56,29 +57,43 @@ export type GuCertificatePropsWithApp = GuDomainNameProps & AppIdentity & GuMigr
  */
 export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Certificate)) {
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
-    const maybeHostedZone =
-      props.CODE.hostedZoneId && props.PROD.hostedZoneId
-        ? HostedZone.fromHostedZoneId(
-            scope,
-            AppIdentity.suffixText({ app: props.app }, "HostedZone"),
-            scope.withStageDependentValue({
-              app: props.app,
-              variableName: "hostedZoneId",
-              stageValues: {
-                [Stage.CODE]: props.CODE.hostedZoneId,
-                [Stage.PROD]: props.PROD.hostedZoneId,
-              },
-            })
-          )
-        : undefined;
+    const hasHostedZoneId: boolean = StageAwareValue.isStageValue(props)
+      ? !!props.CODE.hostedZoneId && !!props.PROD.hostedZoneId
+      : !!props.INFRA.hostedZoneId;
+
+    const maybeHostedZone = !hasHostedZoneId
+      ? undefined
+      : HostedZone.fromHostedZoneId(
+          scope,
+          AppIdentity.suffixText({ app: props.app }, "HostedZone"),
+          scope.withStageDependentValue({
+            app: props.app,
+            variableName: "hostedZoneId",
+            /* eslint-disable @typescript-eslint/no-non-null-assertion -- `hasHostedZoneId` is true, so we know `hostedZoneId` is present here */
+            stageValues: StageAwareValue.isStageValue(props)
+              ? {
+                  [Stage.CODE]: props.CODE.hostedZoneId!,
+                  [Stage.PROD]: props.PROD.hostedZoneId!,
+                }
+              : {
+                  [StageForInfrastructure]: props.INFRA.hostedZoneId!,
+                },
+            /* eslint-enable @typescript-eslint/no-non-null-assertion */
+          })
+        );
+
     const awsCertificateProps: CertificateProps & GuMigratingResource & AppIdentity = {
       domainName: scope.withStageDependentValue({
         app: props.app,
         variableName: "domainName",
-        stageValues: {
-          [Stage.CODE]: props.CODE.domainName,
-          [Stage.PROD]: props.PROD.domainName,
-        },
+        stageValues: StageAwareValue.isStageValue(props)
+          ? {
+              [Stage.CODE]: props.CODE.domainName,
+              [Stage.PROD]: props.PROD.domainName,
+            }
+          : {
+              [StageForInfrastructure]: props.INFRA.domainName,
+            },
       }),
       validation: CertificateValidation.fromDns(maybeHostedZone),
       existingLogicalId: props.existingLogicalId,

@@ -1,5 +1,5 @@
 import { CfnMapping } from "@aws-cdk/core";
-import type { Stage } from "../../constants";
+import type { StageAwareValue } from "../../types/stage";
 import type { AppIdentity } from "./identity";
 import type { GuStack } from "./stack";
 
@@ -7,7 +7,7 @@ export type GuMappingValue = string | number | boolean;
 
 export interface GuStageMappingValue<T extends GuMappingValue> extends AppIdentity {
   variableName: string;
-  stageValues: Record<Stage, T>;
+  stageValues: StageAwareValue<T>;
 }
 
 export class GuStageMapping {
