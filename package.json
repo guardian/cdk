@@ -30,7 +30,7 @@
     "@guardian/eslint-config-typescript": "0.7.0",
     "@types/aws-lambda": "^8.10.85",
     "@types/git-url-parse": "^9.0.1",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
     "@types/node": "16.11.11",
     "@types/yargs": "^17.0.7",
     "cz-conventional-changelog": "^3.3.0",
