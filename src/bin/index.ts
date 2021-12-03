@@ -12,6 +12,7 @@ const Commands = {
   AwsCdkVersion: "aws-cdk-version",
   AccountReadiness: "account-readiness",
   CheckPackageJson: "check-package-json",
+  New: "new",
 };
 
 const parseCommandLineArguments = () => {
@@ -36,6 +37,35 @@ const parseCommandLineArguments = () => {
           defaultDescription: "The current working directory",
         })
       )
+      .command(Commands.New, "Creates a new CDK stack", (yargs) =>
+        yargs
+          .option("multiApp", {
+            type: "boolean",
+            description:
+              "Create the stack files within sub directories as the project defines multiple apps (defaults to false)",
+            default: false,
+          })
+          .option("init", {
+            type: "boolean",
+            description: "Create the cdk directory before building the app and stack files (defaults to true)",
+            default: true,
+          })
+          .option("app", {
+            type: "string",
+            description: "The name of your application e.g. Amigo",
+            demandOption: true,
+          })
+          .option("stack", {
+            type: "string",
+            description:
+              "The Guardian stack being used (as defined in your riff-raff.yaml). This will be applied as a tag to all of your resources.",
+            demandOption: true,
+          })
+          .option("yamlTemplateLocation", {
+            type: "string",
+            description: "Path to the YAML CloudFormation template",
+          })
+      )
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
       .help()
@@ -55,6 +85,16 @@ parseCommandLineArguments()
       case Commands.CheckPackageJson: {
         const { directory } = argv;
         return checkPackageJson(directory);
+      }
+      case Commands.New: {
+        const { init } = argv;
+        const { multiApp } = argv;
+        const { app } = argv;
+        const { stack } = argv;
+        const { yamlTemplateLocation } = argv;
+        return Promise.resolve(
+          `Test: New command has been received. \ninit = ${init.toString()},\n multi-app  = ${multiApp.toString()},\n app = ${app},\n stack = ${stack},\n ymalTemplateLocation = ${yamlTemplateLocation}`
+        );
       }
       default:
         throw new Error(`Unknown command: ${command}`);
