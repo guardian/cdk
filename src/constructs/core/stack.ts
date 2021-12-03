@@ -24,6 +24,11 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
    */
   cloudFormationStackName?: string;
+  /**
+   * Set this to true to stop the GuStack from tagging all of your AWS resources.
+   * This should only be turned on as part of an initial migration from CloudFormation.
+   */
+  withoutTags?: boolean;
 }
 
 /**
@@ -135,12 +140,14 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
     this._stack = props.stack;
 
-    this.addTag(TrackingTag.Key, TrackingTag.Value);
+    if (!props.withoutTags) {
+      this.addTag(TrackingTag.Key, TrackingTag.Value);
 
-    this.addTag("Stack", this.stack);
-    this.addTag("Stage", this.stage);
+      this.addTag("Stack", this.stack);
+      this.addTag("Stage", this.stage);
 
-    this.tryAddRepositoryTag();
+      this.tryAddRepositoryTag();
+    }
   }
 
   /**

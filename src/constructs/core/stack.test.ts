@@ -49,6 +49,16 @@ describe("The GuStack construct", () => {
     expect(stack).toHaveGuTaggedResource("AWS::IAM::Role");
   });
 
+  it("should not apply any tags when withoutTags is set to true", () => {
+    const stack = new GuStack(new App(), "Test", { stack: "test", withoutTags: true });
+
+    new Role(stack, "MyRole", {
+      assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
+    });
+
+    expect(stack).not.toHaveGuTaggedResource("AWS::IAM::Role");
+  });
+
   it("should prefer context values for repository information", () => {
     const stack = new GuStack(new App({ context: { [ContextKeys.REPOSITORY_URL]: "my-repository" } }), "Test", {
       stack: "test",
