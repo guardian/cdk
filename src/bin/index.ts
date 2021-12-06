@@ -25,10 +25,12 @@ const parseCommandLineArguments = () => {
   return Promise.resolve(
     yargs
       .usage("$0 COMMAND [args]")
-      .option("profile", { type: "string", description: "AWS profile" })
-      .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
       .command(Commands.AwsCdkVersion, "Print the version of @aws-cdk libraries being used")
-      .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready")
+      .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready", (yargs) =>
+        yargs
+          .option("profile", { type: "string", description: "AWS profile" })
+          .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
+      )
       .command(Commands.CheckPackageJson, "Check a package.json file for compatibility with GuCDK", (yargs) =>
         yargs.option("directory", {
           type: "string",
@@ -76,12 +78,13 @@ const parseCommandLineArguments = () => {
 parseCommandLineArguments()
   .then((argv): CliCommandResponse => {
     const command = argv._[0];
-    const { profile, region } = argv;
     switch (command) {
       case Commands.AwsCdkVersion:
         return awsCdkVersionCommand();
-      case Commands.AccountReadiness:
+      case Commands.AccountReadiness: {
+        const { profile, region } = argv;
         return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
+      }
       case Commands.CheckPackageJson: {
         const { directory } = argv;
         return checkPackageJson(directory);
