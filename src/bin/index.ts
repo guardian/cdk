@@ -87,11 +87,7 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init } = argv;
-        const { multiApp } = argv;
-        const { app } = argv;
-        const { stack } = argv;
-        const { yamlTemplateLocation } = argv;
+        const { init, multiApp, app, stack, yamlTemplateLocation } = argv;
         return Promise.resolve(
           `Test: New command has been received. \ninit = ${init.toString()},\n multi-app  = ${multiApp.toString()},\n app = ${app},\n stack = ${stack},\n ymalTemplateLocation = ${yamlTemplateLocation}`
         );
