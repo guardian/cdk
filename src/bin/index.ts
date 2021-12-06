@@ -39,7 +39,7 @@ const parseCommandLineArguments = () => {
       )
       .command(Commands.New, "Creates a new CDK stack", (yargs) =>
         yargs
-          .option("multiApp", {
+          .option("multi-app", {
             type: "boolean",
             description:
               "Create the stack files within sub directories as the project defines multiple apps (defaults to false)",
@@ -61,7 +61,7 @@ const parseCommandLineArguments = () => {
               "The Guardian stack being used (as defined in your riff-raff.yaml). This will be applied as a tag to all of your resources.",
             demandOption: true,
           })
-          .option("yamlTemplateLocation", {
+          .option("yaml-template-location", {
             type: "string",
             description: "Path to the YAML CloudFormation template",
           })
@@ -87,7 +87,7 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init, multiApp, app, stack, yamlTemplateLocation } = argv;
+        const { init, "multi-app": multiApp, app, stack, "yaml-template-location": yamlTemplateLocation } = argv;
         return Promise.resolve(
           `Test: New command has been received. \ninit = ${init.toString()},\n multi-app  = ${multiApp.toString()},\n app = ${app},\n stack = ${stack},\n ymalTemplateLocation = ${yamlTemplateLocation}`
         );
