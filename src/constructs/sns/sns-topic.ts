@@ -1,10 +1,26 @@
-import { Topic } from "@aws-cdk/aws-sns";
+import { AccountPrincipal, OrganizationPrincipal } from "@aws-cdk/aws-iam";
 import type { TopicProps } from "@aws-cdk/aws-sns";
+import { Topic } from "@aws-cdk/aws-sns";
+import { RegexPattern } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import type { GuMigratingResource } from "../core/migrating";
 
-interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
+interface GuSnsTopicProps extends TopicProps, GuMigratingResource {
+  /**
+   * List of AWS account ids to grant `SNS:Publish` permission to.
+   *
+   * Note: if you need to add conditions to the Topic Policy, consider calling `this.grantPublish` directly.
+   */
+  accountsAllowedToPublish?: string[];
+
+  /**
+   * List of AWS organisations to grant `SNS:Publish` permission to.
+   *
+   * Note: if you need to add conditions to the Topic Policy, consider calling `this.grantPublish` directly.
+   */
+  organisationsAllowedToPublish?: string[];
+}
 
 /**
  * Construct which creates an SNS Topic.
@@ -25,5 +41,29 @@ interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
 export class GuSnsTopic extends GuStatefulMigratableConstruct(Topic) {
   constructor(scope: GuStack, id: string, props?: GuSnsTopicProps) {
     super(scope, id, props);
+
+    if (props) {
+      const accountsAllowedToPublish = props.accountsAllowedToPublish ?? [];
+      const accountIdRegex = new RegExp(RegexPattern.ACCOUNT_ID);
+
+      accountsAllowedToPublish.forEach((accountId) => {
+        if (!accountIdRegex.test(accountId)) {
+          throw new Error(`${accountId} is not an account ID - should match ${RegexPattern.ACCOUNT_ID}`);
+        }
+
+        this.grantPublish(new AccountPrincipal(accountId));
+      });
+
+      const organisationsAllowedToPublish = props.organisationsAllowedToPublish ?? [];
+      const organisationIdRegex = new RegExp(RegexPattern.ORGANISATION_ID);
+
+      organisationsAllowedToPublish.forEach((orgId) => {
+        if (!organisationIdRegex.test(orgId)) {
+          throw new Error(`${orgId} is not an organisation ID - should match ${RegexPattern.ORGANISATION_ID}`);
+        }
+
+        this.grantPublish(new OrganizationPrincipal(orgId));
+      });
+    }
   }
 }
