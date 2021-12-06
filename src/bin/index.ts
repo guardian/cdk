@@ -66,6 +66,7 @@ const parseCommandLineArguments = () => {
           .option("yaml-template-location", {
             type: "string",
             description: "Path to the YAML CloudFormation template",
+            default: "",
           })
       )
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
