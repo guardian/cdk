@@ -31,4 +31,12 @@ describe("the regex patterns", () => {
     expect(regex.test("arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc")).toBeTruthy();
     expect(regex.test("arn:aws:acm:eu-west-1:000000000000:tls/123abc-0000-0000-0000-123abc")).toBeFalsy();
   });
+
+  it("should successfully regex against account ids", () => {
+    const regex = new RegExp(RegexPattern.ACCOUNT_ID);
+    expect(regex.test("012345678900")).toBeTruthy();
+    expect(regex.test("abc123456789")).toBeFalsy();
+    expect(regex.test("a012345678900")).toBeFalsy();
+    expect(regex.test("012345678900a")).toBeFalsy();
+  });
 });
