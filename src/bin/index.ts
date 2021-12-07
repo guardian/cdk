@@ -66,7 +66,6 @@ const parseCommandLineArguments = () => {
           .option("yaml-template-location", {
             type: "string",
             description: "Path to the YAML CloudFormation template",
-            default: "",
           })
       )
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
@@ -91,9 +90,9 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init, "multi-app": multiApp, app, stack, "yaml-template-location": yamlTemplateLocation } = argv;
+        const { init, "multi-app": multiApp, app, stack } = argv;
         return Promise.resolve(
-          `Test: New command has been received. \ninit = ${init.toString()},\n multi-app  = ${multiApp.toString()},\n app = ${app},\n stack = ${stack},\n ymalTemplateLocation = ${yamlTemplateLocation}`
+          `Test: New command has been received. \ninit = ${init.toString()},\n multi-app  = ${multiApp.toString()},\n app = ${app},\n stack = ${stack}`
         );
       }
       default:
