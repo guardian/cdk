@@ -1,0 +1,2 @@
+This file exists to ensure that the empty directory remains version controlled
+It is ignored by the `init` command when generating files
