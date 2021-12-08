@@ -116,10 +116,9 @@ Commands:
                                GuCDK ready
   @guardian/cdk check-package-json  Check a package.json file for compatibility with
                                GuCDK
+  @guardian/cdk new                 Creates a new CDK stack
 
 Options:
-      --profile  AWS profile                                            [string]
-      --region   AWS region                      [string] [default: "eu-west-1"]
       --version  Show version number                                   [boolean]
   -h, --help     Show help                                             [boolean]
 
