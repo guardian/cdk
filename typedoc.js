@@ -11,9 +11,8 @@ function getEntryPointsFromSubdirectories(directory) {
 
 module.exports = {
   entryPoints: [
-    "src/index.ts",
+    "src/patterns/index.ts",
     "src/constants/index.ts",
-    // we purposefully do not have an index.ts in `src/constructs` or `src/utils`
     ...getEntryPointsFromSubdirectories(constructsDir),
     ...getEntryPointsFromSubdirectories(utilsDir),
   ],
