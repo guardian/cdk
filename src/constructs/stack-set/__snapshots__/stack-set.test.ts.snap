@@ -1,0 +1,237 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuStackSet construct should correctly provision a stack with a stack set resource 1`] = `
+Object {
+  "Resources": Object {
+    "StackSet": Object {
+      "Properties": Object {
+        "AutoDeployment": Object {
+          "Enabled": true,
+          "RetainStacksOnAccountRemoval": false,
+        },
+        "Description": "this stack set provisions some common infrastructure",
+        "Parameters": Array [],
+        "PermissionModel": "SERVICE_MANAGED",
+        "StackInstancesGroup": Array [
+          Object {
+            "DeploymentTargets": Object {
+              "OrganizationalUnitIds": Array [
+                "o-12345abcde",
+              ],
+            },
+            "Regions": Array [
+              Object {
+                "Ref": "AWS::Region",
+              },
+            ],
+          },
+        ],
+        "StackSetName": "my-stack-set",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "INFRA",
+          },
+        ],
+        "TemplateBody": "{
+  \\"Resources\\": {
+    \\"accountloggingstreamB8733874\\": {
+      \\"Type\\": \\"AWS::Kinesis::Stream\\",
+      \\"Properties\\": {
+        \\"ShardCount\\": 1,
+        \\"RetentionPeriodHours\\": 24,
+        \\"StreamEncryption\\": {
+          \\"Fn::If\\": [
+            \\"AwsCdkKinesisEncryptedStreamsUnsupportedRegions\\",
+            {
+              \\"Ref\\": \\"AWS::NoValue\\"
+            },
+            {
+              \\"EncryptionType\\": \\"KMS\\",
+              \\"KeyId\\": \\"alias/aws/kinesis\\"
+            }
+          ]
+        },
+        \\"Tags\\": [
+          {
+            \\"Key\\": \\"gu:cdk:version\\",
+            \\"Value\\": \\"TEST\\"
+          },
+          {
+            \\"Key\\": \\"gu:repo\\",
+            \\"Value\\": \\"guardian/cdk\\"
+          },
+          {
+            \\"Key\\": \\"Stack\\",
+            \\"Value\\": \\"test\\"
+          },
+          {
+            \\"Key\\": \\"Stage\\",
+            \\"Value\\": \\"INFRA\\"
+          }
+        ]
+      }
+    }
+  },
+  \\"Conditions\\": {
+    \\"AwsCdkKinesisEncryptedStreamsUnsupportedRegions\\": {
+      \\"Fn::Or\\": [
+        {
+          \\"Fn::Equals\\": [
+            {
+              \\"Ref\\": \\"AWS::Region\\"
+            },
+            \\"cn-north-1\\"
+          ]
+        },
+        {
+          \\"Fn::Equals\\": [
+            {
+              \\"Ref\\": \\"AWS::Region\\"
+            },
+            \\"cn-northwest-1\\"
+          ]
+        }
+      ]
+    }
+  }
+}",
+      },
+      "Type": "AWS::CloudFormation::StackSet",
+    },
+  },
+}
+`;
+
+exports[`The GuStackSet construct should support parameters in the stack set instance 1`] = `
+Object {
+  "Resources": Object {
+    "StackSet": Object {
+      "Properties": Object {
+        "AutoDeployment": Object {
+          "Enabled": true,
+          "RetainStacksOnAccountRemoval": false,
+        },
+        "Description": "this stack set provisions some common infrastructure",
+        "Parameters": Array [
+          Object {
+            "ParameterKey": "CentralSnsTopicArn",
+            "ParameterValue": Object {
+              "Ref": "accountalertsD9982E6F",
+            },
+          },
+        ],
+        "PermissionModel": "SERVICE_MANAGED",
+        "StackInstancesGroup": Array [
+          Object {
+            "DeploymentTargets": Object {
+              "OrganizationalUnitIds": Array [
+                "o-12345abcde",
+              ],
+            },
+            "Regions": Array [
+              Object {
+                "Ref": "AWS::Region",
+              },
+            ],
+          },
+        ],
+        "StackSetName": "my-stack-set",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "INFRA",
+          },
+        ],
+        "TemplateBody": "{
+  \\"Parameters\\": {
+    \\"CentralSnsTopicArn\\": {
+      \\"Type\\": \\"String\\",
+      \\"AllowedPattern\\": \\"arn:aws:[a-z0-9]*:[a-z0-9\\\\\\\\-]*:[0-9]{12}:.*\\"
+    }
+  }
+}",
+      },
+      "Type": "AWS::CloudFormation::StackSet",
+    },
+    "accountalertsD9982E6F": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "INFRA",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "accountalertsPolicy8E37A8FA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sns:Publish",
+              "Condition": Object {
+                "StringEquals": Object {
+                  "aws:PrincipalOrgID": "o-12345abcde",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Object {
+                "Ref": "accountalertsD9982E6F",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": Array [
+          Object {
+            "Ref": "accountalertsD9982E6F",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+  },
+}
+`;
