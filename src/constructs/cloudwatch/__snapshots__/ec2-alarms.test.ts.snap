@@ -478,7 +478,7 @@ Object {
             ],
           },
         ],
-        "AlarmDescription": "testing's instances have failed healthchecks several times over the last hour.
+        "AlarmDescription": "testing's instances have failed healthchecks several times over the last 1 hour.
       This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
       scaling or handling traffic spikes.
 
