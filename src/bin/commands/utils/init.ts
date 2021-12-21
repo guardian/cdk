@@ -18,11 +18,9 @@ export class ProjectBuilder {
     }
   };
 
-  /* eslint-disable -- copied from https://github.com/aws/aws-cdk/blob/eda1640fcaf6375d7edc5f8edcb5d69c82d130a1/packages/aws-cdk/lib/init.ts */
   constructor(config: InitConfig) {
     this.config = config;
   }
-  /* eslint-enable */
 
   buildDirectory(): void {
     ProjectBuilder.validateConfig(this.config);

@@ -17,14 +17,12 @@ export class AppBuilder {
 
   code: CodeMaker;
 
-  /* eslint-disable -- copied from https://github.com/aws/aws-cdk/blob/eda1640fcaf6375d7edc5f8edcb5d69c82d130a1/packages/aws-cdk/lib/app.ts */
   constructor(props: AppBuilderProps) {
     this.config = props;
 
     this.code = new CodeMaker({ indentationLevel: 2 });
     this.code.closeBlockFormatter = (s?: string): string => s ?? "}";
   }
-  /* eslint-enable */
 
   async constructCdkFile(): Promise<void> {
     this.code.openFile(this.config.outputFile);

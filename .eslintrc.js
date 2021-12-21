@@ -18,4 +18,12 @@ module.exports = {
   },
   root: true,
   ignorePatterns: ["**/*.js", "node_modules"],
+  overrides: [
+    {
+      files: ["src/bin/**"],
+      rules: {
+        "custom-rules/valid-constructors": 0,
+      },
+    },
+  ],
 };

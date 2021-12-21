@@ -16,9 +16,7 @@ export class Imports {
 
   addImport(lib: string, components: string[], type = false): void {
     if (!Object.keys(this.imports).includes(lib)) {
-      const imports = type
-        ? { types: components, components: [] }
-        : { types: [], components };
+      const imports = type ? { types: components, components: [] } : { types: [], components };
 
       this.imports[lib] = imports;
       return;
@@ -28,13 +26,7 @@ export class Imports {
     if (type) {
       // Check if any of the new types are already imported as components
       // if so, don't add them as types too
-      imports.types = [
-        ...new Set(
-          imports.types.concat(
-            components.filter((c) => !imports.components.includes(c))
-          )
-        ),
-      ];
+      imports.types = [...new Set(imports.types.concat(components.filter((c) => !imports.components.includes(c))))];
     } else {
       // Check if any of the new components are already imported as types
       // if so, remove them from types before we add them to components
@@ -65,15 +57,9 @@ export class Imports {
       .forEach(([lib, imports]) => {
         imports.basic && code.line(`import "${lib}";`);
 
-        imports.types.length &&
-          code.line(
-            `import type { ${imports.types.sort().join(", ")} } from "${lib}";`
-          );
+        imports.types.length && code.line(`import type { ${imports.types.sort().join(", ")} } from "${lib}";`);
 
-        imports.components.length &&
-          code.line(
-            `import { ${imports.components.sort().join(", ")} } from "${lib}";`
-          );
+        imports.components.length && code.line(`import { ${imports.components.sort().join(", ")} } from "${lib}";`);
       });
     code.line();
   }
@@ -113,9 +99,7 @@ export const newAppImports = (app: Name, multiApp: boolean): Imports => {
     },
   });
 
-  imports.addImport(`../lib/${multiApp ? `${app.kebab}/` : ""}${app.kebab}`, [
-    app.pascal,
-  ]);
+  imports.addImport(`../lib/${multiApp ? `${app.kebab}/` : ""}${app.kebab}`, [app.pascal]);
 
   return imports;
 };

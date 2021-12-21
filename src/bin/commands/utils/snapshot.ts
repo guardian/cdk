@@ -41,18 +41,14 @@ export class TestBuilder {
   }
 
   addTest(): void {
-    this.code.openBlock(
-      `describe("The ${this.config.appName.pascal} stack", () =>`
-    );
+    this.code.openBlock(`describe("The ${this.config.appName.pascal} stack", () =>`);
     this.code.openBlock(`it("matches the snapshot", () =>`);
 
     this.code.line("const app = new App();");
     this.code.line(
       `const stack = new ${this.config.appName.pascal}(app, "${this.config.appName.pascal}", { stack: "${this.config.stackName.kebab}" });`
     );
-    this.code.line(
-      "expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();"
-    );
+    this.code.line("expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();");
 
     this.code.closeBlock("});");
     this.code.closeBlock("});");

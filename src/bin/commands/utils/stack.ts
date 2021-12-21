@@ -14,6 +14,7 @@ interface StackBuilderProps {
 export class StackBuilder {
   config: StackBuilderProps;
   imports: Imports;
+
   code: CodeMaker;
 
   constructor(props: StackBuilderProps) {
@@ -33,18 +34,12 @@ export class StackBuilder {
 
     this.config.imports.render(this.code);
 
-    this.code.openBlock(
-      `export class ${this.config.appName.pascal} extends GuStack`
-    );
-    this.code.openBlock(
-      `constructor(scope: App, id: string, props: GuStackProps)`
-    );
+    this.code.openBlock(`export class ${this.config.appName.pascal} extends GuStack`);
+    this.code.openBlock(`constructor(scope: App, id: string, props: GuStackProps)`);
     this.code.line("super(scope, id, props);");
 
     if (this.config.yamlTemplateLocation) {
-      this.code.line(
-        `const yamlTemplateFilePath = join(__dirname, "../..", "${this.config.yamlTemplateLocation}");`
-      );
+      this.code.line(`const yamlTemplateFilePath = join(__dirname, "../..", "${this.config.yamlTemplateLocation}");`);
 
       this.code.openBlock(`new CfnInclude(this, "YamlTemplate",`);
       this.code.line(`templateFile: yamlTemplateFilePath,`);
@@ -63,9 +58,7 @@ export class StackBuilder {
   }
 }
 
-export const constructStack = async (
-  props: StackBuilderProps
-): Promise<void> => {
+export const constructStack = async (props: StackBuilderProps): Promise<void> => {
   const builder = new StackBuilder(props);
   await builder.constructCdkFile();
 };
