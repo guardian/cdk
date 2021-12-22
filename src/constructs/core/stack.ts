@@ -1,5 +1,6 @@
-import { Annotations, Stack, Tags } from "@aws-cdk/core";
-import type { App, StackProps } from "@aws-cdk/core";
+import { SynthUtils } from "@aws-cdk/assert";
+import { Annotations, App, Stack, Tags } from "@aws-cdk/core";
+import type { StackProps } from "@aws-cdk/core";
 import execa from "execa";
 import gitUrlParse from "git-url-parse";
 import { StageForInfrastructure } from "../../constants";
@@ -126,6 +127,10 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     return this.params.get(key) as T;
   }
 
+  get parameterKeys(): string[] {
+    return Array.from(this.params.keys());
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
     const mergedProps = {
@@ -194,5 +199,21 @@ export class GuStackForInfrastructure extends GuStack {
     // Yep, we're just calling the super class's implementation...
     // We're overriding to add some helpful documentation in the doc string.
     return super.withStageDependentValue(mappingValue);
+  }
+}
+
+/**
+ * A GuStack but designed for Stack Set instances.
+ *
+ * In a stack set application, `GuStackForStackSetInstance` is used to represent the infrastructure to provision in target AWS accounts.
+ */
+export class GuStackForStackSetInstance extends GuStackForInfrastructure {
+  // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForStackSet should have a unique `App`
+  constructor(id: string, props: GuStackProps) {
+    super(new App(), id, props);
+  }
+
+  get cfnJson(): string {
+    return JSON.stringify(SynthUtils.toCloudFormation(this), null, 2);
   }
 }
