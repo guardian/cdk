@@ -50,8 +50,8 @@ Object {
     \\"accountloggingstreamB8733874\\": {
       \\"Type\\": \\"AWS::Kinesis::Stream\\",
       \\"Properties\\": {
-        \\"ShardCount\\": 1,
         \\"RetentionPeriodHours\\": 24,
+        \\"ShardCount\\": 1,
         \\"StreamEncryption\\": {
           \\"Fn::If\\": [
             \\"AwsCdkKinesisEncryptedStreamsUnsupportedRegions\\",
