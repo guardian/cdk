@@ -649,6 +649,30 @@ Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "RetentionInDays": 14,
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "ecs-test",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
       },
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
