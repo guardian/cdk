@@ -514,6 +514,9 @@ Object {
       "Type": "AWS::ApiGateway::Deployment",
     },
     "lambdaapi2DeploymentStageprodCC9E3016": Object {
+      "DependsOn": Array [
+        "lambdaapi2AccountFAF30ECB",
+      ],
       "Properties": Object {
         "DeploymentId": Object {
           "Ref": "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491",
@@ -918,6 +921,9 @@ Object {
       "Type": "AWS::ApiGateway::Deployment",
     },
     "lambdaapiDeploymentStageprod9598BC2F": Object {
+      "DependsOn": Array [
+        "lambdaapiAccountAF0DCB01",
+      ],
       "Properties": Object {
         "DeploymentId": Object {
           "Ref": "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e",
