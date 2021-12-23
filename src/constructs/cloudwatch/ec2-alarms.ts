@@ -62,23 +62,26 @@ export class Gu5xxPercentageAlarm extends GuAlarm {
 export class GuUnhealthyInstancesAlarm extends GuAlarm {
   constructor(scope: GuStack, props: GuUnhealthyInstancesAlarmProps) {
     const alarmName = `Unhealthy instances for ${props.app} in ${scope.stage}`;
-    const alarmDescription = `${props.app}'s instances have failed healthchecks several times over the last hour.
+
+    const period = Duration.minutes(5);
+    const evaluationPeriods = 12;
+    const evaluationInterval = Duration.minutes(period.toMinutes() * evaluationPeriods).toHumanString();
+
+    const alarmDescription = `${props.app}'s instances have failed healthchecks several times over the last ${evaluationInterval}.
       This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
       scaling or handling traffic spikes.
 
       Check ${props.app}'s application logs or ssh onto an unhealthy instance in order to debug these problems.`;
-    const alarmProps = {
+    const alarmProps: GuAlarmProps = {
       ...props,
       alarmName: alarmName,
       alarmDescription: alarmDescription,
-      metric: props.targetGroup
-        .metricUnhealthyHostCount()
-        .with({ period: Duration.minutes(5), statistic: Statistic.MAXIMUM }),
+      metric: props.targetGroup.metricUnhealthyHostCount().with({ period, statistic: Statistic.MAXIMUM }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       datapointsToAlarm: 6,
-      evaluationPeriods: 12,
+      evaluationPeriods,
     };
     super(scope, AppIdentity.suffixText(props, "UnhealthyInstancesAlarm"), alarmProps);
   }
