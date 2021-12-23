@@ -2,6 +2,7 @@
 lib
 target
 coverage
+cdk
 
 # IDEs
 .idea

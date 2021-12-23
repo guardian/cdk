@@ -6,6 +6,7 @@ import type { CliCommandResponse } from "../types/cli";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
+import { bootstrap } from "./commands/bootstrap";
 import { checkPackageJson } from "./commands/check-package-json";
 
 const Commands = {
@@ -90,10 +91,9 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init, "multi-app": multiApp, app, stack } = argv;
-        return Promise.resolve(
-          `Test: New command has been received. \ninit = ${init.toString()},\n multi-app  = ${multiApp.toString()},\n app = ${app},\n stack = ${stack}`
-        );
+        const { init, "multi-app": multiApp, app, stack, "yaml-template-location": yamlTemplateLocation } = argv;
+        const bootstrapProps = { init, multiApp, app, stack, yamlTemplateLocation };
+        return bootstrap(bootstrapProps);
       }
       default:
         throw new Error(`Unknown command: ${command}`);
