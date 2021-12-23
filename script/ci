@@ -7,7 +7,6 @@ ROOT_DIR=$DIR/..
 
 preamble() {
   "${DIR}"/check-yarn-lock
-  "${DIR}"/check-aws-cdk
 }
 
 runIntegrationTest() {

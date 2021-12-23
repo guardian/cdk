@@ -17,6 +17,11 @@ jobs:
           validateSingleCommit: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  check-aws-cdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./script/check-aws-cdk
   CI:
     runs-on: ubuntu-latest
     steps:
