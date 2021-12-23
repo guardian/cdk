@@ -19,7 +19,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   check-aws-cdk:
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.user.login != 'jacobwinch' }}
+    if: ${{ github.event.pull_request.user.login != 'guardian-ci' }}
     steps:
       - uses: actions/checkout@v2
       - run: ./script/check-aws-cdk
