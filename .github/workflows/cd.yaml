@@ -18,17 +18,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: ./script/cd
-
-      # Only performed if `main` is updated
-      # See https://docs.github.com/en/actions/reference/environment-variables#determining-when-to-use-default-environment-variables-or-contexts
-      - if: ${{ github.ref == 'refs/heads/main' }}
-        name: post-release
-        uses: guardian/actions-merge-release-changes-to-protected-branch@v1.2.0
-        with:
-          # This action will raise a PR to edit package.json.
-          # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI,
-          # so we need to provide a different token.
-          # This is a PAT for the guardian-ci user.
-          # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
-          github-token: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
-          npm-lockfile-version: 2
