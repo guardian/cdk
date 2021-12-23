@@ -164,7 +164,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       ...app,
       vpc,
       listener: {
-        sslCertificateId: "certificateId",
+        sslCertificateArn: "certificateId",
       },
     });
 

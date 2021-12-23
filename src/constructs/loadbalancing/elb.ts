@@ -118,18 +118,20 @@ export class GuHttpsClassicLoadBalancer extends GuClassicLoadBalancer {
   };
 
   constructor(scope: GuStack, id: string, props: GuHttpsClassicLoadBalancerProps) {
-    const listenerProps = { ...GuHttpsClassicLoadBalancer.DefaultListener, ...props.listener };
+    const listenerProps: LoadBalancerListener = { ...GuHttpsClassicLoadBalancer.DefaultListener, ...props.listener };
 
-    if (!listenerProps.sslCertificateId) {
-      const certificateId = new GuArnParameter(scope, "CertificateARN", {
-        description: "Certificate ARN for ELB",
-      });
-      listenerProps.sslCertificateId = certificateId.valueAsString;
-    }
-
-    const mergedProps = {
+    const mergedProps: GuClassicLoadBalancerProps = {
       ...props,
-      listeners: [listenerProps],
+      listeners: [
+        {
+          ...listenerProps,
+          sslCertificateArn:
+            listenerProps.sslCertificateArn ??
+            new GuArnParameter(scope, "CertificateARN", {
+              description: "Certificate ARN for ELB",
+            }).valueAsString,
+        },
+      ],
     };
 
     super(scope, id, mergedProps);

@@ -71,12 +71,12 @@ export class GuUnhealthyInstancesAlarm extends GuAlarm {
       ...props,
       alarmName: alarmName,
       alarmDescription: alarmDescription,
-      metric: props.targetGroup.metricUnhealthyHostCount(),
+      metric: props.targetGroup
+        .metricUnhealthyHostCount()
+        .with({ period: Duration.minutes(5), statistic: Statistic.MAXIMUM }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      statistic: Statistic.MAXIMUM,
       threshold: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      period: Duration.minutes(5),
       datapointsToAlarm: 6,
       evaluationPeriods: 12,
     };
