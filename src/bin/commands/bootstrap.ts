@@ -162,5 +162,5 @@ export const bootstrap = async (props: BootstrapProps): CliCommandResponse => {
     "Raise a PR with these changes",
   ].map((step) => console.log(`  - ${step}`));
 
-  return Promise.resolve("");
+  return Promise.resolve("Project successfully created!");
 };
