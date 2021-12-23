@@ -1,6 +1,6 @@
 # Guardian CDK Library
 
-![npm][badge-npm] [![CD][badge-cd]][internal-cd-file]
+![npm][badge-npm] [![CD][badge-cd]][internal-cd-file] 
 
 Welcome to the Guardian CDK library! This library contains a number of reusable patterns and constructs which can be used to build up your AWS Cloudformation stacks.
 
