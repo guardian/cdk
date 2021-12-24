@@ -56,6 +56,8 @@ export type GuCertificatePropsWithApp = GuDomainNameProps & AppIdentity & GuMigr
  *```
  */
 export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Certificate)) {
+  static mappingVariableName: string = "domainName";
+
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
     const hasHostedZoneId: boolean = StageAwareValue.isStageValue(props)
       ? !!props.CODE.hostedZoneId && !!props.PROD.hostedZoneId
@@ -84,7 +86,7 @@ export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConst
       domainName: StageAwareValue.isStageValue(props)
         ? scope.withStageDependentValue({
             app: props.app,
-            variableName: "domainName",
+            variableName: GuCertificate.mappingVariableName,
             stageValues: {
               [Stage.CODE]: props.CODE.domainName,
               [Stage.PROD]: props.PROD.domainName,

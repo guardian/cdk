@@ -1,0 +1,932 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuStaticSite pattern should be possible to define multiple in a single stack 1`] = `
+Object {
+  "Mappings": Object {
+    "Site2": Object {
+      "CODE": Object {
+        "domainName": "site2.dev-gutools.co.uk",
+      },
+      "PROD": Object {
+        "domainName": "site2.gutools.co.uk",
+      },
+    },
+    "myapp": Object {
+      "CODE": Object {
+        "domainName": "my-app.dev-gutools.co.uk",
+      },
+      "PROD": Object {
+        "domainName": "my-app.gutools.co.uk",
+      },
+    },
+  },
+  "Outputs": Object {
+    "CloudFrontOAISite2": Object {
+      "Description": "Canonical user ID used by CloudFront distribution. This should be granted 's3:GetObject' access to S3 bucket 'site2-origin'.",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CloudFrontOriginAccessIdentitySite23746234B",
+          "S3CanonicalUserId",
+        ],
+      },
+    },
+    "OriginBucketNameMyapp": Object {
+      "Description": "S3 bucket origin for CloudFront.",
+      "Value": Object {
+        "Ref": "OriginBucketMyapp924B0FC3",
+      },
+    },
+  },
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CertificateMyappA1452439": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": Object {
+          "Fn::FindInMap": Array [
+            "myapp",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "my-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CertificateSite2260E1692": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": Object {
+          "Fn::FindInMap": Array [
+            "Site2",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "Site2",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CloudFrontOriginAccessIdentityMyapp936D2403": Object {
+      "Properties": Object {
+        "CloudFrontOriginAccessIdentityConfig": Object {
+          "Comment": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Origin Access Identity for my-app ",
+                Object {
+                  "Ref": "Stage",
+                },
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "CloudFrontOriginAccessIdentitySite23746234B": Object {
+      "Properties": Object {
+        "CloudFrontOriginAccessIdentityConfig": Object {
+          "Comment": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Origin Access Identity for Site2 ",
+                Object {
+                  "Ref": "Stage",
+                },
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "DnsRecordMyapp": Object {
+      "Properties": Object {
+        "Name": Object {
+          "Fn::FindInMap": Array [
+            "myapp",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "RecordType": "CNAME",
+        "ResourceRecords": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "Site1MyappCFDistribution297F4C3E",
+              "DomainName",
+            ],
+          },
+        ],
+        "Stage": Object {
+          "Ref": "Stage",
+        },
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+    "DnsRecordSite2": Object {
+      "Properties": Object {
+        "Name": Object {
+          "Fn::FindInMap": Array [
+            "Site2",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "RecordType": "CNAME",
+        "ResourceRecords": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "Site2Site2CFDistribution8AFAF8EA",
+              "DomainName",
+            ],
+          },
+        ],
+        "Stage": Object {
+          "Ref": "Stage",
+        },
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+    "OriginBucketMyapp924B0FC3": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "my-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OriginBucketMyappPolicyD18AACC9": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "OriginBucketMyapp924B0FC3",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "CloudFrontOriginAccessIdentityMyapp936D2403",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "OriginBucketMyapp924B0FC3",
+                        "Arn",
+                      ],
+                    },
+                    "/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/my-app/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "CloudFrontOriginAccessIdentityMyapp936D2403",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "OriginBucketMyapp924B0FC3",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "Site1MyappCFDistribution297F4C3E": Object {
+      "Properties": Object {
+        "DistributionConfig": Object {
+          "Aliases": Array [
+            Object {
+              "Fn::FindInMap": Array [
+                "myapp",
+                Object {
+                  "Ref": "Stage",
+                },
+                "domainName",
+              ],
+            },
+          ],
+          "Comment": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "CloudFront distribution for my-app ",
+                Object {
+                  "Ref": "Stage",
+                },
+              ],
+            ],
+          },
+          "DefaultCacheBehavior": Object {
+            "AllowedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "CachedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "Compress": true,
+            "ForwardedValues": Object {
+              "Cookies": Object {
+                "Forward": "none",
+              },
+              "QueryString": false,
+            },
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": Array [
+            Object {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "DomainName": Object {
+                "Fn::GetAtt": Array [
+                  "OriginBucketMyapp924B0FC3",
+                  "RegionalDomainName",
+                ],
+              },
+              "Id": "origin1",
+              "OriginPath": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/my-app",
+                  ],
+                ],
+              },
+              "S3OriginConfig": Object {
+                "OriginAccessIdentity": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "origin-access-identity/cloudfront/",
+                      Object {
+                        "Ref": "CloudFrontOriginAccessIdentityMyapp936D2403",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": Object {
+            "AcmCertificateArn": Object {
+              "Ref": "CertificateMyappA1452439",
+            },
+            "SslSupportMethod": "sni-only",
+          },
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "my-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "Site2Site2CFDistribution8AFAF8EA": Object {
+      "Properties": Object {
+        "DistributionConfig": Object {
+          "Aliases": Array [
+            Object {
+              "Fn::FindInMap": Array [
+                "Site2",
+                Object {
+                  "Ref": "Stage",
+                },
+                "domainName",
+              ],
+            },
+          ],
+          "Comment": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "CloudFront distribution for Site2 ",
+                Object {
+                  "Ref": "Stage",
+                },
+              ],
+            ],
+          },
+          "DefaultCacheBehavior": Object {
+            "AllowedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "CachedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "Compress": true,
+            "ForwardedValues": Object {
+              "Cookies": Object {
+                "Forward": "none",
+              },
+              "QueryString": false,
+            },
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": Array [
+            Object {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "DomainName": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "site2-origin.s3.",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ".",
+                    Object {
+                      "Ref": "AWS::URLSuffix",
+                    },
+                  ],
+                ],
+              },
+              "Id": "origin1",
+              "OriginPath": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/Site2",
+                  ],
+                ],
+              },
+              "S3OriginConfig": Object {
+                "OriginAccessIdentity": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "origin-access-identity/cloudfront/",
+                      Object {
+                        "Ref": "CloudFrontOriginAccessIdentitySite23746234B",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": Object {
+            "AcmCertificateArn": Object {
+              "Ref": "CertificateSite2260E1692",
+            },
+            "SslSupportMethod": "sni-only",
+          },
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "Site2",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+  },
+}
+`;
+
+exports[`The GuStaticSite pattern should create the correct resources with minimal config 1`] = `
+Object {
+  "Mappings": Object {
+    "myapp": Object {
+      "CODE": Object {
+        "domainName": "my-app.dev-gutools.co.uk",
+      },
+      "PROD": Object {
+        "domainName": "my-app.gutools.co.uk",
+      },
+    },
+  },
+  "Outputs": Object {
+    "OriginBucketNameMyapp": Object {
+      "Description": "S3 bucket origin for CloudFront.",
+      "Value": Object {
+        "Ref": "OriginBucketMyapp924B0FC3",
+      },
+    },
+  },
+  "Parameters": Object {
+    "Stage": Object {
+      "AllowedValues": Array [
+        "CODE",
+        "PROD",
+      ],
+      "Default": "CODE",
+      "Description": "Stage name",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CertificateMyappA1452439": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": Object {
+          "Fn::FindInMap": Array [
+            "myapp",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "my-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CloudFrontOriginAccessIdentityMyapp936D2403": Object {
+      "Properties": Object {
+        "CloudFrontOriginAccessIdentityConfig": Object {
+          "Comment": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Origin Access Identity for my-app ",
+                Object {
+                  "Ref": "Stage",
+                },
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "DnsRecordMyapp": Object {
+      "Properties": Object {
+        "Name": Object {
+          "Fn::FindInMap": Array [
+            "myapp",
+            Object {
+              "Ref": "Stage",
+            },
+            "domainName",
+          ],
+        },
+        "RecordType": "CNAME",
+        "ResourceRecords": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "StaticSiteMyappCFDistribution3080CEE2",
+              "DomainName",
+            ],
+          },
+        ],
+        "Stage": Object {
+          "Ref": "Stage",
+        },
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+    "OriginBucketMyapp924B0FC3": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "my-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OriginBucketMyappPolicyD18AACC9": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "OriginBucketMyapp924B0FC3",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "CloudFrontOriginAccessIdentityMyapp936D2403",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "OriginBucketMyapp924B0FC3",
+                        "Arn",
+                      ],
+                    },
+                    "/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/my-app/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "CloudFrontOriginAccessIdentityMyapp936D2403",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "OriginBucketMyapp924B0FC3",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "StaticSiteMyappCFDistribution3080CEE2": Object {
+      "Properties": Object {
+        "DistributionConfig": Object {
+          "Aliases": Array [
+            Object {
+              "Fn::FindInMap": Array [
+                "myapp",
+                Object {
+                  "Ref": "Stage",
+                },
+                "domainName",
+              ],
+            },
+          ],
+          "Comment": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "CloudFront distribution for my-app ",
+                Object {
+                  "Ref": "Stage",
+                },
+              ],
+            ],
+          },
+          "DefaultCacheBehavior": Object {
+            "AllowedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "CachedMethods": Array [
+              "GET",
+              "HEAD",
+            ],
+            "Compress": true,
+            "ForwardedValues": Object {
+              "Cookies": Object {
+                "Forward": "none",
+              },
+              "QueryString": false,
+            },
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": Array [
+            Object {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "DomainName": Object {
+                "Fn::GetAtt": Array [
+                  "OriginBucketMyapp924B0FC3",
+                  "RegionalDomainName",
+                ],
+              },
+              "Id": "origin1",
+              "OriginPath": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/my-app",
+                  ],
+                ],
+              },
+              "S3OriginConfig": Object {
+                "OriginAccessIdentity": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "origin-access-identity/cloudfront/",
+                      Object {
+                        "Ref": "CloudFrontOriginAccessIdentityMyapp936D2403",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": Object {
+            "AcmCertificateArn": Object {
+              "Ref": "CertificateMyappA1452439",
+            },
+            "SslSupportMethod": "sni-only",
+          },
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "my-app",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+  },
+}
+`;
