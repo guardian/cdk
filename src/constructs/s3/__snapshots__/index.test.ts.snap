@@ -18,6 +18,12 @@ Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "BucketName": "super-important-stuff",
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
