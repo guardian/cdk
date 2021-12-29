@@ -1,9 +1,9 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import { OrganizationPrincipal } from "@aws-cdk/aws-iam";
 import { Topic } from "@aws-cdk/aws-sns";
-import { App } from "@aws-cdk/core";
 import { RegexPattern } from "../../constants";
-import { GuStackForInfrastructure, GuStackForStackSetInstance, GuStringParameter } from "../core";
+import { simpleInfraStackForTesting } from "../../utils/test";
+import { GuStackForStackSetInstance, GuStringParameter } from "../core";
 import { GuKinesisStream } from "../kinesis";
 import { GuSnsTopic } from "../sns";
 import { GuStackSet } from "./stack-set";
@@ -13,7 +13,7 @@ describe("The GuStackSet construct", () => {
     const theStackSetInstance = new GuStackForStackSetInstance("the-stack-set", { stack: "test" });
     new GuKinesisStream(theStackSetInstance, "account-logging-stream");
 
-    const parentStack = new GuStackForInfrastructure(new App(), "Test", { stack: "test" });
+    const parentStack = simpleInfraStackForTesting({ stack: "test" });
 
     new GuStackSet(parentStack, "StackSet", {
       name: "my-stack-set",
@@ -35,7 +35,7 @@ describe("The GuStackSet construct", () => {
     );
 
     const awsOrgId = "o-12345abcde";
-    const parentStack = new GuStackForInfrastructure(new App(), "Test", { stack: "test" });
+    const parentStack = simpleInfraStackForTesting({ stack: "test" });
     const centralTopic = new GuSnsTopic(parentStack, "account-alerts");
     centralTopic.grantPublish(new OrganizationPrincipal(awsOrgId));
 
@@ -56,7 +56,7 @@ describe("The GuStackSet construct", () => {
     const theStackSetInstance = new GuStackForStackSetInstance("the-stack-set", { stack: "test" });
     new GuStringParameter(theStackSetInstance, "CentralSnsTopic", { allowedPattern: RegexPattern.ARN });
 
-    const parentStack = new GuStackForInfrastructure(new App(), "Test", { stack: "test" });
+    const parentStack = simpleInfraStackForTesting({ stack: "test" });
 
     expect(() => {
       new GuStackSet(parentStack, "StackSet", {
