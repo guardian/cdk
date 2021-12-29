@@ -191,7 +191,20 @@ export class GuStackForInfrastructure extends GuStack {
    * A helper function to switch between different values depending on the Stage being CloudFormed.
    *
    * As GuInfrastructureStack has a single stage (INFRA), calling withStageDependentValue is unnecessary complexity.
-   * Consider using a standard variable in code instead.
+   * Consider using a standard variable in code instead with [[`StageAwareValue`]]
+   *
+   * ```typescript
+   * const name = StageAwareValue.isStageValue(props)
+   *   ? scope.withStageDependentValue({
+   *       app: props.app,
+   *       variableName: "name",
+   *       stageValues: {
+   *         [Stage.CODE]: "CODE value",
+   *         [Stage.PROD]: "PROD value"
+   *       }
+   *     })
+   *   : "INFRA value";
+   * ```
    *
    * Note: Specifying a stage other than `INFRA` will raise an exception.
    */
