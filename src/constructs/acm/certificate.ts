@@ -2,7 +2,7 @@ import { Certificate, CertificateValidation } from "@aws-cdk/aws-certificatemana
 import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
-import { Stage, StageForInfrastructure } from "../../constants";
+import { Stage } from "../../constants";
 import type { GuDomainNameProps } from "../../types/domain-names";
 import { StageAwareValue } from "../../types/stage";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
@@ -65,36 +65,32 @@ export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConst
       ? undefined
       : HostedZone.fromHostedZoneId(
           scope,
+          /* eslint-disable @typescript-eslint/no-non-null-assertion -- `hasHostedZoneId` is true, so we know `hostedZoneId` is present here */
           AppIdentity.suffixText({ app: props.app }, "HostedZone"),
-          scope.withStageDependentValue({
-            app: props.app,
-            variableName: "hostedZoneId",
-            /* eslint-disable @typescript-eslint/no-non-null-assertion -- `hasHostedZoneId` is true, so we know `hostedZoneId` is present here */
-            stageValues: StageAwareValue.isStageValue(props)
-              ? {
+          StageAwareValue.isStageValue(props)
+            ? scope.withStageDependentValue({
+                app: props.app,
+                variableName: "hostedZoneId",
+                stageValues: {
                   [Stage.CODE]: props.CODE.hostedZoneId!,
                   [Stage.PROD]: props.PROD.hostedZoneId!,
-                }
-              : {
-                  [StageForInfrastructure]: props.INFRA.hostedZoneId!,
                 },
-            /* eslint-enable @typescript-eslint/no-non-null-assertion */
-          })
+              })
+            : props.INFRA.hostedZoneId!
+          /* eslint-enable @typescript-eslint/no-non-null-assertion */
         );
 
     const awsCertificateProps: CertificateProps & GuMigratingResource & AppIdentity = {
-      domainName: scope.withStageDependentValue({
-        app: props.app,
-        variableName: "domainName",
-        stageValues: StageAwareValue.isStageValue(props)
-          ? {
+      domainName: StageAwareValue.isStageValue(props)
+        ? scope.withStageDependentValue({
+            app: props.app,
+            variableName: "domainName",
+            stageValues: {
               [Stage.CODE]: props.CODE.domainName,
               [Stage.PROD]: props.PROD.domainName,
-            }
-          : {
-              [StageForInfrastructure]: props.INFRA.domainName,
             },
-      }),
+          })
+        : props.INFRA.domainName,
       validation: CertificateValidation.fromDns(maybeHostedZone),
       existingLogicalId: props.existingLogicalId,
       app: props.app,

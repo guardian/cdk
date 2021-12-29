@@ -1,6 +1,6 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { Stage } from "../../constants";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { Stage, StageForInfrastructure } from "../../constants";
+import { simpleGuStackForTesting, simpleInfraStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import { GuCertificate } from "./certificate";
 
@@ -51,5 +51,34 @@ describe("The GuCertificate class", () => {
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).toContain("MyCloudFormedCertificate");
+  });
+
+  it("should not create a CloudFormation Mapping when used in a GuStackForInfrastructure", () => {
+    const stack = simpleGuStackForTesting();
+    new GuCertificate(stack, {
+      app: "testing",
+      [Stage.CODE]: {
+        domainName: "code-guardian.com",
+        hostedZoneId: "id123",
+      },
+      [Stage.PROD]: {
+        domainName: "prod-guardian.com",
+        hostedZoneId: "id124",
+      },
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(json.Mappings).toBeDefined();
+
+    const infraStack = simpleInfraStackForTesting();
+    new GuCertificate(infraStack, {
+      app: "testing",
+      [StageForInfrastructure]: {
+        domainName: "infra-guardian.com",
+      },
+    });
+
+    const infraJson = SynthUtils.toCloudFormation(infraStack) as SynthedStack;
+    expect(infraJson.Mappings).toBeUndefined();
   });
 });
