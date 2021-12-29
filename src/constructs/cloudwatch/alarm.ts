@@ -25,17 +25,16 @@ export class GuAlarm extends Alarm {
   constructor(scope: GuStack, id: string, props: GuAlarmProps) {
     super(scope, id, {
       ...props,
-      actionsEnabled: scope.withStageDependentValue({
-        app: props.app,
-        variableName: "alarmActionsEnabled",
-        stageValues:
-          scope.stage === StageForInfrastructure
-            ? { [StageForInfrastructure]: true }
-            : {
-                [Stage.CODE]: props.actionsEnabledInCode ?? false,
-                [Stage.PROD]: true,
-              },
-      }),
+      actionsEnabled:
+        scope.stage === StageForInfrastructure ||
+        scope.withStageDependentValue({
+          app: props.app,
+          variableName: "alarmActionsEnabled",
+          stageValues: {
+            [Stage.CODE]: props.actionsEnabledInCode ?? false,
+            [Stage.PROD]: true,
+          },
+        }),
     });
     const topicArn: string = `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicName}`;
     const snsTopic: ITopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, topicArn);
