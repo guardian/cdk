@@ -247,4 +247,10 @@ describe("The GuStaticSite pattern", () => {
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
+
+  it("should be possible to opt-out of DNS creation", () => {
+    const stack = simpleGuStackForTesting();
+    new GuStaticSite(stack, "Site1", { ...defaultProps, withoutDns: true });
+    expect(stack).toCountResources("Guardian::DNS::RecordSet", 0);
+  });
 });

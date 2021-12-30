@@ -61,6 +61,12 @@ export interface GuStaticSiteProps
    * Defaults to compress responses and redirect http to https.
    */
   behaviours?: Behavior[];
+
+  /**
+   * Flag to opt-out of automatically creating a [[ `GuCname` ]]. You'll have to create it yourself.
+   * This is useful if you want to control the TTL, which defaults to 1 hour.
+   */
+  withoutDns?: boolean;
 }
 
 /**
@@ -252,6 +258,7 @@ export class GuStaticSite extends GuAppAwareConstruct(CloudFrontWebDistribution)
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
       ],
+      withoutDns = false,
     } = props;
     const { stage } = scope;
 
@@ -298,11 +305,13 @@ export class GuStaticSite extends GuAppAwareConstruct(CloudFrontWebDistribution)
       ],
     });
 
-    new GuCname(scope, AppIdentity.suffixText({ app }, "DnsRecord"), {
-      app,
-      domainNameProps,
-      resourceRecord: this.distributionDomainName,
-      ttl: Duration.hours(1),
-    });
+    if (!withoutDns) {
+      new GuCname(scope, AppIdentity.suffixText({ app }, "DnsRecord"), {
+        app,
+        domainNameProps,
+        resourceRecord: this.distributionDomainName,
+        ttl: Duration.hours(1),
+      });
+    }
   }
 }
