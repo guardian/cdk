@@ -14,7 +14,7 @@ Object {
     },
   },
   "Resources": Object {
-    "MyBucketF68F3FF0": Object {
+    "MyBucketTest262E966E": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "BucketName": "super-important-stuff",
@@ -25,6 +25,10 @@ Object {
           "RestrictPublicBuckets": true,
         },
         "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "test",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
