@@ -67,6 +67,11 @@ export interface GuStaticSiteProps
    * This is useful if you want to control the TTL, which defaults to 1 hour.
    */
   withoutDns?: boolean;
+
+  /**
+   * Name of the bucket to create, otherwise the bucket name will be auto-generated.
+   */
+  bucketName?: string;
 }
 
 /**
@@ -208,12 +213,12 @@ export class GuStaticSite extends GuAppAwareConstruct(CloudFrontWebDistribution)
 
   private static getBucket(
     scope: GuStack,
-    { app, preExistingOriginBucketName }: GuStaticSiteProps,
+    { app, preExistingOriginBucketName, bucketName }: GuStaticSiteProps,
     { cloudFrontOriginAccessIdentityS3CanonicalUserId }: OriginAccessIdentity
   ) {
     const bucket = preExistingOriginBucketName
       ? Bucket.fromBucketName(scope, AppIdentity.suffixText({ app }, "OriginBucket"), preExistingOriginBucketName)
-      : new GuS3Bucket(scope, "OriginBucket", { app });
+      : new GuS3Bucket(scope, "OriginBucket", { app, bucketName });
 
     if (preExistingOriginBucketName) {
       /*

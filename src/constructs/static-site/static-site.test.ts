@@ -253,4 +253,12 @@ describe("The GuStaticSite pattern", () => {
     new GuStaticSite(stack, "Site1", { ...defaultProps, withoutDns: true });
     expect(stack).toCountResources("Guardian::DNS::RecordSet", 0);
   });
+
+  it("should be possible to create a deterministic bucket name", () => {
+    const stack = simpleGuStackForTesting();
+    new GuStaticSite(stack, "Site", { ...defaultProps, bucketName: "my-new-bucket" });
+    expect(stack).toHaveResourceLike("AWS::S3::Bucket", {
+      BucketName: "my-new-bucket",
+    });
+  });
 });
