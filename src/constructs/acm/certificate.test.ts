@@ -54,22 +54,6 @@ describe("The GuCertificate class", () => {
   });
 
   it("should not create a CloudFormation Mapping when used in a GuStackForInfrastructure", () => {
-    const stack = simpleGuStackForTesting();
-    new GuCertificate(stack, {
-      app: "testing",
-      [Stage.CODE]: {
-        domainName: "code-guardian.com",
-        hostedZoneId: "id123",
-      },
-      [Stage.PROD]: {
-        domainName: "prod-guardian.com",
-        hostedZoneId: "id124",
-      },
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(json.Mappings).toBeDefined();
-
     const infraStack = simpleInfraStackForTesting();
     new GuCertificate(infraStack, {
       app: "testing",
