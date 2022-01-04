@@ -4,8 +4,8 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { Stage } from "../../constants";
-import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
+import { Stage, StageForInfrastructure } from "../../constants";
+import { findResourceByTypeAndLogicalId, simpleGuStackForTesting, simpleInfraStackForTesting } from "../../utils/test";
 import type { Resource, SynthedStack } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
@@ -354,5 +354,34 @@ describe("The GuAutoScalingGroup", () => {
         PROD: { minInstances: 5, maxInstances: 10 },
       },
     });
+  });
+
+  it("should not create a CloudFormation Mapping when used in a GuStackForInfrastructure", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+      app: "TestApp",
+      userData: "SomeUserData",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      vpc,
+      stageDependentProps: {
+        [Stage.CODE]: { minimumInstances: 2 },
+        [Stage.PROD]: { minimumInstances: 3 },
+      },
+    });
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    expect(json.Mappings).toBeDefined();
+
+    const infraStack = simpleInfraStackForTesting();
+    new GuAutoScalingGroup(infraStack, "AutoscalingGroup", {
+      app: "TestApp",
+      userData: "SomeUserData",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      vpc,
+      stageDependentProps: {
+        [StageForInfrastructure]: { minimumInstances: 1 },
+      },
+    });
+    const infraJson = SynthUtils.toCloudFormation(infraStack) as SynthedStack;
+    expect(infraJson.Mappings).toBeUndefined();
   });
 });

@@ -7,10 +7,10 @@ import { Annotations, App } from "@aws-cdk/core";
 import { Stage, StageForInfrastructure, Stages } from "../../constants";
 import { ContextKeys } from "../../constants/context-keys";
 import { TagKeys } from "../../constants/tag-keys";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { simpleGuStackForTesting, simpleInfraStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import { GuParameter } from "./parameters";
-import { GuStack, GuStackForInfrastructure } from "./stack";
+import { GuStack } from "./stack";
 
 describe("The GuStack construct", () => {
   const warn = jest.spyOn(Annotations.prototype, "addWarning");
@@ -113,12 +113,12 @@ describe("The GuStack construct", () => {
 
 describe("The GuStackForInfrastructure construct", () => {
   it("should have a stage of INFRA", () => {
-    const stack = new GuStackForInfrastructure(new App(), "Test", { stack: "test" });
+    const stack = simpleInfraStackForTesting({ stack: "test" });
     expect(stack.stage).toBe("INFRA");
   });
 
   it("should throw when calling withStageDependentValue with a non-INFRA stage", () => {
-    const stack = new GuStackForInfrastructure(new App(), "Test", { stack: "test" });
+    const stack = simpleInfraStackForTesting({ stack: "test" });
 
     expect(() => {
       stack.withStageDependentValue({
