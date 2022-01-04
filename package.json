@@ -20,6 +20,7 @@
     "test:custom-lint-rule": "eslint tools/eslint/rules/valid-constructors.test.ts",
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepare": "tsc",
+    "prepack": "cp -r src/bin/commands/template lib/bin/commands/template",
     "release": "semantic-release",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target",
