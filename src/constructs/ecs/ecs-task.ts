@@ -18,7 +18,6 @@ import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-t
 import { CfnOutput, Duration } from "@aws-cdk/core";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
-import type { Identity } from "../core/identity";
 import { AppIdentity } from "../core/identity";
 import { GuGetDistributablePolicyStatement } from "../iam";
 
@@ -100,7 +99,7 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
  * See https://docs.aws.amazon.com/step-functions/latest/dg/connect-ecs.html for further detail and  other override options - this construct currently
  * only supports environment variables.
  */
-export interface GuEcsTaskProps extends Identity {
+export interface GuEcsTaskProps extends AppIdentity {
   vpc: IVpc;
   containerConfiguration: ContainerConfiguration;
   taskTimeoutInMinutes?: number;
@@ -139,86 +138,96 @@ export class GuEcsTask {
   stateMachine: StateMachine;
 
   constructor(scope: GuStack, id: string, props: GuEcsTaskProps) {
-    const timeout = props.taskTimeoutInMinutes ?? 15;
+    const {
+      app,
 
-    // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
-    const defaultCpu = 2048; // 2 cores and from 4-16GB memory
-    const defaultMemory = 4096; // 4GB
+      // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
+      cpu = 2048, // 2 cores and from 4-16GB memory
+      memory = 4096, // 4GB
 
-    const cpu = props.cpu ?? defaultCpu;
-    const memory = props.memory ?? defaultMemory;
+      containerConfiguration,
+      taskCommand,
+      taskTimeoutInMinutes = 15,
+      customTaskPolicies,
+      vpc,
+      monitoringConfiguration,
+      securityGroups = [],
+      environmentOverrides,
+    } = props;
+
+    const { stack, stage } = scope;
 
     const cluster = new Cluster(scope, `${id}-Cluster`, {
-      clusterName: `${props.app}-cluster-${props.stage}`,
+      clusterName: `${app}-cluster-${stage}`,
       enableFargateCapacityProviders: true,
-      vpc: props.vpc,
+      vpc,
     });
 
     const taskDefinition = new TaskDefinition(scope, `${id}-TaskDefinition`, {
       compatibility: Compatibility.FARGATE,
       cpu: cpu.toString(),
       memoryMiB: memory.toString(),
-      family: `${props.stack}-${props.stage}-${props.app}`,
+      family: `${stack}-${stage}-${app}`,
     });
 
     const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
-      image: getContainer(props.containerConfiguration),
-      entryPoint: props.taskCommand ? ["/bin/sh"] : undefined,
-      command: props.taskCommand ? ["-c", `${props.taskCommand}`] : undefined, // if unset, falls back to CMD in docker file, or no command will be run
+      image: getContainer(containerConfiguration),
+      entryPoint: taskCommand ? ["/bin/sh"] : undefined,
+      command: taskCommand ? ["-c", taskCommand] : undefined, // if unset, falls back to CMD in docker file, or no command will be run
       cpu,
-      memoryLimitMiB: props.memory,
+      memoryLimitMiB: memory,
       logging: LogDrivers.awsLogs({
-        streamPrefix: props.app,
+        streamPrefix: app,
         logRetention: 14,
       }),
     });
 
-    const distPolicy = new GuGetDistributablePolicyStatement(scope, { app: props.app });
+    const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });
 
     taskDefinition.addToTaskRolePolicy(distPolicy);
-    (props.customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
+    (customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
     const task = new EcsRunTask(scope, `${id}-task`, {
-      cluster: cluster,
+      cluster,
       launchTarget: new EcsFargateLaunchTarget({
         platformVersion: FargatePlatformVersion.LATEST,
       }),
-      taskDefinition: taskDefinition,
+      taskDefinition,
       integrationPattern: IntegrationPattern.RUN_JOB,
       resultPath: "DISCARD",
-      timeout: Duration.minutes(timeout),
-      securityGroups: props.securityGroups ?? [],
+      timeout: Duration.minutes(taskTimeoutInMinutes),
+      securityGroups,
       containerOverrides: [
         {
           containerDefinition: containerDefinition,
-          environment: props.environmentOverrides,
+          environment: environmentOverrides,
         },
       ],
     });
 
     this.stateMachine = new StateMachine(scope, `${id}-StateMachine`, {
       definition: task,
-      stateMachineName: `${props.app}-${props.stage}`,
+      stateMachineName: `${app}-${stage}`,
     });
 
-    if (!props.monitoringConfiguration.noMonitoring) {
+    if (!monitoringConfiguration.noMonitoring) {
       const alarmTopic = Topic.fromTopicArn(
         scope,
         AppIdentity.suffixText(props, "AlarmTopic"),
-        props.monitoringConfiguration.snsTopicArn
+        monitoringConfiguration.snsTopicArn
       );
       const alarms = [
         {
-          name: `${props.app}-execution-failed`,
-          description: `${props.app}-${props.stage} job failed `,
+          name: `${app}-execution-failed`,
+          description: `${app}-${stage} job failed `,
           metric: this.stateMachine.metricFailed({
             period: Duration.hours(1),
             statistic: "sum",
           }),
         },
         {
-          name: `${props.app}-timeout`,
-          description: `${props.app}-${props.stage} job timed out `,
+          name: `${app}-timeout`,
+          description: `${app}-${stage} job timed out `,
           metric: this.stateMachine.metricTimedOut({
             period: Duration.hours(1),
             statistic: "sum",
@@ -226,25 +235,23 @@ export class GuEcsTask {
         },
       ];
 
-      alarms.forEach((a) => {
-        const alarm = new Alarm(scope, a.name, {
-          alarmDescription: a.description,
+      alarms.forEach(({ name, description, metric }) => {
+        const alarm = new Alarm(scope, name, {
+          alarmDescription: description,
           actionsEnabled: true,
-          metric: a.metric,
+          metric: metric,
           // default for comparisonOperator is GreaterThanOrEqualToThreshold
           threshold: 1,
           evaluationPeriods: 1,
           treatMissingData: TreatMissingData.NOT_BREACHING,
         });
         alarm.addAlarmAction(new SnsAction(alarmTopic));
-        AppIdentity.taggedConstruct({ app: props.app }, alarm);
+        AppIdentity.taggedConstruct({ app }, alarm);
       });
     }
 
     // Tag all constructs with correct app tag
-    [cluster, task, taskDefinition, this.stateMachine].forEach((c) =>
-      AppIdentity.taggedConstruct({ app: props.app }, c)
-    );
+    [cluster, task, taskDefinition, this.stateMachine].forEach((c) => AppIdentity.taggedConstruct({ app }, c));
 
     new CfnOutput(scope, `${id}-StateMachineArnOutput`, {
       value: this.stateMachine.stateMachineArn,

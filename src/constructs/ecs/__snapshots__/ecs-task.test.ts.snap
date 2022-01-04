@@ -126,7 +126,18 @@ Object {
         "AlarmActions": Array [
           "arn:something:else:here:we:goalarm-topic",
         ],
-        "AlarmDescription": "ecs-test-TEST job failed ",
+        "AlarmDescription": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "ecs-test-",
+              Object {
+                "Ref": "Stage",
+              },
+              " job failed ",
+            ],
+          ],
+        },
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -152,7 +163,18 @@ Object {
         "AlarmActions": Array [
           "arn:something:else:here:we:goalarm-topic",
         ],
-        "AlarmDescription": "ecs-test-TEST job timed out ",
+        "AlarmDescription": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "ecs-test-",
+              Object {
+                "Ref": "Stage",
+              },
+              " job timed out ",
+            ],
+          ],
+        },
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -187,7 +209,17 @@ Object {
     },
     "testecstaskecstestClusterCBD4036C": Object {
       "Properties": Object {
-        "ClusterName": "ecs-test-cluster-TEST",
+        "ClusterName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "ecs-test-cluster-",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
         "Tags": Array [
           Object {
             "Key": "App",
@@ -236,7 +268,11 @@ Object {
                   "Arn",
                 ],
               },
-              "\\",\\"TaskDefinition\\":\\"test-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"test-ecs-task-ecs-test-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
+              "\\",\\"TaskDefinition\\":\\"test-stack-",
+              Object {
+                "Ref": "Stage",
+              },
+              "-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"test-ecs-task-ecs-test-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
             ],
           ],
         },
@@ -246,7 +282,17 @@ Object {
             "Arn",
           ],
         },
-        "StateMachineName": "ecs-test-TEST",
+        "StateMachineName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "ecs-test-",
+              Object {
+                "Ref": "Stage",
+              },
+            ],
+          ],
+        },
         "Tags": Array [
           Object {
             "Key": "App",
@@ -545,7 +591,18 @@ Object {
             "Arn",
           ],
         },
-        "Family": "test-TEST-ecs-test",
+        "Family": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "test-stack-",
+              Object {
+                "Ref": "Stage",
+              },
+              "-ecs-test",
+            ],
+          ],
+        },
         "Memory": "1024",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": Array [

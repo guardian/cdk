@@ -24,8 +24,6 @@ describe("The GuScheduledEcsTask pattern", () => {
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
       vpc: makeVpc(stack),
-      stack: "test",
-      stage: "TEST",
       app: "ecs-test",
     });
 

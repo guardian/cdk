@@ -32,8 +32,6 @@ describe("The GuEcsTask pattern", () => {
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
       vpc: makeVpc(stack),
-      stack: "test",
-      stage: "TEST",
       app: "ecs-test",
     });
 
@@ -44,8 +42,6 @@ describe("The GuEcsTask pattern", () => {
     new GuEcsTask(stack, `test-ecs-task-${app}`, {
       containerConfiguration: { id: "node:10", type: "registry" },
       vpc,
-      stack: "test",
-      stage: "TEST",
       app: app,
       taskTimeoutInMinutes: 60,
       cpu: 1024,
