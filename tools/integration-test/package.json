@@ -22,7 +22,7 @@
     "aws-cdk": "1.137.0",
     "eslint": "^7.23.0",
     "eslint-plugin-custom-rules": "file:../eslint",
-    "jest": "27.4.5",
+    "jest": "27.4.6",
     "prettier": "^2.2.1",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
