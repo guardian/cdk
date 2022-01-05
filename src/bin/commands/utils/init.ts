@@ -106,5 +106,5 @@ function createPackageJson(outputDirectory: string): void {
       "source-map-support": "^0.5.20",
     },
   };
-  writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, "\t"));
+  writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
 }
