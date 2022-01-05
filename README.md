@@ -136,10 +136,8 @@ To release a new version:
 1. Once reviewed and approved, merge your PR.
 1. Wait for the robots to:
    - Use your structured commit to automatically determine the next version number (following [semantic versioning][sem-ver]).
-   - Release a new version to [npm].
+   - Release a new version to npm and update `package.json`.
 1. Enjoy a comment on your PR to inform you that your change has been released.
-
-Note: The version number in `package.json` is static. Refer to [npm] or [releases] for the latest version number.
 
 For more information, see the docs on [testing][docs-testing].
 
@@ -163,7 +161,5 @@ For more information, see the docs on [testing][docs-testing].
 [github-scripts]: https://github.com/github/scripts-to-rule-them-all
 [guardian/actions-merge-release-changes-to-protected-branch]: https://github.com/guardian/actions-merge-release-changes-to-protected-branch
 [karma-commits]: http://karma-runner.github.io/6.1/dev/git-commit-msg.html
-[npm]: https://www.npmjs.com/package/@guardian/cdk
-[releases]: https://github.com/guardian/cdk/releases
 [semantic-release]: https://github.com/semantic-release/semantic-release
 [sem-ver]: https://semver.org/
