@@ -32,3 +32,8 @@ jobs:
           # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
           github-token: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
           npm-lockfile-version: 2
+
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        name: run-project-generation
+        # This ensures that the newly released version of the library can still be used to generate a new project from scratch
+        run: npx @guardian/cdk@latest new --stack my-stack --app my-app
