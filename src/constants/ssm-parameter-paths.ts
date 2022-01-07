@@ -41,7 +41,8 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
   },
   FastlyCustomerId: {
     path: "/account/external/fastly/customer.id",
-    description: "SSM parameter containing the Fastly Customer ID",
+    description:
+      "SSM parameter containing the Fastly Customer ID. Can be obtained from https://manage.fastly.com/account/company by an admin",
     optional: true,
   },
 };
