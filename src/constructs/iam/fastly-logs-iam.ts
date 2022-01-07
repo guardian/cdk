@@ -49,20 +49,18 @@ const FASTLY_AWS_ACCOUNT_ID = "717331877981";
  *
  * See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
  */
-export class GuFastlyLogsIam {
+export class GuFastlyLogsIam extends GuRole {
   constructor(scope: GuStack, id: string, props: GuFastlyLogsIamProps) {
-    const policy = new GuPutS3ObjectsPolicy(scope, `${id}IamPolicy`, {
+    const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
+    super(scope, `${id}Role`, {
+      assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
+      externalIds: [fastlyCustomerId],
+    });
+    const policy = new GuPutS3ObjectsPolicy(scope, `${id}Policy`, {
       bucketName: props.bucketName,
       paths: props.path ? [props.path] : undefined,
     });
 
-    const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
-
-    const role = new GuRole(scope, `${id}IamRole`, {
-      assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
-      externalIds: [fastlyCustomerId],
-    });
-
-    policy.attachToRole(role);
+    policy.attachToRole(this);
   }
 }
