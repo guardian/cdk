@@ -4,7 +4,15 @@ import { GuFastlyCustomerIdParameter } from "../core/parameters/fastly";
 import { GuPutS3ObjectsPolicy, GuRole } from "./";
 
 interface GuFastlyLogsIamProps {
+  /**
+   * S3 bucket name that Fastly will ship logs
+   */
   bucketName: string;
+  /**
+   * Path within the S3 bucket where Fastly will ship logs.
+   * @default - '*'
+   * If path is not specified, access will be granted to the entire S3 bucket.
+   */
   path?: string;
 }
 
@@ -12,7 +20,7 @@ interface GuFastlyLogsIamProps {
 // See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
 const FASTLY_AWS_ACCOUNT_ID = "717331877981";
 
-/*
+/**
  * Construct which creates the required IAM resources to support Fastly logging to an S3 bucket.
  * Importantly, it does not create a permanent IAM user, which was once a requirement.
  *
@@ -40,7 +48,6 @@ const FASTLY_AWS_ACCOUNT_ID = "717331877981";
  * ```
  *
  * See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
- *
  */
 export class GuFastlyLogsIam {
   constructor(scope: GuStack, id: string, props: GuFastlyLogsIamProps) {
