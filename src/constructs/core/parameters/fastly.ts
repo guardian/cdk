@@ -1,5 +1,5 @@
 import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
-import { isSingletonPresentInStack } from "../../../utils/test";
+import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
 
