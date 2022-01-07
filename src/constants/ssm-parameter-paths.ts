@@ -1,6 +1,7 @@
 export interface SsmParameterPath {
   path: string;
   description: string;
+  optional?: boolean;
 }
 
 export const VPC_SSM_PARAMETER_PREFIX = "/account/vpc";
@@ -41,5 +42,6 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
   FastlyCustomerId: {
     path: "/account/external/fastly/customer.id",
     description: "SSM parameter containing the Fastly Customer ID",
+    optional: true,
   },
 };

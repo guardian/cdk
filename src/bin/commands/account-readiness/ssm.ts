@@ -10,7 +10,7 @@ export const ssmParamReadiness = async ({ credentialProvider, region }: AwsAccou
     region,
   });
 
-  const ssmParams = Object.values(SSM_PARAMETER_PATHS);
+  const ssmParams = Object.values(SSM_PARAMETER_PATHS).filter((param) => !param.optional);
   const paths: string[] = ssmParams.map((param) => param.path);
 
   const awsResponse = await ssm.getParameters({ Names: paths }).promise();
