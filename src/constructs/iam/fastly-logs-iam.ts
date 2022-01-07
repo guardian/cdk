@@ -3,7 +3,7 @@ import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core/parameters/fastly";
 import { GuPutS3ObjectsPolicy, GuRole } from "./";
 
-interface GuFastlyLogsIamProps {
+export interface GuFastlyLogsIamProps {
   /**
    * S3 bucket name that Fastly will ship logs
    */
