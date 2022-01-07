@@ -11,7 +11,7 @@ The below table lists those paths, the parameter that sets them, the expected va
 | /account/services/artifact.bucket       | DistributionBucketName       | String                       | GuGetDistributablePolicy   |
 | /account/services/logging.stream.name   | LoggingStreamName            | String                       | GuLogShippingPolicy        |
 | /account/services/anghammarad.topic.arn | AnghammaradSnsArn            | String                       | AnghammaradSenderPolicy    |
-| /account/external/fastly/customer.id    | GuFastlyCustomerIdParameter  | String                       | GuFastlyLogsIam            |
+| /account/external/fastly/customer.id    | GuFastlyCustomerIdParameter  | String                       | GuFastlyLogsIamRole        |
 
 
 ## Pattern-specific default Parameter Store locations

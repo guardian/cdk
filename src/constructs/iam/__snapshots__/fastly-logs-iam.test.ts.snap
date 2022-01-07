@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuFastlyLogsIam pattern correctly wires up the policy 1`] = `
+exports[`The GuFastlyLogsIamRole construct correctly wires up the policy 1`] = `
 Object {
   "Parameters": Object {
     "FastlyCustomerId": Object {
@@ -19,28 +19,7 @@ Object {
     },
   },
   "Resources": Object {
-    "FastlyS3LoggingIamPolicy9067F354": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "s3:PutObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::test//TEST/stack/app/*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "FastlyS3LoggingIamPolicy9067F354",
-        "Roles": Array [
-          Object {
-            "Ref": "FastlyS3LoggingIamRole882987BA",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "FastlyS3LoggingIamRole882987BA": Object {
+    "GuFastlyLogsIamRoleE2DAFAB3": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -94,6 +73,27 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "GuFastlyLogsIamRolePolicy5BF3CDCA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::test/TEST/stack/app/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuFastlyLogsIamRolePolicy5BF3CDCA",
+        "Roles": Array [
+          Object {
+            "Ref": "GuFastlyLogsIamRoleE2DAFAB3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
   },
 }

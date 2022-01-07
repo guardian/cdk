@@ -3,7 +3,7 @@ import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core/parameters/fastly";
 import { GuPutS3ObjectsPolicy, GuRole } from "./";
 
-export interface GuFastlyLogsIamProps {
+export interface GuFastlyLogsIamRoleProps {
   /**
    * S3 bucket name that Fastly will ship logs
    */
@@ -32,31 +32,22 @@ const FASTLY_AWS_ACCOUNT_ID = "717331877981";
  * entire bucket.
  *
  * ```typescript
- * new GuFastlyLogsIam(stack, "FastlyS3Logging", {
+ * new GuFastlyLogsIamRole(stack, {
  *   bucketName: "gu-mobile-logs"
  *   path: "fastly/*"
  * })
  * ```
  *
- * You may instead wish to create separate roles, rather than a single one.
- *
- * ```typescript
- * new GuFastlyLogsIam(stack, "FastlyS3LoggingMyApp", {
- *   bucketName: "gu-mobile-logs"
- *   path: "fastly/my-app/PROD/*"
- * })
- * ```
- *
  * See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
  */
-export class GuFastlyLogsIam extends GuRole {
-  constructor(scope: GuStack, id: string, props: GuFastlyLogsIamProps) {
+export class GuFastlyLogsIamRole extends GuRole {
+  constructor(scope: GuStack, props: GuFastlyLogsIamRoleProps) {
     const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
-    super(scope, `${id}Role`, {
+    super(scope, "GuFastlyLogsIamRole", {
       assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
       externalIds: [fastlyCustomerId],
     });
-    const policy = new GuPutS3ObjectsPolicy(scope, `${id}Policy`, {
+    const policy = new GuPutS3ObjectsPolicy(scope, "GuFastlyLogsIamRolePolicy", {
       bucketName: props.bucketName,
       paths: props.path ? [props.path] : undefined,
     });
