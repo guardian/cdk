@@ -5,7 +5,7 @@ Object {
   "Parameters": Object {
     "FastlyCustomerId": Object {
       "Default": "/account/external/fastly/customer.id",
-      "Description": "SSM parameter containing the Fastly Customer ID",
+      "Description": "SSM parameter containing the Fastly Customer ID. Can be obtained from https://manage.fastly.com/account/company by an admin",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "Stage": Object {
@@ -19,28 +19,28 @@ Object {
     },
   },
   "Resources": Object {
-    "FastlyS3LoggingIamIamPolicy98BADE9A": Object {
+    "FastlyS3LoggingIamPolicy9067F354": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
               "Action": "s3:PutObject",
               "Effect": "Allow",
-              "Resource": "arn:aws:s3:::test/*",
+              "Resource": "arn:aws:s3:::test//TEST/stack/app/*",
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "FastlyS3LoggingIamIamPolicy98BADE9A",
+        "PolicyName": "FastlyS3LoggingIamPolicy9067F354",
         "Roles": Array [
           Object {
-            "Ref": "FastlyS3LoggingIamIamRoleA3215821",
+            "Ref": "FastlyS3LoggingIamRole882987BA",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "FastlyS3LoggingIamIamRoleA3215821": Object {
+    "FastlyS3LoggingIamRole882987BA": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [

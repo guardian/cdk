@@ -8,7 +8,7 @@ describe("The GuFastlyLogsIam pattern", () => {
     const stack = simpleGuStackForTesting();
     new GuFastlyLogsIam(stack, "FastlyS3LoggingIam", {
       bucketName: "test",
-      path: "",
+      path: "/TEST/stack/app/*",
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
