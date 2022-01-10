@@ -71,7 +71,7 @@
     "@aws-cdk/aws-stepfunctions": "1.137.0",
     "@aws-cdk/aws-stepfunctions-tasks": "1.137.0",
     "@aws-cdk/core": "1.137.0",
-    "aws-sdk": "^2.1048.0",
+    "aws-sdk": "^2.1053.0",
     "chalk": "^4.1.2",
     "cli-ux": "^5.6.6",
     "codemaker": "^1.50.0",
