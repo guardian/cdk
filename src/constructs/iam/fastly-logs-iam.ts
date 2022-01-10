@@ -42,6 +42,7 @@ const FASTLY_AWS_ACCOUNT_ID = "717331877981";
  */
 export class GuFastlyLogsIamRole extends GuRole {
   constructor(scope: GuStack, props: GuFastlyLogsIamRoleProps) {
+    const { path = "*" } = props; // set defaults
     const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
     super(scope, "GuFastlyLogsIamRole", {
       assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
@@ -49,7 +50,7 @@ export class GuFastlyLogsIamRole extends GuRole {
     });
     const policy = new GuPutS3ObjectsPolicy(scope, "GuFastlyLogsIamRolePolicy", {
       bucketName: props.bucketName,
-      paths: props.path ? [props.path] : undefined,
+      paths: [path],
     });
 
     policy.attachToRole(this);
