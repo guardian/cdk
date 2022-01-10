@@ -7,5 +7,6 @@ export * from "./dynamodb";
 export * from "./log-shipping";
 export * from "./parameter-store-read";
 export * from "./s3-get-object";
+export * from "./s3-put-object";
 export * from "./ses";
 export * from "./ssm";
