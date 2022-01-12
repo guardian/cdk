@@ -74,7 +74,7 @@
     "aws-sdk": "^2.1054.0",
     "chalk": "^4.1.2",
     "cli-ux": "^5.6.6",
-    "codemaker": "^1.50.0",
+    "codemaker": "^1.52.1",
     "execa": "^5.1.1",
     "git-url-parse": "^11.6.0",
     "lodash.camelcase": "^4.3.0",
