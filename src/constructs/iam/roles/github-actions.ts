@@ -10,7 +10,7 @@ const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN = "token.actions.githubusercontent.
 Thumbprint of `GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN`.
 See: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
 */
-const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINT = "a031c46782e6e6c662c2c87c76da9aa62ccabd8e";
+const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINT = "6938fd4d98bab03faadb97b34396831e3780aea1";
 
 export interface GuGithubActionsRepositoryCondition {
   /**
