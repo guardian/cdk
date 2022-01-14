@@ -345,50 +345,60 @@ export class GuEc2App {
   public readonly targetGroup: GuApplicationTargetGroup;
 
   constructor(scope: GuStack, props: GuEc2AppProps) {
-    const { app } = props;
-    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText(props, "VPC"));
+    const {
+      access,
+      accessLogging = { enabled: false },
+      app,
+      applicationPort,
+      blockDevices,
+      certificateProps,
+      instanceType,
+      monitoringConfiguration,
+      roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
+      scaling,
+      userData,
+    } = props;
+
+    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
     const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
-    if (props.access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(props.access);
-    if (props.access.scope === AccessScope.INTERNAL) validateInternalCidrRanges(props.access);
+    if (access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(access);
+    if (access.scope === AccessScope.INTERNAL) validateInternalCidrRanges(access);
 
     const certificate = new GuCertificate(scope, {
       app,
-      ...props.certificateProps,
+      ...certificateProps,
     });
 
     const maybePrivateConfigPolicy =
-      typeof props.userData !== "string" && props.userData.configuration
-        ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", props.userData.configuration)]
+      typeof userData !== "string" && userData.configuration
+        ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
         : [];
 
     const mergedRoleConfiguration: GuInstanceRoleProps = {
-      withoutLogShipping: props.roleConfiguration?.withoutLogShipping,
-      additionalPolicies: maybePrivateConfigPolicy.concat(props.roleConfiguration?.additionalPolicies ?? []),
+      withoutLogShipping: roleConfiguration.withoutLogShipping,
+      additionalPolicies: maybePrivateConfigPolicy.concat(roleConfiguration.additionalPolicies ?? []),
     };
 
     const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
       app,
       vpc,
-      instanceType: props.instanceType,
+      instanceType,
       stageDependentProps: {
         CODE: {
-          minimumInstances: props.scaling?.CODE?.minimumInstances ?? 1,
-          maximumInstances: props.scaling?.CODE?.maximumInstances,
+          minimumInstances: scaling?.CODE?.minimumInstances ?? 1,
+          maximumInstances: scaling?.CODE?.maximumInstances,
         },
         PROD: {
-          minimumInstances: props.scaling?.PROD?.minimumInstances ?? 3,
-          maximumInstances: props.scaling?.PROD?.maximumInstances,
+          minimumInstances: scaling?.PROD?.minimumInstances ?? 3,
+          maximumInstances: scaling?.PROD?.maximumInstances,
         },
       },
-      role: new GuInstanceRole(scope, { app: props.app, ...mergedRoleConfiguration }),
+      role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
-      userData:
-        typeof props.userData !== "string"
-          ? new GuUserData(scope, { app, ...props.userData }).userData
-          : props.userData,
+      userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
       vpcSubnets: { subnets: privateSubnets },
-      ...(props.blockDevices && { blockDevices: props.blockDevices }),
+      ...(blockDevices && { blockDevices }),
     });
 
     // We are selectively tagging the ASG so that we can expose the number of stacks using this pattern
@@ -401,16 +411,16 @@ export class GuEc2App {
       app,
       vpc,
       // Setting internetFacing to true does not necessarily allow public access to the load balancer itself. That is handled by the listener's `open` prop.
-      internetFacing: props.access.scope !== AccessScope.INTERNAL,
+      internetFacing: access.scope !== AccessScope.INTERNAL,
       vpcSubnets: {
         subnets:
-          props.access.scope === AccessScope.INTERNAL
+          access.scope === AccessScope.INTERNAL
             ? privateSubnets
             : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       },
     });
 
-    if (props.accessLogging?.enabled) {
+    if (accessLogging.enabled) {
       const accessLoggingBucket = new GuStringParameter(scope, "AccessLoggingBucket", {
         description: SSM_PARAMETER_PATHS.AccessLoggingBucket.description,
         default: SSM_PARAMETER_PATHS.AccessLoggingBucket.path,
@@ -423,7 +433,7 @@ export class GuEc2App {
           AppIdentity.suffixText(props, "AccessLoggingBucket"),
           accessLoggingBucket.valueAsString
         ),
-        props.accessLogging.prefix
+        accessLogging.prefix
       );
     }
 
@@ -432,7 +442,7 @@ export class GuEc2App {
       vpc,
       protocol: ApplicationProtocol.HTTP,
       targets: [autoScalingGroup],
-      port: props.applicationPort,
+      port: applicationPort,
     });
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
@@ -441,36 +451,36 @@ export class GuEc2App {
       certificate,
       targetGroup,
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
-      open: props.access.scope === AccessScope.PUBLIC,
+      open: access.scope === AccessScope.PUBLIC,
     });
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
-    if (props.access.scope !== AccessScope.PUBLIC) {
+    if (access.scope !== AccessScope.PUBLIC) {
       loadBalancer.addSecurityGroup(
-        new GuSecurityGroup(scope, `${props.access.scope}IngressSecurityGroup`, {
+        new GuSecurityGroup(scope, `${access.scope}IngressSecurityGroup`, {
           app,
           vpc,
           description: "Allow restricted ingress from CIDR ranges",
           allowAllOutbound: false,
-          ingresses: restrictedCidrRanges(props.access.cidrRanges),
+          ingresses: restrictedCidrRanges(access.cidrRanges),
         })
       );
     }
 
-    if (!props.monitoringConfiguration.noMonitoring) {
-      if (props.monitoringConfiguration.http5xxAlarm) {
+    if (!monitoringConfiguration.noMonitoring) {
+      if (monitoringConfiguration.http5xxAlarm) {
         new Gu5xxPercentageAlarm(scope, {
           app,
           loadBalancer,
-          snsTopicName: props.monitoringConfiguration.snsTopicName,
-          ...props.monitoringConfiguration.http5xxAlarm,
+          snsTopicName: monitoringConfiguration.snsTopicName,
+          ...monitoringConfiguration.http5xxAlarm,
         });
       }
-      if (props.monitoringConfiguration.unhealthyInstancesAlarm) {
+      if (monitoringConfiguration.unhealthyInstancesAlarm) {
         new GuUnhealthyInstancesAlarm(scope, {
           app,
           targetGroup,
-          snsTopicName: props.monitoringConfiguration.snsTopicName,
+          snsTopicName: monitoringConfiguration.snsTopicName,
         });
       }
     }
