@@ -15,6 +15,10 @@ import type { GuMappingValue, GuStageMappingValue } from "./mappings";
 import { GuStageParameter } from "./parameters";
 import type { GuParameter } from "./parameters";
 
+const GU_STACK_SYMBOL = Symbol.for("@guardian/cdk/core.GuStack");
+const GU_STACK_FOR_INFRASTRUCTURE_SYMBOL = Symbol.for("@guardian/cdk/core.GuStackForInfrastructure");
+const GU_STACK_FOR_STACK_SET_SYMBOL = Symbol.for("@guardian/cdk/core.GuStackForStackSetInstance");
+
 export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuMigratingStack> {
   /**
    * The Guardian stack being used (as defined in your riff-raff.yaml).
@@ -60,6 +64,14 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
  * ```
  */
 export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
+  /**
+   * Return whether the given object is a GuStack
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+  public static isGuStack(obj: any): obj is GuStack {
+    return typeof obj === "object" && obj !== null && GU_STACK_SYMBOL in obj;
+  }
+
   private readonly _stack: string;
 
   private _mappings?: GuStageMapping;
@@ -139,6 +151,8 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     };
     super(app, id, mergedProps);
 
+    Object.defineProperty(this, GU_STACK_SYMBOL, { value: true });
+
     this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
 
     this.params = new Map<string, GuParameter>();
@@ -183,6 +197,14 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
  * A GuStack but designed for infrastructure as `Stage` will always be `INFRA`.
  */
 export class GuStackForInfrastructure extends GuStack {
+  /**
+   * Return whether the given object is a GuStackForInfrastructure
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+  public static isGuStackForInfrastructure(obj: any): obj is GuStackForInfrastructure {
+    return typeof obj === "object" && obj !== null && GU_STACK_FOR_INFRASTRUCTURE_SYMBOL in obj;
+  }
+
   override get stage(): string {
     return StageForInfrastructure;
   }
@@ -213,6 +235,12 @@ export class GuStackForInfrastructure extends GuStack {
     // We're overriding to add some helpful documentation in the doc string.
     return super.withStageDependentValue(mappingValue);
   }
+
+  // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForInfrastructure is the exception as it must take an App
+  constructor(app: App, id: string, props: GuStackProps) {
+    super(app, id, props);
+    Object.defineProperty(this, GU_STACK_FOR_INFRASTRUCTURE_SYMBOL, { value: true });
+  }
 }
 
 /**
@@ -221,9 +249,18 @@ export class GuStackForInfrastructure extends GuStack {
  * In a stack set application, `GuStackForStackSetInstance` is used to represent the infrastructure to provision in target AWS accounts.
  */
 export class GuStackForStackSetInstance extends GuStackForInfrastructure {
-  // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForStackSet should have a unique `App`
+  /**
+   * Return whether the given object is a GuStackForStackSetInstance
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+  public static isGuStackForStackSetInstance(obj: any): obj is GuStackForStackSetInstance {
+    return typeof obj === "object" && obj !== null && GU_STACK_FOR_STACK_SET_SYMBOL in obj;
+  }
+
+  // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForStackSetInstance should have a unique `App`
   constructor(id: string, props: GuStackProps) {
     super(new App(), id, props);
+    Object.defineProperty(this, GU_STACK_FOR_STACK_SET_SYMBOL, { value: true });
   }
 
   get cfnJson(): string {
