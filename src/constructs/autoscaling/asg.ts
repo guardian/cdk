@@ -39,7 +39,7 @@ export interface GuAutoScalingGroupProps
   targetGroup?: ApplicationTargetGroup;
 }
 
-type GuStageDependentAsgProps = StageAwareValue<GuAsgCapacityProps>;
+export type GuStageDependentAsgProps = StageAwareValue<GuAsgCapacityProps>;
 
 /**
  * `minimumInstances` determines the number of ec2 instances running under normal circumstances

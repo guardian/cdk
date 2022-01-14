@@ -5,11 +5,10 @@ import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration, Tags } from "@aws-cdk/core";
-import type { Stage } from "../constants";
 import { SSM_PARAMETER_PATHS } from "../constants/ssm-parameter-paths";
 import { TagKeys } from "../constants/tag-keys";
 import { GuCertificate } from "../constructs/acm";
-import type { GuAsgCapacityProps, GuUserDataProps } from "../constructs/autoscaling";
+import type { GuStageDependentAsgProps, GuUserDataProps } from "../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
 import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
@@ -174,10 +173,7 @@ export interface GuEc2AppProps extends AppIdentity {
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: Alarms | NoMonitoring;
   instanceType: InstanceType;
-  scaling?: {
-    [Stage.CODE]?: GuAsgCapacityProps;
-    [Stage.PROD]?: GuAsgCapacityProps;
-  };
+  scaling?: GuStageDependentAsgProps;
   accessLogging?: AccessLoggingProps;
   blockDevices?: BlockDevice[];
 }
@@ -384,16 +380,7 @@ export class GuEc2App {
       app,
       vpc,
       instanceType,
-      stageDependentProps: {
-        CODE: {
-          minimumInstances: scaling?.CODE?.minimumInstances ?? 1,
-          maximumInstances: scaling?.CODE?.maximumInstances,
-        },
-        PROD: {
-          minimumInstances: scaling?.PROD?.minimumInstances ?? 3,
-          maximumInstances: scaling?.PROD?.maximumInstances,
-        },
-      },
+      stageDependentProps: scaling,
       role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
       userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
