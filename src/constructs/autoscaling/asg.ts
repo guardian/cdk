@@ -3,11 +3,11 @@ import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-au
 import { OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../../constants";
+import { Stage, StageForInfrastructure } from "../../constants";
 import { StageAwareValue } from "../../types/stage";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
-import { GuAmiParameter } from "../core";
+import { GuAmiParameter, GuStackForInfrastructure } from "../core";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
@@ -125,10 +125,16 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
       };
     }
 
-    const defaultStageDependentProps = {
-      [Stage.CODE]: { minimumInstances: 1 },
-      [Stage.PROD]: { minimumInstances: 3 },
-    };
+    const defaultStageDependentProps: GuStageDependentAsgProps = GuStackForInfrastructure.isGuStackForInfrastructure(
+      scope
+    )
+      ? {
+          [StageForInfrastructure]: { minimumInstances: 1 },
+        }
+      : {
+          [Stage.CODE]: { minimumInstances: 1 },
+          [Stage.PROD]: { minimumInstances: 3 },
+        };
 
     const mergedProps = {
       ...props,
