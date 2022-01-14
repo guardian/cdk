@@ -3,14 +3,14 @@ import "@aws-cdk/assert/jest";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../constants";
+import { Stage, StageForInfrastructure } from "../constants";
 import { TagKeys } from "../constants/tag-keys";
 import type { GuStack } from "../constructs/core";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
 import { GuDynamoDBWritePolicy } from "../constructs/iam";
 import type { SynthedStack } from "../utils/test";
-import { simpleGuStackForTesting } from "../utils/test";
+import { simpleGuStackForTesting, simpleInfraStackForTesting } from "../utils/test";
 import "../utils/test/jest";
 import type { GuEc2AppProps } from "./ec2-app";
 import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
@@ -55,6 +55,24 @@ describe("the GuEC2App pattern", function () {
       certificateProps: getCertificateProps(),
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+  });
+
+  it("should be usable within infrastructure stacks", () => {
+    const infraStack = simpleInfraStackForTesting();
+    new GuEc2App(infraStack, {
+      applicationPort: GuApplicationPorts.Node,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        [StageForInfrastructure]: {
+          domainName: "infra.theguardian.com",
+        },
+      },
+    });
+    expect(SynthUtils.toCloudFormation(infraStack)).toMatchSnapshot();
   });
 
   it("can produce a restricted EC2 app locked to specific CIDR ranges", function () {
