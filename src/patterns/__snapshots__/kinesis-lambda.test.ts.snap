@@ -27,6 +27,9 @@ Object {
           "EncryptionType": "KMS",
           "KeyId": "alias/aws/kinesis",
         },
+        "StreamModeDetails": Object {
+          "StreamMode": "PROVISIONED",
+        },
         "Tags": Array [
           Object {
             "Key": "App",
