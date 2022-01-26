@@ -64,6 +64,9 @@ Object {
             }
           ]
         },
+        \\"StreamModeDetails\\": {
+          \\"StreamMode\\": \\"PROVISIONED\\"
+        },
         \\"Tags\\": [
           {
             \\"Key\\": \\"gu:cdk:version\\",
