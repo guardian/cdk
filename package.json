@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "0.7.0",
-    "@types/aws-lambda": "^8.10.89",
+    "@types/aws-lambda": "^8.10.92",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^27.4.0",
     "@types/lodash.camelcase": "^4.3.6",
