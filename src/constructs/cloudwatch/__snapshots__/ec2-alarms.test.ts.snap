@@ -495,7 +495,7 @@ Object {
           ],
         },
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "DatapointsToAlarm": 6,
+        "DatapointsToAlarm": 30,
         "Dimensions": Array [
           Object {
             "Name": "LoadBalancer",
@@ -558,10 +558,10 @@ Object {
             },
           },
         ],
-        "EvaluationPeriods": 12,
+        "EvaluationPeriods": 60,
         "MetricName": "UnHealthyHostCount",
         "Namespace": "AWS/ApplicationELB",
-        "Period": 300,
+        "Period": 60,
         "Statistic": "Maximum",
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
