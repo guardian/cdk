@@ -63,8 +63,8 @@ export class GuUnhealthyInstancesAlarm extends GuAlarm {
   constructor(scope: GuStack, props: GuUnhealthyInstancesAlarmProps) {
     const alarmName = `Unhealthy instances for ${props.app} in ${scope.stage}`;
 
-    const period = Duration.minutes(5);
-    const evaluationPeriods = 12;
+    const period = Duration.minutes(1);
+    const evaluationPeriods = 60;
     const evaluationInterval = Duration.minutes(period.toMinutes() * evaluationPeriods).toHumanString();
 
     const alarmDescription = `${props.app}'s instances have failed healthchecks several times over the last ${evaluationInterval}.
@@ -80,7 +80,7 @@ export class GuUnhealthyInstancesAlarm extends GuAlarm {
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      datapointsToAlarm: 6,
+      datapointsToAlarm: 30,
       evaluationPeriods,
     };
     super(scope, AppIdentity.suffixText(props, "UnhealthyInstancesAlarm"), alarmProps);
