@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node
-        uses: guardian/actions-setup-node@v2.4.1
+      - uses: actions/setup-node@v2
         with:
+          node-version-file: '.nvmrc'
           cache: npm
       - name: CD
         env:
