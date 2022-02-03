@@ -28,6 +28,21 @@ describe("The GuDnsRecordSet construct", () => {
     });
     expect(stack).toHaveResourceOfTypeAndLogicalId("Guardian::DNS::RecordSet", "ThisExactLogicalId");
   });
+
+  it("should throw if a CNAME is created with multiple answers", () => {
+    const stack = simpleGuStackForTesting();
+
+    expect(() => {
+      new GuDnsRecordSet(stack, "ThisExactLogicalId", {
+        name: "banana.example.com",
+        recordType: RecordType.CNAME,
+        resourceRecords: ["apple.example.com", "banana.example.com"],
+        ttl: Duration.hours(1),
+      });
+    }).toThrowError(
+      "According to RFC, a CNAME record should not return multiple answers. Doing so may cause problems during resolution."
+    );
+  });
 });
 
 describe("The GuCname construct", () => {
