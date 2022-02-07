@@ -18,7 +18,7 @@ describe("ParameterStoreReadPolicy", () => {
         Version: "2012-10-17",
         Statement: [
           {
-            Action: "ssm:GetParametersByPath",
+            Action: ["ssm:GetParametersByPath", "ssm:GetParameters", "ssm:GetParameter"],
             Effect: "Allow",
             Resource: {
               "Fn::Join": [
@@ -36,7 +36,7 @@ describe("ParameterStoreReadPolicy", () => {
                   {
                     Ref: "Stage",
                   },
-                  "/test-stack/MyApp",
+                  "/test-stack/MyApp*",
                 ],
               ],
             },

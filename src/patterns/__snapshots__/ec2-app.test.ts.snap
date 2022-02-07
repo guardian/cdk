@@ -628,7 +628,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -646,7 +650,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/test-gu-ec2-app",
+                    "/test-stack/test-gu-ec2-app*",
                   ],
                 ],
               },
@@ -1472,7 +1476,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -1490,7 +1498,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/test-gu-ec2-app",
+                    "/test-stack/test-gu-ec2-app*",
                   ],
                 ],
               },

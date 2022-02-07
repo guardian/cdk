@@ -8,8 +8,8 @@ export class GuParameterStoreReadPolicyStatement extends PolicyStatement {
   constructor(scope: GuStack, props: AppIdentity) {
     super({
       effect: Effect.ALLOW,
-      actions: ["ssm:GetParametersByPath"],
-      resources: [`arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${props.app}`],
+      actions: ["ssm:GetParametersByPath", "ssm:GetParameters", "ssm:GetParameter"],
+      resources: [`arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${props.app}*`],
     });
   }
 }
