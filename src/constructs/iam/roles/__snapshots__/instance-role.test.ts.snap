@@ -159,7 +159,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -177,7 +181,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing",
+                    "/test-stack/testing*",
                   ],
                 ],
               },
@@ -513,7 +517,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -531,7 +539,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/my-first-app",
+                    "/test-stack/my-first-app*",
                   ],
                 ],
               },
@@ -553,7 +561,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -571,7 +583,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/my-second-app",
+                    "/test-stack/my-second-app*",
                   ],
                 ],
               },
@@ -816,7 +828,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -834,7 +850,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing",
+                    "/test-stack/testing*",
                   ],
                 ],
               },
@@ -1029,7 +1045,11 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "ssm:GetParametersByPath",
+              "Action": Array [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::Join": Array [
@@ -1047,7 +1067,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing",
+                    "/test-stack/testing*",
                   ],
                 ],
               },
