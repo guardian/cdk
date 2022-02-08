@@ -9,7 +9,7 @@ import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitori
 import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
-import { GuParameterStoreByNameReadPolicyStatement, GuParameterStoreByPathReadPolicyStatement } from "../iam";
+import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
 const DEPRECATED_RUNTIMES: Runtime[] = [
   Runtime.NODEJS_4_3,
@@ -120,8 +120,8 @@ export class GuLambdaFunction extends Function {
     bucket.grantRead(this);
 
     const ssmParamReadPolicies: PolicyStatement[] = [
-      new GuParameterStoreByPathReadPolicyStatement(scope, props),
-      new GuParameterStoreByNameReadPolicyStatement(scope, props),
+      new ReadParametersByPath(scope, props),
+      new ReadParametersByName(scope, props),
     ];
 
     ssmParamReadPolicies.map((policy) => this.addToRolePolicy(policy));
