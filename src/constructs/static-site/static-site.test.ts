@@ -164,53 +164,6 @@ describe("The GuStaticSite pattern", () => {
     });
   });
 
-  it("should work with a pre-existing bucket", () => {
-    const stack = simpleGuStackForTesting();
-    new GuStaticSite(stack, "StaticSite", {
-      ...defaultProps,
-      preExistingOriginBucketName: "i-already-exist",
-    });
-
-    expect(stack).not.toHaveResource("AWS::S3::Bucket");
-    expect(stack).not.toHaveResource("AWS::S3::BucketPolicy");
-
-    expect(stack).toHaveResourceLike("AWS::CloudFront::Distribution", {
-      DistributionConfig: {
-        Origins: [
-          {
-            DomainName: {
-              "Fn::Join": [
-                "",
-                [
-                  "i-already-exist.s3.",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ".",
-                  {
-                    Ref: "AWS::URLSuffix",
-                  },
-                ],
-              ],
-            },
-            OriginPath: {
-              "Fn::Join": [
-                "",
-                [
-                  "/",
-                  {
-                    Ref: "Stage",
-                  },
-                  "/my-app",
-                ],
-              ],
-            },
-          },
-        ],
-      },
-    });
-  });
-
   it("should not create a CloudFormation Mapping when used in a GuStackForInfrastructure", () => {
     const stack = simpleGuStackForTesting();
     new GuStaticSite(stack, "StackSite", defaultProps);
@@ -239,7 +192,6 @@ describe("The GuStaticSite pattern", () => {
           domainName: "site2.gutools.co.uk",
         },
       },
-      preExistingOriginBucketName: "site2-origin",
     });
 
     expect(stack).toHaveGuTaggedResource("AWS::CloudFront::Distribution", { appIdentity: { app: defaultProps.app } });

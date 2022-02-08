@@ -21,19 +21,16 @@ Object {
     },
   },
   "Outputs": Object {
-    "CloudFrontOAISite2": Object {
-      "Description": "Canonical user ID used by CloudFront distribution. This should be granted 's3:GetObject' access to S3 bucket 'site2-origin'.",
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "CloudFrontOriginAccessIdentitySite23746234B",
-          "S3CanonicalUserId",
-        ],
-      },
-    },
     "OriginBucketNameMyapp": Object {
       "Description": "S3 bucket origin for CloudFront.",
       "Value": Object {
         "Ref": "OriginBucketMyapp924B0FC3",
+      },
+    },
+    "OriginBucketNameSite2": Object {
+      "Description": "S3 bucket origin for CloudFront.",
+      "Value": Object {
+        "Ref": "OriginBucketSite255F13D42",
       },
     },
   },
@@ -327,6 +324,112 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "OriginBucketSite255F13D42": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "Site2",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": Object {
+              "Ref": "Stage",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OriginBucketSite2Policy507D57A2": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "OriginBucketSite255F13D42",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "CloudFrontOriginAccessIdentitySite23746234B",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "OriginBucketSite255F13D42",
+                        "Arn",
+                      ],
+                    },
+                    "/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/Site2/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": Object {
+                "CanonicalUser": Object {
+                  "Fn::GetAtt": Array [
+                    "CloudFrontOriginAccessIdentitySite23746234B",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "OriginBucketSite255F13D42",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
     "Site1MyappCFDistribution297F4C3E": Object {
       "Properties": Object {
         "DistributionConfig": Object {
@@ -501,18 +604,9 @@ Object {
               "ConnectionAttempts": 3,
               "ConnectionTimeout": 10,
               "DomainName": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "site2-origin.s3.",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ".",
-                    Object {
-                      "Ref": "AWS::URLSuffix",
-                    },
-                  ],
+                "Fn::GetAtt": Array [
+                  "OriginBucketSite255F13D42",
+                  "RegionalDomainName",
                 ],
               },
               "Id": "origin1",

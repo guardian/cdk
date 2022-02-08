@@ -7,7 +7,6 @@ import {
 } from "@aws-cdk/aws-cloudfront";
 import type { Behavior, CloudFrontWebDistributionProps } from "@aws-cdk/aws-cloudfront/lib/web-distribution";
 import { CanonicalUserPrincipal, PolicyStatement } from "@aws-cdk/aws-iam";
-import { Bucket } from "@aws-cdk/aws-s3";
 import { Annotations, Arn, ArnFormat, CfnOutput, Duration, Token } from "@aws-cdk/core";
 import { Stage } from "../../constants";
 import type { GuDomainNameProps } from "../../types/domain-names";
@@ -43,17 +42,6 @@ export interface GuStaticSiteProps
    * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-acmcertificatearn
    */
   preExistingCertificateArn?: StageAwareValue<string>;
-
-  /**
-   * Name of a pre-existing S3 bucket holding the contents of the static site.
-   *
-   * If provided, a CloudFormation Output is created for the `CanonicalUser` to grant `s3:GetObject` permissions to.
-   * If not provided, a CloudFormation Output of the bucket name is created.
-   *
-   * @see https://github.com/awsdocs/amazon-s3-userguide/blob/d9fa2605ba253b3ca6ca1a83da5fa6b0b9b6debb/doc_source/s3-bucket-user-policy-specifying-principal-intro.md
-   *
-   */
-  preExistingOriginBucketName?: string;
 
   /**
    * Behaviours of the S3 bucket origin.
@@ -213,41 +201,23 @@ export class GuStaticSite extends GuAppAwareConstruct(CloudFrontWebDistribution)
 
   private static getBucket(
     scope: GuStack,
-    { app, preExistingOriginBucketName, bucketName }: GuStaticSiteProps,
+    { app, bucketName }: GuStaticSiteProps,
     { cloudFrontOriginAccessIdentityS3CanonicalUserId }: OriginAccessIdentity
   ) {
-    const bucket = preExistingOriginBucketName
-      ? Bucket.fromBucketName(scope, AppIdentity.suffixText({ app }, "OriginBucket"), preExistingOriginBucketName)
-      : new GuS3Bucket(scope, "OriginBucket", { app, bucketName });
+    const bucket = new GuS3Bucket(scope, "OriginBucket", { app, bucketName });
 
-    if (preExistingOriginBucketName) {
-      /*
-      We can only update a bucket's policy if the bucket is created in the same stack.
-      If the bucket has been created externally, produce a CloudFormation Output to ease.
+    bucket.addToResourcePolicy(
+      new PolicyStatement({
+        actions: ["s3:GetObject"],
+        resources: [bucket.arnForObjects(`${scope.stage}/${app}/*`)],
+        principals: [new CanonicalUserPrincipal(cloudFrontOriginAccessIdentityS3CanonicalUserId)],
+      })
+    );
 
-      @see https://github.com/awsdocs/amazon-s3-userguide/blob/d9fa2605ba253b3ca6ca1a83da5fa6b0b9b6debb/doc_source/s3-bucket-user-policy-specifying-principal-intro.md
-       */
-      new CfnOutput(scope, AppIdentity.suffixText({ app }, "CloudFrontOAI"), {
-        description: `Canonical user ID used by CloudFront distribution. This should be granted 's3:GetObject' access to S3 bucket '${preExistingOriginBucketName}'.`,
-        value: cloudFrontOriginAccessIdentityS3CanonicalUserId,
-      });
-      Annotations.of(scope).addWarning(
-        `Origin bucket not managed by this stack. Grant 's3:GetObject' permission on ${preExistingOriginBucketName} to the principal listed as an Output on this stack. See https://github.com/awsdocs/amazon-s3-userguide/blob/d9fa2605ba253b3ca6ca1a83da5fa6b0b9b6debb/doc_source/s3-bucket-user-policy-specifying-principal-intro.md.`
-      );
-    } else {
-      bucket.addToResourcePolicy(
-        new PolicyStatement({
-          actions: ["s3:GetObject"],
-          resources: [bucket.arnForObjects(`${scope.stage}/${app}/*`)],
-          principals: [new CanonicalUserPrincipal(cloudFrontOriginAccessIdentityS3CanonicalUserId)],
-        })
-      );
-
-      new CfnOutput(scope, AppIdentity.suffixText({ app }, "OriginBucketName"), {
-        description: "S3 bucket origin for CloudFront.",
-        value: bucket.bucketName,
-      });
-    }
+    new CfnOutput(scope, AppIdentity.suffixText({ app }, "OriginBucketName"), {
+      description: "S3 bucket origin for CloudFront.",
+      value: bucket.bucketName,
+    });
 
     return bucket;
   }
