@@ -36,7 +36,7 @@ describe("ParameterStoreReadPolicy", () => {
                   {
                     Ref: "Stage",
                   },
-                  "/test-stack/MyApp*",
+                  "/test-stack/MyApp/*",
                 ],
               ],
             },

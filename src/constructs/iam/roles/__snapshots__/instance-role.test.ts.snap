@@ -181,7 +181,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing*",
+                    "/test-stack/testing/*",
                   ],
                 ],
               },
@@ -539,7 +539,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/my-first-app*",
+                    "/test-stack/my-first-app/*",
                   ],
                 ],
               },
@@ -583,7 +583,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/my-second-app*",
+                    "/test-stack/my-second-app/*",
                   ],
                 ],
               },
@@ -850,7 +850,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing*",
+                    "/test-stack/testing/*",
                   ],
                 ],
               },
@@ -1067,7 +1067,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing*",
+                    "/test-stack/testing/*",
                   ],
                 ],
               },

@@ -650,7 +650,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/test-gu-ec2-app*",
+                    "/test-stack/test-gu-ec2-app/*",
                   ],
                 ],
               },
@@ -1498,7 +1498,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/test-gu-ec2-app*",
+                    "/test-stack/test-gu-ec2-app/*",
                   ],
                 ],
               },

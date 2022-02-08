@@ -265,7 +265,7 @@ Object {
                     Object {
                       "Ref": "Stage",
                     },
-                    "/test-stack/testing*",
+                    "/test-stack/testing/*",
                   ],
                 ],
               },
