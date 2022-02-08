@@ -4,11 +4,21 @@ import type { GuStack } from "../../core";
 import type { AppIdentity } from "../../core/identity";
 import { GuPolicy } from "./base-policy";
 
-export class GuParameterStoreReadPolicyStatement extends PolicyStatement {
+export class GuParameterStoreByPathReadPolicyStatement extends PolicyStatement {
   constructor(scope: GuStack, props: AppIdentity) {
     super({
       effect: Effect.ALLOW,
-      actions: ["ssm:GetParametersByPath", "ssm:GetParameters", "ssm:GetParameter"],
+      actions: ["ssm:GetParametersByPath"],
+      resources: [`arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${props.app}`],
+    });
+  }
+}
+
+export class GuParameterStoreByNameReadPolicyStatement extends PolicyStatement {
+  constructor(scope: GuStack, props: AppIdentity) {
+    super({
+      effect: Effect.ALLOW,
+      actions: ["ssm:GetParameters", "ssm:GetParameter"],
       resources: [
         `arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${props.app}/*`,
       ],
@@ -20,7 +30,10 @@ export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
   constructor(scope: GuStack, props: AppIdentity) {
     super(scope, "ParameterStoreRead", {
       policyName: "parameter-store-read-policy",
-      statements: [new GuParameterStoreReadPolicyStatement(scope, props)],
+      statements: [
+        new GuParameterStoreByPathReadPolicyStatement(scope, props),
+        new GuParameterStoreByNameReadPolicyStatement(scope, props),
+      ],
       ...props,
     });
   }

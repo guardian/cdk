@@ -159,8 +159,31 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/testing",
+                  ],
+                ],
+              },
+            },
+            Object {
               "Action": Array [
-                "ssm:GetParametersByPath",
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
@@ -517,8 +540,31 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/my-first-app",
+                  ],
+                ],
+              },
+            },
+            Object {
               "Action": Array [
-                "ssm:GetParametersByPath",
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
@@ -561,8 +607,31 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/my-second-app",
+                  ],
+                ],
+              },
+            },
+            Object {
               "Action": Array [
-                "ssm:GetParametersByPath",
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
@@ -828,8 +897,31 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/testing",
+                  ],
+                ],
+              },
+            },
+            Object {
               "Action": Array [
-                "ssm:GetParametersByPath",
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
@@ -1045,8 +1137,31 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/",
+                    Object {
+                      "Ref": "Stage",
+                    },
+                    "/test-stack/testing",
+                  ],
+                ],
+              },
+            },
+            Object {
               "Action": Array [
-                "ssm:GetParametersByPath",
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],

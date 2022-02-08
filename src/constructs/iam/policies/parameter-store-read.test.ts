@@ -18,7 +18,31 @@ describe("ParameterStoreReadPolicy", () => {
         Version: "2012-10-17",
         Statement: [
           {
-            Action: ["ssm:GetParametersByPath", "ssm:GetParameters", "ssm:GetParameter"],
+            Action: "ssm:GetParametersByPath",
+            Effect: "Allow",
+            Resource: {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:ssm:",
+                  {
+                    Ref: "AWS::Region",
+                  },
+                  ":",
+                  {
+                    Ref: "AWS::AccountId",
+                  },
+                  ":parameter/",
+                  {
+                    Ref: "Stage",
+                  },
+                  "/test-stack/MyApp",
+                ],
+              ],
+            },
+          },
+          {
+            Action: ["ssm:GetParameters", "ssm:GetParameter"],
             Effect: "Allow",
             Resource: {
               "Fn::Join": [
