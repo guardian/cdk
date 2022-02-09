@@ -1,3 +1,4 @@
+import type { PolicyStatement } from "@aws-cdk/aws-iam";
 import { Code, Function, Runtime, RuntimeFamily } from "@aws-cdk/aws-lambda";
 import type { FunctionProps } from "@aws-cdk/aws-lambda";
 import { Bucket } from "@aws-cdk/aws-s3";
@@ -8,7 +9,7 @@ import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitori
 import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
-import { GuParameterStoreReadPolicyStatement } from "../iam";
+import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
 const DEPRECATED_RUNTIMES: Runtime[] = [
   Runtime.NODEJS_4_3,
@@ -118,8 +119,12 @@ export class GuLambdaFunction extends Function {
 
     bucket.grantRead(this);
 
-    const ssmParamReadPolicy = new GuParameterStoreReadPolicyStatement(scope, props);
-    this.addToRolePolicy(ssmParamReadPolicy);
+    const ssmParamReadPolicies: PolicyStatement[] = [
+      new ReadParametersByPath(scope, props),
+      new ReadParametersByName(scope, props),
+    ];
+
+    ssmParamReadPolicies.map((policy) => this.addToRolePolicy(policy));
 
     AppIdentity.taggedConstruct(props, this);
   }

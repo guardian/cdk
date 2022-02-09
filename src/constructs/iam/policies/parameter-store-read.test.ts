@@ -41,6 +41,30 @@ describe("ParameterStoreReadPolicy", () => {
               ],
             },
           },
+          {
+            Action: ["ssm:GetParameters", "ssm:GetParameter"],
+            Effect: "Allow",
+            Resource: {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:ssm:",
+                  {
+                    Ref: "AWS::Region",
+                  },
+                  ":",
+                  {
+                    Ref: "AWS::AccountId",
+                  },
+                  ":parameter/",
+                  {
+                    Ref: "Stage",
+                  },
+                  "/test-stack/MyApp/*",
+                ],
+              ],
+            },
+          },
         ],
       },
     });
