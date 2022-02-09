@@ -585,6 +585,9 @@ Object {
           },
         ],
         "Cpu": "1024",
+        "EphemeralStorage": Object {
+          "SizeInGiB": 30,
+        },
         "ExecutionRoleArn": Object {
           "Fn::GetAtt": Array [
             "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",

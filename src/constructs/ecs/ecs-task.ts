@@ -110,6 +110,7 @@ export interface GuEcsTaskProps extends AppIdentity {
   securityGroups?: ISecurityGroup[];
   customTaskPolicies?: PolicyStatement[];
   environmentOverrides?: TaskEnvironmentVariable[];
+  storage?: number;
 }
 
 /**
@@ -144,7 +145,7 @@ export class GuEcsTask {
       // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
       cpu = 2048, // 2 cores and from 4-16GB memory
       memory = 4096, // 4GB
-
+      storage = 20, //20 GB
       containerConfiguration,
       taskCommand,
       taskTimeoutInMinutes = 15,
@@ -168,6 +169,7 @@ export class GuEcsTask {
       cpu: cpu.toString(),
       memoryMiB: memory.toString(),
       family: `${stack}-${stage}-${app}`,
+      ephemeralStorageGiB: storage,
     });
 
     const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
