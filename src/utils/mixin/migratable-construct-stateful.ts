@@ -35,7 +35,6 @@ import type { AnyConstructor } from "./types";
  * @see https://www.typescriptlang.org/docs/handbook/mixins.html
  * @see https://www.typescriptlang.org/docs/handbook/decorators.html
  */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- mixin
 export function GuStatefulMigratableConstruct<TBase extends AnyConstructor>(BaseClass: TBase) {
   return class extends GuMigratableConstruct(BaseClass) implements GuStatefulConstruct {
     get isStatefulConstruct(): true {

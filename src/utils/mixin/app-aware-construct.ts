@@ -2,7 +2,6 @@ import { Construct } from "@aws-cdk/core";
 import { AppIdentity } from "../../constructs/core/identity";
 import type { AnyConstructor } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- mixin
 export function GuAppAwareConstruct<TBase extends AnyConstructor>(BaseClass: TBase) {
   class Mixin extends BaseClass {
     /**
@@ -25,6 +24,7 @@ export function GuAppAwareConstruct<TBase extends AnyConstructor>(BaseClass: TBa
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- mixin
       const newArgs = [scope, idWithApp, props, ...rest];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- mixin
       super(...newArgs);
 
       this.idWithApp = idWithApp;
