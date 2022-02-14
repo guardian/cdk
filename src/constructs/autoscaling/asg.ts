@@ -3,8 +3,8 @@ import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-au
 import { OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
 import type { ISecurityGroup, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../../constants";
-import { StageAwareValue } from "../../types/stage";
+import { Token } from "@aws-cdk/core";
+import type { GuAsgCapacity } from "../../types/asg";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
@@ -30,66 +30,12 @@ export interface GuAutoScalingGroupProps
       | "securityGroup"
     >,
     AppIdentity,
-    GuMigratingResource {
-  stageDependentProps?: GuStageDependentAsgProps;
+    GuMigratingResource,
+    GuAsgCapacity {
   imageId?: GuAmiParameter;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
-}
-
-type GuStageDependentAsgProps = StageAwareValue<GuAsgCapacityProps>;
-
-/**
- * `minimumInstances` determines the number of ec2 instances running under normal circumstances
- * (i.e. when there are no deployment or scaling events in progress).
- *
- * `maximumInstances` is optional. If omitted, this will be set to `minimumInstances * 2`.
- * This allows us to support Riff-Raff's autoscaling deployment type by default.
- *
- * The maximum capacity value should only be set if you need to scale beyond the default limit (e.g. due to heavy traffic)
- * or restrict scaling for a specific reason.
- */
-export interface GuAsgCapacityProps {
-  minimumInstances: number;
-  maximumInstances?: number;
-}
-
-interface AwsAsgCapacityProps {
-  minCapacity: number;
-  maxCapacity: number;
-}
-
-function wireStageDependentProps(
-  stack: GuStack,
-  app: string,
-  stageDependentProps: GuStageDependentAsgProps
-): AwsAsgCapacityProps {
-  if (StageAwareValue.isStageForInfrastructureValue(stageDependentProps)) {
-    return {
-      minCapacity: stageDependentProps.INFRA.minimumInstances,
-      maxCapacity: stageDependentProps.INFRA.maximumInstances ?? stageDependentProps.INFRA.minimumInstances * 2,
-    };
-  }
-
-  return {
-    minCapacity: stack.withStageDependentValue({
-      app,
-      variableName: "minInstances",
-      stageValues: {
-        [Stage.CODE]: stageDependentProps.CODE.minimumInstances,
-        [Stage.PROD]: stageDependentProps.PROD.minimumInstances,
-      },
-    }),
-    maxCapacity: stack.withStageDependentValue({
-      app,
-      variableName: "maxInstances",
-      stageValues: {
-        [Stage.CODE]: stageDependentProps.CODE.maximumInstances ?? stageDependentProps.CODE.minimumInstances * 2,
-        [Stage.PROD]: stageDependentProps.PROD.maximumInstances ?? stageDependentProps.PROD.minimumInstances * 2,
-      },
-    }),
-  };
 }
 
 /**
@@ -115,22 +61,27 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
       app,
       additionalSecurityGroups = [],
       imageId = new GuAmiParameter(scope, { app }),
+      minimumInstances,
+      maximumInstances,
       role = new GuInstanceRole(scope, { app }),
       targetGroup,
       userData: userDataLike,
       vpc,
     } = props;
 
-    const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
+    // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
+    if (Token.isUnresolved(minimumInstances) && !Token.isUnresolved(maximumInstances)) {
+      throw new Error(
+        "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too."
+      );
+    }
 
-    const defaultStageDependentProps = {
-      [Stage.CODE]: { minimumInstances: 1 },
-      [Stage.PROD]: { minimumInstances: 3 },
-    };
+    const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
 
     const mergedProps: AutoScalingGroupProps = {
       ...props,
-      ...wireStageDependentProps(scope, app, props.stageDependentProps ?? defaultStageDependentProps),
+      minCapacity: minimumInstances,
+      maxCapacity: maximumInstances ?? minimumInstances * 2,
       role,
       machineImage: {
         getImage: (): MachineImageConfig => {
