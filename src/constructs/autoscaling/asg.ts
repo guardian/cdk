@@ -114,7 +114,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
     const {
       app,
       additionalSecurityGroups = [],
-      imageId,
+      imageId = new GuAmiParameter(scope, { app }),
       role = new GuInstanceRole(scope, { app }),
       targetGroup,
       userData: userDataLike,
@@ -123,27 +123,24 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
 
     const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
 
-    // We need to override getImage() so that we can pass in the AMI as a parameter
-    // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
-    // as the name is hard-coded
-    function getImage(): MachineImageConfig {
-      return {
-        osType: OperatingSystemType.LINUX,
-        userData,
-        imageId: imageId?.valueAsString ?? new GuAmiParameter(scope, { app }).valueAsString,
-      };
-    }
-
     const defaultStageDependentProps = {
       [Stage.CODE]: { minimumInstances: 1 },
       [Stage.PROD]: { minimumInstances: 3 },
     };
 
-    const mergedProps = {
+    const mergedProps: AutoScalingGroupProps = {
       ...props,
       ...wireStageDependentProps(scope, app, props.stageDependentProps ?? defaultStageDependentProps),
       role,
-      machineImage: { getImage: getImage },
+      machineImage: {
+        getImage: (): MachineImageConfig => {
+          return {
+            osType: OperatingSystemType.LINUX,
+            userData,
+            imageId: imageId.valueAsString,
+          };
+        },
+      },
       userData,
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
