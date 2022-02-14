@@ -1,7 +1,7 @@
 import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-autoscaling";
 import { OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
-import type { ISecurityGroup, MachineImage, MachineImageConfig } from "@aws-cdk/aws-ec2";
+import type { ISecurityGroup, MachineImageConfig } from "@aws-cdk/aws-ec2";
 import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../../constants";
 import { StageAwareValue } from "../../types/stage";
@@ -33,7 +33,6 @@ export interface GuAutoScalingGroupProps
     GuMigratingResource {
   stageDependentProps?: GuStageDependentAsgProps;
   imageId?: GuAmiParameter;
-  machineImage?: MachineImage;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
