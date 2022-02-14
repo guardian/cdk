@@ -111,7 +111,17 @@ function wireStageDependentProps(
  */
 export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAwareConstruct(AutoScalingGroup)) {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
-    const userData = props.userData instanceof UserData ? props.userData : UserData.custom(props.userData);
+    const {
+      app,
+      additionalSecurityGroups = [],
+      imageId,
+      role = new GuInstanceRole(scope, { app }),
+      targetGroup,
+      userData: userDataLike,
+      vpc,
+    } = props;
+
+    const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
 
     // We need to override getImage() so that we can pass in the AMI as a parameter
     // Otherwise, MachineImage.lookup({ name: 'some str' }) would work as long
@@ -120,7 +130,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
       return {
         osType: OperatingSystemType.LINUX,
         userData,
-        imageId: props.imageId?.valueAsString ?? new GuAmiParameter(scope, props).valueAsString,
+        imageId: imageId?.valueAsString ?? new GuAmiParameter(scope, { app }).valueAsString,
       };
     }
 
@@ -131,21 +141,20 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
 
     const mergedProps = {
       ...props,
-      ...wireStageDependentProps(scope, props.app, props.stageDependentProps ?? defaultStageDependentProps),
-      role: props.role ?? new GuInstanceRole(scope, { app: props.app }),
+      ...wireStageDependentProps(scope, app, props.stageDependentProps ?? defaultStageDependentProps),
+      role,
       machineImage: { getImage: getImage },
       userData,
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
-      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app: props.app, vpc: props.vpc }),
+      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app, vpc }),
     };
 
     super(scope, id, mergedProps);
 
-    mergedProps.targetGroup && this.attachToApplicationTargetGroup(mergedProps.targetGroup);
+    targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 
-    this.addSecurityGroup(GuWazuhAccess.getInstance(scope, props.vpc));
-    mergedProps.additionalSecurityGroups?.forEach((sg) => this.addSecurityGroup(sg));
+    [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) => this.addSecurityGroup(sg));
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group
