@@ -1,6 +1,5 @@
 import { request } from "https";
 import { parse } from "url";
-// eslint-disable-next-line import/no-unresolved -- this comes from @types/aws-lambda, but eslint can't seem to read it properly
 import type { CloudFormationCustomResourceEvent, Context } from "aws-lambda";
 import SSM from "aws-sdk/clients/ssm";
 import type { CustomResourceGetParameterProps } from "../interfaces";

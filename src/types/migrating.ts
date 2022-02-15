@@ -10,7 +10,7 @@ export interface GuMigratingStack {
   migratedFromCloudFormation: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- user defined type guard
 export function isGuMigratingStack(construct: any): construct is GuMigratingStack {
   return "migratedFromCloudFormation" in construct;
 }
@@ -23,7 +23,7 @@ export interface GuStatefulConstruct {
   isStatefulConstruct: true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- user defined type guard
 export function isGuStatefulConstruct(construct: any): construct is GuStatefulConstruct {
   return "isStatefulConstruct" in construct;
 }

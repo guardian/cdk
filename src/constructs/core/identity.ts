@@ -13,7 +13,7 @@ export interface AppIdentity {
 export interface Identity extends StackStageIdentity, AppIdentity {}
 
 export const AppIdentity = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types -- user defined type guard
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- user defined type guard
   isAppIdentity(props: any): props is AppIdentity {
     return props ? "app" in props : false;
   },

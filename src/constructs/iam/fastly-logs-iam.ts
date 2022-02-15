@@ -1,7 +1,8 @@
 import { AccountPrincipal } from "@aws-cdk/aws-iam";
 import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core/parameters/fastly";
-import { GuPutS3ObjectsPolicy, GuRole } from "./";
+import { GuPutS3ObjectsPolicy } from "./policies";
+import { GuRole } from "./roles";
 
 export interface GuFastlyLogsIamRoleProps {
   /**

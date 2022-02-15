@@ -47,12 +47,12 @@ import type { AnyConstructor } from "./types";
  * @see https://www.typescriptlang.org/docs/handbook/mixins.html
  * @see https://www.typescriptlang.org/docs/handbook/decorators.html
  */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- mixin
 export function GuMigratableConstruct<TBase extends AnyConstructor>(BaseClass: TBase) {
   return class extends BaseClass {
     // eslint-disable-next-line custom-rules/valid-constructors, @typescript-eslint/no-explicit-any -- mixin
     constructor(...args: any[]) {
       // `super` is the parent AWS constructor here
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- mixin
       super(...args);
 
       // Constrained mixins could be used here but couldn't get it to work
