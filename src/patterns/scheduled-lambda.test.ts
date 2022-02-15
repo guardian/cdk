@@ -24,6 +24,24 @@ describe("The GuScheduledLambda pattern", () => {
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 
+  it("should disable scheduled invocations if the user explicitly opts-out", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      rules: [{ schedule: Schedule.rate(Duration.minutes(1)), enabled: false }],
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuScheduledLambda(stack, "my-lambda-function", props);
+    expect(stack).toHaveResource("AWS::Events::Rule", {
+      State: "DISABLED",
+    });
+  });
+
   it("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {

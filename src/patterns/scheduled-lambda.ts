@@ -53,6 +53,7 @@ import type { GuFunctionProps } from "../constructs/lambda";
 export interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   rules: Array<{
     schedule: Schedule;
+    enabled?: boolean;
     description?: string;
   }>;
   monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
@@ -77,7 +78,7 @@ export class GuScheduledLambda extends GuLambdaFunction {
         schedule: rule.schedule,
         targets: [target],
         ...(rule.description && { description: rule.description }),
-        enabled: true,
+        enabled: rule.enabled,
       });
     });
   }
