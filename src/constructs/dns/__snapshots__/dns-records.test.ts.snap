@@ -2,16 +2,6 @@
 
 exports[`The GuCname construct should create the correct resources with minimal config 1`] = `
 Object {
-  "Mappings": Object {
-    "mytestapp": Object {
-      "CODE": Object {
-        "domainName": "xyz.code-guardian.com",
-      },
-      "PROD": Object {
-        "domainName": "xyz.prod-guardian.com",
-      },
-    },
-  },
   "Parameters": Object {
     "Stage": Object {
       "AllowedValues": Array [
@@ -26,15 +16,7 @@ Object {
   "Resources": Object {
     "TestRecord": Object {
       "Properties": Object {
-        "Name": Object {
-          "Fn::FindInMap": Array [
-            "mytestapp",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
+        "Name": "xyz.code-guardian.com",
         "RecordType": "CNAME",
         "ResourceRecords": Array [
           "apple.example.com",

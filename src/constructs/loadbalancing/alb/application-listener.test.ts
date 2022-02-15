@@ -3,7 +3,6 @@ import "../../../utils/test/jest";
 import { Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { Stage } from "../../../constants";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuCertificate } from "../../acm";
 import type { GuStack } from "../../core";
@@ -27,12 +26,7 @@ const getLoadBalancer = (stack: GuStack): GuApplicationLoadBalancer => {
 const getCertificate = (stack: GuStack): GuCertificate => {
   return new GuCertificate(stack, {
     ...app,
-    [Stage.CODE]: {
-      domainName: "code-guardian.com",
-    },
-    [Stage.PROD]: {
-      domainName: "prod-guardian.com",
-    },
+    domainName: "code-guardian.com",
   });
 };
 

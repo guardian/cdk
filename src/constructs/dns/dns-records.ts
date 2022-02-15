@@ -1,8 +1,6 @@
 import type { Duration } from "@aws-cdk/core";
 import { CfnResource } from "@aws-cdk/core";
-import { Stage } from "../../constants";
-import type { GuDomainNameProps } from "../../types/domain-names";
-import { StageAwareValue } from "../../types/stage";
+import type { GuDomainName } from "../../types/domain-names";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";
 
@@ -62,16 +60,7 @@ export class GuDnsRecordSet {
   }
 }
 
-export interface GuCnameProps extends AppIdentity {
-  /** The name of the records for CODE and PROD stages, for example:
-   * ```typescript
-   * {
-   *   [Stage.CODE]: { domainName: "xyz.code-guardian.com" },
-   *   [Stage.PROD]: { domainName: "xyz.prod-guardian.com" },
-   * }
-   * ```
-   */
-  domainNameProps: GuDomainNameProps;
+export interface GuCnameProps extends GuDomainName, AppIdentity {
   /** The record your CNAME should point to, for example your Load Balancer DNS name */
   resourceRecord: string;
   /** The time to live for the DNS record */
@@ -91,21 +80,13 @@ export interface GuCnameProps extends AppIdentity {
  */
 export class GuCname extends GuDnsRecordSet {
   constructor(scope: GuStack, id: string, props: GuCnameProps) {
-    const domainName = StageAwareValue.isStageValue(props.domainNameProps)
-      ? scope.withStageDependentValue({
-          app: props.app,
-          variableName: "domainName",
-          stageValues: {
-            [Stage.CODE]: props.domainNameProps.CODE.domainName,
-            [Stage.PROD]: props.domainNameProps.PROD.domainName,
-          },
-        })
-      : props.domainNameProps.INFRA.domainName;
+    const { domainName: name, resourceRecord, ttl } = props;
+
     super(scope, id, {
-      name: domainName,
+      name,
       recordType: RecordType.CNAME,
-      resourceRecords: [props.resourceRecord],
-      ttl: props.ttl,
+      resourceRecords: [resourceRecord],
+      ttl,
     });
   }
 }
