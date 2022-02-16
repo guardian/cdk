@@ -2,48 +2,21 @@
 
 ![npm][badge-npm] [![CD][badge-cd]][internal-cd-file]
 
-Welcome to the Guardian CDK library! This library contains a number of reusable patterns and constructs which can be used to build up your AWS Cloudformation stacks.
+The [AWS Cloud Development Kit](aws-cdk) (AWS CDK) is an open-source software
+development framework to define cloud infrastructure in code and provision it
+through AWS CloudFormation.
 
-📖 View the available components in the [API documentation][internal-website].
+`@guardian/cdk` builds on CDK to provide Guardian-specific patterns and
+constructs. It is an opinionated and secure-by-default way to describe and
+provision your AWS resources.
 
-💬 Come and chat to us in [Discussions][internal-discussions]
+- [Introduction to `@guardian/cdk`](./docs/001-general-usage.md)
+- [Migrating an existing Cloudformation template](./docs/003-migrating-existing-stacks.md)
+- [Creating a new EC2 or Lambda application from scratch](./docs/002-starting-a-new-project.md)
+- View the [typedocs][internal-website]
+- [Contributing](#contributing) to @guardian/cdk
 
-## Wait, what is CDK?
-
-> The AWS Cloud Development Kit (AWS CDK) is an open-source software development framework to define cloud infrastructure in code and provision it through AWS CloudFormation.
-
-You can read more about it in the [AWS CDK repository][aws-cdk].
-
-## Architecture
-
-### Patterns
-
-Patterns are high level classes which compose a number of constructs to produce standard architectures.
-For example, you should be able to get all the resources you need to deploy a new lambda function from one `GuLambdaStack` class.
-
-We're still working on these right now but hope to start bringing you some of the most common Guardian stacks soon!
-
-Patterns should be your default entry point to this library.
-
-### Constructs
-
-Constructs are lower level classes which will create one or more resources to produce one element of a stack.
-For example, the `GuDatabaseInstance` will create an RDS instance as well as a parameter group, if required.
-This library defines a number of constructs which are combined to create the higher level patterns.
-
-If there is a pattern available for your use case, prefer to use that over composing constructs yourself.
-We welcome feedback and/or PRs to extend the functionality of patterns.
-Where you need to do something outside the currently available patterns, you can use the constructs to provide some level of abstraction.
-In this case, consider whether it's worth defining a pattern.
-
-### Decision Records
-
-[Architecture Decisions Records][adr] are files where we can document the decisions we make around any form of structure, architecture or approach.
-By documenting them in this way, we can preserve the thought process behind all the decisions whilst also laying out formally the preferences for all developers working on the library.
-
-The [docs/architecture-decision-records directory][directory-adr] contains the records for `@guardian/cdk`.
-
-## Usage
+## Quickstart
 
 This library can be installed from npm.
 
@@ -78,20 +51,11 @@ Alternatively, PRs are always welcome!
 
 There are more details on using the CDK library in [docs][directory-docs]
 
-### From AWS CDK to Guardian CDK
-
-If you are migrating from aws-cdk to @guardian/cdk, you will need to make sure that the version of aws-cdk you are using is what is expected. If you run
-
-```
-npx @guardian/cdk@latest check-package-json
-```
-
-then the output is a json object, and you should set your aws-cdk version to the value of `versionExpected`.
-
 ### Using the `@guardian/cdk` CLI
 
-<!-- cli -->
+The CLI supports various commands to ease the transition to CDK.
 
+<!-- cli -->
 ```
 @guardian/cdk COMMAND [args]
 
@@ -109,7 +73,6 @@ Options:
   -h, --help     Show help                                             [boolean]
 
 ```
-
 <!-- clistop -->
 
 ## Contributing
@@ -133,7 +96,14 @@ There are also some other commands defined in `package.json`:
 
 However, it's advised you configure your IDE to format on save to avoid horrible "correct linting" commits.
 
-## Releasing
+### Decision Records
+
+[Architecture Decisions Records][adr] are files where we can document the decisions we make around any form of structure, architecture or approach.
+By documenting them in this way, we can preserve the thought process behind all the decisions whilst also laying out formally the preferences for all developers working on the library.
+
+The [docs/architecture-decision-records directory][directory-adr] contains the records for `@guardian/cdk`.
+
+### Releasing
 
 ✨ TL;DR We release new versions of the library to NPM automagically ✨
 
