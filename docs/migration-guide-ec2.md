@@ -39,9 +39,9 @@ graph TD
 **Stage 3: cleanup**
 
 ```mermaid
-graph TDp
+graph TD
     A(example.gutools.co.uk)
-    A --> C[GuEC2 ALB]
+    A --> C[GuEC2App ALB]
 ```
 
 A fully-worked out example can be found
