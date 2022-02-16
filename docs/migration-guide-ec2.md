@@ -24,7 +24,7 @@ the pattern, test, and, once confident, switch DNS to point to the new stack.
 graph TD
     A(example.gutools.co.uk)
     A --> B[Legacy ELB]
-    A .-> C[GuEC2 ALB]
+    A .-> C[GuEC2App ALB]
 ```
 
 **Stage 2: switch DNS**
@@ -33,7 +33,7 @@ graph TD
 graph TD
     A(example.gutools.co.uk)
     A .-> B[Legacy ELB]
-    A --> C[GuEC2 ALB]
+    A --> C[GuEC2App ALB]
 ```
 
 **Stage 3: cleanup**
@@ -44,6 +44,9 @@ graph TDp
     A --> C[GuEC2 ALB]
 ```
 
+A fully-worked out example can be found
+[here](https://github.com/guardian/amigo/pulls?q=is%3Apr+is%3Aclosed+author%3Aakash1810+label%3Acfn-yaml-to-cdk).
+
 If you application includes a database, queues, S3 buckets, etc., you can either
 duplicate these two, or share them across the two instance groups. E.g. for the
 latter, something like:
@@ -52,7 +55,7 @@ latter, something like:
 graph TD
     A(example.gutools.co.uk)
     A --> B[Legacy ELB]
-    A .-> C[GuEC2 ALB]
+    A .-> C[GuEC2App ALB]
     B <--> D[(Database)]
     C <--> D[(Database)]
 ```
@@ -75,9 +78,6 @@ application, which can be used for testing purposes. Riff-Raff will have been
 configured to deploy to both versions of your infrastructure, so you can operate
 in this state for as long as you need to._
 
-_We will remove the old copy of your resources in a later stage of the
-migration._
-
 1.  Create an instance of GuEc2App in your stack.
 
     Use your existing stack as a guide. For example, you will likely need to
@@ -85,11 +85,13 @@ migration._
 
 2.  Add a tag with the name gu:riffraff:new-asg and value true to your new ASG.
 
-    There’s an example of this here.
+    There’s an example of this
+    [here](https://github.com/guardian/amigo/pull/632/files#diff-78d894e83ca4cb48af587f94e9f8986cc0592d412273ef99246b30c644ae5098R303-R308).
 
 3.  Update your riff-raff.yaml file to include the `asgMigrationInProgress` parameter.
 
-    There’s an example of this here.
+    There’s an example of this
+    [here](https://github.com/guardian/amigo/pull/632/files#diff-8bd759df9f9dfeeb4ba5ee57a1c7a0a3563f8281a526b49854ecb6972102aaa8R10).
 
 4.  Manually apply the CloudFormation update via the console.
 
@@ -119,29 +121,37 @@ _The instructions here assume that your DNS record is managed via NS1. To check 
 1.  Start managing your DNS record via CDK by instantiating a GuCname construct
 
     Use dig to check the current properties of your DNS record, for example:
-    `dig CNAME security-hq.gutools.co.uk`.
+
+    ```
+    $ dig +noall +answer CNAME security-hq.gutools.co.uk
+    $ security-hq.gutools.co.uk. 3600	IN	CNAME	secur-loadb-re7mdt13o53h-879373669.eu-west-1.elb.amazonaws.com.
+    ```
+
+    (3600 is the TTL, and `secur0loadb...` is the loadbalancer.)
 
     Instantiate the GuCname class, ensuring that all properties match the
     properties in NS1. The CNAME should still point at your old load balancer’s
     DNS name for now.
 
-    Here is an example of this change.
+    There's an example of this
+    [here](https://github.com/guardian/security-hq/pull/336/files#diff-f38efbe4db4fb3d00ad6e3d6792a8d0e4fa818b3b974cb9d012ce2e81a242bfc).
 
     _N.B. if your template already includes a Guardian::DNS::RecordSet resource,
     you will need to:_
 
-    - _Use the same logical id when instantiating the GuCname via CloudFormation_
+    - _Use the same [logical
+      id](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html)
+      when instantiating the GuCname via CloudFormation_
     - _Delete the Guardian::DNS::RecordSet resource in the same PR that the
       GuCname is added_
 
 2.  Drop the TTL for your DNS record, to enable faster rollback if something goes wrong.
 
-    Wait for the TTL to expire before proceeding. Here is an example of this
-    change.
+    Wait for the TTL to expire before proceeding. ([Example
+    PR](https://github.com/guardian/security-hq/pull/338/files)).
 
-3.  Update DNS entry for your so that it points to the new load balancer.
-
-    Here is an example of this change.
+3.  Update DNS entry for your so that it points to the new load balancer
+    ([Example PR](https://github.com/guardian/security-hq/pull/339/files)).
 
 4.  Run some tests to confirm that functionality still works as expected.
 
