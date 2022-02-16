@@ -65,7 +65,6 @@ Alternatively, PRs are always welcome!
 The CLI supports various commands to ease the transition to CDK.
 
 <!-- cli -->
-
 ```
 @guardian/cdk COMMAND [args]
 
@@ -83,7 +82,6 @@ Options:
   -h, --help     Show help                                             [boolean]
 
 ```
-
 <!-- clistop -->
 
 ## Contributing
