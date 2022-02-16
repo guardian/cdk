@@ -1,12 +1,8 @@
 # Starting a new CDK project
 
-The [AWS CDK CLI](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-typescript.html) provides a command to generate a starter project. From there, you can install this library and get started defining your new stack.
+We recommend [using the `@guardian/cdk` cli](https://github.com/guardian/cdk/blob/8d5b72871f959d8f85c84c542f09c7069983e818/README.md#using-the-guardiancdk-cli) to generate a `cdk` directory where you can start to define your infrastructure. Once you have generated this boilerplate, you can start to create your infrastructure using [`@guardian/cdk` patterns](https://guardian.github.io/cdk/modules/index.html).
 
-The [Guardian CDK CLI](https://github.com/guardian/cdk-cli) also provides some tooling, currently focused on migration but eventually for setting up new stacks too.
-
-This will generate a `cdk` directory where you can start to define your infrastructure.
-
-## Directory structure
+## Directory structure for a typical CDK project
 
 This directory will contains directories in which your code is written as well as a number of configuration files. Some of the key directories and files are detailed below.
 
@@ -20,7 +16,7 @@ The lib directory contains all of the stack defitions. For single apps, these fi
 
 **cdk.out**
 
-This directory is where the synthesised cloudformation will be written to in JSON format.
+This directory is where the synthesised CloudFormation will be written to in JSON format.
 
 **cdk.json**
 
