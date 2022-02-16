@@ -1,6 +1,6 @@
 # Starting a new CDK project
 
-We recommend [using the `@guardian/cdk` cli](https://github.com/guardian/cdk/blob/8d5b72871f959d8f85c84c542f09c7069983e818/README.md#using-the-guardiancdk-cli) to generate a `cdk` directory where you can start to define your infrastructure. Once you have generated this boilerplate, you can start to create your infrastructure using [`@guardian/cdk` patterns](https://guardian.github.io/cdk/modules/index.html).
+We recommend [using the `@guardian/cdk` cli](https://github.com/guardian/cdk/blob/8d5b72871f959d8f85c84c542f09c7069983e818/README.md#using-the-guardiancdk-cli) to generate a `cdk` project with the correct structure and some helpful tooling (e.g. a CI script). Once you have generated this project boilerplate, you can define your infrastructure using [patterns](https://guardian.github.io/cdk/modules/index.html).
 
 ## Directory structure for a typical CDK project
 
