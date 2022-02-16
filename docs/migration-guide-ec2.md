@@ -21,6 +21,7 @@ the pattern, test, and, once confident, switch DNS to point to the new stack.
 **Stage 1: dual-stack**
 
 ```mermaid
+graph TD
     A(example.gutools.co.uk)
     A --> B[Legacy ELB]
     A .-> C[GuEC2 ALB]
@@ -29,6 +30,7 @@ the pattern, test, and, once confident, switch DNS to point to the new stack.
 **Stage 2: switch DNS**
 
 ```mermaid
+graph TD
     A(example.gutools.co.uk)
     A .-> B[Legacy ELB]
     A --> C[GuEC2 ALB]
@@ -37,6 +39,7 @@ the pattern, test, and, once confident, switch DNS to point to the new stack.
 **Stage 3: cleanup**
 
 ```mermaid
+graph TDp
     A(example.gutools.co.uk)
     A --> C[GuEC2 ALB]
 ```
