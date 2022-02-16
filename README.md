@@ -9,12 +9,15 @@ Welcome to the Guardian CDK library! This library contains a number of reusable 
 💬 Come and chat to us in [Discussions][internal-discussions]
 
 ## Wait, what is CDK?
+
 > The AWS Cloud Development Kit (AWS CDK) is an open-source software development framework to define cloud infrastructure in code and provision it through AWS CloudFormation.
 
 You can read more about it in the [AWS CDK repository][aws-cdk].
 
 ## Architecture
+
 ### Patterns
+
 Patterns are high level classes which compose a number of constructs to produce standard architectures.
 For example, you should be able to get all the resources you need to deploy a new lambda function from one `GuLambdaStack` class.
 
@@ -23,6 +26,7 @@ We're still working on these right now but hope to start bringing you some of th
 Patterns should be your default entry point to this library.
 
 ### Constructs
+
 Constructs are lower level classes which will create one or more resources to produce one element of a stack.
 For example, the `GuDatabaseInstance` will create an RDS instance as well as a parameter group, if required.
 This library defines a number of constructs which are combined to create the higher level patterns.
@@ -33,32 +37,14 @@ Where you need to do something outside the currently available patterns, you can
 In this case, consider whether it's worth defining a pattern.
 
 ### Decision Records
+
 [Architecture Decisions Records][adr] are files where we can document the decisions we make around any form of structure, architecture or approach.
 By documenting them in this way, we can preserve the thought process behind all the decisions whilst also laying out formally the preferences for all developers working on the library.
 
 The [docs/architecture-decision-records directory][directory-adr] contains the records for `@guardian/cdk`.
 
-## Useful commands
-We follow the [`script/task`][github-scripts] pattern,
-find useful scripts within the [`script`][directory-script] directory for common tasks.
-
-- `./script/setup` to install dependencies
-- `./script/start` to run the Jest unit tests in watch mode
-- `./script/start-docs` to generate documentation and view in the browser
-- `./script/lint` to lint the code using ESLint
-- `./script/test` to run the Jest unit tests
-- `./script/build` to compile TypeScript to JS
-- `./script/cli-docs` to update the CLI documentation in this file
-
-There are also some other commands defined in `package.json`:
-
-- `npm run lint --fix` attempt to autofix any linter errors
-- `npm run format` format the code using Prettier
-- `npm run watch` watch for changes and compile
-
-However, it's advised you configure your IDE to format on save to avoid horrible "correct linting" commits.
-
 ## Usage
+
 This library can be installed from npm.
 
 ```
@@ -94,7 +80,7 @@ There are more details on using the CDK library in [docs][directory-docs]
 
 ### From AWS CDK to Guardian CDK
 
-If you are migrating from aws-cdk to @guardian/cdk, you will need to make sure that  the version of aws-cdk you are using is what is expected. If you run
+If you are migrating from aws-cdk to @guardian/cdk, you will need to make sure that the version of aws-cdk you are using is what is expected. If you run
 
 ```
 npx @guardian/cdk@latest check-package-json
@@ -102,10 +88,10 @@ npx @guardian/cdk@latest check-package-json
 
 then the output is a json object, and you should set your aws-cdk version to the value of `versionExpected`.
 
-
 ### Using the `@guardian/cdk` CLI
 
 <!-- cli -->
+
 ```
 @guardian/cdk COMMAND [args]
 
@@ -123,7 +109,29 @@ Options:
   -h, --help     Show help                                             [boolean]
 
 ```
+
 <!-- clistop -->
+
+## Contributing
+
+We follow the [`script/task`][github-scripts] pattern,
+find useful scripts within the [`script`][directory-script] directory for common tasks.
+
+- `./script/setup` to install dependencies
+- `./script/start` to run the Jest unit tests in watch mode
+- `./script/start-docs` to generate documentation and view in the browser
+- `./script/lint` to lint the code using ESLint
+- `./script/test` to run the Jest unit tests
+- `./script/build` to compile TypeScript to JS
+- `./script/cli-docs` to update the CLI documentation in this file
+
+There are also some other commands defined in `package.json`:
+
+- `npm run lint --fix` attempt to autofix any linter errors
+- `npm run format` format the code using Prettier
+- `npm run watch` watch for changes and compile
+
+However, it's advised you configure your IDE to format on save to avoid horrible "correct linting" commits.
 
 ## Releasing
 
@@ -132,6 +140,7 @@ Options:
 We use [semantic-release] and [guardian/actions-merge-release-changes-to-protected-branch] to automate releases.
 
 To release a new version:
+
 1. Raise a PR. The PR title must follow the [Angular][angular-commits] / [Karma][karma-commits] format. Don't worry, CI checks this!
 1. Once reviewed and approved, merge your PR.
 1. Wait for the robots to:
@@ -142,19 +151,16 @@ To release a new version:
 For more information, see the docs on [testing][docs-testing].
 
 <!-- only links below here -->
+
 [badge-cd]: https://github.com/guardian/cdk/actions/workflows/cd.yaml/badge.svg
 [badge-npm]: https://img.shields.io/npm/v/@guardian/cdk?style=flat-square
-
 [directory-adr]: ./docs/architecture-decision-records
 [directory-docs]: ./docs
 [directory-script]: ./script
-
 [docs-testing]: ./docs/006-testing.md
-
 [internal-cd-file]: https://github.com/guardian/cdk/actions/workflows/cd.yaml
 [internal-discussions]: https://github.com/guardian/cdk/discussions
 [internal-website]: https://guardian.github.io/cdk/
-
 [adr]: https://github.com/joelparkerhenderson/architecture_decision_recor
 [aws-cdk]: https://github.com/aws/aws-cdk
 [angular-commits]: https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits
