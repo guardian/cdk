@@ -64,32 +64,6 @@ a pattern.
 
 Alternatively, PRs are always welcome!
 
-### Using the `@guardian/cdk` CLI
-
-The CLI supports various commands to ease the transition to CDK.
-
-<!-- cli -->
-
-```
-@guardian/cdk COMMAND [args]
-
-Commands:
-  @guardian/cdk aws-cdk-version     Print the version of @aws-cdk libraries being
-                               used
-  @guardian/cdk account-readiness   Perform checks on an AWS account to see if it is
-                               GuCDK ready
-  @guardian/cdk check-package-json  Check a package.json file for compatibility with
-                               GuCDK
-  @guardian/cdk new                 Creates a new CDK stack
-
-Options:
-      --version  Show version number                                   [boolean]
-  -h, --help     Show help                                             [boolean]
-
-```
-
-<!-- clistop -->
-
 ## Contributing
 
 We welcome contributions to `@guardian/cdk`!

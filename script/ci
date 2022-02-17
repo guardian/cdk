@@ -16,17 +16,6 @@ runIntegrationTest() {
   )
 }
 
-keepReadmeUpdated() {
-  "${DIR}"/cli-docs
-
-  if git diff --quiet; then
-    exit 0
-  else
-    echo "The CLI docs in README.md are out of date. Run './script/cli-docs' to update them."
-    exit 1
-  fi
-}
-
 main() {
   preamble
 
@@ -37,7 +26,6 @@ main() {
   npm run test
 
   runIntegrationTest
-  keepReadmeUpdated
 }
 
 main
