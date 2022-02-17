@@ -13,8 +13,22 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
 /**
  * Creates a CloudWatch alarm which sends notifications to the specified SNS topic.
  *
- * By default, alarm notifications will be silenced in the `CODE` environment. In order to override this behaviour
- * (e.g. for testing purposes whilst configuring a new alarm), set the `actionsEnabledInCode` prop to `true`.
+ * Alarm actions are enabled by default.
+ *
+ * To silence alarm actions in `CODE`, provide a Mapping:
+ * ```typescript
+ * new GuAlarm(stack, "alarm", {
+ *   // other required props
+ *   actionsEnabled: stack.withStageDependentValue({
+ *     app: "my-app",
+ *     variableName: "alarmActionsEnabled",
+ *     stageValues: {
+ *       [Stage.CODE]: false,
+ *       [Stage.PROD]: true,
+ *     },
+ *   }),
+ * });
+ * ```
  *
  * This library provides an implementation of some commonly used alarms, which require less boilerplate than this construct,
  * for example [[`Gu5xxPercentageAlarm`]]. Prefer using these more specific implementations where possible.
