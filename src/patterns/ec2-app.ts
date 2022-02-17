@@ -100,6 +100,12 @@ export interface Alarms {
   http5xxAlarm: false | Http5xxAlarmProps;
   unhealthyInstancesAlarm: boolean;
   noMonitoring?: false;
+
+  /**
+   * Whether alarm actions are enabled on the `CODE` stage.
+   *
+   * @default false
+   */
   actionsEnabledInCode?: boolean;
 }
 
