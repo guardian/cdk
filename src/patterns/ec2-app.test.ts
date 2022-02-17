@@ -224,6 +224,61 @@ describe("the GuEC2App pattern", function () {
     expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
   });
 
+  test("when actions are enabled in CODE, no CFN mappings are created", () => {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    const appForLogicalId = app.replaceAll("-", ""); // remove invalid characters
+    new GuEc2App(stack, {
+      applicationPort: GuApplicationPorts.Node,
+      app,
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: getCertificateProps(),
+      scaling: {
+        [Stage.CODE]: { minimumInstances: 1 },
+        [Stage.PROD]: { minimumInstances: 3 },
+      },
+      monitoringConfiguration: {
+        snsTopicName: "test-topic",
+        http5xxAlarm: {
+          tolerated5xxPercentage: 5,
+        },
+        unhealthyInstancesAlarm: true,
+        actionsEnabledInCode: true,
+      },
+      userData: "",
+    });
+
+    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+
+    expect(json.Mappings).toEqual({
+      // `alarmActionsEnabled` should not be present
+      [appForLogicalId]: {
+        CODE: {
+          hostedZoneId: "id123",
+          domainName: "code-guardian.com",
+          minInstances: 1,
+          maxInstances: 2,
+        },
+        PROD: {
+          hostedZoneId: "id124",
+          domainName: "prod-guardian.com",
+          minInstances: 3,
+          maxInstances: 6,
+        },
+      },
+    });
+
+    // There are two alarms, both enabled via a direct property
+    const alarms = Object.values(json.Resources).filter(({ Type }) => Type === "AWS::CloudWatch::Alarm");
+
+    expect(alarms).toHaveLength(2);
+
+    alarms.forEach(({ Properties }) => {
+      expect(Properties["ActionsEnabled"]).toBe(true);
+    });
+  });
+
   it("creates the appropriate ingress rules for a restricted access application", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";

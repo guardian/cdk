@@ -4,7 +4,7 @@ import type { InstanceType, IPeer, IVpc } from "@aws-cdk/aws-ec2";
 import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
-import { Duration, Tags } from "@aws-cdk/core";
+import { Duration, Tags, Token } from "@aws-cdk/core";
 import { Stage } from "../constants";
 import { SSM_PARAMETER_PATHS } from "../constants/ssm-parameter-paths";
 import { TagKeys } from "../constants/tag-keys";
@@ -359,6 +359,8 @@ export class GuEc2App {
       userData,
     } = props;
 
+    const { stage } = scope;
+
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
     const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
@@ -518,16 +520,24 @@ export class GuEc2App {
         actionsEnabledInCode = false,
       } = monitoringConfiguration;
 
-      const actionsEnabled: boolean = StageAwareValue.isStageValue(certificateProps)
-        ? scope.withStageDependentValue({
-            app,
-            variableName: "alarmActionsEnabled",
-            stageValues: {
-              [Stage.CODE]: actionsEnabledInCode,
-              [Stage.PROD]: true,
-            },
-          })
-        : true;
+      /*
+      Stage is known at runtime if it is a CFN Parameter, e.g. CODE or PROD.
+      Stage is known at compile time for singleton stacks, e.g. INFRA.
+       */
+      const isStageDeterminedAtRuntime = Token.isUnresolved(stage);
+
+      // Only add a Mapping to the template when strictly necessary, i.e. when the value differs across stages
+      const actionsEnabled: boolean =
+        actionsEnabledInCode || !isStageDeterminedAtRuntime
+          ? true
+          : scope.withStageDependentValue({
+              app,
+              variableName: "alarmActionsEnabled",
+              stageValues: {
+                [Stage.CODE]: false,
+                [Stage.PROD]: true,
+              },
+            });
 
       if (http5xxAlarm) {
         new Gu5xxPercentageAlarm(scope, {
