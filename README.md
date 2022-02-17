@@ -19,7 +19,7 @@ provision your AWS resources.
 
 ## Quickstart
 
-@guardian/cdk expects certain Parameter Store values to be present - for
+`@guardian/cdk` expects certain Parameter Store values to be present - for
 example, VPC IDs, and the location of dist buckets. To check for account
 readiness and fix any issues, run:
 

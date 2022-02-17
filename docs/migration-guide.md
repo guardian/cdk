@@ -1,7 +1,7 @@
 # Migration Guide
 
 This guide describes how to migrate an existing Cloudformation stack (and
-template) to @guardian/cdk.
+template) to `@guardian/cdk`.
 
 If you are starting from scratch, see the [new project guide](TODO).
 

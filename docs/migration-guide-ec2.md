@@ -47,7 +47,7 @@ graph TD
 A fully-worked out example can be found
 [here](https://github.com/guardian/amigo/pulls?q=is%3Apr+is%3Aclosed+author%3Aakash1810+label%3Acfn-yaml-to-cdk).
 
-If you application includes a database, queues, S3 buckets, etc., you can either
+If your application includes a database, queues, S3 buckets, etc., you can either
 duplicate these two, or share them across the two instance groups. E.g. for the
 latter, something like:
 
@@ -60,7 +60,7 @@ graph TD
     C <--> D[(Database)]
 ```
 
-And the continue to migrate DNS and cleanup as described above.
+And then continue to migrate DNS and cleanup as described above.
 
 There is no single-best solution here though; some applications may not work
 with this approach.
@@ -127,7 +127,7 @@ _The instructions here assume that your DNS record is managed via NS1. To check 
     $ security-hq.gutools.co.uk. 3600	IN	CNAME	secur-loadb-re7mdt13o53h-879373669.eu-west-1.elb.amazonaws.com.
     ```
 
-    (3600 is the TTL, and `secur0loadb...` is the loadbalancer.)
+    (3600 is the TTL, and `secur-loadb...` is the loadbalancer.)
 
     Instantiate the GuCname class, ensuring that all properties match the
     properties in NS1. The CNAME should still point at your old load balancer’s
@@ -155,7 +155,7 @@ _The instructions here assume that your DNS record is managed via NS1. To check 
 
 4.  Run some tests to confirm that functionality still works as expected.
 
-5.  Wait for a while before proceeding with Stage 6.
+5.  Wait for a while before proceeding with the next step.
 
     If something goes wrong at this point, we can still roll back by reverting
     the DNS change.
@@ -189,7 +189,7 @@ in your original CFN template._
 
 5. Remove the `asgMigrationInProgress` parameter from your riff-raff.yaml.
 
-6. Update your riff-raff.yaml to use the correct `amiParameter` (this will be AMI<Appname>)
+6. Update your riff-raff.yaml to use the correct `amiParameter` (this will be `AMI<Appname>`)
 
 7. Preview the CloudFormation update (via ./script/diff)
 
