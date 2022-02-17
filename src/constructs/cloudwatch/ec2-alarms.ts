@@ -20,7 +20,7 @@ interface Gu5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, 
   loadBalancer: GuApplicationLoadBalancer;
 }
 
-interface GuUnhealthyInstancesAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, AppIdentity {
+interface GuUnhealthyInstancesAlarmProps extends Pick<GuAlarmProps, "snsTopicName" | "actionsEnabled">, AppIdentity {
   targetGroup: GuApplicationTargetGroup;
 }
 
