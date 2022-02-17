@@ -21,36 +21,22 @@ export type GuCertificatePropsWithApp = GuDomainName & AppIdentity & GuMigrating
  * operation which adds this construct will pause until the relevant DNS record has been added manually.
  *
  * Example usage for creating a new certificate:
- *
  * ```typescript
  * new GuCertificate(stack, "TestCertificate", {
- *    app: "testing",
- *    [Stage.CODE]: {
- *      domainName: "code-guardian.com",
- *      hostedZoneId: "id123",
- *    },
- *    [Stage.PROD]: {
- *      domainName: "prod-guardian.com",
- *      hostedZoneId: "id124",
- *    },
- *  });
+ *   app: "testing",
+ *   domainName: "code-guardian.com",
+ *   hostedZoneId: "id123",
+ * });
  *```
  *
  * Example usage for inheriting a certificate which was created via CloudFormation:
- *
  * ```typescript
  * new GuCertificate(stack, "TestCertificate", {
- *    app: "testing",
- *    existingLogicalId: "MyCloudFormedCertificate",
- *    [Stage.CODE]: {
- *      domainName: "code-guardian.com",
- *      hostedZoneId: "id123",
- *    },
- *    [Stage.PROD]: {
- *      domainName: "prod-guardian.com",
- *      hostedZoneId: "id124",
- *    },
- *  });
+ *   app: "testing",
+ *   existingLogicalId: "MyCloudFormedCertificate",
+ *   domainName: "code-guardian.com",
+ *   hostedZoneId: "id123",
+ * });
  *```
  */
 export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Certificate)) {
