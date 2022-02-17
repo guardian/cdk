@@ -70,12 +70,6 @@ export interface GuCnameProps extends GuDomainName, AppIdentity {
 /**
  * Construct for creating CNAME records in NS1.
  *
- * This is designed to create an appropriate CNAME for your CODE and PROD stages, for example when creating a CNAME
- * for your load balancer.
- *
- * If you need something more unusual (e.g. you only need a CNAME for a standalone INFRA stage) you should use the
- * lower-level [[`GuDnsRecordSet`]] class.
- *
  * See [[`GuCnameProps`]] for configuration options.
  */
 export class GuCname extends GuDnsRecordSet {
