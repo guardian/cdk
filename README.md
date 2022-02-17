@@ -11,24 +11,34 @@ constructs. It is an opinionated and secure-by-default way to describe and
 provision your AWS resources.
 
 - [Introduction to `@guardian/cdk`](./docs/001-general-usage.md)
-- [Migrating an existing Cloudformation template](./docs/003-migrating-existing-stacks.md)
+- [CDK demo including screencast](https://github.com/guardian/cdk-demo)
+- [Migrating an existing Cloudformation template](./docs/migration-guide.md)
 - [Creating a new EC2 or Lambda application from scratch](./docs/002-starting-a-new-project.md)
 - View the [typedocs][internal-website]
 - [Contributing](#contributing) to @guardian/cdk
 
 ## Quickstart
 
-This library can be installed from npm.
+`@guardian/cdk` expects certain Parameter Store values to be present - for
+example, VPC IDs, and the location of dist buckets. To check for account
+readiness and fix any issues, run:
 
-```
-npm install --save @guardian/cdk
-```
+    npx @guardian/cdk account-readiness --profile [profile]
 
-or
+Then, instantiate a new CDK app:
 
-```
-yarn add @guardian/cdk
-```
+    npx @guardian/cdk new --app [app] --stack [stack]
+
+> Tip: if you are migrating an app, see the [Migration
+> Guide](./docs/migration-guide.md) for more detail.
+
+> Tip: the [AWS CDK Developer
+> Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is worth a
+> read-through if you are new to CDK.
+
+### Patterns and Constructs
+
+Once you have your new app, you can start adding patterns and constructs.
 
 Patterns can be imported from the top level of the library:
 
@@ -44,12 +54,11 @@ If you need to use a construct directly, they must be imported from their constr
 import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";
 ```
 
-This is intentional as the patterns ideally solve the majority of use-cases.
-If they don't, please let us know about your use-case so that we can consider supporting it via a pattern.
+Our hope is that patterns solve the majority of your use-cases. If they don't,
+please let us know about your use-case so that we can consider supporting it via
+a pattern.
 
 Alternatively, PRs are always welcome!
-
-There are more details on using the CDK library in [docs][directory-docs]
 
 ### Using the `@guardian/cdk` CLI
 
