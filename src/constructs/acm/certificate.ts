@@ -2,16 +2,14 @@ import { Certificate, CertificateValidation } from "@aws-cdk/aws-certificatemana
 import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "@aws-cdk/aws-route53";
 import { RemovalPolicy } from "@aws-cdk/core";
-import { Stage } from "../../constants";
-import type { GuDomainNameProps } from "../../types/domain-names";
-import { StageAwareValue } from "../../types/stage";
+import type { GuDomainName } from "../../types/domain-names";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core/identity";
 import type { GuMigratingResource } from "../core/migrating";
 
-export type GuCertificatePropsWithApp = GuDomainNameProps & AppIdentity & GuMigratingResource;
+export type GuCertificatePropsWithApp = GuDomainName & AppIdentity & GuMigratingResource;
 
 /**
  * Construct which creates a DNS-validated ACM Certificate.
@@ -23,77 +21,37 @@ export type GuCertificatePropsWithApp = GuDomainNameProps & AppIdentity & GuMigr
  * operation which adds this construct will pause until the relevant DNS record has been added manually.
  *
  * Example usage for creating a new certificate:
- *
  * ```typescript
  * new GuCertificate(stack, "TestCertificate", {
- *    app: "testing",
- *    [Stage.CODE]: {
- *      domainName: "code-guardian.com",
- *      hostedZoneId: "id123",
- *    },
- *    [Stage.PROD]: {
- *      domainName: "prod-guardian.com",
- *      hostedZoneId: "id124",
- *    },
- *  });
+ *   app: "testing",
+ *   domainName: "code-guardian.com",
+ *   hostedZoneId: "id123",
+ * });
  *```
  *
  * Example usage for inheriting a certificate which was created via CloudFormation:
- *
  * ```typescript
  * new GuCertificate(stack, "TestCertificate", {
- *    app: "testing",
- *    existingLogicalId: "MyCloudFormedCertificate",
- *    [Stage.CODE]: {
- *      domainName: "code-guardian.com",
- *      hostedZoneId: "id123",
- *    },
- *    [Stage.PROD]: {
- *      domainName: "prod-guardian.com",
- *      hostedZoneId: "id124",
- *    },
- *  });
+ *   app: "testing",
+ *   existingLogicalId: "MyCloudFormedCertificate",
+ *   domainName: "code-guardian.com",
+ *   hostedZoneId: "id123",
+ * });
  *```
  */
 export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Certificate)) {
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
-    const hasHostedZoneId: boolean = StageAwareValue.isStageValue(props)
-      ? !!props.CODE.hostedZoneId && !!props.PROD.hostedZoneId
-      : !!props.INFRA.hostedZoneId;
+    const { app, domainName, existingLogicalId, hostedZoneId } = props;
 
-    const maybeHostedZone = !hasHostedZoneId
-      ? undefined
-      : HostedZone.fromHostedZoneId(
-          scope,
-          /* eslint-disable @typescript-eslint/no-non-null-assertion -- `hasHostedZoneId` is true, so we know `hostedZoneId` is present here */
-          AppIdentity.suffixText({ app: props.app }, "HostedZone"),
-          StageAwareValue.isStageValue(props)
-            ? scope.withStageDependentValue({
-                app: props.app,
-                variableName: "hostedZoneId",
-                stageValues: {
-                  [Stage.CODE]: props.CODE.hostedZoneId!,
-                  [Stage.PROD]: props.PROD.hostedZoneId!,
-                },
-              })
-            : props.INFRA.hostedZoneId!
-          /* eslint-enable @typescript-eslint/no-non-null-assertion */
-        );
+    const maybeHostedZone = hostedZoneId
+      ? HostedZone.fromHostedZoneId(scope, AppIdentity.suffixText({ app }, "HostedZone"), hostedZoneId)
+      : undefined;
 
     const awsCertificateProps: CertificateProps & GuMigratingResource & AppIdentity = {
-      domainName: StageAwareValue.isStageValue(props)
-        ? scope.withStageDependentValue({
-            app: props.app,
-            variableName: "domainName",
-            stageValues: {
-              [Stage.CODE]: props.CODE.domainName,
-              [Stage.PROD]: props.PROD.domainName,
-            },
-          })
-        : props.INFRA.domainName,
+      domainName,
       validation: CertificateValidation.fromDns(maybeHostedZone),
-      existingLogicalId: props.existingLogicalId,
-      app: props.app,
+      existingLogicalId,
+      app,
     };
     super(scope, "Certificate", awsCertificateProps);
     this.applyRemovalPolicy(RemovalPolicy.RETAIN);

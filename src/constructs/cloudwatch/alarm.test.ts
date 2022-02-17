@@ -2,7 +2,8 @@ import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { ComparisonOperator } from "@aws-cdk/aws-cloudwatch";
 import { Runtime } from "@aws-cdk/aws-lambda";
-import { simpleGuStackForTesting, simpleInfraStackForTesting } from "../../utils/test";
+import { Stage } from "../../constants";
+import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuLambdaFunction } from "../lambda";
@@ -66,10 +67,11 @@ describe("The GuAlarm class", () => {
     });
   });
 
-  it("should enable alarm actions in PROD and disable them in CODE, by default", () => {
+  it("can be made stage aware", () => {
     const stack = simpleGuStackForTesting();
+    const app = "testing";
     new GuAlarm(stack, "alarm", {
-      app: "testing",
+      app,
       alarmName: `Alarm in ${stack.stage}`,
       alarmDescription: "It's broken",
       metric: lambda(stack).metricErrors(),
@@ -77,6 +79,14 @@ describe("The GuAlarm class", () => {
       threshold: 1,
       evaluationPeriods: 1,
       snsTopicName: "alerts-topic",
+      actionsEnabled: stack.withStageDependentValue({
+        app,
+        variableName: "alarmActionsEnabled",
+        stageValues: {
+          [Stage.CODE]: false,
+          [Stage.PROD]: true,
+        },
+      }),
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(json.Mappings).toEqual({
@@ -89,55 +99,9 @@ describe("The GuAlarm class", () => {
         },
       },
     });
-  });
 
-  it("should allow users to manually enable alarm notifications in CODE", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAlarm(stack, "alarm", {
-      app: "testing",
-      actionsEnabledInCode: true,
-      alarmName: `Alarm in ${stack.stage}`,
-      alarmDescription: "It's broken",
-      metric: lambda(stack).metricErrors(),
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      threshold: 1,
-      evaluationPeriods: 1,
-      snsTopicName: "alerts-topic",
+    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+      ActionsEnabled: { "Fn::FindInMap": [app, { Ref: "Stage" }, "alarmActionsEnabled"] },
     });
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(json.Mappings).toEqual({
-      testing: {
-        CODE: {
-          alarmActionsEnabled: true,
-        },
-        PROD: {
-          alarmActionsEnabled: true,
-        },
-      },
-    });
-  });
-
-  it("should not create a CloudFormation Mapping when used in a GuStackForInfrastructure", () => {
-    const addAlarmToStack = (stack: GuStack) =>
-      new GuAlarm(stack, "alarm", {
-        app: "testing",
-        alarmName: `Alarm in ${stack.stage}`,
-        alarmDescription: "It's broken",
-        metric: lambda(stack).metricErrors(),
-        comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-        threshold: 1,
-        evaluationPeriods: 1,
-        snsTopicName: "alerts-topic",
-      });
-
-    const stack = simpleGuStackForTesting();
-    addAlarmToStack(stack);
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(json.Mappings).toBeDefined();
-
-    const infraStack = simpleInfraStackForTesting();
-    addAlarmToStack(infraStack);
-    const infraJson = SynthUtils.toCloudFormation(infraStack) as SynthedStack;
-    expect(infraJson.Mappings).toBeUndefined();
   });
 });

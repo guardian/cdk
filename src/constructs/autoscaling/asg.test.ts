@@ -4,8 +4,8 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { Stage, StageForInfrastructure } from "../../constants";
-import { findResourceByTypeAndLogicalId, simpleGuStackForTesting, simpleInfraStackForTesting } from "../../utils/test";
+import { Stage } from "../../constants";
+import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import type { Resource, SynthedStack } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuSecurityGroup } from "../ec2";
@@ -30,14 +30,7 @@ describe("The GuAutoScalingGroup", () => {
     vpc,
     instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
     userData: UserData.custom(["#!/bin/bash", "service some-dependency start", "service my-app start"].join("\n")),
-    stageDependentProps: {
-      [Stage.CODE]: {
-        minimumInstances: 1,
-      },
-      [Stage.PROD]: {
-        minimumInstances: 3,
-      },
-    },
+    minimumInstances: 1,
   };
 
   test("Uses the AppIdentity to create the logicalId and tag the resource", () => {
@@ -197,38 +190,6 @@ describe("The GuAutoScalingGroup", () => {
     expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", /^AutoscalingGroup.+$/);
   });
 
-  test("uses custom max capacities (if provided)", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      ...defaultProps,
-      stageDependentProps: {
-        [Stage.CODE]: {
-          minimumInstances: 1,
-          maximumInstances: 5,
-        },
-        [Stage.PROD]: {
-          minimumInstances: 3,
-          maximumInstances: 7,
-        },
-      },
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      [app.app]: {
-        CODE: {
-          minInstances: 1,
-          maxInstances: 5,
-        },
-        PROD: {
-          minInstances: 3,
-          maxInstances: 7,
-        },
-      },
-    });
-  });
-
   test("has an instance role created by default with AssumeRole permissions", () => {
     const stack = simpleGuStackForTesting();
 
@@ -237,6 +198,7 @@ describe("The GuAutoScalingGroup", () => {
       userData: "SomeUserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
+      minimumInstances: 1,
     });
 
     expect(stack).toHaveGuTaggedResource("AWS::IAM::Role", {
@@ -273,6 +235,7 @@ describe("The GuAutoScalingGroup", () => {
           }),
         ],
       }),
+      minimumInstances: 1,
     });
 
     expect(stack).toHaveResource("AWS::IAM::Role", {
@@ -302,7 +265,7 @@ describe("The GuAutoScalingGroup", () => {
     });
   });
 
-  test("has sensible default scaling capacities per stage based on minimum capacity", () => {
+  test("by default, the maximum capacity is double the minimum", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
@@ -310,24 +273,16 @@ describe("The GuAutoScalingGroup", () => {
       userData: "SomeUserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
+      minimumInstances: 3,
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      MinSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "minInstances"] },
-      MaxSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "maxInstances"] },
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      TestApp: {
-        CODE: { minInstances: 1, maxInstances: 2 },
-        PROD: { minInstances: 3, maxInstances: 6 },
-      },
+      MinSize: "3",
+      MaxSize: "6",
     });
   });
 
-  test("scaling capacities can be overriden", () => {
+  test("scaling capacities can be overridden", () => {
     const stack = simpleGuStackForTesting();
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
@@ -335,53 +290,52 @@ describe("The GuAutoScalingGroup", () => {
       userData: "SomeUserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
-      stageDependentProps: {
-        [Stage.CODE]: { minimumInstances: 2 },
-        [Stage.PROD]: { minimumInstances: 5 },
-      },
+      minimumInstances: 2,
+      maximumInstances: 11,
     });
 
     expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      MinSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "minInstances"] },
-      MaxSize: { "Fn::FindInMap": ["TestApp", { Ref: "Stage" }, "maxInstances"] },
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      TestApp: {
-        CODE: { minInstances: 2, maxInstances: 4 },
-        PROD: { minInstances: 5, maxInstances: 10 },
-      },
+      MinSize: "2",
+      MaxSize: "11",
     });
   });
 
-  it("should not create a CloudFormation Mapping when used in a GuStackForInfrastructure", () => {
+  test("scaling capacities can be defined via a CfnMapping", () => {
     const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      app: "TestApp",
-      userData: "SomeUserData",
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      vpc,
-      stageDependentProps: {
-        [Stage.CODE]: { minimumInstances: 2 },
-        [Stage.PROD]: { minimumInstances: 3 },
-      },
-    });
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(json.Mappings).toBeDefined();
 
-    const infraStack = simpleInfraStackForTesting();
-    new GuAutoScalingGroup(infraStack, "AutoscalingGroup", {
-      app: "TestApp",
-      userData: "SomeUserData",
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      vpc,
-      stageDependentProps: {
-        [StageForInfrastructure]: { minimumInstances: 1 },
-      },
+    const minimumInstances = stack.withStageDependentValue<number>({
+      ...app,
+      variableName: "minInstances",
+      stageValues: { [Stage.CODE]: 1, [Stage.PROD]: 3 },
     });
-    const infraJson = SynthUtils.toCloudFormation(infraStack) as SynthedStack;
-    expect(infraJson.Mappings).toBeUndefined();
+
+    const maximumInstances = stack.withStageDependentValue<number>({
+      ...app,
+      variableName: "maxInstances",
+      stageValues: { [Stage.CODE]: 2, [Stage.PROD]: 6 },
+    });
+
+    new GuAutoScalingGroup(stack, "AutoScalingGroup", { ...defaultProps, minimumInstances, maximumInstances });
+
+    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+      MinSize: { "Fn::FindInMap": ["testing", { Ref: "Stage" }, "minInstances"] },
+      MaxSize: { "Fn::FindInMap": ["testing", { Ref: "Stage" }, "maxInstances"] },
+    });
+  });
+
+  test("an error should be thrown if capacities are not defined in the same way", () => {
+    expect(() => {
+      const stack = simpleGuStackForTesting();
+      new GuAutoScalingGroup(stack, "AutoScalingGroup", {
+        ...defaultProps,
+        minimumInstances: stack.withStageDependentValue<number>({
+          ...app,
+          variableName: "minInstances",
+          stageValues: { [Stage.CODE]: 1, [Stage.PROD]: 3 },
+        }),
+      });
+    }).toThrowError(
+      "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too."
+    );
   });
 });

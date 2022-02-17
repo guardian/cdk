@@ -2,16 +2,6 @@
 
 exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
 Object {
-  "Mappings": Object {
-    "testing": Object {
-      "CODE": Object {
-        "domainName": "code-guardian.com",
-      },
-      "PROD": Object {
-        "domainName": "prod-guardian.com",
-      },
-    },
-  },
   "Parameters": Object {
     "Stage": Object {
       "AllowedValues": Array [
@@ -27,15 +17,7 @@ Object {
     "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": Object {
-          "Fn::FindInMap": Array [
-            "testing",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
+        "DomainName": "code-guardian.com",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -71,18 +53,6 @@ Object {
 
 exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
 Object {
-  "Mappings": Object {
-    "testing": Object {
-      "CODE": Object {
-        "domainName": "code-guardian.com",
-        "hostedZoneId": "id123",
-      },
-      "PROD": Object {
-        "domainName": "prod-guardian.com",
-        "hostedZoneId": "id124",
-      },
-    },
-  },
   "Parameters": Object {
     "Stage": Object {
       "AllowedValues": Array [
@@ -98,35 +68,11 @@ Object {
     "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": Object {
-          "Fn::FindInMap": Array [
-            "testing",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
+        "DomainName": "code-guardian.com",
         "DomainValidationOptions": Array [
           Object {
-            "DomainName": Object {
-              "Fn::FindInMap": Array [
-                "testing",
-                Object {
-                  "Ref": "Stage",
-                },
-                "domainName",
-              ],
-            },
-            "HostedZoneId": Object {
-              "Fn::FindInMap": Array [
-                "testing",
-                Object {
-                  "Ref": "Stage",
-                },
-                "hostedZoneId",
-              ],
-            },
+            "DomainName": "code-guardian.com",
+            "HostedZoneId": "id123",
           },
         ],
         "Tags": Array [

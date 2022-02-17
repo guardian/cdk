@@ -2,16 +2,6 @@
 
 exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
 Object {
-  "Mappings": Object {
-    "testing": Object {
-      "CODE": Object {
-        "alarmActionsEnabled": false,
-      },
-      "PROD": Object {
-        "alarmActionsEnabled": true,
-      },
-    },
-  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -263,15 +253,7 @@ Object {
     },
     "lambdaThrottlingAlarmForLambda2146DC08": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "testing",
-            Object {
-              "Ref": "Stage",
-            },
-            "alarmActionsEnabled",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
@@ -332,16 +314,6 @@ Object {
 
 exports[`The GuLambdaErrorPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
-  "Mappings": Object {
-    "testing": Object {
-      "CODE": Object {
-        "alarmActionsEnabled": false,
-      },
-      "PROD": Object {
-        "alarmActionsEnabled": true,
-      },
-    },
-  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -593,15 +565,7 @@ Object {
     },
     "mylambdafunction8D341B54": Object {
       "Properties": Object {
-        "ActionsEnabled": Object {
-          "Fn::FindInMap": Array [
-            "testing",
-            Object {
-              "Ref": "Stage",
-            },
-            "alarmActionsEnabled",
-          ],
-        },
+        "ActionsEnabled": true,
         "AlarmActions": Array [
           Object {
             "Fn::Join": Array [
