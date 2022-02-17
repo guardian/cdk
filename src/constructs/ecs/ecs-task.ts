@@ -145,7 +145,7 @@ export class GuEcsTask {
       // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
       cpu = 2048, // 2 cores and from 4-16GB memory
       memory = 4096, // 4GB
-      storage = 20, //20 GB
+      storage = 21, //20 GB
       containerConfiguration,
       taskCommand,
       taskTimeoutInMinutes = 15,
