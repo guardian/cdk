@@ -1,7 +1,7 @@
 import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
 import type { App } from "@aws-cdk/core";
 import { GuPlayApp } from "@guardian/cdk";
-import { StageForInfrastructure } from "@guardian/cdk/lib//constants";
+import { StageForInfrastructure } from "@guardian/cdk/lib/constants";
 import { AccessScope } from "@guardian/cdk/lib/constants/access";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStackForInfrastructure } from "@guardian/cdk/lib/constructs/core";
