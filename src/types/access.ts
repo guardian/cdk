@@ -1,5 +1,6 @@
 import type { IPeer } from "@aws-cdk/aws-ec2";
-import type { AccessScope } from "../constants/access";
+import { Peer } from "@aws-cdk/aws-ec2";
+import { AccessScope } from "../constants/access";
 
 export interface Access {
   scope: AccessScope;
@@ -56,3 +57,44 @@ export interface InternalAccess extends Access {
 }
 
 export type AppAccess = PublicAccess | RestrictedAccess | InternalAccess;
+
+export const AppAccess = {
+  /**
+   * Validate the CIDR rules for AppAccess.
+   *
+   * Public - always valid. No CIDR rules are needed here, and the type-system enforces this
+   * Restricted - Must not include global CIDR ranges as doing so makes other listed CIDR ranges redundant
+   * Internal - All CIDR ranges must start `10.`
+   *
+   * @throws `Error` when CIDR rules are invalid
+   */
+  validate: (access: AppAccess) => {
+    switch (access.scope) {
+      case AccessScope.RESTRICTED: {
+        const ranges = access.cidrRanges.map((_) => _.uniqueId);
+        const rangesString = ranges.join(", ");
+
+        if (ranges.includes(Peer.anyIpv4().uniqueId) || ranges.includes(Peer.anyIpv6().uniqueId)) {
+          throw new Error(
+            `${AccessScope.RESTRICTED} apps cannot be globally accessible. Adjust CIDR ranges (${rangesString}) or use ${AccessScope.PUBLIC}.`
+          );
+        }
+        break;
+      }
+
+      case AccessScope.INTERNAL: {
+        const ranges = access.cidrRanges.map((_) => _.uniqueId);
+        const rangesString = ranges.join(", ");
+
+        if (ranges.some((range) => !range.startsWith("10."))) {
+          throw new Error(
+            `${AccessScope.INTERNAL} apps should only be accessible on 10. ranges. Adjust CIDR ranges (${rangesString}) or use ${AccessScope.RESTRICTED}.`
+          );
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  },
+};

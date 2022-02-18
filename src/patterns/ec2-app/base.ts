@@ -25,7 +25,7 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
-import type { AppAccess, InternalAccess, RestrictedAccess } from "../../types/access";
+import { AppAccess } from "../../types/access";
 import type { GuAsgCapacity } from "../../types/asg";
 import type { GuDomainName } from "../../types/domain-names";
 import { StageAwareValue } from "../../types/stage";
@@ -126,25 +126,6 @@ export interface GuEc2AppProps extends AppIdentity {
   blockDevices?: BlockDevice[];
   scaling: StageAwareValue<GuAsgCapacity>;
   certificateProps: StageAwareValue<GuDomainName>;
-}
-
-const OpenApplicationCidrError: Error =
-  Error(`Your list of CIDR ranges includes 0.0.0.0/0, meaning all other ranges specified are unnecessary as
-your application is open to the world. Please either remove the open CIDR range or use the PUBLIC access scope.`);
-
-const PublicCidrError: Error =
-  Error(`Your list of CIDR ranges includes a public ip, which will not be able to reach an internal load balancer.
-  Please either remove the public CIDR range or use the RESTRICTED access scope.`);
-
-function validateRestrictedCidrRanges(access: RestrictedAccess) {
-  const openToWorld = access.cidrRanges.map((range) => range.uniqueId).includes("0.0.0.0/0");
-  if (openToWorld) throw OpenApplicationCidrError;
-}
-
-function validateInternalCidrRanges(access: InternalAccess) {
-  const publicCidrRanges = access.cidrRanges.filter((range) => !range.uniqueId.startsWith("10."));
-  const containsPublicIps = publicCidrRanges.length > 0;
-  if (containsPublicIps) throw PublicCidrError;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -301,8 +282,7 @@ export class GuEc2App {
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
     const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
-    if (access.scope === AccessScope.RESTRICTED) validateRestrictedCidrRanges(access);
-    if (access.scope === AccessScope.INTERNAL) validateInternalCidrRanges(access);
+    AppAccess.validate(access);
 
     const hostedZone = (): undefined | string => {
       const hasHostedZoneId: boolean = StageAwareValue.isStageValue(certificateProps)
