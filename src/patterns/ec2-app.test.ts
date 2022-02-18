@@ -4,6 +4,7 @@ import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stage } from "../constants";
+import { AccessScope } from "../constants/access";
 import { TagKeys } from "../constants/tag-keys";
 import { GuPrivateConfigBucketParameter } from "../constructs/core";
 import { GuSecurityGroup } from "../constructs/ec2/security-groups";
@@ -13,7 +14,7 @@ import type { StageValue } from "../types/stage";
 import type { SynthedStack } from "../utils/test";
 import { simpleGuStackForTesting } from "../utils/test";
 import "../utils/test/jest";
-import { AccessScope, GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
+import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
 
 const getCertificateProps = (): StageValue<GuDomainName> => ({
   [Stage.CODE]: {
