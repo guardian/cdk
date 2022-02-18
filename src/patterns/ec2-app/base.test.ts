@@ -3,19 +3,18 @@ import "@aws-cdk/assert/jest";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../constants";
-import { AccessScope } from "../constants/access";
-import { TagKeys } from "../constants/tag-keys";
-import { GuPrivateConfigBucketParameter } from "../constructs/core";
-import { GuSecurityGroup } from "../constructs/ec2/security-groups";
-import { GuDynamoDBWritePolicy } from "../constructs/iam";
-import type { GuDomainName } from "../types/domain-names";
-import type { StageValue } from "../types/stage";
-import type { SynthedStack } from "../utils/test";
-import { simpleGuStackForTesting } from "../utils/test";
-import "../utils/test/jest";
-import { GuEc2App } from "./ec2-app";
-import { GuNodeApp, GuPlayApp } from "./ec2-app/framework";
+import { Stage } from "../../constants";
+import { AccessScope } from "../../constants/access";
+import { TagKeys } from "../../constants/tag-keys";
+import { GuPrivateConfigBucketParameter } from "../../constructs/core";
+import { GuSecurityGroup } from "../../constructs/ec2";
+import { GuDynamoDBWritePolicy } from "../../constructs/iam";
+import type { GuDomainName } from "../../types/domain-names";
+import type { StageValue } from "../../types/stage";
+import type { SynthedStack } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
+import "../../utils/test/jest";
+import { GuEc2App } from "./base";
 
 const getCertificateProps = (): StageValue<GuDomainName> => ({
   [Stage.CODE]: {
@@ -641,7 +640,8 @@ describe("the GuEC2App pattern", function () {
 
   it("can handle multiple EC2 apps in a single stack", function () {
     const stack = simpleGuStackForTesting();
-    new GuNodeApp(stack, {
+    new GuEc2App(stack, {
+      applicationPort: 3000,
       app: "NodeApp",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -661,7 +661,8 @@ describe("the GuEC2App pattern", function () {
       },
     });
 
-    new GuPlayApp(stack, {
+    new GuEc2App(stack, {
+      applicationPort: 9000,
       app: "PlayApp",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),

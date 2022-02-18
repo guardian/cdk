@@ -5,8 +5,8 @@ For example, a Play app should come with the infrastructure for https://github.c
  */
 
 import type { GuStack } from "../../constructs/core";
-import type { GuEc2AppProps } from "../ec2-app";
-import { GuEc2App } from "../ec2-app";
+import type { GuEc2AppProps } from "./base";
+import { GuEc2App } from "./base";
 
 type GuEc2FrameworkAppProps = Omit<GuEc2AppProps, "applicationPort">;
 
