@@ -5,30 +5,30 @@ import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Duration, Tags, Token } from "@aws-cdk/core";
-import { Stage } from "../constants";
-import { AccessScope } from "../constants/access";
-import { SSM_PARAMETER_PATHS } from "../constants/ssm-parameter-paths";
-import { TagKeys } from "../constants/tag-keys";
-import { GuCertificate } from "../constructs/acm";
-import type { GuUserDataProps } from "../constructs/autoscaling";
-import { GuAutoScalingGroup, GuUserData } from "../constructs/autoscaling";
-import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
-import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../constructs/cloudwatch";
-import type { GuStack } from "../constructs/core";
-import { GuStringParameter } from "../constructs/core";
-import { AppIdentity } from "../constructs/core/identity";
-import { GuSecurityGroup, GuVpc, SubnetType } from "../constructs/ec2";
-import type { GuInstanceRoleProps } from "../constructs/iam";
-import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../constructs/iam";
+import { Stage } from "../../constants";
+import { AccessScope } from "../../constants/access";
+import { SSM_PARAMETER_PATHS } from "../../constants/ssm-parameter-paths";
+import { TagKeys } from "../../constants/tag-keys";
+import { GuCertificate } from "../../constructs/acm";
+import type { GuUserDataProps } from "../../constructs/autoscaling";
+import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
+import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
+import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
+import type { GuStack } from "../../constructs/core";
+import { GuStringParameter } from "../../constructs/core";
+import { AppIdentity } from "../../constructs/core/identity";
+import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
+import type { GuInstanceRoleProps } from "../../constructs/iam";
+import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
-} from "../constructs/loadbalancing";
-import type { AppAccess, InternalAccess, RestrictedAccess } from "../types/access";
-import type { GuAsgCapacity } from "../types/asg";
-import type { GuDomainName } from "../types/domain-names";
-import { StageAwareValue } from "../types/stage";
+} from "../../constructs/loadbalancing";
+import type { AppAccess, InternalAccess, RestrictedAccess } from "../../types/access";
+import type { GuAsgCapacity } from "../../types/asg";
+import type { GuDomainName } from "../../types/domain-names";
+import { StageAwareValue } from "../../types/stage";
 
 export interface AccessLoggingProps {
   enabled: boolean;
@@ -126,15 +126,6 @@ export interface GuEc2AppProps extends AppIdentity {
   blockDevices?: BlockDevice[];
   scaling: StageAwareValue<GuAsgCapacity>;
   certificateProps: StageAwareValue<GuDomainName>;
-}
-
-interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
-  applicationPort?: number;
-}
-
-export enum GuApplicationPorts {
-  Node = 3000,
-  Play = 9000,
 }
 
 const OpenApplicationCidrError: Error =
@@ -510,27 +501,5 @@ export class GuEc2App {
     this.autoScalingGroup = autoScalingGroup;
     this.listener = listener;
     this.targetGroup = targetGroup;
-  }
-}
-
-/**
- * Creates an instance of [[`GuEc2App`]] with Play's [[GuApplicationPorts | default application port]].
- *
- * For all configuration options, see [[`GuEc2AppProps`]].
- */
-export class GuPlayApp extends GuEc2App {
-  constructor(scope: GuStack, props: GuMaybePortProps) {
-    super(scope, { ...props, applicationPort: GuApplicationPorts.Play });
-  }
-}
-
-/**
- * Creates an instance of [[`GuEc2App`]] with Node's [[GuApplicationPorts | default application port]].
- *
- * For all configuration options, see [[`GuEc2AppProps`]].
- */
-export class GuNodeApp extends GuEc2App {
-  constructor(scope: GuStack, props: GuMaybePortProps) {
-    super(scope, { ...props, applicationPort: GuApplicationPorts.Node });
   }
 }

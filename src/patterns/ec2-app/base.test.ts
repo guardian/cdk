@@ -3,18 +3,18 @@ import "@aws-cdk/assert/jest";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../constants";
-import { AccessScope } from "../constants/access";
-import { TagKeys } from "../constants/tag-keys";
-import { GuPrivateConfigBucketParameter } from "../constructs/core";
-import { GuSecurityGroup } from "../constructs/ec2/security-groups";
-import { GuDynamoDBWritePolicy } from "../constructs/iam";
-import type { GuDomainName } from "../types/domain-names";
-import type { StageValue } from "../types/stage";
-import type { SynthedStack } from "../utils/test";
-import { simpleGuStackForTesting } from "../utils/test";
-import "../utils/test/jest";
-import { GuApplicationPorts, GuEc2App, GuNodeApp, GuPlayApp } from "./ec2-app";
+import { Stage } from "../../constants";
+import { AccessScope } from "../../constants/access";
+import { TagKeys } from "../../constants/tag-keys";
+import { GuPrivateConfigBucketParameter } from "../../constructs/core";
+import { GuSecurityGroup } from "../../constructs/ec2";
+import { GuDynamoDBWritePolicy } from "../../constructs/iam";
+import type { GuDomainName } from "../../types/domain-names";
+import type { StageValue } from "../../types/stage";
+import type { SynthedStack } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
+import "../../utils/test/jest";
+import { GuEc2App } from "./base";
 
 const getCertificateProps = (): StageValue<GuDomainName> => ({
   [Stage.CODE]: {
@@ -31,7 +31,7 @@ describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -49,7 +49,7 @@ describe("the GuEC2App pattern", function () {
   it("can produce a restricted EC2 app locked to specific CIDR ranges", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("1.2.3.4/5")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -67,7 +67,7 @@ describe("the GuEC2App pattern", function () {
   it("can produce an EC2 app with an internal load balancer (located in private subnets)", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("10.0.0.0/8")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -91,7 +91,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -155,7 +155,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -181,7 +181,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -205,7 +205,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -230,7 +230,7 @@ describe("the GuEC2App pattern", function () {
     const app = "test-gu-ec2-app";
     const appForLogicalId = app.replaceAll("-", ""); // remove invalid characters
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -284,7 +284,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -345,7 +345,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -377,7 +377,7 @@ describe("the GuEC2App pattern", function () {
     expect(
       () =>
         new GuEc2App(stack, {
-          applicationPort: GuApplicationPorts.Node,
+          applicationPort: 3000,
           access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("0.0.0.0/0"), Peer.ipv4("1.2.3.4/32")] },
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -398,7 +398,7 @@ describe("the GuEC2App pattern", function () {
     expect(
       () =>
         new GuEc2App(stack, {
-          applicationPort: GuApplicationPorts.Node,
+          applicationPort: 3000,
           access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("93.1.2.3/12")] },
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -417,7 +417,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
       app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -454,7 +454,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
       app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -533,7 +533,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     const pattern = new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -559,7 +559,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -597,7 +597,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
     const pattern = new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -641,7 +641,7 @@ describe("the GuEC2App pattern", function () {
   it("can handle multiple EC2 apps in a single stack", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       app: "NodeApp",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -662,7 +662,7 @@ describe("the GuEC2App pattern", function () {
     });
 
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Play,
+      applicationPort: 9000,
       app: "PlayApp",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -734,7 +734,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -762,7 +762,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -794,7 +794,7 @@ describe("the GuEC2App pattern", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "App";
     new GuEc2App(stack, {
-      applicationPort: GuApplicationPorts.Node,
+      applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
@@ -815,50 +815,6 @@ describe("the GuEC2App pattern", function () {
         { Key: "Name", Value: "Test/AutoScalingGroupApp" },
         { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
       ],
-    });
-  });
-
-  describe("GuNodeApp", () => {
-    it("should set the port to the default of 3000 if not specified", function () {
-      const stack = simpleGuStackForTesting();
-      new GuNodeApp(stack, {
-        app: "NodeApp",
-        access: { scope: AccessScope.PUBLIC },
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        monitoringConfiguration: { noMonitoring: true },
-        userData: "#!/bin/dev foobarbaz",
-        certificateProps: getCertificateProps(),
-        scaling: {
-          [Stage.CODE]: { minimumInstances: 1 },
-          [Stage.PROD]: { minimumInstances: 3 },
-        },
-      });
-
-      expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
-        FromPort: 3000,
-      });
-    });
-  });
-
-  describe("GuPlayApp", () => {
-    it("should set the port to the default of 9000 if not specified", function () {
-      const stack = simpleGuStackForTesting();
-      new GuPlayApp(stack, {
-        app: "PlayApp",
-        access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        monitoringConfiguration: { noMonitoring: true },
-        userData: "#!/bin/dev foobarbaz",
-        certificateProps: getCertificateProps(),
-        scaling: {
-          [Stage.CODE]: { minimumInstances: 1 },
-          [Stage.PROD]: { minimumInstances: 3 },
-        },
-      });
-
-      expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
-        FromPort: 9000,
-      });
     });
   });
 });
