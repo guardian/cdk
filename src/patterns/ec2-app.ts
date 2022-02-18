@@ -128,15 +128,6 @@ export interface GuEc2AppProps extends AppIdentity {
   certificateProps: StageAwareValue<GuDomainName>;
 }
 
-interface GuMaybePortProps extends Omit<GuEc2AppProps, "applicationPort"> {
-  applicationPort?: number;
-}
-
-export enum GuApplicationPorts {
-  Node = 3000,
-  Play = 9000,
-}
-
 const OpenApplicationCidrError: Error =
   Error(`Your list of CIDR ranges includes 0.0.0.0/0, meaning all other ranges specified are unnecessary as
 your application is open to the world. Please either remove the open CIDR range or use the PUBLIC access scope.`);
@@ -510,27 +501,5 @@ export class GuEc2App {
     this.autoScalingGroup = autoScalingGroup;
     this.listener = listener;
     this.targetGroup = targetGroup;
-  }
-}
-
-/**
- * Creates an instance of [[`GuEc2App`]] with Play's [[GuApplicationPorts | default application port]].
- *
- * For all configuration options, see [[`GuEc2AppProps`]].
- */
-export class GuPlayApp extends GuEc2App {
-  constructor(scope: GuStack, props: GuMaybePortProps) {
-    super(scope, { ...props, applicationPort: GuApplicationPorts.Play });
-  }
-}
-
-/**
- * Creates an instance of [[`GuEc2App`]] with Node's [[GuApplicationPorts | default application port]].
- *
- * For all configuration options, see [[`GuEc2AppProps`]].
- */
-export class GuNodeApp extends GuEc2App {
-  constructor(scope: GuStack, props: GuMaybePortProps) {
-    super(scope, { ...props, applicationPort: GuApplicationPorts.Node });
   }
 }
