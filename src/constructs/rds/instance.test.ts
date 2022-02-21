@@ -75,7 +75,7 @@ describe("The GuDatabaseInstance class", () => {
 
     expect(stack).toHaveResource("AWS::RDS::DBInstance", {
       DBParameterGroupName: {
-        Ref: "DatabaseInstanceRDSParameterGroup307734CB",
+        Ref: "DatabaseInstanceTestingParameterGroup0F38B815",
       },
     });
 
