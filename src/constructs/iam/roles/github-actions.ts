@@ -73,10 +73,10 @@ class GitHubOidcProvider extends CfnResource {
 /**
  * A construct to create an IAM role for GitHub Actions to assume via `AssumeRoleWithWebIdentity`.
  *
- * An Output will be added to the stack with the Role's ARN for use with https://github.com/guardian/actions-assume-aws-role.
+ * An Output will be added to the stack with the Role's ARN for use with https://github.com/aws-actions/configure-aws-credentials.
  *
  * See:
- *   - https://github.com/guardian/actions-assume-aws-role
+ *   - https://github.com/aws-actions/configure-aws-credentials
  *   - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
  */
 export class GuGithubActionsRole extends GuRole {
