@@ -145,7 +145,7 @@ export class GuEcsTask {
       // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
       cpu = 2048, // 2 cores and from 4-16GB memory
       memory = 4096, // 4GB
-      storage = 20, //20 GB
+      storage, // default is 20 GB when not provided in props
       containerConfiguration,
       taskCommand,
       taskTimeoutInMinutes = 15,
@@ -155,6 +155,12 @@ export class GuEcsTask {
       securityGroups = [],
       environmentOverrides,
     } = props;
+
+    if (storage && storage < 21) {
+      throw new Error(
+        "Storage must be at least 21. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-ephemeralstorage.html"
+      );
+    }
 
     const { stack, stage } = scope;
 
