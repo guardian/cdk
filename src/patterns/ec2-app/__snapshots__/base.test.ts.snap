@@ -55,7 +55,7 @@ Object {
     },
     "VpcId": Object {
       "Default": "/account/vpc/primary/id",
-      "Description": "Virtual Private Cloud to run EC2 instances within",
+      "Description": "ID of the Virtual Private Cloud to run EC2 instances within.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
     "testguec2appPrivateSubnets": Object {
@@ -944,7 +944,7 @@ Object {
     },
     "VpcId": Object {
       "Default": "/account/vpc/primary/id",
-      "Description": "Virtual Private Cloud to run EC2 instances within",
+      "Description": "ID of the Virtual Private Cloud to run EC2 instances within.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
     "testguec2appPrivateSubnets": Object {
