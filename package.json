@@ -31,7 +31,7 @@
     "@guardian/eslint-config-typescript": "1.0.0",
     "@types/aws-lambda": "^8.10.92",
     "@types/git-url-parse": "^9.0.1",
-    "@types/jest": "^27.4.0",
+    "@types/jest": "^27.4.1",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.kebabcase": "^4.1.6",
     "@types/lodash.upperfirst": "^4.3.6",
