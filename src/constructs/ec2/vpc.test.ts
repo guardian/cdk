@@ -26,11 +26,8 @@ describe("The GuVpc class", () => {
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-      expect(json.Parameters.PrivateSubnets).toEqual({
-        Default: "/account/vpc/primary/subnets/private",
-        Description: "A list of private subnets",
-        Type: "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
-      });
+      expect(json.Parameters.PrivateSubnets.Default).toBe("/account/vpc/primary/subnets/private");
+      expect(json.Parameters.PrivateSubnets.Type).toBe("AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>");
     });
 
     test("adds a public subnets parameter if the type is public", () => {
@@ -40,11 +37,8 @@ describe("The GuVpc class", () => {
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-      expect(json.Parameters.PublicSubnets).toEqual({
-        Default: "/account/vpc/primary/subnets/public",
-        Description: "A list of public subnets",
-        Type: "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
-      });
+      expect(json.Parameters.PublicSubnets.Default).toBe("/account/vpc/primary/subnets/public");
+      expect(json.Parameters.PublicSubnets.Type).toBe("AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>");
     });
   });
 
@@ -66,11 +60,8 @@ describe("The GuVpc class", () => {
 
       const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-      expect(json.Parameters.VpcId).toEqual({
-        Default: "/account/vpc/primary/id",
-        Description: "Virtual Private Cloud to run EC2 instances within",
-        Type: "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
-      });
+      expect(json.Parameters.VpcId.Default).toBe("/account/vpc/primary/id");
+      expect(json.Parameters.VpcId.Type).toBe("AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>");
     });
   });
 });
