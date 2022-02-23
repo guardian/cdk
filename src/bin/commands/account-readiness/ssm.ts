@@ -1,11 +1,27 @@
 import AWS from "aws-sdk";
 import chalk from "chalk";
-import { LibraryInfo } from "../../../constants/library-info";
+import type { SsmParameterPath } from "../../../constants/ssm-parameter-paths";
 import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
 import type { AwsAccountReadiness } from "../../../types/cli";
+import { getSsmParametersForVpc, getVpcsInDetail } from "../../../utils/cli/vpc";
+import type { Report } from ".";
 
-export const ssmParamReadiness = async ({ credentialProvider, region }: AwsAccountReadiness): Promise<number> => {
-  const ssm = new AWS.SSM({
+interface SSMParameterReadinessOutput {
+  missingParameters: SsmParameterPath[];
+  foundParameters: SsmParameterPath[];
+  defaultVPCReferences: SsmParameterPath[];
+}
+
+const ssmParamReadiness = async ({
+  credentialProvider,
+  region,
+}: AwsAccountReadiness): Promise<SSMParameterReadinessOutput> => {
+  const ssmClient = new AWS.SSM({
+    credentialProvider,
+    region,
+  });
+
+  const ec2Client = new AWS.EC2({
     credentialProvider,
     region,
   });
@@ -13,43 +29,68 @@ export const ssmParamReadiness = async ({ credentialProvider, region }: AwsAccou
   const ssmParams = Object.values(SSM_PARAMETER_PATHS).filter((param) => !param.optional);
   const paths: string[] = ssmParams.map((param) => param.path);
 
-  const awsResponse = await ssm.getParameters({ Names: paths }).promise();
+  const awsResponse = await ssmClient.getParameters({ Names: paths }).promise();
 
   const notFoundParameters = awsResponse.InvalidParameters ?? [];
-
   const notFoundInDetail = ssmParams.filter((_) => notFoundParameters.includes(_.path));
   const foundInDetail = ssmParams.filter((_) => !notFoundParameters.includes(_.path));
 
-  console.log(
-    `AWS account has ${chalk.bold(`${foundInDetail.length}/${ssmParams.length}`)} SSM parameters in region ${region}`
+  const vpcs = await getVpcsInDetail(ec2Client);
+  const ssmParamsFromAccount = await getSsmParametersForVpc(ssmClient);
+  const defaultVpcs: string[] = vpcs
+    .filter((vpc) => vpc.IsDefault)
+    .map((vpc) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- a VPC always has an ID, the type in CDK is odd!
+      return vpc.VpcId!;
+    });
+
+  const ssmParametersMatchingDefaultVpc = ssmParamsFromAccount.filter(
+    ({ Value }) => Value && defaultVpcs.includes(Value)
   );
 
-  if (foundInDetail.length > 0) {
-    console.log("\nExisting required parameters:");
+  const defaultVPCReferencePaths = ssmParametersMatchingDefaultVpc
+    .map((param) => {
+      return ssmParams.find((p) => p.path === param.Name);
+    })
+    .filter((p): p is SsmParameterPath => p !== undefined);
 
-    foundInDetail.forEach(({ path, description }) => {
-      console.log(` ✅ ${chalk.yellowBright(path)} ${chalk.dim(`(${description})`)}`);
-    });
+  return {
+    foundParameters: foundInDetail,
+    missingParameters: notFoundInDetail,
+    defaultVPCReferences: defaultVPCReferencePaths,
+  };
+};
+
+export const report = async (props: AwsAccountReadiness): Promise<Report> => {
+  const output = await ssmParamReadiness(props);
+  const isPass = output.missingParameters.length === 0 && output.defaultVPCReferences.length === 0;
+
+  const errs = new Map<string, string>();
+  const parametersMsg =
+    "CDK uses predefined SSM parameters within patterns and constructs. For example, the EC2 APP pattern uses a parameter to determine which Kinesis stream to forward logs to. Your CDK app may fail at runtime if these parameters do not exist.";
+
+  const missingParamsMsg = "Required parameters are missing";
+  const missingParams = output.missingParameters.map((p) => `  ${chalk.yellowBright(p.path)}: ${p.description}`);
+
+  if (output.missingParameters.length > 0) {
+    errs.set(missingParamsMsg, `\n${missingParams.join("\n")}`);
   }
 
-  if (notFoundInDetail.length > 0) {
-    console.log("\nMissing required parameters:");
-
-    notFoundInDetail.forEach(({ path, description }) => {
-      console.log(` ❌ ${chalk.yellowBright(path)} ${chalk.dim(`(${description})`)}`);
-    });
-  }
-
-  if (notFoundInDetail.length === 0) {
-    // no action needed
-    return 0;
-  } else {
-    console.log(
-      chalk.red(
-        `\nAWS account requires the above ${notFoundInDetail.length} SSM parameters to work with @guardian/cdk v${LibraryInfo.VERSION}`
-      )
+  if (output.defaultVPCReferences.length > 0) {
+    errs.set(
+      "Default VPC referenced in VPC parameters",
+      `it is recommended to use a custom VPC instead. Found in paths: ${output.defaultVPCReferences.join(", ")}.`
     );
-
-    return 1;
   }
+
+  return {
+    name: "SSM Readiness",
+    isPass: isPass,
+    msg: parametersMsg,
+    errors: errs,
+  };
+};
+
+export const isPass = (output: SSMParameterReadinessOutput): boolean => {
+  return output.missingParameters.length === 0;
 };
