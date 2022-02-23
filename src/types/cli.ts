@@ -4,6 +4,7 @@ import type { SubnetList, Vpc } from "aws-sdk/clients/ec2";
 export interface AwsAccountReadiness {
   credentialProvider: CredentialProviderChain;
   region: string;
+  fix: boolean;
 }
 
 // A CLI command can return...

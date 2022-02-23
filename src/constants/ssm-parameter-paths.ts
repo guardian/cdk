@@ -1,6 +1,10 @@
 export interface SsmParameterPath {
   path: string;
   description: string;
+
+  // Recommended naming convention for target resource, such as an S3 bucket.
+  // $account is substituted as the account name.
+  namingPattern?: string;
   optional?: boolean;
 }
 
@@ -18,26 +22,29 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
   DistributionBucket: {
     path: "/account/services/artifact.bucket",
     description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
+    namingPattern: "com-gu-$account-artifacts",
   },
   AccessLoggingBucket: {
     path: "/account/services/access-logging/bucket",
-    description: "S3 bucket to store your access logs",
+    description: "S3 bucket to store your access logs.",
+    namingPattern: "com-gu-$account-access-logs",
   },
   ConfigurationBucket: {
     path: "/account/services/private.config.bucket",
-    description: "SSM parameter containing the S3 bucket name holding the app's private configuration",
+    description: "S3 bucket name holding the app's private configuration.",
+    namingPattern: "com-gu-$account-configs",
   },
   PrimaryVpcId: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/id`,
-    description: "Virtual Private Cloud to run EC2 instances within",
+    description: "ID of the Virtual Private Cloud to run EC2 instances within.",
   },
   PrimaryVpcPrivateSubnets: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/subnets/private`,
-    description: "A list of private subnets",
+    description: "A comma-separated list of private subnets. Typically, one per availability zone.",
   },
   PrimaryVpcPublicSubnets: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/subnets/public`,
-    description: "A list of public subnets",
+    description: "A comma-separated list of public subnets. Typically, one per availability zone.",
   },
   FastlyCustomerId: {
     path: "/account/external/fastly/customer.id",

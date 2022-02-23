@@ -31,6 +31,11 @@ const parseCommandLineArguments = () => {
         yargs
           .option("profile", { type: "string", description: "AWS profile" })
           .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
+          .option("fix", {
+            type: "boolean",
+            description: "Helper to add any missing Parameter Store paths",
+            default: false,
+          })
       )
       .command(Commands.CheckPackageJson, "Check a package.json file for compatibility with GuCDK", (yargs) =>
         yargs.option("directory", {
@@ -83,8 +88,8 @@ parseCommandLineArguments()
       case Commands.AwsCdkVersion:
         return awsCdkVersionCommand();
       case Commands.AccountReadiness: {
-        const { profile, region } = argv;
-        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
+        const { profile, region, fix } = argv;
+        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region, fix });
       }
       case Commands.CheckPackageJson: {
         const { directory } = argv;
