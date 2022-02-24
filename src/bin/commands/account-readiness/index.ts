@@ -10,19 +10,15 @@ export interface Report {
 }
 
 export const accountReadinessCommand = async (props: AwsAccountReadiness): CliCommandResponse => {
-  // Got a new AWS account readiness command? Add it to this list and ✨
-  const reports = await Promise.all([reportSSM(props)]);
-  const allPassed = reports.find((report) => !report.isPass);
+  const report = await reportSSM(props);
 
-  reports.forEach((report) => {
-    console.log(chalk.bold(report.name + ":") + " " + (report.isPass ? "✅ Pass" : "❌ Fail"));
+  console.log(chalk.bold(report.name + ":") + " " + (report.isPass ? "✅ Pass" : "❌ Fail"));
 
-    if (!report.isPass) {
-      report.msg && console.log(report.msg + "\n");
-      report.errors.forEach((errMsg, name) => console.log(`${chalk.red(name)}: ${errMsg}`));
-      console.log();
-    }
-  });
+  if (!report.isPass) {
+    report.msg && console.log(report.msg + "\n");
+    report.errors.forEach((errMsg, name) => console.log(`${chalk.red(name)}: ${errMsg}`));
+    console.log();
+  }
 
-  return allPassed ? 0 : 1;
+  return report.isPass ? 0 : 1;
 };

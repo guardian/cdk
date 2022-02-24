@@ -29,8 +29,7 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
   },
   PrimaryVpcId: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/id`,
-    description:
-      "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC. Declare additional VPCs under e.g./secondary/id and /tertiary/id and similar for subnet-related paths.",
+    description: "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
   },
   PrimaryVpcPrivateSubnets: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/subnets/private`,
