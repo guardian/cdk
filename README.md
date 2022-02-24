@@ -17,7 +17,6 @@ provision your AWS resources.
 - [Quickstart](#quickstart)
 - [CDK demo including screencast](https://github.com/guardian/cdk-demo)
 - [Migrating an existing Cloudformation template](./docs/migration-guide.md)
-- [Creating a new EC2 or Lambda application from scratch](./docs/002-starting-a-new-project.md)
 - View the [typedocs](https://guardian.github.io/cdk/)
 - [Contributing](#contributing) to `@guardian/cdk`
 
