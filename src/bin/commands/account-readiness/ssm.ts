@@ -79,7 +79,9 @@ export const report = async (props: AwsAccountReadiness): Promise<Report> => {
   if (output.defaultVPCReferences.length > 0) {
     errs.set(
       "Default VPC referenced in VPC parameters",
-      `it is recommended to use a custom VPC instead. Found in paths: ${output.defaultVPCReferences.join(", ")}.`
+      `you should use a custom VPC instead. Default VPC is referenced in paths: ${output.defaultVPCReferences.join(
+        ", "
+      )}.`
     );
   }
 
