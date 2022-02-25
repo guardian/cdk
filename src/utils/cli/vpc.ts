@@ -5,11 +5,11 @@ import { SSM_PARAMETER_PATHS, VPC_SSM_PARAMETER_PREFIX } from "../../constants/s
 import type { VpcInDetail } from "../../types/cli";
 import { sum } from "../math";
 
-const primaryVpcSsmParameterPaths: string[] = Object.values(SSM_PARAMETER_PATHS)
+export const primaryVpcSsmParameterPaths: string[] = Object.values(SSM_PARAMETER_PATHS)
   .map((_) => _.path)
   .filter((_) => _.startsWith(VPC_SSM_PARAMETER_PREFIX));
 
-const vpcSsmParameterPaths: RegExp[] = primaryVpcSsmParameterPaths.map((primaryPath) => {
+export const vpcSsmParameterPaths: RegExp[] = primaryVpcSsmParameterPaths.map((primaryPath) => {
   const reBody = primaryPath.replace("primary", "([A-z0-9.-_])+");
   return new RegExp(`^${reBody}$`);
 });
