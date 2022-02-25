@@ -37,16 +37,6 @@ export const getSsmParametersForVpc = async (ssmClient: AWS.SSM): Promise<Parame
   });
 };
 
-export const doesDefaultVpcSsmParameterExist = (parameters: ParameterList): boolean => {
-  const vpcIdentifiers = parameters.map((_) => vpcIdentifierFromVpcSsmParameterPath(_.Name ?? ""));
-  return vpcIdentifiers.includes("default");
-};
-
-export const vpcIdentifierFromVpcSsmParameterPath = (path: string): string => {
-  const [, , identifier] = path.split("/");
-  return identifier;
-};
-
 const getSubnetsForVpc = async (vpc: Vpc, ec2Client: AWS.EC2): Promise<SubnetList> => {
   if (!vpc.VpcId) {
     return [];
