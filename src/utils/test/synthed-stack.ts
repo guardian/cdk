@@ -1,5 +1,4 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import type { Stage } from "../../constants";
 import type { GuStack } from "../../constructs/core";
 
 export interface Parameter {
@@ -14,7 +13,6 @@ export type Resource = Record<string, { Type: string; Properties: ResourceProper
 
 export interface SynthedStack {
   Parameters: Record<string, Parameter>;
-  Mappings: Record<Stage, unknown>;
   Resources: Resource;
 }
 

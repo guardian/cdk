@@ -6,6 +6,7 @@ interface AppBuilderProps {
   imports: Imports;
   appName: Name;
   stack: Name;
+  stage: string;
   outputFile: string;
   outputDir: string;
   comment?: string;
@@ -25,24 +26,26 @@ export class AppBuilder {
   }
 
   async constructCdkFile(): Promise<void> {
-    this.code.openFile(this.config.outputFile);
-    if (this.config.comment) {
-      this.code.line(this.config.comment);
+    const { comment, outputFile, imports, appName, stack, outputDir, stage } = this.config;
+
+    this.code.openFile(outputFile);
+    if (comment) {
+      this.code.line(comment);
       this.code.line();
     }
 
-    this.config.imports.render(this.code);
+    imports.render(this.code);
 
     this.code.line("const app = new App();");
 
     this.code.line("const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;");
 
     this.code.line(
-      `new ${this.config.appName.pascal}(app, "${this.config.appName.pascal}", { stack: "${this.config.stack.kebab}", cloudFormationStackName });`
+      `new ${appName.pascal}(app, "${appName.pascal}-${stage}", { stack: "${stack.kebab}", cloudFormationStackName, stage: "${stage}" });`
     );
 
-    this.code.closeFile(this.config.outputFile);
-    await this.code.save(this.config.outputDir);
+    this.code.closeFile(outputFile);
+    await this.code.save(outputDir);
   }
 }
 

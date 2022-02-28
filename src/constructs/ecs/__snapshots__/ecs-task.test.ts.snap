@@ -109,15 +109,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "ecstestexecutionfailedC93F511B": Object {
@@ -126,18 +117,7 @@ Object {
         "AlarmActions": Array [
           "arn:something:else:here:we:goalarm-topic",
         ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "ecs-test-",
-              Object {
-                "Ref": "Stage",
-              },
-              " job failed ",
-            ],
-          ],
-        },
+        "AlarmDescription": "ecs-test-TEST job failed ",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -163,18 +143,7 @@ Object {
         "AlarmActions": Array [
           "arn:something:else:here:we:goalarm-topic",
         ],
-        "AlarmDescription": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "ecs-test-",
-              Object {
-                "Ref": "Stage",
-              },
-              " job timed out ",
-            ],
-          ],
-        },
+        "AlarmDescription": "ecs-test-TEST job timed out ",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
@@ -209,17 +178,7 @@ Object {
     },
     "testecstaskecstestClusterCBD4036C": Object {
       "Properties": Object {
-        "ClusterName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "ecs-test-cluster-",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "ClusterName": "ecs-test-cluster-TEST",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -239,9 +198,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -268,11 +225,7 @@ Object {
                   "Arn",
                 ],
               },
-              "\\",\\"TaskDefinition\\":\\"test-stack-",
-              Object {
-                "Ref": "Stage",
-              },
-              "-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"test-ecs-task-ecs-test-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
+              "\\",\\"TaskDefinition\\":\\"test-stack-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"test-ecs-task-ecs-test-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
             ],
           ],
         },
@@ -282,17 +235,7 @@ Object {
             "Arn",
           ],
         },
-        "StateMachineName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "ecs-test-",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "StateMachineName": "ecs-test-TEST",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -312,9 +255,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -361,9 +302,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -594,18 +533,7 @@ Object {
             "Arn",
           ],
         },
-        "Family": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "test-stack-",
-              Object {
-                "Ref": "Stage",
-              },
-              "-ecs-test",
-            ],
-          ],
-        },
+        "Family": "test-stack-TEST-ecs-test",
         "Memory": "1024",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": Array [
@@ -630,9 +558,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "TaskRoleArn": Object {
@@ -706,9 +632,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -747,9 +671,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -770,11 +692,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/ecs-test/*",
+                    "/test-stack/TEST/ecs-test/*",
                   ],
                 ],
               },
@@ -819,9 +737,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },

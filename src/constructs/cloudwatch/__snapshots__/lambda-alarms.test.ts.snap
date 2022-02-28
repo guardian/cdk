@@ -8,15 +8,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "lambda8B5974B5": Object {
@@ -29,26 +20,13 @@ Object {
           "S3Bucket": Object {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "test-stack/",
-                Object {
-                  "Ref": "Stage",
-                },
-                "/testing/lambda.zip",
-              ],
-            ],
-          },
+          "S3Key": "test-stack/TEST/testing/lambda.zip",
         },
         "Environment": Object {
           "Variables": Object {
             "APP": "testing",
             "STACK": "test-stack",
-            "STAGE": Object {
-              "Ref": "Stage",
-            },
+            "STAGE": "TEST",
           },
         },
         "Handler": "handler.ts",
@@ -79,9 +57,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Timeout": 30,
@@ -135,9 +111,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -203,11 +177,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing",
+                    ":parameter/TEST/test-stack/testing",
                   ],
                 ],
               },
@@ -230,11 +200,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/testing/*",
                   ],
                 ],
               },
@@ -281,11 +247,7 @@ Object {
               Object {
                 "Ref": "lambda8B5974B5",
               },
-              " lambda in ",
-              Object {
-                "Ref": "Stage",
-              },
-              ".",
+              " lambda in TEST.",
             ],
           ],
         },
@@ -320,15 +282,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "lambda8B5974B5": Object {
@@ -341,26 +294,13 @@ Object {
           "S3Bucket": Object {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "test-stack/",
-                Object {
-                  "Ref": "Stage",
-                },
-                "/testing/lambda.zip",
-              ],
-            ],
-          },
+          "S3Key": "test-stack/TEST/testing/lambda.zip",
         },
         "Environment": Object {
           "Variables": Object {
             "APP": "testing",
             "STACK": "test-stack",
-            "STAGE": Object {
-              "Ref": "Stage",
-            },
+            "STAGE": "TEST",
           },
         },
         "Handler": "handler.ts",
@@ -391,9 +331,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Timeout": 30,
@@ -447,9 +385,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -515,11 +451,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing",
+                    ":parameter/TEST/test-stack/testing",
                   ],
                 ],
               },
@@ -542,11 +474,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/testing/*",
                   ],
                 ],
               },
@@ -603,10 +531,7 @@ Object {
               Object {
                 "Ref": "lambda8B5974B5",
               },
-              " lambda in ",
-              Object {
-                "Ref": "Stage",
-              },
+              " lambda in TEST",
             ],
           ],
         },
