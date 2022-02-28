@@ -21,5 +21,5 @@ module.exports = {
   ],
   out: "target",
   includeVersion: true,
-  readme: "docs/001-general-usage.md",
+  readme: "README.md",
 };
