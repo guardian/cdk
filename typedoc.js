@@ -11,6 +11,7 @@ function getEntryPointsFromSubdirectories(directory) {
 }
 
 module.exports = {
+  exclude: "src/**/*.test.ts",
   entryPoints: [
     "src/index.ts",
     "src/constants/index.ts",
