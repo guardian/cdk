@@ -8,15 +8,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "DescribeEC2PolicyFF5F9295": Object {
@@ -81,11 +72,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/testing/*",
+                    "/test-stack/TEST/testing/*",
                   ],
                 ],
               },
@@ -146,9 +133,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -173,11 +158,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing",
+                    ":parameter/TEST/test-stack/testing",
                   ],
                 ],
               },
@@ -200,11 +181,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/testing/*",
                   ],
                 ],
               },
@@ -274,15 +251,6 @@ Object {
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "DescribeEC2PolicyFF5F9295": Object {
@@ -329,11 +297,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/my-first-app/*",
+                    "/test-stack/TEST/my-first-app/*",
                   ],
                 ],
               },
@@ -365,11 +329,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/my-second-app/*",
+                    "/test-stack/TEST/my-second-app/*",
                   ],
                 ],
               },
@@ -475,9 +435,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -527,9 +485,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -554,11 +510,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/my-first-app",
+                    ":parameter/TEST/test-stack/my-first-app",
                   ],
                 ],
               },
@@ -581,11 +533,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/my-first-app/*",
+                    ":parameter/TEST/test-stack/my-first-app/*",
                   ],
                 ],
               },
@@ -621,11 +569,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/my-second-app",
+                    ":parameter/TEST/test-stack/my-second-app",
                   ],
                 ],
               },
@@ -648,11 +592,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/my-second-app/*",
+                    ":parameter/TEST/test-stack/my-second-app/*",
                   ],
                 ],
               },
@@ -725,15 +665,6 @@ Object {
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "DescribeEC2PolicyFF5F9295": Object {
@@ -777,11 +708,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/testing/*",
+                    "/test-stack/TEST/testing/*",
                   ],
                 ],
               },
@@ -884,9 +811,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -911,11 +836,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing",
+                    ":parameter/TEST/test-stack/testing",
                   ],
                 ],
               },
@@ -938,11 +859,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/testing/*",
                   ],
                 ],
               },
@@ -1007,15 +924,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "DescribeEC2PolicyFF5F9295": Object {
@@ -1059,11 +967,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/testing/*",
+                    "/test-stack/TEST/testing/*",
                   ],
                 ],
               },
@@ -1124,9 +1028,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -1151,11 +1053,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing",
+                    ":parameter/TEST/test-stack/testing",
                   ],
                 ],
               },
@@ -1178,11 +1076,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/testing/*",
                   ],
                 ],
               },

@@ -42,7 +42,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "TemplateBody": "{
@@ -82,7 +82,7 @@ Object {
           },
           {
             \\"Key\\": \\"Stage\\",
-            \\"Value\\": \\"INFRA\\"
+            \\"Value\\": \\"TEST\\"
           }
         ]
       }
@@ -167,7 +167,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "TemplateBody": "{
@@ -198,7 +198,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },

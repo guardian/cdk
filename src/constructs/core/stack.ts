@@ -1,15 +1,12 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { Annotations, App, Stack, Tags } from "@aws-cdk/core";
+import { App, Stack, Tags } from "@aws-cdk/core";
 import type { StackProps } from "@aws-cdk/core";
 import gitUrlParse from "git-url-parse";
-import { ContextKeys, StageForInfrastructure, TagKeys, TrackingTag } from "../../constants";
+import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
-import { GuStageMapping } from "./mappings";
-import type { GuMappingValue, GuStageMappingValue } from "./mappings";
-import { GuStageParameter } from "./parameters";
 import type { GuParameter } from "./parameters";
 
 export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuMigratingStack> {
@@ -18,8 +15,12 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
    * This will be applied as a tag to all of your resources.
    */
   stack: string;
+
+  stage: string;
+
   /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
+   * @defaultValue the `GU_CFN_STACK_NAME` environment variable
    */
   cloudFormationStackName?: string;
   /**
@@ -58,42 +59,18 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
  */
 export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
   private readonly _stack: string;
+  private readonly _stage: string;
 
-  private _mappings?: GuStageMapping;
   private params: Map<string, GuParameter>;
 
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    return GuStageParameter.getInstance(this).valueAsString;
+    return this._stage;
   }
 
   get stack(): string {
     return this._stack;
-  }
-
-  // Use lazy initialisation for GuStageMapping so that Mappings block is only created when necessary
-  get mappings(): GuStageMapping {
-    return this._mappings ?? (this._mappings = new GuStageMapping(this));
-  }
-
-  /**
-   * A helper function to switch between different values depending on the Stage being CloudFormed (e.g.
-   * use 1 in `CODE` or 3 in `PROD`).
-   *
-   * Note: Standard conditional logic which references a CloudFormation Parameter's value will not work
-   * as Parameters are not resolved at synth-time. This helper function creates CloudFormation
-   * Mappings to work around this limitation.
-   */
-  withStageDependentValue<T extends GuMappingValue>(mappingValue: GuStageMappingValue<T>): T {
-    const isInfraStageProvided = Object.keys(mappingValue.stageValues).includes(StageForInfrastructure);
-    if (isInfraStageProvided) {
-      Annotations.of(this).addWarning(
-        `GuStack does not have a stage of ${StageForInfrastructure}. Setting a mapping value for it has no impact.`
-      );
-    }
-
-    return this.mappings.withValue(mappingValue);
   }
 
   /**
@@ -132,7 +109,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
   constructor(app: App, id: string, props: GuStackProps) {
     const mergedProps = {
       ...props,
-      stackName: props.cloudFormationStackName,
+      stackName: props.cloudFormationStackName ?? process.env.GU_CFN_STACK_NAME,
     };
     super(app, id, mergedProps);
 
@@ -141,6 +118,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     this.params = new Map<string, GuParameter>();
 
     this._stack = props.stack;
+    this._stage = props.stage.toUpperCase();
 
     if (!props.withoutTags) {
       this.addTag(TrackingTag.Key, TrackingTag.Value);
@@ -175,47 +153,11 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 }
 
 /**
- * A GuStack but designed for infrastructure as `Stage` will always be `INFRA`.
- */
-export class GuStackForInfrastructure extends GuStack {
-  override get stage(): string {
-    return StageForInfrastructure;
-  }
-
-  /**
-   * A helper function to switch between different values depending on the Stage being CloudFormed.
-   *
-   * As GuInfrastructureStack has a single stage (INFRA), calling withStageDependentValue is unnecessary complexity.
-   * Consider using a standard variable in code instead with [[`StageAwareValue`]]
-   *
-   * ```typescript
-   * const name = StageAwareValue.isStageValue(props)
-   *   ? scope.withStageDependentValue({
-   *       app: props.app,
-   *       variableName: "name",
-   *       stageValues: {
-   *         [Stage.CODE]: "CODE value",
-   *         [Stage.PROD]: "PROD value"
-   *       }
-   *     })
-   *   : "INFRA value";
-   * ```
-   *
-   * Note: Specifying a stage other than `INFRA` will raise an exception.
-   */
-  override withStageDependentValue<T extends GuMappingValue>(mappingValue: GuStageMappingValue<T>): T {
-    // Yep, we're just calling the super class's implementation...
-    // We're overriding to add some helpful documentation in the doc string.
-    return super.withStageDependentValue(mappingValue);
-  }
-}
-
-/**
  * A GuStack but designed for Stack Set instances.
  *
  * In a stack set application, `GuStackForStackSetInstance` is used to represent the infrastructure to provision in target AWS accounts.
  */
-export class GuStackForStackSetInstance extends GuStackForInfrastructure {
+export class GuStackForStackSetInstance extends GuStack {
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForStackSet should have a unique `App`
   constructor(id: string, props: GuStackProps) {
     super(new App(), id, props);
