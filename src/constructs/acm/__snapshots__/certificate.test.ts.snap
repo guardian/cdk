@@ -2,17 +2,6 @@
 
 exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
 Object {
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
@@ -37,9 +26,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "ValidationMethod": "DNS",
@@ -53,17 +40,6 @@ Object {
 
 exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
 Object {
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
@@ -94,9 +70,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "ValidationMethod": "DNS",

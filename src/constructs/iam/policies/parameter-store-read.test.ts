@@ -1,12 +1,10 @@
 import "@aws-cdk/assert/jest";
-import { App } from "@aws-cdk/core";
-import { attachPolicyToTestRole } from "../../../utils/test";
-import { GuStack } from "../../core";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
 describe("ParameterStoreReadPolicy", () => {
   it("should constrain the policy to the patch of a stack's identity", () => {
-    const stack = new GuStack(new App(), "my-app", { stack: "test-stack" });
+    const stack = simpleGuStackForTesting();
 
     const policy = new GuParameterStoreReadPolicy(stack, { app: "MyApp" });
 
@@ -32,11 +30,7 @@ describe("ParameterStoreReadPolicy", () => {
                   {
                     Ref: "AWS::AccountId",
                   },
-                  ":parameter/",
-                  {
-                    Ref: "Stage",
-                  },
-                  "/test-stack/MyApp",
+                  ":parameter/TEST/test-stack/MyApp",
                 ],
               ],
             },
@@ -56,11 +50,7 @@ describe("ParameterStoreReadPolicy", () => {
                   {
                     Ref: "AWS::AccountId",
                   },
-                  ":parameter/",
-                  {
-                    Ref: "Stage",
-                  },
-                  "/test-stack/MyApp/*",
+                  ":parameter/TEST/test-stack/MyApp/*",
                 ],
               ],
             },

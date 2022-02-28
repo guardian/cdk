@@ -2,22 +2,6 @@
 
 exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specific CIDR ranges 1`] = `
 Object {
-  "Mappings": Object {
-    "testguec2app": Object {
-      "CODE": Object {
-        "domainName": "code-guardian.com",
-        "hostedZoneId": "id123",
-        "maxInstances": 2,
-        "minInstances": 1,
-      },
-      "PROD": Object {
-        "domainName": "prod-guardian.com",
-        "hostedZoneId": "id124",
-        "maxInstances": 6,
-        "minInstances": 3,
-      },
-    },
-  },
   "Outputs": Object {
     "LoadBalancerTestguec2appDnsName": Object {
       "Description": "DNS entry for LoadBalancerTestguec2app",
@@ -44,15 +28,6 @@ Object {
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
     "VpcId": Object {
       "Default": "/account/vpc/primary/id",
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
@@ -77,24 +52,8 @@ Object {
         "LaunchConfigurationName": Object {
           "Ref": "AutoScalingGroupTestguec2appLaunchConfigA7394577",
         },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "testguec2app",
-            Object {
-              "Ref": "Stage",
-            },
-            "maxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "testguec2app",
-            Object {
-              "Ref": "Stage",
-            },
-            "minInstances",
-          ],
-        },
+        "MaxSize": "2",
+        "MinSize": "1",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -129,9 +88,7 @@ Object {
           Object {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "TargetGroupARNs": Array [
@@ -190,37 +147,7 @@ Object {
     "CertificateTestguec2app86EE2D42": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": Object {
-          "Fn::FindInMap": Array [
-            "testguec2app",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
-        "DomainValidationOptions": Array [
-          Object {
-            "DomainName": Object {
-              "Fn::FindInMap": Array [
-                "testguec2app",
-                Object {
-                  "Ref": "Stage",
-                },
-                "domainName",
-              ],
-            },
-            "HostedZoneId": Object {
-              "Fn::FindInMap": Array [
-                "testguec2app",
-                Object {
-                  "Ref": "Stage",
-                },
-                "hostedZoneId",
-              ],
-            },
-          },
-        ],
+        "DomainName": "code-guardian.com",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -240,9 +167,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "ValidationMethod": "DNS",
@@ -291,11 +216,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-gu-ec2-app/*",
+                    "/test-stack/TEST/test-gu-ec2-app/*",
                   ],
                 ],
               },
@@ -343,9 +264,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -482,9 +401,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -560,9 +477,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Type": "application",
@@ -591,9 +506,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -642,11 +555,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/test-gu-ec2-app",
+                    ":parameter/TEST/test-stack/test-gu-ec2-app",
                   ],
                 ],
               },
@@ -669,11 +578,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/test-gu-ec2-app/*",
+                    ":parameter/TEST/test-stack/test-gu-ec2-app/*",
                   ],
                 ],
               },
@@ -721,9 +626,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -817,9 +720,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -874,9 +775,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -891,22 +790,6 @@ Object {
 
 exports[`the GuEC2App pattern should produce a functional EC2 app with minimal arguments 1`] = `
 Object {
-  "Mappings": Object {
-    "testguec2app": Object {
-      "CODE": Object {
-        "domainName": "code-guardian.com",
-        "hostedZoneId": "id123",
-        "maxInstances": 2,
-        "minInstances": 1,
-      },
-      "PROD": Object {
-        "domainName": "prod-guardian.com",
-        "hostedZoneId": "id124",
-        "maxInstances": 6,
-        "minInstances": 3,
-      },
-    },
-  },
   "Outputs": Object {
     "LoadBalancerTestguec2appDnsName": Object {
       "Description": "DNS entry for LoadBalancerTestguec2app",
@@ -933,15 +816,6 @@ Object {
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
     "VpcId": Object {
       "Default": "/account/vpc/primary/id",
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
@@ -966,24 +840,8 @@ Object {
         "LaunchConfigurationName": Object {
           "Ref": "AutoScalingGroupTestguec2appLaunchConfigA7394577",
         },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "testguec2app",
-            Object {
-              "Ref": "Stage",
-            },
-            "maxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "testguec2app",
-            Object {
-              "Ref": "Stage",
-            },
-            "minInstances",
-          ],
-        },
+        "MaxSize": "2",
+        "MinSize": "1",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -1018,9 +876,7 @@ Object {
           Object {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "TargetGroupARNs": Array [
@@ -1079,37 +935,7 @@ Object {
     "CertificateTestguec2app86EE2D42": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": Object {
-          "Fn::FindInMap": Array [
-            "testguec2app",
-            Object {
-              "Ref": "Stage",
-            },
-            "domainName",
-          ],
-        },
-        "DomainValidationOptions": Array [
-          Object {
-            "DomainName": Object {
-              "Fn::FindInMap": Array [
-                "testguec2app",
-                Object {
-                  "Ref": "Stage",
-                },
-                "domainName",
-              ],
-            },
-            "HostedZoneId": Object {
-              "Fn::FindInMap": Array [
-                "testguec2app",
-                Object {
-                  "Ref": "Stage",
-                },
-                "hostedZoneId",
-              ],
-            },
-          },
-        ],
+        "DomainName": "code-guardian.com",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -1129,9 +955,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "ValidationMethod": "DNS",
@@ -1180,11 +1004,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/test-stack/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-gu-ec2-app/*",
+                    "/test-stack/TEST/test-gu-ec2-app/*",
                   ],
                 ],
               },
@@ -1232,9 +1052,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -1350,9 +1168,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -1422,9 +1238,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Type": "application",
@@ -1462,9 +1276,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -1513,11 +1325,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/test-gu-ec2-app",
+                    ":parameter/TEST/test-stack/test-gu-ec2-app",
                   ],
                 ],
               },
@@ -1540,11 +1348,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/test-gu-ec2-app/*",
+                    ":parameter/TEST/test-stack/test-gu-ec2-app/*",
                   ],
                 ],
               },
@@ -1625,9 +1429,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -1682,9 +1484,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {

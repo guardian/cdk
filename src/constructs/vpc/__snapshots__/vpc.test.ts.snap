@@ -28,7 +28,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },
@@ -55,7 +55,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },
@@ -116,7 +116,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -164,7 +164,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -206,7 +206,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -265,7 +265,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -346,7 +346,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },
@@ -382,7 +382,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },
@@ -420,7 +420,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -468,7 +468,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -514,7 +514,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },
@@ -550,7 +550,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
       },
@@ -577,7 +577,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -636,7 +636,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "INFRA",
+            "Value": "TEST",
           },
         ],
         "VpcId": Object {
@@ -685,7 +685,7 @@ Object {
         "Name": "/account/vpc/primary/subnets/private",
         "Tags": Object {
           "Stack": "test-stack",
-          "Stage": "INFRA",
+          "Stage": "TEST",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },
@@ -712,7 +712,7 @@ Object {
         "Name": "/account/vpc/primary/subnets/public",
         "Tags": Object {
           "Stack": "test-stack",
-          "Stage": "INFRA",
+          "Stage": "TEST",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },
@@ -739,7 +739,7 @@ Object {
         "Name": "/account/vpc/primary/id",
         "Tags": Object {
           "Stack": "test-stack",
-          "Stage": "INFRA",
+          "Stage": "TEST",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },

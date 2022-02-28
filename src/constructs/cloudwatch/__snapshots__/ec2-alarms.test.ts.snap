@@ -13,17 +13,6 @@ Object {
       },
     },
   },
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "ApplicationLoadBalancerTesting172A253B": Object {
       "Properties": Object {
@@ -64,9 +53,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Type": "application",
@@ -104,9 +91,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": "test",
@@ -135,17 +120,7 @@ Object {
           },
         ],
         "AlarmDescription": "testing exceeded 1% error rate",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "High 5XX error % from testing in ",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "AlarmName": "High 5XX error % from testing in TEST",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": Array [
@@ -246,17 +221,6 @@ Object {
       },
     },
   },
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "ApplicationListener62E539D0": Object {
       "Properties": Object {
@@ -315,9 +279,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Type": "application",
@@ -364,9 +326,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "VpcId": "test",
@@ -401,9 +361,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -447,17 +405,7 @@ Object {
       scaling or handling traffic spikes.
 
       Check testing's application logs or ssh onto an unhealthy instance in order to debug these problems.",
-        "AlarmName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Unhealthy instances for testing in ",
-              Object {
-                "Ref": "Stage",
-              },
-            ],
-          ],
-        },
+        "AlarmName": "Unhealthy instances for testing in TEST",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "DatapointsToAlarm": 30,
         "Dimensions": Array [

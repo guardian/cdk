@@ -2,17 +2,6 @@
 
 exports[`The GuCname construct should create the correct resources with minimal config 1`] = `
 Object {
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "TestRecord": Object {
       "Properties": Object {
@@ -21,9 +10,7 @@ Object {
         "ResourceRecords": Array [
           "apple.example.com",
         ],
-        "Stage": Object {
-          "Ref": "Stage",
-        },
+        "Stage": "TEST",
         "TTL": 3600,
       },
       "Type": "Guardian::DNS::RecordSet",
@@ -34,17 +21,6 @@ Object {
 
 exports[`The GuDnsRecordSet construct should create the correct resources with minimal config 1`] = `
 Object {
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "TestRecord": Object {
       "Properties": Object {
@@ -53,9 +29,7 @@ Object {
         "ResourceRecords": Array [
           "apple.example.com",
         ],
-        "Stage": Object {
-          "Ref": "Stage",
-        },
+        "Stage": "TEST",
         "TTL": 3600,
       },
       "Type": "Guardian::DNS::RecordSet",
