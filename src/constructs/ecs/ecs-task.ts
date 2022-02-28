@@ -18,7 +18,7 @@ import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-t
 import { CfnOutput, Duration } from "@aws-cdk/core";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
-import { AppIdentity } from "../core/identity";
+import { AppIdentity } from "../core";
 import { GuGetDistributablePolicyStatement } from "../iam";
 
 /**
