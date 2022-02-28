@@ -389,7 +389,9 @@ describe("the GuEC2App pattern", function () {
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
         })
-    ).toThrowError();
+    ).toThrowError(
+      "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public."
+    );
   });
 
   it("errors if specifying public CIDR ranges with internal access scope", function () {
@@ -410,7 +412,9 @@ describe("the GuEC2App pattern", function () {
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
         })
-    ).toThrowError();
+    ).toThrowError(
+      "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted."
+    );
   });
 
   it("can configure ASG scaling by stage if desired", function () {
