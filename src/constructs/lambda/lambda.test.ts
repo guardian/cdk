@@ -55,18 +55,7 @@ describe("The GuLambdaFunction class", () => {
         S3Bucket: {
           Ref: "DistributionBucketName",
         },
-        S3Key: {
-          "Fn::Join": [
-            "",
-            [
-              "test-stack/",
-              {
-                Ref: "Stage",
-              },
-              "/testing/my-app.zip",
-            ],
-          ],
-        },
+        S3Key: "test-stack/TEST/testing/my-app.zip",
       },
     });
   });

@@ -4,10 +4,9 @@ import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
 import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Stack } from "@aws-cdk/core";
-import { Stage } from "../../constants";
 import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import type { Resource, SynthedStack } from "../../utils/test";
-import type { AppIdentity } from "../core/identity";
+import type { AppIdentity } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuAllowPolicy, GuInstanceRole } from "../iam";
 import { GuApplicationTargetGroup } from "../loadbalancing";
@@ -298,44 +297,5 @@ describe("The GuAutoScalingGroup", () => {
       MinSize: "2",
       MaxSize: "11",
     });
-  });
-
-  test("scaling capacities can be defined via a CfnMapping", () => {
-    const stack = simpleGuStackForTesting();
-
-    const minimumInstances = stack.withStageDependentValue<number>({
-      ...app,
-      variableName: "minInstances",
-      stageValues: { [Stage.CODE]: 1, [Stage.PROD]: 3 },
-    });
-
-    const maximumInstances = stack.withStageDependentValue<number>({
-      ...app,
-      variableName: "maxInstances",
-      stageValues: { [Stage.CODE]: 2, [Stage.PROD]: 6 },
-    });
-
-    new GuAutoScalingGroup(stack, "AutoScalingGroup", { ...defaultProps, minimumInstances, maximumInstances });
-
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
-      MinSize: { "Fn::FindInMap": ["testing", { Ref: "Stage" }, "minInstances"] },
-      MaxSize: { "Fn::FindInMap": ["testing", { Ref: "Stage" }, "maxInstances"] },
-    });
-  });
-
-  test("an error should be thrown if capacities are not defined in the same way", () => {
-    expect(() => {
-      const stack = simpleGuStackForTesting();
-      new GuAutoScalingGroup(stack, "AutoScalingGroup", {
-        ...defaultProps,
-        minimumInstances: stack.withStageDependentValue<number>({
-          ...app,
-          variableName: "minInstances",
-          stageValues: { [Stage.CODE]: 1, [Stage.PROD]: 3 },
-        }),
-      });
-    }).toThrowError(
-      "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too."
-    );
   });
 });

@@ -18,9 +18,7 @@ describe("SSM:", () => {
       const stack = simpleGuStackForTesting({ stack: "some-stack" });
       const param = new GuSSMIdentityParameter(stack, { parameter: "some-param", app: "foo" });
       expect(stack).toHaveResourceLike("Custom::GuGetSSMParameter", {
-        getParamsProps: {
-          "Fn::Join": ["", ['{"apiRequest":{"Name":"/', { Ref: "Stage" }, '/some-stack/foo/some-param"}}']],
-        },
+        getParamsProps: '{"apiRequest":{"Name":"/TEST/some-stack/foo/some-param"}}',
       });
       expect(param.getValue()).toMatch(/TOKEN/i);
     });
@@ -43,15 +41,6 @@ describe("SSM:", () => {
 
       expect(param1.toString()).toMatch(/Test\/GuSSMParameter-pathtosomeparam/i);
       expect(param2.toString()).toMatch(/Test\/GuSSMParameter-pathtosomeparam/i);
-      expect(param1.toString()).not.toEqual(param2.toString());
-    });
-
-    it("creates unique IDs that handles tokens", function () {
-      const stack = simpleGuStackForTesting({ stack: "some-stack" });
-      const param1 = new GuSSMParameter(stack, { parameter: `/path/${stack.stage}/some-param` });
-      const param2 = new GuSSMParameter(stack, { parameter: `/path/${stack.stage}/some-param` });
-      expect(param1.toString()).toMatch(/Test\/GuSSMParameter-token/i);
-      expect(param2.toString()).toMatch(/Test\/GuSSMParameter-token/i);
       expect(param1.toString()).not.toEqual(param2.toString());
     });
   });

@@ -82,8 +82,7 @@ describe("The GuGetDistributablePolicy construct", () => {
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
     const parameterKeys = Object.keys(json.Parameters);
-    const expectedKeys = ["Stage", GuDistributionBucketParameter.getInstance(stack).id];
-    expect(parameterKeys).toEqual(expectedKeys);
+    expect(parameterKeys).toEqual([GuDistributionBucketParameter.getInstance(stack).id]);
 
     expect(json.Parameters.DistributionBucketName).toEqual({
       Default: "/account/services/artifact.bucket",
@@ -106,11 +105,7 @@ describe("The GuGetDistributablePolicy construct", () => {
                   {
                     Ref: "DistributionBucketName",
                   },
-                  `/test-stack/`,
-                  {
-                    Ref: "Stage",
-                  },
-                  "/testing/*",
+                  "/test-stack/TEST/testing/*",
                 ],
               ],
             },

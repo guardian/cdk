@@ -15,27 +15,21 @@ describe("GuAnghammaradSenderPolicy", () => {
   it("should add a parameter to the stack if it is not already defined", () => {
     const stack = simpleGuStackForTesting();
 
-    // an empty stack should only have `Stage` which GuStack adds
-    expect(getParams(stack)).toEqual(["Stage"]);
-
     // add the policy
     attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
-    expect(getParams(stack)).toEqual(["Stage", "AnghammaradSnsArn"]);
+    expect(getParams(stack)).toEqual(["AnghammaradSnsArn"]);
   });
 
   it("should not add a parameter to the stack if it already exists", () => {
     const stack = simpleGuStackForTesting();
 
-    // an empty stack should only have `Stage` which GuStack adds
-    expect(getParams(stack)).toEqual(["Stage"]);
-
     // explicitly add an AnghammaradTopicParameter
     GuAnghammaradTopicParameter.getInstance(stack);
-    expect(getParams(stack)).toEqual(["Stage", "AnghammaradSnsArn"]);
+    expect(getParams(stack)).toEqual(["AnghammaradSnsArn"]);
 
     // add the policy
     attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
-    expect(getParams(stack)).toEqual(["Stage", "AnghammaradSnsArn"]);
+    expect(getParams(stack)).toEqual(["AnghammaradSnsArn"]);
   });
 
   it("should define a policy that would allow writing to SNS", () => {
