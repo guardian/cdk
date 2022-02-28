@@ -1,5 +1,5 @@
-export * from "./assume-role";
 export * from "./anghammarad";
+export * from "./assume-role";
 export * from "./base-policy";
 export * from "./cloudwatch";
 export * from "./describe-ec2";
