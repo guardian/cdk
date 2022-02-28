@@ -7,7 +7,6 @@ import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
 import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
-import { GuStageParameter } from "./parameters";
 import type { GuParameter } from "./parameters";
 
 export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuMigratingStack> {
@@ -16,6 +15,9 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
    * This will be applied as a tag to all of your resources.
    */
   stack: string;
+
+  stage: string;
+
   /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
    */
@@ -56,13 +58,14 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
  */
 export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
   private readonly _stack: string;
+  private readonly _stage: string;
 
   private params: Map<string, GuParameter>;
 
   public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
-    return GuStageParameter.getInstance(this).valueAsString;
+    return this._stage;
   }
 
   get stack(): string {
@@ -114,6 +117,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
     this.params = new Map<string, GuParameter>();
 
     this._stack = props.stack;
+    this._stage = props.stage.toUpperCase();
 
     if (!props.withoutTags) {
       this.addTag(TrackingTag.Key, TrackingTag.Value);
