@@ -13,7 +13,7 @@ function getEntryPointsFromSubdirectories(directory) {
 module.exports = {
   exclude: "src/**/*.test.ts",
   entryPoints: [
-    "src/index.ts",
+    "src/patterns/index.ts",
     "src/constants/index.ts",
     "src/types/index.ts",
     // we purposefully do not have an index.ts in `src/constructs` or `src/utils`
