@@ -4,19 +4,15 @@ import type { InstanceType, IPeer, IVpc } from "@aws-cdk/aws-ec2";
 import { Port } from "@aws-cdk/aws-ec2";
 import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
 import { Bucket } from "@aws-cdk/aws-s3";
-import { Duration, Tags, Token } from "@aws-cdk/core";
-import { Stage } from "../../constants";
-import { AccessScope } from "../../constants/access";
-import { SSM_PARAMETER_PATHS } from "../../constants/ssm-parameter-paths";
-import { TagKeys } from "../../constants/tag-keys";
+import { Duration, Tags } from "@aws-cdk/core";
+import { AccessScope, SSM_PARAMETER_PATHS, TagKeys } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
 import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { GuStringParameter } from "../../constructs/core";
-import { AppIdentity } from "../../constructs/core/identity";
+import { AppIdentity, GuStringParameter } from "../../constructs/core";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
@@ -25,10 +21,8 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
-import { AppAccess } from "../../types/access";
-import type { GuAsgCapacity } from "../../types/asg";
-import type { GuDomainName } from "../../types/domain-names";
-import { StageAwareValue } from "../../types/stage";
+import { AppAccess } from "../../types";
+import type { GuAsgCapacity, GuDomainName } from "../../types";
 
 export interface AccessLoggingProps {
   enabled: boolean;
@@ -40,13 +34,6 @@ export interface Alarms {
   http5xxAlarm: false | Http5xxAlarmProps;
   unhealthyInstancesAlarm: boolean;
   noMonitoring?: false;
-
-  /**
-   * Whether alarm actions are enabled on the `CODE` stage.
-   *
-   * @default false
-   */
-  actionsEnabledInCode?: boolean;
 }
 
 /**
@@ -124,8 +111,8 @@ export interface GuEc2AppProps extends AppIdentity {
   instanceType: InstanceType;
   accessLogging?: AccessLoggingProps;
   blockDevices?: BlockDevice[];
-  scaling: StageAwareValue<GuAsgCapacity>;
-  certificateProps: StageAwareValue<GuDomainName>;
+  scaling: GuAsgCapacity;
+  certificateProps: GuDomainName;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -269,57 +256,23 @@ export class GuEc2App {
       app,
       applicationPort,
       blockDevices,
-      certificateProps,
+      certificateProps: { domainName, hostedZoneId },
       instanceType,
       monitoringConfiguration,
       roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
-      scaling,
+      scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData,
     } = props;
-
-    const { stage } = scope;
 
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
     const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
     AppAccess.validate(access);
 
-    const hostedZone = (): undefined | string => {
-      const hasHostedZoneId: boolean = StageAwareValue.isStageValue(certificateProps)
-        ? !!certificateProps.CODE.hostedZoneId && !!certificateProps.PROD.hostedZoneId
-        : !!certificateProps.INFRA.hostedZoneId;
-
-      if (!hasHostedZoneId) {
-        return;
-      }
-
-      /* eslint-disable @typescript-eslint/no-non-null-assertion -- `hasHostedZoneId` is true, so we know `hostedZoneId` is present here */
-      return StageAwareValue.isStageValue(certificateProps)
-        ? scope.withStageDependentValue({
-            app,
-            variableName: "hostedZoneId",
-            stageValues: {
-              [Stage.CODE]: certificateProps.CODE.hostedZoneId!,
-              [Stage.PROD]: certificateProps.PROD.hostedZoneId!,
-            },
-          })
-        : certificateProps.INFRA.hostedZoneId!;
-      /* eslint-enable @typescript-eslint/no-non-null-assertion */
-    };
-
     const certificate = new GuCertificate(scope, {
       app,
-      domainName: StageAwareValue.isStageValue(certificateProps)
-        ? scope.withStageDependentValue({
-            app,
-            variableName: "domainName",
-            stageValues: {
-              [Stage.CODE]: certificateProps.CODE.domainName,
-              [Stage.PROD]: certificateProps.PROD.domainName,
-            },
-          })
-        : certificateProps.INFRA.domainName,
-      hostedZoneId: hostedZone(),
+      domainName,
+      hostedZoneId,
     });
 
     const maybePrivateConfigPolicy =
@@ -336,26 +289,8 @@ export class GuEc2App {
       app,
       vpc,
       instanceType,
-      minimumInstances: StageAwareValue.isStageValue(scaling)
-        ? scope.withStageDependentValue({
-            app,
-            variableName: "minInstances",
-            stageValues: {
-              [Stage.CODE]: scaling.CODE.minimumInstances,
-              [Stage.PROD]: scaling.PROD.minimumInstances,
-            },
-          })
-        : scaling.INFRA.minimumInstances,
-      maximumInstances: StageAwareValue.isStageValue(scaling)
-        ? scope.withStageDependentValue({
-            app,
-            variableName: "maxInstances",
-            stageValues: {
-              [Stage.CODE]: scaling.CODE.maximumInstances ?? scaling.CODE.minimumInstances * 2,
-              [Stage.PROD]: scaling.PROD.maximumInstances ?? scaling.PROD.minimumInstances * 2,
-            },
-          })
-        : scaling.INFRA.maximumInstances ?? scaling.INFRA.minimumInstances * 2,
+      minimumInstances,
+      maximumInstances,
       role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
       userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
@@ -430,31 +365,7 @@ export class GuEc2App {
     }
 
     if (!monitoringConfiguration.noMonitoring) {
-      const {
-        http5xxAlarm,
-        snsTopicName,
-        unhealthyInstancesAlarm,
-        actionsEnabledInCode = false,
-      } = monitoringConfiguration;
-
-      /*
-      Stage is known at runtime if it is a CFN Parameter, e.g. CODE or PROD.
-      Stage is known at compile time for singleton stacks, e.g. INFRA.
-       */
-      const isStageDeterminedAtRuntime = Token.isUnresolved(stage);
-
-      // Only add a Mapping to the template when strictly necessary, i.e. when the value differs across stages
-      const actionsEnabled: boolean =
-        actionsEnabledInCode || !isStageDeterminedAtRuntime
-          ? true
-          : scope.withStageDependentValue({
-              app,
-              variableName: "alarmActionsEnabled",
-              stageValues: {
-                [Stage.CODE]: false,
-                [Stage.PROD]: true,
-              },
-            });
+      const { http5xxAlarm, snsTopicName, unhealthyInstancesAlarm } = monitoringConfiguration;
 
       if (http5xxAlarm) {
         new Gu5xxPercentageAlarm(scope, {
@@ -462,7 +373,6 @@ export class GuEc2App {
           loadBalancer,
           snsTopicName,
           ...http5xxAlarm,
-          actionsEnabled,
         });
       }
       if (unhealthyInstancesAlarm) {
@@ -470,7 +380,6 @@ export class GuEc2App {
           app,
           targetGroup,
           snsTopicName,
-          actionsEnabled,
         });
       }
     }
