@@ -3,29 +3,14 @@ import "@aws-cdk/assert/jest";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
 import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stage } from "../../constants";
-import { AccessScope } from "../../constants/access";
-import { TagKeys } from "../../constants/tag-keys";
+import { AccessScope, TagKeys } from "../../constants";
 import { GuPrivateConfigBucketParameter } from "../../constructs/core";
 import { GuSecurityGroup } from "../../constructs/ec2";
 import { GuDynamoDBWritePolicy } from "../../constructs/iam";
-import type { GuDomainName } from "../../types/domain-names";
-import type { StageValue } from "../../types/stage";
 import type { SynthedStack } from "../../utils/test";
 import { simpleGuStackForTesting } from "../../utils/test";
 import "../../utils/test/jest";
 import { GuEc2App } from "./base";
-
-const getCertificateProps = (): StageValue<GuDomainName> => ({
-  [Stage.CODE]: {
-    domainName: "code-guardian.com",
-    hostedZoneId: "id123",
-  },
-  [Stage.PROD]: {
-    domainName: "prod-guardian.com",
-    hostedZoneId: "id124",
-  },
-});
 
 describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
@@ -37,10 +22,11 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -55,10 +41,11 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -73,10 +60,11 @@ describe("the GuEC2App pattern", function () {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
     });
     expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -95,10 +83,11 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: {
@@ -159,10 +148,11 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: {
         snsTopicName: "test-topic",
@@ -185,10 +175,11 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: {
         snsTopicName: "test-topic",
@@ -209,10 +200,11 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: {
         snsTopicName: "test-topic",
@@ -225,61 +217,6 @@ describe("the GuEC2App pattern", function () {
     expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
   });
 
-  test("when actions are enabled in CODE, no CFN mappings are created", () => {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    const appForLogicalId = app.replaceAll("-", ""); // remove invalid characters
-    new GuEc2App(stack, {
-      applicationPort: 3000,
-      app,
-      access: { scope: AccessScope.PUBLIC },
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
-      scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
-      },
-      monitoringConfiguration: {
-        snsTopicName: "test-topic",
-        http5xxAlarm: {
-          tolerated5xxPercentage: 5,
-        },
-        unhealthyInstancesAlarm: true,
-        actionsEnabledInCode: true,
-      },
-      userData: "",
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      // `alarmActionsEnabled` should not be present
-      [appForLogicalId]: {
-        CODE: {
-          hostedZoneId: "id123",
-          domainName: "code-guardian.com",
-          minInstances: 1,
-          maxInstances: 2,
-        },
-        PROD: {
-          hostedZoneId: "id124",
-          domainName: "prod-guardian.com",
-          minInstances: 3,
-          maxInstances: 6,
-        },
-      },
-    });
-
-    // There are two alarms, both enabled via a direct property
-    const alarms = Object.values(json.Resources).filter(({ Type }) => Type === "AWS::CloudWatch::Alarm");
-
-    expect(alarms).toHaveLength(2);
-
-    alarms.forEach(({ Properties }) => {
-      expect(Properties["ActionsEnabled"]).toBe(true);
-    });
-  });
-
   it("creates the appropriate ingress rules for a restricted access application", function () {
     const stack = simpleGuStackForTesting();
     const app = "test-gu-ec2-app";
@@ -288,10 +225,11 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -349,10 +287,11 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -381,10 +320,11 @@ describe("the GuEC2App pattern", function () {
           access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("0.0.0.0/0"), Peer.ipv4("1.2.3.4/32")] },
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-          certificateProps: getCertificateProps(),
+          certificateProps: {
+            domainName: "code-guardian.com",
+          },
           scaling: {
-            [Stage.CODE]: { minimumInstances: 1 },
-            [Stage.PROD]: { minimumInstances: 3 },
+            minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
@@ -404,10 +344,11 @@ describe("the GuEC2App pattern", function () {
           access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("93.1.2.3/12")] },
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-          certificateProps: getCertificateProps(),
+          certificateProps: {
+            domainName: "code-guardian.com",
+          },
           scaling: {
-            [Stage.CODE]: { minimumInstances: 1 },
-            [Stage.PROD]: { minimumInstances: 3 },
+            minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
@@ -415,43 +356,6 @@ describe("the GuEC2App pattern", function () {
     ).toThrowError(
       "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted."
     );
-  });
-
-  it("can configure ASG scaling by stage if desired", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: app,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      monitoringConfiguration: { noMonitoring: true },
-      userData: "",
-      certificateProps: getCertificateProps(),
-      scaling: {
-        [Stage.CODE]: { minimumInstances: 3 },
-        [Stage.PROD]: { minimumInstances: 5, maximumInstances: 12 },
-      },
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      testguec2app: {
-        CODE: {
-          hostedZoneId: "id123",
-          domainName: "code-guardian.com",
-          minInstances: 3,
-          maxInstances: 6,
-        },
-        PROD: {
-          hostedZoneId: "id124",
-          domainName: "prod-guardian.com",
-          minInstances: 5,
-          maxInstances: 12,
-        },
-      },
-    });
   });
 
   it("correctly wires up custom role configuration", function () {
@@ -462,10 +366,11 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -541,10 +446,11 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "UserData from pattern declaration",
@@ -567,10 +473,11 @@ describe("the GuEC2App pattern", function () {
       app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "UserData from pattern declaration",
@@ -605,10 +512,11 @@ describe("the GuEC2App pattern", function () {
       app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "UserData from pattern declaration",
@@ -652,16 +560,10 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        [Stage.CODE]: {
-          domainName: "node-app.code.example.com",
-        },
-        [Stage.PROD]: {
-          domainName: "node-app.example.com",
-        },
+        domainName: "node-app.code.example.com",
       },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 0 },
-        [Stage.PROD]: { minimumInstances: 1 },
+        minimumInstances: 1,
       },
     });
 
@@ -673,45 +575,10 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        [Stage.CODE]: {
-          domainName: "play-app.code.example.com",
-        },
-        [Stage.PROD]: {
-          domainName: "play-app.example.com",
-        },
+        domainName: "play-app.code.example.com",
       },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
-      },
-    });
-
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Mappings).toEqual({
-      NodeApp: {
-        CODE: {
-          domainName: "node-app.code.example.com",
-          minInstances: 0,
-          maxInstances: 0,
-        },
-        PROD: {
-          domainName: "node-app.example.com",
-          minInstances: 1,
-          maxInstances: 2,
-        },
-      },
-      PlayApp: {
-        CODE: {
-          domainName: "play-app.code.example.com",
-          minInstances: 1,
-          maxInstances: 2,
-        },
-        PROD: {
-          domainName: "play-app.example.com",
-          minInstances: 3,
-          maxInstances: 6,
-        },
+        minimumInstances: 3,
       },
     });
 
@@ -742,10 +609,11 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -770,10 +638,11 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "",
@@ -802,10 +671,11 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: getCertificateProps(),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
       userData: "",

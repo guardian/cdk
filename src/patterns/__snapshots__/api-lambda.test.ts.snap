@@ -1295,15 +1295,6 @@ Object {
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "lambda8B5974B5": Object {
@@ -1316,26 +1307,13 @@ Object {
           "S3Bucket": Object {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "test-stack/",
-                Object {
-                  "Ref": "Stage",
-                },
-                "/testing/my-app.zip",
-              ],
-            ],
-          },
+          "S3Key": "test-stack/TEST/testing/my-app.zip",
         },
         "Environment": Object {
           "Variables": Object {
             "APP": "testing",
             "STACK": "test-stack",
-            "STAGE": Object {
-              "Ref": "Stage",
-            },
+            "STAGE": "TEST",
           },
         },
         "Handler": "handler.ts",
@@ -1366,9 +1344,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
         "Timeout": 30,
@@ -1422,9 +1398,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -1490,11 +1464,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing",
+                    ":parameter/TEST/test-stack/testing",
                   ],
                 ],
               },
@@ -1517,11 +1487,7 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/",
-                    Object {
-                      "Ref": "Stage",
-                    },
-                    "/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/testing/*",
                   ],
                 ],
               },
@@ -1561,9 +1527,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -1751,15 +1715,13 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491": Object {
+    "lambdaapi2Deployment4ECB937315346667ee4df9c22c2d20802b9cda38": Object {
       "DependsOn": Array [
         "lambdaapi2proxyANY3F8E1D36",
         "lambdaapi2proxyE68FDFBC",
@@ -1779,7 +1741,7 @@ Object {
       ],
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapi2Deployment4ECB93733f2a465bd3376b026a790d1cda259491",
+          "Ref": "lambdaapi2Deployment4ECB937315346667ee4df9c22c2d20802b9cda38",
         },
         "RestApiId": Object {
           "Ref": "lambdaapi239350ECC",
@@ -1804,9 +1766,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -2103,9 +2063,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
@@ -2158,15 +2116,13 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e": Object {
+    "lambdaapiDeployment8E95B585116f53ab28b49c00a8893f8c0c3770d1": Object {
       "DependsOn": Array [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -2186,7 +2142,7 @@ Object {
       ],
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "lambdaapiDeployment8E95B585280b2dd8620eae880b6845467e6ee11e",
+          "Ref": "lambdaapiDeployment8E95B585116f53ab28b49c00a8893f8c0c3770d1",
         },
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
@@ -2211,9 +2167,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },

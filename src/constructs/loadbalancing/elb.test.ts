@@ -182,7 +182,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
 
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
 
-    expect(Object.keys(json.Parameters)).not.toContain("CertificateARN");
+    expect(json.Parameters).toBeUndefined();
   });
 
   test("merges any listener values provided", () => {

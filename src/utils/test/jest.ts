@@ -68,9 +68,7 @@ expect.extend({
       },
       {
         Key: "Stage",
-        Value: {
-          Ref: "Stage",
-        },
+        Value: stack.stage,
       },
       TrackingTag,
       {

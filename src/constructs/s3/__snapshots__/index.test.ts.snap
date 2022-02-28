@@ -2,17 +2,6 @@
 
 exports[`The GuS3Bucket construct should set the bucket's policy to 'retain' 1`] = `
 Object {
-  "Parameters": Object {
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "MyBucketTest262E966E": Object {
       "DeletionPolicy": "Retain",
@@ -43,9 +32,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },
