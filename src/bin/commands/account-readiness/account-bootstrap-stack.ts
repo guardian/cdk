@@ -3,10 +3,13 @@ import { stdin, stdout } from "process";
 import { createInterface } from "readline";
 import { StringParameter } from "@aws-cdk/aws-ssm";
 import { App } from "@aws-cdk/core";
+import AWS from "aws-sdk";
+import type { CreateStackInput } from "aws-sdk/clients/cloudformation";
 import { dump } from "js-yaml";
 import type { SsmParameterPath } from "../../../constants/ssm-parameter-paths";
 import { GuStack } from "../../../constructs/core";
 import type { GuStackProps } from "../../../constructs/core";
+import type { AwsAccountReadiness } from "../../../types/cli";
 
 interface PopulatedParameter extends SsmParameterPath {
   value: string;
@@ -54,6 +57,33 @@ export const accountBootstrapCfn = async (parameters: SsmParameterPath[]): Promi
   const tpl = readFileSync(tplFile, "utf-8");
   const tplYaml = dump(JSON.parse(tpl));
   return tplYaml;
+};
+
+export const createBootstrapStack = (
+  { credentialProvider, region }: AwsAccountReadiness,
+  template: string
+): Promise<string> => {
+  const cfn = new AWS.CloudFormation({
+    credentialProvider,
+    region,
+  });
+
+  const input: CreateStackInput = {
+    StackName: "cdk-bootstrap-INFRA",
+    TemplateBody: template,
+    EnableTerminationProtection: true,
+  };
+
+  return cfn
+    .createStack(input)
+    .promise()
+    .then((res) => {
+      if (res.$response.error) {
+        return `Stack creation failed: ${res.$response.error.message}`;
+      }
+
+      return res.StackId ?? "";
+    });
 };
 
 export const writeBootrapCfn = (tpl: string): string => {

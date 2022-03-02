@@ -1,0 +1,137 @@
+Description: >-
+  CDK Bootstrap template used to manage required SSM parameters and other
+  resources.
+Parameters:
+  Stage:
+    Type: String
+    Default: CODE
+    AllowedValues:
+      - CODE
+      - PROD
+    Description: Stage name
+Resources:
+  accountservicesanghammaradtopicarnEBB061EC:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdf
+      Description: SSM parameter containing the ARN of the Anghammarad SNS topic
+      Name: /account/services/anghammarad.topic.arn
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountservicesloggingstreamname33701367:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdflkj
+      Description: SSM parameter containing the Name (not ARN) on the kinesis stream
+      Name: /account/services/logging.stream.name
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountservicesartifactbucket2583022C:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdlkj
+      Description: >-
+        SSM parameter containing the S3 bucket name holding distribution
+        artifacts
+      Name: /account/services/artifact.bucket
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountservicesaccessloggingbucket03D60DEC:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdflkj
+      Description: S3 bucket to store your access logs.
+      Name: /account/services/access-logging/bucket
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountservicesprivateconfigbucketC5201B30:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdlfkj
+      Description: S3 bucket name holding the app's private configuration.
+      Name: /account/services/private.config.bucket
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountvpcprimaryid777CB1C6:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdlfkj
+      Description: ID of the Virtual Private Cloud to run EC2 instances within.
+      Name: /account/vpc/primary/id
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountvpcprimarysubnetsprivate0B6D64E4:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdflkj
+      Description: >-
+        A comma-separated list of private subnets. Typically, one per
+        availability zone.
+      Name: /account/vpc/primary/subnets/private
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountvpcprimarysubnetspublic0266BC2B:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdflkj
+      Description: >-
+        A comma-separated list of public subnets. Typically, one per
+        availability zone.
+      Name: /account/vpc/primary/subnets/public
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage
+  accountexternalfastlycustomerid8C0CF4D2:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: sdlfkj
+      Description: >-
+        SSM parameter containing the Fastly Customer ID. Can be obtained from
+        https://manage.fastly.com/account/company by an admin
+      Name: /account/external/fastly/customer.id
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: sdflkj
+        Stage:
+          Ref: Stage

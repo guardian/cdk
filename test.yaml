@@ -1,0 +1,22 @@
+Parameters:
+  Stage:
+    Type: String
+    Default: CODE
+    AllowedValues:
+      - CODE
+      - PROD
+    Description: Stage name
+Resources:
+  accountservicesanghammaradtopicarnEBB061EC:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: cdk-update
+      Description: NIC Test
+      Name: /NIC/test
+      Tags:
+        gu:cdk:version: 35.0.1
+        gu:repo: guardian/cdk
+        Stack: foo
+        Stage:
+          Ref: Stage
