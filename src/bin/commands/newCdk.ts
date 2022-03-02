@@ -90,7 +90,7 @@ async function getConfig(props: BootstrapProps): Promise<NewCommandConfig> {
   return config;
 }
 
-export const bootstrap = async (props: BootstrapProps): CliCommandResponse => {
+export const newCdk = async (props: BootstrapProps): CliCommandResponse => {
   console.log("Starting CDK generator");
 
   const config = await getConfig(props);

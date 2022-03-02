@@ -86,10 +86,12 @@ export const report = async (props: AwsAccountReadiness): Promise<Report> => {
   }
 
   return {
-    name: "SSM Readiness",
+    name: "SSM Parameter Readiness",
     isPass: isPass,
     msg: parametersMsg,
     errors: errs,
+    parametersFound: output.foundParameters.length,
+    parametersMissing: output.missingParameters.length,
   };
 };
 

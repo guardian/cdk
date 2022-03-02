@@ -6,14 +6,16 @@ import type { CliCommandResponse } from "../types/cli";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
-import { bootstrap } from "./commands/bootstrap";
+import { bootstrapCommand } from "./commands/bootstrap";
 import { checkPackageJson } from "./commands/check-package-json";
+import { newCdk } from "./commands/newCdk";
 
 const Commands = {
   AwsCdkVersion: "aws-cdk-version",
   AccountReadiness: "account-readiness",
   CheckPackageJson: "check-package-json",
   New: "new",
+  Bootstrap: "bootstrap",
 };
 
 const parseCommandLineArguments = () => {
@@ -27,6 +29,17 @@ const parseCommandLineArguments = () => {
     yargs
       .usage("$0 COMMAND [args]")
       .command(Commands.AwsCdkVersion, "Print the version of @aws-cdk libraries being used")
+      .command(Commands.Bootstrap, "Bootstrap an AWS account for @guardian/cdk", (yargs) =>
+        yargs
+          .option("profile", {
+            type: "string",
+            description: "AWS profile",
+          })
+          .option("dry-run", {
+            type: "boolean",
+            description: "If set, AWS stack will not be created but the template will be printed to stdout.",
+          })
+      )
       .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready", (yargs) =>
         yargs
           .option("profile", { type: "string", description: "AWS profile" })
@@ -80,8 +93,17 @@ parseCommandLineArguments()
   .then((argv): CliCommandResponse => {
     const command = argv._[0];
     switch (command) {
-      case Commands.AwsCdkVersion:
+      case Commands.AwsCdkVersion: {
         return awsCdkVersionCommand();
+      }
+      case Commands.Bootstrap: {
+        const { profile, region, dryRun } = argv;
+        return bootstrapCommand({
+          credentialProvider: awsCredentialProviderChain(profile),
+          dryRun: dryRun || false,
+          region,
+        });
+      }
       case Commands.AccountReadiness: {
         const { profile, region } = argv;
         return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
@@ -92,8 +114,8 @@ parseCommandLineArguments()
       }
       case Commands.New: {
         const { init, "multi-app": multiApp, app, stack, "yaml-template-location": yamlTemplateLocation } = argv;
-        const bootstrapProps = { init, multiApp, app, stack, yamlTemplateLocation };
-        return bootstrap(bootstrapProps);
+        const newProps = { init, multiApp, app, stack, yamlTemplateLocation };
+        return newCdk(newProps);
       }
       default:
         throw new Error(`Unknown command: ${command}`);
