@@ -100,7 +100,7 @@ parseCommandLineArguments()
         const { profile, region, dryRun } = argv;
         return bootstrapCommand({
           credentialProvider: awsCredentialProviderChain(profile),
-          dryRun: dryRun || false,
+          dryRun: dryRun ?? false,
           region,
         });
       }
