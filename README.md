@@ -14,6 +14,8 @@ through AWS CloudFormation.
 constructs. It is an opinionated and secure-by-default way to describe and
 provision your AWS resources.
 
+Jump to:
+
 - [Quickstart](#quickstart)
 - [CDK demo including screencast](https://github.com/guardian/cdk-demo)
 - [Migrating an existing Cloudformation template](./docs/migration-guide.md)
