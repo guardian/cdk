@@ -78,11 +78,12 @@ export const accountBootstrapCfn = async (parameters: SsmParameterPath[]): Promi
 
   const populatedParameters = parameters.map((param) => ({ value: answers[safeName(param.path)] as string, ...param }));
 
+  const cfnStackName = "CDKBoostrap";
   const app = new App();
-  new AccountBootstrap(app, "CDKBoostrap", { stack: answers["stack"] as string, parameters: populatedParameters });
+  new AccountBootstrap(app, cfnStackName, { stack: answers["stack"] as string, parameters: populatedParameters });
 
   const assembly = app.synth();
-  const tplFile = assembly.stacks[0].templateFullPath; // Cloud assemblies can contain multiple stacks but in this case we know there is only one.
+  const tplFile = assembly.getStackByName(cfnStackName).templateFullPath; // Cloud assemblies can contain multiple stacks but in this case we know there is only one.
   return readFileSync(tplFile, "utf-8");
 };
 
