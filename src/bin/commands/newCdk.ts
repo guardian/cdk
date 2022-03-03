@@ -14,7 +14,7 @@ import { constructStack } from "./utils/stack";
 import type { Name } from "./utils/utils";
 import { pascalCase } from "./utils/utils";
 
-interface BootstrapProps {
+interface NewCdkProps {
   init: boolean;
   multiApp: boolean;
   app: string;
@@ -58,7 +58,7 @@ function validateConfig(config: NewCommandConfig): void {
   }
 }
 
-async function getConfig(props: BootstrapProps): Promise<NewCommandConfig> {
+async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
   const rootDir = await gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
 
@@ -90,7 +90,7 @@ async function getConfig(props: BootstrapProps): Promise<NewCommandConfig> {
   return config;
 }
 
-export const newCdk = async (props: BootstrapProps): CliCommandResponse => {
+export const newCdk = async (props: NewCdkProps): CliCommandResponse => {
   console.log("Starting CDK generator");
 
   const config = await getConfig(props);
