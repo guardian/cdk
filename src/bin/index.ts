@@ -34,11 +34,13 @@ const parseCommandLineArguments = () => {
           .option("profile", {
             type: "string",
             description: "AWS profile",
+            demandOption: true,
           })
           .option("dry-run", {
             type: "boolean",
             description: "If set, AWS stack will not be created but the template will be printed to stdout.",
           })
+          .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
       )
       .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready", (yargs) =>
         yargs

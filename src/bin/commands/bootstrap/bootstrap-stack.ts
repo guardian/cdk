@@ -1,11 +1,11 @@
 import { readFileSync } from "fs";
-import { stdin, stdout } from "process";
-import { createInterface } from "readline";
 import { StringParameter } from "@aws-cdk/aws-ssm";
 import { App } from "@aws-cdk/core";
 import AWS from "aws-sdk";
 import type { CreateStackInput } from "aws-sdk/clients/cloudformation";
 import chalk from "chalk";
+import { prompt } from "inquirer";
+import type { Question } from "inquirer";
 import type { SsmParameterPath } from "../../../constants/ssm-parameter-paths";
 import { GuStack } from "../../../constructs/core";
 import type { GuStackProps } from "../../../constructs/core";
@@ -38,24 +38,48 @@ class AccountBootstrap extends GuStack {
 }
 
 export const accountBootstrapCfn = async (parameters: SsmParameterPath[]): Promise<string> => {
-  const stack = await ask(
-    "Enter a Guardian stack, used to tag resources (e.g. 'frontend' - typically the same as your Janus profile)\n >> "
-  );
+  // Inquirer interprets '.' in question names as a special character, so let's
+  // replace it.
+  const safeName = (name: string): string => name.replaceAll(".", "-");
 
-  console.log("Next, we will create some SSM parameters, which are used by @guardian/cdk patterns and constructs.");
-  console.log();
+  const stackQ: Question = {
+    type: "string",
+    name: "stack",
+    message:
+      "Enter a Guardian stack, used to tag resources (e.g. 'frontend' - typically the same as your Janus profile)",
+  };
 
-  const populatedParameters = await mapInOrder(parameters, async (p) => {
-    const answer = await ask(
-      `Path: ${chalk.bold(p.path)}\nDescription: ${p.description}\n${
-        p.namingPattern ? `Naming convention: ${p.namingPattern}\n` : ""
-      }Set *value* of this SSM parameter to >> `
-    );
-    return { value: answer, ...p };
+  const paramQuestions: Question[] = parameters.map((param) => {
+    return {
+      type: "string",
+      name: safeName(param.path),
+      message: `Set param ${param.path} to`,
+    };
   });
 
+  console.log(
+    chalk.green(
+      `@guardian/cdk Bootstrap will create a Cloudformation stack containing various resources used by library patterns and constructs.\n`
+    )
+  );
+
+  console.log(
+    chalk.green(
+      `For documentation on @guardian/cdk SSM Parameters see: ${chalk.underline(
+        "https://github.com/guardian/cdk/blob/main/src/constants/ssm-parameter-paths.ts#L9"
+      )}.\n`
+    )
+  );
+
+  const questions = [stackQ].concat(paramQuestions);
+  const answers = await prompt(questions);
+
+  console.log(JSON.stringify(answers));
+
+  const populatedParameters = parameters.map((param) => ({ value: answers[safeName(param.path)] as string, ...param }));
+
   const app = new App();
-  new AccountBootstrap(app, "CDKBoostrap", { stack, parameters: populatedParameters });
+  new AccountBootstrap(app, "CDKBoostrap", { stack: answers["stack"] as string, parameters: populatedParameters });
 
   const assembly = app.synth();
   const tplFile = assembly.stacks[0].templateFullPath; // Cloud assemblies can contain multiple stacks but in this case we know there is only one.
@@ -87,29 +111,4 @@ export const createBootstrapStack = (
 
       return res.StackId ?? "STACK ID UNDEFINED";
     });
-};
-
-const ask = async (question: string): Promise<string> => {
-  const rl = createInterface(stdin, stdout);
-  const answer = new Promise<string>((resolve) => {
-    rl.question(question, (response) => {
-      rl.close();
-      console.log();
-      resolve(response);
-    });
-  });
-
-  return answer;
-};
-
-const mapInOrder = <A, B>(seq: A[], fn: (item: A) => Promise<B>): Promise<B[]> => {
-  const loop = (seq: A[], acc: B[]): Promise<B[]> => {
-    if (seq.length < 1) {
-      return Promise.resolve(acc);
-    }
-
-    return fn(seq[0]).then((output) => loop(seq.slice(1), acc.concat(output)));
-  };
-
-  return loop(seq, []);
 };
