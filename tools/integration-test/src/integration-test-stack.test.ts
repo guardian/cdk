@@ -6,7 +6,7 @@ import { IntegrationTestStack } from "./integration-test-stack";
 describe("The Cdk stack", () => {
   it("matches the snapshot", () => {
     const app = new App();
-    const stack = new IntegrationTestStack(app, "cdk", { stack: "integration-test" });
+    const stack = new IntegrationTestStack(app, "cdk", { stack: "integration-test", stage: "PROD" });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });
