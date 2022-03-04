@@ -67,15 +67,6 @@ export interface Alarms {
  * monitoringConfiguration: { noMonitoring: true }
  * ```
  *
- * To configure your scaling policies for AutoScalingGroups, use the `scaling` prop. For example:
- * ```typescript
- * // other props
- * scaling: {
- *   CODE: { minimumInstances: 3 },
- *   PROD: { minimumInstances: 5, maximumInstances: 12 }
- * }
- * ```
- *
  * To enable access logging for your load balancer, you can specify the prefix to write the logs to.
  * The S3 bucket used to hold these access logs must be specified in SSM at `/account/services/access-logging/bucket`
  * You must specify a region in your stack declaration if you are to use this prop, as specified here:
@@ -92,8 +83,7 @@ export interface Alarms {
  *
  * If you would like to enable access logging at the root of the S3 bucket (ie without a prefix), you can omit the prefix
  * For example:
- * ```
- *  * ```typescript
+ * ```typescript
  * {
  *   // other props
  *   accessLogging: {
@@ -146,14 +136,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *   access: { scope: AccessScope.PUBLIC },
  *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
  *   certificateProps:{
- *     [Stage.CODE]: {
- *       domainName: "code-guardian.com",
- *       hostedZoneId: "id123",
- *     },
- *     [Stage.PROD]: {
- *       domainName: "prod-guardian.com",
- *       hostedZoneId: "id124",
- *     },
+ *     domainName: "prod-guardian.com",
  *   },
  *   monitoringConfiguration: {
  *     snsTopicName: "alerts-topic-for-my-team",
@@ -182,14 +165,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *   },
  *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
  *   certificateProps:{
- *     [Stage.CODE]: {
- *       domainName: "code-guardian.com",
- *       hostedZoneId: "id123",
- *     },
- *     [Stage.PROD]: {
- *       domainName: "prod-guardian.com",
- *       hostedZoneId: "id124",
- *     },
+ *     domainName: "prod-guardian.com",
  *   },
  *   monitoringConfiguration: {
  *     snsTopicName: "alerts-topic-for-my-team",
