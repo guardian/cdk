@@ -1,5 +1,5 @@
-import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
-import type { LambdaRestApiProps } from "@aws-cdk/aws-apigateway";
+import type { LambdaRestApiProps } from "aws-cdk-lib/aws-apigateway";
+import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";

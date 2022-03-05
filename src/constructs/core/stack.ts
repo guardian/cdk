@@ -1,6 +1,6 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import { App, Stack, Tags } from "@aws-cdk/core";
-import type { StackProps } from "@aws-cdk/core";
+import type { StackProps } from "aws-cdk-lib";
+import { App, Stack, Tags } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import execa from "execa";
 import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
@@ -165,6 +165,6 @@ export class GuStackForStackSetInstance extends GuStack {
   }
 
   get cfnJson(): string {
-    return JSON.stringify(SynthUtils.toCloudFormation(this), null, 2);
+    return JSON.stringify(Template.fromStack(this).toJSON(), null, 2);
   }
 }

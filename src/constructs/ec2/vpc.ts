@@ -1,5 +1,5 @@
-import { Subnet, Vpc } from "@aws-cdk/aws-ec2";
-import type { ISubnet, IVpc, VpcAttributes } from "@aws-cdk/aws-ec2";
+import type { ISubnet, IVpc, VpcAttributes } from "aws-cdk-lib/aws-ec2";
+import { Subnet, Vpc } from "aws-cdk-lib/aws-ec2";
 import { GuSubnetListParameter, GuVpcParameter } from "../core";
 import type { GuStack } from "../core";
 

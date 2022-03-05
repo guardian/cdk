@@ -1,8 +1,7 @@
-import type { Duration } from "@aws-cdk/core";
-import { CfnResource } from "@aws-cdk/core";
-import type { GuDomainName } from "../../types/domain-names";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
+import type { Duration } from "aws-cdk-lib";
+import { CfnResource } from "aws-cdk-lib";
+import type { GuDomainName } from "../../types";
+import type { AppIdentity, GuStack } from "../core";
 
 export enum RecordType {
   CNAME = "CNAME",

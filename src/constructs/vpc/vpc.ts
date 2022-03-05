@@ -1,6 +1,6 @@
-import type { VpcProps } from "@aws-cdk/aws-ec2";
-import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "@aws-cdk/aws-ec2";
-import { StringListParameter, StringParameter } from "@aws-cdk/aws-ssm";
+import type { VpcProps } from "aws-cdk-lib/aws-ec2";
+import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
+import { StringListParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { VPC_SSM_PARAMETER_PREFIX } from "../../constants";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuMigratingResource, GuStack } from "../core";

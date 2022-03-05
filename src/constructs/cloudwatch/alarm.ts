@@ -1,10 +1,9 @@
-import { Alarm } from "@aws-cdk/aws-cloudwatch";
-import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
-import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
-import { Topic } from "@aws-cdk/aws-sns";
-import type { ITopic } from "@aws-cdk/aws-sns";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
+import type { AlarmProps } from "aws-cdk-lib/aws-cloudwatch";
+import { Alarm } from "aws-cdk-lib/aws-cloudwatch";
+import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
+import type { ITopic } from "aws-cdk-lib/aws-sns";
+import { Topic } from "aws-cdk-lib/aws-sns";
+import type { AppIdentity, GuStack } from "../core";
 
 export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;

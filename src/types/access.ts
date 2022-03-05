@@ -1,6 +1,6 @@
-import type { IPeer } from "@aws-cdk/aws-ec2";
-import { Peer } from "@aws-cdk/aws-ec2";
-import { AccessScope } from "../constants/access";
+import type { IPeer } from "aws-cdk-lib/aws-ec2";
+import { Peer } from "aws-cdk-lib/aws-ec2";
+import { AccessScope } from "../constants";
 
 export interface Access {
   scope: AccessScope;

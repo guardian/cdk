@@ -1,5 +1,5 @@
-import { ComparisonOperator, MathExpression, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
+import { ComparisonOperator, MathExpression, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import type { GuStack } from "../core";
 import type { GuLambdaFunction } from "../lambda";
 import { GuAlarm } from "./alarm";

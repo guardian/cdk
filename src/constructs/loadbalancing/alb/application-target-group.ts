@@ -1,11 +1,9 @@
-import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { ApplicationTargetGroupProps, HealthCheck } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Annotations, Duration } from "@aws-cdk/core";
+import { Annotations, Duration } from "aws-cdk-lib";
+import type { ApplicationTargetGroupProps, HealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
-import type { GuMigratingResource } from "../../core/migrating";
+import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 
 export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity, GuMigratingResource {}
 

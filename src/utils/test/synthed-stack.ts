@@ -1,20 +1,8 @@
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
+import type { Resource, Template as TemplateType } from "aws-cdk-lib/assertions/lib/private/template";
 import type { GuStack } from "../../constructs/core";
 
-export interface Parameter {
-  Type: string;
-  Description: string;
-  Default?: string | number;
-  AllowedValues?: Array<string | number>;
-}
-
-export type ResourceProperty = Record<string, unknown>;
-export type Resource = Record<string, { Type: string; Properties: ResourceProperty; UpdatePolicy?: unknown }>;
-
-export interface SynthedStack {
-  Parameters: Record<string, Parameter>;
-  Resources: Resource;
-}
+export type SynthedStack = TemplateType;
 
 /**
  * A helper function to find a resource of a particular type and logicalId within a stack.
@@ -27,13 +15,14 @@ export const findResourceByTypeAndLogicalId = (
   stack: GuStack,
   resourceType: string,
   logicalIdPattern: string | RegExp
-): Resource | undefined => {
-  const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+): Record<string, Resource> | undefined => {
+  const template = Template.fromStack(stack);
 
-  const match = Object.entries(json.Resources).find(([key, { Type }]) => {
+  const typeMatches = template.findResources(resourceType) as Record<string, Resource>;
+
+  const match = Object.entries(typeMatches).find(([key, resource]) => {
     const logicalIdMatch = logicalIdPattern instanceof RegExp ? logicalIdPattern.test(key) : key === logicalIdPattern;
-    const typeMatch = Type === resourceType;
-    return logicalIdMatch && typeMatch;
+    return logicalIdMatch && resource;
   });
 
   if (match) {

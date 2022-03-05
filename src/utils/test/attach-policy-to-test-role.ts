@@ -1,7 +1,7 @@
-import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import type { Policy } from "@aws-cdk/aws-iam";
-import { Tags } from "@aws-cdk/core";
-import type { Stack } from "@aws-cdk/core";
+import type { Stack } from "aws-cdk-lib";
+import { Tags } from "aws-cdk-lib";
+import type { Policy } from "aws-cdk-lib/aws-iam";
+import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 
 // IAM Policies need to be attached to a role, group or user to be created in a stack
 export const attachPolicyToTestRole = (stack: Stack, policy: Policy, id: string = "TestRole"): void => {

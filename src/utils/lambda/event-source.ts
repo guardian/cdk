@@ -1,6 +1,6 @@
-import type { IEventSourceDlq } from "@aws-cdk/aws-lambda";
-import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
+import type { IEventSourceDlq } from "aws-cdk-lib/aws-lambda";
+import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
 
 export type StreamProcessingProps = Omit<
   KinesisEventSourceProps,

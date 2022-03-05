@@ -1,11 +1,6 @@
-import "@aws-cdk/assert/jest";
-import { HaveResourceAssertion } from "@aws-cdk/assert";
-import type { JestFriendlyAssertion, StackInspector } from "@aws-cdk/assert";
-import { expect as awsExpect } from "@aws-cdk/assert/lib/expect";
-import { TagKeys } from "../../constants/tag-keys";
-import { TrackingTag } from "../../constants/tracking-tag";
-import type { GuStack } from "../../constructs/core";
-import type { AppIdentity } from "../../constructs/core/identity";
+import { Template } from "aws-cdk-lib/assertions";
+import { TagKeys, TrackingTag } from "../../constants";
+import type { AppIdentity, GuStack } from "../../constructs/core";
 import { findResourceByTypeAndLogicalId } from "./synthed-stack";
 
 interface Tag {
@@ -95,33 +90,20 @@ expect.extend({
       });
     }
 
-    // This comes from aws/aws-cdk
-    const assertion = new HaveResourceAssertion(resourceType, {
+    const template = Template.fromStack(stack);
+
+    const result = template.findResources(resourceType, {
       ...props?.resourceProperties,
       Tags: sortTagsByKey(Array.from(tagMap.values())),
     });
 
-    return applyAssertion(assertion, stack);
+    const resourceFound = Object.keys(result).length > 0;
+
+    return resourceFound
+      ? { pass: true, message: () => "" }
+      : { pass: false, message: () => `No ${resourceType} resource found with standard Guardian tags` };
   },
 });
-
-// Copied from aws/aws-cdk
-// See: https://github.com/aws/aws-cdk/blob/063ddc7315954a2104ac7aa4cb98f96239b8dd1e/packages/%40aws-cdk/assert-internal/jest.ts#L93-L107
-function applyAssertion(assertion: JestFriendlyAssertion<StackInspector>, actual: GuStack) {
-  const inspector = awsExpect(actual);
-  const pass = assertion.assertUsing(inspector);
-  if (pass) {
-    return {
-      pass,
-      message: () => "Not " + assertion.generateErrorMessage(),
-    };
-  } else {
-    return {
-      pass,
-      message: () => assertion.generateErrorMessage(),
-    };
-  }
-}
 
 function sortTagsByKey(tags: Tag[]): Tag[] {
   return [...tags].sort((first, second) => {

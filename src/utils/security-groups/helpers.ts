@@ -1,5 +1,5 @@
-import { Peer } from "@aws-cdk/aws-ec2";
-import type { Port } from "@aws-cdk/aws-ec2";
+import type { Port } from "aws-cdk-lib/aws-ec2";
+import { Peer } from "aws-cdk-lib/aws-ec2";
 import type { SecurityGroupAccessRule } from "../../constructs/ec2";
 
 export const transformToSecurityGroupAccessRule = (

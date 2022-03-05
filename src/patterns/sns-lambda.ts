@@ -1,10 +1,9 @@
-import { SnsEventSource } from "@aws-cdk/aws-lambda-event-sources";
-import { Topic } from "@aws-cdk/aws-sns";
-import { CfnOutput } from "@aws-cdk/core";
+import { CfnOutput } from "aws-cdk-lib";
+import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { Topic } from "aws-cdk-lib/aws-sns";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import type { GuStack } from "../constructs/core";
-import { AppIdentity } from "../constructs/core/identity";
-import type { GuMigratingResource } from "../constructs/core/migrating";
+import { AppIdentity } from "../constructs/core";
+import type { GuMigratingResource, GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";

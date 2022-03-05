@@ -1,8 +1,7 @@
-import { Role } from "@aws-cdk/aws-iam";
-import type { RoleProps } from "@aws-cdk/aws-iam";
+import type { RoleProps } from "aws-cdk-lib/aws-iam";
+import { Role } from "aws-cdk-lib/aws-iam";
 import { GuMigratableConstruct } from "../../../utils/mixin";
-import type { GuStack } from "../../core";
-import type { GuMigratingResource } from "../../core/migrating";
+import type { GuMigratingResource, GuStack } from "../../core";
 
 export interface GuRoleProps extends RoleProps, GuMigratingResource {}
 
