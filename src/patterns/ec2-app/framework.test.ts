@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
@@ -22,7 +22,7 @@ describe("Framework level EC2 app patterns", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroupIngress", {
       FromPort: 3000,
     });
   });
@@ -44,7 +44,7 @@ describe("Framework level EC2 app patterns", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroupIngress", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroupIngress", {
       FromPort: 9000,
     });
   });

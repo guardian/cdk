@@ -1,5 +1,5 @@
-import "@aws-cdk/assert/jest";
 import { Annotations, Duration } from "aws-cdk-lib";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "./lambda";
@@ -35,7 +35,7 @@ describe("The GuLambdaFunction class", () => {
     });
 
     expect(error).toHaveBeenCalledTimes(0);
-    expect(stack).toHaveResource("AWS::Lambda::Function", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       Runtime: "nodejs",
     });
   });
@@ -50,7 +50,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::Lambda::Function", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       Code: {
         S3Bucket: {
           Ref: "DistributionBucketName",
@@ -70,7 +70,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).not.toHaveResource("AWS::Events::Rule");
+    Template.fromStack(stack).resourceCountIs("AWS::Events::Rule", 0);
   });
 
   it("should add an alarm if errorPercentageMonitoring is passed in", () => {
@@ -87,7 +87,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm"); // The shape of this alarm is tested via lambda-alarms.test.ts
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1); // The shape of this alarm is tested via lambda-alarms.test.ts
   });
 
   it("should give the function read permissions to the required bucket", () => {
@@ -100,9 +100,9 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResourceLike("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
-        Statement: [
+        Statement: Match.arrayWith([
           {
             Action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
             Effect: "Allow",
@@ -140,7 +140,7 @@ describe("The GuLambdaFunction class", () => {
               },
             ],
           },
-        ],
+        ]),
         Version: "2012-10-17",
       },
     });
@@ -157,7 +157,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::Lambda::Function", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       MemorySize: 2048,
     });
   });
@@ -172,7 +172,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::Lambda::Function", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       MemorySize: 1024,
     });
   });
@@ -188,7 +188,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::Lambda::Function", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       Timeout: 60,
     });
   });
@@ -203,7 +203,7 @@ describe("The GuLambdaFunction class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::Lambda::Function", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       Timeout: 30,
     });
   });

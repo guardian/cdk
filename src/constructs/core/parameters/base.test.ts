@@ -1,7 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
 import { GuArnParameter, GuParameter, GuStringParameter } from "./base";
 
 describe("The GuParameter class", () => {
@@ -10,9 +8,7 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { type: "Boolean" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
+    Template.fromStack(stack).hasParameter("Parameter", {
       Type: "Boolean",
     });
   });
@@ -22,9 +18,7 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
+    Template.fromStack(stack).hasParameter("Parameter", {
       Default: "/$STAGE/$STACK/$APP/parameter",
       Type: "AWS::SSM::Parameter::Value<Boolean>",
     });
@@ -35,9 +29,7 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { fromSSM: true });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
+    Template.fromStack(stack).hasParameter("Parameter", {
       Default: "/$STAGE/$STACK/$APP/parameter",
       Type: "AWS::SSM::Parameter::Value<String>",
     });
@@ -48,9 +40,7 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true, description: "This is a test" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
+    Template.fromStack(stack).hasParameter("Parameter", {
       Default: "/$STAGE/$STACK/$APP/parameter",
       Type: "AWS::SSM::Parameter::Value<Boolean>",
       Description: "This is a test",
@@ -62,10 +52,9 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { fromSSM: true });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toHaveProperty("Default");
-    expect(json.Parameters.Parameter.Default).toEqual("/$STAGE/$STACK/$APP/parameter");
+    Template.fromStack(stack).hasParameter("Parameter", {
+      Default: "/$STAGE/$STACK/$APP/parameter",
+    });
   });
 
   it("default SSM path gets overridden by prop", () => {
@@ -73,9 +62,9 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { fromSSM: true, default: "/FOO/BAR" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter.Default).toEqual("/FOO/BAR");
+    Template.fromStack(stack).hasParameter("Parameter", {
+      Default: "/FOO/BAR",
+    });
   });
 
   it("when not from SSM, has no default", () => {
@@ -83,9 +72,9 @@ describe("The GuParameter class", () => {
 
     new GuParameter(stack, "Parameter", { fromSSM: false });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).not.toHaveProperty("Default");
+    Template.fromStack(stack).hasParameter("Parameter", {
+      Default: Match.absent(),
+    });
   });
 });
 
@@ -95,9 +84,7 @@ describe("The GuStringParameter class", () => {
 
     new GuStringParameter(stack, "Parameter", { description: "This is a test" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
+    Template.fromStack(stack).hasParameter("Parameter", {
       Type: "String",
       Description: "This is a test",
     });
@@ -110,9 +97,7 @@ describe("The GuArnParameter class", () => {
 
     new GuArnParameter(stack, "Parameter", { description: "This is a test" });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.Parameter).toEqual({
+    Template.fromStack(stack).hasParameter("Parameter", {
       Type: "String",
       Description: "This is a test",
       AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",

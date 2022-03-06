@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
 import { Duration } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuCertificate } from "../constructs/acm";
 import type { NoMonitoring } from "../constructs/cloudwatch";
@@ -29,7 +28,7 @@ describe("The GuApiLambda pattern", () => {
         },
       ],
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create an alarm if monitoring configuration is provided", () => {
@@ -54,7 +53,7 @@ describe("The GuApiLambda pattern", () => {
         },
       ],
     });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
   it("should allow us to link a domain name to a LambdaRestApi", () => {
@@ -96,6 +95,6 @@ describe("The GuApiLambda pattern", () => {
       domainName: "code.theguardian.com",
       resourceRecord: domain.domainNameAliasDomainName,
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

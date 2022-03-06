@@ -1,9 +1,8 @@
-import "../test/jest";
-import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { GuStack } from "../../constructs/core";
 import { GuMigratingResource } from "../../constructs/core";
-import { simpleGuStackForTesting } from "../test";
+import { GuTemplate, simpleGuStackForTesting } from "../test";
 import { GuMigratableConstruct } from "./migratable-construct";
 
 interface TestGuMigratableConstructProps extends BucketProps, GuMigratingResource {}
@@ -26,7 +25,7 @@ describe("The GuMigratableConstruct mixin", () => {
     new TestGuMigratableConstruct(stack, "MyBucket", { existingLogicalId: { logicalId: "Hello", reason: "testing" } });
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", "Hello");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", "Hello");
   });
 
   it("should call GuMigratingResource.setLogicalId when the stack is not being migrated and existingLogicalId is set", () => {
@@ -34,7 +33,7 @@ describe("The GuMigratableConstruct mixin", () => {
     new TestGuMigratableConstruct(stack, "MyBucket", { existingLogicalId: { logicalId: "Hello", reason: "testing" } });
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", /^MyBucket.+/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", /^MyBucket.+/);
   });
 
   it("should call GuMigratingResource.setLogicalId even when existingLogicalId is undefined", () => {
@@ -42,6 +41,6 @@ describe("The GuMigratableConstruct mixin", () => {
     new TestGuMigratableConstruct(stack, "MyBucket", {});
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", /^MyBucket.+/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", /^MyBucket.+/);
   });
 });

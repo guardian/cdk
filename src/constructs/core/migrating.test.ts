@@ -1,11 +1,8 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
 import { Annotations } from "aws-cdk-lib";
-import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { GuStatefulConstruct } from "../../types";
-import { simpleGuStackForTesting } from "../../utils/test";
-import type { SynthedStack } from "../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuMigratingResource } from "./migrating";
 import type { GuStack } from "./stack";
 
@@ -41,11 +38,7 @@ describe("GuMigratingResource", () => {
     expect(warn).toHaveBeenCalledTimes(0);
     expect(info).toHaveBeenCalledTimes(0);
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    const resourceKeys = Object.keys(json.Resources);
-
-    expect(resourceKeys).toHaveLength(1);
-    expect(resourceKeys[0]).toMatch(/^MyBucket[A-Z0-9]+$/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", /^MyBucket[A-Z0-9]+$/);
   });
 
   test("Keeping a resource's logicalId when migrating a stack", () => {
@@ -59,8 +52,7 @@ describe("GuMigratingResource", () => {
     expect(warn).toHaveBeenCalledTimes(0);
     expect(info).toHaveBeenCalledTimes(0);
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("my-pre-existing-bucket");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", "my-pre-existing-bucket");
   });
 
   test("Creating a construct in a migrating stack, w/out setting existingLogicalId", () => {
@@ -72,11 +64,7 @@ describe("GuMigratingResource", () => {
     expect(info).toHaveBeenCalledTimes(0);
     expect(warn).toHaveBeenCalledTimes(0);
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    const resourceKeys = Object.keys(json.Resources);
-
-    expect(resourceKeys).toHaveLength(1);
-    expect(resourceKeys[0]).toMatch(/^MyBucket[A-Z0-9]+$/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", /^MyBucket[A-Z0-9]+$/);
   });
 
   test("Specifying a construct's existingLogicalId in a new stack", () => {
@@ -93,11 +81,7 @@ describe("GuMigratingResource", () => {
       "GuStack has 'migratedFromCloudFormation' set to false. MyBucket has an 'existingLogicalId' set to my-pre-existing-bucket. This will have no effect - the logicalId will be auto-generated. Set 'migratedFromCloudFormation' to true for 'existingLogicalId' to be observed."
     );
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    const resourceKeys = Object.keys(json.Resources);
-
-    expect(resourceKeys).toHaveLength(1);
-    expect(resourceKeys[0]).toMatch(/^MyBucket[A-Z0-9]+$/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", /^MyBucket[A-Z0-9]+$/);
   });
 
   test("Creating a stateful construct in a migrating stack, w/out setting existingLogicalId", () => {

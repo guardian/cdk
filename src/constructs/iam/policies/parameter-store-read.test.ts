@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
@@ -10,7 +10,7 @@ describe("ParameterStoreReadPolicy", () => {
 
     attachPolicyToTestRole(stack, policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "parameter-store-read-policy",
       PolicyDocument: {
         Version: "2012-10-17",

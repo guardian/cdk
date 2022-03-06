@@ -1,12 +1,10 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import type { IVpc } from "aws-cdk-lib/aws-ec2";
 import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuEcsTask } from "./ecs-task";
-import "../../utils/test/jest";
 
 const makeVpc = (stack: GuStack) =>
   Vpc.fromVpcAttributes(stack, "VPC", {
@@ -35,7 +33,9 @@ describe("The GuEcsTask pattern", () => {
       app: "ecs-test",
     });
 
-    expect(stack).toHaveResourceLike("AWS::ECS::TaskDefinition", { ContainerDefinitions: [{ Image: "node:10" }] });
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      ContainerDefinitions: [{ Image: "node:10" }],
+    });
   });
 
   const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc) => {
@@ -59,7 +59,7 @@ describe("The GuEcsTask pattern", () => {
 
     generateComplexStack(stack, "ecs-test", makeVpc(stack));
 
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should support having more than one scheduled task in the same stack", () => {
@@ -70,7 +70,9 @@ describe("The GuEcsTask pattern", () => {
     generateComplexStack(stack, "ecs-test2", vpc);
     generateComplexStack(stack, "ecs-test", vpc);
 
-    expect(stack).toHaveGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test" } });
-    expect(stack).toHaveGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test2" } });
+    const template = GuTemplate.fromStack(stack);
+
+    template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test" } });
+    template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test2" } });
   });
 });

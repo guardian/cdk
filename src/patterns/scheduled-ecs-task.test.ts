@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import "../utils/test/jest";
 import { Duration } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import type { GuStack } from "../constructs/core";
@@ -27,6 +26,6 @@ describe("The GuScheduledEcsTask pattern", () => {
       app: "ecs-test",
     });
 
-    expect(stack).toHaveResourceLike("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
+    Template.fromStack(stack).hasResourceProperties("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
   });
 });

@@ -1,9 +1,8 @@
-import "@aws-cdk/assert/jest";
-import "../../utils/test/jest";
 import { Stack } from "aws-cdk-lib";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
@@ -29,7 +28,7 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::RDS::DBInstance", {
+    Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
       DBInstanceClass: "db.t3.small",
     });
   });
@@ -37,7 +36,7 @@ describe("The GuDatabaseInstance class", () => {
   it("sets the parameter group if passed in", () => {
     const stack = simpleGuStackForTesting();
 
-    const parameterGroup = new ParameterGroup(stack, "ParameterGroup", {
+    const parameterGroup = new ParameterGroup(stack, "MyParameterGroup", {
       parameters: { max_connections: "100" },
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
@@ -54,9 +53,9 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::RDS::DBInstance", {
+    Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
       DBParameterGroupName: {
-        Ref: "ParameterGroup5E32DECB",
+        Ref: Match.stringLikeRegexp("MyParameterGroup[A-Z0-9]+"),
       },
     });
   });
@@ -73,21 +72,24 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::RDS::DBInstance", {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties("AWS::RDS::DBInstance", {
       DBParameterGroupName: {
-        Ref: "DatabaseInstanceTestingParameterGroup0F38B815",
+        Ref: Match.stringLikeRegexp("DatabaseInstanceTestingParameterGroup[A-Z0-9]+"),
       },
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::RDS::DBParameterGroup", {
-      appIdentity: { app: "testing" },
-      resourceProperties: {
-        Description: "Parameter group for postgres11",
-        Family: "postgres11",
-        Parameters: {
-          max_connections: "100",
-        },
+    template.hasResourceProperties("AWS::RDS::DBParameterGroup", {
+      Description: "Parameter group for postgres11",
+      Family: "postgres11",
+      Parameters: {
+        max_connections: "100",
       },
+    });
+
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::RDS::DBParameterGroup", {
+      appIdentity: { app: "testing" },
     });
   });
 
@@ -103,7 +105,7 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::RDS::DBInstance", "MyDb");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::RDS::DBInstance", "MyDb");
   });
 
   test("auto-generates the logicalId by default", () => {
@@ -117,8 +119,10 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::RDS::DBInstance", /^DatabaseInstance.+$/);
-    expect(stack).toHaveGuTaggedResource("AWS::RDS::DBInstance", { appIdentity: { app: "testing" } });
+    const template = GuTemplate.fromStack(stack);
+
+    template.hasResourceWithLogicalId("AWS::RDS::DBInstance", /^DatabaseInstance.+$/);
+    template.hasGuTaggedResource("AWS::RDS::DBInstance", { appIdentity: { app: "testing" } });
   });
 
   test("sets the deletion protection value to true by default", () => {
@@ -132,7 +136,7 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::RDS::DBInstance", {
+    Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
       DeletionProtection: true,
     });
   });

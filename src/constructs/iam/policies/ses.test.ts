@@ -1,5 +1,4 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuSESSenderPolicy } from "./ses";
 
@@ -8,7 +7,7 @@ describe("GuSESSenderPolicy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack));
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -43,6 +42,6 @@ describe("GuSESSenderPolicy", () => {
   it("should add a parameter to the stack for the sending email address", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack));
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

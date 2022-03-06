@@ -1,5 +1,5 @@
-import "@aws-cdk/assert/jest";
 import { Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuPrivateConfigBucketParameter } from "../core";
@@ -36,7 +36,7 @@ describe("GuUserData", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
         "Fn::Base64": {
           "Fn::Join": [
@@ -80,7 +80,7 @@ describe("GuUserData", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
         "Fn::Base64": {
           "Fn::Join": [

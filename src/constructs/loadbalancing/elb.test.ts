@@ -1,10 +1,7 @@
-import "@aws-cdk/assert/jest";
-import "../../utils/test/jest";
 import { Stack } from "aws-cdk-lib";
-import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
-import { simpleGuStackForTesting } from "../../utils/test";
-import type { SynthedStack } from "../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core";
 import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
 
@@ -26,14 +23,14 @@ describe("The GuClassicLoadBalancer class", () => {
       existingLogicalId: { logicalId: "MyCLB", reason: "testing" },
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", "MyCLB");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", "MyCLB");
   });
 
   test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancing::LoadBalancer",
       /^ClassicLoadBalancerTesting.+$/
     );
@@ -43,7 +40,7 @@ describe("The GuClassicLoadBalancer class", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveGuTaggedResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancing::LoadBalancer", {
       appIdentity: { app: "testing" },
     });
   });
@@ -61,7 +58,7 @@ describe("The GuClassicLoadBalancer class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
       AccessLoggingPolicy: {
         EmitInterval: 5,
         Enabled: true,
@@ -76,7 +73,7 @@ describe("The GuClassicLoadBalancer class", () => {
       vpc,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
       HealthCheck: {
         HealthyThreshold: "2",
         Interval: "30",
@@ -97,7 +94,7 @@ describe("The GuClassicLoadBalancer class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
       HealthCheck: {
         HealthyThreshold: "2",
         Interval: "30",
@@ -126,7 +123,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       vpc,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
       Listeners: [
         {
           InstancePort: "9000",
@@ -148,9 +145,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       vpc,
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters.CertificateARN).toEqual({
+    Template.fromStack(stack).hasParameter("CertificateARN", {
       AllowedPattern: "arn:aws:[a-z0-9]*:[a-z0-9\\-]*:[0-9]{12}:.*",
       Description: "Certificate ARN for ELB",
       ConstraintDescription: "Must be a valid ARN, eg: arn:partition:service:region:account-id:resource-id",
@@ -168,7 +163,9 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
       Listeners: [
         {
           InstancePort: "9000",
@@ -180,9 +177,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       ],
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-    expect(json.Parameters).toBeUndefined();
+    expect(template.findParameters("*")).toMatchObject({});
   });
 
   test("merges any listener values provided", () => {
@@ -195,7 +190,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancing::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
       Listeners: [
         {
           InstancePort: "3000",
@@ -218,7 +213,9 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       removeScheme: true,
       existingLogicalId: { logicalId: "ClassicLoadBalancer", reason: "testing" },
     });
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.ClassicLoadBalancer.Properties)).not.toContain("Scheme");
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {
+      Scheme: Match.absent(),
+    });
   });
 });

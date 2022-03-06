@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import "../../../utils/test/jest";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { Template } from "aws-cdk-lib/assertions";
+import { attachPolicyToTestRole, GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuAllowPolicy, GuDenyPolicy } from "./base-policy";
 
 describe("GuAllowPolicy", () => {
@@ -14,7 +13,7 @@ describe("GuAllowPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -38,7 +37,7 @@ describe("GuAllowPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -62,7 +61,7 @@ describe("GuAllowPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", /^AllowS3GetObject.+/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", /^AllowS3GetObject.+/);
   });
 
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
@@ -76,7 +75,7 @@ describe("GuAllowPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", "MyAwesomeAllowPolicy");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", "MyAwesomeAllowPolicy");
   });
 });
 
@@ -91,7 +90,7 @@ describe("GuDenyPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -115,7 +114,7 @@ describe("GuDenyPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -139,7 +138,7 @@ describe("GuDenyPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", /^DenyS3GetObject.+/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", /^DenyS3GetObject.+/);
   });
 
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
@@ -153,6 +152,6 @@ describe("GuDenyPolicy", () => {
       })
     );
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Policy", "MyAwesomeDenyPolicy");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", "MyAwesomeDenyPolicy");
   });
 });

@@ -1,6 +1,5 @@
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
-import type { SynthedStack } from "../../utils/test";
 import { GuVpc, SubnetType } from "./vpc";
 
 describe("The GuVpc class", () => {
@@ -24,10 +23,10 @@ describe("The GuVpc class", () => {
 
       GuVpc.subnetsFromParameter(stack);
 
-      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-      expect(json.Parameters.PrivateSubnets.Default).toBe("/account/vpc/primary/subnets/private");
-      expect(json.Parameters.PrivateSubnets.Type).toBe("AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>");
+      Template.fromStack(stack).hasParameter("PrivateSubnets", {
+        Default: "/account/vpc/primary/subnets/private",
+        Type: "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+      });
     });
 
     test("adds a public subnets parameter if the type is public", () => {
@@ -35,10 +34,10 @@ describe("The GuVpc class", () => {
 
       GuVpc.subnetsFromParameter(stack, { type: SubnetType.PUBLIC });
 
-      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-      expect(json.Parameters.PublicSubnets.Default).toBe("/account/vpc/primary/subnets/public");
-      expect(json.Parameters.PublicSubnets.Type).toBe("AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>");
+      Template.fromStack(stack).hasParameter("PublicSubnets", {
+        Default: "/account/vpc/primary/subnets/public",
+        Type: "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+      });
     });
   });
 
@@ -58,10 +57,10 @@ describe("The GuVpc class", () => {
 
       GuVpc.fromIdParameter(stack, "Vpc");
 
-      const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-
-      expect(json.Parameters.VpcId.Default).toBe("/account/vpc/primary/id");
-      expect(json.Parameters.VpcId.Type).toBe("AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>");
+      Template.fromStack(stack).hasParameter("VpcId", {
+        Default: "/account/vpc/primary/id",
+        Type: "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
+      });
     });
   });
 });

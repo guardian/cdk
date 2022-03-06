@@ -1,11 +1,8 @@
-import "@aws-cdk/assert/jest";
-import "../../utils/test/jest";
 import { Stack } from "aws-cdk-lib";
-import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
-import type { Resource, SynthedStack } from "../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core";
 import { GuSecurityGroup } from "../ec2";
 import { GuAllowPolicy, GuInstanceRole } from "../iam";
@@ -36,12 +33,10 @@ describe("The GuAutoScalingGroup", () => {
     const stack = simpleGuStackForTesting();
     new GuAutoScalingGroup(stack, "MyAutoScalingGroup", defaultProps);
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
-      "AWS::AutoScaling::AutoScalingGroup",
-      /MyAutoScalingGroupTesting[A-Z0-9]+/
-    );
+    const template = GuTemplate.fromStack(stack);
 
-    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+    template.hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /MyAutoScalingGroupTesting[A-Z0-9]+/);
+    template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "testing" },
       propagateAtLaunch: true,
       additionalTags: [
@@ -59,15 +54,15 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const template = Template.fromStack(stack);
 
-    expect(json.Parameters["AMITesting"]).toEqual({
+    template.hasParameter("AMITesting", {
       Description:
         "Amazon Machine Image ID for the app testing. Use this in conjunction with AMIgo to keep AMIs up to date.",
       Type: "AWS::EC2::Image::Id",
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       ImageId: {
         Ref: "AMITesting",
       },
@@ -79,7 +74,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       InstanceType: "t3.small",
     });
   });
@@ -89,7 +84,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
         "Fn::Base64": "#!/bin/bash\nservice some-dependency start\nservice my-app start",
       },
@@ -110,10 +105,10 @@ describe("The GuAutoScalingGroup", () => {
       targetGroup: targetGroup,
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::AutoScalingGroup", {
       TargetGroupARNs: [
         {
-          Ref: "TargetGroupTesting29B71ABC",
+          Ref: Match.stringLikeRegexp("TargetGroupTesting[A-Z0-9]+"),
         },
       ],
     });
@@ -133,22 +128,22 @@ describe("The GuAutoScalingGroup", () => {
       additionalSecurityGroups: [securityGroup, securityGroup1, securityGroup2],
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       SecurityGroups: [
         {
-          "Fn::GetAtt": [`GuHttpsEgressSecurityGroup${app}89CDDA4B`, "GroupId"],
+          "Fn::GetAtt": [Match.stringLikeRegexp(`GuHttpsEgressSecurityGroup${app}[A-Z0-9]+`), "GroupId"],
         },
         {
           "Fn::GetAtt": ["WazuhSecurityGroup", "GroupId"],
         },
         {
-          "Fn::GetAtt": ["SecurityGroupTestingA32D34F9", "GroupId"], // auto-generated logicalId
+          "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroupTesting[A-Z0-9]+"), "GroupId"],
         },
         {
-          "Fn::GetAtt": ["SecurityGroup1TestingCA3A17A4", "GroupId"], // auto-generated logicalId
+          "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroup1Testing[A-Z0-9]+"), "GroupId"],
         },
         {
-          "Fn::GetAtt": ["SecurityGroup2Testing6436C75B", "GroupId"], // auto-generated logicalId
+          "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroup2Testing[A-Z0-9]+"), "GroupId"],
         },
       ],
     });
@@ -158,18 +153,11 @@ describe("The GuAutoScalingGroup", () => {
     const stack = simpleGuStackForTesting();
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", /AutoscalingGroup.+/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /AutoscalingGroup.+/);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the `toHaveResourceOfTypeAndLogicalId` line above confirms `asgResource` will not be `undefined`
-    const asgResource: Resource = findResourceByTypeAndLogicalId(
-      stack,
-      "AWS::AutoScaling::AutoScalingGroup",
-      /AutoscalingGroup.+/
-    )!;
-
-    // This is checking the properties of the ASG resource
-    // TODO improve the syntax
-    expect(Object.keys(Object.values(asgResource)[0])).not.toContain("UpdatePolicy");
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::AutoScalingGroup", {
+      UpdatePolicy: Match.absent(),
+    });
   });
 
   test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
@@ -179,14 +167,14 @@ describe("The GuAutoScalingGroup", () => {
       existingLogicalId: { logicalId: "MyASG", reason: "testing" },
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", "MyASG");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", "MyASG");
   });
 
   test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::AutoScaling::AutoScalingGroup", /^AutoscalingGroup.+$/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /^AutoscalingGroup.+$/);
   });
 
   test("has an instance role created by default with AssumeRole permissions", () => {
@@ -200,19 +188,18 @@ describe("The GuAutoScalingGroup", () => {
       minimumInstances: 1,
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::IAM::Role", {
-      appIdentity: { app: "TestApp" },
-      resourceProperties: {
-        AssumeRolePolicyDocument: {
-          Version: "2012-10-17",
-          Statement: [
-            {
-              Action: "sts:AssumeRole",
-              Effect: "Allow",
-              Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
-            },
-          ],
-        },
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::Role", { appIdentity: { app: "TestApp" } });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Role", {
+      AssumeRolePolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: "sts:AssumeRole",
+            Effect: "Allow",
+            Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
+          },
+        ],
       },
     });
   });
@@ -237,7 +224,9 @@ describe("The GuAutoScalingGroup", () => {
       minimumInstances: 1,
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Role", {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties("AWS::IAM::Role", {
       AssumeRolePolicyDocument: {
         Statement: [
           {
@@ -250,7 +239,7 @@ describe("The GuAutoScalingGroup", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    template.hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -275,7 +264,7 @@ describe("The GuAutoScalingGroup", () => {
       minimumInstances: 3,
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::AutoScalingGroup", {
       MinSize: "3",
       MaxSize: "6",
     });
@@ -293,7 +282,7 @@ describe("The GuAutoScalingGroup", () => {
       maximumInstances: 11,
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::AutoScalingGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::AutoScalingGroup", {
       MinSize: "2",
       MaxSize: "11",
     });

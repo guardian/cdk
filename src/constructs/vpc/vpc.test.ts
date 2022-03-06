@@ -1,6 +1,4 @@
-import "@aws-cdk/assert/jest";
-import "../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuVpc } from "./vpc";
 
@@ -8,29 +6,28 @@ describe("The GuVpc construct", () => {
   it("should match snapshot", () => {
     const stack = simpleGuStackForTesting({ stack: "test-stack" });
     new GuVpc(stack, "MyVpc");
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create VPC SSM parameters by default", () => {
     const stack = simpleGuStackForTesting({ stack: "test-stack" });
     new GuVpc(stack, "MyVpc", { ssmParameters: true });
-    expect(stack).toHaveResourceLike("AWS::SSM::Parameter", {
-      Name: "/account/vpc/primary/id",
-    });
 
-    expect(stack).toHaveResourceLike("AWS::SSM::Parameter", {
-      Name: "/account/vpc/primary/subnets/public",
-    });
+    const template = Template.fromStack(stack);
 
-    expect(stack).toHaveResourceLike("AWS::SSM::Parameter", {
-      Name: "/account/vpc/primary/subnets/private",
-    });
+    ["/account/vpc/primary/id", "/account/vpc/primary/subnets/public", "/account/vpc/primary/subnets/private"].forEach(
+      (p) => {
+        template.hasResourceProperties("AWS::SSM::Parameter", {
+          Name: p,
+        });
+      }
+    );
   });
 
   it("should not create VPC SSM parameters if set to false", () => {
     const stack = simpleGuStackForTesting({ stack: "test-stack" });
     new GuVpc(stack, "MyVpc", { ssmParameters: false });
 
-    expect(stack).toCountResources("AWS::SSM::Parameter", 0);
+    Template.fromStack(stack).resourceCountIs("AWS::SSM::Parameter", 0);
   });
 });

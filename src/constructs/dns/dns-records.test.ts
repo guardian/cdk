@@ -1,8 +1,6 @@
-import "@aws-cdk/assert/jest";
-import "../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
 import { Duration } from "aws-cdk-lib";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { Template } from "aws-cdk-lib/assertions";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuCname, GuDnsRecordSet, RecordType } from "./dns-records";
 
 describe("The GuDnsRecordSet construct", () => {
@@ -14,7 +12,7 @@ describe("The GuDnsRecordSet construct", () => {
       resourceRecords: ["apple.example.com"],
       ttl: Duration.hours(1),
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
   it("should use the exact logical id that is passed in", () => {
     const stack = simpleGuStackForTesting();
@@ -24,7 +22,7 @@ describe("The GuDnsRecordSet construct", () => {
       resourceRecords: ["apple.example.com"],
       ttl: Duration.hours(1),
     });
-    expect(stack).toHaveResourceOfTypeAndLogicalId("Guardian::DNS::RecordSet", "ThisExactLogicalId");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("Guardian::DNS::RecordSet", "ThisExactLogicalId");
   });
 
   it("should throw if a CNAME is created with multiple answers", () => {
@@ -52,6 +50,6 @@ describe("The GuCname construct", () => {
       resourceRecord: "apple.example.com",
       ttl: Duration.hours(1),
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
