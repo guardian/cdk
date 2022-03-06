@@ -1,12 +1,10 @@
-import "@aws-cdk/assert/jest";
-import "../../../utils/test/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuCertificate } from "../../acm";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
+import type { AppIdentity, GuStack } from "../../core";
 import { GuApplicationListener, GuHttpsApplicationListener } from "./application-listener";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 import { GuApplicationTargetGroup } from "./application-target-group";
@@ -49,7 +47,7 @@ describe("The GuApplicationListener class", () => {
       certificates: [{ certificateArn: "" }],
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    new GuTemplate(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::Listener",
       /ApplicationListenerTesting.+/
     );
@@ -66,7 +64,7 @@ describe("The GuApplicationListener class", () => {
       certificates: [{ certificateArn: "" }],
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", "AppListener");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::Listener", "AppListener");
   });
 
   test("auto-generates the logicalId by default", () => {
@@ -79,7 +77,7 @@ describe("The GuApplicationListener class", () => {
       certificates: [{ certificateArn: "" }],
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::Listener", /^ApplicationListener.+$/);
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::Listener", /^ApplicationListener.+$/);
   });
 
   test("sets default props", () => {
@@ -92,7 +90,7 @@ describe("The GuApplicationListener class", () => {
       certificates: [{ certificateArn: "" }],
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       Port: 443,
       Protocol: "HTTPS",
     });
@@ -109,7 +107,7 @@ describe("The GuApplicationListener class", () => {
       port: 80,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       Port: 80,
       Protocol: "HTTPS",
     });
@@ -125,7 +123,7 @@ describe("The GuApplicationListener class", () => {
       protocol: ApplicationProtocol.HTTP,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       Protocol: "HTTP",
     });
   });
@@ -142,7 +140,7 @@ describe("The GuHttpsApplicationListener class", () => {
       targetGroup: getAppTargetGroup(stack),
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    new GuTemplate(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::Listener",
       /^HttpsApplicationListenerTesting.+/
     );
@@ -158,7 +156,7 @@ describe("The GuHttpsApplicationListener class", () => {
       ...app,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       Port: 443,
       Protocol: "HTTPS",
       DefaultActions: [
@@ -181,7 +179,7 @@ describe("The GuHttpsApplicationListener class", () => {
       targetGroup: getAppTargetGroup(stack),
       ...app,
     });
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::Listener", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       Certificates: [
         {
           CertificateArn: {

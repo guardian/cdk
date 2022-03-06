@@ -1,14 +1,12 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import "@aws-cdk/assert/jest";
-import { StreamEncryption } from "@aws-cdk/aws-kinesis";
-import type { StreamProps } from "@aws-cdk/aws-kinesis";
-import { Runtime, StartingPosition } from "@aws-cdk/aws-lambda";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
+import { Match, Template } from "aws-cdk-lib/assertions";
+import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
+import { StreamEncryption } from "aws-cdk-lib/aws-kinesis";
+import { Runtime, StartingPosition } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { StreamRetry } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
-import { simpleGuStackForTesting } from "../utils/test";
-import type { SynthedStack } from "../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
 import { GuKinesisLambda } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {
@@ -29,7 +27,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
@@ -50,8 +48,8 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("pre-existing-kinesis-stream");
+
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
   });
 
   it("should not generate a new Kinesis stream if an external stream name is passed in", () => {
@@ -72,7 +70,9 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
+
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       EventSourceArn: {
         "Fn::Join": [
           "",
@@ -90,7 +90,7 @@ describe("The GuKinesisLambda pattern", () => {
         ],
       },
     });
-    expect(stack).not.toHaveResource("AWS::Kinesis::Stream");
+    template.resourceCountIs("AWS::Kinesis::Stream", 0);
   });
 
   it("should create an alarm if monitoring configuration is provided", () => {
@@ -112,7 +112,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
   it("should use managed encryption by default", () => {
@@ -132,7 +132,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::Kinesis::Stream", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Kinesis::Stream", {
       StreamEncryption: {
         EncryptionType: "KMS",
         KeyId: "alias/aws/kinesis",
@@ -160,11 +160,9 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).not.toHaveResource("AWS::Kinesis::Stream", {
-      StreamEncryption: {
-        EncryptionType: "KMS",
-        KeyId: "alias/aws/kinesis",
-      },
+
+    Template.fromStack(stack).hasResourceProperties("AWS::Kinesis::Stream", {
+      StreamEncryption: Match.absent(),
     });
   });
 
@@ -191,7 +189,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::Kinesis::Stream", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Kinesis::Stream", {
       Name: "custom-kinesis-stream-name",
       RetentionPeriodHours: 100,
       ShardCount: 3,
@@ -223,7 +221,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       BatchSize: 11,
       ParallelizationFactor: 2,
       StartingPosition: "TRIM_HORIZON",
@@ -249,7 +247,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       BisectBatchOnFunctionError: true,
       MaximumRetryAttempts: 5,
     });
@@ -272,7 +270,7 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::Lambda::EventSourceMapping", {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       BisectBatchOnFunctionError: true,
       MaximumRecordAgeInSeconds: 300,
     });

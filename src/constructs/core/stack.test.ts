@@ -1,9 +1,8 @@
-import "@aws-cdk/assert/jest";
-
-import "../../utils/test/jest";
-import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
+import { Match, Template } from "aws-cdk-lib/assertions";
+import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { ContextKeys, TagKeys } from "../../constants";
+import { GuTemplate } from "../../utils/test";
 import { GuParameter } from "./parameters";
 import { GuStack } from "./stack";
 
@@ -15,7 +14,7 @@ describe("The GuStack construct", () => {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::IAM::Role");
+    new GuTemplate(stack).hasGuTaggedResource("AWS::IAM::Role");
   });
 
   it("should not apply any tags when withoutTags is set to true", () => {
@@ -25,7 +24,9 @@ describe("The GuStack construct", () => {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    expect(stack).not.toHaveGuTaggedResource("AWS::IAM::Role");
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Role", {
+      Tags: Match.absent(),
+    });
   });
 
   it("should prefer context values for repository information", () => {
@@ -38,7 +39,7 @@ describe("The GuStack construct", () => {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::IAM::Role", {
+    new GuTemplate(stack).hasGuTaggedResource("AWS::IAM::Role", {
       additionalTags: [
         {
           Key: TagKeys.REPOSITORY_NAME,

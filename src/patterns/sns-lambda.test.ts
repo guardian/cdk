@@ -1,9 +1,7 @@
-import "@aws-cdk/assert/jest";
-import "../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { Template } from "aws-cdk-lib/assertions";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
-import { simpleGuStackForTesting } from "../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
 import { GuSnsLambda } from "./sns-lambda";
 
 describe("The GuSnsLambda pattern", () => {
@@ -19,7 +17,7 @@ describe("The GuSnsLambda pattern", () => {
       app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should inherit an existing SNS topic correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
@@ -36,7 +34,7 @@ describe("The GuSnsLambda pattern", () => {
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
   });
 
   it("should not generate a new SNS Topic if an externalTopicName is passed via existingSnsTopic", () => {
@@ -52,8 +50,10 @@ describe("The GuSnsLambda pattern", () => {
       app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::SNS::Subscription");
-    expect(stack).not.toHaveResource("AWS::SNS::Topic");
+
+    const template = Template.fromStack(stack);
+    template.resourceCountIs("AWS::SNS::Subscription", 1);
+    template.resourceCountIs("AWS::SNS::Topic", 0);
   });
 
   it("should create an alarm if monitoring configuration is provided", () => {
@@ -70,6 +70,6 @@ describe("The GuSnsLambda pattern", () => {
       app: "testing",
     };
     new GuSnsLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 });

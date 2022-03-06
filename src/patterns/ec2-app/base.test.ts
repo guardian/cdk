@@ -1,15 +1,12 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import "@aws-cdk/assert/jest";
-import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
-import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
-import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { Match, Template } from "aws-cdk-lib/assertions";
+import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscaling";
+import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
+import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, TagKeys } from "../../constants";
 import { GuPrivateConfigBucketParameter } from "../../constructs/core";
 import { GuSecurityGroup } from "../../constructs/ec2";
 import { GuDynamoDBWritePolicy } from "../../constructs/iam";
-import type { SynthedStack } from "../../utils/test";
-import { simpleGuStackForTesting } from "../../utils/test";
-import "../../utils/test/jest";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuEc2App } from "./base";
 
 describe("the GuEC2App pattern", function () {
@@ -29,7 +26,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("can produce a restricted EC2 app locked to specific CIDR ranges", function () {
@@ -48,7 +45,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("can produce an EC2 app with an internal load balancer (located in private subnets)", function () {
@@ -67,7 +64,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
     });
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Scheme: "internal",
       Subnets: {
         Ref: "testguec2appPrivateSubnets",
@@ -101,7 +98,7 @@ describe("the GuEC2App pattern", function () {
         },
       },
     });
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -164,7 +161,7 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
     //The shape of this alarm is tested at construct level
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
   });
 
   it("creates an UnhealthyInstancesAlarm if the user enables it", function () {
@@ -189,7 +186,7 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
     //The shape of this alarm is tested at construct level
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
   });
 
   it("Skips alarm creation if the user explicitly opts-out", function () {
@@ -213,8 +210,7 @@ describe("the GuEC2App pattern", function () {
       },
       userData: "",
     });
-    expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
-    expect(stack).not.toHaveResourceOfTypeAndLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 0);
   });
 
   it("creates the appropriate ingress rules for a restricted access application", function () {
@@ -235,48 +231,35 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    const securityGroupKey = Object.keys(json.Resources).filter((resource) =>
-      // This will fail if we ever change the security group ID,
-      //if there's a cleaner way of identifying the security group we should do it
-      resource.toLowerCase().startsWith("restrictedingresssecuritygroup")
-    )[0];
-    const securityGroup = json.Resources[securityGroupKey];
-    const loadBalancerKey = Object.keys(json.Resources).filter(
-      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
-    )[0];
-    const loadBalancer = json.Resources[loadBalancerKey];
-    const lbSecurityGroups = loadBalancer.Properties.SecurityGroups as Array<{
-      "Fn::GetAtt": [id: string, param: string];
-    }>;
-    const securityGroupIsAttachedToLoadBalancer = lbSecurityGroups.filter(
-      (sg) => sg["Fn::GetAtt"][0] === securityGroupKey
-    );
+    const template = Template.fromStack(stack);
 
-    // This asserts that the load balancer has the security group attached to it
-    expect(securityGroupIsAttachedToLoadBalancer).toBeTruthy();
+    template.hasResourceProperties("AWS::EC2::SecurityGroup", {
+      GroupDescription: "Allow restricted ingress from CIDR ranges",
+      SecurityGroupIngress: [
+        {
+          CidrIp: "192.168.1.1/32",
+          Description: "Allow access on port 443 from 192.168.1.1/32",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+        {
+          CidrIp: "8.8.8.8/32",
+          Description: "Allow access on port 443 from 8.8.8.8/32",
+          FromPort: 443,
+          IpProtocol: "tcp",
+          ToPort: 443,
+        },
+      ],
+    });
 
-    // This asserts that said security group has the expected ingress rules
-    expect(securityGroup.Properties).toEqual(
-      expect.objectContaining({
-        SecurityGroupIngress: [
-          {
-            CidrIp: "192.168.1.1/32",
-            Description: "Allow access on port 443 from 192.168.1.1/32",
-            FromPort: 443,
-            IpProtocol: "tcp",
-            ToPort: 443,
-          },
-          {
-            CidrIp: "8.8.8.8/32",
-            Description: "Allow access on port 443 from 8.8.8.8/32",
-            FromPort: 443,
-            IpProtocol: "tcp",
-            ToPort: 443,
-          },
-        ],
-      })
-    );
+    template.hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      SecurityGroups: Match.arrayWith([
+        {
+          "Fn::GetAtt": [Match.stringLikeRegexp("RestrictedIngressSecurityGroupTest"), "GroupId"],
+        },
+      ]),
+    });
   });
 
   it("allows all connections if set to public", function () {
@@ -297,7 +280,7 @@ describe("the GuEC2App pattern", function () {
       userData: "",
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       SecurityGroupIngress: [
         {
           CidrIp: "0.0.0.0/0",
@@ -379,8 +362,13 @@ describe("the GuEC2App pattern", function () {
         additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
       },
     });
-    expect(stack).not.toHaveResource("AWS::IAM::Policy", {
-      PolicyDocument: {
+
+    const template = Template.fromStack(stack);
+
+    expect(template.findParameters("GuLogShippingPolicy")).toMatchObject({}); // testing parameter doesn't exist
+
+    template.hasResourceProperties("AWS::IAM::Policy", {
+      PolicyDocument: Match.not({
         Version: "2012-10-17",
         Statement: [
           {
@@ -407,9 +395,10 @@ describe("the GuEC2App pattern", function () {
             },
           },
         ],
-      },
+      }),
     });
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+
+    template.hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -491,7 +480,7 @@ describe("the GuEC2App pattern", function () {
       ],
     });
 
-    expect(stack).toHaveResource("AWS::AutoScaling::LaunchConfiguration", {
+    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       BlockDeviceMappings: [
         {
           DeviceName: "/dev/sda1",
@@ -537,7 +526,7 @@ describe("the GuEC2App pattern", function () {
 
     cfnLb.securityGroups = [sg.securityGroupId];
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       SecurityGroupIngress: [
         {
           CidrIp: "8.8.8.8/32",
@@ -582,7 +571,9 @@ describe("the GuEC2App pattern", function () {
       },
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+    const template = new GuTemplate(stack);
+
+    template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "PlayApp" },
       propagateAtLaunch: true,
       additionalTags: [
@@ -591,7 +582,7 @@ describe("the GuEC2App pattern", function () {
       ],
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+    template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "NodeApp" },
       propagateAtLaunch: true,
       additionalTags: [
@@ -620,7 +611,7 @@ describe("the GuEC2App pattern", function () {
       accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       LoadBalancerAttributes: [
         { Key: "deletion_protection.enabled", Value: "true" },
         { Key: "access_logs.s3.enabled", Value: "true" },
@@ -649,18 +640,14 @@ describe("the GuEC2App pattern", function () {
       accessLogging: { enabled: false },
     });
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    const lbKey = Object.keys(json.Resources).find(
-      (resource) => json.Resources[resource].Type === "AWS::ElasticLoadBalancingV2::LoadBalancer"
-    );
-    expect(lbKey).toBeTruthy();
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We assert above that this is truthy
-    const loadBalancer = json.Resources[lbKey!];
-
-    expect(loadBalancer.Properties.LoadBalancerAttributes).toEqual(
-      expect.not.arrayContaining([{ Key: "access_logs.s3.enabled", Value: "true" }])
-    );
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: Match.arrayEquals([
+        {
+          Key: "deletion_protection.enabled",
+          Value: "true",
+        },
+      ]),
+    });
   });
 
   it("adds a tag to aid visibility of stacks using the pattern", () => {
@@ -682,7 +669,7 @@ describe("the GuEC2App pattern", function () {
       accessLogging: { enabled: false },
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+    new GuTemplate(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app },
       propagateAtLaunch: true,
       additionalTags: [

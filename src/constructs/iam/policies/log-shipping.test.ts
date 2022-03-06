@@ -1,7 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
 import { GuLogShippingPolicy } from "./log-shipping";
 
 describe("The GuLogShippingPolicy singleton class", () => {
@@ -11,14 +9,15 @@ describe("The GuLogShippingPolicy singleton class", () => {
     const logShippingPolicy = GuLogShippingPolicy.getInstance(stack);
     attachPolicyToTestRole(stack, logShippingPolicy);
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(json.Parameters.LoggingStreamName).toEqual({
+    const template = Template.fromStack(stack);
+
+    template.hasParameter("LoggingStreamName", {
       Type: "AWS::SSM::Parameter::Value<String>",
       Default: "/account/services/logging.stream.name",
       Description: "SSM parameter containing the Name (not ARN) on the kinesis stream",
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    template.hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "GuLogShippingPolicy981BFE5A",
       PolicyDocument: {
         Version: "2012-10-17",
@@ -58,9 +57,10 @@ describe("The GuLogShippingPolicy singleton class", () => {
     attachPolicyToTestRole(stack, logShippingPolicy, "MyFirstRole");
     attachPolicyToTestRole(stack, logShippingPolicy, "MySecondRole");
 
-    expect(stack).toCountResources("AWS::IAM::Policy", 1);
-    expect(stack).toCountResources("AWS::IAM::Role", 2);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    const template = Template.fromStack(stack);
+    template.resourceCountIs("AWS::IAM::Policy", 1);
+    template.resourceCountIs("AWS::IAM::Role", 2);
+    expect(template.toJSON()).toMatchSnapshot();
   });
 
   it("works across multiple stacks", () => {
@@ -73,10 +73,12 @@ describe("The GuLogShippingPolicy singleton class", () => {
     attachPolicyToTestRole(stack1, logShippingPolicy1);
     attachPolicyToTestRole(stack2, logShippingPolicy2);
 
-    expect(stack1).toCountResources("AWS::IAM::Policy", 1);
-    expect(stack1).toCountResources("AWS::IAM::Role", 1);
+    const template1 = Template.fromStack(stack1);
+    template1.resourceCountIs("AWS::IAM::Policy", 1);
+    template1.resourceCountIs("AWS::IAM::Role", 1);
 
-    expect(stack2).toCountResources("AWS::IAM::Policy", 1);
-    expect(stack2).toCountResources("AWS::IAM::Role", 1);
+    const template2 = Template.fromStack(stack2);
+    template2.resourceCountIs("AWS::IAM::Policy", 1);
+    template2.resourceCountIs("AWS::IAM::Role", 1);
   });
 });

@@ -1,8 +1,7 @@
-import "@aws-cdk/assert/jest";
-import "../../../utils/test/jest";
-import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "./base";
 
 describe("The GuSecurityGroup class", () => {
@@ -20,7 +19,7 @@ describe("The GuSecurityGroup class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::EC2::SecurityGroup", { appIdentity: { app: "testing" } });
+    new GuTemplate(stack).hasGuTaggedResource("AWS::EC2::SecurityGroup", { appIdentity: { app: "testing" } });
   });
 
   it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
@@ -31,14 +30,14 @@ describe("The GuSecurityGroup class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "TestSG");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::EC2::SecurityGroup", "TestSG");
   });
 
   test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuSecurityGroup(stack, "TestSecurityGroup", { vpc, app: "testing" });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", /^TestSecurityGroup.+$/);
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::EC2::SecurityGroup", /^TestSecurityGroup.+$/);
   });
 
   it("adds the ingresses passed in through props", () => {
@@ -53,7 +52,7 @@ describe("The GuSecurityGroup class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       SecurityGroupIngress: [
         {
           CidrIp: "127.0.0.1/24",
@@ -86,7 +85,7 @@ describe("The GuSecurityGroup class", () => {
       app: "testing",
     });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       SecurityGroupEgress: [
         {
           CidrIp: "127.0.0.1/24",
@@ -131,7 +130,7 @@ describe("The GuHttpsEgressSecurityGroup class", () => {
 
     GuHttpsEgressSecurityGroup.forVpc(stack, { vpc, app: "testing" });
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       GroupDescription: "Allow all outbound HTTPS traffic",
       SecurityGroupEgress: [
         {

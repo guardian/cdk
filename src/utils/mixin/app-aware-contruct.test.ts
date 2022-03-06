@@ -1,8 +1,7 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import type { BucketProps } from "@aws-cdk/aws-s3";
-import { Bucket } from "@aws-cdk/aws-s3";
-import type { GuStack } from "../../constructs/core";
-import type { AppIdentity } from "../../constructs/core/identity";
+import { Template } from "aws-cdk-lib/assertions";
+import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import type { AppIdentity, GuStack } from "../../constructs/core";
 import { simpleGuStackForTesting } from "../test";
 import { GuAppAwareConstruct } from "./app-aware-construct";
 
@@ -42,6 +41,6 @@ describe("The GuAppAwareConstruct mixin", () => {
   it("should add the app tag", () => {
     const stack = simpleGuStackForTesting();
     new TestAppAwareConstruct(stack, "MyBucket", { app: "Test" });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

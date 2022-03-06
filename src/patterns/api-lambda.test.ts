@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { Template } from "aws-cdk-lib/assertions";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuApiLambda } from "./api-lambda";
@@ -26,7 +25,7 @@ describe("The GuApiLambda pattern", () => {
         },
       ],
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create an alarm if monitoring configuration is provided", () => {
@@ -51,6 +50,6 @@ describe("The GuApiLambda pattern", () => {
         },
       ],
     });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 });

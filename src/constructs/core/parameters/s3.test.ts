@@ -1,5 +1,5 @@
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import { GuStack } from "../stack";
 import { GuDistributionBucketParameter } from "./s3";
 
@@ -16,7 +16,7 @@ describe("GuDistributionBucketParameter", () => {
     expect(stack1Param).not.toEqual(stack2Param);
 
     // make doubly sure the two stacks can be synthesised
-    SynthUtils.toCloudFormation(stack1);
-    SynthUtils.toCloudFormation(stack2);
+    Template.fromStack(stack1).toJSON();
+    Template.fromStack(stack2).toJSON();
   });
 });

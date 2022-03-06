@@ -1,10 +1,8 @@
-import "../test/jest";
-import { Bucket } from "@aws-cdk/aws-s3";
-import type { BucketProps } from "@aws-cdk/aws-s3";
-import { Annotations } from "@aws-cdk/core";
-import type { GuStack } from "../../constructs/core";
-import type { GuMigratingResource } from "../../constructs/core/migrating";
-import { simpleGuStackForTesting } from "../test";
+import { Annotations } from "aws-cdk-lib";
+import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import type { GuMigratingResource, GuStack } from "../../constructs/core";
+import { GuTemplate, simpleGuStackForTesting } from "../test";
 import { GuStatefulMigratableConstruct } from "./migratable-construct-stateful";
 
 interface TestGuMigratableConstructProps extends BucketProps, GuMigratingResource {}
@@ -37,6 +35,6 @@ describe("The GuStatefulMigratableConstruct mixin", () => {
     expect(info).toHaveBeenCalledWith(
       "GuStack has 'migratedFromCloudFormation' set to false. MyBucket is a stateful construct, it's logicalId will be auto-generated and AWS will create a new resource."
     );
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", /^MyBucket.+/);
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::S3::Bucket", /^MyBucket.+/);
   });
 });

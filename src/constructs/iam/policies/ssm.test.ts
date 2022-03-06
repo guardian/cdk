@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuSSMRunCommandPolicy } from "./ssm";
 
@@ -10,7 +10,7 @@ describe("The GuSSMRunCommandPolicy class", () => {
 
     attachPolicyToTestRole(stack, ssmPolicy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "ssm-run-command-policy",
       PolicyDocument: {
         Version: "2012-10-17",

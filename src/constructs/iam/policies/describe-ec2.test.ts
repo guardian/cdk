@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuDescribeEC2Policy } from "./describe-ec2";
 
@@ -10,7 +10,7 @@ describe("DescribeEC2Policy", () => {
 
     attachPolicyToTestRole(stack, policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "describe-ec2-policy",
       PolicyDocument: {
         Version: "2012-10-17",

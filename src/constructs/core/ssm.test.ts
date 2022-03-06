@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuSSMIdentityParameter, GuSSMParameter } from "./ssm";
 
@@ -17,7 +17,7 @@ describe("SSM:", () => {
     it("requires the scope and parameter name", function () {
       const stack = simpleGuStackForTesting({ stack: "some-stack" });
       const param = new GuSSMIdentityParameter(stack, { parameter: "some-param", app: "foo" });
-      expect(stack).toHaveResourceLike("Custom::GuGetSSMParameter", {
+      Template.fromStack(stack).hasResourceProperties("Custom::GuGetSSMParameter", {
         getParamsProps: '{"apiRequest":{"Name":"/TEST/some-stack/foo/some-param"}}',
       });
       expect(param.getValue()).toMatch(/TOKEN/i);
@@ -28,7 +28,7 @@ describe("SSM:", () => {
     it("requires the scope and parameter name", function () {
       const stack = simpleGuStackForTesting({ stack: "some-stack" });
       const param = new GuSSMParameter(stack, { parameter: "/path/to/some-param" });
-      expect(stack).toHaveResourceLike("Custom::GuGetSSMParameter", {
+      Template.fromStack(stack).hasResourceProperties("Custom::GuGetSSMParameter", {
         getParamsProps: '{"apiRequest":{"Name":"/path/to/some-param"}}',
       });
       expect(param.getValue()).toMatch(/TOKEN/i);

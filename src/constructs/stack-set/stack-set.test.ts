@@ -1,6 +1,6 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import { OrganizationPrincipal } from "@aws-cdk/aws-iam";
-import { Topic } from "@aws-cdk/aws-sns";
+import { Template } from "aws-cdk-lib/assertions";
+import { OrganizationPrincipal } from "aws-cdk-lib/aws-iam";
+import { Topic } from "aws-cdk-lib/aws-sns";
 import { RegexPattern } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuStackForStackSetInstance, GuStringParameter } from "../core";
@@ -22,7 +22,7 @@ describe("The GuStackSet construct", () => {
       stackSetInstance: theStackSetInstance,
     });
 
-    expect(SynthUtils.toCloudFormation(parentStack)).toMatchSnapshot();
+    expect(Template.fromStack(parentStack).toJSON()).toMatchSnapshot();
   });
 
   it("should support parameters in the stack set instance", () => {
@@ -49,7 +49,7 @@ describe("The GuStackSet construct", () => {
       },
     });
 
-    expect(SynthUtils.toCloudFormation(parentStack)).toMatchSnapshot();
+    expect(Template.fromStack(parentStack).toJSON()).toMatchSnapshot();
   });
 
   it("should error if the parent stack does not specify all parameters for the stack set instance template", () => {

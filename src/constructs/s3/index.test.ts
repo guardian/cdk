@@ -1,6 +1,5 @@
-import "../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { Template } from "aws-cdk-lib/assertions";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuS3Bucket } from "./index";
 
 describe("The GuS3Bucket construct", () => {
@@ -14,7 +13,7 @@ describe("The GuS3Bucket construct", () => {
 
     // The policies are siblings of Properties.
     // The `.toHaveResource` matcher cannot be used as it only looks at Properties.
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should be possible to override the logical id", () => {
@@ -29,7 +28,7 @@ describe("The GuS3Bucket construct", () => {
       },
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::S3::Bucket", "DataBucket");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::S3::Bucket", "DataBucket");
   });
 
   it("should receive the correct set of tags", () => {
@@ -41,7 +40,7 @@ describe("The GuS3Bucket construct", () => {
       app,
     });
 
-    expect(stack).toHaveGuTaggedResource("AWS::S3::Bucket", {
+    new GuTemplate(stack).hasGuTaggedResource("AWS::S3::Bucket", {
       appIdentity: { app },
     });
   });

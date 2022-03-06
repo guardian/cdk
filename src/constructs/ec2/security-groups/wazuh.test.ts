@@ -1,8 +1,7 @@
-import "@aws-cdk/assert/jest";
-import "../../../utils/test/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuWazuhAccess } from "./wazuh";
 
 describe("The GuWazuhAccess class", () => {
@@ -17,7 +16,7 @@ describe("The GuWazuhAccess class", () => {
 
     GuWazuhAccess.getInstance(stack, vpc);
 
-    expect(stack).toHaveResource("AWS::EC2::SecurityGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       GroupDescription: "Allow outbound traffic from wazuh agent to manager",
       SecurityGroupEgress: [
         {
@@ -42,13 +41,13 @@ describe("The GuWazuhAccess class", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: false });
     GuWazuhAccess.getInstance(stack, vpc);
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
   });
 
   it("has the logicalId WazuhSecurityGroup in a migrating stack", () => {
     const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
     GuWazuhAccess.getInstance(stack, vpc);
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
   });
 });

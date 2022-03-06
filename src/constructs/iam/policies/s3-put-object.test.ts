@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuPutS3ObjectsPolicy } from "./s3-put-object";
 
@@ -10,7 +10,7 @@ describe("The GuPutS3ObjectPolicy class", () => {
 
     attachPolicyToTestRole(stack, s3Policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -31,7 +31,7 @@ describe("The GuPutS3ObjectPolicy class", () => {
 
     attachPolicyToTestRole(stack, s3Policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "test",
       PolicyDocument: {
         Version: "2012-10-17",
@@ -56,7 +56,7 @@ describe("The GuPutS3ObjectPolicy class", () => {
 
     attachPolicyToTestRole(stack, s3Policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [

@@ -1,4 +1,4 @@
-import "@aws-cdk/assert/jest";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuDynamoDBReadPolicy, GuDynamoDBWritePolicy } from "./dynamodb";
 
@@ -7,7 +7,7 @@ describe("The GuDynamoDBReadPolicy construct", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuDynamoDBReadPolicy(stack, "ReadMyTablePolicy", { tableName: "MyTable" }));
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "ReadMyTablePolicyBE0064AB",
       PolicyDocument: {
         Version: "2012-10-17",
@@ -49,7 +49,7 @@ describe("The GuDynamoDBWritePolicy construct", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuDynamoDBWritePolicy(stack, "WriteMyTablePolicy", { tableName: "MyTable" }));
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "WriteMyTablePolicy7D2601F8",
       PolicyDocument: {
         Version: "2012-10-17",

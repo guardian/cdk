@@ -1,8 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
+import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
-import { GuDistributionBucketParameter } from "../../core";
 import { GuGetDistributablePolicy, GuGetS3ObjectsPolicy } from "./s3-get-object";
 
 describe("The GuGetS3ObjectPolicy class", () => {
@@ -13,7 +10,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
 
     attachPolicyToTestRole(stack, s3Policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -34,7 +31,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
 
     attachPolicyToTestRole(stack, s3Policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "test",
       PolicyDocument: {
         Version: "2012-10-17",
@@ -59,7 +56,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
 
     attachPolicyToTestRole(stack, s3Policy);
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -79,18 +76,15 @@ describe("The GuGetDistributablePolicy construct", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuGetDistributablePolicy(stack, { app: "testing" }));
 
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
+    const template = Template.fromStack(stack);
 
-    const parameterKeys = Object.keys(json.Parameters);
-    expect(parameterKeys).toEqual([GuDistributionBucketParameter.getInstance(stack).id]);
-
-    expect(json.Parameters.DistributionBucketName).toEqual({
+    template.hasParameter("DistributionBucketName", {
       Default: "/account/services/artifact.bucket",
       Description: "SSM parameter containing the S3 bucket name holding distribution artifacts",
       Type: "AWS::SSM::Parameter::Value<String>",
     });
 
-    expect(stack).toHaveResource("AWS::IAM::Policy", {
+    template.hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [

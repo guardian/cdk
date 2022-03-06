@@ -1,11 +1,8 @@
-import "@aws-cdk/assert/jest";
-import "../../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../utils/test";
-import type { SynthedStack } from "../../../utils/test";
-import type { AppIdentity } from "../../core/identity";
+import { Stack } from "aws-cdk-lib";
+import { Match, Template } from "aws-cdk-lib/assertions";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
+import type { AppIdentity } from "../../core";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -23,7 +20,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    new GuTemplate(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::LoadBalancer",
       /^ApplicationLoadBalancerTesting.+/
     );
@@ -33,7 +30,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveGuTaggedResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+    new GuTemplate(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       appIdentity: app,
     });
   });
@@ -46,14 +43,14 @@ describe("The GuApplicationLoadBalancer class", () => {
       existingLogicalId: { logicalId: "MyALB", reason: "testing" },
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::LoadBalancer", "MyALB");
+    new GuTemplate(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::LoadBalancer", "MyALB");
   });
 
   test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    new GuTemplate(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::LoadBalancer",
       /^ApplicationLoadBalancer.+$/
     );
@@ -68,15 +65,17 @@ describe("The GuApplicationLoadBalancer class", () => {
       existingLogicalId: { logicalId: "MyALB", reason: "testing" },
       removeType: true,
     });
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources.MyALB.Properties)).not.toContain("Type");
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      Type: Match.absent(),
+    });
   });
 
   test("sets the deletion protection value to true by default", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       LoadBalancerAttributes: [
         {
           Key: "deletion_protection.enabled",
@@ -91,8 +90,6 @@ describe("The GuApplicationLoadBalancer class", () => {
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
-    expect(stack).toHaveOutput({
-      outputName: "ApplicationLoadBalancerTestingDnsName",
-    });
+    Template.fromStack(stack).hasOutput("ApplicationLoadBalancerTestingDnsName", {});
   });
 });
