@@ -70,7 +70,7 @@ export interface Alarms {
  * To enable access logging for your load balancer, you can specify the prefix to write the logs to.
  * The S3 bucket used to hold these access logs must be specified in SSM at `/account/services/access-logging/bucket`
  * You must specify a region in your stack declaration if you are to use this prop, as specified here:
- * https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix
+ * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix
  * For example:
  * ```typescript
  * {

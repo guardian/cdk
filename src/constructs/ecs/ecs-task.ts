@@ -33,7 +33,7 @@ import { GuGetDistributablePolicyStatement } from "../iam";
  *
  * Alternatively you can specify a repository and version, for example for an ECR repository:
  * ```typescript
- * import { Repository } from "@aws-cdk/aws-ecr";
+ * import { Repository } from "aws-cdk-lib/aws-ecr";
  * const repository = new Repository(scope, `${app}-repository`, {
     repositoryName: app,
   });

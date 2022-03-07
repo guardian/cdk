@@ -9,7 +9,7 @@ import type { GuStack } from "../constructs/core";
  * the singleton will new unique across the Stacks.
  *
  * ```typescript
- * import { App } from "@aws-cdk/core";
+ * import { App } from "aws-cdk-lib";
  *
  * class SomeSingletonConstruct { }
  *
