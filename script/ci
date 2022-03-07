@@ -9,11 +9,13 @@ preamble() {
   "${DIR}"/check-yarn-lock
 }
 
-runIntegrationTest() {
+runIntegrationTests() {
   (
     cd "$ROOT_DIR/tools/integration-test"
     ./script/ci
   )
+
+  ./script/ci-project-generation
 }
 
 main() {
@@ -25,7 +27,7 @@ main() {
   npm run test:custom-lint-rule
   npm run test
 
-  runIntegrationTest
+  runIntegrationTests
 }
 
 main

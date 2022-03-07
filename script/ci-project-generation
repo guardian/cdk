@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+npm link
+
+TMP_DIR=/tmp/cdk-project/$(uuidgen)
+
+mkdir -p $TMP_DIR
+
+(
+  cd $TMP_DIR
+  npm link @guardian/cdk
+  npx gu-cdk new --app integration-test --stack cdk
+  cd cdk
+  ./script/ci
+)
