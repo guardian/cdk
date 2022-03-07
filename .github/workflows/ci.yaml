@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ./script/check-aws-cdk
-  CI:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,10 +30,44 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
-      - run: ./script/ci
+      - run: npm ci
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [ install ]
+    steps:
+      - run: npm run build
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: [ install ]
+    steps:
+      - run: |
+          npm run lint
+          npm test:custom-lint-rule
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [ install ]
+    steps:
+      - run: npm run test
+
+  project-gen:
+    runs-on: ubuntu-latest
+    needs: [ install ]
+    steps:
+      - run: ./script/ci-project-generation
+
+  integration-test:
+    runs-on: ubuntu-latest
+    needs: [ install ]
+    steps:
+      - working-directory: tools/integration-test
+        run: ./script/ci
+
   approve-and-merge:
     runs-on: ubuntu-latest
-    needs: [CI]
+    needs: [install, lint, test, project-gen, integration-test]
     steps:
       - name: Validate, approve and merge release PRs
         uses: guardian/actions-merge-release-changes-to-protected-branch@v1.2.0
