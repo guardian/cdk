@@ -1,13 +1,10 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import { Annotations, App, Stack, Tags } from "@aws-cdk/core";
 import type { StackProps } from "@aws-cdk/core";
-import execa from "execa";
 import gitUrlParse from "git-url-parse";
-import { StageForInfrastructure } from "../../constants";
-import { ContextKeys } from "../../constants/context-keys";
-import { TagKeys } from "../../constants/tag-keys";
-import { TrackingTag } from "../../constants/tracking-tag";
-import type { GuMigratingStack } from "../../types/migrating";
+import { ContextKeys, StageForInfrastructure, TagKeys, TrackingTag } from "../../constants";
+import type { GuMigratingStack } from "../../types";
+import { gitRemoteOriginUrl } from "../../utils/git";
 import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
 import { GuStageMapping } from "./mappings";
@@ -165,10 +162,8 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
    */
   private tryAddRepositoryTag(): void {
     try {
-      // a function to avoid creating a child process if value can be found in the context
-      const urlFromGitConfig: () => string = () => execa.sync("git", ["config", "--get", "remote.origin.url"]).stdout;
       const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
-      const repositoryUrl: string = urlFromContext ?? urlFromGitConfig();
+      const repositoryUrl: string = urlFromContext ?? gitRemoteOriginUrl();
       const repositoryName = gitUrlParse(repositoryUrl).full_name;
       this.addTag(TagKeys.REPOSITORY_NAME, repositoryName);
     } catch {

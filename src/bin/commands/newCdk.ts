@@ -4,9 +4,9 @@ import chalk from "chalk";
 import { cli } from "cli-ux";
 import kebabCase from "lodash.kebabcase";
 import type { CliCommandResponse } from "../../types/cli";
+import { execute } from "../../utils/exec";
+import { gitRootOrCwd } from "../../utils/git";
 import { constructApp } from "./utils/app";
-import { execute } from "./utils/exec";
-import { gitRootOrCwd } from "./utils/git";
 import { newAppImports, newStackImports, newTestImports } from "./utils/imports";
 import { buildDirectory } from "./utils/init";
 import { constructTest } from "./utils/snapshot";
@@ -56,8 +56,8 @@ function validateConfig(config: NewCommandConfig): void {
   }
 }
 
-async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
-  const rootDir = await gitRootOrCwd();
+function getConfig(props: NewCdkProps): NewCommandConfig {
+  const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
 
   const appName = pascalCase(props.app);
@@ -90,7 +90,7 @@ async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
 export const newCdk = async (props: NewCdkProps): CliCommandResponse => {
   console.log("Starting CDK generator");
 
-  const config = await getConfig(props);
+  const config = getConfig(props);
 
   if (config.init) {
     buildDirectory({ outputDir: config.cdkDir });
