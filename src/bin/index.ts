@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import yargs from "yargs";
-import { LibraryInfo } from "../constants/library-info";
+import { LibraryInfo } from "../constants";
 import type { CliCommandResponse } from "../types/cli";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
@@ -57,12 +57,6 @@ const parseCommandLineArguments = () => {
       )
       .command(Commands.New, "Creates a new CDK stack", (yargs) =>
         yargs
-          .option("multi-app", {
-            type: "boolean",
-            description:
-              "Create the stack files within sub directories as the project defines multiple apps (defaults to false)",
-            default: false,
-          })
           .option("init", {
             type: "boolean",
             description: "Create the cdk directory before building the app and stack files (defaults to true)",
@@ -115,8 +109,8 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init, "multi-app": multiApp, app, stack, "yaml-template-location": yamlTemplateLocation } = argv;
-        const newProps = { init, multiApp, app, stack, yamlTemplateLocation };
+        const { init, app, stack, yamlTemplateLocation } = argv;
+        const newProps = { init, app, stack, yamlTemplateLocation };
         return newCdk(newProps);
       }
       default:

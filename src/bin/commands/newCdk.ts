@@ -16,7 +16,6 @@ import { pascalCase } from "./utils/utils";
 
 interface NewCdkProps {
   init: boolean;
-  multiApp: boolean;
   app: string;
   stack: string;
   yamlTemplateLocation?: string;
@@ -24,7 +23,6 @@ interface NewCdkProps {
 
 interface NewCommandConfig {
   cdkDir: string;
-  multiApp: boolean;
   appPath: string;
   appName: Name;
   stackPath: string;
@@ -69,7 +67,6 @@ async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
 
   const config: NewCommandConfig = {
     cdkDir,
-    multiApp: props.multiApp,
     appName: {
       kebab: kebabAppName,
       pascal: appName,
@@ -79,8 +76,8 @@ async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
       kebab: kebabStackName,
       pascal: stackName,
     },
-    stackPath: `${cdkDir}/lib/${props.multiApp ? `${kebabAppName}/` : ""}${kebabAppName}.ts`,
-    testPath: `${cdkDir}/lib/${props.multiApp ? `${kebabAppName}/` : ""}${kebabAppName}.test.ts`,
+    stackPath: `${cdkDir}/lib/${kebabAppName}.ts`,
+    testPath: `${cdkDir}/lib/${kebabAppName}.test.ts`,
     init: props.init,
     yamlTemplateLocation: props.yamlTemplateLocation,
   };
@@ -108,7 +105,7 @@ export const newCdk = async (props: NewCdkProps): CliCommandResponse => {
     outputFile: "cdk.ts",
     outputDir: dirname(config.appPath),
     stack: config.stackName,
-    imports: newAppImports(config.appName, config.multiApp),
+    imports: newAppImports(config.appName),
   });
 
   // lib directory
