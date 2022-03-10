@@ -14,22 +14,20 @@ import { constructStack } from "./utils/stack";
 import type { Name } from "./utils/utils";
 import { pascalCase } from "./utils/utils";
 
-interface NewCdkProps {
+interface NewProjectProps {
   init: boolean;
   app: string;
   stack: string;
   yamlTemplateLocation?: string;
 }
 
-interface NewCommandConfig {
+interface NewProjectConfig extends Omit<NewProjectProps, "stack" | "app"> {
   cdkDir: string;
   appPath: string;
   appName: Name;
   stackPath: string;
   stackName: Name;
   testPath: string;
-  init: boolean;
-  yamlTemplateLocation?: string;
 }
 
 const checkPathExists = (path: string): void => {
@@ -44,7 +42,7 @@ const checkPathDoesNotExist = (path: string): void => {
   }
 };
 
-function validateConfig(config: NewCommandConfig): void {
+function validateConfig(config: NewProjectConfig): void {
   if (!config.init) {
     checkPathExists(config.cdkDir);
   }
@@ -56,7 +54,7 @@ function validateConfig(config: NewCommandConfig): void {
   }
 }
 
-function getConfig(props: NewCdkProps): NewCommandConfig {
+function getConfig(props: NewProjectProps): NewProjectConfig {
   const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
 
@@ -65,7 +63,7 @@ function getConfig(props: NewCdkProps): NewCommandConfig {
   const stackName = pascalCase(props.stack);
   const kebabStackName = kebabCase(stackName);
 
-  const config: NewCommandConfig = {
+  const config: NewProjectConfig = {
     cdkDir,
     appName: {
       kebab: kebabAppName,
@@ -87,7 +85,7 @@ function getConfig(props: NewCdkProps): NewCommandConfig {
   return config;
 }
 
-export const newCdk = async (props: NewCdkProps): CliCommandResponse => {
+export const newCdkProject = async (props: NewProjectProps): CliCommandResponse => {
   console.log("Starting CDK generator");
 
   const config = getConfig(props);

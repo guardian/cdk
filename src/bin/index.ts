@@ -8,7 +8,7 @@ import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
 import { bootstrapCommand } from "./commands/bootstrap";
 import { checkPackageJson } from "./commands/check-package-json";
-import { newCdk } from "./commands/new-project";
+import { newCdkProject } from "./commands/new-project";
 
 const Commands = {
   AwsCdkVersion: "aws-cdk-version",
@@ -55,28 +55,31 @@ const parseCommandLineArguments = () => {
           defaultDescription: "The current working directory",
         })
       )
-      .command(Commands.New, "Creates a new CDK stack", (yargs) =>
-        yargs
-          .option("init", {
-            type: "boolean",
-            description: "Create the cdk directory before building the app and stack files (defaults to true)",
-            default: true,
-          })
-          .option("app", {
-            type: "string",
-            description: "The name of your application e.g. Amigo",
-            demandOption: true,
-          })
-          .option("stack", {
-            type: "string",
-            description:
-              "The Guardian stack being used (as defined in your riff-raff.yaml). This will be applied as a tag to all of your resources.",
-            demandOption: true,
-          })
-          .option("yaml-template-location", {
-            type: "string",
-            description: "Path to the YAML CloudFormation template",
-          })
+      .command(
+        Commands.New,
+        "Creates a new CDK project within a `cdk` directory at the root of the repository",
+        (yargs) =>
+          yargs
+            .option("init", {
+              type: "boolean",
+              description: "Create the cdk directory before building the app and stack files (defaults to true)",
+              default: true,
+            })
+            .option("app", {
+              type: "string",
+              description: "The name of your application e.g. Amigo",
+              demandOption: true,
+            })
+            .option("stack", {
+              type: "string",
+              description:
+                "The Guardian stack being used (as defined in your riff-raff.yaml). This will be applied as a tag to all of your resources.",
+              demandOption: true,
+            })
+            .option("yaml-template-location", {
+              type: "string",
+              description: "Path to the YAML CloudFormation template",
+            })
       )
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
@@ -111,7 +114,7 @@ parseCommandLineArguments()
       case Commands.New: {
         const { init, app, stack, yamlTemplateLocation } = argv;
         const newProps = { init, app, stack, yamlTemplateLocation };
-        return newCdk(newProps);
+        return newCdkProject(newProps);
       }
       default:
         throw new Error(`Unknown command: ${command}`);
