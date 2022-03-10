@@ -8,7 +8,7 @@ import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
 import { bootstrapCommand } from "./commands/bootstrap";
 import { checkPackageJson } from "./commands/check-package-json";
-import { newCdk } from "./commands/newCdk";
+import { newCdk } from "./commands/new-project";
 
 const Commands = {
   AwsCdkVersion: "aws-cdk-version",

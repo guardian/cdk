@@ -1,6 +1,6 @@
 import { copyFileSync, existsSync, lstatSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import { join } from "path";
-import { LibraryInfo } from "../../../constants/library-info";
+import { LibraryInfo } from "../../../../constants";
 
 export interface InitConfig {
   outputDir: string;
