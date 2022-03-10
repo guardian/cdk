@@ -1,9 +1,13 @@
 import type { CredentialProviderChain } from "aws-sdk";
 import type { SubnetList, Vpc } from "aws-sdk/clients/ec2";
 
-export interface AwsAccountReadiness {
+export interface AwsConfig {
   credentialProvider: CredentialProviderChain;
   region: string;
+}
+
+export interface AwsBootstrap extends AwsConfig {
+  dryRun: boolean;
 }
 
 // A CLI command can return...

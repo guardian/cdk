@@ -2,7 +2,7 @@ import AWS from "aws-sdk";
 import chalk from "chalk";
 import type { SsmParameterPath } from "../../../constants/ssm-parameter-paths";
 import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
-import type { AwsAccountReadiness } from "../../../types/cli";
+import type { AwsConfig } from "../../../types/cli";
 import { getSsmParametersForVpc, getVpcsInDetail } from "../../../utils/cli/vpc";
 import type { Report } from ".";
 
@@ -12,10 +12,7 @@ interface SSMParameterReadinessOutput {
   defaultVPCReferences: SsmParameterPath[];
 }
 
-const ssmParamReadiness = async ({
-  credentialProvider,
-  region,
-}: AwsAccountReadiness): Promise<SSMParameterReadinessOutput> => {
+const ssmParamReadiness = async ({ credentialProvider, region }: AwsConfig): Promise<SSMParameterReadinessOutput> => {
   const ssmClient = new AWS.SSM({
     credentialProvider,
     region,
@@ -61,7 +58,7 @@ const ssmParamReadiness = async ({
   };
 };
 
-export const report = async (props: AwsAccountReadiness): Promise<Report> => {
+export const report = async (props: AwsConfig): Promise<Report> => {
   const output = await ssmParamReadiness(props);
   const isPass = output.missingParameters.length === 0 && output.defaultVPCReferences.length === 0;
 
@@ -86,10 +83,12 @@ export const report = async (props: AwsAccountReadiness): Promise<Report> => {
   }
 
   return {
-    name: "SSM Readiness",
+    name: "SSM Parameter Readiness",
     isPass: isPass,
     msg: parametersMsg,
     errors: errs,
+    parametersFound: output.foundParameters.length,
+    parametersMissing: output.missingParameters.length,
   };
 };
 
