@@ -32,13 +32,13 @@ interface NewCommandConfig {
   yamlTemplateLocation?: string;
 }
 
-export const checkPathExists = (path: string): void => {
+const checkPathExists = (path: string): void => {
   if (!existsSync(path)) {
     throw new Error(`File not found - ${path}`);
   }
 };
 
-export const checkPathDoesNotExist = (path: string): void => {
+const checkPathDoesNotExist = (path: string): void => {
   if (existsSync(path)) {
     throw new Error(`There is already a file at - ${path}`);
   }
