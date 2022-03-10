@@ -7,9 +7,10 @@ import chalk from "chalk";
 import { prompt } from "inquirer";
 import type { Question } from "inquirer";
 import type { SsmParameterPath } from "../../../constants/ssm-parameter-paths";
+import { TrackingTag } from "../../../constants/tracking-tag";
 import { GuStack } from "../../../constructs/core";
 import type { GuStackProps } from "../../../constructs/core";
-import type { AwsAccountReadiness } from "../../../types/cli";
+import type { AwsConfig } from "../../../types/cli";
 
 interface PopulatedParameter extends SsmParameterPath {
   value: string;
@@ -74,8 +75,6 @@ export const accountBootstrapCfn = async (parameters: SsmParameterPath[]): Promi
   const questions = [stackQ].concat(paramQuestions);
   const answers = await prompt(questions);
 
-  console.log(JSON.stringify(answers));
-
   const populatedParameters = parameters.map((param) => ({ value: answers[safeName(param.path)] as string, ...param }));
 
   const cfnStackName = "CDKBoostrap";
@@ -87,10 +86,7 @@ export const accountBootstrapCfn = async (parameters: SsmParameterPath[]): Promi
   return readFileSync(tplFile, "utf-8");
 };
 
-export const createBootstrapStack = (
-  { credentialProvider, region }: AwsAccountReadiness,
-  template: string
-): Promise<string> => {
+export const createBootstrapStack = ({ credentialProvider, region }: AwsConfig, template: string): Promise<string> => {
   const cfn = new AWS.CloudFormation({
     credentialProvider,
     region,
@@ -100,6 +96,7 @@ export const createBootstrapStack = (
     StackName: "cdk-bootstrap-INFRA",
     TemplateBody: template,
     EnableTerminationProtection: true,
+    Tags: [TrackingTag],
   };
 
   return cfn

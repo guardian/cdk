@@ -4,7 +4,7 @@ import type { AwsBootstrap, CliCommandResponse } from "../../../types/cli";
 import { accountBootstrapCfn, createBootstrapStack } from "./bootstrap-stack";
 
 export const bootstrapCommand = async (props: AwsBootstrap): CliCommandResponse => {
-  const params = Object.entries(SSM_PARAMETER_PATHS).map((kv) => kv[1]);
+  const params = Object.values(SSM_PARAMETER_PATHS);
   const tpl = await accountBootstrapCfn(params);
 
   if (props.dryRun) {
