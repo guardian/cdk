@@ -133,15 +133,6 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
-    /*
-    This is just to demonstrate PR #1148 works.
-     */
-    const { NODE_ENV, CI } = process.env;
-    const isTest = NODE_ENV?.toUpperCase() === "TEST" || CI?.toUpperCase() === "TRUE";
-    if (isTest) {
-      throw new Error("Oh hello, I'm about to intentionally break... Sorry!");
-    }
-
     const mergedProps = {
       ...props,
       stackName: props.cloudFormationStackName,
