@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Remove any artifacts from previous builds
+rm -rf lib
+
+npm ci
+
+TMP_DIR=/tmp/cdk-project/$(uuidgen)
+mkdir -p $TMP_DIR
+
+npm pack --pack-destination $TMP_DIR
+
+(
+  cd $TMP_DIR
+
+  FILE_COUNT=$(ls guardian-cdk-*.tgz | wc -l)
+
+  if [ $FILE_COUNT -ne 1 ]; then
+    echo "Expected 1 file to exist but there are ${FILE_COUNT}";
+    exit 1
+  fi
+
+  npm install guardian-cdk-*.tgz
+  NODE_ENV=test npx gu-cdk new --app integration-test --stack cdk
+)

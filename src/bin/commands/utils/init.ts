@@ -68,6 +68,9 @@ export const buildDirectory = (config: InitConfig): void => {
 };
 
 function createPackageJson(outputDirectory: string): void {
+  const { NODE_ENV, CI } = process.env;
+  const isTest = NODE_ENV?.toUpperCase() === "TEST" || CI?.toUpperCase() === "TRUE";
+
   const contents = {
     name: "cdk",
     version: "0.0.0",
@@ -102,7 +105,15 @@ function createPackageJson(outputDirectory: string): void {
     dependencies: {
       "@aws-cdk/cloudformation-include": LibraryInfo.AWS_CDK_VERSION,
       "@aws-cdk/core": LibraryInfo.AWS_CDK_VERSION,
-      "@guardian/cdk": LibraryInfo.VERSION,
+
+      /*
+      Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
+      See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat
+
+      TODO remove this once the `new` command allows opting out of automatic dependency installation
+       */
+      ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
+
       "source-map-support": "^0.5.20",
     },
   };
