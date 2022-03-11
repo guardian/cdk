@@ -3,10 +3,10 @@ import { basename, dirname, join } from "path";
 import chalk from "chalk";
 import { cli } from "cli-ux";
 import kebabCase from "lodash.kebabcase";
-import type { CliCommandResponse } from "../../types/cli";
+import type { CliCommandResponse } from "../../../types/cli";
+import { execute } from "../../../utils/exec";
+import { gitRootOrCwd } from "../../../utils/git";
 import { constructApp } from "./utils/app";
-import { execute } from "./utils/exec";
-import { gitRootOrCwd } from "./utils/git";
 import { newAppImports, newStackImports, newTestImports } from "./utils/imports";
 import { buildDirectory } from "./utils/init";
 import { constructTest } from "./utils/snapshot";
@@ -14,39 +14,35 @@ import { constructStack } from "./utils/stack";
 import type { Name } from "./utils/utils";
 import { pascalCase } from "./utils/utils";
 
-interface NewCdkProps {
+interface NewProjectProps {
   init: boolean;
-  multiApp: boolean;
   app: string;
   stack: string;
   yamlTemplateLocation?: string;
 }
 
-interface NewCommandConfig {
+interface NewProjectConfig extends Omit<NewProjectProps, "stack" | "app"> {
   cdkDir: string;
-  multiApp: boolean;
   appPath: string;
   appName: Name;
   stackPath: string;
   stackName: Name;
   testPath: string;
-  init: boolean;
-  yamlTemplateLocation?: string;
 }
 
-export const checkPathExists = (path: string): void => {
+const checkPathExists = (path: string): void => {
   if (!existsSync(path)) {
     throw new Error(`File not found - ${path}`);
   }
 };
 
-export const checkPathDoesNotExist = (path: string): void => {
+const checkPathDoesNotExist = (path: string): void => {
   if (existsSync(path)) {
     throw new Error(`There is already a file at - ${path}`);
   }
 };
 
-function validateConfig(config: NewCommandConfig): void {
+function validateConfig(config: NewProjectConfig): void {
   if (!config.init) {
     checkPathExists(config.cdkDir);
   }
@@ -58,8 +54,8 @@ function validateConfig(config: NewCommandConfig): void {
   }
 }
 
-async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
-  const rootDir = await gitRootOrCwd();
+function getConfig(props: NewProjectProps): NewProjectConfig {
+  const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
 
   const appName = pascalCase(props.app);
@@ -67,9 +63,8 @@ async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
   const stackName = pascalCase(props.stack);
   const kebabStackName = kebabCase(stackName);
 
-  const config: NewCommandConfig = {
+  const config: NewProjectConfig = {
     cdkDir,
-    multiApp: props.multiApp,
     appName: {
       kebab: kebabAppName,
       pascal: appName,
@@ -79,8 +74,8 @@ async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
       kebab: kebabStackName,
       pascal: stackName,
     },
-    stackPath: `${cdkDir}/lib/${props.multiApp ? `${kebabAppName}/` : ""}${kebabAppName}.ts`,
-    testPath: `${cdkDir}/lib/${props.multiApp ? `${kebabAppName}/` : ""}${kebabAppName}.test.ts`,
+    stackPath: `${cdkDir}/lib/${kebabAppName}.ts`,
+    testPath: `${cdkDir}/lib/${kebabAppName}.test.ts`,
     init: props.init,
     yamlTemplateLocation: props.yamlTemplateLocation,
   };
@@ -90,10 +85,10 @@ async function getConfig(props: NewCdkProps): Promise<NewCommandConfig> {
   return config;
 }
 
-export const newCdk = async (props: NewCdkProps): CliCommandResponse => {
+export const newCdkProject = async (props: NewProjectProps): CliCommandResponse => {
   console.log("Starting CDK generator");
 
-  const config = await getConfig(props);
+  const config = getConfig(props);
 
   if (config.init) {
     buildDirectory({ outputDir: config.cdkDir });
@@ -108,7 +103,7 @@ export const newCdk = async (props: NewCdkProps): CliCommandResponse => {
     outputFile: "cdk.ts",
     outputDir: dirname(config.appPath),
     stack: config.stackName,
-    imports: newAppImports(config.appName, config.multiApp),
+    imports: newAppImports(config.appName),
   });
 
   // lib directory

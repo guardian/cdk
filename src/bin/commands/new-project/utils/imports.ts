@@ -86,7 +86,7 @@ export const newStackImports = (): Imports => {
   });
 };
 
-export const newAppImports = (app: Name, multiApp: boolean): Imports => {
+export const newAppImports = (app: Name): Imports => {
   const imports = new Imports({
     "@aws-cdk/core": {
       types: [],
@@ -99,7 +99,7 @@ export const newAppImports = (app: Name, multiApp: boolean): Imports => {
     },
   });
 
-  imports.addImport(`../lib/${multiApp ? `${app.kebab}/` : ""}${app.kebab}`, [app.pascal]);
+  imports.addImport(`../lib/${app.kebab}`, [app.pascal]);
 
   return imports;
 };
