@@ -40,17 +40,24 @@ interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitor
  * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-lambda-integration.html
  */
 export class GuApiLambda extends GuLambdaFunction {
+  public readonly apis: Map<string, LambdaRestApi>;
+
   constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
 
-    props.apis.forEach((api) => {
-      new LambdaRestApi(this, api.id, {
-        handler: this,
-        ...api,
-      });
-    });
+    this.apis = new Map<string, LambdaRestApi>();
+
+    for (const api of props.apis) {
+      this.apis.set(
+        api.id,
+        new LambdaRestApi(this, api.id, {
+          handler: this,
+          ...api,
+        })
+      );
+    }
   }
 }
