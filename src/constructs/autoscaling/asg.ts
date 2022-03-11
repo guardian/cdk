@@ -55,6 +55,9 @@ export interface GuAutoScalingGroupProps
  *
  * If additional ingress or egress rules are required, define custom security groups and pass them in via the
  * `additionalSecurityGroups` prop.
+ *
+ * All EC2 instances provisioned via this construct will use
+ * [IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html).
  */
 export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAwareConstruct(AutoScalingGroup)) {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
