@@ -1,7 +1,10 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
 import { Runtime } from "@aws-cdk/aws-lambda";
+import { Duration } from "@aws-cdk/core";
+import { GuCertificate } from "../constructs/acm";
 import type { NoMonitoring } from "../constructs/cloudwatch";
+import { GuCname } from "../constructs/dns";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuApiLambda } from "./api-lambda";
 
@@ -52,5 +55,47 @@ describe("The GuApiLambda pattern", () => {
       ],
     });
     expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+  });
+
+  it("should allow us to link a domain name to a LambdaRestApi", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const apiLambda = new GuApiLambda(stack, "lambda", {
+      fileName: "my-app.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+      apis: [
+        {
+          id: "api",
+          description: "this is a test",
+        },
+        {
+          id: "api2",
+          description: "this is a test2",
+        },
+      ],
+    });
+    const maybeApi = apiLambda.apis.get("api");
+    expect(maybeApi).toBeDefined();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We expect api to be defined beyond this line
+    const api = maybeApi!;
+    const domain = api.addDomainName("domain", {
+      domainName: "code.theguardian.com",
+      certificate: new GuCertificate(stack, {
+        app: "testing",
+        domainName: "code.theguardian.com",
+        hostedZoneId: "id123",
+      }),
+    });
+
+    new GuCname(stack, "DNS", {
+      app: "testing",
+      ttl: Duration.days(1),
+      domainName: "code.theguardian.com",
+      resourceRecord: domain.domainNameAliasDomainName,
+    });
+    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });
