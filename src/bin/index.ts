@@ -80,6 +80,12 @@ const parseCommandLineArguments = () => {
               type: "string",
               description: "Path to the YAML CloudFormation template",
             })
+            .option("stage", {
+              description:
+                "The stage(s) for your stack. Can be specified multiple times, e.g. --stage CODE --stage PROD",
+              type: "array",
+              demandOption: true,
+            })
       )
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
@@ -112,9 +118,9 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init, app, stack, yamlTemplateLocation } = argv;
-        const newProps = { init, app, stack, yamlTemplateLocation };
-        return newCdkProject(newProps);
+        const { init, app, stack, yamlTemplateLocation, stage } = argv;
+        const stages = stage.map((_) => (_ as string).toUpperCase());
+        return newCdkProject({ init, app, stack, yamlTemplateLocation, stages });
       }
       default:
         throw new Error(`Unknown command: ${command}`);

@@ -23,5 +23,5 @@ npm pack --pack-destination $TMP_DIR
   fi
 
   npm install guardian-cdk-*.tgz
-  NODE_ENV=test npx gu-cdk new --app integration-test --stack cdk
+  NODE_ENV=test npx gu-cdk new --app integration-test --stack cdk --stage CODE --stage PROD
 )

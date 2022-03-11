@@ -29,18 +29,15 @@ Jump to:
 example, VPC IDs, and the location of dist buckets. To check for account
 readiness and fix any issues, run:
 
-    npx @guardian/cdk account-readiness --profile [profile]
+    npx @guardian/cdk@latest account-readiness --profile [profile]
 
 Then, instantiate a new CDK app:
 
-    npx @guardian/cdk new --app [app] --stack [stack]
+    npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage]
 
-> Tip: if you are migrating an app, see the [Migration
-> Guide](./docs/migration-guide.md) for more detail.
+> Tip: Migrating an app? See the [Migration Guide](./docs/migration-guide.md) for more detail.
 
-> Tip: the [AWS CDK Developer
-> Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is worth a
-> read-through if you are new to CDK.
+> Tip: New to CDK? The [AWS CDK Developer Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is worth a read.
 
 ### Patterns and Constructs
 
@@ -70,5 +67,4 @@ Alternatively, PRs are always welcome!
 
 We welcome contributions to `@guardian/cdk`!
 
-To get started, please read our [Contribution
-Guidelines.](./docs/contributing.md).
+To get started, please read our [Contribution Guidelines](./docs/contributing.md).

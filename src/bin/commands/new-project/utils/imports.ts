@@ -81,7 +81,7 @@ export const newStackImports = (): Imports => {
     },
     "@guardian/cdk/lib/constructs/core": {
       types: ["GuStackProps"],
-      components: ["GuStack", "GuStageParameter"],
+      components: ["GuStack"],
     },
   });
 };
