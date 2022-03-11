@@ -1,6 +1,5 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { DomainName } from "@aws-cdk/aws-apigateway/lib/domain-name";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 import { GuCertificate } from "../constructs/acm";
@@ -80,6 +79,7 @@ describe("The GuApiLambda pattern", () => {
     });
     const api = apiLambda.apis.get("api");
     expect(api).toBeDefined();
+    /* eslint-disable @typescript-eslint/no-non-null-assertion -- We expect api to be defined beyond this point */
     api!.addDomainName("domain", {
       domainName: "code.theguardian.com",
       certificate: new GuCertificate(stack, {
@@ -96,5 +96,6 @@ describe("The GuApiLambda pattern", () => {
       resourceRecord: api!.domainName!.domainNameAliasDomainName,
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
   });
 });
