@@ -77,10 +77,11 @@ describe("The GuApiLambda pattern", () => {
         },
       ],
     });
-    const api = apiLambda.apis.get("api");
-    expect(api).toBeDefined();
-    /* eslint-disable @typescript-eslint/no-non-null-assertion -- We expect api to be defined beyond this point */
-    api!.addDomainName("domain", {
+    const maybeApi = apiLambda.apis.get("api");
+    expect(maybeApi).toBeDefined();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We expect api to be defined beyond this line
+    const api = maybeApi!;
+    const domain = api.addDomainName("domain", {
       domainName: "code.theguardian.com",
       certificate: new GuCertificate(stack, {
         app: "testing",
@@ -93,9 +94,8 @@ describe("The GuApiLambda pattern", () => {
       app: "testing",
       ttl: Duration.days(1),
       domainName: "code.theguardian.com",
-      resourceRecord: api!.domainName!.domainNameAliasDomainName,
+      resourceRecord: domain.domainNameAliasDomainName,
     });
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
   });
 });
