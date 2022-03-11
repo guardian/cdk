@@ -27,6 +27,7 @@ export interface GuAutoScalingGroupProps
       | "minCapacity"
       | "maxCapacity"
       | "desiredCapacity"
+      | "requireImdsv2"
       | "securityGroup"
     >,
     AppIdentity,
@@ -83,6 +84,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
       minCapacity: minimumInstances,
       maxCapacity: maximumInstances ?? minimumInstances * 2,
       role,
+      requireImdsv2: true,
       machineImage: {
         getImage: (): MachineImageConfig => {
           return {

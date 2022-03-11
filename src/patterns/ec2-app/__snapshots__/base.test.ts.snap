@@ -167,6 +167,9 @@ Object {
           "Ref": "AMITestguec2app",
         },
         "InstanceType": "t4g.medium",
+        "MetadataOptions": Object {
+          "HttpTokens": "required",
+        },
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -1056,6 +1059,9 @@ Object {
           "Ref": "AMITestguec2app",
         },
         "InstanceType": "t4g.medium",
+        "MetadataOptions": Object {
+          "HttpTokens": "required",
+        },
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
