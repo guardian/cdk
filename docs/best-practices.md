@@ -10,7 +10,9 @@ deploying cloud infrastructure with CDK.
 ## Guardian CDK
 Here are some best practices for using the Guardian CDK library:
 - Use [snapshot testing with Jest](https://jestjs.io/docs/snapshot-testing). Snapshot testing makes it easy to review
-  any stack changes when developing locally and also in PRs.
+  any stack changes when developing locally and in PRs. This enables us to catch things early, creating a shorter
+  feedback loop. See the [AWS docs](https://docs.aws.amazon.com/cdk/v2/guide/testing.html#testing_snapshot) on snapshot
+  testing.
 
 - Uploading the json output file produced by running `cdk synth` is preferable to uploading a `cloudformation.yaml`
   file. Using the `cloudformation.yaml` file doesn't guarantee the file reflects the current state of your CDK
