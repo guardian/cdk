@@ -20,6 +20,7 @@ interface NewProjectProps {
   stack: string;
   stages: string[];
   yamlTemplateLocation?: string;
+  verbose: boolean;
 }
 
 interface NewProjectConfig extends Omit<NewProjectProps, "stack" | "app"> {
@@ -56,7 +57,7 @@ function validateConfig(config: NewProjectConfig): void {
 }
 
 function getConfig(props: NewProjectProps): NewProjectConfig {
-  const { init, app, stack, stages, yamlTemplateLocation } = props;
+  const { init, app, stack, stages, yamlTemplateLocation, verbose } = props;
 
   const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
@@ -71,6 +72,7 @@ function getConfig(props: NewProjectProps): NewProjectConfig {
     yamlTemplateLocation,
     stages,
     cdkDir,
+    verbose,
     appName: {
       kebab: kebabAppName,
       pascal: appName,
@@ -90,7 +92,10 @@ function getConfig(props: NewProjectProps): NewProjectConfig {
 }
 
 export const newCdkProject = async (props: NewProjectProps): CliCommandResponse => {
+  const { verbose } = props;
   console.log("Starting CDK generator");
+
+  verbose && console.log(JSON.stringify(props));
 
   const config = getConfig(props);
 
@@ -101,17 +106,19 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   console.log(`New app ${config.appName.pascal} will be written to ${config.appPath}`);
   console.log(`New stack ${config.stackName.pascal} will be written to ${config.stackPath}`);
 
-  config.stages.map(async (stage) => {
-    // bin directory
-    await constructApp({
-      appName: config.appName,
-      outputFile: "cdk.ts",
-      outputDir: dirname(config.appPath),
-      stack: config.stackName,
-      imports: newAppImports(config.appName),
-      stage,
-    });
-  });
+  await Promise.all(
+    config.stages.map(async (stage) => {
+      // bin directory
+      await constructApp({
+        appName: config.appName,
+        outputFile: "cdk.ts",
+        outputDir: dirname(config.appPath),
+        stack: config.stackName,
+        imports: newAppImports(config.appName),
+        stage,
+      });
+    })
+  );
 
   // lib directory
   await constructStack({

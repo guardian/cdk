@@ -87,6 +87,11 @@ const parseCommandLineArguments = () => {
               demandOption: true,
             })
       )
+      .option("verbose", {
+        type: "boolean",
+        description: "Run in verbose mode",
+        default: false,
+      })
       .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
       .help()
@@ -118,9 +123,9 @@ parseCommandLineArguments()
         return checkPackageJson(directory);
       }
       case Commands.New: {
-        const { init, app, stack, yamlTemplateLocation, stage } = argv;
+        const { init, app, stack, yamlTemplateLocation, stage, verbose } = argv;
         const stages = stage.map((_) => (_ as string).toUpperCase());
-        return newCdkProject({ init, app, stack, yamlTemplateLocation, stages });
+        return newCdkProject({ init, app, stack, yamlTemplateLocation, stages, verbose });
       }
       default:
         throw new Error(`Unknown command: ${command}`);
