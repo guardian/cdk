@@ -19,6 +19,7 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
 
   /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
+   * @defaultValue the `GU_CFN_STACK_NAME` environment variable
    */
   cloudFormationStackName?: string;
   /**
@@ -105,20 +106,24 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
-    const mergedProps = {
-      ...props,
-      stackName: props.cloudFormationStackName,
-    };
-    super(app, id, mergedProps);
+    const {
+      cloudFormationStackName = process.env.GU_CFN_STACK_NAME,
+      migratedFromCloudFormation,
+      stack,
+      stage,
+      withoutTags,
+    } = props;
 
-    this.migratedFromCloudFormation = !!props.migratedFromCloudFormation;
+    super(app, id, { ...props, stackName: cloudFormationStackName });
+
+    this.migratedFromCloudFormation = !!migratedFromCloudFormation;
 
     this.params = new Map<string, GuParameter>();
 
-    this._stack = props.stack;
-    this._stage = props.stage.toUpperCase();
+    this._stack = stack;
+    this._stage = stage.toUpperCase();
 
-    if (!props.withoutTags) {
+    if (!withoutTags) {
       this.addTag(TrackingTag.Key, TrackingTag.Value);
 
       this.addTag("Stack", this.stack);

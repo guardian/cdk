@@ -38,11 +38,9 @@ export class AppBuilder {
 
     this.code.line("const app = new App();");
 
-    this.code.line("const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;");
-
     stages.forEach((stage) => {
       this.code.line(
-        `new ${appName.pascal}(app, "${appName.pascal}-${stage}", { stack: "${stack.kebab}", cloudFormationStackName, stage: "${stage}" });`
+        `new ${appName.pascal}(app, "${appName.pascal}-${stage}", { stack: "${stack.kebab}", stage: "${stage}" });`
       );
     });
 
