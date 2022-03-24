@@ -1,65 +1,173 @@
-<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@guardian/cdk - v38.2.0</title><meta name="description" content="Documentation for @guardian/cdk - v38.2.0"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@guardian/cdk - v38.2.0</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> @guardian/cdk - v38.2.0</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
-<a href="#guardian-cdk-library" id="guardian-cdk-library" style="color: inherit; text-decoration: none;">
-  <h1>Guardian CDK Library</h1>
-</a>
-<p><img src="https://img.shields.io/npm/v/@guardian/cdk?style=flat-square" alt="npm"> <a href="https://github.com/guardian/cdk/actions/workflows/cd.yaml"><img src="https://github.com/guardian/cdk/actions/workflows/cd.yaml/badge.svg" alt="CD"></a></p>
-<p>The <a href="aws-cdk">AWS Cloud Development Kit</a> (AWS CDK) is an open-source software
-development framework to define cloud infrastructure in code and provision it
-through AWS CloudFormation.</p>
-<p><code>@guardian/cdk</code> builds on CDK to provide Guardian-specific patterns and
-constructs. It is an opinionated and secure-by-default way to describe and
-provision your AWS resources.</p>
-<p>Jump to:</p>
-<ul>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="https://github.com/guardian/cdk-demo">CDK demo including screencast</a></li>
-<li><a href="./docs/migration-guide.md">Migrating an existing Cloudformation template</a></li>
-<li>View the <a href="https://guardian.github.io/cdk/">typedocs</a></li>
-<li><a href="#contributing">Contributing</a> to <code>@guardian/cdk</code></li>
-<li><a href="./docs/best-practices.md">Best practices</a></li>
-</ul>
-
-<a href="#quickstart" id="quickstart" style="color: inherit; text-decoration: none;">
-  <h2>Quickstart</h2>
-</a>
-<p><code>@guardian/cdk</code> expects certain Parameter Store values to be present - for
-example, VPC IDs, and the location of dist buckets. To check for account
-readiness and fix any issues, run:</p>
-<pre><code><span class="hl-0">npx</span><span class="hl-1"> @</span><span class="hl-0">guardian</span><span class="hl-1">/</span><span class="hl-0">cdk</span><span class="hl-1"> </span><span class="hl-0">account</span><span class="hl-1">-</span><span class="hl-0">readiness</span><span class="hl-1"> --</span><span class="hl-0">profile</span><span class="hl-1"> [</span><span class="hl-0">profile</span><span class="hl-1">]</span>
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@guardian/cdk - v0.39.0</title>
+	<meta name="description" content="Documentation for @guardian/cdk - v0.39.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@guardian/cdk - v0.39.0</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>@guardian/cdk - v0.39.0</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#general-usage" id="general-usage" style="color: inherit; text-decoration: none;">
+					<h1>General Usage</h1>
+				</a>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<p>This library can be installed from npm.</p>
+				<pre><code><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">install</span><span style="color: #000000"> --</span><span style="color: #001080">save</span><span style="color: #000000"> @</span><span style="color: #001080">guardian</span><span style="color: #000000">/</span><span style="color: #001080">cdk</span>
 </code></pre>
-<p>Then, instantiate a new CDK app:</p>
-<pre><code><span class="hl-0">npx</span><span class="hl-1"> @</span><span class="hl-0">guardian</span><span class="hl-1">/</span><span class="hl-0">cdk</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> --</span><span class="hl-0">app</span><span class="hl-1"> [</span><span class="hl-0">app</span><span class="hl-1">] --</span><span class="hl-0">stack</span><span class="hl-1"> [</span><span class="hl-0">stack</span><span class="hl-1">]</span>
+				<p>or</p>
+				<pre><code><span style="color: #001080">yarn</span><span style="color: #000000"> </span><span style="color: #001080">add</span><span style="color: #000000"> @</span><span style="color: #001080">guardian</span><span style="color: #000000">/</span><span style="color: #001080">cdk</span>
 </code></pre>
-<blockquote>
-<p>Tip: if you are migrating an app, see the <a href="./docs/migration-guide.md">Migration
-Guide</a> for more detail.</p>
-</blockquote>
-<blockquote>
-<p>Tip: the <a href="https://docs.aws.amazon.com/cdk/v2/guide/home.html">AWS CDK Developer
-Guide</a> is worth a
-read-through if you are new to CDK.</p>
-</blockquote>
-
-<a href="#patterns-and-constructs" id="patterns-and-constructs" style="color: inherit; text-decoration: none;">
-  <h3>Patterns and Constructs</h3>
-</a>
-<p>Once you have your new app, you can start adding patterns and constructs.</p>
-<p>Patterns can be imported from the top level of the library:</p>
-<pre><code class="language-typescript"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-0">GuScheduledLambda</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-4">&quot;@guardian/cdk&quot;</span><span class="hl-1">;</span>
-</code></pre>
-<p>We encourage you to use patterns rather than constructs whenever possible.</p>
-<p>If you need to use a construct directly, they must be imported from their construct directory:</p>
-<pre><code class="language-typescript"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-0">GuAutoScalingGroup</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-4">&quot;@guardian/cdk/lib/constructs/autoscaling&quot;</span><span class="hl-1">;</span>
-</code></pre>
-<p>Our hope is that patterns solve the majority of your use-cases. If they don&#39;t,
-please let us know about your use-case so that we can consider supporting it via
-a pattern.</p>
-<p>Alternatively, PRs are always welcome!</p>
-
-<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
-  <h2>Contributing</h2>
-</a>
-<p>We welcome contributions to <code>@guardian/cdk</code>!</p>
-<p>To get started, please read our <a href="./docs/contributing.md">Contribution
-Guidelines.</a>.</p>
-</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/constants.html">constants</a></li><li class=" tsd-kind-module"><a href="modules/constructs_acm.html">constructs/acm</a></li><li class=" tsd-kind-module"><a href="modules/constructs_autoscaling.html">constructs/autoscaling</a></li><li class=" tsd-kind-module"><a href="modules/constructs_cloudwatch.html">constructs/cloudwatch</a></li><li class=" tsd-kind-module"><a href="modules/constructs_core.html">constructs/core</a></li><li class=" tsd-kind-module"><a href="modules/constructs_dns.html">constructs/dns</a></li><li class=" tsd-kind-module"><a href="modules/constructs_ec2.html">constructs/ec2</a></li><li class=" tsd-kind-module"><a href="modules/constructs_ecs.html">constructs/ecs</a></li><li class=" tsd-kind-module"><a href="modules/constructs_iam.html">constructs/iam</a></li><li class=" tsd-kind-module"><a href="modules/constructs_kinesis.html">constructs/kinesis</a></li><li class=" tsd-kind-module"><a href="modules/constructs_lambda.html">constructs/lambda</a></li><li class=" tsd-kind-module"><a href="modules/constructs_loadbalancing.html">constructs/loadbalancing</a></li><li class=" tsd-kind-module"><a href="modules/constructs_rds.html">constructs/rds</a></li><li class=" tsd-kind-module"><a href="modules/constructs_s3.html">constructs/s3</a></li><li class=" tsd-kind-module"><a href="modules/constructs_sns.html">constructs/sns</a></li><li class=" tsd-kind-module"><a href="modules/constructs_stack_set.html">constructs/stack-<wbr/>set</a></li><li class=" tsd-kind-module"><a href="modules/constructs_vpc.html">constructs/vpc</a></li><li class=" tsd-kind-module"><a href="modules/patterns.html">patterns</a></li><li class=" tsd-kind-module"><a href="modules/types.html">types</a></li><li class=" tsd-kind-module"><a href="modules/utils_ec2.html">utils/ec2</a></li><li class=" tsd-kind-module"><a href="modules/utils_lambda.html">utils/lambda</a></li><li class=" tsd-kind-module"><a href="modules/utils_mixin.html">utils/mixin</a></li><li class=" tsd-kind-module"><a href="modules/utils_security_groups.html">utils/security-<wbr/>groups</a></li><li class=" tsd-kind-module"><a href="modules/utils_test.html">utils/test</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li><li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
+				<a href="#patterns" id="patterns" style="color: inherit; text-decoration: none;">
+					<h2>Patterns</h2>
+				</a>
+				<p>Patterns are high level classes which compose a number of constructs to produce standard architectures. For example, you should be able to get all of the resources you need to deploy a new lambda function from one <code>GuLambdaStack</code> class. We&#39;re still working on these right now but hope to start bringing you some of the most common Guardian stacks soon!</p>
+				<p>Patterns should be your default entry point to this library.</p>
+				<a href="#constructs" id="constructs" style="color: inherit; text-decoration: none;">
+					<h2>Constructs</h2>
+				</a>
+				<p>Constructs are lower level classes which will create one or more resources to produce one element of a stack. For example, the <code>GuDatabaseInstance</code> will create an RDS instance as well as a parameter group, if required. This library defines a number of constructs which are combined to create the higher level patterns.</p>
+				<p>If there is a pattern available for your use case, prefer to use that over composing constructs yourself. We welcome feedback and/or PRs to extend the functionality of patterns. Where you need to do something outside of currently available patterns, you can use the constructs to provide some level of abstraction. In this case, consider whether it&#39;s worth defining a pattern.</p>
+				<a href="#using-patterns-and-constructs" id="using-patterns-and-constructs" style="color: inherit; text-decoration: none;">
+					<h2>Using patterns and constructs</h2>
+				</a>
+				<p>Patterns can be imported from the top level of the library (e.g. <code>import { InstanceRole } from &quot;@guardian/cdk&quot;;</code>) while constructs must be imported from their construct directory (e.g. <code>import { GuAutoScalingGroup } from &quot;@guardian/cdk/lib/constructs/autoscaling&quot;;</code>)</p>
+				<a href="#aws-library-versions" id="aws-library-versions" style="color: inherit; text-decoration: none;">
+					<h2>AWS Library Versions</h2>
+				</a>
+				<p>Any versions of the <code>@aws-cdk</code> libraries that you have installed in your project must be the same version as those used in the <code>@guardian/cdk</code> library.</p>
+				<a href="#synthesising" id="synthesising" style="color: inherit; text-decoration: none;">
+					<h2>Synthesising</h2>
+				</a>
+				<p>The <code>cdk synth</code> command can be used to generate cloudformation from CDK defintions. This will, by default, generate JSON in the <code>cdk.out</code> directory. Apps written in typescript will need to either be built first so the javascript can be passed to the app value, or can be passed in directly using <code>ts-node</code> (e.g. <code>--app=&quot;ts-node ./bin/my-app.ts&quot;</code>). For apps with a single stack, the generated yaml will also be printed in the console. For app with multiple stacks, you can specify a stack to see the yaml output. This yaml can then be directed to a file if desired.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constants.html">constants</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_autoscaling.html">constructs/autoscaling</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_core.html">constructs/core</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_ec2.html">constructs/ec2</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_iam.html">constructs/iam</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_lambda.html">constructs/lambda</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/constructs_rds.html">constructs/rds</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/index.html">index</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils.html">utils</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

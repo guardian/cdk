@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>constructs/autoscaling | @guardian/cdk - v0.39.0</title>
+	<title>GuAsgCapacityProps | @guardian/cdk - v0.39.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.39.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,38 +55,74 @@
 					<a href="../modules.html">@guardian/cdk - v0.39.0</a>
 				</li>
 				<li>
-					<a href="constructs_autoscaling.html">constructs/autoscaling</a>
+					<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
+				</li>
+				<li>
+					<a href="constructs_autoscaling.guasgcapacityprops.html">GuAsgCapacityProps</a>
 				</li>
 			</ul>
-			<h1>Module constructs/autoscaling</h1>
+			<h1>Interface GuAsgCapacityProps</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p><code>minimumInstances</code> determines the number of ec2 instances running under normal circumstances
+						(i.e. when there are no deployment or scaling events in progress).</p>
+					</div>
+					<p><code>maximumInstances</code> is optional. If omitted, this will be set to <code>minimumInstances * 2</code>.
+					This allows us to support Riff-Raff&#39;s autoscaling deployment type by default.</p>
+					<p>The maximum capacity value should only be set if you need to scale beyond the default limit (e.g. due to heavy traffic)
+					or restrict scaling for a specific reason.</p>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">GuAsgCapacityProps</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_autoscaling.guautoscalinggroup.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_autoscaling.guuserdata.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_autoscaling.guasgcapacityprops.html" class="tsd-kind-icon">Gu<wbr>Asg<wbr>Capacity<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_autoscaling.guautoscalinggroupprops.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_autoscaling.guuserdataprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_autoscaling.guuserdatas3configurationprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Configuration<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_autoscaling.guuserdatas3distributableprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Distributable<wbr>Props</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_autoscaling.guasgcapacityprops.html#maximuminstances" class="tsd-kind-icon">maximum<wbr>Instances</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_autoscaling.guasgcapacityprops.html#minimuminstances" class="tsd-kind-icon">minimum<wbr>Instances</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="maximuminstances" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> maximum<wbr>Instances</h3>
+					<div class="tsd-signature tsd-kind-icon">maximum<wbr>Instances<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ce220c8/src/constructs/autoscaling/asg.ts#L51">src/constructs/autoscaling/asg.ts:51</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="minimuminstances" class="tsd-anchor"></a>
+					<h3>minimum<wbr>Instances</h3>
+					<div class="tsd-signature tsd-kind-icon">minimum<wbr>Instances<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ce220c8/src/constructs/autoscaling/asg.ts#L50">src/constructs/autoscaling/asg.ts:50</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -97,37 +133,37 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constants.html">constants</a>
+						<a href="../modules/constants.html">constants</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="constructs_autoscaling.html">constructs/autoscaling</a>
+						<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
+						<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_core.html">constructs/core</a>
+						<a href="../modules/constructs_core.html">constructs/core</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_ec2.html">constructs/ec2</a>
+						<a href="../modules/constructs_ec2.html">constructs/ec2</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_iam.html">constructs/iam</a>
+						<a href="../modules/constructs_iam.html">constructs/iam</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_lambda.html">constructs/lambda</a>
+						<a href="../modules/constructs_lambda.html">constructs/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_loadbalancing.html">constructs/loadbalancing</a>
+						<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_rds.html">constructs/rds</a>
+						<a href="../modules/constructs_rds.html">constructs/rds</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="index.html">index</a>
+						<a href="../modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils.html">utils</a>
+						<a href="../modules/utils.html">utils</a>
 					</li>
 				</ul>
 			</nav>
@@ -139,20 +175,32 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="../classes/constructs_autoscaling.guuserdata.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data</a>
 					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_autoscaling.guasgcapacityprops.html" class="tsd-kind-icon">Gu<wbr>Asg<wbr>Capacity<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_autoscaling.guasgcapacityprops.html#maximuminstances" class="tsd-kind-icon">maximum<wbr>Instances</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_autoscaling.guasgcapacityprops.html#minimuminstances" class="tsd-kind-icon">minimum<wbr>Instances</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_autoscaling.guasgcapacityprops.html" class="tsd-kind-icon">Gu<wbr>Asg<wbr>Capacity<wbr>Props</a>
+						<a href="constructs_autoscaling.guautoscalinggroupprops.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_autoscaling.guautoscalinggroupprops.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Props</a>
+						<a href="constructs_autoscaling.guuserdataprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_autoscaling.guuserdataprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>Props</a>
+						<a href="constructs_autoscaling.guuserdatas3configurationprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Configuration<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_autoscaling.guuserdatas3configurationprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Configuration<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_autoscaling.guuserdatas3distributableprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Distributable<wbr>Props</a>
+						<a href="constructs_autoscaling.guuserdatas3distributableprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Distributable<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>
@@ -171,6 +219,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>

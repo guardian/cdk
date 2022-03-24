@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>constructs/loadbalancing | @guardian/cdk - v0.39.0</title>
+	<title>SubnetType | @guardian/cdk - v0.39.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.39.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,13 @@
 					<a href="../modules.html">@guardian/cdk - v0.39.0</a>
 				</li>
 				<li>
-					<a href="constructs_loadbalancing.html">constructs/loadbalancing</a>
+					<a href="../modules/constructs_ec2.html">constructs/ec2</a>
+				</li>
+				<li>
+					<a href="constructs_ec2.subnettype.html">SubnetType</a>
 				</li>
 			</ul>
-			<h1>Module constructs/loadbalancing</h1>
+			<h1>Enumeration SubnetType</h1>
 		</div>
 	</div>
 </header>
@@ -70,25 +73,36 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_loadbalancing.guapplicationlistener.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Listener</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_loadbalancing.guapplicationloadbalancer.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Load<wbr>Balancer</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_loadbalancing.guapplicationtargetgroup.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Target<wbr>Group</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_loadbalancing.guclassicloadbalancer.html" class="tsd-kind-icon">Gu<wbr>Classic<wbr>Load<wbr>Balancer</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_loadbalancing.guhttpsapplicationlistener.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Application<wbr>Listener</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_loadbalancing.guhttpsclassicloadbalancer.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Classic<wbr>Load<wbr>Balancer</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_loadbalancing.guapplicationlistenerprops.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Listener<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_loadbalancing.guapplicationtargetgroupprops.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Target<wbr>Group<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_loadbalancing.guhttpsapplicationlistenerprops.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Application<wbr>Listener<wbr>Props</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="constructs_ec2.subnettype.html#private" class="tsd-kind-icon">PRIVATE</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="constructs_ec2.subnettype.html#public" class="tsd-kind-icon">PUBLIC</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="private" class="tsd-anchor"></a>
+					<h3>PRIVATE</h3>
+					<div class="tsd-signature tsd-kind-icon">PRIVATE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;Private&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ce220c8/src/constructs/ec2/vpc.ts#L14">src/constructs/ec2/vpc.ts:14</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="public" class="tsd-anchor"></a>
+					<h3>PUBLIC</h3>
+					<div class="tsd-signature tsd-kind-icon">PUBLIC<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;Public&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ce220c8/src/constructs/ec2/vpc.ts#L13">src/constructs/ec2/vpc.ts:13</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -99,68 +113,83 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constants.html">constants</a>
+						<a href="../modules/constants.html">constants</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_autoscaling.html">constructs/autoscaling</a>
+						<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
+						<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_core.html">constructs/core</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="constructs_ec2.html">constructs/ec2</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="constructs_iam.html">constructs/iam</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="constructs_lambda.html">constructs/lambda</a>
+						<a href="../modules/constructs_core.html">constructs/core</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="constructs_loadbalancing.html">constructs/loadbalancing</a>
+						<a href="../modules/constructs_ec2.html">constructs/ec2</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_rds.html">constructs/rds</a>
+						<a href="../modules/constructs_iam.html">constructs/iam</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="index.html">index</a>
+						<a href="../modules/constructs_lambda.html">constructs/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils.html">utils</a>
+						<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_rds.html">constructs/rds</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/index.html">index</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils.html">utils</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-module">
+						<a href="constructs_ec2.subnettype.html" class="tsd-kind-icon">Subnet<wbr>Type</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="constructs_ec2.subnettype.html#private" class="tsd-kind-icon">PRIVATE</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="constructs_ec2.subnettype.html#public" class="tsd-kind-icon">PUBLIC</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_loadbalancing.guapplicationlistener.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Listener</a>
+						<a href="../classes/constructs_ec2.guhttpsegresssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Egress<wbr>Security<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_loadbalancing.guapplicationloadbalancer.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Load<wbr>Balancer</a>
+						<a href="../classes/constructs_ec2.gupublicinternetaccesssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Public<wbr>Internet<wbr>Access<wbr>Security<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_loadbalancing.guapplicationtargetgroup.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Target<wbr>Group</a>
+						<a href="../classes/constructs_ec2.gusecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_loadbalancing.guclassicloadbalancer.html" class="tsd-kind-icon">Gu<wbr>Classic<wbr>Load<wbr>Balancer</a>
+						<a href="../classes/constructs_ec2.guvpc.html" class="tsd-kind-icon">Gu<wbr>Vpc</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_loadbalancing.guhttpsapplicationlistener.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Application<wbr>Listener</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_loadbalancing.guhttpsclassicloadbalancer.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Classic<wbr>Load<wbr>Balancer</a>
+						<a href="../classes/constructs_ec2.guwazuhaccess.html" class="tsd-kind-icon">Gu<wbr>Wazuh<wbr>Access</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_loadbalancing.guapplicationlistenerprops.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Listener<wbr>Props</a>
+						<a href="../interfaces/constructs_ec2.cidregress.html" class="tsd-kind-icon">Cidr<wbr>Egress</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_loadbalancing.guapplicationtargetgroupprops.html" class="tsd-kind-icon">Gu<wbr>Application<wbr>Target<wbr>Group<wbr>Props</a>
+						<a href="../interfaces/constructs_ec2.cidringress.html" class="tsd-kind-icon">Cidr<wbr>Ingress</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_loadbalancing.guhttpsapplicationlistenerprops.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Application<wbr>Listener<wbr>Props</a>
+						<a href="../interfaces/constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/constructs_ec2.gusubnetprops.html" class="tsd-kind-icon">Gu<wbr>Subnet<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>

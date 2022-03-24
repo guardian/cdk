@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>constructs/ec2 | @guardian/cdk - v0.39.0</title>
+	<title>GuUserDataProps | @guardian/cdk - v0.39.0</title>
 	<meta name="description" content="Documentation for @guardian/cdk - v0.39.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,46 +55,62 @@
 					<a href="../modules.html">@guardian/cdk - v0.39.0</a>
 				</li>
 				<li>
-					<a href="constructs_ec2.html">constructs/ec2</a>
+					<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
+				</li>
+				<li>
+					<a href="constructs_autoscaling.guuserdataprops.html">GuUserDataProps</a>
 				</li>
 			</ul>
-			<h1>Module constructs/ec2</h1>
+			<h1>Interface GuUserDataProps</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">GuUserDataProps</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumerations</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/constructs_ec2.subnettype.html" class="tsd-kind-icon">Subnet<wbr>Type</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_ec2.guhttpsegresssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Egress<wbr>Security<wbr>Group</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_ec2.gupublicinternetaccesssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Public<wbr>Internet<wbr>Access<wbr>Security<wbr>Group</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_ec2.gusecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_ec2.guvpc.html" class="tsd-kind-icon">Gu<wbr>Vpc</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/constructs_ec2.guwazuhaccess.html" class="tsd-kind-icon">Gu<wbr>Wazuh<wbr>Access</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_ec2.cidregress.html" class="tsd-kind-icon">Cidr<wbr>Egress</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_ec2.cidringress.html" class="tsd-kind-icon">Cidr<wbr>Ingress</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/constructs_ec2.gusubnetprops.html" class="tsd-kind-icon">Gu<wbr>Subnet<wbr>Props</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_autoscaling.guuserdataprops.html#configuration" class="tsd-kind-icon">configuration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_autoscaling.guuserdataprops.html#distributable" class="tsd-kind-icon">distributable</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="configuration" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> configuration</h3>
+					<div class="tsd-signature tsd-kind-icon">configuration<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="constructs_autoscaling.guuserdatas3configurationprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuUserDataS3ConfigurationProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ce220c8/src/constructs/autoscaling/user-data.ts#L29">src/constructs/autoscaling/user-data.ts:29</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="distributable" class="tsd-anchor"></a>
+					<h3>distributable</h3>
+					<div class="tsd-signature tsd-kind-icon">distributable<span class="tsd-signature-symbol">:</span> <a href="constructs_autoscaling.guuserdatas3distributableprops.html" class="tsd-signature-type" data-tsd-kind="Interface">GuUserDataS3DistributableProps</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/guardian/cdk/blob/ce220c8/src/constructs/autoscaling/user-data.ts#L28">src/constructs/autoscaling/user-data.ts:28</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -105,71 +121,74 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constants.html">constants</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="constructs_autoscaling.html">constructs/autoscaling</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="constructs_cloudwatch.html">constructs/cloudwatch</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="constructs_core.html">constructs/core</a>
+						<a href="../modules/constants.html">constants</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="constructs_ec2.html">constructs/ec2</a>
+						<a href="../modules/constructs_autoscaling.html">constructs/autoscaling</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_iam.html">constructs/iam</a>
+						<a href="../modules/constructs_cloudwatch.html">constructs/cloudwatch</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_lambda.html">constructs/lambda</a>
+						<a href="../modules/constructs_core.html">constructs/core</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_loadbalancing.html">constructs/loadbalancing</a>
+						<a href="../modules/constructs_ec2.html">constructs/ec2</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="constructs_rds.html">constructs/rds</a>
+						<a href="../modules/constructs_iam.html">constructs/iam</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="index.html">index</a>
+						<a href="../modules/constructs_lambda.html">constructs/lambda</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils.html">utils</a>
+						<a href="../modules/constructs_loadbalancing.html">constructs/loadbalancing</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/constructs_rds.html">constructs/rds</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/index.html">index</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils.html">utils</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/constructs_ec2.subnettype.html" class="tsd-kind-icon">Subnet<wbr>Type</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/constructs_autoscaling.guautoscalinggroup.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_ec2.guhttpsegresssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Https<wbr>Egress<wbr>Security<wbr>Group</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_ec2.gupublicinternetaccesssecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Public<wbr>Internet<wbr>Access<wbr>Security<wbr>Group</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_ec2.gusecuritygroup.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_ec2.guvpc.html" class="tsd-kind-icon">Gu<wbr>Vpc</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/constructs_ec2.guwazuhaccess.html" class="tsd-kind-icon">Gu<wbr>Wazuh<wbr>Access</a>
+						<a href="../classes/constructs_autoscaling.guuserdata.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_ec2.cidregress.html" class="tsd-kind-icon">Cidr<wbr>Egress</a>
+						<a href="constructs_autoscaling.guasgcapacityprops.html" class="tsd-kind-icon">Gu<wbr>Asg<wbr>Capacity<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_ec2.cidringress.html" class="tsd-kind-icon">Cidr<wbr>Ingress</a>
+						<a href="constructs_autoscaling.guautoscalinggroupprops.html" class="tsd-kind-icon">Gu<wbr>Auto<wbr>Scaling<wbr>Group<wbr>Props</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_autoscaling.guuserdataprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_autoscaling.guuserdataprops.html#configuration" class="tsd-kind-icon">configuration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="constructs_autoscaling.guuserdataprops.html#distributable" class="tsd-kind-icon">distributable</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="constructs_autoscaling.guuserdatas3configurationprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Configuration<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_ec2.gusecuritygroupprops.html" class="tsd-kind-icon">Gu<wbr>Security<wbr>Group<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/constructs_ec2.gusubnetprops.html" class="tsd-kind-icon">Gu<wbr>Subnet<wbr>Props</a>
+						<a href="constructs_autoscaling.guuserdatas3distributableprops.html" class="tsd-kind-icon">Gu<wbr>User<wbr>Data<wbr>S3Distributable<wbr>Props</a>
 					</li>
 				</ul>
 			</nav>
@@ -188,6 +207,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
