@@ -21,6 +21,7 @@ Jump to:
 - [Migrating an existing Cloudformation template](./docs/migration-guide.md)
 - View the [typedocs](https://guardian.github.io/cdk/)
 - [Contributing](#contributing) to `@guardian/cdk`
+- [Best practices](./docs/best-practices.md)
 
 ## Quickstart
 
