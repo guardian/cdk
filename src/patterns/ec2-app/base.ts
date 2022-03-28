@@ -114,7 +114,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
 }
 
 /**
- * Pattern which creates all of the resources needed to run an application on EC2 instances.
+ * Pattern which creates the resources needed to run an application on EC2 instances.
  * For convenience, you may wish to use [[`GuPlayApp`]] or [[`GuNodeApp`]], which extend this class.
  *
  * This pattern will grant your EC2 instances a number of commonly needed IAM permissions. For more information on
@@ -125,8 +125,6 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  * [[`AppAccess`]] specified).
  * 2. Communication between the load balancer and the EC2 instances over HTTP, via the specified application port.
  * 3. Outbound traffic from your EC2 instances over HTTPS (to enable communication with third-party APIs).
- *
- * The pattern will run a single EC2 instance in `CODE` and three EC2 instances in `PROD`.
  *
  * Example usage for a public facing app (open to the internet):
  * ```typescript

@@ -15,18 +15,11 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
  *
  * Alarm actions are enabled by default.
  *
- * To silence alarm actions in `CODE`, provide a Mapping:
+ * To enable the alarm only in PROD, use the value of `Stage`:
  * ```typescript
  * new GuAlarm(stack, "alarm", {
  *   // other required props
- *   actionsEnabled: stack.withStageDependentValue({
- *     app: "my-app",
- *     variableName: "alarmActionsEnabled",
- *     stageValues: {
- *       [Stage.CODE]: false,
- *       [Stage.PROD]: true,
- *     },
- *   }),
+ *   actionsEnabled: this.stage !== "PROD",
  * });
  * ```
  *

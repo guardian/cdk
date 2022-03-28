@@ -18,9 +18,8 @@ export interface GuDnsRecordSetProps {
 /**
  * This construct can be used to create DNS records in NS1.
  *
- * Prefer to use [[`GuCname`]] when creating a CNAME for a CODE or PROD load balancer,
+ * Prefer to use [[`GuCname`]] when creating a CNAME for a load balancer,
  * as this requires less boilerplate.
-
  */
 export class GuDnsRecordSet {
   constructor(scope: GuStack, id: string, props: GuDnsRecordSetProps) {
