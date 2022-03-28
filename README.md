@@ -35,6 +35,16 @@ Then, instantiate a new CDK app:
 
     npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage]
 
+For example, for the app `riff-raff` we'd do:
+
+```bash
+npx @guardian/cdk@latest new \
+  --app riff-raff \
+  --stack deploy \
+  --stage CODE \
+  --stage PROD
+```
+
 > Tip: Migrating an app? See the [Migration Guide](./docs/migration-guide.md) for more detail.
 
 > Tip: New to CDK? The [AWS CDK Developer Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is worth a read.

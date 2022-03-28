@@ -198,7 +198,6 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *
  * ```typescript
  * export interface MyAppProps extends GuStackProps {
- *   stage: string;
  *   domainName: string;
  *   scaling: GuAsgCapacity;
  *   monitoringConfiguration: Alarms | NoMonitoring;

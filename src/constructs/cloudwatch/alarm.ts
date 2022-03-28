@@ -3,8 +3,7 @@ import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
 import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
 import { Topic } from "@aws-cdk/aws-sns";
 import type { ITopic } from "@aws-cdk/aws-sns";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
+import type { AppIdentity, GuStack } from "../core";
 
 export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;
@@ -19,7 +18,7 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
  * ```typescript
  * new GuAlarm(stack, "alarm", {
  *   // other required props
- *   actionsEnabled: this.stage !== "PROD",
+ *   actionsEnabled: this.stage === "PROD",
  * });
  * ```
  *
