@@ -46,11 +46,7 @@ describe("GuUserData", () => {
               {
                 Ref: "DistributionBucketName",
               },
-              "/test-stack/",
-              {
-                Ref: "Stage",
-              },
-              "/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+              "/test-stack/TEST/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
             ],
           ],
         },
@@ -102,11 +98,7 @@ describe("GuUserData", () => {
               {
                 Ref: "DistributionBucketName",
               },
-              "/test-stack/",
-              {
-                Ref: "Stage",
-              },
-              "/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+              "/test-stack/TEST/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
             ],
           ],
         },

@@ -1,7 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
-import { Stage } from "../../constants";
-import { AccessScope } from "../../constants/access";
+import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuNodeApp, GuPlayApp } from "./framework";
 
@@ -15,18 +14,11 @@ describe("Framework level EC2 app patterns", () => {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
+        domainName: "code-guardian.com",
+        hostedZoneId: "id123",
       },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
     });
 
@@ -44,18 +36,11 @@ describe("Framework level EC2 app patterns", () => {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        [Stage.CODE]: {
-          domainName: "code-guardian.com",
-          hostedZoneId: "id123",
-        },
-        [Stage.PROD]: {
-          domainName: "prod-guardian.com",
-          hostedZoneId: "id124",
-        },
+        domainName: "code-guardian.com",
+        hostedZoneId: "id123",
       },
       scaling: {
-        [Stage.CODE]: { minimumInstances: 1 },
-        [Stage.PROD]: { minimumInstances: 3 },
+        minimumInstances: 1,
       },
     });
 

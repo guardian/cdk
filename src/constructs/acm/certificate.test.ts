@@ -1,6 +1,5 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Stage } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import { GuCertificate } from "./certificate";
@@ -34,32 +33,5 @@ describe("The GuCertificate class", () => {
     });
     const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
     expect(Object.keys(json.Resources)).toContain("MyCloudFormedCertificate");
-  });
-
-  test("the domain name can be stage aware", () => {
-    const stack = simpleGuStackForTesting();
-    new GuCertificate(stack, {
-      app: "testing",
-      domainName: stack.withStageDependentValue({
-        app: "testing",
-        variableName: "domainName",
-        stageValues: {
-          [Stage.CODE]: "code-guardian.com",
-          [Stage.PROD]: "prod-guardian.com",
-        },
-      }),
-    });
-
-    expect(stack).toHaveResource("AWS::CertificateManager::Certificate", {
-      DomainName: {
-        "Fn::FindInMap": [
-          "testing",
-          {
-            Ref: "Stage",
-          },
-          "domainName",
-        ],
-      },
-    });
   });
 });

@@ -9,15 +9,6 @@ Object {
       "Description": "The sender of emails sent using SES.",
       "Type": "String",
     },
-    "Stage": Object {
-      "AllowedValues": Array [
-        "CODE",
-        "PROD",
-      ],
-      "Default": "CODE",
-      "Description": "Stage name",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "GuSESSenderPolicy2E2A75A2": Object {
@@ -102,9 +93,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": Object {
-              "Ref": "Stage",
-            },
+            "Value": "TEST",
           },
         ],
       },

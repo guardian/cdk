@@ -13,22 +13,31 @@ If you are starting from scratch, see the [new project guide](TODO).
 things like VPC identifiers and dist buckets. To ensure AWS your account is set
 up correctly, run:
 
-    npx @guardian/cdk account-readiness --profile [profile]
+    npx @guardian/cdk@latest account-readiness --profile [profile]
 
 Then follow the instructions for any errors.
 
 ## Initial setup
 
-Firstly, ensure you are running a recent version of Node and then initialise a
-new CDK app from within your repo:
+First ensure you are running a recent version of Node.
+Then initialise a new CDK app from within your repo:
 
-    npx @guardian/cdk new --app [app] --stack [stack] --yaml-template-location cfn.yaml
+    npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] --yaml-template-location /path/to/cfn.yaml
 
-> Tip: run `npx @guardian/cdk new -h` to find out more about the `app` and
-> `stack` flags.
+> Tip: Run `npx @guardian/cdk@latest new -h` to find out more about the `app`,`stack` and `stage` flags.
 
-This will create a new CDK (Typescript) app that simply wraps your existing
-Cloudformation template.
+This will create a new CDK (Typescript) app that simply wraps your existing Cloudformation template.
+
+For example, to migrate an app called `riff-raff` that has a `CODE` and `PROD` stage, we'd do:
+
+```bash
+npx @guardian/cdk@latest new \
+  --app riff-raff \
+  --stack deploy \
+  --stage CODE \
+  --stage PROD \
+  --yaml-template-location cloudformation/riff-raff.template.yaml
+```
 
 Pay attention to the output of the command as it may describe further manual
 steps at this point.

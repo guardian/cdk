@@ -6,8 +6,8 @@ import type { CreateStackInput } from "aws-sdk/clients/cloudformation";
 import chalk from "chalk";
 import { prompt } from "inquirer";
 import type { Question } from "inquirer";
-import type { SsmParameterPath } from "../../../constants/ssm-parameter-paths";
-import { TrackingTag } from "../../../constants/tracking-tag";
+import type { SsmParameterPath } from "../../../constants";
+import { TrackingTag } from "../../../constants";
 import { GuStack } from "../../../constructs/core";
 import type { GuStackProps } from "../../../constructs/core";
 import type { AwsConfig } from "../../../types/cli";
@@ -16,7 +16,7 @@ interface PopulatedParameter extends SsmParameterPath {
   value: string;
 }
 
-interface BootstrapProps extends GuStackProps {
+interface BootstrapProps extends Omit<GuStackProps, "stage"> {
   parameters: PopulatedParameter[];
 }
 
@@ -24,7 +24,10 @@ class AccountBootstrap extends GuStack {
   migratedFromCloudFormation = true;
 
   constructor(scope: App, id: string, props: BootstrapProps) {
-    super(scope, id, props);
+    super(scope, id, {
+      ...props,
+      stage: "INFRA",
+    });
 
     this.templateOptions.description = `CDK Bootstrap template used to manage required SSM parameters and other resources.`;
 

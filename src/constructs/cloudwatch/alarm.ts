@@ -3,8 +3,7 @@ import type { AlarmProps } from "@aws-cdk/aws-cloudwatch";
 import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
 import { Topic } from "@aws-cdk/aws-sns";
 import type { ITopic } from "@aws-cdk/aws-sns";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
+import type { AppIdentity, GuStack } from "../core";
 
 export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;
@@ -15,18 +14,11 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
  *
  * Alarm actions are enabled by default.
  *
- * To silence alarm actions in `CODE`, provide a Mapping:
+ * To enable the alarm only in PROD, use the value of `Stage`:
  * ```typescript
  * new GuAlarm(stack, "alarm", {
  *   // other required props
- *   actionsEnabled: stack.withStageDependentValue({
- *     app: "my-app",
- *     variableName: "alarmActionsEnabled",
- *     stageValues: {
- *       [Stage.CODE]: false,
- *       [Stage.PROD]: true,
- *     },
- *   }),
+ *   actionsEnabled: this.stage === "PROD",
  * });
  * ```
  *
