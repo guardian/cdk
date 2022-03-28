@@ -5,7 +5,6 @@ import gitUrlParse from "git-url-parse";
 import { ContextKeys, StageForInfrastructure, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
 import { gitRemoteOriginUrl } from "../../utils/git";
-import { Logger } from "../../utils/logger";
 import type { StackStageIdentity } from "./identity";
 import { GuStageMapping } from "./mappings";
 import type { GuMappingValue, GuStageMappingValue } from "./mappings";
@@ -167,7 +166,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
       const repositoryName = gitUrlParse(repositoryUrl).full_name;
       this.addTag(TagKeys.REPOSITORY_NAME, repositoryName);
     } catch {
-      Logger.info(
+      console.info(
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
       );
     }
