@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
-import { GuMigratingResource } from "../../constructs/core/migrating";
-import { isGuMigratingStack } from "../../types/migrating";
+import { GuMigratingResource } from "../../constructs/core";
+import { isGuMigratingStack } from "../../types";
 import type { AnyConstructor } from "./types";
 
 /**

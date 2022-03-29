@@ -1,10 +1,10 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
+import { Duration, Stack } from "aws-cdk-lib";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { Duration, Stack } from "aws-cdk-lib";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import type { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {

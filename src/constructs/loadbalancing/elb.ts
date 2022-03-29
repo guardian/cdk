@@ -1,3 +1,4 @@
+import { Duration } from "aws-cdk-lib";
 import { LoadBalancer, LoadBalancingProtocol } from "aws-cdk-lib/aws-elasticloadbalancing";
 import type {
   CfnLoadBalancer,
@@ -5,13 +6,10 @@ import type {
   LoadBalancerListener,
   LoadBalancerProps,
 } from "aws-cdk-lib/aws-elasticloadbalancing";
-import { Duration } from "aws-cdk-lib";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuArnParameter } from "../core";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
-import type { GuMigratingResource } from "../core/migrating";
+import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
 
 interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource, AppIdentity {
   propertiesToOverride?: Record<string, unknown>;

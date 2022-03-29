@@ -2,8 +2,7 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import { GuDistributionBucketParameter } from "../../core";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
+import type { AppIdentity, GuStack } from "../../core";
 import { GuAllowPolicy } from "./base-policy";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 

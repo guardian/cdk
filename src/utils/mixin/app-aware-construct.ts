@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { AppIdentity } from "../../constructs/core/identity";
+import { AppIdentity } from "../../constructs/core";
 import type { AnyConstructor } from "./types";
 
 export function GuAppAwareConstruct<TBase extends AnyConstructor>(BaseClass: TBase) {

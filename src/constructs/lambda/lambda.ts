@@ -1,14 +1,13 @@
+import { Annotations, Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Code, Function, Runtime, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import type { FunctionProps } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
-import { Annotations, Duration } from "aws-cdk-lib";
-import { GuDistributable } from "../../types/distributable";
+import { GuDistributable } from "../../types";
 import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
 import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitoringProps } from "../cloudwatch";
-import { GuDistributionBucketParameter } from "../core";
 import type { GuStack } from "../core";
-import { AppIdentity } from "../core/identity";
+import { AppIdentity, GuDistributionBucketParameter } from "../core";
 import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
 const DEPRECATED_RUNTIMES: Runtime[] = [

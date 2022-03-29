@@ -1,9 +1,8 @@
 import "../test/jest";
+import { Annotations } from "aws-cdk-lib";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
-import { Annotations } from "aws-cdk-lib";
-import type { GuStack } from "../../constructs/core";
-import type { GuMigratingResource } from "../../constructs/core/migrating";
+import type { GuMigratingResource, GuStack } from "../../constructs/core";
 import { simpleGuStackForTesting } from "../test";
 import { GuStatefulMigratableConstruct } from "./migratable-construct-stateful";
 

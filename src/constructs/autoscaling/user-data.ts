@@ -1,12 +1,11 @@
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import type { S3DownloadOptions } from "aws-cdk-lib/aws-ec2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
-import { GuDistributable } from "../../types/distributable";
-import type { GuDistributableForEc2 } from "../../types/distributable";
+import { GuDistributable } from "../../types";
+import type { GuDistributableForEc2 } from "../../types";
 import type { GuPrivateS3ConfigurationProps } from "../../utils/ec2";
 import { GuDistributionBucketParameter } from "../core";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
+import type { AppIdentity, GuStack } from "../core";
 
 export type GuUserDataPropsWithApp = GuUserDataProps & AppIdentity;
 export interface GuUserDataProps {

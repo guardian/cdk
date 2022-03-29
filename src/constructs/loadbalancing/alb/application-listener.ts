@@ -3,9 +3,7 @@ import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalanc
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
-import type { GuMigratingResource } from "../../core/migrating";
+import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
 export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity, GuMigratingResource {}

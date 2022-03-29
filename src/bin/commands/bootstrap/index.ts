@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { SSM_PARAMETER_PATHS } from "../../../constants/ssm-parameter-paths";
+import { SSM_PARAMETER_PATHS } from "../../../constants";
 import type { AwsBootstrap, CliCommandResponse } from "../../../types/cli";
 import { accountBootstrapCfn, createBootstrapStack } from "./bootstrap-stack";
 

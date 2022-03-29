@@ -1,11 +1,11 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { Stack } from "aws-cdk-lib";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import type { SynthedStack } from "../../../utils/test";
-import type { AppIdentity } from "../../core/identity";
+import type { AppIdentity } from "../../core";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {

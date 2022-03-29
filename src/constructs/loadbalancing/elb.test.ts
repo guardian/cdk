@@ -5,7 +5,7 @@ import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
-import type { AppIdentity } from "../core/identity";
+import type { AppIdentity } from "../core";
 import { GuClassicLoadBalancer, GuHttpsClassicLoadBalancer } from "./elb";
 
 describe("The GuClassicLoadBalancer class", () => {

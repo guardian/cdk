@@ -1,5 +1,5 @@
 import { Peer } from "aws-cdk-lib/aws-ec2";
-import { AccessScope } from "../constants/access";
+import { AccessScope } from "../constants";
 import { AppAccess } from "./access";
 
 describe("AppAccess.validate", () => {

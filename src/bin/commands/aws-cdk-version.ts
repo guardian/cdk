@@ -1,4 +1,4 @@
-import { LibraryInfo } from "../../constants/library-info";
+import { LibraryInfo } from "../../constants";
 import type { CliCommandResponse } from "../../types/cli";
 
 export const awsCdkVersionCommand = (): CliCommandResponse => {

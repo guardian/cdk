@@ -1,6 +1,6 @@
 import { AccountPrincipal } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../core";
-import { GuFastlyCustomerIdParameter } from "../core/parameters/fastly";
+import { GuFastlyCustomerIdParameter } from "../core";
 import { GuPutS3ObjectsPolicy } from "./policies";
 import { GuRole } from "./roles";
 

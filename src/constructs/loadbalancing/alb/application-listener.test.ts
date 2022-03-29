@@ -1,12 +1,11 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
+import { Stack } from "aws-cdk-lib";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { Stack } from "aws-cdk-lib";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuCertificate } from "../../acm";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
+import type { AppIdentity, GuStack } from "../../core";
 import { GuApplicationListener, GuHttpsApplicationListener } from "./application-listener";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 import { GuApplicationTargetGroup } from "./application-target-group";
