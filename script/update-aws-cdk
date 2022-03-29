@@ -58,12 +58,12 @@ checkForLocalChanges() {
 }
 
 raisePR() {
-  LIBRARY_TO_CHECK="@aws-cdk/core"
-  INSTALLED_VERSION_NUMBER=$(jq -r ".dependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
+  LIBRARY_TO_CHECK="aws-cdk-lib"
+  INSTALLED_VERSION_NUMBER=$(jq -r ".devDependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
 
   BRANCH_NAME="update-aws-cdk-$INSTALLED_VERSION_NUMBER"
-  COMMIT_SUBJECT="chore(deps)!: Update aws-cdk libraries to $INSTALLED_VERSION_NUMBER"
-  COMMIT_BODY="BREAKING CHANGE: Update aws-cdk libraries to $INSTALLED_VERSION_NUMBER"
+  COMMIT_SUBJECT="chore(deps)!: Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
+  COMMIT_BODY="BREAKING CHANGE: Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
 
   git checkout -b $BRANCH_NAME
 
