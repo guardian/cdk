@@ -1,9 +1,9 @@
 import "@aws-cdk/assert/jest";
 import "../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "@aws-cdk/aws-ec2";
-import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stack } from "@aws-cdk/core";
+import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
+import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
+import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Stack } from "aws-cdk-lib";
 import { findResourceByTypeAndLogicalId, simpleGuStackForTesting } from "../../utils/test";
 import type { Resource, SynthedStack } from "../../utils/test";
 import type { AppIdentity } from "../core";

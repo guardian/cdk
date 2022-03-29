@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import "../../utils/test/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "@aws-cdk/aws-rds";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 

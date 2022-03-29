@@ -1,6 +1,6 @@
 import "../test/jest";
-import { Bucket } from "@aws-cdk/aws-s3";
-import type { BucketProps } from "@aws-cdk/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import type { BucketProps } from "aws-cdk-lib/aws-s3";
 import type { GuStack } from "../../constructs/core";
 import { GuMigratingResource } from "../../constructs/core/migrating";
 import { simpleGuStackForTesting } from "../test";

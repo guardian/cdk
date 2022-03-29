@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import "../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuSnsLambda } from "./sns-lambda";

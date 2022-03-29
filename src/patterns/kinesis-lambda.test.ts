@@ -1,9 +1,9 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
-import { StreamEncryption } from "@aws-cdk/aws-kinesis";
-import type { StreamProps } from "@aws-cdk/aws-kinesis";
-import { Runtime, StartingPosition } from "@aws-cdk/aws-lambda";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
+import { StreamEncryption } from "aws-cdk-lib/aws-kinesis";
+import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
+import { Runtime, StartingPosition } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { StreamRetry } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";

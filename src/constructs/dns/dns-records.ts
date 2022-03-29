@@ -1,5 +1,5 @@
-import type { Duration } from "@aws-cdk/core";
-import { CfnResource } from "@aws-cdk/core";
+import type { Duration } from "aws-cdk-lib";
+import { CfnResource } from "aws-cdk-lib";
 import type { GuDomainName } from "../../types/domain-names";
 import type { GuStack } from "../core";
 import type { AppIdentity } from "../core/identity";

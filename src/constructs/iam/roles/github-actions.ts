@@ -1,5 +1,5 @@
-import { FederatedPrincipal } from "@aws-cdk/aws-iam";
-import { CfnOutput, CfnResource } from "@aws-cdk/core";
+import { CfnOutput, CfnResource } from "aws-cdk-lib";
+import { FederatedPrincipal } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../core";
 import type { GuPolicy } from "../policies";
 import { GuRole } from "./roles";

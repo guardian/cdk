@@ -1,5 +1,5 @@
-import { ApplicationListener, ApplicationProtocol, ListenerAction } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { ApplicationListenerProps } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { ApplicationListener, ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";

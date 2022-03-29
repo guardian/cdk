@@ -1,5 +1,5 @@
-import { Topic } from "@aws-cdk/aws-sns";
-import type { TopicProps } from "@aws-cdk/aws-sns";
+import { Topic } from "aws-cdk-lib/aws-sns";
+import type { TopicProps } from "aws-cdk-lib/aws-sns";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import type { GuStack } from "../core";
 import type { GuMigratingResource } from "../core/migrating";

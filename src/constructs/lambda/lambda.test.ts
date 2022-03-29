@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
-import { Runtime } from "@aws-cdk/aws-lambda";
-import { Annotations, Duration } from "@aws-cdk/core";
+import { Annotations, Duration } from "aws-cdk-lib";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "./lambda";
 

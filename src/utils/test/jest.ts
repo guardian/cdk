@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { HaveResourceAssertion } from "@aws-cdk/assert";
 import type { JestFriendlyAssertion, StackInspector } from "@aws-cdk/assert";
-import { expect as awsExpect } from "@aws-cdk/assert/lib/expect";
+import { expect as awsExpect } from "aws-cdk-lib/assert/lib/expect";
 import { TagKeys } from "../../constants/tag-keys";
 import { TrackingTag } from "../../constants/tracking-tag";
 import type { GuStack } from "../../constructs/core";

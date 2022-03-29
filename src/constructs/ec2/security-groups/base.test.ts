@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
-import { Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "./base";
 

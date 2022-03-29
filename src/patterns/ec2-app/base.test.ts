@@ -1,8 +1,8 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
-import { BlockDeviceVolume, EbsDeviceVolumeType } from "@aws-cdk/aws-autoscaling";
-import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "@aws-cdk/aws-ec2";
-import type { CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
+import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscaling";
+import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
+import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, TagKeys } from "../../constants";
 import { GuPrivateConfigBucketParameter } from "../../constructs/core";
 import { GuSecurityGroup } from "../../constructs/ec2";

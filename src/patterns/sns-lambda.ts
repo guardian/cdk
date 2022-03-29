@@ -1,6 +1,6 @@
-import { SnsEventSource } from "@aws-cdk/aws-lambda-event-sources";
-import { Topic } from "@aws-cdk/aws-sns";
-import { CfnOutput } from "@aws-cdk/core";
+import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { Topic } from "aws-cdk-lib/aws-sns";
+import { CfnOutput } from "aws-cdk-lib";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";

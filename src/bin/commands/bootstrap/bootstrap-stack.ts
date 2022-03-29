@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
-import { StringParameter } from "@aws-cdk/aws-ssm";
-import { App } from "@aws-cdk/core";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { App } from "aws-cdk-lib";
 import AWS from "aws-sdk";
 import type { CreateStackInput } from "aws-sdk/clients/cloudformation";
 import chalk from "chalk";

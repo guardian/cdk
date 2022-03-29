@@ -1,4 +1,4 @@
-import type { Stack } from "@aws-cdk/core/lib/stack";
+import type { Stack } from "aws-cdk-lib/core/lib/stack";
 import type { GuStack } from "../constructs/core";
 
 /**

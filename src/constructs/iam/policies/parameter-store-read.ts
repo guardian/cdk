@@ -1,4 +1,4 @@
-import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
 import type { AppIdentity } from "../../core/identity";

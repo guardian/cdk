@@ -1,11 +1,11 @@
-import { LoadBalancer, LoadBalancingProtocol } from "@aws-cdk/aws-elasticloadbalancing";
+import { LoadBalancer, LoadBalancingProtocol } from "aws-cdk-lib/aws-elasticloadbalancing";
 import type {
   CfnLoadBalancer,
   HealthCheck,
   LoadBalancerListener,
   LoadBalancerProps,
-} from "@aws-cdk/aws-elasticloadbalancing";
-import { Duration } from "@aws-cdk/core";
+} from "aws-cdk-lib/aws-elasticloadbalancing";
+import { Duration } from "aws-cdk-lib";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuArnParameter } from "../core";

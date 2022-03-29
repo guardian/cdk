@@ -1,10 +1,10 @@
-import type { BlockDevice } from "@aws-cdk/aws-autoscaling";
-import { HealthCheck } from "@aws-cdk/aws-autoscaling";
-import type { InstanceType, IPeer, IVpc } from "@aws-cdk/aws-ec2";
-import { Port } from "@aws-cdk/aws-ec2";
-import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Bucket } from "@aws-cdk/aws-s3";
-import { Duration, Tags } from "@aws-cdk/core";
+import { Duration, Tags } from "aws-cdk-lib";
+import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
+import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
+import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
+import { Port } from "aws-cdk-lib/aws-ec2";
+import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import { AccessScope, SSM_PARAMETER_PATHS, TagKeys } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";

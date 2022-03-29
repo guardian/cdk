@@ -1,7 +1,7 @@
-import { Certificate, CertificateValidation } from "@aws-cdk/aws-certificatemanager";
-import type { CertificateProps } from "@aws-cdk/aws-certificatemanager/lib/certificate";
-import { HostedZone } from "@aws-cdk/aws-route53";
-import { RemovalPolicy } from "@aws-cdk/core";
+import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatemanager";
+import type { CertificateProps } from "aws-cdk-lib/aws-certificatemanager/lib/certificate";
+import { HostedZone } from "aws-cdk-lib/aws-route53";
+import { RemovalPolicy } from "aws-cdk-lib";
 import type { GuDomainName } from "../../types/domain-names";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";

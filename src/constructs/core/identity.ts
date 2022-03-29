@@ -1,5 +1,5 @@
-import { Tags } from "@aws-cdk/core";
-import type { IConstruct } from "@aws-cdk/core";
+import { Tags } from "aws-cdk-lib";
+import type { IConstruct } from "constructs";
 
 export interface StackStageIdentity {
   stack: string;

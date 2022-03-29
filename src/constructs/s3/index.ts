@@ -1,6 +1,6 @@
-import type { BucketProps } from "@aws-cdk/aws-s3";
-import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
-import { RemovalPolicy } from "@aws-cdk/core";
+import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { BlockPublicAccess, Bucket } from "aws-cdk-lib/aws-s3";
+import { RemovalPolicy } from "aws-cdk-lib";
 import { GuMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";

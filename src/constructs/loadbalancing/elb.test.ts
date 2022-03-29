@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import "../../utils/test/jest";
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { SynthedStack } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";

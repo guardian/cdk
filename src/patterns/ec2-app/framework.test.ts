@@ -1,5 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuNodeApp, GuPlayApp } from "./framework";

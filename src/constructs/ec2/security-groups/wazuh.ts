@@ -1,5 +1,5 @@
-import { Peer } from "@aws-cdk/aws-ec2";
-import type { IVpc } from "@aws-cdk/aws-ec2";
+import { Peer } from "aws-cdk-lib/aws-ec2";
+import type { IVpc } from "aws-cdk-lib/aws-ec2";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
 import { GuMigratingResource } from "../../core/migrating";

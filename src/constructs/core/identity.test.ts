@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
-import { Topic } from "@aws-cdk/aws-sns";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { Topic } from "aws-cdk-lib/aws-sns";
 import { AppIdentity } from "./identity";
 
 describe("AppIdentity.suffixText", () => {

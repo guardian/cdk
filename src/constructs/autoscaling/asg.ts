@@ -1,9 +1,9 @@
-import { AutoScalingGroup } from "@aws-cdk/aws-autoscaling";
-import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "@aws-cdk/aws-autoscaling";
-import { OperatingSystemType, UserData } from "@aws-cdk/aws-ec2";
-import type { ISecurityGroup, MachineImageConfig } from "@aws-cdk/aws-ec2";
-import type { ApplicationTargetGroup } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Token } from "@aws-cdk/core";
+import { AutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
+import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
+import { OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
+import type { ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
+import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Token } from "aws-cdk-lib";
 import type { GuAsgCapacity } from "../../types/asg";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";

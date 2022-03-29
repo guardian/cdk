@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Runtime } from "@aws-cdk/aws-lambda";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuCertificate } from "../constructs/acm";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { GuCname } from "../constructs/dns";

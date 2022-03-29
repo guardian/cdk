@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 
 import "../../utils/test/jest";
-import { Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
+import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { ContextKeys, TagKeys } from "../../constants";
 import { GuParameter } from "./parameters";
 import { GuStack } from "./stack";

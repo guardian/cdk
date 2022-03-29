@@ -1,8 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import type { IVpc } from "@aws-cdk/aws-ec2";
-import { SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
-import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import type { IVpc } from "aws-cdk-lib/aws-ec2";
+import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuEcsTask } from "./ecs-task";

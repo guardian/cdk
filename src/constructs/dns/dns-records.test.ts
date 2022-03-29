@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import "../../utils/test/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuCname, GuDnsRecordSet, RecordType } from "./dns-records";
 

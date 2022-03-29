@@ -1,8 +1,8 @@
-import { Stream, StreamEncryption } from "@aws-cdk/aws-kinesis";
-import type { StreamProps } from "@aws-cdk/aws-kinesis";
-import { StartingPosition } from "@aws-cdk/aws-lambda";
-import { KinesisEventSource } from "@aws-cdk/aws-lambda-event-sources";
-import type { KinesisEventSourceProps } from "@aws-cdk/aws-lambda-event-sources";
+import { Stream, StreamEncryption } from "aws-cdk-lib/aws-kinesis";
+import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
+import { StartingPosition } from "aws-cdk-lib/aws-lambda";
+import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { AppIdentity } from "../constructs/core/identity";

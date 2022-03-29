@@ -1,4 +1,4 @@
-import { Construct } from "@aws-cdk/core";
+import { Construct } from "constructs";
 import { AppIdentity } from "../../constructs/core/identity";
 import type { AnyConstructor } from "./types";
 

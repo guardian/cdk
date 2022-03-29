@@ -1,8 +1,8 @@
 import { SynthUtils } from "@aws-cdk/assert";
 import "@aws-cdk/assert/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { ApplicationListener, ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stack } from "@aws-cdk/core";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { ApplicationListener, ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Stack } from "aws-cdk-lib";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core/identity";
 import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";

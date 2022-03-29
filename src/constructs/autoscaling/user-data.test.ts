@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
-import { InstanceClass, InstanceSize, InstanceType, Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { InstanceClass, InstanceSize, InstanceType, Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuPrivateConfigBucketParameter } from "../core";
 import { GuAutoScalingGroup } from "./asg";

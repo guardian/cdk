@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
-import { ComparisonOperator } from "@aws-cdk/aws-cloudwatch";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { ComparisonOperator } from "aws-cdk-lib/aws-cloudwatch";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuLambdaFunction } from "../lambda";

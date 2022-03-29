@@ -1,6 +1,6 @@
-import type { Schedule } from "@aws-cdk/aws-events";
-import { Rule } from "@aws-cdk/aws-events";
-import { SfnStateMachine } from "@aws-cdk/aws-events-targets";
+import type { Schedule } from "aws-cdk-lib/aws-events";
+import { Rule } from "aws-cdk-lib/aws-events";
+import { SfnStateMachine } from "aws-cdk-lib/aws-events-targets";
 import type { GuStack } from "../constructs/core";
 import type { GuEcsTaskProps } from "../constructs/ecs/ecs-task";
 import { GuEcsTask } from "../constructs/ecs/ecs-task";

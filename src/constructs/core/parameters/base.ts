@@ -1,5 +1,5 @@
-import { CfnParameter } from "@aws-cdk/core";
-import type { CfnParameterProps } from "@aws-cdk/core";
+import { CfnParameter } from "aws-cdk-lib";
+import type { CfnParameterProps } from "aws-cdk-lib";
 import { RegexPattern } from "../../../constants";
 import type { AppIdentity } from "../identity";
 import type { GuStack } from "../stack";

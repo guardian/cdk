@@ -1,5 +1,6 @@
-import { Annotations } from "@aws-cdk/core";
-import type { CfnElement, IConstruct } from "@aws-cdk/core";
+import { IConstruct } from 'constructs';
+import { Annotations } from "aws-cdk-lib";
+import type { CfnElement } from "aws-cdk-lib";
 import type { GuMigratingStack } from "../../types/migrating";
 import { isGuStatefulConstruct } from "../../types/migrating";
 

@@ -1,7 +1,7 @@
 import "@aws-cdk/assert/jest";
 import "../../../utils/test/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuWazuhAccess } from "./wazuh";
 

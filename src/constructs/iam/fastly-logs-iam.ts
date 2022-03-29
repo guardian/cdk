@@ -1,4 +1,4 @@
-import { AccountPrincipal } from "@aws-cdk/aws-iam";
+import { AccountPrincipal } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core/parameters/fastly";
 import { GuPutS3ObjectsPolicy } from "./policies";

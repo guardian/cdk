@@ -1,6 +1,6 @@
 import "@aws-cdk/assert/jest";
 import { SynthUtils } from "@aws-cdk/assert";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "../lambda";
 import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";

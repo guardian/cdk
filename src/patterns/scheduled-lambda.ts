@@ -1,6 +1,6 @@
-import { Rule } from "@aws-cdk/aws-events";
-import type { Schedule } from "@aws-cdk/aws-events";
-import { LambdaFunction } from "@aws-cdk/aws-events-targets";
+import { Rule } from "aws-cdk-lib/aws-events";
+import type { Schedule } from "aws-cdk-lib/aws-events";
+import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";

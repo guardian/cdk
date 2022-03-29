@@ -1,6 +1,6 @@
 import "../../../utils/test/jest";
 import "@aws-cdk/assert/jest";
-import { ServicePrincipal } from "@aws-cdk/aws-iam";
+import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuRole } from "./roles";
 

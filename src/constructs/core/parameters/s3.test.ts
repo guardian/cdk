@@ -1,5 +1,5 @@
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
+import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
 import { GuStack } from "../stack";
 import { GuDistributionBucketParameter } from "./s3";
 

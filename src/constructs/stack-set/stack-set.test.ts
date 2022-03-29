@@ -1,6 +1,6 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { OrganizationPrincipal } from "@aws-cdk/aws-iam";
-import { Topic } from "@aws-cdk/aws-sns";
+import { OrganizationPrincipal } from "aws-cdk-lib/aws-iam";
+import { Topic } from "aws-cdk-lib/aws-sns";
 import { RegexPattern } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuStackForStackSetInstance, GuStringParameter } from "../core";

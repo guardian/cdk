@@ -1,6 +1,6 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import { App, Stack, Tags } from "@aws-cdk/core";
-import type { StackProps } from "@aws-cdk/core";
+import { App, Stack, Tags } from "aws-cdk-lib";
+import type { StackProps } from "aws-cdk-lib";
 import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";

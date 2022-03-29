@@ -1,7 +1,7 @@
-import { InstanceType } from "@aws-cdk/aws-ec2";
-import { DatabaseInstance } from "@aws-cdk/aws-rds";
-import type { DatabaseInstanceProps } from "@aws-cdk/aws-rds";
-import { Fn } from "@aws-cdk/core";
+import { InstanceType } from "aws-cdk-lib/aws-ec2";
+import { DatabaseInstance } from "aws-cdk-lib/aws-rds";
+import type { DatabaseInstanceProps } from "aws-cdk-lib/aws-rds";
+import { Fn } from "aws-cdk-lib";
 import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../core";

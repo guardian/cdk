@@ -1,5 +1,5 @@
 import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert/lib/synth-utils";
+import { SynthUtils } from "aws-cdk-lib/assert/lib/synth-utils";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import type { SynthedStack } from "../../../utils/test";
 import { GuDistributionBucketParameter } from "../../core";

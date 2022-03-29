@@ -1,6 +1,6 @@
-import { ApplicationLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { CfnOutput } from "@aws-cdk/core";
+import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { CfnOutput } from "aws-cdk-lib";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";

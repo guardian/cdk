@@ -1,6 +1,6 @@
 import { SynthUtils } from "@aws-cdk/assert";
-import type { BucketProps } from "@aws-cdk/aws-s3";
-import { Bucket } from "@aws-cdk/aws-s3";
+import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { GuStack } from "../../constructs/core";
 import type { AppIdentity } from "../../constructs/core/identity";
 import { simpleGuStackForTesting } from "../test";
