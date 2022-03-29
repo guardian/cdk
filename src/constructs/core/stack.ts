@@ -1,4 +1,4 @@
-import { App, Stack, Tags } from "aws-cdk-lib";
+import { App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import gitUrlParse from "git-url-parse";
@@ -114,7 +114,14 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
       withoutTags,
     } = props;
 
-    super(app, id, { ...props, stackName: cloudFormationStackName });
+    super(app, id, {
+      ...props,
+      stackName: cloudFormationStackName,
+
+      // TODO Use `DefaultStackSynthesizer` or create own synthesizer?
+      //  see https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html#bootstrapping-custom-synth
+      synthesizer: new LegacyStackSynthesizer(),
+    });
 
     this.migratedFromCloudFormation = !!migratedFromCloudFormation;
 
