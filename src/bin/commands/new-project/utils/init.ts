@@ -95,6 +95,7 @@ function createPackageJson(outputDirectory: string): void {
       "@types/node": "16.11.7",
       "aws-cdk": LibraryInfo.AWS_CDK_VERSION,
       "aws-cdk-lib": LibraryInfo.AWS_CDK_VERSION,
+      constructs: LibraryInfo.CONSTRUCTS_VERSION,
       eslint: "^7.32.0",
       jest: "^27.3.1",
       prettier: "^2.4.1",
