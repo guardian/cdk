@@ -87,7 +87,7 @@ const parseCommandLineArguments = () => {
               demandOption: true,
             })
       )
-      .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
+      .version(`${LibraryInfo.VERSION} (using aws-cdk-lib ${LibraryInfo.AWS_CDK_VERSION})`)
       .demandCommand(1, "") // just print help
       .help()
       .alias("h", "help").argv
