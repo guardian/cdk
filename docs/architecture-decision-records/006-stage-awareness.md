@@ -1,7 +1,7 @@
 # Stage Awareness
 
 ## Status
-Proposed.
+Accepted. Implemented since [v39.0.0](https://github.com/guardian/cdk/releases/tag/v39.0.0).
 
 ## Context
 It is best practise to use to produce a single artifact for use on all stages of an application.
