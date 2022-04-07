@@ -103,6 +103,7 @@ export interface GuEc2AppProps extends AppIdentity {
   blockDevices?: BlockDevice[];
   scaling: GuAsgCapacity;
   certificateProps: GuDomainName;
+  withoutImdsv2?: boolean;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -303,6 +304,7 @@ export class GuEc2App {
       roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData,
+      withoutImdsv2,
     } = props;
 
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
@@ -332,6 +334,7 @@ export class GuEc2App {
       instanceType,
       minimumInstances,
       maximumInstances,
+      withoutImdsv2,
       role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
       userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,

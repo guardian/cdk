@@ -37,6 +37,7 @@ export interface GuAutoScalingGroupProps
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
+  withoutImdsv2?: boolean;
 }
 
 /**
@@ -71,6 +72,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
       targetGroup,
       userData: userDataLike,
       vpc,
+      withoutImdsv2 = false,
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -87,7 +89,7 @@ export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAware
       minCapacity: minimumInstances,
       maxCapacity: maximumInstances ?? minimumInstances * 2,
       role,
-      requireImdsv2: true,
+      requireImdsv2: !withoutImdsv2,
       machineImage: {
         getImage: (): MachineImageConfig => {
           return {
