@@ -1,4 +1,4 @@
-import { CfnStackSet } from "@aws-cdk/core";
+import { CfnStackSet } from "aws-cdk-lib";
 import type { GuStack, GuStackForStackSetInstance } from "../core";
 
 interface GuStackSetProps {

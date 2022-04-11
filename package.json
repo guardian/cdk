@@ -24,7 +24,7 @@
     "release": "semantic-release",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target",
-    "update-aws-cdk": "ncu \"/^@?aws-cdk(/.*)?$/\" --upgrade --deep --target minor",
+    "update-aws-cdk": "ncu \"aws-cdk-lib\" \"aws-cdk\" --upgrade --deep --target minor",
     "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
@@ -38,6 +38,8 @@
     "@types/lodash.upperfirst": "^4.3.6",
     "@types/node": "17.0.23",
     "@types/yargs": "^17.0.10",
+    "aws-cdk-lib": "2.20.0",
+    "constructs": "10.0.106",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.12.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -53,25 +55,6 @@
     "typescript": "~4.6.3"
   },
   "dependencies": {
-    "@aws-cdk/assert": "1.152.0",
-    "@aws-cdk/aws-apigateway": "1.152.0",
-    "@aws-cdk/aws-autoscaling": "1.152.0",
-    "@aws-cdk/aws-cloudwatch-actions": "1.152.0",
-    "@aws-cdk/aws-ec2": "1.152.0",
-    "@aws-cdk/aws-ecr": "1.152.0",
-    "@aws-cdk/aws-ecs": "1.152.0",
-    "@aws-cdk/aws-elasticloadbalancing": "1.152.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "1.152.0",
-    "@aws-cdk/aws-events-targets": "1.152.0",
-    "@aws-cdk/aws-iam": "1.152.0",
-    "@aws-cdk/aws-kinesis": "1.152.0",
-    "@aws-cdk/aws-lambda": "1.152.0",
-    "@aws-cdk/aws-lambda-event-sources": "1.152.0",
-    "@aws-cdk/aws-rds": "1.152.0",
-    "@aws-cdk/aws-s3": "1.152.0",
-    "@aws-cdk/aws-stepfunctions": "1.152.0",
-    "@aws-cdk/aws-stepfunctions-tasks": "1.152.0",
-    "@aws-cdk/core": "1.152.0",
     "aws-sdk": "^2.1109.0",
     "chalk": "^4.1.2",
     "cli-ux": "^5.6.6",
@@ -83,6 +66,10 @@
     "lodash.upperfirst": "^4.3.1",
     "read-pkg-up": "7.0.1",
     "yargs": "^17.4.0"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "2.20.0",
+    "constructs": "10.0.106"
   },
   "config": {
     "commitizen": {

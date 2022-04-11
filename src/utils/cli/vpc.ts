@@ -1,7 +1,7 @@
 import type AWS from "aws-sdk";
 import type { DescribeSubnetsResult, DescribeVpcsResult, SubnetList, Vpc, VpcList } from "aws-sdk/clients/ec2";
 import type { ParameterList } from "aws-sdk/clients/ssm";
-import { SSM_PARAMETER_PATHS, VPC_SSM_PARAMETER_PREFIX } from "../../constants/ssm-parameter-paths";
+import { SSM_PARAMETER_PATHS, VPC_SSM_PARAMETER_PREFIX } from "../../constants";
 import type { VpcInDetail } from "../../types/cli";
 import { sum } from "../math";
 

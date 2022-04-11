@@ -1,5 +1,4 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuGetS3ObjectsPolicy } from "../policies";
 import { GuGithubActionsRole } from "./github-actions";
@@ -15,7 +14,7 @@ describe("The GitHubActionsRole construct", () => {
       ],
     });
 
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should be possible to limit which repositories can assume the role", () => {
@@ -32,7 +31,7 @@ describe("The GitHubActionsRole construct", () => {
       },
     });
 
-    expect(stack).toHaveResourceLike("AWS::IAM::Role", {
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Role", {
       AssumeRolePolicyDocument: {
         Statement: [
           {

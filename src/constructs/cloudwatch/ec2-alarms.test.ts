@@ -1,10 +1,9 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import "@aws-cdk/assert/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { ApplicationListener, ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { ApplicationListener, ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { simpleGuStackForTesting } from "../../utils/test";
-import type { AppIdentity } from "../core/identity";
+import type { AppIdentity } from "../core";
 import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
 
@@ -27,7 +26,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should use a custom description if one is provided", () => {
@@ -39,7 +38,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmDescription: "test-custom-alarm-description",
     });
   });
@@ -53,7 +52,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmName: "test-custom-alarm-name",
     });
   });
@@ -67,7 +66,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       EvaluationPeriods: 3,
     });
   });
@@ -85,6 +84,6 @@ describe("The GuUnhealthyInstancesAlarm construct", () => {
       defaultTargetGroups: [targetGroup],
     });
     new GuUnhealthyInstancesAlarm(stack, { ...app, targetGroup: targetGroup, snsTopicName: "test-topic" });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

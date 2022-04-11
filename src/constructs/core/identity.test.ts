@@ -1,6 +1,6 @@
-import "@aws-cdk/assert/jest";
-import { Topic } from "@aws-cdk/aws-sns";
-import { Stack } from "@aws-cdk/core";
+import { Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Topic } from "aws-cdk-lib/aws-sns";
 import { AppIdentity } from "./identity";
 
 describe("AppIdentity.suffixText", () => {
@@ -39,7 +39,7 @@ describe("AppIdentity.taggedConstruct", () => {
 
     AppIdentity.taggedConstruct(appIdentity, snsTopic);
 
-    expect(stack).toHaveResource("AWS::SNS::Topic", {
+    Template.fromStack(stack).hasResourceProperties("AWS::SNS::Topic", {
       Tags: [
         {
           Key: "App",

@@ -1,7 +1,8 @@
-import { Alarm, TreatMissingData } from "@aws-cdk/aws-cloudwatch";
-import { SnsAction } from "@aws-cdk/aws-cloudwatch-actions";
-import type { ISecurityGroup, IVpc } from "@aws-cdk/aws-ec2";
-import type { IRepository } from "@aws-cdk/aws-ecr";
+import { CfnOutput, Duration } from "aws-cdk-lib";
+import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
+import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
+import type { ISecurityGroup, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { IRepository } from "aws-cdk-lib/aws-ecr";
 import {
   Cluster,
   Compatibility,
@@ -9,13 +10,12 @@ import {
   FargatePlatformVersion,
   LogDrivers,
   TaskDefinition,
-} from "@aws-cdk/aws-ecs";
-import type { PolicyStatement } from "@aws-cdk/aws-iam";
-import { Topic } from "@aws-cdk/aws-sns";
-import { IntegrationPattern, StateMachine } from "@aws-cdk/aws-stepfunctions";
-import type { TaskEnvironmentVariable } from "@aws-cdk/aws-stepfunctions-tasks";
-import { EcsFargateLaunchTarget, EcsRunTask } from "@aws-cdk/aws-stepfunctions-tasks";
-import { CfnOutput, Duration } from "@aws-cdk/core";
+} from "aws-cdk-lib/aws-ecs";
+import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Topic } from "aws-cdk-lib/aws-sns";
+import { IntegrationPattern, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
+import type { TaskEnvironmentVariable } from "aws-cdk-lib/aws-stepfunctions-tasks";
+import { EcsFargateLaunchTarget, EcsRunTask } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
@@ -33,7 +33,7 @@ import { GuGetDistributablePolicyStatement } from "../iam";
  *
  * Alternatively you can specify a repository and version, for example for an ECR repository:
  * ```typescript
- * import { Repository } from "@aws-cdk/aws-ecr";
+ * import { Repository } from "aws-cdk-lib/aws-ecr";
  * const repository = new Repository(scope, `${app}-repository`, {
     repositoryName: app,
   });

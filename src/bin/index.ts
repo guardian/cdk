@@ -7,13 +7,11 @@ import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
 import { bootstrapCommand } from "./commands/bootstrap";
-import { checkPackageJson } from "./commands/check-package-json";
 import { newCdkProject } from "./commands/new-project";
 
 const Commands = {
   AwsCdkVersion: "aws-cdk-version",
   AccountReadiness: "account-readiness",
-  CheckPackageJson: "check-package-json",
   New: "new",
   Bootstrap: "bootstrap",
 };
@@ -28,7 +26,7 @@ const parseCommandLineArguments = () => {
   return Promise.resolve(
     yargs
       .usage("$0 COMMAND [args]")
-      .command(Commands.AwsCdkVersion, "Print the version of @aws-cdk libraries being used")
+      .command(Commands.AwsCdkVersion, "Print the version of AWS CDK libraries being used")
       .command(Commands.Bootstrap, "Bootstrap an AWS account for @guardian/cdk", (yargs) =>
         yargs
           .option("profile", {
@@ -46,14 +44,6 @@ const parseCommandLineArguments = () => {
         yargs
           .option("profile", { type: "string", description: "AWS profile" })
           .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
-      )
-      .command(Commands.CheckPackageJson, "Check a package.json file for compatibility with GuCDK", (yargs) =>
-        yargs.option("directory", {
-          type: "string",
-          description: "The location of the package.json file to check",
-          default: process.cwd(),
-          defaultDescription: "The current working directory",
-        })
       )
       .command(
         Commands.New,
@@ -87,7 +77,9 @@ const parseCommandLineArguments = () => {
               demandOption: true,
             })
       )
-      .version(`${LibraryInfo.VERSION} (using @aws-cdk ${LibraryInfo.AWS_CDK_VERSION})`)
+      .version(
+        `${LibraryInfo.VERSION} (using aws-cdk-lib ${LibraryInfo.AWS_CDK_VERSION}, constructs ${LibraryInfo.CONSTRUCTS_VERSION})`
+      )
       .demandCommand(1, "") // just print help
       .help()
       .alias("h", "help").argv
@@ -112,10 +104,6 @@ parseCommandLineArguments()
       case Commands.AccountReadiness: {
         const { profile, region } = argv;
         return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
-      }
-      case Commands.CheckPackageJson: {
-        const { directory } = argv;
-        return checkPackageJson(directory);
       }
       case Commands.New: {
         const { init, app, stack, yamlTemplateLocation, stage } = argv;

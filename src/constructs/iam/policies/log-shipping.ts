@@ -1,6 +1,6 @@
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
-import { GuLoggingStreamNameParameter } from "../../core/parameters/log-shipping";
+import { GuLoggingStreamNameParameter } from "../../core";
 import { GuAllowPolicy } from "./base-policy";
 
 export class GuLogShippingPolicy extends GuAllowPolicy {

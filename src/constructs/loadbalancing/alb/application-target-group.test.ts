@@ -1,10 +1,9 @@
-import "@aws-cdk/assert/jest";
-import "../../../utils/test/jest";
-import { Vpc } from "@aws-cdk/aws-ec2";
-import { ApplicationProtocol } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { Duration, Stack } from "@aws-cdk/core";
-import { simpleGuStackForTesting } from "../../../utils/test";
-import type { AppIdentity } from "../../core/identity";
+import { Duration, Stack } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Vpc } from "aws-cdk-lib/aws-ec2";
+import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
+import type { AppIdentity } from "../../core";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -22,7 +21,7 @@ describe("The GuApplicationTargetGroup class", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::TargetGroup",
       /^ApplicationTargetGroupTesting.+/
     );
@@ -32,7 +31,7 @@ describe("The GuApplicationTargetGroup class", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
-    expect(stack).toHaveGuTaggedResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
       appIdentity: app,
     });
   });
@@ -45,14 +44,14 @@ describe("The GuApplicationTargetGroup class", () => {
       existingLogicalId: { logicalId: "MyTargetGroup", reason: "testing" },
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::ElasticLoadBalancingV2::TargetGroup", "MyTargetGroup");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::TargetGroup", "MyTargetGroup");
   });
 
   test("auto-generates the logicalId by default", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId(
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::TargetGroup",
       /^ApplicationTargetGroup.+$/
     );
@@ -65,7 +64,7 @@ describe("The GuApplicationTargetGroup class", () => {
       vpc,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
       HealthCheckIntervalSeconds: 10,
       HealthCheckPath: "/healthcheck",
       HealthCheckProtocol: "HTTP",
@@ -86,7 +85,7 @@ describe("The GuApplicationTargetGroup class", () => {
       },
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
       HealthCheckIntervalSeconds: 10,
       HealthCheckPath: "/test",
       HealthCheckPort: "9000",
@@ -102,7 +101,7 @@ describe("The GuApplicationTargetGroup class", () => {
 
     new GuApplicationTargetGroup(stack, "TargetGroup", { vpc, ...app });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
       Protocol: "HTTP",
     });
   });
@@ -116,7 +115,7 @@ describe("The GuApplicationTargetGroup class", () => {
       protocol: ApplicationProtocol.HTTPS,
     });
 
-    expect(stack).toHaveResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
       Protocol: "HTTPS",
     });
   });

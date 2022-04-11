@@ -1,5 +1,4 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
+import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuFastlyLogsIamRole } from "./fastly-logs-iam";
 
@@ -10,6 +9,6 @@ describe("The GuFastlyLogsIamRole construct", () => {
       bucketName: "test",
       path: "TEST/stack/app/*",
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

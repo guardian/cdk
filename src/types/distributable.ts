@@ -1,5 +1,4 @@
-import type { GuStack } from "../constructs/core";
-import type { AppIdentity } from "../constructs/core/identity";
+import type { AppIdentity, GuStack } from "../constructs/core";
 
 export interface GuDistributable {
   /**

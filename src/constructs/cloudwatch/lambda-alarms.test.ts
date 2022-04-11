@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { Template } from "aws-cdk-lib/assertions";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "../lambda";
 import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";
@@ -16,7 +15,7 @@ describe("GuLambdaThrottlingAlarm construct", () => {
       throttlingMonitoring: { snsTopicName: "alerts-topic" },
     });
 
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
 
@@ -35,7 +34,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should adjust the number of evaluation periods if a custom value is provided", () => {
@@ -53,7 +52,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       EvaluationPeriods: 12,
     });
   });
@@ -73,7 +72,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmDescription: "test-custom-alarm-description",
     });
   });
@@ -93,7 +92,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       alarmName: "test-custom-alarm-name",
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmName: "test-custom-alarm-name",
     });
   });

@@ -1,4 +1,4 @@
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
 import { GuStack } from "../../constructs/core";
 import type { GuStackProps } from "../../constructs/core";
 

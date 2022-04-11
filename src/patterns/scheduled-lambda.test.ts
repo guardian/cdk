@@ -1,8 +1,7 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { Schedule } from "@aws-cdk/aws-events";
-import { Runtime } from "@aws-cdk/aws-lambda";
-import { Duration } from "@aws-cdk/core";
+import { Duration } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Schedule } from "aws-cdk-lib/aws-events";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledLambda } from "./scheduled-lambda";
@@ -21,7 +20,7 @@ describe("The GuScheduledLambda pattern", () => {
       app: "testing",
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create an alarm if monitoring configuration is provided", () => {
@@ -39,6 +38,6 @@ describe("The GuScheduledLambda pattern", () => {
       app: "testing",
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 });

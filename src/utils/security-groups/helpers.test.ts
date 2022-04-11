@@ -1,4 +1,4 @@
-import { Peer } from "@aws-cdk/aws-ec2";
+import { Peer } from "aws-cdk-lib/aws-ec2";
 import { transformToSecurityGroupAccessRule } from "./helpers";
 
 describe("The transformToSecurityGroupAccessRule", () => {

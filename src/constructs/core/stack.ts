@@ -1,6 +1,6 @@
-import { SynthUtils } from "@aws-cdk/assert";
-import { App, Stack, Tags } from "@aws-cdk/core";
-import type { StackProps } from "@aws-cdk/core";
+import { App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import type { StackProps } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
@@ -114,7 +114,14 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
       withoutTags,
     } = props;
 
-    super(app, id, { ...props, stackName: cloudFormationStackName });
+    super(app, id, {
+      ...props,
+      stackName: cloudFormationStackName,
+
+      // TODO Use `DefaultStackSynthesizer` or create own synthesizer?
+      //  see https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html#bootstrapping-custom-synth
+      synthesizer: new LegacyStackSynthesizer(),
+    });
 
     this.migratedFromCloudFormation = !!migratedFromCloudFormation;
 
@@ -167,6 +174,6 @@ export class GuStackForStackSetInstance extends GuStack {
   }
 
   get cfnJson(): string {
-    return JSON.stringify(SynthUtils.toCloudFormation(this), null, 2);
+    return JSON.stringify(Template.fromStack(this).toJSON(), null, 2);
   }
 }

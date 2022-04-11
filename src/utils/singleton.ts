@@ -1,4 +1,4 @@
-import type { Stack } from "@aws-cdk/core/lib/stack";
+import type { Stack } from "aws-cdk-lib/core/lib/stack";
 import type { GuStack } from "../constructs/core";
 
 /**
@@ -9,7 +9,7 @@ import type { GuStack } from "../constructs/core";
  * the singleton will new unique across the Stacks.
  *
  * ```typescript
- * import { App } from "@aws-cdk/core";
+ * import { App } from "aws-cdk-lib/core";
  *
  * class SomeSingletonConstruct { }
  *

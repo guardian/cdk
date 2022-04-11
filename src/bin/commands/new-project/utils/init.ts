@@ -90,11 +90,12 @@ function createPackageJson(outputDirectory: string): void {
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
     devDependencies: {
-      "@aws-cdk/assert": LibraryInfo.AWS_CDK_VERSION,
       "@guardian/eslint-config-typescript": "^0.7.0",
       "@types/jest": "^27.0.2",
       "@types/node": "16.11.7",
       "aws-cdk": LibraryInfo.AWS_CDK_VERSION,
+      "aws-cdk-lib": LibraryInfo.AWS_CDK_VERSION,
+      constructs: LibraryInfo.CONSTRUCTS_VERSION,
       eslint: "^7.32.0",
       jest: "^27.3.1",
       prettier: "^2.4.1",
@@ -103,9 +104,6 @@ function createPackageJson(outputDirectory: string): void {
       typescript: "~4.4.3",
     },
     dependencies: {
-      "@aws-cdk/cloudformation-include": LibraryInfo.AWS_CDK_VERSION,
-      "@aws-cdk/core": LibraryInfo.AWS_CDK_VERSION,
-
       /*
       Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
       See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat

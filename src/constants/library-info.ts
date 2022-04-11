@@ -1,11 +1,16 @@
+import type { NormalizedPackageJson, PackageJson } from "read-pkg-up";
 import readPkgUp from "read-pkg-up";
-import { getAwsCdkCoreVersion, getAwsCdkDependencies } from "../utils/package-json";
 
 const valueOrUnknown = (value: string | undefined) => value ?? "unknown";
 
 const packageJson = readPkgUp.sync({ cwd: __dirname })?.packageJson;
 
 const version = valueOrUnknown(packageJson?.version);
+
+function getDevDependency(packageName: string, packageJson: PackageJson | NormalizedPackageJson): string | undefined {
+  const { devDependencies = {} } = packageJson;
+  return devDependencies[packageName];
+}
 
 export const LibraryInfo = {
   /**
@@ -19,13 +24,14 @@ export const LibraryInfo = {
   VERSION: version,
 
   /**
-   * The version of the `@aws-cdk` libraries used by `@guardian/cdk`.
+   * The version of the `aws-cdk-lib` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_VERSION: valueOrUnknown(getAwsCdkCoreVersion(packageJson ?? {})),
+  AWS_CDK_VERSION: valueOrUnknown(getDevDependency("aws-cdk-lib", packageJson ?? {})),
 
   /**
-   * A complete list of the `@aws-cdk` libraries used by `@guardian/cdk`.
+   * The version of the `constructs` library used by `@guardian/cdk`.
+   * You need to match this version exactly.
    */
-  AWS_CDK_VERSIONS: getAwsCdkDependencies(packageJson ?? {}),
+  CONSTRUCTS_VERSION: valueOrUnknown(getDevDependency("constructs", packageJson ?? {})),
 };

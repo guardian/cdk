@@ -1,6 +1,6 @@
-import "@aws-cdk/assert/jest";
-import { ComparisonOperator } from "@aws-cdk/aws-cloudwatch";
-import { Runtime } from "@aws-cdk/aws-lambda";
+import { Template } from "aws-cdk-lib/assertions";
+import { ComparisonOperator } from "aws-cdk-lib/aws-cloudwatch";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuLambdaFunction } from "../lambda";
@@ -27,7 +27,7 @@ describe("The GuAlarm class", () => {
       evaluationPeriods: 1,
       snsTopicName: "alerts-topic",
     });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm");
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
   it("should send alerts to the provided SNS Topic", () => {
@@ -42,7 +42,7 @@ describe("The GuAlarm class", () => {
       evaluationPeriods: 1,
       snsTopicName: "alerts-topic",
     });
-    expect(stack).toHaveResource("AWS::CloudWatch::Alarm", {
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmActions: [
         {
           "Fn::Join": [

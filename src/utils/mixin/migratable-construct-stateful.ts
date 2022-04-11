@@ -1,4 +1,4 @@
-import type { GuStatefulConstruct } from "../../types/migrating";
+import type { GuStatefulConstruct } from "../../types";
 import { GuMigratableConstruct } from "./migratable-construct";
 import type { AnyConstructor } from "./types";
 

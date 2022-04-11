@@ -1,11 +1,9 @@
-import { ApplicationLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "@aws-cdk/aws-elasticloadbalancingv2";
-import { CfnOutput } from "@aws-cdk/core";
+import { CfnOutput } from "aws-cdk-lib";
+import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { GuStack } from "../../core";
-import type { AppIdentity } from "../../core/identity";
-import type { GuMigratingResource } from "../../core/migrating";
+import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {
   /**

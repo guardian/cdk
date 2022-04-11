@@ -1,8 +1,7 @@
-import { Effect, Policy, PolicyStatement } from "@aws-cdk/aws-iam";
-import type { PolicyProps } from "@aws-cdk/aws-iam";
+import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import type { PolicyProps } from "aws-cdk-lib/aws-iam";
 import { GuMigratableConstruct } from "../../../utils/mixin";
-import type { GuStack } from "../../core";
-import type { GuMigratingResource } from "../../core/migrating";
+import type { GuMigratingResource, GuStack } from "../../core";
 
 export interface GuPolicyProps extends PolicyProps, GuMigratingResource {}
 

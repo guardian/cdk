@@ -1,6 +1,6 @@
-import { Rule } from "@aws-cdk/aws-events";
-import type { Schedule } from "@aws-cdk/aws-events";
-import { LambdaFunction } from "@aws-cdk/aws-events-targets";
+import { Rule } from "aws-cdk-lib/aws-events";
+import type { Schedule } from "aws-cdk-lib/aws-events";
+import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
@@ -14,8 +14,8 @@ import type { GuFunctionProps } from "../constructs/lambda";
  * The `schedule` property determines when your lambda is invoked. For example, to invoke
  * the lambda every 5 minutes, use:
  * ```typescript
- * import { Schedule } from "@aws-cdk/aws-events";
- * import { Duration } from "@aws-cdk/core";
+ * import { Schedule } from "aws-cdk-lib/aws-events";
+ * import { Duration } from "aws-cdk-lib/core";
  *
  * const props = {
  *   // Other props here
@@ -25,7 +25,7 @@ import type { GuFunctionProps } from "../constructs/lambda";
  *
  * To invoke the lambda every weekday at 8am, use:
  * ```
- * import { Schedule } from "@aws-cdk/aws-events";
+ * import { Schedule } from "aws-cdk-lib/aws-events";
  *
  * const props = {
  *   // Other props here

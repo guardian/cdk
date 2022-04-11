@@ -1,7 +1,5 @@
-import "../../../utils/test/jest";
-import "@aws-cdk/assert/jest";
-import { ServicePrincipal } from "@aws-cdk/aws-iam";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuRole } from "./roles";
 
 describe("The GuRole class", () => {
@@ -13,7 +11,7 @@ describe("The GuRole class", () => {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Role", "MyRole");
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Role", "MyRole");
   });
 
   test("auto-generates the logicalId by default", () => {
@@ -23,6 +21,6 @@ describe("The GuRole class", () => {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
     });
 
-    expect(stack).toHaveResourceOfTypeAndLogicalId("AWS::IAM::Role", /^TestRole.+$/);
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Role", /^TestRole.+$/);
   });
 });

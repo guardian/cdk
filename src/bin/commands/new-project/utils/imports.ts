@@ -71,11 +71,11 @@ export const newStackImports = (): Imports => {
       types: [],
       components: ["join"],
     },
-    "@aws-cdk/cloudformation-include": {
+    "aws-cdk-lib/cloudformation-include": {
       types: [],
       components: ["CfnInclude"],
     },
-    "@aws-cdk/core": {
+    "aws-cdk-lib": {
       types: ["App"],
       components: [],
     },
@@ -88,7 +88,7 @@ export const newStackImports = (): Imports => {
 
 export const newAppImports = (app: Name): Imports => {
   const imports = new Imports({
-    "@aws-cdk/core": {
+    "aws-cdk-lib": {
       types: [],
       components: ["App"],
     },
@@ -106,18 +106,13 @@ export const newAppImports = (app: Name): Imports => {
 
 export const newTestImports = (appName: Name): Imports => {
   const imports = new Imports({
-    "@aws-cdk/assert/jest": {
-      types: [],
-      components: [],
-      basic: true,
-    },
-    "@aws-cdk/assert": {
-      types: [],
-      components: ["SynthUtils"],
-    },
-    "@aws-cdk/core": {
+    "aws-cdk-lib": {
       types: [],
       components: ["App"],
+    },
+    "aws-cdk-lib/assertions": {
+      types: [],
+      components: ["Template"],
     },
   });
 

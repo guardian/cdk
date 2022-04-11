@@ -50,7 +50,9 @@ export class TestBuilder {
     this.code.line(
       `const stack = new ${appName.pascal}(app, "${appName.pascal}", { stack: "${stackName.kebab}", stage: "TEST" });`
     );
-    this.code.line("expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();");
+
+    this.code.line(`const template = Template.fromStack(stack);`);
+    this.code.line(`expect(template.toJSON()).toMatchSnapshot();`);
 
     this.code.closeBlock("});");
     this.code.closeBlock("});");

@@ -1,11 +1,9 @@
-import type { BucketProps } from "@aws-cdk/aws-s3";
-import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
-import { RemovalPolicy } from "@aws-cdk/core";
+import { RemovalPolicy } from "aws-cdk-lib";
+import type { BucketProps } from "aws-cdk-lib/aws-s3";
+import { BlockPublicAccess, Bucket } from "aws-cdk-lib/aws-s3";
 import { GuMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
-import type { GuStack } from "../core";
-import type { AppIdentity } from "../core/identity";
-import type { GuMigratingResource } from "../core/migrating";
+import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
 
 export interface GuS3BucketProps extends GuMigratingResource, Omit<BucketProps, "removalPolicy">, AppIdentity {}
 

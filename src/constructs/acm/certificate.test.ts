@@ -1,7 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { simpleGuStackForTesting } from "../../utils/test";
-import type { SynthedStack } from "../../utils/test";
+import { Template } from "aws-cdk-lib/assertions";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuCertificate } from "./certificate";
 
 describe("The GuCertificate class", () => {
@@ -12,7 +10,7 @@ describe("The GuCertificate class", () => {
       domainName: "code-guardian.com",
       hostedZoneId: "id123",
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided", () => {
@@ -21,7 +19,7 @@ describe("The GuCertificate class", () => {
       app: "testing",
       domainName: "code-guardian.com",
     });
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should inherit a CloudFormed certificate correctly", () => {
@@ -31,7 +29,10 @@ describe("The GuCertificate class", () => {
       existingLogicalId: { logicalId: "MyCloudFormedCertificate", reason: "testing" },
       domainName: "code-guardian.com",
     });
-    const json = SynthUtils.toCloudFormation(stack) as SynthedStack;
-    expect(Object.keys(json.Resources)).toContain("MyCloudFormedCertificate");
+
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
+      "AWS::CertificateManager::Certificate",
+      "MyCloudFormedCertificate"
+    );
   });
 });
