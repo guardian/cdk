@@ -19,7 +19,7 @@ import type { GuFunctionProps } from "../constructs/lambda";
  *
  * const props = {
  *   // Other props here
- *   schedule: Schedule.rate(Duration.minutes(5)),
+ *   rules: [{ schedule: Schedule.rate(Duration.minutes(5)) }],
  * }
  * ```
  *
@@ -29,7 +29,7 @@ import type { GuFunctionProps } from "../constructs/lambda";
  *
  * const props = {
  *   // Other props here
- *   schedule: Schedule.expression("cron(0 8 ? * MON-FRI *)"),
+ *   rules: [{ schedule: Schedule.expression("cron(0 8 ? * MON-FRI *)") }],
  * }
  * ```
  *

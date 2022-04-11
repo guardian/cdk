@@ -51,21 +51,23 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 /**
  * Construct which creates a Lambda function.
  *
- * This lambda relies on the code artifact residing in a standard location in S3. For more details on the bucket used,
- * see [[`GuDistributionBucketParameter`]]. By default, the path used will be `stack/stage/app/fileName`.
+ * This Lambda relies on the code artifact residing in a standard location in S3. For more details on the bucket used,
+ * see [[`GuDistributionBucketParameter`]]. By default, the path used will be `<stack>/<stage>/<app</<fileName>`.
  *
  * The default memory size of this Lambda will vary depending on the runtime chosen.
  * For Java runtimes (i.e. resource hungry Scala Lambdas!), 1024MB will be used. For all other runtimes,
  * the memory size defaults to 512MB. This can be overridden via the `memorySize` prop.
  *
- * By default, the timeout for this lambda is 30 seconds. This can be overridden via the `timeout` prop.
+ * By default, the timeout for this Lambda is 30 seconds. This can be overridden via the `timeout` prop.
  *
- * By default the Lambda is granted permission to read from the SSM parameter store subtree specific to this lambda
- * (i.e. it can read all keys under <stage>/<stack>/<app>/). The lambda has STACK/STAGE/APP environment variables
- * which can be used to determine its identity.
+ * By default the Lambda is granted permission to read from the SSM parameter store subtree specific to this Lambda
+ * (i.e. it can read all keys under `/<stage>/<stack>/<app>/`). If you need to add additional permissions, you can use
+ * [`addToRolePolicy`](https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-lambda.FunctionBase.html#addwbrtowbrrolewbrpolicystatement).
  *
- * Note that this construct creates a Lambda without a trigger/event source. Depending on your use-case, you may wish to
- * consider using a pattern which instantiates a Lambda with a trigger e.g. [[`GuScheduledLambda`]].
+ * The Lambda has `STACK`, `STAGE` and `APP` environment variables which can be used to determine its identity.
+ *
+ * Note that this construct creates a Lambda without an event source. Depending on your use-case, you may wish to
+ * consider using a pattern which instantiates a Lambda with an event source e.g. [[`GuScheduledLambda`]].
  */
 export class GuLambdaFunction extends Function {
   public readonly app: string;
