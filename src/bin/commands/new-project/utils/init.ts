@@ -84,6 +84,14 @@ function createPackageJson(outputDirectory: string): void {
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
     devDependencies: {
+      /*
+      Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
+      See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat
+
+      TODO remove this once the `new` command allows opting out of automatic dependency installation
+       */
+      ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
+
       "@guardian/eslint-config-typescript": "^0.7.0",
       "@types/jest": "^27.0.2",
       "@types/node": "16.11.7",
@@ -93,20 +101,10 @@ function createPackageJson(outputDirectory: string): void {
       eslint: "^7.32.0",
       jest: "^27.3.1",
       prettier: "^2.4.1",
+      "source-map-support": "^0.5.20",
       "ts-jest": "^27.0.7",
       "ts-node": "^10.4.0",
       typescript: "~4.4.3",
-    },
-    dependencies: {
-      /*
-      Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
-      See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat
-
-      TODO remove this once the `new` command allows opting out of automatic dependency installation
-       */
-      ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
-
-      "source-map-support": "^0.5.20",
     },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
