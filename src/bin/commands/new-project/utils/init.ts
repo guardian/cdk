@@ -75,16 +75,10 @@ function createPackageJson(outputDirectory: string): void {
     name: "cdk",
     version: "0.0.0",
     private: true,
-    bin: {
-      cdk: "bin/cdk.js",
-    },
     scripts: {
       build: "tsc",
-      watch: "tsc -w",
       test: "jest",
-      "test:dev": "jest --watch",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
-      cdk: "cdk",
       lint: "eslint lib/** bin/** --ext .ts --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
       diff: "cdk diff --path-metadata false --version-reporting false",
