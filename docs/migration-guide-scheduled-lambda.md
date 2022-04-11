@@ -32,14 +32,17 @@ need to adapt these steps slightly.
   should also be able to remove the `CfnInclude` block and the
   `@aws-cdk/cloudformation-include` dependency.
 
-  Note that AWS will provision the new version of the lambda function before
+  Note that AWS will provision the new version of the Lambda function before
   the old one is removed, so the two Lambdas (and their schedules) will coexist
   for a short period of time.
 
 3. Deploy this change using Riff-Raff.
 
-   In `CODE` you should test this by deploying your branch. In `PROD` you can merge
-   the PR and allow Riff-Raff to deploy `main` automatically.
+  In order for this deployment to work Riff-Raff must identify your Lambda using tags, rather than function name.
+  There's an example of this [here](https://github.com/guardian/elastic-search-monitor/pull/17/commits/6cf1684fe518c7dd7e24fc20f8047866bc6e51e3).
+
+  In `CODE` you should test this by deploying your branch. In `PROD` you can merge
+  the PR and allow Riff-Raff to deploy `main` automatically.
 
 4. Confirm that your Lambda is still invoked on the correct schedule and that all behaviour works as expected.
 
