@@ -39,7 +39,7 @@
     "@types/node": "17.0.23",
     "@types/yargs": "^17.0.10",
     "aws-cdk-lib": "2.20.0",
-    "constructs": "10.0.106",
+    "constructs": "10.0.110",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.12.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -69,7 +69,7 @@
   },
   "peerDependencies": {
     "aws-cdk-lib": "2.20.0",
-    "constructs": "10.0.106"
+    "constructs": "10.0.110"
   },
   "config": {
     "commitizen": {
