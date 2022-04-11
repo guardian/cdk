@@ -3,11 +3,11 @@ import readPkgUp from "read-pkg-up";
 
 const valueOrUnknown = (value: string | undefined) => value ?? "unknown";
 
-const packageJson = readPkgUp.sync({ cwd: __dirname })?.packageJson;
+const packageJson: PackageJson | NormalizedPackageJson = readPkgUp.sync({ cwd: __dirname })?.packageJson ?? {};
 
-const version = valueOrUnknown(packageJson?.version);
+const version = valueOrUnknown(packageJson.version);
 
-function getDevDependency(packageName: string, packageJson: PackageJson | NormalizedPackageJson): string | undefined {
+export function getDevDependency(packageName: string): string | undefined {
   const { devDependencies = {} } = packageJson;
   return devDependencies[packageName];
 }
@@ -27,11 +27,11 @@ export const LibraryInfo = {
    * The version of the `aws-cdk-lib` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_VERSION: valueOrUnknown(getDevDependency("aws-cdk-lib", packageJson ?? {})),
+  AWS_CDK_VERSION: valueOrUnknown(getDevDependency("aws-cdk-lib")),
 
   /**
    * The version of the `constructs` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  CONSTRUCTS_VERSION: valueOrUnknown(getDevDependency("constructs", packageJson ?? {})),
+  CONSTRUCTS_VERSION: valueOrUnknown(getDevDependency("constructs")),
 };

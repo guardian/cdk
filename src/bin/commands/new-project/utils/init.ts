@@ -1,6 +1,6 @@
 import { copyFileSync, existsSync, lstatSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import { join } from "path";
-import { LibraryInfo } from "../../../../constants";
+import { getDevDependency, LibraryInfo } from "../../../../constants";
 
 export interface InitConfig {
   outputDir: string;
@@ -71,6 +71,39 @@ function createPackageJson(outputDirectory: string): void {
   const { NODE_ENV, CI } = process.env;
   const isTest = NODE_ENV?.toUpperCase() === "TEST" || CI?.toUpperCase() === "TRUE";
 
+  const coreDeps: Record<string, string> = [
+    "@guardian/eslint-config-typescript",
+    "@types/jest",
+    "@types/node",
+    "eslint",
+    "jest",
+    "prettier",
+    "ts-jest",
+    "ts-mode",
+    "typescript",
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- deps come from `package.json`, so shouldn't be `undefined`
+  ].reduce((acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }), {});
+
+  const cdkDeps: Record<string, string> = {
+    /*
+      Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
+      See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat
+
+      TODO remove this once the `new` command allows opting out of automatic dependency installation
+       */
+    ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
+
+    "aws-cdk": LibraryInfo.AWS_CDK_VERSION,
+    "aws-cdk-lib": LibraryInfo.AWS_CDK_VERSION,
+    constructs: LibraryInfo.CONSTRUCTS_VERSION,
+  };
+
+  const allDeps: Record<string, string> = { ...coreDeps, ...cdkDeps, "source-map-support": "^0.5.20" };
+
+  const devDependencies: Record<string, string> = Object.keys(allDeps)
+    .sort()
+    .reduce((acc, depName) => ({ ...acc, [depName]: allDeps[depName] }), {});
+
   const contents = {
     name: "cdk",
     version: "0.0.0",
@@ -83,29 +116,7 @@ function createPackageJson(outputDirectory: string): void {
       synth: "cdk synth --path-metadata false --version-reporting false",
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
-    devDependencies: {
-      /*
-      Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
-      See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat
-
-      TODO remove this once the `new` command allows opting out of automatic dependency installation
-       */
-      ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
-
-      "@guardian/eslint-config-typescript": "^0.7.0",
-      "@types/jest": "^27.0.2",
-      "@types/node": "16.11.7",
-      "aws-cdk": LibraryInfo.AWS_CDK_VERSION,
-      "aws-cdk-lib": LibraryInfo.AWS_CDK_VERSION,
-      constructs: LibraryInfo.CONSTRUCTS_VERSION,
-      eslint: "^7.32.0",
-      jest: "^27.3.1",
-      prettier: "^2.4.1",
-      "source-map-support": "^0.5.20",
-      "ts-jest": "^27.0.7",
-      "ts-node": "^10.4.0",
-      typescript: "~4.4.3",
-    },
+    devDependencies,
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
 }
