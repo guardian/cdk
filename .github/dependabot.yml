@@ -18,8 +18,7 @@ updates:
       prefix: "chore(deps): "
     # force the lockfile and package.json to be updated
     versioning-strategy: increase
-    # We update AWS CDK libraries ourselves (via `script/update-aws-cdk`)
-    # Dependabot wants to update them individually, but they should all be done at once.
+    # We update AWS CDK libraries ourselves (via `script/update-aws-cdk`) as this is a breaking change for users, and it results in a new major version being released
     ignore:
       - dependency-name: "aws-cdk-lib"
   - package-ecosystem: 'npm'
