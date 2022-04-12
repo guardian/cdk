@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { basename, dirname, join } from "path";
+import { CliUx } from "@oclif/core";
 import chalk from "chalk";
-import { cli } from "cli-ux";
 import kebabCase from "lodash.kebabcase";
 import type { CliCommandResponse } from "../../../types/cli";
 import { execute } from "../../../utils/exec";
@@ -130,9 +130,9 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   });
 
   if (config.init) {
-    cli.action.start(chalk.yellow("Installing dependencies. This may take a while..."));
+    CliUx.ux.action.start(chalk.yellow("Installing dependencies. This may take a while..."));
     await execute("./script/setup", [], { cwd: config.cdkDir });
-    cli.action.stop();
+    CliUx.ux.action.stop();
   }
 
   // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter
@@ -144,9 +144,9 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     }
   );
 
-  cli.action.start(chalk.yellow("Running tests..."));
+  CliUx.ux.action.start(chalk.yellow("Running tests..."));
   await execute("./script/test", [], { cwd: config.cdkDir });
-  cli.action.stop();
+  CliUx.ux.action.stop();
 
   console.log(chalk.green("Summarising the created files"));
   const tree = await execute("tree", ["-I 'node_modules|cdk.out'"], {
