@@ -53,7 +53,11 @@ existing stack by running a Cloudformation diff:
 where `AWS stack name` is the full name of the target Cloudformation Stack in
 AWS.
 
-At this point we recommend running CDK synth as part of your CI.
+You might find that the diff contains a lot of noise due to tags that are automatically added by `@guardian/cdk`.
+Tag changes will not cause disruption to your infrastructure. 
+If desired, you can view a diff which excludes the tagging changes by temporarily [amending your stack's props](https://github.com/guardian/cdk-playground/blob/26af40f6432cb94b3e5ef34648d422a7a6ee6b33/cdk/bin/cdk.ts#L6).
+
+Once you are happy with the diff, we recommend running CDK synth as part of your CI process.
 
 ## Migrating resources
 
