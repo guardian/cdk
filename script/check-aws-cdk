@@ -11,7 +11,7 @@ VERSIONS=$(npm view $LIBRARY_TO_CHECK versions --json)
 
 TOTAL_VERSIONS=$(echo "$VERSIONS" | jq '. | length')
 
-INSTALLED_VERSION_NUMBER=$(jq -r ".devDependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
+INSTALLED_VERSION_NUMBER=$(jq -r ".dependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
 
 INSTALLED_VERSION_POSITION=$(echo "$VERSIONS" | jq ". | index(\"${INSTALLED_VERSION_NUMBER}\")")
 
