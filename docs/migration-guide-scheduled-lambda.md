@@ -29,8 +29,7 @@ need to adapt these steps slightly.
 2. Remove the CloudFormation YAML file from your repository.
 
   In simple cases it may be possible to remove the whole file. If so, you
-  should also be able to remove the `CfnInclude` block and the
-  `@aws-cdk/cloudformation-include` dependency.
+  should also be able to remove the `CfnInclude` block.
 
   Note that AWS will provision the new version of the Lambda function before
   the old one is removed, so the two Lambdas (and their schedules) will coexist

@@ -182,8 +182,7 @@ in your original CFN template._
 3. Remove the redundant resources from your original CFN template.
 
    In simple cases it may be possible to remove the whole file. If so, you
-   should also be able to remove the CfnInclude block and the associated
-   dependency
+   should also be able to remove the `CfnInclude` block.
 
 4. Remove the gu:riffraff:new-asg tag from your new ASG.
 
