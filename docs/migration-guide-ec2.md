@@ -5,7 +5,7 @@ in the [Migration Guide](./migration-guide.md).
 
 ---
 
-The [GuEc2App](https://guardian.github.io/cdk/classes/index.GuEc2App.html)
+The [GuEc2App](https://guardian.github.io/cdk/classes/patterns.GuEc2App.html)
 pattern describes a web service with instances running in an auto-scaling group
 (ASG), accessed via an Application Load Balancer (ALB).
 
