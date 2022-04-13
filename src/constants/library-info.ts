@@ -12,6 +12,11 @@ export function getDevDependency(packageName: string): string | undefined {
   return devDependencies[packageName];
 }
 
+export function getDependency(packageName: string): string | undefined {
+  const { dependencies = {} } = packageJson;
+  return dependencies[packageName];
+}
+
 export const LibraryInfo = {
   /**
    * The name of this package
@@ -27,11 +32,11 @@ export const LibraryInfo = {
    * The version of the `aws-cdk-lib` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_VERSION: valueOrUnknown(getDevDependency("aws-cdk-lib")),
+  AWS_CDK_VERSION: valueOrUnknown(getDependency("aws-cdk-lib")),
 
   /**
    * The version of the `constructs` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  CONSTRUCTS_VERSION: valueOrUnknown(getDevDependency("constructs")),
+  CONSTRUCTS_VERSION: valueOrUnknown(getDependency("constructs")),
 };

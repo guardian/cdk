@@ -59,7 +59,7 @@ checkForLocalChanges() {
 
 raisePR() {
   LIBRARY_TO_CHECK="aws-cdk-lib"
-  INSTALLED_VERSION_NUMBER=$(jq -r ".devDependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
+  INSTALLED_VERSION_NUMBER=$(jq -r ".dependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
 
   BRANCH_NAME="update-aws-cdk-$INSTALLED_VERSION_NUMBER"
   COMMIT_SUBJECT="chore(deps)!: Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
