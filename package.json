@@ -68,6 +68,7 @@
     "yargs": "^17.4.0"
   },
   "peerDependencies": {
+    "aws-cdk": "2.20.0",
     "aws-cdk-lib": "2.20.0",
     "constructs": "10.0.110"
   },
