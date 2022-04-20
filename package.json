@@ -57,7 +57,7 @@
     "aws-cdk-lib": "2.20.0",
     "aws-sdk": "^2.1113.0",
     "chalk": "^4.1.2",
-    "codemaker": "^1.55.1",
+    "codemaker": "^1.57.0",
     "constructs": "10.0.110",
     "git-url-parse": "^11.6.0",
     "inquirer": "^8.2.2",
