@@ -76,6 +76,13 @@ Object {
             "Value": "guardian/cdk",
           },
           Object {
+            "Key": "LogKinesisStreamName",
+            "PropagateAtLaunch": true,
+            "Value": Object {
+              "Ref": "LoggingStreamName",
+            },
+          },
+          Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
             "Value": "Test/AutoScalingGroupTestguec2app",
@@ -865,6 +872,13 @@ Object {
             "Key": "gu:repo",
             "PropagateAtLaunch": true,
             "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "LogKinesisStreamName",
+            "PropagateAtLaunch": true,
+            "Value": Object {
+              "Ref": "LoggingStreamName",
+            },
           },
           Object {
             "Key": "Name",

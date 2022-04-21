@@ -12,7 +12,7 @@ import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
 import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuStringParameter } from "../../constructs/core";
+import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
@@ -347,6 +347,13 @@ export class GuEc2App {
     //  but we have decided that this is sufficient for now.
     // TODO: Do we need to tag all resources with this value? What would the use-cases be?
     Tags.of(autoScalingGroup).add(TagKeys.PATTERN_NAME, this.constructor.name, { applyToLaunchedInstances: true });
+
+    // This allows automatic shipping of instance Cloud Init logs when using the
+    // `cdk-base` Amigo role on your AMI.
+    Tags.of(autoScalingGroup).add(
+      TagKeys.LOG_KINESIS_STREAM_NAME,
+      GuLoggingStreamNameParameter.getInstance(scope).valueAsString
+    );
 
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,

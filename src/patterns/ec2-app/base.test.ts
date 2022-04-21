@@ -580,6 +580,7 @@ describe("the GuEC2App pattern", function () {
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupPlayApp" },
         { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
 
@@ -589,6 +590,7 @@ describe("the GuEC2App pattern", function () {
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupNodeApp" },
         { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
   });
@@ -676,6 +678,7 @@ describe("the GuEC2App pattern", function () {
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupApp" },
         { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
   });

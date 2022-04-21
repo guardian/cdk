@@ -12,7 +12,14 @@ import type { GuPolicy } from "../policies";
 import { GuRole } from "./roles";
 
 export interface GuInstanceRoleProps {
+  /**
+   * By default, instances are given permissions to write to Kinesis. Set to
+   * 'true' to prevent this. Note, disabling will prevent not just application
+   * logs being shipped but also anything else - for example, automatic log
+   * shipping of Cloud Init and other logs by the cdk-base role in your AMI.
+   */
   withoutLogShipping?: boolean;
+
   additionalPolicies?: GuPolicy[];
 }
 
