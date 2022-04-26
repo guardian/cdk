@@ -8,6 +8,7 @@ updates:
       interval: 'weekly'
     commit-message:
       prefix: "chore(deps): "
+
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -18,9 +19,16 @@ updates:
       prefix: "chore(deps): "
     # force the lockfile and package.json to be updated
     versioning-strategy: increase
-    # We update AWS CDK libraries ourselves (via `script/update-aws-cdk`) as this is a breaking change for users, and it results in a new major version being released
+
+    # Users of `@guardian/cdk` must be on the exact version of these dependencies.
+    # Any update to them in `package.json` should create a new major version of `@guardian/cdk`.
+    # New versions of these dependencies are published quite often. In the case of `constructs`, see https://github.com/aws/constructs/issues/970.
+    # In order to reduce the frequency of new major versions of `@guardian/cdk`, we'll manage these dependencies ourselves via `script/update-aws-cdk`.
     ignore:
+      - dependency-name: "aws-cdk"
       - dependency-name: "aws-cdk-lib"
+      - dependency-name: "constructs"
+
   - package-ecosystem: 'npm'
     directory: '/tools/integration-test'
     schedule:
@@ -34,3 +42,4 @@ updates:
     ignore:
       - dependency-name: "aws-cdk"
       - dependency-name: "aws-cdk-lib"
+      - dependency-name: "constructs"
