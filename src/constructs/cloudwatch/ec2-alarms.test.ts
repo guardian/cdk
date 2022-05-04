@@ -5,7 +5,7 @@ import { ApplicationListener, ApplicationProtocol } from "aws-cdk-lib/aws-elasti
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core";
 import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
-import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
+import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",
@@ -25,7 +25,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    new GuAlb5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
@@ -37,7 +37,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    new GuAlb5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmDescription: "test-custom-alarm-description",
     });
@@ -51,7 +51,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    new GuAlb5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmName: "test-custom-alarm-name",
     });
@@ -65,7 +65,7 @@ describe("The Gu5xxPercentageAlarm construct", () => {
       numberOfMinutesAboveThresholdBeforeAlarm: 3,
       snsTopicName: "test-topic",
     };
-    new Gu5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    new GuAlb5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       EvaluationPeriods: 3,
     });

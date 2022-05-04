@@ -5,18 +5,9 @@ import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
 import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import { GuAlarm } from "./alarm";
-import type { GuAlarmProps } from "./alarm";
+import type { GuAlarmProps, Http5xxAlarmProps } from "./alarm";
 
-export interface Http5xxAlarmProps
-  extends Omit<
-    GuAlarmProps,
-    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
-  > {
-  tolerated5xxPercentage: number;
-  numberOfMinutesAboveThresholdBeforeAlarm?: number;
-}
-
-interface Gu5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps, AppIdentity {
+interface GuAlb5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps, AppIdentity {
   loadBalancer: GuApplicationLoadBalancer;
 }
 
@@ -28,8 +19,8 @@ interface GuUnhealthyInstancesAlarmProps extends Pick<GuAlarmProps, "snsTopicNam
  * Creates an alarm which is triggered whenever the percentage of requests with a 5xx response code exceeds
  * the specified threshold.
  */
-export class Gu5xxPercentageAlarm extends GuAlarm {
-  constructor(scope: GuStack, props: Gu5xxPercentageAlarmProps) {
+export class GuAlb5xxPercentageAlarm extends GuAlarm {
+  constructor(scope: GuStack, props: GuAlb5xxPercentageAlarmProps) {
     const mathExpression = new MathExpression({
       expression: "100*(m1+m2)/m3",
       usingMetrics: {
