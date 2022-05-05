@@ -2,7 +2,7 @@ import { App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import gitUrlParse from "git-url-parse";
-import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
+import { BuildNumberTag, ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
@@ -137,6 +137,8 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
       this.addTag("Stage", this.stage);
 
       this.tryAddRepositoryTag();
+
+      this.addTag(BuildNumberTag.Key, BuildNumberTag.Value);
     }
   }
 
