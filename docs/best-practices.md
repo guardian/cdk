@@ -19,44 +19,39 @@ Here are some recommendations for using the Guardian CDK library:
 developing locally and in PRs. This enables us to catch things early, creating a shorter feedback loop. See the
 [AWS docs](https://docs.aws.amazon.com/cdk/v2/guide/testing.html#testing_snapshot) on snapshot testing.
 
-#### Mocking `gu:cdk:version`
-The `@guardian/cdk` library follows [Semantic Versioning](https://semver.org/).
+#### Mocking
+GuCDK will add tags to resources:
+  - `gu:cdk:version` represents the version of GuCDK being used. This helps with usage tracking.
+  - `gu:build-number` represents the build number from CI. This helps when triaging incidents.
 
-GuCDK will add the `gu:cdk:version` tag to resources to aid usage tracking.
-This number changes with every version and as a result automatic version upgrade PRs (e.g. via Dependabot) will fail their snapshot tests.
-To reduce friction, GuCDK ships a mock that can be used with Jest, resulting in snapshots having a static value for this tag.
+To reduce friction, GuCDK ships mocks that can be used with Jest to make snapshot tests simpler. To use them:
 
-To use it, first, create `jest.setup.js` and add the global mock:
+1. Create `jest.setup.js` and add the global mocks:
 
-```javascript
-jest.mock("@guardian/cdk/lib/constants/tracking-tag");
-```
+   ```javascript
+   jest.mock("@guardian/cdk/lib/constants/tracking-tag");
+   jest.mock("@guardian/cdk/lib/constants/build-number-tag");
+   ```
 
-Next, edit `jest.config.js` setting the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) property:
+2. Edit `jest.config.js` setting the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) property:
 
-```javascript
-module.exports = {
-  setupFilesAfterEnv: ["./jest.setup.js"],
-};
-```
+   ```javascript
+   module.exports = {
+     setupFilesAfterEnv: ["./jest.setup.js"],
+   };
+   ```
 
-Finally, update your snapshots (`jest -u`).
+3. Update your snapshots:
 
-The `gu:cdk:version` tag should now be:
+   ```shell
+   jest -u
+   ```
 
-```json5
-{
-  "Key": "gu:cdk:version",
-  "PropagateAtLaunch": true,
-  "Value": "TEST", // <-- would otherwise be the version number of @guardian/cdk in use
-}
-```
+   The value of these tags within your snapshot files should now be `"TEST"`.
 
 Note:
-  - This mock only affects tests. The `gu:cdk:version` tag in the final template created from a `cdk synth` will have the correct value
-  - This mock is automatically configured when using the GuCDK project generator
-
-✨ With `gu:cdk:version` mocked, snapshot tests run during CI, you can feel confident about merging Dependabot PRs that bump `@guardian/cdk` once CI passes ✨.
+  - Mocks only affect tests. The final template created from a `cdk synth` will have the correct values.
+  - The above mocks are automatically configured when using the GuCDK project generator.
 
 ### Generating the cloudformation template
 CI should generate files in the `cdk.out` directory (make sure to add this to `.gitignore`).
