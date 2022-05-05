@@ -44,6 +44,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -96,6 +100,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "testing",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -318,6 +326,10 @@ Object {
             "Value": "testing",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -370,6 +382,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "testing",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",

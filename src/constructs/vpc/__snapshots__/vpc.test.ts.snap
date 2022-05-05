@@ -11,6 +11,10 @@ Object {
         "InstanceTenancy": "default",
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -37,6 +41,10 @@ Object {
     "MyVpcIGW5C4A4F63": Object {
       "Properties": Object {
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -99,6 +107,10 @@ Object {
       "Properties": Object {
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -147,6 +159,10 @@ Object {
             "Value": "Private",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -188,6 +204,10 @@ Object {
     "MyVpcapplicationSubnet2RouteTable1A5026C8": Object {
       "Properties": Object {
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -246,6 +266,10 @@ Object {
           Object {
             "Key": "aws-cdk:subnet-type",
             "Value": "Private",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -329,6 +353,10 @@ Object {
         "Domain": "vpc",
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -364,6 +392,10 @@ Object {
           "Ref": "MyVpcingressSubnet1Subnet05B4D133",
         },
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -402,6 +434,10 @@ Object {
     "MyVpcingressSubnet1RouteTableBD23564A": Object {
       "Properties": Object {
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -451,6 +487,10 @@ Object {
             "Value": "Public",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -497,6 +537,10 @@ Object {
         "Domain": "vpc",
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -533,6 +577,10 @@ Object {
         },
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -559,6 +607,10 @@ Object {
     "MyVpcingressSubnet2RouteTable17765BD0": Object {
       "Properties": Object {
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -617,6 +669,10 @@ Object {
           Object {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -686,6 +742,7 @@ Object {
         "Tags": Object {
           "Stack": "test-stack",
           "Stage": "TEST",
+          "gu:build-number": "TEST",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },
@@ -713,6 +770,7 @@ Object {
         "Tags": Object {
           "Stack": "test-stack",
           "Stage": "TEST",
+          "gu:build-number": "TEST",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },
@@ -740,6 +798,7 @@ Object {
         "Tags": Object {
           "Stack": "test-stack",
           "Stage": "TEST",
+          "gu:build-number": "TEST",
           "gu:cdk:version": "TEST",
           "gu:repo": "guardian/cdk",
         },

@@ -61,6 +61,11 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:pattern-name",
             "PropagateAtLaunch": true,
             "Value": "GuEc2App",
@@ -164,6 +169,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -259,6 +268,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -398,6 +411,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -474,6 +491,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -501,6 +522,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -623,6 +648,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -717,6 +746,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -771,6 +804,10 @@ Object {
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -857,6 +894,11 @@ Object {
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:pattern-name",
@@ -962,6 +1004,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -1057,6 +1103,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -1175,6 +1225,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -1245,6 +1299,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -1281,6 +1339,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "test-gu-ec2-app",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -1436,6 +1498,10 @@ Object {
             "Value": "test-gu-ec2-app",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -1490,6 +1556,10 @@ Object {
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",

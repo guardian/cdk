@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import type { Resource } from "aws-cdk-lib/assertions/lib/private/template";
-import { TagKeys, TrackingTag } from "../../constants";
+import { BuildNumberTag, TagKeys, TrackingTag } from "../../constants";
 import type { AppIdentity, GuStack } from "../../constructs/core";
 
 interface Tag {
@@ -82,6 +82,7 @@ export class GuTemplate {
         Key: TagKeys.REPOSITORY_NAME,
         Value: "guardian/cdk",
       },
+      BuildNumberTag,
     ];
 
     const tagMap = new Map<string, Tag>();

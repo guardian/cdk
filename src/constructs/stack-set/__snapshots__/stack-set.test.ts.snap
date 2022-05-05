@@ -29,6 +29,10 @@ Object {
         "StackSetName": "my-stack-set",
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -68,6 +72,10 @@ Object {
           \\"StreamMode\\": \\"PROVISIONED\\"
         },
         \\"Tags\\": [
+          {
+            \\"Key\\": \\"gu:build-number\\",
+            \\"Value\\": \\"TEST\\"
+          },
           {
             \\"Key\\": \\"gu:cdk:version\\",
             \\"Value\\": \\"TEST\\"
@@ -154,6 +162,10 @@ Object {
         "StackSetName": "my-stack-set",
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -184,6 +196,10 @@ Object {
     "accountalertsD9982E6F": Object {
       "Properties": Object {
         "Tags": Array [
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",

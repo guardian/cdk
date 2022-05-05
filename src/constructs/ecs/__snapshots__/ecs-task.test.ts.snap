@@ -185,6 +185,10 @@ Object {
             "Value": "ecs-test",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -242,6 +246,10 @@ Object {
             "Value": "ecs-test",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -287,6 +295,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "ecs-test",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -545,6 +557,10 @@ Object {
             "Value": "ecs-test",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -619,6 +635,10 @@ Object {
             "Value": "ecs-test",
           },
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -656,6 +676,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "ecs-test",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -722,6 +746,10 @@ Object {
           Object {
             "Key": "App",
             "Value": "ecs-test",
+          },
+          Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:cdk:version",

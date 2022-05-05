@@ -44,6 +44,10 @@ Object {
         },
         "Tags": Array [
           Object {
+            "Key": "gu:build-number",
+            "Value": "TEST",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
