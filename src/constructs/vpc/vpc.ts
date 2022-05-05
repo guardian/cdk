@@ -55,6 +55,9 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResou
  * A managed NAT is created for each private subnet to allow access to the
  * internet.
  *
+ * For recommendations on how best to configure your VPC see:
+ * https://github.com/guardian/recommendations/blob/main/AWS.md#vpc
+ *
  * For more information on VPCs and AWS see:
  * https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html.
  */
