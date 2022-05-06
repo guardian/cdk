@@ -10,7 +10,7 @@ import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
-import { Gu5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
+import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
@@ -419,7 +419,7 @@ export class GuEc2App {
       const { http5xxAlarm, snsTopicName, unhealthyInstancesAlarm } = monitoringConfiguration;
 
       if (http5xxAlarm) {
-        new Gu5xxPercentageAlarm(scope, {
+        new GuAlb5xxPercentageAlarm(scope, {
           app,
           loadBalancer,
           snsTopicName,

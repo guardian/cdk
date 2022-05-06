@@ -9,6 +9,15 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;
 }
 
+export interface Http5xxAlarmProps
+  extends Omit<
+    GuAlarmProps,
+    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
+  > {
+  tolerated5xxPercentage: number;
+  numberOfMinutesAboveThresholdBeforeAlarm?: number;
+}
+
 /**
  * Creates a CloudWatch alarm which sends notifications to the specified SNS topic.
  *
