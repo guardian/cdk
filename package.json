@@ -60,7 +60,7 @@
     "codemaker": "^1.57.0",
     "constructs": "10.0.110",
     "git-url-parse": "^11.6.0",
-    "inquirer": "^8.2.2",
+    "inquirer": "^8.2.4",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
     "lodash.upperfirst": "^4.3.1",
