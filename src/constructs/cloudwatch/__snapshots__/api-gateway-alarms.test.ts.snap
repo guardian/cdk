@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The Gu5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
+exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
   "Outputs": Object {
     "RestApiEndpoint0551178A": Object {

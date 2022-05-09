@@ -32,7 +32,7 @@ export interface Http5xxAlarmProps
  * ```
  *
  * This library provides an implementation of some commonly used alarms, which require less boilerplate than this construct,
- * for example [[`Gu5xxPercentageAlarm`]]. Prefer using these more specific implementations where possible.
+ * for example the [[`GuAlb5xxPercentageAlarm`]]. Prefer using these more specific implementations where possible.
  */
 export class GuAlarm extends Alarm {
   constructor(scope: GuStack, id: string, props: GuAlarmProps) {
