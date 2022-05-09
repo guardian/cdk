@@ -15,7 +15,7 @@ function setupBasicRestApi(stack: GuStack): RestApi {
   return restApi;
 }
 
-describe("The Gu5xxPercentageAlarm construct", () => {
+describe("The GuApiGateway5xxPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const props = {

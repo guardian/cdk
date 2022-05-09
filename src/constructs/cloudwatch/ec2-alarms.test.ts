@@ -17,7 +17,7 @@ const app: AppIdentity = {
   app: "testing",
 };
 
-describe("The Gu5xxPercentageAlarm construct", () => {
+describe("The GuAlb5xxPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
