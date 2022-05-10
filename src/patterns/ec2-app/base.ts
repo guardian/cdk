@@ -1,9 +1,9 @@
-import { Duration, Tags } from "aws-cdk-lib";
+import { Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
 import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { AccessScope, SSM_PARAMETER_PATHS, TagKeys } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -104,6 +104,13 @@ export interface GuEc2AppProps extends AppIdentity {
   scaling: GuAsgCapacity;
   certificateProps: GuDomainName;
   withoutImdsv2?: boolean;
+  auth?: GuAuth;
+}
+
+// TODO find better home
+interface GuAuth {
+  oktaServer: string;
+  oktaClientId: string;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -305,6 +312,7 @@ export class GuEc2App {
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData,
       withoutImdsv2,
+      auth,
     } = props;
 
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
@@ -401,6 +409,33 @@ export class GuEc2App {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC,
     });
+
+    if (auth) {
+      const oktaSecretParameter = new GuStringParameter(scope, "OktaSecret", {
+        fromSSM: false,
+        description: "Name of Secrets Manager secret containing the Okta Secret key",
+        default: "/STAGE/STACK/APP/OktaSecret",
+      });
+
+      const oktaAction = ListenerAction.authenticateOidc({
+        authorizationEndpoint: `${auth.oktaServer}/v1/authorize`,
+        clientId: auth.oktaClientId,
+        clientSecret: SecretValue.secretsManager(oktaSecretParameter.valueAsString),
+        issuer: auth.oktaServer,
+        tokenEndpoint: `${auth.oktaServer}/v1/token`,
+        userInfoEndpoint: `${auth.oktaServer}/v1/userinfo`,
+        sessionCookieName: "AWSELBAuthSessionCookie",
+        sessionTimeout: Duration.minutes(5),
+        scope: "openid profile",
+        next: ListenerAction.forward([targetGroup]),
+      });
+
+      listener.addAction("OktaAction", { action: oktaAction });
+      listener.connections.allowToAnyIpv4(
+        Port.tcp(443),
+        "Allows outbound access to connect to Okta for OIDC negotiation."
+      );
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {

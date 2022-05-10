@@ -682,4 +682,64 @@ describe("the GuEC2App pattern", function () {
       ],
     });
   });
+
+  it("can be configured with OIDC on the load balancer", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      auth: {
+        oktaServer: "https://dev-000.okta.com/oauth2/default",
+        oktaClientId: "abc",
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+      DefaultActions: [
+        {
+          AuthenticateOidcConfig: {
+            AuthorizationEndpoint: "https://dev-000.okta.com/oauth2/default/v1/authorize",
+            ClientId: "abc",
+            ClientSecret: {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:secretsmanager:",
+                  {
+                    Ref: "OktaSecret",
+                  },
+                  ":SecretString:::}}",
+                ],
+              ],
+            },
+            Issuer: "https://dev-000.okta.com/oauth2/default",
+            Scope: "openid profile",
+            SessionCookieName: "AWSELBAuthSessionCookie",
+            SessionTimeout: "300",
+            TokenEndpoint: "https://dev-000.okta.com/oauth2/default/v1/token",
+            UserInfoEndpoint: "https://dev-000.okta.com/oauth2/default/v1/userinfo",
+          },
+          Order: 1,
+          Type: "authenticate-oidc",
+        },
+        {
+          Order: 2,
+          TargetGroupArn: {
+            // Ref: "TargetGroup",
+          },
+          Type: "forward",
+        },
+      ],
+    });
+  });
 });
