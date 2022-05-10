@@ -5,15 +5,18 @@ import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gat
 import type { AppIdentity, GuStack } from "../constructs/core";
 import type { GuLambdaFunction } from "../constructs/lambda";
 
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+export type HttpMethod = "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH";
+
 export interface ApiTarget {
   /**
    * The path for the request (e.g. /test).
    */
   path: string;
   /**
-   * The HTTP method for the target (e.g. GET, POST, PUT).
+   * The [[`HttpMethod`]] for the target (e.g. GET, POST, PUT).
    */
-  httpMethod: string;
+  httpMethod: HttpMethod;
   /**
    * The Lambda function responsible for handling the request.
    */
@@ -40,7 +43,7 @@ export interface ApiGatewayAlarms {
   noMonitoring?: false;
 }
 
-export interface GuApiMultipleLambdasProps extends RestApiProps, AppIdentity {
+export interface GuApiGatewayWithLambdaByPathProps extends RestApiProps, AppIdentity {
   /**
    * A list of [[`ApiTarget`]]s to configure for the API Gateway instance.
    */
@@ -88,7 +91,7 @@ function isNoMonitoring(
  * });
  *
  * // Wire up the API
- * new GuApiMultipleLambdas(this, {
+ * new GuApiGatewayWithLambdaByPath(this, {
  *   app: "example-api-gateway-instance",
  *   targets: [
  *     {
@@ -112,12 +115,12 @@ function isNoMonitoring(
  * });
  * ```
  *
- * For all API configuration options, see [[`GuApiMultipleLambdasProps`]].
+ * For all API configuration options, see [[`GuApiGatewayWithLambdaByPathProps`]].
  *
  * For details on configuring the individual Lambda functions, see [[`GuLambdaFunction`]].
  */
-export class GuApiMultipleLambdas {
-  constructor(scope: GuStack, props: GuApiMultipleLambdasProps) {
+export class GuApiGatewayWithLambdaByPath {
+  constructor(scope: GuStack, props: GuApiGatewayWithLambdaByPathProps) {
     const apiGateway = new RestApi(scope, "RestApi", props);
     props.targets.map((target) => {
       const resource = apiGateway.root.resourceForPath(target.path);

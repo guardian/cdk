@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuApiMultipleLambdas pattern should create the correct resources with minimal config 1`] = `
+exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct resources with minimal config 1`] = `
 Object {
   "Outputs": Object {
     "RestApiEndpoint0551178A": Object {

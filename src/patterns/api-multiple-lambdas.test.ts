@@ -2,9 +2,9 @@ import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
-import { GuApiMultipleLambdas } from "./api-multiple-lambdas";
+import { GuApiGatewayWithLambdaByPath } from "./api-multiple-lambdas";
 
-describe("The GuApiMultipleLambdas pattern", () => {
+describe("The GuApiGatewayWithLambdaByPath pattern", () => {
   it("should create the correct resources with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const defaultProps = {
@@ -24,7 +24,7 @@ describe("The GuApiMultipleLambdas pattern", () => {
       ...defaultProps,
       fileName: "my-app-3.zip",
     });
-    new GuApiMultipleLambdas(stack, {
+    new GuApiGatewayWithLambdaByPath(stack, {
       app: "testing",
       monitoringConfiguration: { noMonitoring: true },
       targets: [
@@ -56,7 +56,7 @@ describe("The GuApiMultipleLambdas pattern", () => {
       app: "testing",
       fileName: "my-app-1.zip",
     });
-    new GuApiMultipleLambdas(stack, {
+    new GuApiGatewayWithLambdaByPath(stack, {
       app: "testing",
       monitoringConfiguration: {
         snsTopicName: "my-alarm-topic",

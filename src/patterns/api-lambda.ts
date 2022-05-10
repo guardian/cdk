@@ -42,7 +42,7 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * This pattern should be used if you intend to serve all traffic via a single Lambda
  * (for example, if your Lambda uses an application framework, like https://github.com/vendia/serverless-express).
  * If you need to configure path-based routing to serve different requests with different
- * Lambdas, use the [[`GuApiMultipleLambdas`]] pattern instead.
+ * Lambdas, use the [[`GuApiGatewayWithLambdaByPath`]] pattern instead.
  *
  * For all configuration options, see [[`GuApiLambdaProps`]].
  */
