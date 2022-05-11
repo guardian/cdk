@@ -4,6 +4,18 @@ import type { IConstruct } from "constructs";
 import type { GuMigratingStack } from "../../types";
 import { isGuStatefulConstruct } from "../../types";
 
+export interface GuStaticLogicalId {
+  /**
+   * The logical ID to use in the synthesised template for this resource.
+   */
+  logicalId: string;
+
+  /**
+   * A short description to help developers understand why this resource's logical ID is being set.
+   */
+  reason: string;
+}
+
 export interface GuMigratingResource {
   /**
    * A string to use to override the logicalId AWS CDK auto-generates for a resource.
@@ -17,17 +29,7 @@ export interface GuMigratingResource {
    * @see GuMigratingStack
    * @see GuStack
    */
-  existingLogicalId?: {
-    /**
-     * The logical ID to use in the synthesised template for this resource.
-     */
-    logicalId: string;
-
-    /**
-     * A short description to help developers understand why this resource's logical ID is being set.
-     */
-    reason: string;
-  };
+  existingLogicalId?: GuStaticLogicalId;
 }
 
 export const GuMigratingResource = {

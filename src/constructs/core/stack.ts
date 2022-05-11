@@ -1,11 +1,13 @@
-import { App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
+import { Annotations, App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
+import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
+import type { GuStaticLogicalId } from "./migrating";
 import type { GuParameter } from "./parameters";
 
 export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuMigratingStack> {
@@ -159,6 +161,69 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
       );
     }
+  }
+
+  /**
+   * Override the auto-generated logical ID for a resource, in the generated CloudFormation template, with a static one.
+   *
+   * Of particular use when migrating a JSON/YAML CloudFormation template into GuCDK.
+   * It's generally advised to retain the logical ID for stateful resources, such as databases or buckets.
+   *
+   * Let's say we have a YAML template:
+   *
+   * ```yaml
+   * AWSTemplateFormatVersion: '2010-09-09'
+   * Resources:
+   *   UsesTable:
+   *     Type: AWS::DynamoDB::Table
+   *     Properties:
+   *       TableName: !Sub 'users-${stage}'
+   * ```
+   *
+   * When moving to GuCDK we'll have this:
+   *
+   * class MyStack extends GuStack {
+   *   constructor(app: App, id: string, props: GuStackProps) {
+   *     super(app, id, props);
+   *
+   *     const { stage } = this;
+   *
+   *     new Table(this, "UsersTable", {
+   *       name: `users-${stage}`
+   *     });
+   *   }
+   * }
+   *
+   * During synthesis, CDK auto-generates logical IDs, so we'll have a stack with a DynamoDB table named 'UsersTable<SOME GUID>', NOT `UsersTable`.
+   * That is, the `UsersTable` table will be deleted.
+   *
+   * In order to retain the original ID from the YAML template, we will do:
+   *
+   * class MyStack extends GuStack {
+   *   constructor(app: App, id: string, props: GuStackProps) {
+   *     super(app, id, props);
+   *
+   *     const { stage } = this;
+   *
+   *     const table = new Table(this, "UsersTable", {
+   *       name: `users-${stage}`
+   *     });
+   *
+   *     this.overrideLogicalId(table, { logicalId: "UsersTable", reason: "Retaining a stateful resource from the YAML template" });
+   *   }
+   * }
+   *
+   * @param construct The (stateful) resource to retain the logical ID of.
+   * @param logicalId The logical ID of the resource (as defined in the JSON/YAML template.
+   * @param reason A small explanation to keep the logical ID. Mainly used to help future developers.
+   */
+  public overrideLogicalId(construct: IConstruct, { logicalId, reason }: GuStaticLogicalId): void {
+    const {
+      node: { id, defaultChild },
+    } = construct;
+
+    (defaultChild as CfnElement).overrideLogicalId(logicalId);
+    Annotations.of(construct).addInfo(`Setting logical ID for ${id} to ${logicalId}. Reason: ${reason}`);
   }
 }
 
