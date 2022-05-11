@@ -2,7 +2,6 @@ import { Peer } from "aws-cdk-lib/aws-ec2";
 import type { IVpc } from "aws-cdk-lib/aws-ec2";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
-import { GuMigratingResource } from "../../core";
 import { GuBaseSecurityGroup } from "./base";
 
 /**
@@ -85,15 +84,10 @@ export class GuWazuhAccess extends GuBaseSecurityGroup {
       - easier for YAML defined stacks to move to GuCDK as the resource will be kept
       - easier for stacks already using GuCDK to upgrade versions
      */
-    GuMigratingResource.setLogicalId(
+    scope.overrideLogicalId(
       this,
-      { migratedFromCloudFormation: true },
-      {
-        existingLogicalId: {
-          logicalId: "WazuhSecurityGroup",
-          reason: "Avoid tricky security group replacement during a YAML to GuCDK migration.",
-        },
-      }
+      "WazuhSecurityGroup",
+      "Avoid tricky security group replacement during a YAML to GuCDK migration."
     );
   }
 

@@ -1,6 +1,7 @@
-import { App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
-import type { StackProps } from "aws-cdk-lib";
+import { Annotations, App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
+import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import type { GuMigratingStack } from "../../types";
@@ -159,6 +160,16 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
       );
     }
+  }
+
+  // TODO use `GuMigratingResource` interface
+  public overrideLogicalId(construct: IConstruct, desiredLogicalId: string, reason: string): void {
+    const {
+      node: { id, defaultChild },
+    } = construct;
+
+    (defaultChild as CfnElement).overrideLogicalId(desiredLogicalId);
+    Annotations.of(construct).addInfo(`Setting logical ID for ${id} to ${desiredLogicalId}. Reason: ${reason}`);
   }
 }
 
