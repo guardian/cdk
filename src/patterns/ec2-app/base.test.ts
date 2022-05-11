@@ -653,6 +653,96 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
+  it("can be configured with application logging", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      applicationLogging: { enabled: true },
+    });
+
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app },
+      propagateAtLaunch: true,
+      additionalTags: [
+        { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
+        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: TagKeys.SYSTEMD_UNIT, Value: "test-gu-ec2-app.service" },
+      ],
+    });
+  });
+
+  it("can be configured with application logging using a custom systemd unit name", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      applicationLogging: { enabled: true, systemdUnitName: "not-my-app-name" },
+    });
+
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app },
+      propagateAtLaunch: true,
+      additionalTags: [
+        { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
+        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: TagKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
+      ],
+    });
+  });
+
+  it("throws an error if users attempt to ship application logs without the appropriate IAM permissions", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    expect(() => {
+      new GuEc2App(stack, {
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app,
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        certificateProps: {
+          domainName: "code-guardian.com",
+        },
+        scaling: {
+          minimumInstances: 1,
+        },
+        monitoringConfiguration: { noMonitoring: true },
+        userData: "",
+        applicationLogging: { enabled: true },
+        roleConfiguration: {
+          withoutLogShipping: true,
+        },
+      });
+    }).toThrowError(
+      "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
+        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+    );
+  });
+
   it("adds a tag to aid visibility of stacks using the pattern", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "App";
