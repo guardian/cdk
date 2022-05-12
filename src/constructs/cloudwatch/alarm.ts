@@ -9,6 +9,15 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;
 }
 
+export interface Http5xxAlarmProps
+  extends Omit<
+    GuAlarmProps,
+    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
+  > {
+  tolerated5xxPercentage: number;
+  numberOfMinutesAboveThresholdBeforeAlarm?: number;
+}
+
 /**
  * Creates a CloudWatch alarm which sends notifications to the specified SNS topic.
  *
@@ -23,7 +32,7 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
  * ```
  *
  * This library provides an implementation of some commonly used alarms, which require less boilerplate than this construct,
- * for example [[`Gu5xxPercentageAlarm`]]. Prefer using these more specific implementations where possible.
+ * for example the [[`GuAlb5xxPercentageAlarm`]]. Prefer using these more specific implementations where possible.
  */
 export class GuAlarm extends Alarm {
   constructor(scope: GuStack, id: string, props: GuAlarmProps) {

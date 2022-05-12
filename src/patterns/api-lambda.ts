@@ -9,7 +9,7 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
 }
 
-interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
+export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   /**
    * A list of [[`LambdaRestApiProps`]] to configure for the lambda.
    */
@@ -36,8 +36,15 @@ interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitor
 }
 
 /**
- * A pattern to create a lambda triggered by API Gateway
+ * A pattern to create a Lambda triggered by API Gateway
  * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-lambda-integration.html
+ *
+ * This pattern should be used if you intend to serve all traffic via a single Lambda
+ * (for example, if your Lambda uses an application framework, like https://github.com/vendia/serverless-express).
+ * If you need to configure path-based routing to serve different requests with different
+ * Lambdas, use the [[`GuApiGatewayWithLambdaByPath`]] pattern instead.
+ *
+ * For all configuration options, see [[`GuApiLambdaProps`]].
  */
 export class GuApiLambda extends GuLambdaFunction {
   public readonly apis: Map<string, LambdaRestApi>;
