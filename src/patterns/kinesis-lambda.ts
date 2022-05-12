@@ -1,17 +1,23 @@
 import { Stream, StreamEncryption } from "aws-cdk-lib/aws-kinesis";
-import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
+import type { IStream, StreamProps } from "aws-cdk-lib/aws-kinesis";
 import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import { AppIdentity } from "../constructs/core";
 import type { GuMigratingResource, GuStack } from "../constructs/core";
+import { guAssumeRolePolicyStatement } from "../constructs/iam";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { toAwsErrorHandlingProps } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
+
+export interface CrossAccountKinesisStream {
+  roleArn: string;
+  streamArn: string;
+}
 
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
@@ -42,6 +48,7 @@ import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/l
  */
 export interface ExistingKinesisStream extends GuMigratingResource {
   externalKinesisStreamName?: string;
+  crossAccountKinesisStream?: CrossAccountKinesisStream;
 }
 
 /**
@@ -88,6 +95,26 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
   processingProps?: StreamProcessingProps;
 }
 
+const getStream = (scope: GuStack, props: GuKinesisLambdaProps): IStream => {
+  const streamId = props.existingKinesisStream?.existingLogicalId?.logicalId ?? "KinesisStream";
+  if (props.existingKinesisStream?.externalKinesisStreamName) {
+    return Stream.fromStreamArn(
+      scope,
+      streamId,
+      `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
+    );
+  } else if (props.existingKinesisStream?.crossAccountKinesisStream) {
+    return Stream.fromStreamArn(scope, streamId, props.existingKinesisStream.crossAccountKinesisStream.streamArn);
+  } else {
+    const kinesisProps: GuKinesisStreamProps = {
+      existingLogicalId: props.existingKinesisStream?.existingLogicalId,
+      encryption: StreamEncryption.MANAGED,
+      ...props.kinesisStreamProps,
+    };
+    return AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
+  }
+};
+
 /**
  * Pattern which creates all of the resources needed to invoke a lambda function whenever a record is
  * put onto a Kinesis stream.
@@ -102,20 +129,14 @@ export class GuKinesisLambda extends GuLambdaFunction {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const kinesisProps: GuKinesisStreamProps = {
-      existingLogicalId: props.existingKinesisStream?.existingLogicalId,
-      encryption: StreamEncryption.MANAGED,
-      ...props.kinesisStreamProps,
-    };
-    const streamId = props.existingKinesisStream?.existingLogicalId?.logicalId ?? "KinesisStream";
 
-    const kinesisStream = props.existingKinesisStream?.externalKinesisStreamName
-      ? Stream.fromStreamArn(
-          scope,
-          streamId,
-          `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
-        )
-      : AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
+    const kinesisStream = getStream(scope, props);
+
+    if (props.existingKinesisStream?.crossAccountKinesisStream) {
+      this.addToRolePolicy(
+        guAssumeRolePolicyStatement([props.existingKinesisStream.crossAccountKinesisStream.roleArn])
+      );
+    }
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 

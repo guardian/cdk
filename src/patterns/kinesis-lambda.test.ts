@@ -93,6 +93,41 @@ describe("The GuKinesisLambda pattern", () => {
     template.resourceCountIs("AWS::Kinesis::Stream", 0);
   });
 
+  it("should work correctly with cross account streams", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const basicErrorHandling: StreamErrorHandlingProps = {
+      bisectBatchOnError: false,
+      retryBehaviour: StreamRetry.maxAttempts(1),
+    };
+    const arn = "arn:aws:kinesis:eu-west-1:12345:stream/test-cross-account-stream";
+    const role = "test-cross-account-role";
+    const props = {
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: noMonitoring,
+      errorHandlingConfiguration: basicErrorHandling,
+      existingKinesisStream: {
+        crossAccountKinesisStream: {
+          roleArn: role,
+          streamArn: arn,
+        },
+      },
+      app: "testing",
+    };
+    new GuKinesisLambda(stack, "my-lambda-function", props);
+
+    const template = Template.fromStack(stack);
+    console.log(JSON.stringify(template.toJSON(), null, 2));
+    // it would be nice to check that the lambda policy includes the correct AssumeRole statement here but I didn't manage it
+    template.hasResourceProperties("AWS::Lambda::EventSourceMapping", {
+      EventSourceArn: arn,
+    });
+    template.resourceCountIs("AWS::Kinesis::Stream", 0);
+  });
+
   it("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {

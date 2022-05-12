@@ -7,16 +7,17 @@ export interface GuAssumeRolePolicyProps extends GuNoStatementsPolicyProps {
   resources: string[];
 }
 
+export const guAssumeRolePolicyStatement = (resources: string[]) =>
+  new PolicyStatement({
+    effect: Effect.ALLOW,
+    actions: ["sts:AssumeRole"],
+    resources: resources,
+  });
+
 export class GuAssumeRolePolicy extends GuPolicy {
   constructor(scope: GuStack, id: string, props: GuAssumeRolePolicyProps) {
     super(scope, id, {
-      statements: [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["sts:AssumeRole"],
-          resources: props.resources,
-        }),
-      ],
+      statements: [guAssumeRolePolicyStatement(props.resources)],
       ...props,
     });
   }
