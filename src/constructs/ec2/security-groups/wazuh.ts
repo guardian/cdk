@@ -84,11 +84,10 @@ export class GuWazuhAccess extends GuBaseSecurityGroup {
       - easier for YAML defined stacks to move to GuCDK as the resource will be kept
       - easier for stacks already using GuCDK to upgrade versions
      */
-    scope.overrideLogicalId(
-      this,
-      "WazuhSecurityGroup",
-      "Avoid tricky security group replacement during a YAML to GuCDK migration."
-    );
+    scope.overrideLogicalId(this, {
+      logicalId: "WazuhSecurityGroup",
+      reason: "Avoid tricky security group replacement during a YAML to GuCDK migration.",
+    });
   }
 
   /**

@@ -24,7 +24,7 @@ export function WithStaticLogicalId<TBase extends AnyConstructor>(BaseClass: TBa
 
           if (maybeExistingLogicalId) {
             const stack = GuStack.of(this) as GuStack;
-            stack.overrideLogicalId(this, maybeExistingLogicalId.logicalId, maybeExistingLogicalId.reason);
+            stack.overrideLogicalId(this, maybeExistingLogicalId);
           }
         }
       }

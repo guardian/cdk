@@ -76,11 +76,11 @@ describe("The GuStack construct", () => {
 
         const sqs = new Queue(this, "Notifications For External Users", {});
 
-        this.overrideLogicalId(
-          sqs,
-          "Notifications",
-          "Persisting this logicalId from the YAML template as the resource is stateful and used by multiple downstream systems that we don't own."
-        );
+        this.overrideLogicalId(sqs, {
+          logicalId: "Notifications",
+          reason:
+            "Persisting this logicalId from the YAML template as the resource is stateful and used by multiple downstream systems that we don't own.",
+        });
       }
     }
 

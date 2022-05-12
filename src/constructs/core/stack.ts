@@ -6,6 +6,7 @@ import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
+import type { GuStaticLogicalId } from "./migrating";
 import type { GuParameter } from "./parameters";
 
 export interface GuStackProps extends Omit<StackProps, "stackName"> {
@@ -151,14 +152,13 @@ export class GuStack extends Stack implements StackStageIdentity {
     }
   }
 
-  // TODO use `GuMigratingResource` interface
-  public overrideLogicalId(construct: IConstruct, desiredLogicalId: string, reason: string): void {
+  public overrideLogicalId(construct: IConstruct, { logicalId, reason }: GuStaticLogicalId): void {
     const {
       node: { id, defaultChild },
     } = construct;
 
-    (defaultChild as CfnElement).overrideLogicalId(desiredLogicalId);
-    Annotations.of(construct).addInfo(`Setting logical ID for ${id} to ${desiredLogicalId}. Reason: ${reason}`);
+    (defaultChild as CfnElement).overrideLogicalId(logicalId);
+    Annotations.of(construct).addInfo(`Setting logical ID for ${id} to ${logicalId}. Reason: ${reason}`);
   }
 }
 
