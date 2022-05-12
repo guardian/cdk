@@ -1,9 +1,10 @@
 import { Annotations, App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
+import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
-import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
+import { ContextKeys, LibraryInfo, TagKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
@@ -129,6 +130,24 @@ export class GuStack extends Stack implements StackStageIdentity {
 
       this.tryAddRepositoryTag();
     }
+
+    const { node } = this;
+
+    node.addValidation({
+      validate(): string[] {
+        const NO_ERRORS: string[] = [];
+
+        const isMigrating = !!node.findAll().find((construct: IConstruct) => construct instanceof CfnInclude);
+
+        if (isMigrating) {
+          Annotations.of(node.root).addWarning(
+            `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! Call 'GuStack.overrideLogicalId' to ensure they're not unintentionally replaced.`
+          );
+        }
+
+        return NO_ERRORS;
+      },
+    });
   }
 
   /**
