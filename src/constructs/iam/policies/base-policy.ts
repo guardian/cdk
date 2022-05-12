@@ -1,13 +1,13 @@
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { PolicyProps } from "aws-cdk-lib/aws-iam";
-import { GuMigratableConstruct } from "../../../utils/mixin";
+import { WithStaticLogicalId } from "../../../utils/mixin/with-static-logical-id";
 import type { GuMigratingResource, GuStack } from "../../core";
 
 export interface GuPolicyProps extends PolicyProps, GuMigratingResource {}
 
 export type GuNoStatementsPolicyProps = Omit<GuPolicyProps, "statements">;
 
-export class GuPolicy extends GuMigratableConstruct(Policy) {
+export class GuPolicy extends WithStaticLogicalId(Policy) {
   constructor(scope: GuStack, id: string, props: GuPolicyProps) {
     super(scope, id, props);
   }
