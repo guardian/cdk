@@ -1,8 +1,8 @@
 import { CfnOutput } from "aws-cdk-lib";
 import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
+import { WithStaticLogicalId } from "../../../utils/mixin/with-static-logical-id";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {
@@ -25,9 +25,7 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
  * `existingLogicalId` prop.
  */
-export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(
-  GuAppAwareConstruct(ApplicationLoadBalancer)
-) {
+export class GuApplicationLoadBalancer extends WithStaticLogicalId(GuAppAwareConstruct(ApplicationLoadBalancer)) {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
     super(scope, id, { deletionProtection: true, ...props });
 

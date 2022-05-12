@@ -1,7 +1,7 @@
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
+import { WithStaticLogicalId } from "../../../utils/mixin/with-static-logical-id";
 import type { GuCertificate } from "../../acm";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 import type { GuApplicationTargetGroup } from "./application-target-group";
@@ -22,7 +22,7 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps, Ap
  * If you are running an application which only accepts traffic over HTTPS, consider using [[`GuHttpsApplicationListener`]]
  * to reduce the amount of boilerplate needed when configuring your Listener.
  */
-export class GuApplicationListener extends GuStatefulMigratableConstruct(GuAppAwareConstruct(ApplicationListener)) {
+export class GuApplicationListener extends WithStaticLogicalId(GuAppAwareConstruct(ApplicationListener)) {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
   }

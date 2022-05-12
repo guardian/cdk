@@ -1,6 +1,6 @@
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { TopicProps } from "aws-cdk-lib/aws-sns";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { WithStaticLogicalId } from "../../utils/mixin/with-static-logical-id";
 import type { GuMigratingResource, GuStack } from "../core";
 
 interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
@@ -21,7 +21,7 @@ interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
  *  new GuSnsTopic(stack, "SnsTopic", { existingLogicalId: "MyCloudFormedSnsTopic" });
  * ```
  */
-export class GuSnsTopic extends GuStatefulMigratableConstruct(Topic) {
+export class GuSnsTopic extends WithStaticLogicalId(Topic) {
   constructor(scope: GuStack, id: string, props?: GuSnsTopicProps) {
     super(scope, id, props);
   }

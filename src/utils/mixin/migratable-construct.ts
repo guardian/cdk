@@ -42,7 +42,6 @@ import type { AnyConstructor } from "./types";
  * @param BaseClass the class to apply the mixin to
  * @constructor
  *
- * @see GuStatefulMigratableConstruct
  * @see GuMigratingResource
  * @see https://www.typescriptlang.org/docs/handbook/mixins.html
  * @see https://www.typescriptlang.org/docs/handbook/decorators.html

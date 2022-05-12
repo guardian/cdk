@@ -2,7 +2,7 @@ import type { VpcProps } from "aws-cdk-lib/aws-ec2";
 import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
 import { StringListParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { VPC_SSM_PARAMETER_PREFIX } from "../../constants";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { WithStaticLogicalId } from "../../utils/mixin/with-static-logical-id";
 import type { GuMigratingResource, GuStack } from "../core";
 
 export interface GuVpcCustomProps {
@@ -61,7 +61,7 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResou
  * For more information on VPCs and AWS see:
  * https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html.
  */
-export class GuVpc extends GuStatefulMigratableConstruct(Vpc) {
+export class GuVpc extends WithStaticLogicalId(Vpc) {
   constructor(scope: GuStack, id: string, props?: GuVpcProps) {
     const defaultVpcProps: VpcProps = {
       gatewayEndpoints: {

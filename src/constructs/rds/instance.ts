@@ -2,8 +2,8 @@ import { Fn } from "aws-cdk-lib";
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { DatabaseInstance } from "aws-cdk-lib/aws-rds";
 import type { DatabaseInstanceProps } from "aws-cdk-lib/aws-rds";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
+import { WithStaticLogicalId } from "../../utils/mixin/with-static-logical-id";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
 
 export interface GuDatabaseInstanceProps
@@ -13,7 +13,7 @@ export interface GuDatabaseInstanceProps
   instanceType: string;
 }
 
-export class GuDatabaseInstance extends GuStatefulMigratableConstruct(GuAppAwareConstruct(DatabaseInstance)) {
+export class GuDatabaseInstance extends WithStaticLogicalId(GuAppAwareConstruct(DatabaseInstance)) {
   constructor(scope: GuStack, id: string, props: GuDatabaseInstanceProps) {
     // CDK just wants "t3.micro" format, whereas
     // some CFN yaml might have the older "db.t3.micro" with the "db." prefix

@@ -6,8 +6,8 @@ import type {
   LoadBalancerListener,
   LoadBalancerProps,
 } from "aws-cdk-lib/aws-elasticloadbalancing";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
+import { WithStaticLogicalId } from "../../utils/mixin/with-static-logical-id";
 import { GuArnParameter } from "../core";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
 
@@ -45,7 +45,7 @@ interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthChec
  * If you are running an application which only accepts traffic over HTTPs, consider using [[`GuHttpsClassicLoadBalancer`]]
  * to reduce the amount of boilerplate needed when configuring your load balancer.
  */
-export class GuClassicLoadBalancer extends GuStatefulMigratableConstruct(GuAppAwareConstruct(LoadBalancer)) {
+export class GuClassicLoadBalancer extends WithStaticLogicalId(GuAppAwareConstruct(LoadBalancer)) {
   static DefaultHealthCheck = {
     port: 9000,
     path: "/healthcheck",

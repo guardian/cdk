@@ -1,6 +1,6 @@
 import { Stream } from "aws-cdk-lib/aws-kinesis";
 import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
+import { WithStaticLogicalId } from "../../utils/mixin/with-static-logical-id";
 import type { GuMigratingResource, GuStack } from "../core";
 
 export interface GuKinesisStreamProps extends StreamProps, GuMigratingResource {}
@@ -22,7 +22,7 @@ export interface GuKinesisStreamProps extends StreamProps, GuMigratingResource {
  * new GuKinesisStream(stack, "LoggingStream", { existingLogicalId: "MyCloudFormedKinesisStream" });
  * ```
  */
-export class GuKinesisStream extends GuStatefulMigratableConstruct(Stream) {
+export class GuKinesisStream extends WithStaticLogicalId(Stream) {
   constructor(scope: GuStack, id: string, props?: GuKinesisStreamProps) {
     super(scope, id, props);
   }
