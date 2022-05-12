@@ -1,9 +1,3 @@
-import { Annotations } from "aws-cdk-lib";
-import type { CfnElement } from "aws-cdk-lib";
-import type { IConstruct } from "constructs";
-import type { GuMigratingStack } from "../../types";
-import { isGuStatefulConstruct } from "../../types";
-
 export interface GuMigratingResource {
   /**
    * A string to use to override the logicalId AWS CDK auto-generates for a resource.
@@ -29,43 +23,3 @@ export interface GuMigratingResource {
     reason: string;
   };
 }
-
-export const GuMigratingResource = {
-  setLogicalId<T extends IConstruct>(
-    construct: T,
-    { migratedFromCloudFormation }: GuMigratingStack,
-    { existingLogicalId }: GuMigratingResource
-  ): void {
-    const overrideLogicalId = (logicalId: string) => {
-      const defaultChild = construct.node.defaultChild as CfnElement;
-      defaultChild.overrideLogicalId(logicalId);
-    };
-
-    const id = construct.node.id;
-    const isStateful = isGuStatefulConstruct(construct);
-
-    if (migratedFromCloudFormation) {
-      if (existingLogicalId) {
-        return overrideLogicalId(existingLogicalId.logicalId);
-      }
-
-      if (isStateful) {
-        Annotations.of(construct).addWarning(
-          `GuStack has 'migratedFromCloudFormation' set to true. ${id} is a stateful construct and 'existingLogicalId' has not been set. ${id}'s logicalId will be auto-generated and consequently AWS will create a new resource rather than inheriting an existing one. This is not advised as downstream services, such as DNS, will likely need updating.`
-        );
-      }
-    } else {
-      if (existingLogicalId) {
-        Annotations.of(construct).addWarning(
-          `GuStack has 'migratedFromCloudFormation' set to false. ${id} has an 'existingLogicalId' set to ${existingLogicalId.logicalId}. This will have no effect - the logicalId will be auto-generated. Set 'migratedFromCloudFormation' to true for 'existingLogicalId' to be observed.`
-        );
-      }
-
-      if (isStateful) {
-        Annotations.of(construct).addInfo(
-          `GuStack has 'migratedFromCloudFormation' set to false. ${id} is a stateful construct, it's logicalId will be auto-generated and AWS will create a new resource.`
-        );
-      }
-    }
-  },
-};
