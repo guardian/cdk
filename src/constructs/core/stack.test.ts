@@ -1,8 +1,10 @@
-import { App } from "aws-cdk-lib";
+import { join } from "path";
+import { Annotations, App } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Queue } from "aws-cdk-lib/aws-sqs";
-import { ContextKeys, TagKeys } from "../../constants";
+import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
+import { ContextKeys, LibraryInfo, TagKeys } from "../../constants";
 import { GuTemplate } from "../../utils/test";
 import { GuParameter } from "./parameters";
 import type { GuStackProps } from "./stack";
@@ -86,5 +88,17 @@ describe("The GuStack construct", () => {
 
     const stack = new MigratingStack(new App(), "Test", { stack: "test", stage: "TEST" });
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SQS::Queue", "Notifications");
+  });
+
+  it("prompts to use GuStack.overrideLogicalId", () => {
+    const warning = jest.spyOn(Annotations.prototype, "addWarning");
+
+    const app = new App();
+    const stack = new GuStack(app, "Test", { stack: "test", stage: "TEST" });
+    new CfnInclude(stack, "Template", { templateFile: join(__dirname, "__data__", "cfn.yaml") });
+    app.synth();
+    expect(warning).toHaveBeenCalledWith(
+      `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! Use 'overrideLogicalId' to preserve a resource's logical ID, ensuring it's not removed unintentionally.`
+    );
   });
 });

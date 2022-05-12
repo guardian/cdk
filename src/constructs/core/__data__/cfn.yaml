@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: A CloudFormation template for testing purposes
+Parameters:
+  BucketName:
+    Type: String
+Resources:
+  ImportantBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
