@@ -8,8 +8,8 @@ describe("The GuSnsTopic construct", () => {
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", /MySnsTopic.+/);
   });
 
-  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     new GuSnsTopic(stack, "my-sns-topic", { existingLogicalId: { logicalId: "TheSnsTopic", reason: "testing" } });
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "TheSnsTopic");
   });

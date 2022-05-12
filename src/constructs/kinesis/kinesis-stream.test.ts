@@ -8,8 +8,8 @@ describe("The GuKinesisStream construct", () => {
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", /^LoggingStream.+$/);
   });
 
-  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     new GuKinesisStream(stack, "LoggingStream", { existingLogicalId: { logicalId: "MyStream", reason: "testing" } });
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "MyStream");
   });

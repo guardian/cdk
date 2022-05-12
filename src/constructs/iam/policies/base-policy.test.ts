@@ -64,8 +64,8 @@ describe("GuAllowPolicy", () => {
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", /^AllowS3GetObject.+/);
   });
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  test("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(
       stack,
       new GuAllowPolicy(stack, "AllowS3GetObject", {
@@ -141,8 +141,8 @@ describe("GuDenyPolicy", () => {
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", /^DenyS3GetObject.+/);
   });
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  test("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(
       stack,
       new GuDenyPolicy(stack, "DenyS3GetObject", {

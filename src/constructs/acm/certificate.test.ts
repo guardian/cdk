@@ -23,7 +23,7 @@ describe("The GuCertificate class", () => {
   });
 
   it("should inherit a CloudFormed certificate correctly", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuCertificate(stack, {
       app: "testing",
       existingLogicalId: { logicalId: "MyCloudFormedCertificate", reason: "testing" },

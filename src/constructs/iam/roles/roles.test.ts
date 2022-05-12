@@ -3,8 +3,8 @@ import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuRole } from "./roles";
 
 describe("The GuRole class", () => {
-  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
 
     new GuRole(stack, "TestRole", {
       existingLogicalId: { logicalId: "MyRole", reason: "testing" },

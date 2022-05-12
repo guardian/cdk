@@ -20,8 +20,8 @@ describe("The GuSnsLambda pattern", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  it("should inherit an existing SNS topic correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("should inherit an existing SNS topic correctly if an existingLogicalId is passed via existingSnsTopic", () => {
+    const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
       fileName: "lambda.zip",

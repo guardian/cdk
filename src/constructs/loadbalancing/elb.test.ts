@@ -15,8 +15,8 @@ describe("The GuClassicLoadBalancer class", () => {
 
   const app: AppIdentity = { app: "testing" };
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  test("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       ...app,
       vpc,
@@ -206,7 +206,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
   });
 
   test("Removes Scheme if user asks us to", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       ...app,
       vpc,

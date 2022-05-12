@@ -4,12 +4,11 @@ import { Template } from "aws-cdk-lib/assertions";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
 import { ContextKeys, TagKeys, TrackingTag } from "../../constants";
-import type { GuMigratingStack } from "../../types";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuParameter } from "./parameters";
 
-export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuMigratingStack> {
+export interface GuStackProps extends Omit<StackProps, "stackName"> {
   /**
    * The Guardian stack being used (as defined in your riff-raff.yaml).
    * This will be applied as a tag to all of your resources.
@@ -57,13 +56,11 @@ export interface GuStackProps extends Omit<StackProps, "stackName">, Partial<GuM
  * }
  * ```
  */
-export class GuStack extends Stack implements StackStageIdentity, GuMigratingStack {
+export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
 
   private params: Map<string, GuParameter>;
-
-  public readonly migratedFromCloudFormation: boolean;
 
   get stage(): string {
     return this._stage;
@@ -107,13 +104,7 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
-    const {
-      cloudFormationStackName = process.env.GU_CFN_STACK_NAME,
-      migratedFromCloudFormation,
-      stack,
-      stage,
-      withoutTags,
-    } = props;
+    const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, withoutTags } = props;
 
     super(app, id, {
       ...props,
@@ -123,8 +114,6 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
       //  see https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html#bootstrapping-custom-synth
       synthesizer: new LegacyStackSynthesizer(),
     });
-
-    this.migratedFromCloudFormation = !!migratedFromCloudFormation;
 
     this.params = new Map<string, GuParameter>();
 

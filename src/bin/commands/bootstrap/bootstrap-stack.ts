@@ -21,8 +21,6 @@ interface BootstrapProps extends Omit<GuStackProps, "stage"> {
 }
 
 class AccountBootstrap extends GuStack {
-  migratedFromCloudFormation = true;
-
   constructor(scope: App, id: string, props: BootstrapProps) {
     super(scope, id, {
       ...props,

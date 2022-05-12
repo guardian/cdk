@@ -17,7 +17,7 @@ describe("The GuS3Bucket construct", () => {
   });
 
   it("should be possible to override the logical id", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
 
     new GuS3Bucket(stack, "MyBucket", {
       bucketName: "data-bucket",

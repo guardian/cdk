@@ -93,8 +93,8 @@ describe("The GuDatabaseInstance class", () => {
     });
   });
 
-  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     new GuDatabaseInstance(stack, "DatabaseInstance", {
       vpc,
       existingLogicalId: { logicalId: "MyDb", reason: "testing" },

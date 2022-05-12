@@ -12,7 +12,7 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("applies the Stack, Stage and App tags", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
       existingLogicalId: { logicalId: "TestSG", reason: "testing" },
@@ -22,8 +22,8 @@ describe("The GuSecurityGroup class", () => {
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::EC2::SecurityGroup", { appIdentity: { app: "testing" } });
   });
 
-  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("overrides the logicalId when existingLogicalId is set", () => {
+    const stack = simpleGuStackForTesting();
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
       existingLogicalId: { logicalId: "TestSG", reason: "testing" },
