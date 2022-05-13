@@ -14,8 +14,17 @@ import type { GuFunctionProps } from "../constructs/lambda";
 import { toAwsErrorHandlingProps } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
 
+/**
+ * Used to provide information about an existing cross account Kinesis stream to the [[`ExistingKinesisStream`]] pattern.
+ */
 export interface CrossAccountKinesisStream {
+  /**
+   * cross account role that is used to assume the role in the current stack by adding an sts:AssumeRole policy
+   */
   roleArn: string;
+  /**
+   * cross account kinesis stream Arn that is used for EventSourceMapping
+   */
   streamArn: string;
 }
 
@@ -27,7 +36,11 @@ export interface CrossAccountKinesisStream {
  * service when migrating stacks from CloudFormation to `cdk`.
  *
  * Specify an `externalKinesisStreamName` to link the lambda to a Kinesis stream owned by a different stack
- * (or created outside of version control).
+ * on the same aws account (or created outside of version control).
+ *
+ * Specify an `crossAccountKinesisStream` to link the lambda to a Kinesis stream owned by a different stack
+ * on a different aws account (or created outside of version control).
+ * For more details and example usage, see [[`CrossAccountKinesisStream`]].
  *
  * **Example Usage**
  *
@@ -41,9 +54,19 @@ export interface CrossAccountKinesisStream {
  * existingKinesisStream: { existingLogicalId: "MyCloudFormedKinesisStream" }
  * ```
  *
- * Alternatively, reference a Kinesis stream which belongs to another stack or pattern using:
+ * Alternatively, reference a Kinesis stream which belongs to another stack or pattern in the same aws account using:
  * ```typescript
  * existingKinesisStream: { externalKinesisStreamName: "KinesisStreamFromAnotherStack" }
+ * ```
+ *
+ *  Alternatively, reference a Kinesis stream which belongs to another stack or pattern in a different aws account using:
+ * ```typescript
+ * existingKinesisStream: {
+ *   crossAccountKinesisStream: {
+ *      roleArn: "CrossAccountKinesisStreamRoleArn",
+ *      streamArn: "CrossAccountKinesisStreamArn",
+ *   }
+ * }
  * ```
  */
 export interface ExistingKinesisStream extends GuMigratingResource {
