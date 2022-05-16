@@ -6,7 +6,7 @@ import { Runtime, StartingPosition } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { StreamRetry } from "../utils/lambda";
 import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
-import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
+import { simpleGuStackForTesting } from "../utils/test";
 import { GuKinesisLambda } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {
@@ -30,28 +30,6 @@ describe("The GuKinesisLambda pattern", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  it("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    const basicErrorHandling: StreamErrorHandlingProps = {
-      bisectBatchOnError: false,
-      retryBehaviour: StreamRetry.maxAttempts(1),
-    };
-    const noMonitoring: NoMonitoring = { noMonitoring: true };
-    const props = {
-      fileName: "lambda.zip",
-      functionName: "my-lambda-function",
-      handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
-      errorHandlingConfiguration: basicErrorHandling,
-      monitoringConfiguration: noMonitoring,
-      existingKinesisStream: { existingLogicalId: { logicalId: "pre-existing-kinesis-stream", reason: "testing" } },
-      app: "testing",
-    };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
-  });
-
   it("should not generate a new Kinesis stream if an external stream name is passed in", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
@@ -59,6 +37,7 @@ describe("The GuKinesisLambda pattern", () => {
       bisectBatchOnError: false,
       retryBehaviour: StreamRetry.maxAttempts(1),
     };
+    const arn = "arn:aws:kinesis:eu-west-1:12345:stream/test-cross-account-stream";
     const props = {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
@@ -66,29 +45,14 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
       errorHandlingConfiguration: basicErrorHandling,
-      existingKinesisStream: { externalKinesisStreamName: "kinesis-stream-from-another-stack" },
+      existingKinesisStream: { streamArn: arn },
       app: "testing",
     };
     new GuKinesisLambda(stack, "my-lambda-function", props);
 
     const template = Template.fromStack(stack);
     template.hasResourceProperties("AWS::Lambda::EventSourceMapping", {
-      EventSourceArn: {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:kinesis:",
-            {
-              Ref: "AWS::Region",
-            },
-            ":",
-            {
-              Ref: "AWS::AccountId",
-            },
-            ":stream/kinesis-stream-from-another-stack",
-          ],
-        ],
-      },
+      EventSourceArn: arn,
     });
     template.resourceCountIs("AWS::Kinesis::Stream", 0);
   });
@@ -110,10 +74,8 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       errorHandlingConfiguration: basicErrorHandling,
       existingKinesisStream: {
-        crossAccountKinesisStream: {
-          roleArn: role,
-          streamArn: arn,
-        },
+        roleArn: role,
+        streamArn: arn,
       },
       app: "testing",
     };
@@ -121,6 +83,7 @@ describe("The GuKinesisLambda pattern", () => {
 
     const template = Template.fromStack(stack);
     console.log(JSON.stringify(template.toJSON(), null, 2));
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
     // it would be nice to check that the lambda policy includes the correct AssumeRole statement here but I didn't manage it
     template.hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       EventSourceArn: arn,

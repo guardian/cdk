@@ -303,3 +303,261 @@ Object {
   },
 }
 `;
+
+exports[`The GuKinesisLambda pattern should work correctly with cross account streams 1`] = `
+Object {
+  "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "mylambdafunction8D341B54": Object {
+      "DependsOn": Array [
+        "mylambdafunctionServiceRoleDefaultPolicy769897D4",
+        "mylambdafunctionServiceRoleE82C2E25",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "test-stack/TEST/testing/lambda.zip",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "APP": "testing",
+            "STACK": "test-stack",
+            "STAGE": "TEST",
+          },
+        },
+        "FunctionName": "my-lambda-function",
+        "Handler": "my-lambda/handler",
+        "MemorySize": 512,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "mylambdafunctionServiceRoleE82C2E25",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mylambdafunctionKinesisEventSourceTestKinesisStream4CAC6550FA5E175D": Object {
+      "Properties": Object {
+        "BatchSize": 100,
+        "BisectBatchOnFunctionError": false,
+        "EventSourceArn": "arn:aws:kinesis:eu-west-1:12345:stream/test-cross-account-stream",
+        "FunctionName": Object {
+          "Ref": "mylambdafunction8D341B54",
+        },
+        "MaximumRetryAttempts": 1,
+        "StartingPosition": "LATEST",
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "mylambdafunctionServiceRoleDefaultPolicy769897D4": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/test-stack/testing",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/test-stack/testing/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "test-cross-account-role",
+            },
+            Object {
+              "Action": Array [
+                "kinesis:DescribeStreamSummary",
+                "kinesis:GetRecords",
+                "kinesis:GetShardIterator",
+                "kinesis:ListShards",
+                "kinesis:SubscribeToShard",
+                "kinesis:DescribeStream",
+                "kinesis:ListStreams",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:kinesis:eu-west-1:12345:stream/test-cross-account-stream",
+            },
+            Object {
+              "Action": "kinesis:DescribeStream",
+              "Effect": "Allow",
+              "Resource": "arn:aws:kinesis:eu-west-1:12345:stream/test-cross-account-stream",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mylambdafunctionServiceRoleDefaultPolicy769897D4",
+        "Roles": Array [
+          Object {
+            "Ref": "mylambdafunctionServiceRoleE82C2E25",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mylambdafunctionServiceRoleE82C2E25": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "testing",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;

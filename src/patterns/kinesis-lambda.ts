@@ -31,16 +31,11 @@ export interface CrossAccountKinesisStream {
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
  *
- * Specify a `existingLogicalId` to inherit a Kinesis stream which has already
- * been created via a CloudFormation stack. This is necessary to avoid data loss and interruptions of
- * service when migrating stacks from CloudFormation to `cdk`.
  *
- * Specify an `externalKinesisStreamName` to link the lambda to a Kinesis stream owned by a different stack
- * on the same aws account (or created outside of version control).
+ * Specify an `streamArn` to link the lambda to an existing Kinesis stream owned by a different stack
+ * (or created outside of version control).
  *
- * Specify an `crossAccountKinesisStream` to link the lambda to a Kinesis stream owned by a different stack
- * on a different aws account (or created outside of version control).
- * For more details and example usage, see [[`CrossAccountKinesisStream`]].
+ * Specify an `roleArn` if the existing stream is on a different aws account.
  *
  * **Example Usage**
  *
@@ -49,29 +44,29 @@ export interface CrossAccountKinesisStream {
  * MyCloudFormedKinesisStream:
  *   Type: AWS::Kinesis::Stream
  * ```
- * Inherit the Kinesis stream (rather than creating a new one) using:
- * ```typescript
- * existingKinesisStream: { existingLogicalId: "MyCloudFormedKinesisStream" }
- * ```
  *
  * Alternatively, reference a Kinesis stream which belongs to another stack or pattern in the same aws account using:
  * ```typescript
- * existingKinesisStream: { externalKinesisStreamName: "KinesisStreamFromAnotherStack" }
+ * existingKinesisStream: { streamArn: "existingKinesisStreamArn" }
  * ```
  *
  *  Alternatively, reference a Kinesis stream which belongs to another stack or pattern in a different aws account using:
  * ```typescript
  * existingKinesisStream: {
- *   crossAccountKinesisStream: {
- *      roleArn: "CrossAccountKinesisStreamRoleArn",
- *      streamArn: "CrossAccountKinesisStreamArn",
- *   }
+ *    streamArn: "existingKinesisStreamArn",
+ *    roleArn: "CrossAccountKinesisStreamRoleArn",
  * }
  * ```
  */
 export interface ExistingKinesisStream extends GuMigratingResource {
-  externalKinesisStreamName?: string;
-  crossAccountKinesisStream?: CrossAccountKinesisStream;
+  /**
+   * kinesis stream Arn that is owned by a different stack
+   */
+  streamArn: string;
+  /**
+   * cross account role that is used to assume the role in the current stack by adding an sts:AssumeRole policy
+   */
+  roleArn?: string;
 }
 
 /**
@@ -120,22 +115,16 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
 
 const getStream = (scope: GuStack, props: GuKinesisLambdaProps): IStream => {
   const streamId = props.existingKinesisStream?.existingLogicalId?.logicalId ?? "KinesisStream";
-  if (props.existingKinesisStream?.externalKinesisStreamName) {
-    return Stream.fromStreamArn(
-      scope,
-      streamId,
-      `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
-    );
-  } else if (props.existingKinesisStream?.crossAccountKinesisStream) {
-    return Stream.fromStreamArn(scope, streamId, props.existingKinesisStream.crossAccountKinesisStream.streamArn);
-  } else {
-    const kinesisProps: GuKinesisStreamProps = {
-      existingLogicalId: props.existingKinesisStream?.existingLogicalId,
-      encryption: StreamEncryption.MANAGED,
-      ...props.kinesisStreamProps,
-    };
-    return AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
+
+  if (props.existingKinesisStream?.streamArn) {
+    return Stream.fromStreamArn(scope, "KinesisStream", props.existingKinesisStream.streamArn);
   }
+  const kinesisProps: GuKinesisStreamProps = {
+    existingLogicalId: props.existingKinesisStream?.existingLogicalId,
+    encryption: StreamEncryption.MANAGED,
+    ...props.kinesisStreamProps,
+  };
+  return AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
 };
 
 /**
@@ -155,10 +144,8 @@ export class GuKinesisLambda extends GuLambdaFunction {
 
     const kinesisStream = getStream(scope, props);
 
-    if (props.existingKinesisStream?.crossAccountKinesisStream) {
-      this.addToRolePolicy(
-        guAssumeRolePolicyStatement([props.existingKinesisStream.crossAccountKinesisStream.roleArn])
-      );
+    if (props.existingKinesisStream?.roleArn) {
+      this.addToRolePolicy(guAssumeRolePolicyStatement([props.existingKinesisStream.roleArn]));
     }
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
