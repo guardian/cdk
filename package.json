@@ -41,7 +41,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.15.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
-    "gh-pages": "^3.2.3",
+    "gh-pages": "^4.0.0",
     "jest": "^27.5.1",
     "npm-check-updates": "^13.0.0",
     "prettier": "^2.6.2",
