@@ -46,6 +46,8 @@ import type { AnyConstructor } from "./types";
  * @see GuMigratingResource
  * @see https://www.typescriptlang.org/docs/handbook/mixins.html
  * @see https://www.typescriptlang.org/docs/handbook/decorators.html
+ *
+ * @deprecated Please use the `overrideLogicalId` function on [[`GuStack`]]
  */
 export function GuMigratableConstruct<TBase extends AnyConstructor>(BaseClass: TBase) {
   return class extends BaseClass {
