@@ -7,6 +7,7 @@ import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
 import { bootstrapCommand } from "./commands/bootstrap";
+import type { PackageManager } from "./commands/new-project";
 import { newCdkProject } from "./commands/new-project";
 
 const Commands = {
@@ -76,6 +77,12 @@ const parseCommandLineArguments = () => {
               type: "array",
               demandOption: true,
             })
+            .option("package-manager", {
+              description:
+                "The Node package manager to use. Match this to the repository (package-lock.json = npm, yarn.lock = yarn). If the repository has neither file, and there is no strong convention in your team, we recommend npm.",
+              choices: ["npm", "yarn"],
+              demandOption: true,
+            })
       )
       .version(
         `${LibraryInfo.VERSION} (using aws-cdk-lib ${LibraryInfo.AWS_CDK_VERSION}, constructs ${LibraryInfo.CONSTRUCTS_VERSION})`
@@ -106,9 +113,16 @@ parseCommandLineArguments()
         return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
       }
       case Commands.New: {
-        const { init, app, stack, yamlTemplateLocation, stage } = argv;
+        const { init, app, stack, yamlTemplateLocation, stage, packageManager } = argv;
         const stages = stage.map((_) => (_ as string).toUpperCase());
-        return newCdkProject({ init, app, stack, yamlTemplateLocation, stages });
+        return newCdkProject({
+          init,
+          app,
+          stack,
+          yamlTemplateLocation,
+          stages,
+          packageManager: packageManager as PackageManager,
+        });
       }
       default:
         throw new Error(`Unknown command: ${command}`);

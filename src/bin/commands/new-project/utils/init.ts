@@ -6,7 +6,6 @@ export interface InitConfig {
   outputDir: string;
 }
 
-// TODO: Add yarn or npm flag
 // TODO: Add project name flag
 export class ProjectBuilder {
   templateDir = `${__dirname}/../template`;

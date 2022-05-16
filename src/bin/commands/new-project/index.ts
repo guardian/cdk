@@ -12,7 +12,9 @@ import { buildDirectory } from "./utils/init";
 import { constructTest } from "./utils/snapshot";
 import { constructStack } from "./utils/stack";
 import type { Name } from "./utils/utils";
-import { pascalCase } from "./utils/utils";
+import { getCommands, pascalCase } from "./utils/utils";
+
+export type PackageManager = "npm" | "yarn";
 
 interface NewProjectProps {
   init: boolean;
@@ -20,6 +22,7 @@ interface NewProjectProps {
   stack: string;
   stages: string[];
   yamlTemplateLocation?: string;
+  packageManager: PackageManager;
 }
 
 interface NewProjectConfig extends Omit<NewProjectProps, "stack" | "app"> {
@@ -56,7 +59,7 @@ function validateConfig(config: NewProjectConfig): void {
 }
 
 function getConfig(props: NewProjectProps): NewProjectConfig {
-  const { init, app, stack, stages, yamlTemplateLocation } = props;
+  const { init, app, stack, stages, yamlTemplateLocation, packageManager } = props;
 
   const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
@@ -82,6 +85,7 @@ function getConfig(props: NewProjectProps): NewProjectConfig {
     },
     stackPath: `${cdkDir}/lib/${kebabAppName}.ts`,
     testPath: `${cdkDir}/lib/${kebabAppName}.test.ts`,
+    packageManager,
   };
 
   validateConfig(config);
@@ -129,9 +133,11 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     outputDir: dirname(config.stackPath),
   });
 
+  const commands = getCommands(config.packageManager, config.cdkDir);
+
   if (config.init) {
     CliUx.ux.action.start(chalk.yellow("Installing dependencies. This may take a while..."));
-    await execute("./script/setup", [], { cwd: config.cdkDir });
+    await commands.installDependencies();
     CliUx.ux.action.stop();
   }
 
@@ -144,8 +150,16 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     }
   );
 
+  CliUx.ux.action.start(chalk.yellow("Running lint check..."));
+  await commands.lint();
+  CliUx.ux.action.stop();
+
   CliUx.ux.action.start(chalk.yellow("Running tests..."));
-  await execute("./script/test", [], { cwd: config.cdkDir });
+  await commands.test();
+  CliUx.ux.action.stop();
+
+  CliUx.ux.action.start(chalk.yellow("Running initial synthesis..."));
+  await commands.synth();
   CliUx.ux.action.stop();
 
   console.log(chalk.green("Summarising the created files"));
@@ -156,11 +170,13 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
 
   console.log("Project successfully created! Next steps:");
 
+  const { packageManager } = config;
+
   [
-    "Run ./script/diff to confirm there are no destructive changes (there should only be tag additions)",
-    "Update the repository's CI configuration to run ./script/ci",
+    `Run '${packageManager} run diff' to confirm there are no destructive changes (there should only be tag additions)`,
+    `Update the repository's CI configuration to run '${packageManager} run lint', '${packageManager} test', '${packageManager} run synth'`,
     "Raise a PR with these changes",
-  ].map((step) => console.log(`  - ${step}`));
+  ].map((step, index) => console.log(`  ${index + 1}. ${step}`));
 
   return Promise.resolve("Project successfully created!");
 };
