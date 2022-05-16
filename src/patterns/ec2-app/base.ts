@@ -29,6 +29,31 @@ export interface AccessLoggingProps {
   prefix?: string;
 }
 
+/**
+ * To ship your application logs to ELK automatically, you must:
+ *
+ * 1. Set the `enabled` flag to true
+ * 2. Include the `cdk-base` Amigo role in your AMI
+ * 3. Log to `journald`. We recommend doing this by logging to `stdout` and
+ * using `systemd` to start your app
+ * 4. Confirm that your [[`systemdUnitName`]] is configured properly.
+ *
+ * Unless you have explicitly opted-out, appropriate IAM permissions for logging
+ * to Kinesis will be configured automatically via the [[`GuEc2App`]] pattern.
+ */
+export interface ApplicationLoggingProps {
+  enabled: boolean;
+  /**
+   * Defaults to app name. That is, if your app runs as `<app>.service`
+   * (e.g. `janus.service`), this will 'just work'.
+   *
+   * If it runs with a non-standard name, you will need to override the default
+   * behavour. I.e. if your app is running as `some-different-name.service`, then
+   * this prop should be set to `some-different-name`.
+   */
+  systemdUnitName?: string;
+}
+
 export interface Alarms {
   snsTopicName: string;
   http5xxAlarm: false | Http5xxAlarmProps;
@@ -67,6 +92,17 @@ export interface Alarms {
  * monitoringConfiguration: { noMonitoring: true }
  * ```
  *
+ * To automatically ship application logs from `stdout` to ELK, use:
+ *
+ * ```typescript
+ * {
+ *   // other props
+ *   applicationLogging: { enabled: true }
+ * }
+ * ```
+ *
+ * For more details on the requirements for application log shipping, see [[`ApplicationLoggingProps`]].
+ *
  * To enable access logging for your load balancer, you can specify the prefix to write the logs to.
  * The S3 bucket used to hold these access logs must be specified in SSM at `/account/services/access-logging/bucket`
  * You must specify a region in your stack declaration if you are to use this prop, as specified here:
@@ -99,6 +135,7 @@ export interface GuEc2AppProps extends AppIdentity {
   roleConfiguration?: GuInstanceRoleProps;
   monitoringConfiguration: Alarms | NoMonitoring;
   instanceType: InstanceType;
+  applicationLogging?: ApplicationLoggingProps;
   accessLogging?: AccessLoggingProps;
   blockDevices?: BlockDevice[];
   scaling: GuAsgCapacity;
@@ -296,6 +333,8 @@ export class GuEc2App {
       access,
       accessLogging = { enabled: false },
       app,
+      // We should update this default once a significant number of apps have migrated to devx-logs
+      applicationLogging = { enabled: false },
       applicationPort,
       blockDevices,
       certificateProps: { domainName, hostedZoneId },
@@ -306,6 +345,15 @@ export class GuEc2App {
       userData,
       withoutImdsv2,
     } = props;
+
+    // We should really prevent users from doing this via the type system,
+    // but that requires a breaking change to the API
+    if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
+      throw new Error(
+        "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
+          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+      );
+    }
 
     const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
     const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
@@ -354,6 +402,15 @@ export class GuEc2App {
       TagKeys.LOG_KINESIS_STREAM_NAME,
       GuLoggingStreamNameParameter.getInstance(scope).valueAsString
     );
+
+    if (applicationLogging.enabled) {
+      // This allows automatic shipping of application logs when using the
+      // `cdk-base` Amigo role on your AMI.
+      Tags.of(autoScalingGroup).add(
+        TagKeys.SYSTEMD_UNIT,
+        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`
+      );
+    }
 
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
       app,
