@@ -162,21 +162,14 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   await commands.synth();
   CliUx.ux.action.stop();
 
-  console.log(chalk.green("Summarising the created files"));
+  console.log(chalk.green("Success! Here's a summary of the created files:"));
   const tree = await execute("tree", ["-I 'node_modules|cdk.out'"], {
     cwd: config.cdkDir,
   });
   console.log(tree);
 
-  console.log("Project successfully created! Next steps:");
+  const docsUrl = "https://github.com/guardian/cdk/tree/main/docs";
+  CliUx.ux.url(chalk.green(`Please see the docs (${docsUrl}) for next steps.`), docsUrl);
 
-  const { packageManager } = config;
-
-  [
-    `Run '${packageManager} run diff' to confirm there are no destructive changes (there should only be tag additions)`,
-    `Update the repository's CI configuration to run '${packageManager} run lint', '${packageManager} test', '${packageManager} run synth'`,
-    "Raise a PR with these changes",
-  ].map((step, index) => console.log(`  ${index + 1}. ${step}`));
-
-  return Promise.resolve("Project successfully created!");
+  return Promise.resolve(0);
 };
