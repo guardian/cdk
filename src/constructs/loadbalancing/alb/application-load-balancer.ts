@@ -2,9 +2,9 @@ import { CfnOutput } from "aws-cdk-lib";
 import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
+import type { AppIdentity, GuStack } from "../../core";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity {
   /**
    * If your CloudFormation does not define the Type of your Load Balancer, you must set this boolean to true to avoid
    * resource [replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-type).

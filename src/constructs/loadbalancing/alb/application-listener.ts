@@ -2,10 +2,10 @@ import { ApplicationListener, ApplicationProtocol, ListenerAction } from "aws-cd
 import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
+import type { AppIdentity, GuStack } from "../../core";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity, GuMigratingResource {}
+export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity {}
 
 /**
  * Construct which creates a Listener.

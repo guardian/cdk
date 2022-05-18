@@ -1,8 +1,8 @@
 import { Stream } from "aws-cdk-lib/aws-kinesis";
 import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
-import type { GuMigratingResource, GuStack } from "../core";
+import type { GuStack } from "../core";
 
-export interface GuKinesisStreamProps extends StreamProps, GuMigratingResource {}
+export type GuKinesisStreamProps = StreamProps;
 
 /**
  * Construct which creates a Kinesis stream.

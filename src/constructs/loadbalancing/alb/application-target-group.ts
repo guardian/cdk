@@ -2,9 +2,9 @@ import { Annotations, Duration } from "aws-cdk-lib";
 import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationTargetGroupProps, HealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
+import type { AppIdentity, GuStack } from "../../core";
 
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity, GuMigratingResource {}
+export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity {}
 
 /**
  * Construct which creates a Target Group.

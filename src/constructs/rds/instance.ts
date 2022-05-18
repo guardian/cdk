@@ -3,12 +3,9 @@ import { InstanceType } from "aws-cdk-lib/aws-ec2";
 import { DatabaseInstance } from "aws-cdk-lib/aws-rds";
 import type { DatabaseInstanceProps } from "aws-cdk-lib/aws-rds";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
+import type { AppIdentity, GuStack } from "../core";
 
-export interface GuDatabaseInstanceProps
-  extends Omit<DatabaseInstanceProps, "instanceType">,
-    AppIdentity,
-    GuMigratingResource {
+export interface GuDatabaseInstanceProps extends Omit<DatabaseInstanceProps, "instanceType">, AppIdentity {
   instanceType: string;
 }
 

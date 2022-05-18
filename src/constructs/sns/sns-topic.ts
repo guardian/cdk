@@ -1,8 +1,8 @@
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { TopicProps } from "aws-cdk-lib/aws-sns";
-import type { GuMigratingResource, GuStack } from "../core";
+import type { GuStack } from "../core";
 
-interface GuSnsTopicProps extends TopicProps, GuMigratingResource {}
+type GuSnsTopicProps = TopicProps;
 
 /**
  * Construct which creates an SNS Topic.

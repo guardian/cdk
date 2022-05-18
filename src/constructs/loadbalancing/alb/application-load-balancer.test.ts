@@ -41,7 +41,6 @@ describe("The GuApplicationLoadBalancer class", () => {
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
       vpc,
-      existingLogicalId: { logicalId: "MyALB", reason: "testing" },
       removeType: true,
     });
 

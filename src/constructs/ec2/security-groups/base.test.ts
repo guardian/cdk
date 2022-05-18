@@ -15,7 +15,6 @@ describe("The GuSecurityGroup class", () => {
     const stack = simpleGuStackForTesting();
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
-      existingLogicalId: { logicalId: "TestSG", reason: "testing" },
       app: "testing",
     });
 

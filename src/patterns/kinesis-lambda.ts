@@ -5,7 +5,7 @@ import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import { AppIdentity } from "../constructs/core";
-import type { GuMigratingResource, GuStack } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
 import { GuKinesisStream } from "../constructs/kinesis";
 import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuLambdaFunction } from "../constructs/lambda";
@@ -40,7 +40,7 @@ import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/l
  * existingKinesisStream: { externalKinesisStreamName: "KinesisStreamFromAnotherStack" }
  * ```
  */
-export interface ExistingKinesisStream extends GuMigratingResource {
+export interface ExistingKinesisStream {
   externalKinesisStreamName?: string;
 }
 

@@ -5,9 +5,9 @@ import { HostedZone } from "aws-cdk-lib/aws-route53";
 import type { GuDomainName } from "../../types";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { AppIdentity } from "../core";
-import type { GuMigratingResource, GuStack } from "../core";
+import type { GuStack } from "../core";
 
-export type GuCertificatePropsWithApp = GuDomainName & AppIdentity & GuMigratingResource;
+export type GuCertificatePropsWithApp = GuDomainName & AppIdentity;
 
 /**
  * Construct which creates a DNS-validated ACM Certificate.
@@ -39,16 +39,15 @@ export type GuCertificatePropsWithApp = GuDomainName & AppIdentity & GuMigrating
  */
 export class GuCertificate extends GuAppAwareConstruct(Certificate) {
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
-    const { app, domainName, existingLogicalId, hostedZoneId } = props;
+    const { app, domainName, hostedZoneId } = props;
 
     const maybeHostedZone = hostedZoneId
       ? HostedZone.fromHostedZoneId(scope, AppIdentity.suffixText({ app }, "HostedZone"), hostedZoneId)
       : undefined;
 
-    const awsCertificateProps: CertificateProps & GuMigratingResource & AppIdentity = {
+    const awsCertificateProps: CertificateProps & AppIdentity = {
       domainName,
       validation: CertificateValidation.fromDns(maybeHostedZone),
-      existingLogicalId,
       app,
     };
     super(scope, "Certificate", awsCertificateProps);

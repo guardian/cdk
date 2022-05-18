@@ -1,8 +1,8 @@
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { PolicyProps } from "aws-cdk-lib/aws-iam";
-import type { GuMigratingResource, GuStack } from "../../core";
+import type { GuStack } from "../../core";
 
-export interface GuPolicyProps extends PolicyProps, GuMigratingResource {}
+export type GuPolicyProps = PolicyProps;
 
 export type GuNoStatementsPolicyProps = Omit<GuPolicyProps, "statements">;
 

@@ -7,7 +7,7 @@ import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancin
 import type { GuAsgCapacity } from "../../types";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
+import type { AppIdentity, GuStack } from "../core";
 import { GuHttpsEgressSecurityGroup, GuWazuhAccess } from "../ec2";
 import { GuInstanceRole } from "../iam";
 
@@ -28,7 +28,6 @@ export interface GuAutoScalingGroupProps
       | "securityGroup"
     >,
     AppIdentity,
-    GuMigratingResource,
     GuAsgCapacity {
   imageId?: GuAmiParameter;
   userData: UserData | string;

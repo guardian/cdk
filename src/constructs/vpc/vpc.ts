@@ -2,7 +2,7 @@ import type { VpcProps } from "aws-cdk-lib/aws-ec2";
 import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
 import { StringListParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { VPC_SSM_PARAMETER_PREFIX } from "../../constants";
-import type { GuMigratingResource, GuStack } from "../core";
+import type { GuStack } from "../core";
 
 export interface GuVpcCustomProps {
   /**
@@ -25,7 +25,7 @@ export interface GuVpcCustomProps {
   ssmParametersNamespace?: string;
 }
 
-export interface GuVpcProps extends GuVpcCustomProps, VpcProps, GuMigratingResource {}
+export interface GuVpcProps extends GuVpcCustomProps, VpcProps {}
 
 /**
  * Construct which creates a Virtual Private Cloud.

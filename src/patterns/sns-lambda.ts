@@ -3,7 +3,7 @@ import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import { AppIdentity } from "../constructs/core";
-import type { GuMigratingResource, GuStack } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";
@@ -35,7 +35,7 @@ import { GuSnsTopic } from "../constructs/sns";
  *  existingSnsTopic: { externalTopicName: "MySnsTopicNameFromAnotherStack" }
  * ```
  */
-export interface ExistingSnsTopic extends GuMigratingResource {
+export interface ExistingSnsTopic {
   externalTopicName?: string;
 }
 

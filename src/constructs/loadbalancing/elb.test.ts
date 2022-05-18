@@ -190,7 +190,6 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
       ...app,
       vpc,
       removeScheme: true,
-      existingLogicalId: { logicalId: "ClassicLoadBalancer", reason: "testing" },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {

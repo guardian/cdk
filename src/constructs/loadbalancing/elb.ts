@@ -8,9 +8,9 @@ import type {
 } from "aws-cdk-lib/aws-elasticloadbalancing";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuArnParameter } from "../core";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
+import type { AppIdentity, GuStack } from "../core";
 
-interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, GuMigratingResource, AppIdentity {
+interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, AppIdentity {
   propertiesToOverride?: Record<string, unknown>;
   healthCheck?: Partial<HealthCheck>;
   /**
