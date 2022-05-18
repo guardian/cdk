@@ -31,7 +31,7 @@ describe("The GuKinesisLambda pattern", () => {
   });
 
   it("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
       retryBehaviour: StreamRetry.maxAttempts(1),

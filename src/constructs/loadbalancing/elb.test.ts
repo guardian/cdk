@@ -185,7 +185,7 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
   });
 
   test("Removes Scheme if user asks us to", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       ...app,
       vpc,

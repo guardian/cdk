@@ -37,7 +37,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("deletes the Type property if the removeType prop is set to true", () => {
     // not using an auto-generated logicalId to make the expectation notation easier
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
       vpc,

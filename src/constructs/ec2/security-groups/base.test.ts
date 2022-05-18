@@ -12,7 +12,7 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("applies the Stack, Stage and App tags", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
       existingLogicalId: { logicalId: "TestSG", reason: "testing" },
