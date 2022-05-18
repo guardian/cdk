@@ -1,5 +1,6 @@
 import { CfnOutput } from "aws-cdk-lib";
 import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import type { ITopic } from "aws-cdk-lib/aws-sns";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import { AppIdentity } from "../constructs/core";
@@ -36,7 +37,7 @@ import { GuSnsTopic } from "../constructs/sns";
  * ```
  */
 export interface ExistingSnsTopic {
-  externalTopicName?: string;
+  externalTopicName: string;
 }
 
 /**
@@ -81,26 +82,26 @@ export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * @alpha This pattern is in early development. The API is likely to change in future releases.
  */
 export class GuSnsLambda extends GuLambdaFunction {
+  public readonly snsTopic: ITopic;
+
   constructor(scope: GuStack, id: string, props: GuSnsLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const topicId = props.existingSnsTopic?.existingLogicalId?.logicalId ?? "SnsIncomingEventsTopic";
 
-    const snsTopic = props.existingSnsTopic?.externalTopicName
+    const { account, region } = scope;
+    const { existingSnsTopic } = props;
+
+    this.snsTopic = existingSnsTopic
       ? Topic.fromTopicArn(
           scope,
-          topicId,
-          `arn:aws:sns:${scope.region}:${scope.account}:${props.existingSnsTopic.externalTopicName}`
+          existingSnsTopic.externalTopicName,
+          `arn:aws:sns:${region}:${account}:${existingSnsTopic.externalTopicName}`
         )
-      : AppIdentity.taggedConstruct(
-          props,
-          new GuSnsTopic(scope, topicId, {
-            existingLogicalId: props.existingSnsTopic?.existingLogicalId,
-          })
-        );
-    this.addEventSource(new SnsEventSource(snsTopic));
-    new CfnOutput(this, "TopicName", { value: snsTopic.topicName });
+      : AppIdentity.taggedConstruct(props, new GuSnsTopic(scope, "SnsIncomingEventsTopic"));
+
+    this.addEventSource(new SnsEventSource(this.snsTopic));
+    new CfnOutput(this, "TopicName", { value: this.snsTopic.topicName });
   }
 }
