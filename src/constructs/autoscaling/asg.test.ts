@@ -160,23 +160,6 @@ describe("The GuAutoScalingGroup", () => {
     });
   });
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      ...defaultProps,
-      existingLogicalId: { logicalId: "MyASG", reason: "testing" },
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", "MyASG");
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /^AutoscalingGroup.+$/);
-  });
-
   test("has an instance role created by default with AssumeRole permissions", () => {
     const stack = simpleGuStackForTesting();
 

@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuAllowPolicy, GuDenyPolicy } from "./base-policy";
 
 describe("GuAllowPolicy", () => {
@@ -50,33 +50,6 @@ describe("GuAllowPolicy", () => {
       },
     });
   });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(
-      stack,
-      new GuAllowPolicy(stack, "AllowS3GetObject", {
-        actions: ["s3:GetObject"],
-        resources: ["*"],
-      })
-    );
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", /^AllowS3GetObject.+/);
-  });
-
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    attachPolicyToTestRole(
-      stack,
-      new GuAllowPolicy(stack, "AllowS3GetObject", {
-        actions: ["s3:GetObject"],
-        resources: ["*"],
-        existingLogicalId: { logicalId: "MyAwesomeAllowPolicy", reason: "testing" },
-      })
-    );
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", "MyAwesomeAllowPolicy");
-  });
 });
 
 describe("GuDenyPolicy", () => {
@@ -126,32 +99,5 @@ describe("GuDenyPolicy", () => {
         ],
       },
     });
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(
-      stack,
-      new GuDenyPolicy(stack, "DenyS3GetObject", {
-        actions: ["s3:GetObject"],
-        resources: ["*"],
-      })
-    );
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", /^DenyS3GetObject.+/);
-  });
-
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    attachPolicyToTestRole(
-      stack,
-      new GuDenyPolicy(stack, "DenyS3GetObject", {
-        actions: ["s3:GetObject"],
-        resources: ["*"],
-        existingLogicalId: { logicalId: "MyAwesomeDenyPolicy", reason: "testing" },
-      })
-    );
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::IAM::Policy", "MyAwesomeDenyPolicy");
   });
 });

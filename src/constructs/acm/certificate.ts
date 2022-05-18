@@ -3,7 +3,6 @@ import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatem
 import type { CertificateProps } from "aws-cdk-lib/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "aws-cdk-lib/aws-route53";
 import type { GuDomainName } from "../../types";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { AppIdentity } from "../core";
 import type { GuMigratingResource, GuStack } from "../core";
@@ -38,7 +37,7 @@ export type GuCertificatePropsWithApp = GuDomainName & AppIdentity & GuMigrating
  * });
  *```
  */
-export class GuCertificate extends GuStatefulMigratableConstruct(GuAppAwareConstruct(Certificate)) {
+export class GuCertificate extends GuAppAwareConstruct(Certificate) {
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
     const { app, domainName, existingLogicalId, hostedZoneId } = props;
 

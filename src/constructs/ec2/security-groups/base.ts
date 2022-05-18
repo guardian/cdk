@@ -1,6 +1,5 @@
 import { Peer, Port, SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import type { IPeer, SecurityGroupProps } from "aws-cdk-lib/aws-ec2";
-import { GuMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 
@@ -46,7 +45,7 @@ export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdent
  * - [[GuPublicInternetAccessSecurityGroup]]
  * - [[GuHttpsEgressSecurityGroup]]
  */
-export class GuBaseSecurityGroup extends GuMigratableConstruct(SecurityGroup) {
+export class GuBaseSecurityGroup extends SecurityGroup {
   constructor(scope: GuStack, id: string, props: GuBaseSecurityGroupProps) {
     super(scope, id, props);
 

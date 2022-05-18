@@ -93,38 +93,6 @@ describe("The GuDatabaseInstance class", () => {
     });
   });
 
-  it("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
-      vpc,
-      existingLogicalId: { logicalId: "MyDb", reason: "testing" },
-      instanceType: "t3.small",
-      engine: DatabaseInstanceEngine.postgres({
-        version: PostgresEngineVersion.VER_11_8,
-      }),
-      app: "testing",
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::RDS::DBInstance", "MyDb");
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
-      vpc,
-      instanceType: "t3.small",
-      engine: DatabaseInstanceEngine.postgres({
-        version: PostgresEngineVersion.VER_11_8,
-      }),
-      app: "testing",
-    });
-
-    const template = GuTemplate.fromStack(stack);
-
-    template.hasResourceWithLogicalId("AWS::RDS::DBInstance", /^DatabaseInstance.+$/);
-    template.hasGuTaggedResource("AWS::RDS::DBInstance", { appIdentity: { app: "testing" } });
-  });
-
   test("sets the deletion protection value to true by default", () => {
     const stack = simpleGuStackForTesting();
     new GuDatabaseInstance(stack, "DatabaseInstance", {

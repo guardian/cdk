@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { simpleGuStackForTesting } from "../../utils/test";
 import { GuCertificate } from "./certificate";
 
 describe("The GuCertificate class", () => {
@@ -20,19 +20,5 @@ describe("The GuCertificate class", () => {
       domainName: "code-guardian.com",
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
-  });
-
-  it("should inherit a CloudFormed certificate correctly", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuCertificate(stack, {
-      app: "testing",
-      existingLogicalId: { logicalId: "MyCloudFormedCertificate", reason: "testing" },
-      domainName: "code-guardian.com",
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
-      "AWS::CertificateManager::Certificate",
-      "MyCloudFormedCertificate"
-    );
   });
 });

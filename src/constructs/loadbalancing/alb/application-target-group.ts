@@ -1,7 +1,6 @@
 import { Annotations, Duration } from "aws-cdk-lib";
 import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationTargetGroupProps, HealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
 
@@ -32,9 +31,7 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
  *   });
  * ```
  */
-export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(
-  GuAppAwareConstruct(ApplicationTargetGroup)
-) {
+export class GuApplicationTargetGroup extends GuAppAwareConstruct(ApplicationTargetGroup) {
   private static defaultHealthcheckInterval = Duration.seconds(10);
   private static defaultHealthcheckTimeout = Duration.seconds(5);
 

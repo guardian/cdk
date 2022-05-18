@@ -36,27 +36,6 @@ describe("The GuApplicationTargetGroup class", () => {
     });
   });
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
-      ...app,
-      vpc,
-      existingLogicalId: { logicalId: "MyTargetGroup", reason: "testing" },
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::TargetGroup", "MyTargetGroup");
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
-      "AWS::ElasticLoadBalancingV2::TargetGroup",
-      /^ApplicationTargetGroup.+$/
-    );
-  });
-
   test("uses default health check properties", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {

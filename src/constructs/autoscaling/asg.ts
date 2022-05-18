@@ -5,7 +5,6 @@ import { OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
 import type { ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
 import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { GuAsgCapacity } from "../../types";
-import { GuStatefulMigratableConstruct } from "../../utils/mixin";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
 import type { AppIdentity, GuMigratingResource, GuStack } from "../core";
@@ -58,7 +57,7 @@ export interface GuAutoScalingGroupProps
  * All EC2 instances provisioned via this construct will use
  * [IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html).
  */
-export class GuAutoScalingGroup extends GuStatefulMigratableConstruct(GuAppAwareConstruct(AutoScalingGroup)) {
+export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const {
       app,
