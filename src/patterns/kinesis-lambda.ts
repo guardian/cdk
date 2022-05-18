@@ -1,5 +1,5 @@
 import { Stream, StreamEncryption } from "aws-cdk-lib/aws-kinesis";
-import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
+import type { IStream, StreamProps } from "aws-cdk-lib/aws-kinesis";
 import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
@@ -7,7 +7,6 @@ import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../co
 import { AppIdentity } from "../constructs/core";
 import type { GuStack } from "../constructs/core";
 import { GuKinesisStream } from "../constructs/kinesis";
-import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { toAwsErrorHandlingProps } from "../utils/lambda";
@@ -41,7 +40,7 @@ import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/l
  * ```
  */
 export interface ExistingKinesisStream {
-  externalKinesisStreamName?: string;
+  externalKinesisStreamName: string;
 }
 
 /**
@@ -99,25 +98,27 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
  * @alpha This pattern is in early development. The API is likely to change in future releases.
  */
 export class GuKinesisLambda extends GuLambdaFunction {
+  public readonly kinesisStream: IStream;
+
   constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const kinesisProps: GuKinesisStreamProps = {
-      existingLogicalId: props.existingKinesisStream?.existingLogicalId,
-      encryption: StreamEncryption.MANAGED,
-      ...props.kinesisStreamProps,
-    };
-    const streamId = props.existingKinesisStream?.existingLogicalId?.logicalId ?? "KinesisStream";
 
-    const kinesisStream = props.existingKinesisStream?.externalKinesisStreamName
+    const { account, region } = scope;
+    const { existingKinesisStream, kinesisStreamProps } = props;
+
+    this.kinesisStream = existingKinesisStream
       ? Stream.fromStreamArn(
           scope,
-          streamId,
-          `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
+          existingKinesisStream.externalKinesisStreamName,
+          `arn:aws:kinesis:${region}:${account}:stream/${existingKinesisStream.externalKinesisStreamName}`
         )
-      : AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
+      : AppIdentity.taggedConstruct(
+          props,
+          new GuKinesisStream(scope, "KinesisStream", { encryption: StreamEncryption.MANAGED, ...kinesisStreamProps })
+        );
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 
@@ -126,6 +127,6 @@ export class GuKinesisLambda extends GuLambdaFunction {
       ...props.processingProps,
       ...errorHandlingPropsToAwsProps,
     };
-    this.addEventSource(new KinesisEventSource(kinesisStream, eventSourceProps));
+    this.addEventSource(new KinesisEventSource(this.kinesisStream, eventSourceProps));
   }
 }
