@@ -43,7 +43,7 @@
     "eslint-plugin-custom-rules": "file:tools/eslint",
     "gh-pages": "^4.0.0",
     "jest": "^27.5.1",
-    "npm-check-updates": "^13.0.0",
+    "npm-check-updates": "^13.0.1",
     "prettier": "^2.6.2",
     "semantic-release": "^19.0.2",
     "serve": "^13.0.2",
