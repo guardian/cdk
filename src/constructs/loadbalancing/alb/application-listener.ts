@@ -14,12 +14,11 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps, Ap
  * to route traffic to your application. For more details on these three components, see the
  * [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components).
  *
- * In order to inherit an existing Listener, the `migratedFromCloudFormation` prop on your stack must
- * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
- * `existingLogicalId` prop.
- *
  * If you are running an application which only accepts traffic over HTTPS, consider using [[`GuHttpsApplicationListener`]]
  * to reduce the amount of boilerplate needed when configuring your Listener.
+ *
+ * This resource is stateful.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
 export class GuApplicationListener extends GuAppAwareConstruct(ApplicationListener) {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {

@@ -25,9 +25,6 @@ interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthChec
  * **IMPORTANT**: This construct should **only** be used if you are migrating an existing stack and you need to retain the load balancer.
  * Please use [[`GuApplicationLoadBalancer`]] instead of [[`GuClassicLoadBalancer`]] wherever possible.
  *
- * In order to inherit an existing load balancer, the `migratedFromCloudFormation` prop on your stack must be set to `true`.
- * You must also pass the logical id from your CloudFormation template to this construct via the `existingLogicalId` prop.
- *
  * By default, load balancers created via this construct will perform a healthcheck against `/healthcheck` on port 9000. All healthcheck
  * defaults can be overridden via the `healthcheck` prop.
  *
@@ -43,6 +40,9 @@ interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthChec
  * ```
  * If you are running an application which only accepts traffic over HTTPs, consider using [[`GuHttpsClassicLoadBalancer`]]
  * to reduce the amount of boilerplate needed when configuring your load balancer.
+ *
+ * This resource is stateful.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
 export class GuClassicLoadBalancer extends GuAppAwareConstruct(LoadBalancer) {
   static DefaultHealthCheck = {

@@ -12,29 +12,8 @@ import { GuSnsTopic } from "../constructs/sns";
 /**
  * Used to provide information about an existing SNS topic to the [[`GuSnsLambda`]] pattern.
  *
- * Specify a `existingLogicalId` to inherit an SNS topic which has already
- * been created via a CloudFormation stack. This is necessary to avoid interruptions of
- * service when migrating stacks from CloudFormation to `cdk`.
- *
  * Specify an `externalTopicName` to link the lambda to an SNS topic owned by a different stack
  * (or created outside of version control).
- *
- * **Example Usage**
- *
- * When migrating a CloudFormation stack which includes the following resource:
- * ```yaml
- * MyCloudFormedSnsTopic:
- *   Type: AWS::SNS::Topic
- * ```
- * Inherit the SNS topic (rather than creating a new one) using:
- * ```typescript
- *  existingSnsTopic: { existingLogicalId: "MyCloudFormedSnsTopic" }
- * ```
- *
- * Alternatively, reference an SNS topic which belongs to another stack using:
- * ```typescript
- *  existingSnsTopic: { externalTopicName: "MySnsTopicNameFromAnotherStack" }
- * ```
  */
 export interface ExistingSnsTopic {
   externalTopicName: string;
@@ -78,6 +57,9 @@ export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * This pattern will create a new SNS topic by default. If you are migrating a stack from CloudFormation,
  * you will need to opt-out of this behaviour. For information on overriding the default behaviour,
  * see [[`GuSnsLambdaProps`]].
+ *
+ * The SNS topic is stateful, and is accessible via `snsTopic`.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  *
  * @alpha This pattern is in early development. The API is likely to change in future releases.
  */

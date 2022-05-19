@@ -17,25 +17,6 @@ export type GuCertificatePropsWithApp = GuDomainName & AppIdentity;
  *
  * If your DNS is not managed via Route 53, or you omit the `hostedZoneId` props, then the CloudFormation
  * operation which adds this construct will pause until the relevant DNS record has been added manually.
- *
- * Example usage for creating a new certificate:
- * ```typescript
- * new GuCertificate(stack, "TestCertificate", {
- *   app: "testing",
- *   domainName: "code-guardian.com",
- *   hostedZoneId: "id123",
- * });
- *```
- *
- * Example usage for inheriting a certificate which was created via CloudFormation:
- * ```typescript
- * new GuCertificate(stack, "TestCertificate", {
- *   app: "testing",
- *   existingLogicalId: "MyCloudFormedCertificate",
- *   domainName: "code-guardian.com",
- *   hostedZoneId: "id123",
- * });
- *```
  */
 export class GuCertificate extends GuAppAwareConstruct(Certificate) {
   constructor(scope: GuStack, props: GuCertificatePropsWithApp) {
