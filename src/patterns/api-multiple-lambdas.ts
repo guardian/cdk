@@ -120,8 +120,10 @@ function isNoMonitoring(
  * For details on configuring the individual Lambda functions, see [[`GuLambdaFunction`]].
  */
 export class GuApiGatewayWithLambdaByPath {
+  public readonly api: RestApi;
   constructor(scope: GuStack, props: GuApiGatewayWithLambdaByPathProps) {
     const apiGateway = new RestApi(scope, "RestApi", props);
+    this.api = apiGateway;
     props.targets.map((target) => {
       const resource = apiGateway.root.resourceForPath(target.path);
       resource.addMethod(target.httpMethod, new LambdaIntegration(target.lambda));
