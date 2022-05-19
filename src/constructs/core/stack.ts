@@ -148,13 +148,14 @@ export class GuStack extends Stack implements StackStageIdentity, GuMigratingSta
       validate(): string[] {
         const NO_ERRORS: string[] = [];
 
-        const isMigrating = !!node.findAll().find((construct: IConstruct) => construct instanceof CfnInclude);
-
-        if (isMigrating) {
-          Annotations.of(node.root).addWarning(
-            `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! Use 'overrideLogicalId' to preserve a resource's logical ID, ensuring it's not removed unintentionally.`
-          );
-        }
+        node
+          .findAll()
+          .filter((construct) => construct instanceof CfnInclude)
+          .map((cfnInclude) => {
+            Annotations.of(cfnInclude).addWarning(
+              `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! Use 'overrideLogicalId' to preserve a resource's logical ID, ensuring it's not removed unintentionally.`
+            );
+          });
 
         return NO_ERRORS;
       },
