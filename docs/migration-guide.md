@@ -16,48 +16,61 @@ To ensure AWS your account is set up correctly, run:
 
 Then follow the instructions for any errors.
 
-## Initial setup
-Create a new GuCDK project in your repository following [this guide](setting-up-a-gucdk-project.md).
-This will create a new CDK (Typescript) app that simply wraps your existing Cloudformation template.
+## Process
+Generally speaking, we've found this to be a good process to follow when migrating a stack to GuCDK (assumes use of `npm`):
 
-Pay attention to the output of the command as it may describe further manual steps at this point.
-Once done, we recommend running `git diff` to see the full set of changes.
+### Introduce CDK to the repository with CI/CD
+1. Create a [new project](setting-up-a-gucdk-project.md) specifying the `--yaml-template-location` flag.
+2. Check to see what changes will be made to the stack:
 
-Finally, confirm that your new CDK stack is not materially different from your existing stack by running a diff:
+   ```shell
+   npm run diff -- --profile <AWS PROFILE NAME> <STACK ID FROM bin/cdk.ts>
+   ```
 
-```sh
-npm run diff
+   This should only show differences in how resources are tagged; GuCDK will add various tags to _all_ resources in the stack.
+   If you find this initial diff too noisy, you could temporarily exclude these tags by amending your [stack's props](https://guardian.github.io/cdk/interfaces/constructs_core.GuStackProps.html#withoutTags),
+   specifically set `withoutTags` to `true`.
+
+4. Configure CI and CD. See [here](setting-up-a-gucdk-project.md) for more detail.
+5. Raise a PR and merge.
+
+### Migration to CDK
+We now have something like this:
+
+```
+CDK(cfn.yaml) -> cfn.json
 ```
 
-You might find that the diff contains a lot of noise due to tags that are automatically added by `@guardian/cdk`.
-Tag changes will not cause disruption to your infrastructure.
-If desired, you can view a diff which excludes the tagging changes by temporarily [amending your stack's props](https://github.com/guardian/cdk-playground/blob/26af40f6432cb94b3e5ef34648d422a7a6ee6b33/cdk/bin/cdk.ts#L6).
+That is, CDK is merely wrapping an existing template.
 
-Once you are happy with the diff, we recommend running CDK synth as part of your CI process.
-See [here](./setting-up-a-gucdk-project.md) for more detail on CI/CD.
+The end goal is for CDK to do all the work, and remove the YAML template:
 
-## Migrating resources
+```
+CDK -> cfn.json
+```
 
-After initial setup, you have something like this:
+In the previous phase, we also created a [snapshot test](https://docs.aws.amazon.com/cdk/v2/guide/testing.html#testing_snapshot) (`cdk/lib/*.test.ts`),
+which we can treat as the source of truth, representing the exact resources in the stack. We can now begin the migration process.
 
-    CDK(cfn.yaml) -> cfn.yaml
+**Pro-tip:** Annotate the existing YAML template with inline comments as part of the migration and get it reviewed by your team - it might transpire that a resource is no longer needed and can be removed, meaning there's less to migrate!
 
-That is, CDK is merely wrapping an existing template. This is useful as a
-starting point. For example, to integrate with CI/CD.
+As a first step, it is a good idea to read through the template to understand if you have any [stateful resources](stateful-resources.md), as these require a bit of care.
 
-The end goal, though, is for CDK to do all of the work:
+When migrating stateful resources:
+1. Identify a resource(s) to move from YAML to CDK.
+2. Write the CDK and comment out/delete the resource(s) from the YAML template.
+3. Run the tests:
+   - If the changes are acceptable, update the snapshot.
+   - If the changes are not acceptable, refactor CDK and re-run the tests.
+4. With the smallest change made, we can now raise a PR, merge it, and move to the next resource(s).
 
-    CDK -> cfn.yaml
+That is, we can use the snapshot in a [red/green refactor cycle](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html).
+We'll repeat this process until the YAML template is empty and can be removed.
 
-To get there, we need to migrate resources defined in the old cfn.yaml template
-into CDK (Typescript).
-
-How best to do this will depend on the details of your application. Further
-advice can be found here:
-
+Please also read the specific guides for:
 - [for EC2 apps](./migration-guide-ec2.md)
 - [for Lambdas which run on a schedule/cron](./migration-guide-scheduled-lambda.md)
 - [for an API which serves requests using AWS Lambda](./migration-guide-api-with-lambda.md)
 
-Migration guides will be coming soon for other architectures.
+:information_source: Migration guides will be coming soon for other architectures.
 Please contact DevX if you'd like to discuss the migration of an application which uses an architecture that is not listed above.
