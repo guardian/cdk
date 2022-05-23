@@ -95,6 +95,8 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
  * This pattern will create a new Kinesis stream by default. If you are migrating a stack from CloudFormation,
  * you will need to opt-out of this behaviour. For information on overriding the default behaviour,
  * see [[`GuKinesisLambdaProps`]].
+ *
+ * @alpha This pattern is in early development. The API is likely to change in future releases.
  */
 export class GuKinesisLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
