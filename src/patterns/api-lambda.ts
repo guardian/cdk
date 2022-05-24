@@ -38,6 +38,25 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * Lambdas, use the [[`GuApiGatewayWithLambdaByPath`]] pattern instead.
  *
  * For all configuration options, see [[`GuApiLambdaProps`]].
+ *
+ * Example usage:
+ *
+ * ```typescript
+ * new GuApiLambda(stack, "my-lambda", {
+ *   fileName: "my-app.zip",
+ *   handler: "handler.ts",
+ *   runtime: Runtime.NODEJS_14_X,
+ *   monitoringConfiguration: {
+ *     http5xxAlarm: { tolerated5xxPercentage: 5 },
+ *     snsTopicName: "alerts-topic",
+ *   },
+ *   app: "my-app",
+ *   api: {
+ *     id: "my-api",
+ *     description: "...",
+ *   },
+ * });
+ * ```
  */
 export class GuApiLambda extends GuLambdaFunction {
   public readonly api: LambdaRestApi;
