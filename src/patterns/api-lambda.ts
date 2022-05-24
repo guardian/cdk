@@ -49,6 +49,10 @@ export class GuApiLambda extends GuLambdaFunction {
 
     this.api = new LambdaRestApi(this, props.api.id, {
       handler: this,
+
+      // Override to avoid clashes as default is just api ID, which is often shared across stages.
+      restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
+
       ...props.api,
     });
 
