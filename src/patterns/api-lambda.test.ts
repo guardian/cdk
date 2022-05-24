@@ -32,7 +32,7 @@ describe("The GuApiLambda pattern", () => {
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: {
-        toleratedErrorPercentage: 99,
+        http5xxAlarm: { tolerated5xxPercentage: 5 },
         snsTopicName: "alerts-topic",
       },
       app: "testing",

@@ -1,9 +1,11 @@
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import type { LambdaRestApiProps } from "aws-cdk-lib/aws-apigateway";
-import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
+import type { NoMonitoring } from "../constructs/cloudwatch";
+import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
+import type { ApiGatewayAlarms } from "./api-multiple-lambdas";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
@@ -16,23 +18,14 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
   api: ApiProps;
 
   /**
-   * Configuration for an alarm based on the lambda's error percentage.
-   *
-   * For example:
-   *
-   * ```typescript
-   * monitoringConfiguration: {
-   *   toleratedErrorPercentage: <sensible_error_percentage_threshold>,
-   *   snsTopicName: "my-topic-for-cloudwatch-alerts",
-   * }
-   * ```
+   * Alarm configuration for your API. For more details, see [[`ApiGatewayAlarms`]].
    *
    * If your team do not use CloudWatch, it's possible to opt-out with the following configuration:
    * ```typescript
    *  monitoringConfiguration: { noMonitoring: true }
    * ```
    */
-  monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
+  monitoringConfiguration: NoMonitoring | ApiGatewayAlarms;
 }
 
 /**
@@ -52,12 +45,20 @@ export class GuApiLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
     super(scope, id, {
       ...props,
-      errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
 
     this.api = new LambdaRestApi(this, props.api.id, {
       handler: this,
       ...props.api,
     });
+
+    if (!props.monitoringConfiguration.noMonitoring) {
+      new GuApiGateway5xxPercentageAlarm(scope, {
+        app: props.app,
+        apiGatewayInstance: this.api,
+        snsTopicName: props.monitoringConfiguration.snsTopicName,
+        ...props.monitoringConfiguration.http5xxAlarm,
+      });
+    }
   }
 }
