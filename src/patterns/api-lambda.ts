@@ -11,9 +11,9 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
 
 export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   /**
-   * A list of [[`LambdaRestApiProps`]] to configure for the lambda.
+   * [[`LambdaRestApiProps`]] to configure for the lambda.
    */
-  apis: ApiProps[];
+  api: ApiProps;
 
   /**
    * Configuration for an alarm based on the lambda's error percentage.
@@ -47,7 +47,7 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * For all configuration options, see [[`GuApiLambdaProps`]].
  */
 export class GuApiLambda extends GuLambdaFunction {
-  public readonly apis: Map<string, LambdaRestApi>;
+  public readonly api: LambdaRestApi;
 
   constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
     super(scope, id, {
@@ -55,16 +55,9 @@ export class GuApiLambda extends GuLambdaFunction {
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
 
-    this.apis = new Map<string, LambdaRestApi>();
-
-    for (const api of props.apis) {
-      this.apis.set(
-        api.id,
-        new LambdaRestApi(this, api.id, {
-          handler: this,
-          ...api,
-        })
-      );
-    }
+    this.api = new LambdaRestApi(this, props.api.id, {
+      handler: this,
+      ...props.api,
+    });
   }
 }
