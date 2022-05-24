@@ -1,9 +1,10 @@
 import { CfnOutput } from "aws-cdk-lib";
 import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import type { ITopic } from "aws-cdk-lib/aws-sns";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import { AppIdentity } from "../constructs/core";
-import type { GuMigratingResource, GuStack } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";
@@ -11,32 +12,11 @@ import { GuSnsTopic } from "../constructs/sns";
 /**
  * Used to provide information about an existing SNS topic to the [[`GuSnsLambda`]] pattern.
  *
- * Specify a `existingLogicalId` to inherit an SNS topic which has already
- * been created via a CloudFormation stack. This is necessary to avoid interruptions of
- * service when migrating stacks from CloudFormation to `cdk`.
- *
  * Specify an `externalTopicName` to link the lambda to an SNS topic owned by a different stack
  * (or created outside of version control).
- *
- * **Example Usage**
- *
- * When migrating a CloudFormation stack which includes the following resource:
- * ```yaml
- * MyCloudFormedSnsTopic:
- *   Type: AWS::SNS::Topic
- * ```
- * Inherit the SNS topic (rather than creating a new one) using:
- * ```typescript
- *  existingSnsTopic: { existingLogicalId: "MyCloudFormedSnsTopic" }
- * ```
- *
- * Alternatively, reference an SNS topic which belongs to another stack using:
- * ```typescript
- *  existingSnsTopic: { externalTopicName: "MySnsTopicNameFromAnotherStack" }
- * ```
  */
-export interface ExistingSnsTopic extends GuMigratingResource {
-  externalTopicName?: string;
+export interface ExistingSnsTopic {
+  externalTopicName: string;
 }
 
 /**
@@ -78,29 +58,32 @@ export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * you will need to opt-out of this behaviour. For information on overriding the default behaviour,
  * see [[`GuSnsLambdaProps`]].
  *
+ * The SNS topic is stateful, and is accessible via `snsTopic`.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
+ *
  * @alpha This pattern is in early development. The API is likely to change in future releases.
  */
 export class GuSnsLambda extends GuLambdaFunction {
+  public readonly snsTopic: ITopic;
+
   constructor(scope: GuStack, id: string, props: GuSnsLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const topicId = props.existingSnsTopic?.existingLogicalId?.logicalId ?? "SnsIncomingEventsTopic";
 
-    const snsTopic = props.existingSnsTopic?.externalTopicName
+    const { account, region } = scope;
+    const { existingSnsTopic } = props;
+
+    this.snsTopic = existingSnsTopic
       ? Topic.fromTopicArn(
           scope,
-          topicId,
-          `arn:aws:sns:${scope.region}:${scope.account}:${props.existingSnsTopic.externalTopicName}`
+          existingSnsTopic.externalTopicName,
+          `arn:aws:sns:${region}:${account}:${existingSnsTopic.externalTopicName}`
         )
-      : AppIdentity.taggedConstruct(
-          props,
-          new GuSnsTopic(scope, topicId, {
-            existingLogicalId: props.existingSnsTopic?.existingLogicalId,
-          })
-        );
-    this.addEventSource(new SnsEventSource(snsTopic));
-    new CfnOutput(this, "TopicName", { value: snsTopic.topicName });
+      : AppIdentity.taggedConstruct(props, new GuSnsTopic(scope, "SnsIncomingEventsTopic"));
+
+    this.addEventSource(new SnsEventSource(this.snsTopic));
+    new CfnOutput(this, "TopicName", { value: this.snsTopic.topicName });
   }
 }

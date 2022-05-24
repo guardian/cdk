@@ -15,27 +15,6 @@ describe("The GuClassicLoadBalancer class", () => {
 
   const app: AppIdentity = { app: "testing" };
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
-      ...app,
-      vpc,
-      existingLogicalId: { logicalId: "MyCLB", reason: "testing" },
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancing::LoadBalancer", "MyCLB");
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
-      "AWS::ElasticLoadBalancing::LoadBalancer",
-      /^ClassicLoadBalancerTesting.+$/
-    );
-  });
-
   test("applies the App tag", () => {
     const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", { ...app, vpc });
@@ -206,12 +185,11 @@ describe("The GuHttpsClassicLoadBalancer class", () => {
   });
 
   test("Removes Scheme if user asks us to", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuClassicLoadBalancer(stack, "ClassicLoadBalancer", {
       ...app,
       vpc,
       removeScheme: true,
-      existingLogicalId: { logicalId: "ClassicLoadBalancer", reason: "testing" },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancing::LoadBalancer", {

@@ -1,11 +1,10 @@
 import { CfnOutput } from "aws-cdk-lib";
 import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
+import type { AppIdentity, GuStack } from "../../core";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity, GuMigratingResource {
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity {
   /**
    * If your CloudFormation does not define the Type of your Load Balancer, you must set this boolean to true to avoid
    * resource [replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-type).
@@ -21,13 +20,10 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  * to route traffic to your application. For more details on these three components, see the
  * [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components).
  *
- * In order to inherit an existing Application Load Balancer, the `migratedFromCloudFormation` prop on your stack must
- * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
- * `existingLogicalId` prop.
+ * This resource is stateful.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuApplicationLoadBalancer extends GuStatefulMigratableConstruct(
-  GuAppAwareConstruct(ApplicationLoadBalancer)
-) {
+export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLoadBalancer) {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
     super(scope, id, { deletionProtection: true, ...props });
 

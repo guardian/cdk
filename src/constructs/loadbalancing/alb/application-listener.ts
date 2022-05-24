@@ -1,12 +1,11 @@
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
+import type { AppIdentity, GuStack } from "../../core";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity, GuMigratingResource {}
+export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity {}
 
 /**
  * Construct which creates a Listener.
@@ -15,14 +14,13 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps, Ap
  * to route traffic to your application. For more details on these three components, see the
  * [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components).
  *
- * In order to inherit an existing Listener, the `migratedFromCloudFormation` prop on your stack must
- * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
- * `existingLogicalId` prop.
- *
  * If you are running an application which only accepts traffic over HTTPS, consider using [[`GuHttpsApplicationListener`]]
  * to reduce the amount of boilerplate needed when configuring your Listener.
+ *
+ * This resource is stateful.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuApplicationListener extends GuStatefulMigratableConstruct(GuAppAwareConstruct(ApplicationListener)) {
+export class GuApplicationListener extends GuAppAwareConstruct(ApplicationListener) {
   constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
     super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
   }

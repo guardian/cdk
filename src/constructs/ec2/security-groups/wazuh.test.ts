@@ -37,17 +37,9 @@ describe("The GuWazuhAccess class", () => {
     });
   });
 
-  it("has the logicalId WazuhSecurityGroup in a new stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: false });
+  it("has the logicalId WazuhSecurityGroup", () => {
+    const stack = simpleGuStackForTesting();
     GuWazuhAccess.getInstance(stack, vpc);
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
-  });
-
-  it("has the logicalId WazuhSecurityGroup in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    GuWazuhAccess.getInstance(stack, vpc);
-
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::EC2::SecurityGroup", "WazuhSecurityGroup");
   });
 });

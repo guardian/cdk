@@ -16,21 +16,6 @@ describe("The GuS3Bucket construct", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  it("should be possible to override the logical id", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-
-    new GuS3Bucket(stack, "MyBucket", {
-      bucketName: "data-bucket",
-      app: "test",
-      existingLogicalId: {
-        logicalId: "DataBucket",
-        reason: "Unit tests",
-      },
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::S3::Bucket", "DataBucket");
-  });
-
   it("should receive the correct set of tags", () => {
     const stack = simpleGuStackForTesting();
     const app = "test";

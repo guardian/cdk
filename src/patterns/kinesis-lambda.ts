@@ -1,13 +1,12 @@
 import { Stream, StreamEncryption } from "aws-cdk-lib/aws-kinesis";
-import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
+import type { IStream, StreamProps } from "aws-cdk-lib/aws-kinesis";
 import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import { AppIdentity } from "../constructs/core";
-import type { GuMigratingResource, GuStack } from "../constructs/core";
+import type { GuStack } from "../constructs/core";
 import { GuKinesisStream } from "../constructs/kinesis";
-import type { GuKinesisStreamProps } from "../constructs/kinesis";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { toAwsErrorHandlingProps } from "../utils/lambda";
@@ -16,32 +15,11 @@ import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/l
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
  *
- * Specify a `existingLogicalId` to inherit a Kinesis stream which has already
- * been created via a CloudFormation stack. This is necessary to avoid data loss and interruptions of
- * service when migrating stacks from CloudFormation to `cdk`.
- *
  * Specify an `externalKinesisStreamName` to link the lambda to a Kinesis stream owned by a different stack
  * (or created outside of version control).
- *
- * **Example Usage**
- *
- * When migrating a CloudFormation stack which includes the following resource:
- * ```yaml
- * MyCloudFormedKinesisStream:
- *   Type: AWS::Kinesis::Stream
- * ```
- * Inherit the Kinesis stream (rather than creating a new one) using:
- * ```typescript
- * existingKinesisStream: { existingLogicalId: "MyCloudFormedKinesisStream" }
- * ```
- *
- * Alternatively, reference a Kinesis stream which belongs to another stack or pattern using:
- * ```typescript
- * existingKinesisStream: { externalKinesisStreamName: "KinesisStreamFromAnotherStack" }
- * ```
  */
-export interface ExistingKinesisStream extends GuMigratingResource {
-  externalKinesisStreamName?: string;
+export interface ExistingKinesisStream {
+  externalKinesisStreamName: string;
 }
 
 /**
@@ -49,10 +27,9 @@ export interface ExistingKinesisStream extends GuMigratingResource {
  *
  * For all lambda function configuration options, see [[`GuFunctionProps`]].
  *
- * The `existingKinesisStream` property can be used to inherit or reference a Kinesis stream which
+ * The `existingKinesisStream` property can be used to reference a Kinesis stream which
  * has been created outside of this pattern (i.e. via CloudFormation, or via a different `cdk` pattern, or stack).
- * For more details and example usage, see [[`ExistingKinesisStream`]].
- * If this property is omitted, the [[`GuKinesisLambda`]] pattern will create a new stream.
+ * For more details see [[`ExistingKinesisStream`]].
  *
  * If you have specific stream configuration requirements (e.g. data retention period), these can be set via
  * `kinesisStreamProps`.
@@ -96,28 +73,33 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
  * you will need to opt-out of this behaviour. For information on overriding the default behaviour,
  * see [[`GuKinesisLambdaProps`]].
  *
+ * The Kinesis stream is stateful, and is accessible via `kinesisStream`.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
+ *
  * @alpha This pattern is in early development. The API is likely to change in future releases.
  */
 export class GuKinesisLambda extends GuLambdaFunction {
+  public readonly kinesisStream: IStream;
+
   constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
-    const kinesisProps: GuKinesisStreamProps = {
-      existingLogicalId: props.existingKinesisStream?.existingLogicalId,
-      encryption: StreamEncryption.MANAGED,
-      ...props.kinesisStreamProps,
-    };
-    const streamId = props.existingKinesisStream?.existingLogicalId?.logicalId ?? "KinesisStream";
 
-    const kinesisStream = props.existingKinesisStream?.externalKinesisStreamName
+    const { account, region } = scope;
+    const { existingKinesisStream, kinesisStreamProps } = props;
+
+    this.kinesisStream = existingKinesisStream
       ? Stream.fromStreamArn(
           scope,
-          streamId,
-          `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${props.existingKinesisStream.externalKinesisStreamName}`
+          existingKinesisStream.externalKinesisStreamName,
+          `arn:aws:kinesis:${region}:${account}:stream/${existingKinesisStream.externalKinesisStreamName}`
         )
-      : AppIdentity.taggedConstruct(props, new GuKinesisStream(scope, streamId, kinesisProps));
+      : AppIdentity.taggedConstruct(
+          props,
+          new GuKinesisStream(scope, "KinesisStream", { encryption: StreamEncryption.MANAGED, ...kinesisStreamProps })
+        );
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 
@@ -126,6 +108,6 @@ export class GuKinesisLambda extends GuLambdaFunction {
       ...props.processingProps,
       ...errorHandlingPropsToAwsProps,
     };
-    this.addEventSource(new KinesisEventSource(kinesisStream, eventSourceProps));
+    this.addEventSource(new KinesisEventSource(this.kinesisStream, eventSourceProps));
   }
 }

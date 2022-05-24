@@ -31,7 +31,7 @@ describe("The GuKinesisLambda pattern", () => {
   });
 
   it("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
       retryBehaviour: StreamRetry.maxAttempts(1),
@@ -44,11 +44,10 @@ describe("The GuKinesisLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
-      existingKinesisStream: { existingLogicalId: { logicalId: "pre-existing-kinesis-stream", reason: "testing" } },
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
-
+    const { kinesisStream } = new GuKinesisLambda(stack, "my-lambda-function", props);
+    stack.overrideLogicalId(kinesisStream, { logicalId: "pre-existing-kinesis-stream", reason: "testing" });
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
   });
 

@@ -35,34 +35,12 @@ describe("The GuApplicationLoadBalancer class", () => {
     });
   });
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
-      ...app,
-      vpc,
-      existingLogicalId: { logicalId: "MyALB", reason: "testing" },
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::LoadBalancer", "MyALB");
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
-      "AWS::ElasticLoadBalancingV2::LoadBalancer",
-      /^ApplicationLoadBalancer.+$/
-    );
-  });
-
   test("deletes the Type property if the removeType prop is set to true", () => {
     // not using an auto-generated logicalId to make the expectation notation easier
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+    const stack = simpleGuStackForTesting();
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
       vpc,
-      existingLogicalId: { logicalId: "MyALB", reason: "testing" },
       removeType: true,
     });
 

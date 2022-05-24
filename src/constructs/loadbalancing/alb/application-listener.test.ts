@@ -53,36 +53,6 @@ describe("The GuApplicationListener class", () => {
     );
   });
 
-  test("overrides the logicalId when existingLogicalId is set in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      ...app,
-      loadBalancer: getLoadBalancer(stack),
-      existingLogicalId: { logicalId: "AppListener", reason: "testing" },
-      defaultAction: ListenerAction.forward([getAppTargetGroup(stack)]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::ElasticLoadBalancingV2::Listener", "AppListener");
-  });
-
-  test("auto-generates the logicalId by default", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuApplicationListener(stack, "ApplicationListener", {
-      ...app,
-      loadBalancer: getLoadBalancer(stack),
-      defaultAction: ListenerAction.forward([getAppTargetGroup(stack)]),
-      certificates: [{ certificateArn: "" }],
-    });
-
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId(
-      "AWS::ElasticLoadBalancingV2::Listener",
-      /^ApplicationListener.+$/
-    );
-  });
-
   test("sets default props", () => {
     const stack = simpleGuStackForTesting();
 

@@ -20,8 +20,8 @@ describe("The GuSnsLambda pattern", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  it("should inherit an existing SNS topic correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
-    const stack = simpleGuStackForTesting({ migratedFromCloudFormation: true });
+  it("should inherit an existing SNS topic correctly", () => {
+    const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
       fileName: "lambda.zip",
@@ -29,11 +29,10 @@ describe("The GuSnsLambda pattern", () => {
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
-      existingSnsTopic: { existingLogicalId: { logicalId: "in-use-sns-topic", reason: "testing" } },
       app: "testing",
     };
-    new GuSnsLambda(stack, "my-lambda-function", props);
-
+    const { snsTopic } = new GuSnsLambda(stack, "my-lambda-function", props);
+    stack.overrideLogicalId(snsTopic, { logicalId: "in-use-sns-topic", reason: "testing" });
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
   });
 

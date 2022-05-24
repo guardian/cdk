@@ -1,11 +1,10 @@
 import { Annotations, Duration } from "aws-cdk-lib";
 import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationTargetGroupProps, HealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuStatefulMigratableConstruct } from "../../../utils/mixin";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuMigratingResource, GuStack } from "../../core";
+import type { AppIdentity, GuStack } from "../../core";
 
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity, GuMigratingResource {}
+export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity {}
 
 /**
  * Construct which creates a Target Group.
@@ -13,10 +12,6 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
  * This construct should be used in conjunction with [[`GuApplicationLoadBalancer`]] and [[`GuApplicationListener`]]
  * to route traffic to your application. For more details on these three components, see the
  * [AWS documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html#application-load-balancer-components).
- *
- * In order to inherit an existing Target Group, the `migratedFromCloudFormation` prop on your stack must
- * be set to `true`. You must also pass the logical id from your CloudFormation template to this construct via the
- * `existingLogicalId` prop.
  *
  * By default, Target Groups created via this construct will perform a healthcheck against `/healthcheck` on your application's
  * traffic port (as specified via the `port` prop). All healthcheck defaults can be overridden via the `healthcheck` prop.
@@ -31,10 +26,11 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
  *     },
  *   });
  * ```
+ *
+ * This resource is stateful.
+ * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuApplicationTargetGroup extends GuStatefulMigratableConstruct(
-  GuAppAwareConstruct(ApplicationTargetGroup)
-) {
+export class GuApplicationTargetGroup extends GuAppAwareConstruct(ApplicationTargetGroup) {
   private static defaultHealthcheckInterval = Duration.seconds(10);
   private static defaultHealthcheckTimeout = Duration.seconds(5);
 
