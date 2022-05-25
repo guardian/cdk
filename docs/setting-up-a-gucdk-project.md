@@ -29,7 +29,7 @@ This ensures you have a short feedback loop.
 
 We recommend performing the following steps in CI:
   - `lint` to ensure a common code format
-  - `test` to ensure your snapshot is up-to-date (see [here](best-practices.md) for more detail)
+  - `test` to run the snapshot tests to make sure there are no unexpected changes to the generated CFN (see [here](best-practices.md) for more detail)
   - `synth` to generate your template as JSON to `cdk/cdk.out`
 
 These steps are described in the `package.json` file.
