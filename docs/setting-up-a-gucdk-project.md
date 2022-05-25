@@ -18,10 +18,57 @@ To initialise a new project run the following within your repository:
 npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] --package-manager [npm|yarn]
 ```
 
-TIP: Run `npx @guardian/cdk@latest new --help` to find out more about the available flags,
+For example, for the app `riff-raff` we'd do:
+
+```sh
+npx @guardian/cdk@latest new \
+  --app riff-raff \
+  --stack deploy \
+  --stage CODE \
+  --stage PROD
+```
+
+> Tip: Run `npx @guardian/cdk@latest new --help` to find out more about the available flags,
 including `--yaml-template-location` to use when migrating a YAML template to GuCDK.
 
 You should now have an empty stack within `cdk/lib` for you to populate with the necessary resources.
+
+## Defining your infrastructure
+
+### Patterns and Constructs
+
+You now have an empty stack within `cdk/lib`, and can start adding patterns and constructs!
+
+Patterns are TypeScript classes that create the requisite AWS resources for a common architecture. For example:
+
+* [A Play Framework application](https://guardian.github.io/cdk/classes/patterns.GuEc2App.html) running on EC2 instances
+* [A Lambda function](https://guardian.github.io/cdk/classes/patterns.GuScheduledLambda.html) that runs every *n* minutes
+* An API which serves requests using AWS Lambda
+  * when [serving all requests via single Lambda Function](https://guardian.github.io/cdk/classes/patterns.GuApiLambda.html)
+(e.g. when using [`serverless-express`](https://github.com/vendia/serverless-express))
+  * when [routing different requests to different Lambda functions based on the path](https://guardian.github.io/cdk/classes/patterns.GuApiGatewayWithLambdaByPath.html)
+
+> Tip: You can find a full list of available patterns [here](https://guardian.github.io/cdk/modules/patterns.html).
+
+Patterns can be imported from the top level of the library:
+
+```typescript
+import { GuEc2App } from "@guardian/cdk";
+```
+
+We encourage you to use patterns rather than constructs whenever possible.
+
+If do you need to use a construct directly, they must be imported from their construct directory:
+
+```typescript
+import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";
+```
+
+Our hope is that patterns solve the majority of your use-cases. If they don't,
+please let us know about your use-case so that we can consider supporting it via
+a pattern.
+
+Alternatively, [PRs are always welcome](./contributing.md)!
 
 ## Configuring CI
 We strongly recommend configuring CI and CD of your infrastructure as early as possible.
