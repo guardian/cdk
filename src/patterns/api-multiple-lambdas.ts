@@ -122,7 +122,12 @@ function isNoMonitoring(
 export class GuApiGatewayWithLambdaByPath {
   public readonly api: RestApi;
   constructor(scope: GuStack, props: GuApiGatewayWithLambdaByPathProps) {
-    const apiGateway = new RestApi(scope, "RestApi", props);
+    const apiGateway = new RestApi(scope, "RestApi", {
+      // Override to avoid clashes as default is just api ID, which is often shared across stages.
+      restApiName: `${scope.stack}-${scope.stage}-${props.app}`,
+      ...props,
+    });
+
     this.api = apiGateway;
     props.targets.map((target) => {
       const resource = apiGateway.root.resourceForPath(target.path);
