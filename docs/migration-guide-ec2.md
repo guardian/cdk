@@ -114,7 +114,7 @@ in this state for as long as you need to._
 
 _This stage ensures that you are able to manage your own DNS record(s) via CDK and updates your DNS record(s) to point at your new load balancer(s)._
 
-_At the end of this stage, all traffic should be running via the new resources that we created in Stage 2. The equivalent old resources should still be part of your stack, but they should be redundant by the end of this stage._
+_At the end of this stage, all traffic should be running via the new resources that we created in Stage 1. The equivalent old resources should still be part of your stack, but they should be redundant by the end of this stage._
 
 _The instructions here assume that your DNS record is managed via NS1. To check if you are using NS1, you can use dig - dig +nssearch +noall +answer <TLD> where TLD is the top level domain. For example dig +nssearch +noall +answer gutools.co.uk._
 
