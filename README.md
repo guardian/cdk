@@ -18,6 +18,7 @@ Jump to:
 
 - [Quickstart](#quickstart)
 - [CDK demo including screencast](https://github.com/guardian/cdk-demo)
+- [Setting up a new project](./docs/setting-up-a-gucdk-project.md)
 - [Migrating an existing Cloudformation template](./docs/migration-guide.md)
 - View the [typedocs](https://guardian.github.io/cdk/)
 - [Contributing](#contributing) to `@guardian/cdk`
@@ -31,47 +32,13 @@ readiness and fix any issues, run:
 
     npx @guardian/cdk@latest account-readiness --profile [profile]
 
-Then, instantiate a new CDK app:
+Once you've confirmed that your account is ready, you can start provisioning your infrastructure.
 
-    npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage]
-
-For example, for the app `riff-raff` we'd do:
-
-```bash
-npx @guardian/cdk@latest new \
-  --app riff-raff \
-  --stack deploy \
-  --stage CODE \
-  --stage PROD
-```
+> Tip: Setting up a new project? [Start here!](./docs/setting-up-a-gucdk-project.md)
 
 > Tip: Migrating an app? See the [Migration Guide](./docs/migration-guide.md) for more detail.
 
 > Tip: New to CDK? The [AWS CDK Developer Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is worth a read.
-
-### Patterns and Constructs
-
-Once you have your new app, you can start adding patterns and constructs.
-
-Patterns can be imported from the top level of the library:
-
-```typescript
-import { GuScheduledLambda } from "@guardian/cdk";
-```
-
-We encourage you to use patterns rather than constructs whenever possible.
-
-If you need to use a construct directly, they must be imported from their construct directory:
-
-```typescript
-import { GuAutoScalingGroup } from "@guardian/cdk/lib/constructs/autoscaling";
-```
-
-Our hope is that patterns solve the majority of your use-cases. If they don't,
-please let us know about your use-case so that we can consider supporting it via
-a pattern.
-
-Alternatively, PRs are always welcome!
 
 ## Contributing
 
