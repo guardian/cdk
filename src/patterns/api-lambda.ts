@@ -1,9 +1,11 @@
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import type { LambdaRestApiProps } from "aws-cdk-lib/aws-apigateway";
-import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
+import type { NoMonitoring } from "../constructs/cloudwatch";
+import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
+import type { ApiGatewayAlarms } from "./api-multiple-lambdas";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
@@ -11,28 +13,19 @@ interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
 
 export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   /**
-   * A list of [[`LambdaRestApiProps`]] to configure for the lambda.
+   * [[`LambdaRestApiProps`]] to configure for the lambda.
    */
-  apis: ApiProps[];
+  api: ApiProps;
 
   /**
-   * Configuration for an alarm based on the lambda's error percentage.
-   *
-   * For example:
-   *
-   * ```typescript
-   * monitoringConfiguration: {
-   *   toleratedErrorPercentage: <sensible_error_percentage_threshold>,
-   *   snsTopicName: "my-topic-for-cloudwatch-alerts",
-   * }
-   * ```
+   * Alarm configuration for your API. For more details, see [[`ApiGatewayAlarms`]].
    *
    * If your team do not use CloudWatch, it's possible to opt-out with the following configuration:
    * ```typescript
    *  monitoringConfiguration: { noMonitoring: true }
    * ```
    */
-  monitoringConfiguration: NoMonitoring | GuLambdaErrorPercentageMonitoringProps;
+  monitoringConfiguration: NoMonitoring | ApiGatewayAlarms;
 }
 
 /**
@@ -45,26 +38,50 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * Lambdas, use the [[`GuApiGatewayWithLambdaByPath`]] pattern instead.
  *
  * For all configuration options, see [[`GuApiLambdaProps`]].
+ *
+ * Example usage:
+ *
+ * ```typescript
+ * new GuApiLambda(stack, "my-lambda", {
+ *   fileName: "my-app.zip",
+ *   handler: "handler.ts",
+ *   runtime: Runtime.NODEJS_14_X,
+ *   monitoringConfiguration: {
+ *     http5xxAlarm: { tolerated5xxPercentage: 5 },
+ *     snsTopicName: "alerts-topic",
+ *   },
+ *   app: "my-app",
+ *   api: {
+ *     id: "my-api",
+ *     description: "...",
+ *   },
+ * });
+ * ```
  */
 export class GuApiLambda extends GuLambdaFunction {
-  public readonly apis: Map<string, LambdaRestApi>;
+  public readonly api: LambdaRestApi;
 
   constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
     super(scope, id, {
       ...props,
-      errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
 
-    this.apis = new Map<string, LambdaRestApi>();
+    this.api = new LambdaRestApi(this, props.api.id, {
+      handler: this,
 
-    for (const api of props.apis) {
-      this.apis.set(
-        api.id,
-        new LambdaRestApi(this, api.id, {
-          handler: this,
-          ...api,
-        })
-      );
+      // Override to avoid clashes as default is just api ID, which is often shared across stages.
+      restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
+
+      ...props.api,
+    });
+
+    if (!props.monitoringConfiguration.noMonitoring) {
+      new GuApiGateway5xxPercentageAlarm(scope, {
+        app: props.app,
+        apiGatewayInstance: this.api,
+        snsTopicName: props.monitoringConfiguration.snsTopicName,
+        ...props.monitoringConfiguration.http5xxAlarm,
+      });
     }
   }
 }

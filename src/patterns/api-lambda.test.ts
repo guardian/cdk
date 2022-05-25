@@ -17,16 +17,10 @@ describe("The GuApiLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
       app: "testing",
-      apis: [
-        {
-          id: "api",
-          description: "this is a test",
-        },
-        {
-          id: "api2",
-          description: "this is a test2",
-        },
-      ],
+      api: {
+        id: "api",
+        description: "this is a test",
+      },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
@@ -38,20 +32,14 @@ describe("The GuApiLambda pattern", () => {
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: {
-        toleratedErrorPercentage: 99,
+        http5xxAlarm: { tolerated5xxPercentage: 5 },
         snsTopicName: "alerts-topic",
       },
       app: "testing",
-      apis: [
-        {
-          id: "api",
-          description: "this is a test",
-        },
-        {
-          id: "api2",
-          description: "this is a test2",
-        },
-      ],
+      api: {
+        id: "api",
+        description: "this is a test",
+      },
     });
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
@@ -65,22 +53,13 @@ describe("The GuApiLambda pattern", () => {
       runtime: Runtime.NODEJS_12_X,
       monitoringConfiguration: noMonitoring,
       app: "testing",
-      apis: [
-        {
-          id: "api",
-          description: "this is a test",
-        },
-        {
-          id: "api2",
-          description: "this is a test2",
-        },
-      ],
+      api: {
+        id: "api",
+        description: "this is a test",
+      },
     });
-    const maybeApi = apiLambda.apis.get("api");
-    expect(maybeApi).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We expect api to be defined beyond this line
-    const api = maybeApi!;
-    const domain = api.addDomainName("domain", {
+
+    const domain = apiLambda.api.addDomainName("domain", {
       domainName: "code.theguardian.com",
       certificate: new GuCertificate(stack, {
         app: "testing",
