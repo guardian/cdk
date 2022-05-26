@@ -142,7 +142,9 @@ export class GuStackSet extends CfnStackSet {
     const stackSetInstanceParameters = props.stackSetInstanceParameters ?? {};
 
     const params = Object.keys(stackSetInstanceParameters);
-    const undefinedStackSetParams = props.stackSetInstance.parameterKeys.filter((_) => !params.includes(_));
+    const parameterKeys = Object.keys(props.stackSetInstance.parameters);
+
+    const undefinedStackSetParams = parameterKeys.filter((_) => !params.includes(_));
 
     if (undefinedStackSetParams.length !== 0) {
       throw new Error(`There are undefined stack set parameters: ${undefinedStackSetParams.join(", ")}`);
