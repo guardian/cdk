@@ -57,5 +57,7 @@ advice can be found here:
 
 - [for EC2 apps](./migration-guide-ec2.md)
 - [for Lambdas which run on a schedule/cron](./migration-guide-scheduled-lambda.md)
+- [for an API which serves requests using AWS Lambda](./migration-guide-api-with-lambda.md)
 
-Migration guides will be coming soon for other Lambda-based architectures. Please contact DevX if you'd like to discuss the migration of an application which uses an architecture that is not listed above.
+Migration guides will be coming soon for other architectures.
+Please contact DevX if you'd like to discuss the migration of an application which uses an architecture that is not listed above.
