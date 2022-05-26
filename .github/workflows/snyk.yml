@@ -18,5 +18,6 @@ jobs:
       DEBUG: true
       ORG: guardian-security
       SKIP_NODE: false
+      EXCLUDE: tools
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
