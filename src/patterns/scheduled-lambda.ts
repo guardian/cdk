@@ -2,7 +2,7 @@ import { Rule } from "aws-cdk-lib/aws-events";
 import type { Schedule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import type { GuStack } from "../constructs/core";
+import type { GuApp } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 
@@ -64,7 +64,7 @@ export interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "errorPerc
  * For all configuration options, see [[`GuScheduledLambdaProps`]].
  */
 export class GuScheduledLambda extends GuLambdaFunction {
-  constructor(scope: GuStack, id: string, props: GuScheduledLambdaProps) {
+  constructor(scope: GuApp, id: string, props: GuScheduledLambdaProps) {
     const lambdaProps: GuFunctionProps = {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,

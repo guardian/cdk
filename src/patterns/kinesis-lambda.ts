@@ -4,8 +4,7 @@ import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import { AppIdentity } from "../constructs/core";
-import type { GuStack } from "../constructs/core";
+import type { GuApp } from "../constructs/core";
 import { GuKinesisStream } from "../constructs/kinesis";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
@@ -81,13 +80,13 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
 export class GuKinesisLambda extends GuLambdaFunction {
   public readonly kinesisStream: IStream;
 
-  constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
+  constructor(scope: GuApp, id: string, props: GuKinesisLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
 
-    const { account, region } = scope;
+    const { account, region } = scope.parent;
     const { existingKinesisStream, kinesisStreamProps } = props;
 
     this.kinesisStream = existingKinesisStream
@@ -96,10 +95,7 @@ export class GuKinesisLambda extends GuLambdaFunction {
           existingKinesisStream.externalKinesisStreamName,
           `arn:aws:kinesis:${region}:${account}:stream/${existingKinesisStream.externalKinesisStreamName}`
         )
-      : AppIdentity.taggedConstruct(
-          props,
-          new GuKinesisStream(scope, "KinesisStream", { encryption: StreamEncryption.MANAGED, ...kinesisStreamProps })
-        );
+      : new GuKinesisStream(scope, "KinesisStream", { encryption: StreamEncryption.MANAGED, ...kinesisStreamProps });
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);
 

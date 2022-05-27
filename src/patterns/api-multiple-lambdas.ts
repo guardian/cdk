@@ -2,7 +2,7 @@ import type { RestApiProps } from "aws-cdk-lib/aws-apigateway";
 import { LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
 import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
-import type { AppIdentity, GuStack } from "../constructs/core";
+import type { GuApp } from "../constructs/core";
 import type { GuLambdaFunction } from "../constructs/lambda";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
@@ -43,7 +43,7 @@ export interface ApiGatewayAlarms {
   noMonitoring?: false;
 }
 
-export interface GuApiGatewayWithLambdaByPathProps extends RestApiProps, AppIdentity {
+export interface GuApiGatewayWithLambdaByPathProps extends RestApiProps {
   /**
    * A list of [[`ApiTarget`]]s to configure for the API Gateway instance.
    */
@@ -121,10 +121,10 @@ function isNoMonitoring(
  */
 export class GuApiGatewayWithLambdaByPath {
   public readonly api: RestApi;
-  constructor(scope: GuStack, props: GuApiGatewayWithLambdaByPathProps) {
+  constructor(scope: GuApp, props: GuApiGatewayWithLambdaByPathProps) {
     const apiGateway = new RestApi(scope, "RestApi", {
       // Override to avoid clashes as default is just api ID, which is often shared across stages.
-      restApiName: `${scope.stack}-${scope.stage}-${props.app}`,
+      restApiName: `${scope.stack}-${scope.stage}-${scope.app}`,
       ...props,
     });
 
@@ -135,7 +135,6 @@ export class GuApiGatewayWithLambdaByPath {
     });
     if (!isNoMonitoring(props.monitoringConfiguration)) {
       new GuApiGateway5xxPercentageAlarm(scope, {
-        app: props.app,
         apiGatewayInstance: apiGateway,
         snsTopicName: props.monitoringConfiguration.snsTopicName,
         ...props.monitoringConfiguration.http5xxAlarm,

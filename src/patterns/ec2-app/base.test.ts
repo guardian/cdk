@@ -3,18 +3,17 @@ import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscal
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, TagKeys } from "../../constants";
-import { GuPrivateConfigBucketParameter } from "../../constructs/core";
+import { GuApp, GuPrivateConfigBucketParameter } from "../../constructs/core";
 import { GuSecurityGroup } from "../../constructs/ec2";
 import { GuDynamoDBWritePolicy } from "../../constructs/iam";
-import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleTestingResources } from "../../utils/test";
 import { GuEc2App } from "./base";
 
 describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
-    const stack = simpleGuStackForTesting();
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app: "test-gu-ec2-app",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
@@ -30,10 +29,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can produce a restricted EC2 app locked to specific CIDR ranges", function () {
-    const stack = simpleGuStackForTesting();
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app: "test-gu-ec2-app",
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("1.2.3.4/5")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
@@ -49,10 +47,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can produce an EC2 app with an internal load balancer (located in private subnets)", function () {
-    const stack = simpleGuStackForTesting();
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app: "test-gu-ec2-app",
       access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("10.0.0.0/8")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
@@ -73,11 +70,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("adds the correct permissions for apps which need to fetch private config from s3", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -90,10 +85,10 @@ describe("the GuEC2App pattern", function () {
       userData: {
         distributable: {
           fileName: "my-app.deb",
-          executionStatement: `dpkg -i /${app}/my-app.deb`,
+          executionStatement: `dpkg -i /${app.app}/my-app.deb`,
         },
         configuration: {
-          bucket: new GuPrivateConfigBucketParameter(stack),
+          bucket: new GuPrivateConfigBucketParameter(app),
           files: ["secrets.json", "application.conf"],
         },
       },
@@ -138,11 +133,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates a High5xxPercentageAlarm if the relevant monitoringConfiguration is provided", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -165,11 +158,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates an UnhealthyInstancesAlarm if the user enables it", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -190,11 +181,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("Skips alarm creation if the user explicitly opts-out", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -214,11 +203,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates the appropriate ingress rules for a restricted access application", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -263,11 +250,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("allows all connections if set to public", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -294,14 +279,12 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("errors if specifying open access as well as specific CIDR ranges", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
+    const { app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
     expect(
       () =>
-        new GuEc2App(stack, {
+        new GuEc2App(app, {
           applicationPort: 3000,
           access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("0.0.0.0/0"), Peer.ipv4("1.2.3.4/32")] },
-          app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
           certificateProps: {
             domainName: "code-guardian.com",
@@ -318,14 +301,12 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("errors if specifying public CIDR ranges with internal access scope", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
+    const { app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
     expect(
       () =>
-        new GuEc2App(stack, {
+        new GuEc2App(app, {
           applicationPort: 3000,
           access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("93.1.2.3/12")] },
-          app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
           certificateProps: {
             domainName: "code-guardian.com",
@@ -342,12 +323,10 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("correctly wires up custom role configuration", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
-      app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         domainName: "code-guardian.com",
@@ -359,7 +338,7 @@ describe("the GuEC2App pattern", function () {
       userData: "",
       roleConfiguration: {
         withoutLogShipping: true,
-        additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
+        additionalPolicies: [new GuDynamoDBWritePolicy(app, "DynamoTable", { tableName: "my-dynamo-table" })],
       },
     });
 
@@ -429,11 +408,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("sub-constructs can be accessed and modified after declaring the pattern", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    const pattern = new GuEc2App(stack, {
+    const { app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    const pattern = new GuEc2App(app, {
       applicationPort: 3000,
-      app: app,
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -456,11 +433,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("users can optionally configure block devices", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    new GuEc2App(app, {
       applicationPort: 3000,
-      app: app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -495,11 +470,9 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("users can override resources and constructs if desired", function () {
-    const stack = simpleGuStackForTesting();
-    const app = "test-gu-ec2-app";
-    const pattern = new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app" });
+    const pattern = new GuEc2App(app, {
       applicationPort: 3000,
-      app,
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
@@ -514,8 +487,7 @@ describe("the GuEC2App pattern", function () {
 
     const cfnLb = pattern.loadBalancer.node.defaultChild as CfnLoadBalancer;
 
-    const sg = new GuSecurityGroup(stack, "SG", {
-      app,
+    const sg = new GuSecurityGroup(app, "SG", {
       vpc: Vpc.fromVpcAttributes(stack, "VPC", {
         vpcId: "test",
         availabilityZones: [""],
@@ -541,10 +513,11 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can handle multiple EC2 apps in a single stack", function () {
-    const stack = simpleGuStackForTesting();
-    new GuEc2App(stack, {
+    const { stack, app: nodeApp } = simpleTestingResources({ appName: "NodeApp" });
+    const playApp = new GuApp(stack, "PlayApp");
+
+    new GuEc2App(nodeApp, {
       applicationPort: 3000,
-      app: "NodeApp",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
@@ -557,9 +530,8 @@ describe("the GuEC2App pattern", function () {
       },
     });
 
-    new GuEc2App(stack, {
+    new GuEc2App(playApp, {
       applicationPort: 9000,
-      app: "PlayApp",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
@@ -575,7 +547,7 @@ describe("the GuEC2App pattern", function () {
     const template = GuTemplate.fromStack(stack);
 
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
-      appIdentity: { app: "PlayApp" },
+      app: playApp,
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupPlayApp" },
@@ -585,7 +557,7 @@ describe("the GuEC2App pattern", function () {
     });
 
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
-      appIdentity: { app: "NodeApp" },
+      app: nodeApp,
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupNodeApp" },
@@ -596,12 +568,10 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can be configured with access logging", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app", env: { region: "eu-west-1" } });
+    new GuEc2App(app, {
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
-      app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         domainName: "code-guardian.com",
@@ -625,12 +595,10 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can disable access logging if desired", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app", env: { region: "eu-west-1" } });
+    new GuEc2App(app, {
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
-      app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         domainName: "code-guardian.com",
@@ -654,12 +622,10 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can be configured with application logging", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app", env: { region: "eu-west-1" } });
+    new GuEc2App(app, {
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
-      app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         domainName: "code-guardian.com",
@@ -673,7 +639,7 @@ describe("the GuEC2App pattern", function () {
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
-      appIdentity: { app },
+      app,
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
@@ -685,12 +651,10 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can be configured with application logging using a custom systemd unit name", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "test-gu-ec2-app", env: { region: "eu-west-1" } });
+    new GuEc2App(app, {
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
-      app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         domainName: "code-guardian.com",
@@ -704,7 +668,7 @@ describe("the GuEC2App pattern", function () {
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
-      appIdentity: { app },
+      app,
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
@@ -716,13 +680,11 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("throws an error if users attempt to ship application logs without the appropriate IAM permissions", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
+    const { app } = simpleTestingResources({ appName: "test-gu-ec2-app", env: { region: "eu-west-1" } });
     expect(() => {
-      new GuEc2App(stack, {
+      new GuEc2App(app, {
         applicationPort: 3000,
         access: { scope: AccessScope.PUBLIC },
-        app,
         instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
         certificateProps: {
           domainName: "code-guardian.com",
@@ -744,12 +706,10 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("adds a tag to aid visibility of stacks using the pattern", () => {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "App";
-    new GuEc2App(stack, {
+    const { stack, app } = simpleTestingResources({ appName: "App", env: { region: "eu-west-1" } });
+    new GuEc2App(app, {
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
-      app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
         domainName: "code-guardian.com",
@@ -763,7 +723,7 @@ describe("the GuEC2App pattern", function () {
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
-      appIdentity: { app },
+      app,
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupApp" },

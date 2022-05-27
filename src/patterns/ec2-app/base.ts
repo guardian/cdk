@@ -11,8 +11,8 @@ import type { GuUserDataProps } from "../../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
 import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
-import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
+import type { GuApp } from "../../constructs/core";
+import { GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
 import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
@@ -128,7 +128,7 @@ export interface Alarms {
  * }
  * ```
  */
-export interface GuEc2AppProps extends AppIdentity {
+export interface GuEc2AppProps {
   userData: GuUserDataProps | string;
   access: AppAccess;
   applicationPort: number;
@@ -328,11 +328,10 @@ export class GuEc2App {
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroup: GuApplicationTargetGroup;
 
-  constructor(scope: GuStack, props: GuEc2AppProps) {
+  constructor(scope: GuApp, props: GuEc2AppProps) {
     const {
       access,
       accessLogging = { enabled: false },
-      app,
       // We should update this default once a significant number of apps have migrated to devx-logs
       applicationLogging = { enabled: false },
       applicationPort,
@@ -355,13 +354,12 @@ export class GuEc2App {
       );
     }
 
-    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
-    const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
+    const vpc = GuVpc.fromIdParameter(scope.parent, "VPC");
+    const privateSubnets = GuVpc.subnetsFromParameter(scope, SubnetType.PRIVATE);
 
     AppAccess.validate(access);
 
     const certificate = new GuCertificate(scope, {
-      app,
       domainName,
       hostedZoneId,
     });
@@ -377,15 +375,14 @@ export class GuEc2App {
     };
 
     const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
-      app,
       vpc,
       instanceType,
       minimumInstances,
       maximumInstances,
       withoutImdsv2,
-      role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
+      role: new GuInstanceRole(scope, mergedRoleConfiguration),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
-      userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
+      userData: typeof userData !== "string" ? new GuUserData(scope, userData).userData : userData,
       vpcSubnets: { subnets: privateSubnets },
       ...(blockDevices && { blockDevices }),
     });
@@ -400,7 +397,7 @@ export class GuEc2App {
     // `cdk-base` Amigo role on your AMI.
     Tags.of(autoScalingGroup).add(
       TagKeys.LOG_KINESIS_STREAM_NAME,
-      GuLoggingStreamNameParameter.getInstance(scope).valueAsString
+      GuLoggingStreamNameParameter.getInstance(scope.parent).valueAsString
     );
 
     if (applicationLogging.enabled) {
@@ -408,20 +405,17 @@ export class GuEc2App {
       // `cdk-base` Amigo role on your AMI.
       Tags.of(autoScalingGroup).add(
         TagKeys.SYSTEMD_UNIT,
-        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`
+        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${scope.app}.service`
       );
     }
 
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
-      app,
       vpc,
       // Setting internetFacing to true does not necessarily allow public access to the load balancer itself. That is handled by the listener's `open` prop.
       internetFacing: access.scope !== AccessScope.INTERNAL,
       vpcSubnets: {
         subnets:
-          access.scope === AccessScope.INTERNAL
-            ? privateSubnets
-            : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
+          access.scope === AccessScope.INTERNAL ? privateSubnets : GuVpc.subnetsFromParameter(scope, SubnetType.PUBLIC),
       },
     });
 
@@ -433,17 +427,12 @@ export class GuEc2App {
       });
 
       loadBalancer.logAccessLogs(
-        Bucket.fromBucketName(
-          scope,
-          AppIdentity.suffixText(props, "AccessLoggingBucket"),
-          accessLoggingBucket.valueAsString
-        ),
+        Bucket.fromBucketName(scope, "AccessLoggingBucket", accessLoggingBucket.valueAsString),
         accessLogging.prefix
       );
     }
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
-      app,
       vpc,
       protocol: ApplicationProtocol.HTTP,
       targets: [autoScalingGroup],
@@ -451,7 +440,6 @@ export class GuEc2App {
     });
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
-      app,
       loadBalancer,
       certificate,
       targetGroup,
@@ -463,7 +451,6 @@ export class GuEc2App {
     if (access.scope !== AccessScope.PUBLIC) {
       loadBalancer.addSecurityGroup(
         new GuSecurityGroup(scope, `${access.scope}IngressSecurityGroup`, {
-          app,
           vpc,
           description: "Allow restricted ingress from CIDR ranges",
           allowAllOutbound: false,
@@ -477,7 +464,6 @@ export class GuEc2App {
 
       if (http5xxAlarm) {
         new GuAlb5xxPercentageAlarm(scope, {
-          app,
           loadBalancer,
           snsTopicName,
           ...http5xxAlarm,
@@ -485,7 +471,6 @@ export class GuEc2App {
       }
       if (unhealthyInstancesAlarm) {
         new GuUnhealthyInstancesAlarm(scope, {
-          app,
           targetGroup,
           snsTopicName,
         });

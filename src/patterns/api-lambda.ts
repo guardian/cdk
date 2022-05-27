@@ -2,7 +2,7 @@ import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import type { LambdaRestApiProps } from "aws-cdk-lib/aws-apigateway";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
-import type { GuStack } from "../constructs/core";
+import type { GuApp } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import type { ApiGatewayAlarms } from "./api-multiple-lambdas";
@@ -61,7 +61,7 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
 export class GuApiLambda extends GuLambdaFunction {
   public readonly api: LambdaRestApi;
 
-  constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
+  constructor(scope: GuApp, id: string, props: GuApiLambdaProps) {
     super(scope, id, {
       ...props,
     });
@@ -77,7 +77,6 @@ export class GuApiLambda extends GuLambdaFunction {
 
     if (!props.monitoringConfiguration.noMonitoring) {
       new GuApiGateway5xxPercentageAlarm(scope, {
-        app: props.app,
         apiGatewayInstance: this.api,
         snsTopicName: props.monitoringConfiguration.snsTopicName,
         ...props.monitoringConfiguration.http5xxAlarm,

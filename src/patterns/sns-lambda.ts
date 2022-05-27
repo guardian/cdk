@@ -3,8 +3,7 @@ import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { ITopic } from "aws-cdk-lib/aws-sns";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import { AppIdentity } from "../constructs/core";
-import type { GuStack } from "../constructs/core";
+import type { GuApp } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import { GuSnsTopic } from "../constructs/sns";
@@ -66,13 +65,13 @@ export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "errorPercentage
 export class GuSnsLambda extends GuLambdaFunction {
   public readonly snsTopic: ITopic;
 
-  constructor(scope: GuStack, id: string, props: GuSnsLambdaProps) {
+  constructor(scope: GuApp, id: string, props: GuSnsLambdaProps) {
     super(scope, id, {
       ...props,
       errorPercentageMonitoring: props.monitoringConfiguration.noMonitoring ? undefined : props.monitoringConfiguration,
     });
 
-    const { account, region } = scope;
+    const { account, region } = scope.parent;
     const { existingSnsTopic } = props;
 
     this.snsTopic = existingSnsTopic
@@ -81,7 +80,7 @@ export class GuSnsLambda extends GuLambdaFunction {
           existingSnsTopic.externalTopicName,
           `arn:aws:sns:${region}:${account}:${existingSnsTopic.externalTopicName}`
         )
-      : AppIdentity.taggedConstruct(props, new GuSnsTopic(scope, "SnsIncomingEventsTopic"));
+      : new GuSnsTopic(scope, "SnsIncomingEventsTopic");
 
     this.addEventSource(new SnsEventSource(this.snsTopic));
     new CfnOutput(this, "TopicName", { value: this.snsTopic.topicName });

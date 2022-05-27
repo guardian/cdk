@@ -1,14 +1,13 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { simpleTestingResources } from "../../utils/test";
 import { GuNodeApp, GuPlayApp } from "./framework";
 
 describe("Framework level EC2 app patterns", () => {
   test("GuNodeApp exposes port 3000", function () {
-    const stack = simpleGuStackForTesting();
-    new GuNodeApp(stack, {
-      app: "NodeApp",
+    const { stack, app } = simpleTestingResources({ appName: "NodeApp" });
+    new GuNodeApp(app, {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
@@ -28,9 +27,8 @@ describe("Framework level EC2 app patterns", () => {
   });
 
   it("GuPlayApp exposes port 9000", function () {
-    const stack = simpleGuStackForTesting();
-    new GuPlayApp(stack, {
-      app: "PlayApp",
+    const { stack, app } = simpleTestingResources({ appName: "PlayApp" });
+    new GuPlayApp(app, {
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },

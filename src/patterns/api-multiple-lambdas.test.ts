@@ -1,31 +1,29 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
+import { GuTemplate, simpleTestingResources } from "../utils/test";
 import { GuApiGatewayWithLambdaByPath } from "./api-multiple-lambdas";
 
 describe("The GuApiGatewayWithLambdaByPath pattern", () => {
   it("should create the correct resources with minimal config", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
     const defaultProps = {
       handler: "handler.ts",
       runtime: Runtime.NODEJS_14_X,
-      app: "testing",
     };
-    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
+    const lambdaOne = new GuLambdaFunction(app, "lambda-one", {
       ...defaultProps,
       fileName: "my-app-1.zip",
     });
-    const lambdaTwo = new GuLambdaFunction(stack, "lambda-two", {
+    const lambdaTwo = new GuLambdaFunction(app, "lambda-two", {
       ...defaultProps,
       fileName: "my-app-2.zip",
     });
-    const lambdaThree = new GuLambdaFunction(stack, "lambda-three", {
+    const lambdaThree = new GuLambdaFunction(app, "lambda-three", {
       ...defaultProps,
       fileName: "my-app-3.zip",
     });
-    new GuApiGatewayWithLambdaByPath(stack, {
-      app: "testing",
+    new GuApiGatewayWithLambdaByPath(app, {
       monitoringConfiguration: { noMonitoring: true },
       targets: [
         {
@@ -49,15 +47,13 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
   });
 
   it("should create an alarm if the relevant monitoring configuration is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
+    const { stack, app } = simpleTestingResources();
+    const lambdaOne = new GuLambdaFunction(app, "lambda-one", {
       handler: "handler.ts",
       runtime: Runtime.NODEJS_14_X,
-      app: "testing",
       fileName: "my-app-1.zip",
     });
-    new GuApiGatewayWithLambdaByPath(stack, {
-      app: "testing",
+    new GuApiGatewayWithLambdaByPath(app, {
       monitoringConfiguration: {
         snsTopicName: "my-alarm-topic",
         http5xxAlarm: {

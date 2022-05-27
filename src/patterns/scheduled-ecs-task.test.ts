@@ -3,7 +3,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import type { GuStack } from "../constructs/core";
-import { simpleGuStackForTesting } from "../utils/test";
+import { simpleTestingResources } from "../utils/test";
 import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 
 const makeVpc = (stack: GuStack) =>
@@ -16,14 +16,13 @@ const makeVpc = (stack: GuStack) =>
 
 describe("The GuScheduledEcsTask pattern", () => {
   it("should use the specified schedule", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources({ appName: "ecs-task" });
 
-    new GuScheduledEcsTask(stack, "test", {
+    new GuScheduledEcsTask(app, "test", {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
       vpc: makeVpc(stack),
-      app: "ecs-test",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
