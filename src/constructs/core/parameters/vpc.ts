@@ -1,3 +1,4 @@
+import { CfnParameter } from "aws-cdk-lib";
 import { SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
@@ -15,15 +16,14 @@ export class GuSubnetListParameter extends GuParameter {
  * This parameter will read from Parameter Store.
  * By default it will read from `/account/vpc/primary/id`, this can be changed at runtime if needed.
  */
-export class GuVpcParameter extends GuParameter {
+export class GuVpcParameter extends CfnParameter {
   private static instance: GuVpcParameter | undefined;
 
   private constructor(scope: GuStack) {
     super(scope, "VpcId", {
       description: SSM_PARAMETER_PATHS.PrimaryVpcId.description,
       default: SSM_PARAMETER_PATHS.PrimaryVpcId.path,
-      type: "AWS::EC2::VPC::Id",
-      fromSSM: true,
+      type: "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     });
   }
 

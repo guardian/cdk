@@ -1,18 +1,23 @@
+import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
 import { GuLoggingStreamNameParameter } from "../../core";
-import { GuAllowPolicy } from "./base-policy";
 
-export class GuLogShippingPolicy extends GuAllowPolicy {
+export class GuLogShippingPolicy extends Policy {
   private static instance: GuLogShippingPolicy | undefined;
 
   private constructor(scope: GuStack) {
     super(scope, "GuLogShippingPolicy", {
-      actions: ["kinesis:Describe*", "kinesis:Put*"],
-      resources: [
-        `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${
-          GuLoggingStreamNameParameter.getInstance(scope).valueAsString
-        }`,
+      statements: [
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ["kinesis:Describe*", "kinesis:Put*"],
+          resources: [
+            `arn:aws:kinesis:${scope.region}:${scope.account}:stream/${
+              GuLoggingStreamNameParameter.getInstance(scope).valueAsString
+            }`,
+          ],
+        }),
       ],
     });
   }

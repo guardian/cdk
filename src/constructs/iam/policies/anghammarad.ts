@@ -1,7 +1,7 @@
+import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
 import { GuAnghammaradTopicParameter } from "../../core";
-import { GuAllowPolicy } from "./base-policy";
 
 /**
  * Creates an `AWS::IAM::Policy` to grant `sns:Publish` permission to the Anghammarad topic.
@@ -10,15 +10,20 @@ import { GuAllowPolicy } from "./base-policy";
  * @see GuAnghammaradTopicParameter
  * @see https://github.com/guardian/anghammarad
  */
-export class GuAnghammaradSenderPolicy extends GuAllowPolicy {
+export class GuAnghammaradSenderPolicy extends Policy {
   private static instance: GuAnghammaradSenderPolicy | undefined;
 
   private constructor(scope: GuStack) {
     const anghammaradTopicParameter = GuAnghammaradTopicParameter.getInstance(scope);
 
     super(scope, "GuAnghammaradSenderPolicy", {
-      actions: ["sns:Publish"],
-      resources: [anghammaradTopicParameter.valueAsString],
+      statements: [
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ["sns:Publish"],
+          resources: [anghammaradTopicParameter.valueAsString],
+        }),
+      ],
     });
   }
 

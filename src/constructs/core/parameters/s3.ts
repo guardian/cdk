@@ -1,3 +1,4 @@
+import { CfnParameter } from "aws-cdk-lib";
 import { SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
@@ -7,14 +8,14 @@ import { GuStringParameter } from "./base";
  * Creates a CloudFormation parameter which references the bucket used to store code artifacts.
  * By default, the bucket name is stored in an SSM Parameter called `/account/services/artifact.bucket`.
  */
-export class GuDistributionBucketParameter extends GuStringParameter {
+export class GuDistributionBucketParameter extends CfnParameter {
   private static instance: GuDistributionBucketParameter | undefined;
 
   private constructor(scope: GuStack) {
     super(scope, "DistributionBucketName", {
       description: SSM_PARAMETER_PATHS.DistributionBucket.description,
       default: SSM_PARAMETER_PATHS.DistributionBucket.path,
-      fromSSM: true,
+      type: "AWS::SSM::Parameter::Value<String>",
     });
   }
 

@@ -1,7 +1,7 @@
+import { CfnParameter } from "aws-cdk-lib";
 import { SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
-import { GuStringParameter } from "./base";
 
 /**
  * Creates a CloudFormation parameter to a SSM Parameter Store item that holds the ARN of the Anghammarad SNS topic.
@@ -9,12 +9,12 @@ import { GuStringParameter } from "./base";
  *
  * @see https://github.com/guardian/anghammarad
  */
-export class GuAnghammaradTopicParameter extends GuStringParameter {
+export class GuAnghammaradTopicParameter extends CfnParameter {
   private static instance: GuAnghammaradTopicParameter | undefined;
 
   private constructor(scope: GuStack) {
     super(scope, "AnghammaradSnsArn", {
-      fromSSM: true,
+      type: "AWS::SSM::Parameter::Value<String>",
       default: SSM_PARAMETER_PATHS.Anghammarad.path,
       description: SSM_PARAMETER_PATHS.Anghammarad.description,
     });

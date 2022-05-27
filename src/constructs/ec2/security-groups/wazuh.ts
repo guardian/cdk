@@ -1,8 +1,7 @@
-import { Peer } from "aws-cdk-lib/aws-ec2";
+import { Peer, Port, SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import type { IVpc } from "aws-cdk-lib/aws-ec2";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
-import { GuBaseSecurityGroup } from "./base";
 
 /**
  * A security group to allow a Wazuh agent on an EC2 instance to communicate with the outside.
@@ -56,7 +55,7 @@ import { GuBaseSecurityGroup } from "./base";
  *
  * @see https://github.com/guardian/security-hq/blob/main/hq/markdown/wazuh.md
  */
-export class GuWazuhAccess extends GuBaseSecurityGroup {
+export class GuWazuhAccess extends SecurityGroup {
   private static instance: GuWazuhAccess | undefined;
 
   private constructor(scope: GuStack, vpc: IVpc) {
@@ -71,11 +70,10 @@ export class GuWazuhAccess extends GuBaseSecurityGroup {
        */
       description: "Allow outbound traffic from wazuh agent to manager",
       allowAllOutbound: false,
-      egresses: [
-        { range: Peer.anyIpv4(), port: 1514, description: "Wazuh event logging" },
-        { range: Peer.anyIpv4(), port: 1515, description: "Wazuh agent registration" },
-      ],
     });
+
+    this.addEgressRule(Peer.anyIpv4(), Port.tcp(1514), "Wazuh event logging");
+    this.addEgressRule(Peer.anyIpv4(), Port.tcp(1515), "Wazuh agent registration");
 
     /*
     Replacing in-use security groups is difficult as it requires careful orchestration with instances.
