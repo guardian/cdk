@@ -97,7 +97,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       .reduce((acc, param) => ({ ...acc, [param.node.id]: param as CfnParameter }), {});
   }
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
+  // eslint-disable-next-line custom-rules/valid-constructors -- `GuStack` is the exception as it must take an App, and is the parent of `GuApp`
   constructor(app: App, id: string, props: GuStackProps) {
     const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, withoutTags } = props;
 
@@ -233,7 +233,7 @@ export class GuStack extends Stack implements StackStageIdentity {
  * In a stack set application, `GuStackForStackSetInstance` is used to represent the infrastructure to provision in target AWS accounts.
  */
 export class GuStackForStackSetInstance extends GuStack {
-  // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForStackSet should have a unique `App`
+  // eslint-disable-next-line custom-rules/valid-constructors -- `GuStackForStackSet` should have a unique `App`, and is the parent of `GuApp`
   constructor(id: string, props: GuStackProps) {
     super(new App(), id, props);
   }
