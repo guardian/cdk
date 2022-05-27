@@ -3,7 +3,7 @@ RULES
 1. Private constructors don't get linted
 2. Must be 1, 2 or 3 parameters
 3. First parameter must be called scope
-4. First parameter must be of type GuStack
+4. First parameter must be of type GuApp
 5. If 2 parameters:
    - The second parameter must be called props
    - The second parameter must be a custom type
@@ -77,7 +77,7 @@ const lintParameter = (param, node, context, { name, type, allowOptional, allowD
 
 const scopeParamSpec = {
   name: "scope",
-  type: "GuStack",
+  type: "GuApp",
   allowOptional: false,
   allowDefault: false,
   position: "first",

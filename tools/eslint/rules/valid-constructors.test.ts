@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- testing file */
 
-import type { GuStack } from "../../../src/constructs/core";
+import type { GuApp } from "../../../src/constructs/core";
 
 interface MyProps {
   name: string;
@@ -9,20 +9,20 @@ interface MyProps {
 const defaultProps: MyProps = { name: "guardian" };
 
 class OneParamConstructor {
-  constructor(scope: GuStack) {
+  constructor(scope: GuApp) {
     console.log(scope);
   }
 }
 
 class TwoParamConstructor {
-  constructor(scope: GuStack, props: MyProps) {
+  constructor(scope: GuApp, props: MyProps) {
     console.log(scope);
     console.log(props);
   }
 }
 
 class ThreeParamConstructor {
-  constructor(scope: GuStack, id: string, props: MyProps) {
+  constructor(scope: GuApp, id: string, props: MyProps) {
     console.log(scope);
     console.log(id);
     console.log(props);
@@ -30,7 +30,7 @@ class ThreeParamConstructor {
 }
 
 class AnotherThreeParamConstructor {
-  constructor(scope: GuStack, id: string, props?: MyProps) {
+  constructor(scope: GuApp, id: string, props?: MyProps) {
     console.log(scope);
     console.log(id);
     console.log(props);
@@ -38,7 +38,7 @@ class AnotherThreeParamConstructor {
 }
 
 class YetAnotherThreeParamConstructor {
-  constructor(scope: GuStack, id: string, props: MyProps = defaultProps) {
+  constructor(scope: GuApp, id: string, props: MyProps = defaultProps) {
     console.log(scope);
     console.log(id);
     console.log(props);

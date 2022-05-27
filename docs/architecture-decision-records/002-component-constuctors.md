@@ -4,7 +4,8 @@
 
 <!--- What is the status, such as proposed, accepted, rejected, deprecated, superseded, etc.? -->
 
-proposed
+Accepted, with:
+  - [Update 1](002U1-component-constructors.md)
 
 ## Context
 
