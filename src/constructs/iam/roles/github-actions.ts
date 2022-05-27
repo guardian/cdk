@@ -1,6 +1,6 @@
 import { CfnOutput, CfnResource } from "aws-cdk-lib";
 import { FederatedPrincipal } from "aws-cdk-lib/aws-iam";
-import type { GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import type { GuPolicy } from "../policies";
 import { GuRole } from "./roles";
 
@@ -58,7 +58,7 @@ See:
   - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
  */
 class GitHubOidcProvider extends CfnResource {
-  constructor(scope: GuStack) {
+  constructor(scope: GuApp) {
     super(scope, "GithubActionsOidc", {
       type: "AWS::IAM::OIDCProvider",
       properties: {
@@ -80,7 +80,7 @@ class GitHubOidcProvider extends CfnResource {
  *   - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
  */
 export class GuGithubActionsRole extends GuRole {
-  constructor(scope: GuStack, props: GuGithubActionsRoleProps) {
+  constructor(scope: GuApp, props: GuGithubActionsRoleProps) {
     super(scope, "GithubActionsRole", {
       assumedBy: new FederatedPrincipal(
         new GitHubOidcProvider(scope).ref,

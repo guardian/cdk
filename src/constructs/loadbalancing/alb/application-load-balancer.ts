@@ -1,10 +1,9 @@
 import { CfnOutput } from "aws-cdk-lib";
 import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuApp } from "../../core";
 
-interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity {
+interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps {
   /**
    * If your CloudFormation does not define the Type of your Load Balancer, you must set this boolean to true to avoid
    * resource [replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-type).
@@ -23,8 +22,8 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  * This resource is stateful.
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLoadBalancer) {
-  constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
+export class GuApplicationLoadBalancer extends ApplicationLoadBalancer {
+  constructor(scope: GuApp, id: string, props: GuApplicationLoadBalancerProps) {
     super(scope, id, { deletionProtection: true, ...props });
 
     if (props.removeType) {
@@ -32,9 +31,9 @@ export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLo
       cfnLb.addPropertyDeletionOverride("Type");
     }
 
-    new CfnOutput(this, `${this.idWithApp}-DnsName`, {
-      description: `DNS entry for ${this.idWithApp}`,
+    new CfnOutput(this, `DnsName`, {
+      description: `DNS entry for ${scope.app}`,
       value: this.loadBalancerDnsName,
-    }).overrideLogicalId(`${this.idWithApp}DnsName`);
+    }).overrideLogicalId(`${scope.appForLogicalId}DnsName`);
   }
 }

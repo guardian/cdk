@@ -1,14 +1,13 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleTestingResources } from "../../utils/test";
 import { GuS3Bucket } from "./index";
 
 describe("The GuS3Bucket construct", () => {
   it("should set the bucket's policy to 'retain'", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources({ appName: "test" });
 
-    new GuS3Bucket(stack, "MyBucket", {
+    new GuS3Bucket(app, "MyBucket", {
       bucketName: "super-important-stuff",
-      app: "test",
     });
 
     // The policies are siblings of Properties.
@@ -17,16 +16,14 @@ describe("The GuS3Bucket construct", () => {
   });
 
   it("should receive the correct set of tags", () => {
-    const stack = simpleGuStackForTesting();
-    const app = "test";
+    const { stack, app } = simpleTestingResources();
 
-    new GuS3Bucket(stack, "MyBucket", {
+    new GuS3Bucket(app, "MyBucket", {
       bucketName: "super-important-stuff",
-      app,
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::S3::Bucket", {
-      appIdentity: { app },
+      app,
     });
   });
 });

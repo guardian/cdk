@@ -1,15 +1,11 @@
 import { Duration } from "aws-cdk-lib";
 import type { RestApi } from "aws-cdk-lib/aws-apigateway";
 import { ComparisonOperator, MathExpression, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
-import type { GuStack } from "../core";
-import { AppIdentity } from "../core";
+import type { GuApp } from "../core";
 import type { GuAlarmProps, Http5xxAlarmProps } from "./alarm";
 import { GuAlarm } from "./alarm";
 
-interface GuApiGateway5xxPercentageAlarmProps
-  extends Pick<GuAlarmProps, "snsTopicName">,
-    Http5xxAlarmProps,
-    AppIdentity {
+interface GuApiGateway5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps {
   apiGatewayInstance: RestApi;
 }
 
@@ -18,18 +14,18 @@ interface GuApiGateway5xxPercentageAlarmProps
  * the specified threshold.
  */
 export class GuApiGateway5xxPercentageAlarm extends GuAlarm {
-  constructor(scope: GuStack, props: GuApiGateway5xxPercentageAlarmProps) {
+  constructor(scope: GuApp, props: GuApiGateway5xxPercentageAlarmProps) {
     const mathExpression = new MathExpression({
       expression: "100*m1/m2",
       usingMetrics: {
         m1: props.apiGatewayInstance.metricServerError(),
         m2: props.apiGatewayInstance.metricCount(),
       },
-      label: `% of 5XX responses served for ${props.app}`,
+      label: `% of 5XX responses served for ${scope.app}`,
       period: Duration.minutes(1),
     });
-    const defaultAlarmName = `High 5XX error % from ${props.app} (ApiGateway) in ${scope.stage}`;
-    const defaultDescription = `${props.app} exceeded ${props.tolerated5xxPercentage}% error rate`;
+    const defaultAlarmName = `High 5XX error % from ${scope.app} (ApiGateway) in ${scope.stage}`;
+    const defaultDescription = `${scope.app} exceeded ${props.tolerated5xxPercentage}% error rate`;
     const alarmProps = {
       ...props,
       metric: mathExpression,
@@ -40,6 +36,6 @@ export class GuApiGateway5xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, AppIdentity.suffixText(props, "ApiGatewayHigh5xxPercentageAlarm"), alarmProps);
+    super(scope, "ApiGatewayHigh5xxPercentageAlarm", alarmProps);
   }
 }

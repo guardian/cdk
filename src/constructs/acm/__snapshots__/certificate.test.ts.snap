@@ -3,7 +3,7 @@
 exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
 Object {
   "Resources": Object {
-    "CertificateTesting28FCAC6D": Object {
+    "testingCertificate27BF3B5F": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "DomainName": "code-guardian.com",
@@ -41,7 +41,7 @@ Object {
 exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
 Object {
   "Resources": Object {
-    "CertificateTesting28FCAC6D": Object {
+    "testingCertificate27BF3B5F": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "DomainName": "code-guardian.com",

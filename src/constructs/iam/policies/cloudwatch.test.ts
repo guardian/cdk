@@ -1,11 +1,11 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuGetCloudwatchMetricsPolicy, GuPutCloudwatchMetricsPolicy } from "./cloudwatch";
 
 describe("The GuGetCloudwatchMetricsPolicy construct", () => {
   it("creates the correct policy", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuGetCloudwatchMetricsPolicy(stack));
+    const { stack, app } = simpleTestingResources();
+    attachPolicyToTestRole(stack, new GuGetCloudwatchMetricsPolicy(app));
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
@@ -29,8 +29,8 @@ describe("The GuGetCloudwatchMetricsPolicy construct", () => {
 
 describe("The GuPutCloudwatchMetricsPolicy construct", () => {
   it("creates the correct policy", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuPutCloudwatchMetricsPolicy(stack));
+    const { stack, app } = simpleTestingResources();
+    attachPolicyToTestRole(stack, new GuPutCloudwatchMetricsPolicy(app));
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {

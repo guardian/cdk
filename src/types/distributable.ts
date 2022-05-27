@@ -1,4 +1,4 @@
-import type { AppIdentity, GuStack } from "../constructs/core";
+import type { GuApp } from "../constructs/core";
 
 export interface GuDistributable {
   /**
@@ -9,7 +9,7 @@ export interface GuDistributable {
 }
 
 export const GuDistributable = {
-  getObjectKey({ stack, stage }: GuStack, { app }: AppIdentity, { fileName }: GuDistributable): string {
+  getObjectKey({ stack, stage, app }: GuApp, { fileName }: GuDistributable): string {
     return [stack, stage, app, fileName].join("/");
   },
 };

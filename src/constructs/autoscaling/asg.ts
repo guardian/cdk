@@ -5,9 +5,8 @@ import { OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
 import type { ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
 import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { GuAsgCapacity } from "../../types";
-import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
-import type { AppIdentity, GuStack } from "../core";
+import type { GuApp } from "../core";
 import { GuHttpsEgressSecurityGroup, GuWazuhAccess } from "../ec2";
 import { GuInstanceRole } from "../iam";
 
@@ -27,7 +26,6 @@ export interface GuAutoScalingGroupProps
       | "requireImdsv2"
       | "securityGroup"
     >,
-    AppIdentity,
     GuAsgCapacity {
   imageId?: GuAmiParameter;
   userData: UserData | string;
@@ -56,15 +54,14 @@ export interface GuAutoScalingGroupProps
  * All EC2 instances provisioned via this construct will use
  * [IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html).
  */
-export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
-  constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
+export class GuAutoScalingGroup extends AutoScalingGroup {
+  constructor(scope: GuApp, id: string, props: GuAutoScalingGroupProps) {
     const {
-      app,
       additionalSecurityGroups = [],
-      imageId = new GuAmiParameter(scope, { app }),
+      imageId = new GuAmiParameter(scope),
       minimumInstances,
       maximumInstances,
-      role = new GuInstanceRole(scope, { app }),
+      role = new GuInstanceRole(scope, {}),
       targetGroup,
       userData: userDataLike,
       vpc,
@@ -98,14 +95,16 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       userData,
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
-      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app, vpc }),
+      securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { vpc }),
     };
 
     super(scope, id, mergedProps);
 
     targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 
-    [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) => this.addSecurityGroup(sg));
+    [GuWazuhAccess.getInstance(scope.parent, vpc), ...additionalSecurityGroups].forEach((sg) =>
+      this.addSecurityGroup(sg)
+    );
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group

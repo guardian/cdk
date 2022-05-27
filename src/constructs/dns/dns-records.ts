@@ -1,7 +1,7 @@
 import type { Duration } from "aws-cdk-lib";
 import { CfnResource } from "aws-cdk-lib";
 import type { GuDomainName } from "../../types";
-import type { AppIdentity, GuStack } from "../core";
+import type { GuApp } from "../core";
 
 export enum RecordType {
   CNAME = "CNAME",
@@ -21,7 +21,7 @@ export interface GuDnsRecordSetProps {
  * as this requires less boilerplate.
  */
 export class GuDnsRecordSet {
-  constructor(scope: GuStack, id: string, props: GuDnsRecordSetProps) {
+  constructor(scope: GuApp, id: string, props: GuDnsRecordSetProps) {
     const { name, recordType, resourceRecords, ttl } = props;
     const { stage } = scope;
 
@@ -58,7 +58,7 @@ export class GuDnsRecordSet {
   }
 }
 
-export interface GuCnameProps extends GuDomainName, AppIdentity {
+export interface GuCnameProps extends GuDomainName {
   /** The record your CNAME should point to, for example your Load Balancer DNS name */
   resourceRecord: string;
   /** The time to live for the DNS record */
@@ -71,7 +71,7 @@ export interface GuCnameProps extends GuDomainName, AppIdentity {
  * See [[`GuCnameProps`]] for configuration options.
  */
 export class GuCname extends GuDnsRecordSet {
-  constructor(scope: GuStack, id: string, props: GuCnameProps) {
+  constructor(scope: GuApp, id: string, props: GuCnameProps) {
     const { domainName: name, resourceRecord, ttl } = props;
 
     super(scope, id, {

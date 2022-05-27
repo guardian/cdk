@@ -1,5 +1,5 @@
 import { AccountPrincipal } from "aws-cdk-lib/aws-iam";
-import type { GuStack } from "../core";
+import type { GuApp } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core";
 import { GuPutS3ObjectsPolicy } from "./policies";
 import { GuRole } from "./roles";
@@ -42,9 +42,9 @@ const FASTLY_AWS_ACCOUNT_ID = "717331877981";
  * See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
  */
 export class GuFastlyLogsIamRole extends GuRole {
-  constructor(scope: GuStack, props: GuFastlyLogsIamRoleProps) {
+  constructor(scope: GuApp, props: GuFastlyLogsIamRoleProps) {
     const { path = "*" } = props; // set defaults
-    const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
+    const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope.parent).valueAsString;
     super(scope, "GuFastlyLogsIamRole", {
       assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
       externalIds: [fastlyCustomerId],

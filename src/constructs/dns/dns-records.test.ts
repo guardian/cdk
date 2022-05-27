@@ -1,12 +1,12 @@
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleTestingResources } from "../../utils/test";
 import { GuCname, GuDnsRecordSet, RecordType } from "./dns-records";
 
 describe("The GuDnsRecordSet construct", () => {
   it("should create the correct resources with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    new GuDnsRecordSet(stack, "TestRecord", {
+    const { stack, app } = simpleTestingResources();
+    new GuDnsRecordSet(app, "TestRecord", {
       name: "banana.example.com",
       recordType: RecordType.CNAME,
       resourceRecords: ["apple.example.com"],
@@ -15,8 +15,8 @@ describe("The GuDnsRecordSet construct", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
   it("should use the exact logical id that is passed in", () => {
-    const stack = simpleGuStackForTesting();
-    new GuDnsRecordSet(stack, "ThisExactLogicalId", {
+    const { stack, app } = simpleTestingResources();
+    new GuDnsRecordSet(app, "ThisExactLogicalId", {
       name: "banana.example.com",
       recordType: RecordType.CNAME,
       resourceRecords: ["apple.example.com"],
@@ -26,10 +26,10 @@ describe("The GuDnsRecordSet construct", () => {
   });
 
   it("should throw if a CNAME is created with multiple answers", () => {
-    const stack = simpleGuStackForTesting();
+    const { app } = simpleTestingResources();
 
     expect(() => {
-      new GuDnsRecordSet(stack, "ThisExactLogicalId", {
+      new GuDnsRecordSet(app, "ThisExactLogicalId", {
         name: "banana.example.com",
         recordType: RecordType.CNAME,
         resourceRecords: ["apple.example.com", "banana.example.com"],
@@ -43,10 +43,9 @@ describe("The GuDnsRecordSet construct", () => {
 
 describe("The GuCname construct", () => {
   it("should create the correct resources with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    new GuCname(stack, "TestRecord", {
+    const { stack, app } = simpleTestingResources({ appName: "my-test-app" });
+    new GuCname(app, "TestRecord", {
       domainName: "xyz.code-guardian.com",
-      app: "my-test-app",
       resourceRecord: "apple.example.com",
       ttl: Duration.hours(1),
     });

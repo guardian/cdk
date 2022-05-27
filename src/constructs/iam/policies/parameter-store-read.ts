@@ -1,6 +1,5 @@
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import { GuPolicy } from "./base-policy";
 
 /**
@@ -8,11 +7,13 @@ import { GuPolicy } from "./base-policy";
  * [simple-configuration](https://github.com/guardian/simple-configuration) library requires these permissions.
  */
 export class ReadParametersByPath extends PolicyStatement {
-  constructor(scope: GuStack, props: AppIdentity) {
+  constructor(scope: GuApp) {
+    const { stack, stage, app } = scope;
+    const { account, region } = scope.parent;
     super({
       effect: Effect.ALLOW,
       actions: ["ssm:GetParametersByPath"],
-      resources: [`arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${props.app}`],
+      resources: [`arn:aws:ssm:${region}:${account}:parameter/${stage}/${stack}/${app}`],
     });
   }
 }
@@ -23,13 +24,13 @@ export class ReadParametersByPath extends PolicyStatement {
  * permissions.
  */
 export class ReadParametersByName extends PolicyStatement {
-  constructor(scope: GuStack, props: AppIdentity) {
+  constructor(scope: GuApp) {
+    const { stack, stage, app } = scope;
+    const { account, region } = scope.parent;
     super({
       effect: Effect.ALLOW,
       actions: ["ssm:GetParameters", "ssm:GetParameter"],
-      resources: [
-        `arn:aws:ssm:${scope.region}:${scope.account}:parameter/${scope.stage}/${scope.stack}/${props.app}/*`,
-      ],
+      resources: [`arn:aws:ssm:${region}:${account}:parameter/${stage}/${stack}/${app}/*`],
     });
   }
 }
@@ -37,12 +38,11 @@ export class ReadParametersByName extends PolicyStatement {
  * Grants read-only permissions for Parameter Store. These permissions are typically used for accessing private
  * configuration. See [[`ReadParametersByPath`]] and [[`ReadParametersByName`]] for more details.
  */
-export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
-  constructor(scope: GuStack, props: AppIdentity) {
+export class GuParameterStoreReadPolicy extends GuPolicy {
+  constructor(scope: GuApp) {
     super(scope, "ParameterStoreRead", {
       policyName: "parameter-store-read-policy",
-      statements: [new ReadParametersByPath(scope, props), new ReadParametersByName(scope, props)],
-      ...props,
+      statements: [new ReadParametersByPath(scope), new ReadParametersByName(scope)],
     });
   }
 }

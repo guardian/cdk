@@ -1,6 +1,6 @@
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { TopicProps } from "aws-cdk-lib/aws-sns";
-import type { GuStack } from "../core";
+import type { GuApp } from "../core";
 
 type GuSnsTopicProps = TopicProps;
 
@@ -11,7 +11,7 @@ type GuSnsTopicProps = TopicProps;
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
 export class GuSnsTopic extends Topic {
-  constructor(scope: GuStack, id: string, props?: GuSnsTopicProps) {
+  constructor(scope: GuApp, id: string, props?: GuSnsTopicProps) {
     super(scope, id, props);
   }
 }

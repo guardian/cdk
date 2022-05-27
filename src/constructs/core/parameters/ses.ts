@@ -1,9 +1,9 @@
 import { RegexPattern } from "../../../constants";
-import type { GuStack } from "../stack";
+import type { GuApp } from "../app";
 import { GuStringParameter } from "./base";
 
 export class GuGuardianEmailSenderParameter extends GuStringParameter {
-  constructor(scope: GuStack) {
+  constructor(scope: GuApp) {
     super(scope, "EmailSenderAddress", {
       allowedPattern: RegexPattern.GUARDIAN_EMAIL,
       constraintDescription: "Must be an @theguardian.com email address",

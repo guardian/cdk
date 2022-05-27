@@ -1,7 +1,7 @@
 import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
-import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
+import { GuTemplate, simpleTestingResources } from "../../../utils/test";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "./base";
 
 describe("The GuSecurityGroup class", () => {
@@ -12,25 +12,23 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("applies the Stack, Stage and App tags", () => {
-    const stack = simpleGuStackForTesting();
-    new GuSecurityGroup(stack, "TestSecurityGroup", {
+    const { stack, app } = simpleTestingResources();
+    new GuSecurityGroup(app, "TestSecurityGroup", {
       vpc,
-      app: "testing",
     });
 
-    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::EC2::SecurityGroup", { appIdentity: { app: "testing" } });
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::EC2::SecurityGroup", { app });
   });
 
   it("adds the ingresses passed in through props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuSecurityGroup(stack, "TestSecurityGroup", {
+    new GuSecurityGroup(app, "TestSecurityGroup", {
       vpc,
       ingresses: [
         { range: Peer.ipv4("127.0.0.1/24"), description: "ingress1", port: 443 },
         { range: Peer.ipv4("127.0.0.2/8"), description: "ingress2", port: 443 },
       ],
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
@@ -54,16 +52,15 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("adds the egresses passed in through props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuSecurityGroup(stack, "TestSecurityGroup", {
+    new GuSecurityGroup(app, "TestSecurityGroup", {
       vpc,
       allowAllOutbound: false,
       egresses: [
         { range: Peer.ipv4("127.0.0.1/24"), port: Port.tcp(8000), description: "egress1" },
         { range: Peer.ipv4("127.0.0.2/8"), port: Port.tcp(9000), description: "egress2" },
       ],
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
@@ -87,13 +84,12 @@ describe("The GuSecurityGroup class", () => {
   });
 
   it("should not allow an ingress rule for port 22", () => {
-    const stack = simpleGuStackForTesting();
+    const { app } = simpleTestingResources();
 
     expect(() => {
-      new GuSecurityGroup(stack, "TestSecurityGroup", {
+      new GuSecurityGroup(app, "TestSecurityGroup", {
         vpc,
         ingresses: [{ range: Peer.anyIpv4(), description: "SSH access", port: 22 }],
-        app: "testing",
       });
     }).toThrow(new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
   });
@@ -107,9 +103,9 @@ describe("The GuHttpsEgressSecurityGroup class", () => {
   });
 
   it("adds global access on 443 by default", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    GuHttpsEgressSecurityGroup.forVpc(stack, { vpc, app: "testing" });
+    GuHttpsEgressSecurityGroup.forVpc(app, { vpc });
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
       GroupDescription: "Allow all outbound HTTPS traffic",

@@ -1,9 +1,9 @@
-import type { GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import { GuAllowPolicy } from "./base-policy";
 import type { GuAllowPolicyProps } from "./base-policy";
 
 abstract class GuCloudwatchPolicy extends GuAllowPolicy {
-  protected constructor(scope: GuStack, id: string, props: Omit<GuAllowPolicyProps, "resources">) {
+  protected constructor(scope: GuApp, id: string, props: Omit<GuAllowPolicyProps, "resources">) {
     super(scope, id, {
       ...props,
       actions: props.actions.map((action) => `cloudwatch:${action}`),
@@ -13,7 +13,7 @@ abstract class GuCloudwatchPolicy extends GuAllowPolicy {
 }
 
 export class GuGetCloudwatchMetricsPolicy extends GuCloudwatchPolicy {
-  constructor(scope: GuStack) {
+  constructor(scope: GuApp) {
     super(scope, "GuGetCloudwatchMetricsPolicy", {
       actions: ["ListMetrics", "GetMetricData", "GetMetricStatistics", "DescribeAlarmsForMetric"],
     });
@@ -21,7 +21,7 @@ export class GuGetCloudwatchMetricsPolicy extends GuCloudwatchPolicy {
 }
 
 export class GuPutCloudwatchMetricsPolicy extends GuCloudwatchPolicy {
-  constructor(scope: GuStack) {
+  constructor(scope: GuApp) {
     super(scope, "GuPutCloudwatchMetricsPolicy", { actions: ["PutMetricData"] });
   }
 }

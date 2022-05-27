@@ -1,11 +1,8 @@
 import { ApplicationListener, ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import type { GuApplicationTargetGroup } from "./application-target-group";
-
-export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity {}
 
 /**
  * Construct which creates a Listener.
@@ -20,15 +17,14 @@ export interface GuApplicationListenerProps extends ApplicationListenerProps, Ap
  * This resource is stateful.
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuApplicationListener extends GuAppAwareConstruct(ApplicationListener) {
-  constructor(scope: GuStack, id: string, props: GuApplicationListenerProps) {
+export class GuApplicationListener extends ApplicationListener {
+  constructor(scope: GuApp, id: string, props: ApplicationListenerProps) {
     super(scope, id, { port: 443, protocol: ApplicationProtocol.HTTPS, ...props });
   }
 }
 
 export interface GuHttpsApplicationListenerProps
-  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">,
-    AppIdentity {
+  extends Omit<ApplicationListenerProps, "defaultAction" | "certificates"> {
   targetGroup: GuApplicationTargetGroup;
   certificate: GuCertificate;
 }
@@ -40,11 +36,11 @@ export interface GuHttpsApplicationListenerProps
  *
  * For general details about Listeners, see [[`GuApplicationListener`]].
  */
-export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationListener) {
-  constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
+export class GuHttpsApplicationListener extends ApplicationListener {
+  constructor(scope: GuApp, id: string, props: GuHttpsApplicationListenerProps) {
     const { certificate, targetGroup } = props;
 
-    const mergedProps: GuApplicationListenerProps = {
+    const mergedProps: ApplicationListenerProps = {
       port: 443,
       protocol: ApplicationProtocol.HTTPS,
       ...props,

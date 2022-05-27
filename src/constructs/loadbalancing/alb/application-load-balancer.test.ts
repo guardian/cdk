@@ -1,8 +1,7 @@
 import { Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
-import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
-import type { AppIdentity } from "../../core";
+import { GuTemplate, simpleTestingResources } from "../../../utils/test";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -11,14 +10,10 @@ const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   publicSubnetIds: [""],
 });
 
-const app: AppIdentity = {
-  app: "testing",
-};
-
 describe("The GuApplicationLoadBalancer class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationLoadBalancer(app, "ApplicationLoadBalancer", { vpc });
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::LoadBalancer",
@@ -27,19 +22,17 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   it("should apply the App tag", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationLoadBalancer(app, "ApplicationLoadBalancer", { vpc });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      appIdentity: app,
+      app,
     });
   });
 
   test("deletes the Type property if the removeType prop is set to true", () => {
-    // not using an auto-generated logicalId to make the expectation notation easier
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
-      ...app,
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationLoadBalancer(app, "ApplicationLoadBalancer", {
       vpc,
       removeType: true,
     });
@@ -50,8 +43,8 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("sets the deletion protection value to true by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationLoadBalancer(app, "ApplicationLoadBalancer", { vpc });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       LoadBalancerAttributes: [
@@ -64,9 +57,9 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   it("creates an cloudformation output of the dns name", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    new GuApplicationLoadBalancer(app, "ApplicationLoadBalancer", { vpc });
 
     Template.fromStack(stack).hasOutput("ApplicationLoadBalancerTestingDnsName", {});
   });

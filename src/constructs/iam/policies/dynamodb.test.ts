@@ -1,11 +1,11 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuDynamoDBReadPolicy, GuDynamoDBWritePolicy } from "./dynamodb";
 
 describe("The GuDynamoDBReadPolicy construct", () => {
   it("creates the correct policy", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuDynamoDBReadPolicy(stack, "ReadMyTablePolicy", { tableName: "MyTable" }));
+    const { stack, app } = simpleTestingResources();
+    attachPolicyToTestRole(stack, new GuDynamoDBReadPolicy(app, "ReadMyTablePolicy", { tableName: "MyTable" }));
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "ReadMyTablePolicyBE0064AB",
@@ -46,8 +46,8 @@ describe("The GuDynamoDBReadPolicy construct", () => {
 
 describe("The GuDynamoDBWritePolicy construct", () => {
   it("creates the correct policy", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuDynamoDBWritePolicy(stack, "WriteMyTablePolicy", { tableName: "MyTable" }));
+    const { stack, app } = simpleTestingResources();
+    attachPolicyToTestRole(stack, new GuDynamoDBWritePolicy(app, "WriteMyTablePolicy", { tableName: "MyTable" }));
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "WriteMyTablePolicy7D2601F8",

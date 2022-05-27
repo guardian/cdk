@@ -1,14 +1,14 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { simpleTestingResources } from "../../../utils/test";
 import { GuGetS3ObjectsPolicy } from "../policies";
 import { GuGithubActionsRole } from "./github-actions";
 
 describe("The GitHubActionsRole construct", () => {
   it("should create the correct resources with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    new GuGithubActionsRole(stack, {
+    const { stack, app } = simpleTestingResources();
+    new GuGithubActionsRole(app, {
       policies: [
-        new GuGetS3ObjectsPolicy(stack, "GetObjects", {
+        new GuGetS3ObjectsPolicy(app, "GetObjects", {
           bucketName: "super-secret-stuff",
         }),
       ],
@@ -18,10 +18,10 @@ describe("The GitHubActionsRole construct", () => {
   });
 
   it("should be possible to limit which repositories can assume the role", () => {
-    const stack = simpleGuStackForTesting();
-    new GuGithubActionsRole(stack, {
+    const { stack, app } = simpleTestingResources();
+    new GuGithubActionsRole(app, {
       policies: [
-        new GuGetS3ObjectsPolicy(stack, "GetObjects", {
+        new GuGetS3ObjectsPolicy(app, "GetObjects", {
           bucketName: "super-secret-stuff",
         }),
       ],

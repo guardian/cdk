@@ -2,8 +2,7 @@ import { Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
-import type { AppIdentity } from "../core";
+import { GuTemplate, simpleTestingResources } from "../../utils/test";
 import { GuSecurityGroup } from "../ec2";
 import { GuAllowPolicy, GuInstanceRole } from "../iam";
 import { GuApplicationTargetGroup } from "../loadbalancing";
@@ -17,12 +16,7 @@ describe("The GuAutoScalingGroup", () => {
     publicSubnetIds: [""],
   });
 
-  const app: AppIdentity = {
-    app: "testing",
-  };
-
   const defaultProps: GuAutoScalingGroupProps = {
-    ...app,
     vpc,
     instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
     userData: UserData.custom(["#!/bin/bash", "service some-dependency start", "service my-app start"].join("\n")),
@@ -30,14 +24,14 @@ describe("The GuAutoScalingGroup", () => {
   };
 
   test("Uses the AppIdentity to create the logicalId and tag the resource", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "MyAutoScalingGroup", defaultProps);
+    const { stack, app } = simpleTestingResources();
+    new GuAutoScalingGroup(app, "MyAutoScalingGroup", defaultProps);
 
     const template = GuTemplate.fromStack(stack);
 
     template.hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /MyAutoScalingGroupTesting[A-Z0-9]+/);
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
-      appIdentity: { app: "testing" },
+      app,
       propagateAtLaunch: true,
       additionalTags: [
         {
@@ -50,9 +44,9 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds the AMI parameter if no imageId prop provided", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+    new GuAutoScalingGroup(app, "AutoscalingGroup", defaultProps);
 
     const template = Template.fromStack(stack);
 
@@ -70,9 +64,9 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("correctly sets up the instance type in the launch configuration", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
+    new GuAutoScalingGroup(app, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
 
     Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       InstanceType: "t3.small",
@@ -80,9 +74,9 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("correctly sets the user data using prop", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
+    new GuAutoScalingGroup(app, "AutoscalingGroup", defaultProps);
 
     Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       UserData: {
@@ -92,15 +86,14 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds any target groups passed through props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const targetGroup = new GuApplicationTargetGroup(stack, "TargetGroup", {
-      ...app,
+    const targetGroup = new GuApplicationTargetGroup(app, "TargetGroup", {
       vpc: vpc,
       protocol: ApplicationProtocol.HTTP,
     });
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+    new GuAutoScalingGroup(app, "AutoscalingGroup", {
       ...defaultProps,
       targetGroup: targetGroup,
     });
@@ -115,15 +108,14 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("adds any security groups passed through props", () => {
-    const app = "Testing";
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
     // not passing `existingLogicalId`, so logicalId will be auto-generated
-    const securityGroup = new GuSecurityGroup(stack, "SecurityGroup", { vpc, app });
-    const securityGroup1 = new GuSecurityGroup(stack, "SecurityGroup1", { vpc, app });
-    const securityGroup2 = new GuSecurityGroup(stack, "SecurityGroup2", { vpc, app });
+    const securityGroup = new GuSecurityGroup(app, "SecurityGroup", { vpc });
+    const securityGroup1 = new GuSecurityGroup(app, "SecurityGroup1", { vpc });
+    const securityGroup2 = new GuSecurityGroup(app, "SecurityGroup2", { vpc });
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
+    new GuAutoScalingGroup(app, "AutoscalingGroup", {
       ...defaultProps,
       additionalSecurityGroups: [securityGroup, securityGroup1, securityGroup2],
     });
@@ -131,7 +123,10 @@ describe("The GuAutoScalingGroup", () => {
     Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
       SecurityGroups: [
         {
-          "Fn::GetAtt": [Match.stringLikeRegexp(`GuHttpsEgressSecurityGroup${app}[A-Z0-9]+`), "GroupId"],
+          "Fn::GetAtt": [
+            Match.stringLikeRegexp(`GuHttpsEgressSecurityGroup${app.appForLogicalId}[A-Z0-9]+`),
+            "GroupId",
+          ],
         },
         {
           "Fn::GetAtt": ["WazuhSecurityGroup", "GroupId"],
@@ -150,8 +145,8 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("does not include the UpdatePolicy property", () => {
-    const stack = simpleGuStackForTesting();
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps });
+    const { stack, app } = simpleTestingResources();
+    new GuAutoScalingGroup(app, "AutoscalingGroup", { ...defaultProps });
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /AutoscalingGroup.+/);
 
@@ -161,17 +156,16 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("has an instance role created by default with AssumeRole permissions", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources({ appName: "TestApp" });
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      app: "TestApp",
+    new GuAutoScalingGroup(app, "AutoscalingGroup", {
       userData: "SomeUserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       minimumInstances: 1,
     });
 
-    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::Role", { appIdentity: { app: "TestApp" } });
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::Role", { app });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Role", {
       AssumeRolePolicyDocument: {
@@ -188,17 +182,15 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("passing in an instance role overrides the default", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      app: "TestApp",
+    new GuAutoScalingGroup(app, "AutoscalingGroup", {
       userData: "UserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
-      role: new GuInstanceRole(stack, {
-        app: "TestApp",
+      role: new GuInstanceRole(app, {
         additionalPolicies: [
-          new GuAllowPolicy(stack, "SomePolicy", {
+          new GuAllowPolicy(app, "SomePolicy", {
             actions: ["some:Action"],
             resources: ["some:Resource"],
           }),
@@ -237,10 +229,9 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("by default, the maximum capacity is double the minimum", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      app: "TestApp",
+    new GuAutoScalingGroup(app, "AutoscalingGroup", {
       userData: "SomeUserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
@@ -254,10 +245,9 @@ describe("The GuAutoScalingGroup", () => {
   });
 
   test("scaling capacities can be overridden", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuAutoScalingGroup(stack, "AutoscalingGroup", {
-      app: "TestApp",
+    new GuAutoScalingGroup(app, "AutoscalingGroup", {
       userData: "SomeUserData",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,

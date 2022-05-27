@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { simpleGuStackForTesting, simpleTestingResources } from "../../utils/test";
 import { GuVpc, SubnetType } from "./vpc";
 
 describe("The GuVpc class", () => {
@@ -19,9 +19,9 @@ describe("The GuVpc class", () => {
 
   describe("subnetsFromParameter method", () => {
     test("adds the parameter with default type as private", () => {
-      const stack = simpleGuStackForTesting();
+      const { stack, app } = simpleTestingResources();
 
-      GuVpc.subnetsFromParameter(stack);
+      GuVpc.subnetsFromParameter(app);
 
       Template.fromStack(stack).hasParameter("PrivateSubnets", {
         Default: "/account/vpc/primary/subnets/private",
@@ -30,9 +30,9 @@ describe("The GuVpc class", () => {
     });
 
     test("adds a public subnets parameter if the type is public", () => {
-      const stack = simpleGuStackForTesting();
+      const { stack, app } = simpleTestingResources();
 
-      GuVpc.subnetsFromParameter(stack, { type: SubnetType.PUBLIC });
+      GuVpc.subnetsFromParameter(app, SubnetType.PUBLIC);
 
       Template.fromStack(stack).hasParameter("PublicSubnets", {
         Default: "/account/vpc/primary/subnets/public",

@@ -1,7 +1,7 @@
 import { Subnet, Vpc } from "aws-cdk-lib/aws-ec2";
 import type { ISubnet, IVpc, VpcAttributes } from "aws-cdk-lib/aws-ec2";
 import { GuSubnetListParameter, GuVpcParameter } from "../core";
-import type { GuStack } from "../core";
+import type { GuApp, GuStack } from "../core";
 
 interface VpcFromIdProps extends Omit<VpcAttributes, "availabilityZones"> {
   availabilityZones?: string[];
@@ -14,18 +14,6 @@ export enum SubnetType {
   PUBLIC = "Public",
   PRIVATE = "Private",
 }
-
-// TODO: Migrate this to use `AppIdentity`
-export interface GuSubnetProps {
-  type?: SubnetType;
-  app?: string;
-}
-
-/*
- * Some stacks maybe have multiple patterns (such as `GuEc2App`), therefore creating multiple VPC and subnet resources.
- * This function ensures that, where desired, we can have unique IDs for each VPC and subnet declaration
- */
-export const maybeApp = (props?: { app?: string }): string => props?.app ?? "";
 
 export class GuVpc {
   static subnets(scope: GuStack, subnets: string[]): ISubnet[] {
@@ -46,10 +34,8 @@ export class GuVpc {
     );
   }
 
-  static subnetsFromParameter(scope: GuStack, props?: GuSubnetProps): ISubnet[] {
-    const type = props?.type ?? SubnetType.PRIVATE;
-
-    const subnets = new GuSubnetListParameter(scope, `${maybeApp(props)}${type}Subnets`, {
+  static subnetsFromParameter(scope: GuApp, type: SubnetType = SubnetType.PRIVATE): ISubnet[] {
+    const subnets = new GuSubnetListParameter(scope, `${scope.app}${type}Subnets`, {
       description: `A list of ${type.toLowerCase()} subnets`,
 
       // TODO use `SSM_PARAMETER_PATHS.PrimaryVpcPrivateSubnets` or `SSM_PARAMETER_PATHS.PrimaryVpcPublicSubnets`
@@ -57,7 +43,7 @@ export class GuVpc {
       fromSSM: true,
     });
 
-    return GuVpc.subnets(scope, subnets.valueAsList);
+    return GuVpc.subnets(scope.parent, subnets.valueAsList);
   }
 
   static fromId(scope: GuStack, id: string, props: VpcFromIdProps): IVpc {

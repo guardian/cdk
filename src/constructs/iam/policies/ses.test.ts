@@ -1,11 +1,11 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuSESSenderPolicy } from "./ses";
 
 describe("GuSESSenderPolicy", () => {
   it("should have a policy that reads from a parameter", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack));
+    const { stack, app } = simpleTestingResources();
+    attachPolicyToTestRole(stack, new GuSESSenderPolicy(app));
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
@@ -40,8 +40,8 @@ describe("GuSESSenderPolicy", () => {
   });
 
   it("should add a parameter to the stack for the sending email address", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack));
+    const { stack, app } = simpleTestingResources();
+    attachPolicyToTestRole(stack, new GuSESSenderPolicy(app));
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

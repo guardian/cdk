@@ -1,7 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
 import type { Resource } from "aws-cdk-lib/assertions/lib/private/template";
 import { TagKeys, TrackingTag } from "../../constants";
-import type { AppIdentity, GuStack } from "../../constructs/core";
+import type { GuApp, GuStack } from "../../constructs/core";
 
 interface Tag {
   Key: string;
@@ -10,7 +10,7 @@ interface Tag {
 }
 
 interface GuTagMatcherProps {
-  appIdentity?: AppIdentity;
+  app?: GuApp;
   additionalTags?: Tag[];
   propagateAtLaunch?: boolean;
 }
@@ -66,7 +66,7 @@ export class GuTemplate {
 
   hasGuTaggedResource(type: string, props?: GuTagMatcherProps) {
     const { stack, stage } = this.stack;
-    const { appIdentity, additionalTags, propagateAtLaunch } = props ?? {};
+    const { app, additionalTags, propagateAtLaunch } = props ?? {};
 
     const coreTags = [
       {
@@ -87,8 +87,8 @@ export class GuTemplate {
     const tagMap = new Map<string, Tag>();
     coreTags.forEach((tag) => tagMap.set(tag.Key, tag));
 
-    if (appIdentity) {
-      tagMap.set("App", { Key: "App", Value: appIdentity.app });
+    if (app) {
+      tagMap.set("App", { Key: "App", Value: app.app });
     }
 
     if (additionalTags) {

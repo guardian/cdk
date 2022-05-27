@@ -1,5 +1,5 @@
 import { App } from "aws-cdk-lib";
-import { GuStack } from "../../constructs/core";
+import { GuApp, GuStack } from "../../constructs/core";
 import type { GuStackProps } from "../../constructs/core";
 
 export function simpleGuStackForTesting(props?: Partial<GuStackProps>) {
@@ -8,4 +8,14 @@ export function simpleGuStackForTesting(props?: Partial<GuStackProps>) {
     stage: props?.stage ?? "TEST",
     ...props,
   });
+}
+
+interface SimpleTestingResourcesProps extends Partial<GuStackProps> {
+  appName?: string;
+}
+
+export function simpleTestingResources(props?: SimpleTestingResourcesProps) {
+  const stack = simpleGuStackForTesting(props);
+  const app = new GuApp(stack, props?.appName ?? "testing");
+  return { stack, app };
 }

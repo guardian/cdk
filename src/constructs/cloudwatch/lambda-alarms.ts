@@ -1,6 +1,6 @@
 import { Duration } from "aws-cdk-lib";
 import { ComparisonOperator, MathExpression, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
-import type { GuStack } from "../core";
+import type { GuApp } from "../core";
 import type { GuLambdaFunction } from "../lambda";
 import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
@@ -23,7 +23,7 @@ interface GuLambdaAlarmProps extends GuLambdaErrorPercentageMonitoringProps {
  * Creates an alarm which is triggered whenever the error percentage specified is exceeded.
  */
 export class GuLambdaErrorPercentageAlarm extends GuAlarm {
-  constructor(scope: GuStack, id: string, props: GuLambdaAlarmProps) {
+  constructor(scope: GuApp, id: string, props: GuLambdaAlarmProps) {
     const mathExpression = new MathExpression({
       expression: "100*m1/m2",
       usingMetrics: { m1: props.lambda.metricErrors(), m2: props.lambda.metricInvocations() },
@@ -34,7 +34,6 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
     const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
     const alarmProps: GuAlarmProps = {
       ...props,
-      app: props.lambda.app,
       metric: mathExpression,
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: props.toleratedErrorPercentage,
@@ -74,10 +73,9 @@ interface GuLambdaThrottlingAlarmProps extends GuLambdaThrottlingMonitoringProps
 }
 
 export class GuLambdaThrottlingAlarm extends GuAlarm {
-  constructor(scope: GuStack, id: string, props: GuLambdaThrottlingAlarmProps) {
+  constructor(scope: GuApp, id: string, props: GuLambdaThrottlingAlarmProps) {
     super(scope, id, {
       ...props,
-      app: props.lambda.app,
       alarmName:
         props.alarmName ?? `Lambda throttling alarm for ${props.lambda.functionName} lambda in ${scope.stage}.`,
       alarmDescription:

@@ -1,7 +1,6 @@
 import { Peer, Port, SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import type { IPeer, SecurityGroupProps } from "aws-cdk-lib/aws-ec2";
-import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuApp } from "../../core";
 
 /**
  * A way to describe an ingress or egress rule for a security group.
@@ -28,12 +27,10 @@ export interface SecurityGroupAccessRule {
   description: string;
 }
 
-export interface GuBaseSecurityGroupProps extends SecurityGroupProps {
+export interface GuSecurityGroupProps extends SecurityGroupProps {
   ingresses?: SecurityGroupAccessRule[];
   egresses?: SecurityGroupAccessRule[];
 }
-
-export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdentity {}
 
 /**
  * Defining an AWS Security Group with ingress and egress rules.
@@ -45,8 +42,8 @@ export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdent
  * - [[GuPublicInternetAccessSecurityGroup]]
  * - [[GuHttpsEgressSecurityGroup]]
  */
-export class GuBaseSecurityGroup extends SecurityGroup {
-  constructor(scope: GuStack, id: string, props: GuBaseSecurityGroupProps) {
+export class GuSecurityGroup extends SecurityGroup {
+  constructor(scope: GuApp, id: string, props: GuSecurityGroupProps) {
     super(scope, id, props);
 
     props.ingresses?.forEach(({ range, port, description }) => {
@@ -66,18 +63,12 @@ export class GuBaseSecurityGroup extends SecurityGroup {
   }
 }
 
-export class GuSecurityGroup extends GuAppAwareConstruct(GuBaseSecurityGroup) {
-  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
-    super(scope, id, props);
-  }
-}
-
 /**
  * Creates a security group which allows all outbound HTTPS traffic.
  */
 // TODO should this be a singleton?
 export class GuHttpsEgressSecurityGroup extends GuSecurityGroup {
-  constructor(scope: GuStack, id: string, props: GuSecurityGroupProps) {
+  constructor(scope: GuApp, id: string, props: GuSecurityGroupProps) {
     super(scope, id, {
       ...props,
       allowAllOutbound: false,
@@ -87,7 +78,7 @@ export class GuHttpsEgressSecurityGroup extends GuSecurityGroup {
     });
   }
 
-  public static forVpc(scope: GuStack, props: GuSecurityGroupProps): GuHttpsEgressSecurityGroup {
+  public static forVpc(scope: GuApp, props: GuSecurityGroupProps): GuHttpsEgressSecurityGroup {
     return new GuHttpsEgressSecurityGroup(scope, "GuHttpsEgressSecurityGroup", props);
   }
 }

@@ -6,11 +6,10 @@ import type {
   LoadBalancerListener,
   LoadBalancerProps,
 } from "aws-cdk-lib/aws-elasticloadbalancing";
-import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuArnParameter } from "../core";
-import type { AppIdentity, GuStack } from "../core";
+import type { GuApp } from "../core";
 
-interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck">, AppIdentity {
+interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthCheck"> {
   propertiesToOverride?: Record<string, unknown>;
   healthCheck?: Partial<HealthCheck>;
   /**
@@ -44,7 +43,7 @@ interface GuClassicLoadBalancerProps extends Omit<LoadBalancerProps, "healthChec
  * This resource is stateful.
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuClassicLoadBalancer extends GuAppAwareConstruct(LoadBalancer) {
+export class GuClassicLoadBalancer extends LoadBalancer {
   static DefaultHealthCheck = {
     port: 9000,
     path: "/healthcheck",
@@ -55,7 +54,7 @@ export class GuClassicLoadBalancer extends GuAppAwareConstruct(LoadBalancer) {
     timeout: Duration.seconds(10),
   };
 
-  constructor(scope: GuStack, id: string, props: GuClassicLoadBalancerProps) {
+  constructor(scope: GuApp, id: string, props: GuClassicLoadBalancerProps) {
     const mergedProps = {
       ...props,
       healthCheck: { ...GuClassicLoadBalancer.DefaultHealthCheck, ...props.healthCheck },
@@ -114,7 +113,7 @@ export class GuHttpsClassicLoadBalancer extends GuClassicLoadBalancer {
     externalProtocol: LoadBalancingProtocol.HTTPS,
   };
 
-  constructor(scope: GuStack, id: string, props: GuHttpsClassicLoadBalancerProps) {
+  constructor(scope: GuApp, id: string, props: GuHttpsClassicLoadBalancerProps) {
     const listenerProps: LoadBalancerListener = { ...GuHttpsClassicLoadBalancer.DefaultListener, ...props.listener };
 
     const mergedProps: GuClassicLoadBalancerProps = {

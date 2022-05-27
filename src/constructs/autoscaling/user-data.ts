@@ -5,9 +5,8 @@ import { GuDistributable } from "../../types";
 import type { GuDistributableForEc2 } from "../../types";
 import type { GuPrivateS3ConfigurationProps } from "../../utils/ec2";
 import { GuDistributionBucketParameter } from "../core";
-import type { AppIdentity, GuStack } from "../core";
+import type { GuApp } from "../core";
 
-export type GuUserDataPropsWithApp = GuUserDataProps & AppIdentity;
 export interface GuUserDataProps {
   distributable: GuDistributableForEc2;
   configuration?: GuPrivateS3ConfigurationProps;
@@ -27,22 +26,22 @@ export class GuUserData {
     return this._userData;
   }
 
-  private downloadDistributable(scope: GuStack, app: AppIdentity, props: GuDistributableForEc2) {
-    const bucketKey = GuDistributable.getObjectKey(scope, app, props);
+  private downloadDistributable(scope: GuApp, props: GuDistributableForEc2) {
+    const bucketKey = GuDistributable.getObjectKey(scope, props);
 
     const bucket = Bucket.fromBucketAttributes(scope, "DistributionBucket", {
-      bucketName: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+      bucketName: GuDistributionBucketParameter.getInstance(scope.parent).valueAsString,
     });
 
     this.addS3DownloadCommand({
       bucket,
       bucketKey,
-      localFile: `/${app.app}/${props.fileName}`,
+      localFile: `/${scope.app}/${props.fileName}`,
     });
   }
 
-  private downloadConfiguration(scope: GuStack, app: string, props: GuPrivateS3ConfigurationProps) {
-    const bucket = Bucket.fromBucketAttributes(scope, `${app}ConfigurationBucket`, {
+  private downloadConfiguration(scope: GuApp, props: GuPrivateS3ConfigurationProps) {
+    const bucket = Bucket.fromBucketAttributes(scope, `${scope.app}ConfigurationBucket`, {
       bucketName: props.bucket.valueAsString,
     });
 
@@ -52,19 +51,19 @@ export class GuUserData {
       this.addS3DownloadCommand({
         bucket,
         bucketKey,
-        localFile: `/etc/${app}/${fileName}`,
+        localFile: `/etc/${scope.app}/${fileName}`,
       });
     });
   }
 
-  constructor(scope: GuStack, props: GuUserDataPropsWithApp) {
+  constructor(scope: GuApp, props: GuUserDataProps) {
     this._userData = UserData.forLinux();
 
     if (props.configuration) {
-      this.downloadConfiguration(scope, props.app, props.configuration);
+      this.downloadConfiguration(scope, props.configuration);
     }
 
-    this.downloadDistributable(scope, props, props.distributable);
+    this.downloadDistributable(scope, props.distributable);
     this.addCommands(props.distributable.executionStatement);
   }
 

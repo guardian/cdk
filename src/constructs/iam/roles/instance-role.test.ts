@@ -1,12 +1,13 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { simpleGuStackForTesting, simpleTestingResources } from "../../../utils/test";
+import { GuApp } from "../../core";
 import { GuGetS3ObjectsPolicy } from "../policies";
 import { GuInstanceRole } from "./instance-role";
 
 describe("The GuInstanceRole construct", () => {
   it("should create the correct resources with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    new GuInstanceRole(stack, { withoutLogShipping: true, app: "testing" });
+    const { stack, app } = simpleTestingResources();
+    new GuInstanceRole(app, { withoutLogShipping: true });
 
     const template = Template.fromStack(stack);
 
@@ -16,8 +17,8 @@ describe("The GuInstanceRole construct", () => {
   });
 
   it("should create an additional logging policy if logging stream is specified", () => {
-    const stack = simpleGuStackForTesting();
-    new GuInstanceRole(stack, { app: "testing" });
+    const { stack, app } = simpleTestingResources();
+    new GuInstanceRole(app, {});
 
     const template = Template.fromStack(stack);
 
@@ -27,12 +28,11 @@ describe("The GuInstanceRole construct", () => {
   });
 
   it("should allow additional policies to be specified", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuInstanceRole(stack, {
-      app: "testing",
+    new GuInstanceRole(app, {
       withoutLogShipping: true,
-      additionalPolicies: [new GuGetS3ObjectsPolicy(stack, "GetConfigPolicy", { bucketName: "config" })],
+      additionalPolicies: [new GuGetS3ObjectsPolicy(app, "GetConfigPolicy", { bucketName: "config" })],
     });
 
     const template = Template.fromStack(stack);
@@ -45,13 +45,8 @@ describe("The GuInstanceRole construct", () => {
   it("should be possible to create multiple instance roles in a single stack", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuInstanceRole(stack, {
-      app: "my-first-app",
-    });
-
-    new GuInstanceRole(stack, {
-      app: "my-second-app",
-    });
+    new GuInstanceRole(new GuApp(stack, "my-first-app"), {});
+    new GuInstanceRole(new GuApp(stack, "my-second-app"), {});
 
     const template = Template.fromStack(stack);
 

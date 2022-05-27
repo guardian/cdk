@@ -1,4 +1,4 @@
-import type { GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import { GuAllowPolicy } from "./base-policy";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 
@@ -11,23 +11,25 @@ interface GuDynamoDBPolicyPropsWithActions extends GuNoStatementsPolicyProps, Gu
 }
 
 abstract class GuDynamoDBPolicy extends GuAllowPolicy {
-  protected constructor(scope: GuStack, id: string, props: GuDynamoDBPolicyPropsWithActions) {
+  protected constructor(scope: GuApp, id: string, props: GuDynamoDBPolicyPropsWithActions) {
+    const { account, region } = scope.parent;
+
     super(scope, id, {
       ...props,
       actions: props.actions.map((action) => `dynamodb:${action}`),
-      resources: [`arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}`],
+      resources: [`arn:aws:dynamodb:${region}:${account}:table/${props.tableName}`],
     });
   }
 }
 
 export class GuDynamoDBReadPolicy extends GuDynamoDBPolicy {
-  constructor(scope: GuStack, id: string, props: GuDynamoDBPolicyProps) {
+  constructor(scope: GuApp, id: string, props: GuDynamoDBPolicyProps) {
     super(scope, id, { ...props, actions: ["BatchGetItem", "GetItem", "Scan", "Query", "GetRecords"] });
   }
 }
 
 export class GuDynamoDBWritePolicy extends GuDynamoDBPolicy {
-  constructor(scope: GuStack, id: string, props: GuDynamoDBPolicyProps) {
+  constructor(scope: GuApp, id: string, props: GuDynamoDBPolicyProps) {
     super(scope, id, { ...props, actions: ["BatchWriteItem", "PutItem", "DeleteItem", "UpdateItem"] });
   }
 }

@@ -1,7 +1,7 @@
 import { Annotations, Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { simpleTestingResources } from "../../utils/test";
 import { GuLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {
@@ -12,26 +12,24 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should warn against using deprecated runtimes", () => {
-    const stack = simpleGuStackForTesting();
+    const { app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
-      app: "testing",
     });
 
     expect(error).toHaveBeenCalledWith("The runtime nodejs12.x is deprecated or not LTS. Consider updating.");
   });
 
   it("should not warn about runtimes when using the latest", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
       runtime: Runtime.NODEJS,
-      app: "testing",
     });
 
     expect(error).toHaveBeenCalledTimes(0);
@@ -41,13 +39,12 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should create the code object from the bucket and key passed in", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
@@ -61,22 +58,21 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should not have any schedule rules by default", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
-      app: "testing",
     });
 
     Template.fromStack(stack).resourceCountIs("AWS::Events::Rule", 0);
   });
 
   it("should add an alarm if errorPercentageMonitoring is passed in", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
@@ -84,20 +80,18 @@ describe("The GuLambdaFunction class", () => {
         toleratedErrorPercentage: 5,
         snsTopicName: "test-topic",
       },
-      app: "testing",
     });
 
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1); // The shape of this alarm is tested via lambda-alarms.test.ts
   });
 
   it("should give the function read permissions to the required bucket", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
       runtime: Runtime.NODEJS_12_X,
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
@@ -147,14 +141,13 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should use the memorySize provided via props when it is defined", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       memorySize: 2048,
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
@@ -163,13 +156,12 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should add a sensible default memorySize if none is provided", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
@@ -178,14 +170,13 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should use the timeout provided via props when it is defined", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
       timeout: Duration.seconds(60),
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
@@ -194,13 +185,12 @@ describe("The GuLambdaFunction class", () => {
   });
 
   it("should add a sensible default timeout if none is provided", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuLambdaFunction(stack, "lambda", {
+    new GuLambdaFunction(app, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
       runtime: Runtime.JAVA_8,
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {

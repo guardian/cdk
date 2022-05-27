@@ -1,12 +1,12 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuPutS3ObjectsPolicy } from "./s3-put-object";
 
 describe("The GuPutS3ObjectPolicy class", () => {
   it("sets default props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const s3Policy = new GuPutS3ObjectsPolicy(stack, "S3Policy", { bucketName: "test" });
+    const s3Policy = new GuPutS3ObjectsPolicy(app, "S3Policy", { bucketName: "test" });
 
     attachPolicyToTestRole(stack, s3Policy);
 
@@ -25,9 +25,9 @@ describe("The GuPutS3ObjectPolicy class", () => {
   });
 
   it("merges defaults and passed in props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const s3Policy = new GuPutS3ObjectsPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
+    const s3Policy = new GuPutS3ObjectsPolicy(app, "S3Policy", { bucketName: "test", policyName: "test" });
 
     attachPolicyToTestRole(stack, s3Policy);
 
@@ -47,9 +47,9 @@ describe("The GuPutS3ObjectPolicy class", () => {
   });
 
   it("handles multiple paths correctly", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const s3Policy = new GuPutS3ObjectsPolicy(stack, "S3Policy", {
+    const s3Policy = new GuPutS3ObjectsPolicy(app, "S3Policy", {
       bucketName: "test",
       paths: ["file1.txt", "file2.txt"],
     });

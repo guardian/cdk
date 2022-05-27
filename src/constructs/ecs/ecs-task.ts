@@ -17,8 +17,7 @@ import { IntegrationPattern, StateMachine } from "aws-cdk-lib/aws-stepfunctions"
 import type { TaskEnvironmentVariable } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { EcsFargateLaunchTarget, EcsRunTask } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import type { NoMonitoring } from "../cloudwatch";
-import type { GuStack } from "../core";
-import { AppIdentity } from "../core";
+import type { GuApp } from "../core";
 import { GuGetDistributablePolicyStatement } from "../iam";
 
 /**
@@ -99,7 +98,7 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
  * See https://docs.aws.amazon.com/step-functions/latest/dg/connect-ecs.html for further detail and  other override options - this construct currently
  * only supports environment variables.
  */
-export interface GuEcsTaskProps extends AppIdentity {
+export interface GuEcsTaskProps {
   vpc: IVpc;
   containerConfiguration: ContainerConfiguration;
   taskTimeoutInMinutes?: number;
@@ -138,10 +137,8 @@ const getContainer = (config: ContainerConfiguration) => {
 export class GuEcsTask {
   stateMachine: StateMachine;
 
-  constructor(scope: GuStack, id: string, props: GuEcsTaskProps) {
+  constructor(scope: GuApp, id: string, props: GuEcsTaskProps) {
     const {
-      app,
-
       // see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu for details
       cpu = 2048, // 2 cores and from 4-16GB memory
       memory = 4096, // 4GB
@@ -162,7 +159,7 @@ export class GuEcsTask {
       );
     }
 
-    const { stack, stage } = scope;
+    const { stack, stage, app } = scope;
 
     const cluster = new Cluster(scope, `${id}-Cluster`, {
       clusterName: `${app}-cluster-${stage}`,
@@ -190,7 +187,7 @@ export class GuEcsTask {
       }),
     });
 
-    const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });
+    const distPolicy = new GuGetDistributablePolicyStatement(scope);
 
     taskDefinition.addToTaskRolePolicy(distPolicy);
     (customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
@@ -219,11 +216,7 @@ export class GuEcsTask {
     });
 
     if (!monitoringConfiguration.noMonitoring) {
-      const alarmTopic = Topic.fromTopicArn(
-        scope,
-        AppIdentity.suffixText(props, "AlarmTopic"),
-        monitoringConfiguration.snsTopicArn
-      );
+      const alarmTopic = Topic.fromTopicArn(scope, "AlarmTopic", monitoringConfiguration.snsTopicArn);
       const alarms = [
         {
           name: `${app}-execution-failed`,
@@ -254,12 +247,8 @@ export class GuEcsTask {
           treatMissingData: TreatMissingData.NOT_BREACHING,
         });
         alarm.addAlarmAction(new SnsAction(alarmTopic));
-        AppIdentity.taggedConstruct({ app }, alarm);
       });
     }
-
-    // Tag all constructs with correct app tag
-    [cluster, task, taskDefinition, this.stateMachine].forEach((c) => AppIdentity.taggedConstruct({ app }, c));
 
     new CfnOutput(scope, `${id}-StateMachineArnOutput`, {
       value: this.stateMachine.stateMachineArn,

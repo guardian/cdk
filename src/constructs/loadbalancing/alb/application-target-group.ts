@@ -1,10 +1,7 @@
 import { Annotations, Duration } from "aws-cdk-lib";
 import { ApplicationProtocol, ApplicationTargetGroup, Protocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationTargetGroupProps, HealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuStack } from "../../core";
-
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity {}
+import type { GuApp } from "../../core";
 
 /**
  * Construct which creates a Target Group.
@@ -30,7 +27,7 @@ export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupPro
  * This resource is stateful.
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
-export class GuApplicationTargetGroup extends GuAppAwareConstruct(ApplicationTargetGroup) {
+export class GuApplicationTargetGroup extends ApplicationTargetGroup {
   private static defaultHealthcheckInterval = Duration.seconds(10);
   private static defaultHealthcheckTimeout = Duration.seconds(5);
 
@@ -43,7 +40,7 @@ export class GuApplicationTargetGroup extends GuAppAwareConstruct(ApplicationTar
     timeout: GuApplicationTargetGroup.defaultHealthcheckTimeout,
   };
 
-  constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
+  constructor(scope: GuApp, id: string, props: ApplicationTargetGroupProps) {
     const mergedProps: ApplicationTargetGroupProps = {
       protocol: ApplicationProtocol.HTTP, // We terminate HTTPS at the load balancer level, so load balancer to ASG/EC2 traffic can be over HTTP
       deregistrationDelay: Duration.seconds(30),

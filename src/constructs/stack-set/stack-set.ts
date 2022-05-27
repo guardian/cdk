@@ -1,5 +1,5 @@
 import { CfnStackSet } from "aws-cdk-lib";
-import type { GuStack, GuStackForStackSetInstance } from "../core";
+import type { GuApp, GuStackForStackSetInstance } from "../core";
 
 interface GuStackSetProps {
   /**
@@ -138,7 +138,7 @@ interface GuStackSetProps {
  * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html
  */
 export class GuStackSet extends CfnStackSet {
-  constructor(scope: GuStack, id: string, props: GuStackSetProps) {
+  constructor(scope: GuApp, id: string, props: GuStackSetProps) {
     const stackSetInstanceParameters = props.stackSetInstanceParameters ?? {};
 
     const params = Object.keys(stackSetInstanceParameters);
@@ -160,7 +160,7 @@ export class GuStackSet extends CfnStackSet {
       },
       stackInstancesGroup: [
         {
-          regions: props.regions ?? [scope.region],
+          regions: props.regions ?? [scope.parent.region],
           deploymentTargets: {
             organizationalUnitIds: props.organisationUnitTargets,
           },

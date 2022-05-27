@@ -2,8 +2,7 @@ import { Duration, Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
-import type { AppIdentity } from "../../core";
+import { GuTemplate, simpleTestingResources } from "../../../utils/test";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
@@ -12,14 +11,10 @@ const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   publicSubnetIds: [""],
 });
 
-const app: AppIdentity = {
-  app: "testing",
-};
-
 describe("The GuApplicationTargetGroup class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationTargetGroup(app, "ApplicationTargetGroup", { vpc });
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::TargetGroup",
@@ -28,18 +23,17 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   it("should apply the App tag", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationTargetGroup(app, "ApplicationTargetGroup", { vpc });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      appIdentity: app,
+      app,
     });
   });
 
   test("uses default health check properties", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
-      ...app,
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationTargetGroup(app, "ApplicationTargetGroup", {
       vpc,
     });
 
@@ -54,9 +48,8 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("merges any health check properties provided", () => {
-    const stack = simpleGuStackForTesting();
-    new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", {
-      ...app,
+    const { stack, app } = simpleTestingResources();
+    new GuApplicationTargetGroup(app, "ApplicationTargetGroup", {
       vpc,
       healthCheck: {
         path: "/test",
@@ -76,9 +69,9 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("uses HTTP protocol by default", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationTargetGroup(stack, "TargetGroup", { vpc, ...app });
+    new GuApplicationTargetGroup(app, "TargetGroup", { vpc });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
       Protocol: "HTTP",
@@ -86,11 +79,10 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("Can override default protocol with prop", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationTargetGroup(stack, "TargetGroup", {
+    new GuApplicationTargetGroup(app, "TargetGroup", {
       vpc,
-      ...app,
       protocol: ApplicationProtocol.HTTPS,
     });
 
@@ -100,11 +92,10 @@ describe("The GuApplicationTargetGroup class", () => {
   });
 
   test("An illegal healthcheck is flagged", () => {
-    const stack = simpleGuStackForTesting();
+    const { app } = simpleTestingResources();
 
     expect(() => {
-      new GuApplicationTargetGroup(stack, "TargetGroup", {
-        ...app,
+      new GuApplicationTargetGroup(app, "TargetGroup", {
         vpc,
         healthCheck: {
           interval: Duration.seconds(10),

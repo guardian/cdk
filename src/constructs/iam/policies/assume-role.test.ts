@@ -1,12 +1,12 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuAssumeRolePolicy } from "./assume-role";
 
 describe("The GuAssumeRolePolicy class", () => {
   it("sets default props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const policy = new GuAssumeRolePolicy(stack, "GuAssumeRolePolicy", { resources: ["test"] });
+    const policy = new GuAssumeRolePolicy(app, "GuAssumeRolePolicy", { resources: ["test"] });
 
     attachPolicyToTestRole(stack, policy);
 
@@ -25,9 +25,9 @@ describe("The GuAssumeRolePolicy class", () => {
   });
 
   it("merges defaults and passed in props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const policy = new GuAssumeRolePolicy(stack, "GuAssumeRolePolicy", {
+    const policy = new GuAssumeRolePolicy(app, "GuAssumeRolePolicy", {
       resources: ["test"],
       policyName: "test-policy",
     });

@@ -1,6 +1,5 @@
 import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import {
   GuDescribeEC2Policy,
   GuGetDistributablePolicy,
@@ -23,8 +22,6 @@ export interface GuInstanceRoleProps {
   additionalPolicies?: GuPolicy[];
 }
 
-export type GuInstanceRolePropsWithApp = GuInstanceRoleProps & AppIdentity;
-
 /**
  * Creates an IAM role with common policies that are needed by most Guardian applications.
  *
@@ -40,8 +37,8 @@ export type GuInstanceRolePropsWithApp = GuInstanceRoleProps & AppIdentity;
  *
  * If log shipping is not required, opt out by setting the `withoutLogShipping` prop to `true`.
  */
-export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
-  constructor(scope: GuStack, props: GuInstanceRolePropsWithApp) {
+export class GuInstanceRole extends GuRole {
+  constructor(scope: GuApp, props: GuInstanceRoleProps) {
     super(scope, "InstanceRole", {
       path: "/",
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -49,15 +46,15 @@ export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
     });
 
     const sharedPolicies = [
-      GuSSMRunCommandPolicy.getInstance(scope),
-      GuDescribeEC2Policy.getInstance(scope),
-      ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope)]),
+      GuSSMRunCommandPolicy.getInstance(scope.parent),
+      GuDescribeEC2Policy.getInstance(scope.parent),
+      ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope.parent)]),
     ];
 
     const policies = [
       ...sharedPolicies,
-      new GuGetDistributablePolicy(scope, props),
-      new GuParameterStoreReadPolicy(scope, props),
+      new GuGetDistributablePolicy(scope),
+      new GuParameterStoreReadPolicy(scope),
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 

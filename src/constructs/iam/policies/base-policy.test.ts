@@ -1,13 +1,13 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuAllowPolicy, GuDenyPolicy } from "./base-policy";
 
 describe("GuAllowPolicy", () => {
   test("if a single action is provided, the resulting resource's action will be a single item", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
     attachPolicyToTestRole(
       stack,
-      new GuAllowPolicy(stack, "AllowS3GetObject", {
+      new GuAllowPolicy(app, "AllowS3GetObject", {
         actions: ["s3:GetObject"],
         resources: ["*"],
       })
@@ -28,10 +28,10 @@ describe("GuAllowPolicy", () => {
   });
 
   test("if multiple actions are provided, the resulting resource's action will be an array", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
     attachPolicyToTestRole(
       stack,
-      new GuAllowPolicy(stack, "AllowS3GetObject", {
+      new GuAllowPolicy(app, "AllowS3GetObject", {
         actions: ["s3:GetObject", "s3:ListBucket"],
         resources: ["*"],
       })
@@ -54,10 +54,10 @@ describe("GuAllowPolicy", () => {
 
 describe("GuDenyPolicy", () => {
   test("if a single action is provided, the resulting resource's action will be a single item", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
     attachPolicyToTestRole(
       stack,
-      new GuDenyPolicy(stack, "DenyS3GetObject", {
+      new GuDenyPolicy(app, "DenyS3GetObject", {
         actions: ["s3:GetObject"],
         resources: ["*"],
       })
@@ -78,10 +78,10 @@ describe("GuDenyPolicy", () => {
   });
 
   test("if multiple actions are provided, the resulting resource's action will be an array", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
     attachPolicyToTestRole(
       stack,
-      new GuDenyPolicy(stack, "DenyS3GetObject", {
+      new GuDenyPolicy(app, "DenyS3GetObject", {
         actions: ["s3:GetObject", "s3:ListBucket"],
         resources: ["*"],
       })

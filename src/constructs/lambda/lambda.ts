@@ -6,8 +6,8 @@ import { Bucket } from "aws-cdk-lib/aws-s3";
 import { GuDistributable } from "../../types";
 import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
 import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitoringProps } from "../cloudwatch";
-import type { GuStack } from "../core";
-import { AppIdentity, GuDistributionBucketParameter } from "../core";
+import type { GuApp } from "../core";
+import { GuDistributionBucketParameter } from "../core";
 import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
 const DEPRECATED_RUNTIMES: Runtime[] = [
@@ -18,7 +18,7 @@ const DEPRECATED_RUNTIMES: Runtime[] = [
   Runtime.NODEJS_12_X,
 ];
 
-export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
+export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code"> {
   /**
    * Alarm if error percentage exceeds a threshold.
    */
@@ -69,23 +69,21 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  * consider using a pattern which instantiates a Lambda with an event source e.g. [[`GuScheduledLambda`]].
  */
 export class GuLambdaFunction extends Function {
-  public readonly app: string;
-
-  constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout } = props;
+  constructor(scope: GuApp, id: string, props: GuFunctionProps) {
+    const { fileName, runtime, memorySize, timeout } = props;
 
     const defaultEnvironmentVariables = {
       STACK: scope.stack,
       STAGE: scope.stage,
-      APP: app,
+      APP: scope.app,
     };
 
     const bucket = Bucket.fromBucketName(
       scope,
       `${id}-bucket`,
-      GuDistributionBucketParameter.getInstance(scope).valueAsString
+      GuDistributionBucketParameter.getInstance(scope.parent).valueAsString
     );
-    const objectKey = GuDistributable.getObjectKey(scope, { app }, { fileName });
+    const objectKey = GuDistributable.getObjectKey(scope, { fileName });
     const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
@@ -101,8 +99,6 @@ export class GuLambdaFunction extends Function {
     if (DEPRECATED_RUNTIMES.includes(runtime)) {
       Annotations.of(this).addError(`The runtime ${runtime.name} is deprecated or not LTS. Consider updating.`);
     }
-
-    this.app = app;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
@@ -120,13 +116,8 @@ export class GuLambdaFunction extends Function {
 
     bucket.grantRead(this);
 
-    const ssmParamReadPolicies: PolicyStatement[] = [
-      new ReadParametersByPath(scope, props),
-      new ReadParametersByName(scope, props),
-    ];
+    const ssmParamReadPolicies: PolicyStatement[] = [new ReadParametersByPath(scope), new ReadParametersByName(scope)];
 
     ssmParamReadPolicies.map((policy) => this.addToRolePolicy(policy));
-
-    AppIdentity.taggedConstruct(props, this);
   }
 }

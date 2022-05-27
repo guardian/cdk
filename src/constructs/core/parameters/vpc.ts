@@ -1,12 +1,13 @@
 import { CfnParameter } from "aws-cdk-lib";
 import { SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
+import type { GuApp } from "../app";
 import type { GuStack } from "../stack";
 import { GuParameter } from "./base";
 import type { GuNoTypeParameterProps } from "./base";
 
 export class GuSubnetListParameter extends GuParameter {
-  constructor(scope: GuStack, id: string, props: GuNoTypeParameterProps) {
+  constructor(scope: GuApp, id: string, props: GuNoTypeParameterProps) {
     super(scope, id, { ...props, type: "List<AWS::EC2::Subnet::Id>" });
   }
 }

@@ -2,7 +2,7 @@ import { Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { DatabaseInstanceEngine, ParameterGroup, PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
-import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleTestingResources } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
@@ -14,9 +14,9 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("removes the db prefix from the instanceType prop (before CDK adds it back again)", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
+    new GuDatabaseInstance(app, "DatabaseInstance", {
       vpc,
       // When you pass an instanceType to the DatabaseInstance class, the db. prefix is added automagically
       // regardless of whether it exists already. The GuDatabaseInstance class contains some functionality
@@ -25,7 +25,6 @@ describe("The GuDatabaseInstance class", () => {
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
@@ -34,23 +33,22 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("sets the parameter group if passed in", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    const parameterGroup = new ParameterGroup(stack, "MyParameterGroup", {
+    const parameterGroup = new ParameterGroup(app, "MyParameterGroup", {
       parameters: { max_connections: "100" },
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
     });
 
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
+    new GuDatabaseInstance(app, "DatabaseInstance", {
       vpc,
       instanceType: "t3.small",
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
       parameterGroup,
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
@@ -61,15 +59,14 @@ describe("The GuDatabaseInstance class", () => {
   });
 
   it("creates a new parameter group if parameters are passed in", () => {
-    const stack = simpleGuStackForTesting();
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
+    const { stack, app } = simpleTestingResources();
+    new GuDatabaseInstance(app, "DatabaseInstance", {
       vpc,
       instanceType: "t3.small",
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
       parameters: { max_connections: "100" },
-      app: "testing",
     });
 
     const template = Template.fromStack(stack);
@@ -89,19 +86,18 @@ describe("The GuDatabaseInstance class", () => {
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::RDS::DBParameterGroup", {
-      appIdentity: { app: "testing" },
+      app,
     });
   });
 
   test("sets the deletion protection value to true by default", () => {
-    const stack = simpleGuStackForTesting();
-    new GuDatabaseInstance(stack, "DatabaseInstance", {
+    const { stack, app } = simpleTestingResources();
+    new GuDatabaseInstance(app, "DatabaseInstance", {
       vpc,
       instanceType: "t3.small",
       engine: DatabaseInstanceEngine.postgres({
         version: PostgresEngineVersion.VER_11_8,
       }),
-      app: "testing",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {

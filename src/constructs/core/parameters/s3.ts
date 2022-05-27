@@ -1,6 +1,7 @@
 import { CfnParameter } from "aws-cdk-lib";
 import { SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
+import type { GuApp } from "../app";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
 
@@ -28,10 +29,11 @@ export class GuDistributionBucketParameter extends CfnParameter {
   }
 }
 
+// TODO should this be a singleton?
 export class GuPrivateConfigBucketParameter extends GuStringParameter {
   public static parameterName = "PrivateConfigBucketName";
 
-  constructor(scope: GuStack) {
+  constructor(scope: GuApp) {
     super(scope, GuPrivateConfigBucketParameter.parameterName, {
       description: SSM_PARAMETER_PATHS.ConfigurationBucket.description,
       default: SSM_PARAMETER_PATHS.ConfigurationBucket.path,

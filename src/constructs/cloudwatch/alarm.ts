@@ -3,9 +3,9 @@ import type { AlarmProps } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import type { ITopic } from "aws-cdk-lib/aws-sns";
-import type { AppIdentity, GuStack } from "../core";
+import type { GuApp } from "../core";
 
-export interface GuAlarmProps extends AlarmProps, AppIdentity {
+export interface GuAlarmProps extends AlarmProps {
   snsTopicName: string;
 }
 
@@ -35,8 +35,8 @@ export interface Http5xxAlarmProps
  * for example the [[`GuAlb5xxPercentageAlarm`]]. Prefer using these more specific implementations where possible.
  */
 export class GuAlarm extends Alarm {
-  constructor(scope: GuStack, id: string, props: GuAlarmProps) {
-    const { region, account } = scope;
+  constructor(scope: GuApp, id: string, props: GuAlarmProps) {
+    const { region, account } = scope.parent;
     const { snsTopicName, actionsEnabled = true } = props;
 
     super(scope, id, { ...props, actionsEnabled });

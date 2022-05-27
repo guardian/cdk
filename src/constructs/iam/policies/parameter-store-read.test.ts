@@ -1,12 +1,12 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
+import { attachPolicyToTestRole, simpleTestingResources } from "../../../utils/test";
 import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
 describe("ParameterStoreReadPolicy", () => {
   it("should constrain the policy to the patch of a stack's identity", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources({ appName: "MyApp" });
 
-    const policy = new GuParameterStoreReadPolicy(stack, { app: "MyApp" });
+    const policy = new GuParameterStoreReadPolicy(app);
 
     attachPolicyToTestRole(stack, policy);
 

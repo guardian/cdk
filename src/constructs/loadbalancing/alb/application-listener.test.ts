@@ -2,9 +2,9 @@ import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
+import { GuTemplate, simpleTestingResources } from "../../../utils/test";
 import { GuCertificate } from "../../acm";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuApp } from "../../core";
 import { GuApplicationListener, GuHttpsApplicationListener } from "./application-listener";
 import { GuApplicationLoadBalancer } from "./application-load-balancer";
 import { GuApplicationTargetGroup } from "./application-target-group";
@@ -15,22 +15,18 @@ const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   publicSubnetIds: [""],
 });
 
-const app: AppIdentity = { app: "testing" };
-
-const getLoadBalancer = (stack: GuStack): GuApplicationLoadBalancer => {
-  return new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc, ...app });
+const getLoadBalancer = (stack: GuApp): GuApplicationLoadBalancer => {
+  return new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { vpc });
 };
 
-const getCertificate = (stack: GuStack): GuCertificate => {
+const getCertificate = (stack: GuApp): GuCertificate => {
   return new GuCertificate(stack, {
-    ...app,
     domainName: "code-guardian.com",
   });
 };
 
-const getAppTargetGroup = (stack: GuStack): GuApplicationTargetGroup => {
+const getAppTargetGroup = (stack: GuApp): GuApplicationTargetGroup => {
   return new GuApplicationTargetGroup(stack, "TargetGroup", {
-    ...app,
     vpc,
     protocol: ApplicationProtocol.HTTP,
   });
@@ -38,12 +34,11 @@ const getAppTargetGroup = (stack: GuStack): GuApplicationTargetGroup => {
 
 describe("The GuApplicationListener class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationListener(stack, "ApplicationListener", {
-      ...app,
-      loadBalancer: getLoadBalancer(stack),
-      defaultAction: ListenerAction.forward([getAppTargetGroup(stack)]),
+    new GuApplicationListener(app, "ApplicationListener", {
+      loadBalancer: getLoadBalancer(app),
+      defaultAction: ListenerAction.forward([getAppTargetGroup(app)]),
       certificates: [{ certificateArn: "" }],
     });
 
@@ -54,12 +49,11 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("sets default props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationListener(stack, "ApplicationListener", {
-      ...app,
-      loadBalancer: getLoadBalancer(stack),
-      defaultAction: ListenerAction.forward([getAppTargetGroup(stack)]),
+    new GuApplicationListener(app, "ApplicationListener", {
+      loadBalancer: getLoadBalancer(app),
+      defaultAction: ListenerAction.forward([getAppTargetGroup(app)]),
       certificates: [{ certificateArn: "" }],
     });
 
@@ -70,12 +64,11 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("merges default and passed in props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationListener(stack, "ApplicationListener", {
-      ...app,
-      loadBalancer: getLoadBalancer(stack),
-      defaultAction: ListenerAction.forward([getAppTargetGroup(stack)]),
+    new GuApplicationListener(app, "ApplicationListener", {
+      loadBalancer: getLoadBalancer(app),
+      defaultAction: ListenerAction.forward([getAppTargetGroup(app)]),
       certificates: [{ certificateArn: "" }],
       port: 80,
     });
@@ -87,12 +80,12 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("Can override default protocol with prop", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuApplicationListener(stack, "Listener", {
-      loadBalancer: getLoadBalancer(stack),
-      defaultTargetGroups: [getAppTargetGroup(stack)],
-      ...app,
+    new GuApplicationListener(app, "Listener", {
+      loadBalancer: getLoadBalancer(app),
+      defaultTargetGroups: [getAppTargetGroup(app)],
+
       protocol: ApplicationProtocol.HTTP,
     });
 
@@ -104,13 +97,12 @@ describe("The GuApplicationListener class", () => {
 
 describe("The GuHttpsApplicationListener class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuHttpsApplicationListener(stack, "HttpsApplicationListener", {
-      ...app,
-      certificate: getCertificate(stack),
-      loadBalancer: getLoadBalancer(stack),
-      targetGroup: getAppTargetGroup(stack),
+    new GuHttpsApplicationListener(app, "HttpsApplicationListener", {
+      certificate: getCertificate(app),
+      loadBalancer: getLoadBalancer(app),
+      targetGroup: getAppTargetGroup(app),
     });
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
@@ -120,13 +112,12 @@ describe("The GuHttpsApplicationListener class", () => {
   });
 
   test("sets default props", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      certificate: getCertificate(stack),
-      loadBalancer: getLoadBalancer(stack),
-      targetGroup: getAppTargetGroup(stack),
-      ...app,
+    new GuHttpsApplicationListener(app, "ApplicationListener", {
+      certificate: getCertificate(app),
+      loadBalancer: getLoadBalancer(app),
+      targetGroup: getAppTargetGroup(app),
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
@@ -144,13 +135,12 @@ describe("The GuHttpsApplicationListener class", () => {
   });
 
   test("wires up the certificate which is passed in correctly", () => {
-    const stack = simpleGuStackForTesting();
+    const { stack, app } = simpleTestingResources();
 
-    new GuHttpsApplicationListener(stack, "ApplicationListener", {
-      certificate: getCertificate(stack),
-      loadBalancer: getLoadBalancer(stack),
-      targetGroup: getAppTargetGroup(stack),
-      ...app,
+    new GuHttpsApplicationListener(app, "ApplicationListener", {
+      certificate: getCertificate(app),
+      loadBalancer: getLoadBalancer(app),
+      targetGroup: getAppTargetGroup(app),
     });
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       Certificates: [
