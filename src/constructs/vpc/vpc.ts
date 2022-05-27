@@ -61,6 +61,7 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps {}
  * https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html.
  */
 export class GuVpc extends Vpc {
+  // eslint-disable-next-line custom-rules/valid-constructors -- VPCs are account wide
   constructor(scope: GuStack, id: string, props?: GuVpcProps) {
     const defaultVpcProps: VpcProps = {
       gatewayEndpoints: {
