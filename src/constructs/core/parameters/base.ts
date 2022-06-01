@@ -22,7 +22,6 @@ export class GuParameter extends CfnParameter {
     });
 
     this.id = id;
-    scope.setParam(this);
   }
 }
 

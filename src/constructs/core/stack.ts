@@ -1,4 +1,4 @@
-import { Annotations, App, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import { Annotations, App, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
@@ -8,7 +8,6 @@ import { ContextKeys, LibraryInfo, TagKeys, TrackingTag } from "../../constants"
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
-import type { GuParameter } from "./parameters";
 
 export interface GuStackProps extends Omit<StackProps, "stackName"> {
   /**
@@ -62,8 +61,6 @@ export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
 
-  private params: Map<string, GuParameter>;
-
   get stage(): string {
     return this._stage;
   }
@@ -88,20 +85,16 @@ export class GuStack extends Stack implements StackStageIdentity {
     Tags.of(this).add(key, value, { applyToLaunchedInstances });
   }
 
-  setParam(value: GuParameter): void {
-    this.params.set(value.id, value);
-  }
-
-  getParam<T extends GuParameter>(key: string): T {
-    if (!this.params.has(key)) {
-      throw new Error(`Attempting to read parameter ${key} which does not exist`);
-    }
-
-    return this.params.get(key) as T;
-  }
-
-  get parameterKeys(): string[] {
-    return Array.from(this.params.keys());
+  /**
+   * Returns all the parameters on this stack.
+   *
+   * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html
+   */
+  get parameters(): Record<string, CfnParameter> {
+    return this.node
+      .findAll()
+      .filter((construct) => construct instanceof CfnParameter)
+      .reduce((acc, param) => ({ ...acc, [param.node.id]: param as CfnParameter }), {});
   }
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
@@ -116,8 +109,6 @@ export class GuStack extends Stack implements StackStageIdentity {
       //  see https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html#bootstrapping-custom-synth
       synthesizer: new LegacyStackSynthesizer(),
     });
-
-    this.params = new Map<string, GuParameter>();
 
     this._stack = stack;
     this._stage = stage.toUpperCase();

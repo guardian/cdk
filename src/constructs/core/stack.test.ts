@@ -6,7 +6,6 @@ import { Queue } from "aws-cdk-lib/aws-sqs";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import { ContextKeys, LibraryInfo, TagKeys } from "../../constants";
 import { GuTemplate } from "../../utils/test";
-import { GuParameter } from "./parameters";
 import type { GuStackProps } from "./stack";
 import { GuStack } from "./stack";
 
@@ -51,23 +50,6 @@ describe("The GuStack construct", () => {
         },
       ],
     });
-  });
-
-  it("should return a parameter that exists", () => {
-    const stack = new GuStack(new App(), "Test", { stack: "test", stage: "TEST" });
-    const testParam = new GuParameter(stack, "MyTestParam", {});
-    stack.setParam(testParam);
-
-    const actual = stack.getParam<GuParameter>("MyTestParam");
-    expect(actual).toBe(testParam);
-  });
-
-  it("should throw on attempt to get a parameter that doesn't exist", () => {
-    const stack = new GuStack(new App(), "Test", { stack: "test", stage: "TEST" });
-
-    expect(() => stack.getParam<GuParameter>("i-do-not-exist")).toThrowError(
-      "Attempting to read parameter i-do-not-exist which does not exist"
-    );
   });
 
   it("can persist the logicalId for any resource (consumer's POV)", () => {
