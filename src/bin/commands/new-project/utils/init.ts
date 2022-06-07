@@ -124,6 +124,14 @@ function createPackageJson(outputDirectory: string): void {
 
     prettier: "@guardian/prettier",
 
+    jest: {
+      testMatch: ["<rootDir>/lib/**/*.test.ts"],
+      transform: {
+        "^.+\\.tsx?$": "ts-jest",
+      },
+      setupFilesAfterEnv: ["./jest.setup.js"],
+    },
+
     eslintConfig: {
       root: true,
       env: {
