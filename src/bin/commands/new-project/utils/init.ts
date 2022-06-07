@@ -97,7 +97,12 @@ function createPackageJson(outputDirectory: string): void {
     constructs: LibraryInfo.CONSTRUCTS_VERSION,
   };
 
-  const allDeps: Record<string, string> = { ...coreDeps, ...cdkDeps, "source-map-support": "^0.5.20" };
+  const customDeps = {
+    "source-map-support": "^0.5.20",
+    "@guardian/prettier": "1.0.0",
+  };
+
+  const allDeps: Record<string, string> = { ...coreDeps, ...cdkDeps, ...customDeps };
 
   const devDependencies: Record<string, string> = Object.keys(allDeps)
     .sort()
@@ -116,6 +121,8 @@ function createPackageJson(outputDirectory: string): void {
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
     devDependencies,
+
+    prettier: "@guardian/prettier",
 
     eslintConfig: {
       root: true,
