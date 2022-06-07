@@ -31,7 +31,6 @@
   "exclude": [
     "node_modules",
     "cdk.out",
-    "lib/**/*.test.ts",
     "lib/**/__snapshots__/**"
   ]
 }

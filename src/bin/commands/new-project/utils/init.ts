@@ -116,6 +116,25 @@ function createPackageJson(outputDirectory: string): void {
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
     devDependencies,
+
+    eslintConfig: {
+      root: true,
+      env: {
+        node: true,
+        jest: true,
+      },
+      extends: ["@guardian/eslint-config-typescript"],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      plugins: ["@typescript-eslint"],
+      rules: {
+        "@typescript-eslint/no-inferrable-types": 0,
+        "import/no-namespace": 2,
+      },
+      ignorePatterns: ["**/*.js", "node_modules", "cdk.out", ".eslintrc.js", "jest.config.js"],
+    },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
 }
