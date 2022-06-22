@@ -78,7 +78,7 @@ export class GuSnsLambda extends GuLambdaFunction {
     this.snsTopic = existingSnsTopic
       ? Topic.fromTopicArn(
           scope,
-          existingSnsTopic.externalTopicName,
+          "SnsExistingIncomingEventsTopic",
           `arn:aws:sns:${region}:${account}:${existingSnsTopic.externalTopicName}`
         )
       : AppIdentity.taggedConstruct(props, new GuSnsTopic(scope, "SnsIncomingEventsTopic"));
