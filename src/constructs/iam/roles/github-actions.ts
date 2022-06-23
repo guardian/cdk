@@ -63,7 +63,7 @@ class GitHubOidcProvider extends CfnResource {
       type: "AWS::IAM::OIDCProvider",
       properties: {
         Url: `https://${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}`,
-        ClientIdList: ["sigstore"],
+        ClientIdList: ["sts.amazonaws.com"],
         ThumbprintList: [GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINT],
       },
     });
