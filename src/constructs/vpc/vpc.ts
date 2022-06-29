@@ -34,7 +34,15 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps {}
  * [environment](https://docs.aws.amazon.com/cdk/latest/guide/environments.html)
  * to be set to function correctly. Without this, an environment-agnostic
  * template will be produced, which will only use two AZs even if the region
- * contains more than that.
+ * contains more than that. To set this, set the `env` prop when instantiating
+ * your stack, synthesise locally, and then commit the resulting
+ * `cdk.context.json` file, which will contain AZ context for your region. You
+ * can see an example of setting env
+ * [here](https://github.com/guardian/security-platform/commit/f534c915f1b0b21335c1123142768486a3a803e9#diff-670bd823c8f00bb3feb2eaf95e1ed4606f7c6b0a23776f744aedad04a89b4032R13).
+ * And the resulting context to commit
+ * [here](https://github.com/guardian/security-platform/commit/f534c915f1b0b21335c1123142768486a3a803e9#diff-5622c70a58b7fe378a6fcda75140ab471187b621674d563be7eefcff05c2660a).
+ * Be aware that account IDs are considered sensitive information and should NOT
+ * be committed to public repos.
  *
  * The VPC is provisioned with a public and private subnet for each availability
  * zone, with IPs spread evenly across these. Instances in private subnets
