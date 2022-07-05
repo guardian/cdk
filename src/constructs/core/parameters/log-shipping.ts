@@ -1,4 +1,4 @@
-import { SSM_PARAMETER_PATHS } from "../../../constants";
+import { NAMED_SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
@@ -8,8 +8,8 @@ export class GuLoggingStreamNameParameter extends GuStringParameter {
 
   private constructor(scope: GuStack) {
     super(scope, "LoggingStreamName", {
-      description: SSM_PARAMETER_PATHS.LoggingStreamName.description,
-      default: SSM_PARAMETER_PATHS.LoggingStreamName.path,
+      description: NAMED_SSM_PARAMETER_PATHS.LoggingStreamName.description,
+      default: NAMED_SSM_PARAMETER_PATHS.LoggingStreamName.path,
       fromSSM: true,
     });
   }

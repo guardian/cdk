@@ -1,11 +1,10 @@
 import chalk from "chalk";
-import { SSM_PARAMETER_PATHS } from "../../../constants";
+import { ALL_SSM_PARAMETER_PATHS } from "../../../constants";
 import type { AwsBootstrap, CliCommandResponse } from "../../../types/cli";
 import { accountBootstrapCfn, createBootstrapStack } from "./bootstrap-stack";
 
 export const bootstrapCommand = async (props: AwsBootstrap): CliCommandResponse => {
-  const params = Object.values(SSM_PARAMETER_PATHS);
-  const tpl = await accountBootstrapCfn(params);
+  const tpl = await accountBootstrapCfn(ALL_SSM_PARAMETER_PATHS);
 
   if (props.dryRun) {
     console.log(tpl);
