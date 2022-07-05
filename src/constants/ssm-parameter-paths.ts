@@ -10,7 +10,7 @@ export interface SsmParameterPath {
 
 export const VPC_SSM_PARAMETER_PREFIX = "/account/vpc";
 
-export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
+export const SSM_PARAMETER_PATHS = {
   Anghammarad: {
     path: "/account/services/anghammarad.topic.arn",
     description: "SSM parameter containing the ARN of the Anghammarad SNS topic",

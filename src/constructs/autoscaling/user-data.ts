@@ -49,6 +49,11 @@ export class GuUserData {
     props.files.forEach((bucketKey) => {
       const fileName = bucketKey.split("/").slice(-1)[0];
 
+      // `fileName` is typed as `string | undefined`. Throw if `fileName` is falsy.
+      if (!fileName) {
+        throw new Error("Failed to create configuration section in UserData");
+      }
+
       this.addS3DownloadCommand({
         bucket,
         bucketKey,
