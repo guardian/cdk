@@ -10,11 +10,11 @@ interface Import {
 export class Imports {
   imports: Record<string, Import>;
 
-  constructor(imports?: Record<string, Import>) {
-    this.imports = imports ?? {};
+  private constructor(imports: Record<string, Import>) {
+    this.imports = imports;
   }
 
-  addImport(lib: string, components: string[], type = false): void {
+  private addImport(lib: string, components: string[], type = false): void {
     if (!Object.keys(this.imports).includes(lib)) {
       const imports = type ? { types: components, components: [] } : { types: [], components };
 
@@ -35,6 +35,62 @@ export class Imports {
     }
 
     this.imports[lib] = imports;
+  }
+
+  public static newStackImports(): Imports {
+    return new Imports({
+      path: {
+        types: [],
+        components: ["join"],
+      },
+      "aws-cdk-lib/cloudformation-include": {
+        types: [],
+        components: ["CfnInclude"],
+      },
+      "aws-cdk-lib": {
+        types: ["App"],
+        components: [],
+      },
+      "@guardian/cdk/lib/constructs/core": {
+        types: ["GuStackProps"],
+        components: ["GuStack"],
+      },
+    });
+  }
+
+  public static newAppImports({ kebab, pascal }: Name): Imports {
+    const imports = new Imports({
+      "aws-cdk-lib": {
+        types: [],
+        components: ["App"],
+      },
+      "source-map-support/register": {
+        basic: true,
+        types: [],
+        components: [],
+      },
+    });
+
+    imports.addImport(`../lib/${kebab}`, [pascal]);
+
+    return imports;
+  }
+
+  public static newTestImports({ kebab, pascal }: Name): Imports {
+    const imports = new Imports({
+      "aws-cdk-lib": {
+        types: [],
+        components: ["App"],
+      },
+      "aws-cdk-lib/assertions": {
+        types: [],
+        components: ["Template"],
+      },
+    });
+
+    imports.addImport(`./${kebab}`, [pascal]);
+
+    return imports;
   }
 
   render(code: CodeMaker): void {
@@ -64,59 +120,3 @@ export class Imports {
     code.line();
   }
 }
-
-export const newStackImports = (): Imports => {
-  return new Imports({
-    path: {
-      types: [],
-      components: ["join"],
-    },
-    "aws-cdk-lib/cloudformation-include": {
-      types: [],
-      components: ["CfnInclude"],
-    },
-    "aws-cdk-lib": {
-      types: ["App"],
-      components: [],
-    },
-    "@guardian/cdk/lib/constructs/core": {
-      types: ["GuStackProps"],
-      components: ["GuStack"],
-    },
-  });
-};
-
-export const newAppImports = (app: Name): Imports => {
-  const imports = new Imports({
-    "aws-cdk-lib": {
-      types: [],
-      components: ["App"],
-    },
-    "source-map-support/register": {
-      basic: true,
-      types: [],
-      components: [],
-    },
-  });
-
-  imports.addImport(`../lib/${app.kebab}`, [app.pascal]);
-
-  return imports;
-};
-
-export const newTestImports = (appName: Name): Imports => {
-  const imports = new Imports({
-    "aws-cdk-lib": {
-      types: [],
-      components: ["App"],
-    },
-    "aws-cdk-lib/assertions": {
-      types: [],
-      components: ["Template"],
-    },
-  });
-
-  imports.addImport(`./${appName.kebab}`, [appName.pascal]);
-
-  return imports;
-};
