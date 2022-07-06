@@ -29,4 +29,31 @@ describe("The RiffRaffYamlFile class", () => {
       new RiffRaffYamlFile(app);
     }).toThrowError("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
   });
+
+  it("Should add a cloud-formation deployment", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+    class MyApplicationStack extends GuStack {}
+    new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFile(app).toYAML();
+
+    // Not sure why we have the extra `"` characters...they don't appear in the resulting file on disk...
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - PROD
+      deployments:
+        my-application-stack-cfn-deploy:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              PROD: App-PROD-deploy.template.json
+      "
+      `);
+  });
 });
