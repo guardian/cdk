@@ -79,28 +79,22 @@ export class RiffRaffYamlFile {
 
   private groupByClassNameStackRegionStage(cdkStacks: GuStack[]): GroupedCdkStacks {
     return Object.entries(this.groupByClassName(cdkStacks)).reduce(
-      (accClassName, [className, stacksGroupedByClassName]) => {
-        return {
-          ...accClassName,
-          [className]: Object.entries(this.groupByStackTag(stacksGroupedByClassName)).reduce(
-            (accStackTag, [stackTag, stacksGroupedByStackTag]) => {
-              return {
-                ...accStackTag,
-                [stackTag]: Object.entries(this.groupByRegion(stacksGroupedByStackTag)).reduce(
-                  (accRegion, [region, stacksGroupedByRegion]) => {
-                    return {
-                      ...accRegion,
-                      [region]: this.groupByStageTag(stacksGroupedByRegion),
-                    };
-                  },
-                  {}
-                ),
-              };
-            },
-            {}
-          ),
-        };
-      },
+      (accClassName, [className, stacksGroupedByClassName]) => ({
+        ...accClassName,
+        [className]: Object.entries(this.groupByStackTag(stacksGroupedByClassName)).reduce(
+          (accStackTag, [stackTag, stacksGroupedByStackTag]) => ({
+            ...accStackTag,
+            [stackTag]: Object.entries(this.groupByRegion(stacksGroupedByStackTag)).reduce(
+              (accRegion, [region, stacksGroupedByRegion]) => ({
+                ...accRegion,
+                [region]: this.groupByStageTag(stacksGroupedByRegion),
+              }),
+              {}
+            ),
+          }),
+          {}
+        ),
+      }),
       {}
     );
   }
@@ -144,32 +138,35 @@ export class RiffRaffYamlFile {
     const checks: AppValidation = allCdkStacks.reduce((accClassName, { constructor: { name } }) => {
       return {
         ...accClassName,
-        [name]: allStackTags.reduce((accStackTag, stackTag) => {
-          return {
+        [name]: allStackTags.reduce(
+          (accStackTag, stackTag) => ({
             ...accStackTag,
-            [stackTag]: allRegions.reduce((accRegion, region) => {
-              return {
+            [stackTag]: allRegions.reduce(
+              (accRegion, region) => ({
                 ...accRegion,
-                [region]: allStageTags.reduce((accStageTag, stageTag) => {
-                  return {
+                [region]: allStageTags.reduce(
+                  (accStageTag, stageTag) => ({
                     ...accStageTag,
                     [stageTag]: this.isCdkStackPresent(name, stackTag, region, stageTag) ? "✅" : "❌",
-                  };
-                }, {}),
-              };
-            }, {}),
-          };
-        }, {}),
+                  }),
+                  {}
+                ),
+              }),
+              {}
+            ),
+          }),
+          {}
+        ),
       };
     }, {});
 
-    const missingDefinitions = Object.values(checks).flatMap((groupedByStackTag) => {
-      return Object.values(groupedByStackTag).flatMap((groupedByRegion) => {
-        return Object.values(groupedByRegion).flatMap((groupedByStage) => {
-          return Object.values(groupedByStage).filter((_) => _ === "❌");
-        });
-      });
-    });
+    const missingDefinitions = Object.values(checks).flatMap((groupedByStackTag) =>
+      Object.values(groupedByStackTag).flatMap((groupedByRegion) =>
+        Object.values(groupedByRegion).flatMap((groupedByStage) =>
+          Object.values(groupedByStage).filter((_) => _ === "❌")
+        )
+      )
+    );
 
     if (missingDefinitions.length > 0) {
       const message = `Unable to produce a working riff-raff.yaml file; missing ${missingDefinitions.length} definitions`;
