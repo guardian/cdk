@@ -51,6 +51,45 @@ type GroupedCdkStacks = Record<
   Record<StackTag, Record<Region, Record<StageTag, CdkStacksDifferingOnlyByStage>>>
 >;
 
+/**
+ * A class creates a `riff-raff.yaml` file.
+ *
+ * Supports:
+ *   - Multiple CloudFormation stacks
+ *   - Multiple regions
+ *   - Lambda applications
+ *   - EC2 (autoscaling) applications
+ *
+ * For lambda applications, 3 deployments will be defined:
+ *   1. Lambda upload (`aws-lambda`, `action: [uploadLambda]`)
+ *   2. CloudFormation deploy (`cloud-formation`)
+ *   3. Lambda update (`aws-lambda`, `action: [updateLambda]`)
+ *
+ * For EC2 applications, 3 deployments will be defined:
+ *   1. CloudFormation deploy (`cloud-formation`)
+ *   2. AMI parameter update (`ami-cloudformation-parameter`)
+ *   3. Autoscaling deploy (`autoscaling`)
+ *
+ * It assumes a Riff-Raff bundle structure as follows:
+ *
+ * ```
+ * .
+ * ├── cdk.out
+ * │   └── MyApplication.template.json
+ * ├── my-application
+ * │   └── my-application.deb
+ * └── my-lambda
+ *     └── my-lambda.zip
+ * ```
+ *
+ * That is, all CloudFormation templates sit in `cdk.out`,
+ * and application artifacts sit in `<app>/<app>.deb`.
+ *
+ * NOTE: Resources will be looked up by tags (Stack, Stage, App). Ensure your CFN stack is tagged appropriately!
+ *
+ * @see https://riffraff.gutools.co.uk/docs/reference/riff-raff.yaml.md
+ * @see https://riffraff.gutools.co.uk/docs/magenta-lib/types
+ */
 export class RiffRaffYamlFile {
   private readonly allCdkStacks: GuStack[];
   private readonly allStackTags: StackTag[];
