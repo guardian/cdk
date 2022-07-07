@@ -95,4 +95,64 @@ describe("The RiffRaffYamlFile class", () => {
       "
       `);
   });
+
+  it("Should add a cloud-formation deployment with multiple stages and regions", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+    class MyApplicationStack extends GuStack {}
+    new MyApplicationStack(app, "App-PROD-deploy-eu-west-1", {
+      stack: "deploy",
+      stage: "PROD",
+      env: { region: "eu-west-1" },
+    });
+    new MyApplicationStack(app, "App-CODE-deploy-eu-west-1", {
+      stack: "deploy",
+      stage: "CODE",
+      env: { region: "eu-west-1" },
+    });
+
+    new MyApplicationStack(app, "App-PROD-deploy-us-east-1", {
+      stack: "deploy",
+      stage: "PROD",
+      env: { region: "us-east-1" },
+    });
+    new MyApplicationStack(app, "App-CODE-deploy-us-east-1", {
+      stack: "deploy",
+      stage: "CODE",
+      env: { region: "us-east-1" },
+    });
+
+    const actual = new RiffRaffYamlFile(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - PROD
+        - CODE
+      deployments:
+        my-application-stack-cfn-deploy-eu-west-1:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              PROD: App-PROD-deploy-eu-west-1.template.json
+              CODE: App-CODE-deploy-eu-west-1.template.json
+        my-application-stack-cfn-deploy-us-east-1:
+          type: cloud-formation
+          regions:
+            - us-east-1
+          stacks:
+            - deploy
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              PROD: App-PROD-deploy-us-east-1.template.json
+              CODE: App-CODE-deploy-us-east-1.template.json
+      "
+    `);
+  });
 });
