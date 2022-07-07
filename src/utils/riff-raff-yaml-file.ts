@@ -6,6 +6,7 @@ import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
 import { GuStack } from "../constructs/core/stack";
+import { GuLambdaFunction } from "../constructs/lambda";
 import { groupBy } from "./array";
 
 // type aliases to, hopefully, improve readability
@@ -191,7 +192,10 @@ export class RiffRaffYamlFile {
     );
   }
 
-  private getCloudFormationDeployment(cdkStacks: CdkStacksDifferingOnlyByStage): RiffRaffDeployment {
+  private getCloudFormationDeployment(
+    cdkStacks: CdkStacksDifferingOnlyByStage,
+    dependencies: RiffRaffDeployment[]
+  ): RiffRaffDeployment {
     const classNames = new Set(cdkStacks.map(({ constructor: { name } }) => name));
     assert(
       classNames.size === 1,
@@ -228,6 +232,62 @@ export class RiffRaffYamlFile {
             return { ...acc, [stage]: templateFile };
           }, {}),
         },
+        // only add the `dependencies` property if there are some
+        ...(dependencies.length > 0 && { dependencies: dependencies.map(({ name }) => name) }),
+      },
+    };
+  }
+
+  private getLambdas(cdkStack: GuStack): GuLambdaFunction[] {
+    return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction) as GuLambdaFunction[];
+  }
+
+  private getUploadLambdaDeployment(lambda: GuLambdaFunction): RiffRaffDeployment {
+    const { app, fileName } = lambda;
+
+    const { stack, region } = lambda.stack as GuStack;
+
+    return {
+      name: [app, "upload", stack, region].join("-"),
+      props: {
+        type: "aws-lambda",
+        stacks: new Set([stack]),
+        regions: new Set([region]),
+        app,
+        contentDirectory: path.parse(fileName).name,
+        parameters: {
+          bucketSsmLookup: true,
+          lookupByTags: true,
+          fileName,
+        },
+        actions: ["uploadLambda"],
+      },
+    };
+  }
+
+  private getUpdateLambdaDeployment(
+    lambda: GuLambdaFunction,
+    { name: cfnDeployName }: RiffRaffDeployment
+  ): RiffRaffDeployment {
+    const { app, fileName } = lambda;
+
+    const { stack, region } = lambda.stack as GuStack;
+
+    return {
+      name: [app, "update", stack, region].join("-"),
+      props: {
+        type: "aws-lambda",
+        stacks: new Set([stack]),
+        regions: new Set([region]),
+        app,
+        contentDirectory: path.parse(fileName).name,
+        parameters: {
+          bucketSsmLookup: true,
+          lookupByTags: true,
+          fileName,
+        },
+        actions: ["updateLambda"],
+        dependencies: [cfnDeployName],
       },
     };
   }
@@ -252,10 +312,28 @@ export class RiffRaffYamlFile {
     Object.values(groupedStacks).forEach((stackTagGroup) => {
       Object.values(stackTagGroup).forEach((regionGroup) => {
         Object.values(regionGroup).forEach((stageGroup) => {
-          const { name: cfnDeployName, props: cfnDeployProps } = this.getCloudFormationDeployment(
-            Object.values(stageGroup).flat()
-          );
-          deployments.set(cfnDeployName, cfnDeployProps);
+          const stacks: GuStack[] = Object.values(stageGroup).flat();
+
+          if (stacks.length === 0) {
+            return; // nothing to do
+          }
+
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length of `stacks` is checked above
+          const stack: GuStack = stacks.at(0)!;
+
+          const lambdas = this.getLambdas(stack);
+
+          const lambdaUploadDeployments = lambdas.map((_) => this.getUploadLambdaDeployment(_));
+          lambdaUploadDeployments.forEach(({ name, props }) => {
+            deployments.set(name, props);
+          });
+
+          const cfnDeployment = this.getCloudFormationDeployment(stacks, lambdaUploadDeployments);
+          deployments.set(cfnDeployment.name, cfnDeployment.props);
+
+          lambdas
+            .map((_) => this.getUpdateLambdaDeployment(_, cfnDeployment))
+            .forEach(({ name, props }) => deployments.set(name, props));
         });
       });
     });

@@ -70,6 +70,7 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  */
 export class GuLambdaFunction extends Function {
   public readonly app: string;
+  public readonly fileName: string;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout } = props;
@@ -103,6 +104,7 @@ export class GuLambdaFunction extends Function {
     }
 
     this.app = app;
+    this.fileName = fileName;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
