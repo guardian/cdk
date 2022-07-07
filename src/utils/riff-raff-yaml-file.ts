@@ -345,6 +345,7 @@ export class RiffRaffYamlFile {
           bucketSsmLookup: true, // TODO update Riff-Raff to support this field for autoscaling deployments
         },
         dependencies: [updateAmiDeployName],
+        contentDirectory: app,
       },
     };
   }

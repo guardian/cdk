@@ -316,6 +316,7 @@ describe("The RiffRaffYamlFile class", () => {
             bucketSsmLookup: true
           dependencies:
             - my-app-ami-test-eu-west-1
+          contentDirectory: my-app
       "
     `);
   });
