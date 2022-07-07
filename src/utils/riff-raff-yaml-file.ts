@@ -1,3 +1,4 @@
+import assert from "assert";
 import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
@@ -5,6 +6,7 @@ import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
 import { GuStack } from "../constructs/core";
+import { groupBy } from "./array";
 
 interface RiffRaffYaml {
   allowedStages: Set<string>;
@@ -31,19 +33,72 @@ interface RiffRaffDeployment {
 
 export class RiffRaffYamlFile {
   private readonly allCdkStacks: GuStack[];
-  private readonly allStackNames: string[];
-  private readonly allStages: string[];
+  private readonly allStackTags: string[];
+  private readonly allStageTags: string[];
+  private readonly allRegions: string[];
+
   private readonly riffRaffYaml: RiffRaffYaml;
   private readonly outDir: string;
 
-  private isCdkStackPresent(expectedClassName: string, expectedStack: string, expectedStage: string): boolean {
+  private groupByClassName(cdkStacks: GuStack[]): Record<string, GuStack[]> {
+    return groupBy(cdkStacks, (stack) => stack.constructor.name);
+  }
+
+  private groupByStackTag(cdkStacks: GuStack[]): Record<string, GuStack[]> {
+    return groupBy(cdkStacks, ({ stack }) => stack);
+  }
+
+  private groupByStageTag(cdkStacks: GuStack[]): Record<string, GuStack[]> {
+    return groupBy(cdkStacks, ({ stage }) => stage);
+  }
+
+  private groupByRegion(cdkStacks: GuStack[]): Record<string, GuStack[]> {
+    return groupBy(cdkStacks, ({ region }) => region);
+  }
+
+  private groupByClassNameStackRegionStage(
+    cdkStacks: GuStack[]
+  ): Record<string, Record<string, Record<string, Record<string, GuStack[]>>>> {
+    return Object.entries(this.groupByClassName(cdkStacks)).reduce((acc, [className, stacksGroupedByClassName]) => {
+      return {
+        ...acc,
+        [className]: Object.entries(this.groupByStackTag(stacksGroupedByClassName)).reduce(
+          (acc, [stackTag, stacksGroupedByStackTag]) => {
+            return {
+              ...acc,
+              [stackTag]: Object.entries(this.groupByRegion(stacksGroupedByStackTag)).reduce(
+                (acc, [region, stacksGroupedByRegion]) => {
+                  return {
+                    ...acc,
+                    [region]: this.groupByStageTag(stacksGroupedByRegion),
+                  };
+                },
+                {}
+              ),
+            };
+          },
+          {}
+        ),
+      };
+    }, {});
+  }
+
+  private isCdkStackPresent(
+    expectedClassName: string,
+    expectedStack: string,
+    expectedRegion: string,
+    expectedStage: string
+  ): boolean {
     const matches = this.allCdkStacks.find((cdkStack) => {
       const {
         constructor: { name },
         stack,
         stage,
+        region,
       } = cdkStack;
-      return name === expectedClassName && stack === expectedStack && stage === expectedStage;
+      return (
+        name === expectedClassName && stack === expectedStack && stage === expectedStage && region === expectedRegion
+      );
     });
 
     return !!matches;
@@ -51,7 +106,7 @@ export class RiffRaffYamlFile {
 
   /**
    * Check there are the appropriate number of `GuStack`s.
-   * Expect to find an instance for each combination of `GuStack`, `stack`, and `stage`.
+   * Expect to find an instance for each combination of `GuStack`, `stack`, `region`, and `stage`.
    *
    * If not valid, a message is logged describing what is missing to aid debugging.
    *
@@ -59,26 +114,32 @@ export class RiffRaffYamlFile {
    */
   private validateStacksInApp(): void {
     type ClassName = string;
-    type Stack = string;
-    type Stage = string;
+    type StackTag = string;
+    type StageTag = string;
+    type RegionTag = string;
     type Found = "✅";
     type NotFound = "❌";
-    type AppValidation = Record<ClassName, Record<Stack, Record<Stage, Found | NotFound>>>;
+    type AppValidation = Record<ClassName, Record<StackTag, Record<RegionTag, Record<StageTag, Found | NotFound>>>>;
 
-    const { allCdkStacks, allStackNames, allStages } = this;
+    const { allCdkStacks, allStackTags, allStageTags, allRegions } = this;
 
     const checks: AppValidation = allCdkStacks.reduce((acc, cdkStack) => {
       const className = cdkStack.constructor.name;
 
       return {
         ...acc,
-        [className]: allStackNames.reduce((acc, stack) => {
+        [className]: allStackTags.reduce((acc, stackTag) => {
           return {
             ...acc,
-            [stack]: allStages.reduce((acc, stage) => {
+            [stackTag]: allRegions.reduce((acc, region) => {
               return {
                 ...acc,
-                [stage]: this.isCdkStackPresent(className, stack, stage) ? "✅" : "❌",
+                [region]: allStageTags.reduce((acc, stageTag) => {
+                  return {
+                    ...acc,
+                    [stageTag]: this.isCdkStackPresent(className, stackTag, region, stageTag) ? "✅" : "❌",
+                  };
+                }, {}),
               };
             }, {}),
           };
@@ -86,9 +147,11 @@ export class RiffRaffYamlFile {
       };
     }, {});
 
-    const missingDefinitions = Object.values(checks).flatMap((i) => {
-      return Object.values(i).flatMap((j) => {
-        return Object.values(j).filter((_) => _ === "❌");
+    const missingDefinitions = Object.values(checks).flatMap((groupedByStackTag) => {
+      return Object.values(groupedByStackTag).flatMap((groupedByRegion) => {
+        return Object.values(groupedByRegion).flatMap((groupedByStage) => {
+          return Object.values(groupedByStage).filter((_) => _ === "❌");
+        });
       });
     });
 
@@ -106,39 +169,50 @@ export class RiffRaffYamlFile {
   }
 
   private validateAllRegionsAreResolved(): void {
-    const unresolved = this.allCdkStacks.filter(({ region }) => Token.isUnresolved(region));
+    const unresolved = this.allRegions.filter((region) => Token.isUnresolved(region));
 
-    if (unresolved.length > 0) {
-      throw new Error(`Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set`);
-    }
+    assert(
+      unresolved.length === 0,
+      new Error(`Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set`)
+    );
   }
 
-  private getCloudFormationDeployment(cdkStack: GuStack): RiffRaffDeployment {
-    const {
-      stack,
-      templateFile,
-      constructor: { name },
-      region,
-      stage,
-    } = cdkStack;
+  private getCloudFormationDeployment(cdkStacks: GuStack[]): RiffRaffDeployment {
+    const classNames = new Set(cdkStacks.map(({ constructor: { name } }) => name));
+    assert(
+      classNames.size === 1,
+      new Error(`Expected cdkStacks to be of the same type, found ${classNames.size} types`)
+    );
+
+    const regions = new Set(cdkStacks.map(({ region }) => region));
+    assert(regions.size === 1, new Error(`Expected cdkStacks to be of the same region, found ${regions.size} regions`));
+
+    const stackTags = new Set(cdkStacks.map(({ stack }) => stack));
+    assert(
+      stackTags.size === 1,
+      new Error(`Expected cdkStacks to have the same stack, found ${stackTags.size} stacks`)
+    );
+
+    const [className] = classNames;
+    const [stack] = stackTags;
+    const [region] = regions;
 
     // TODO remove `lodash.kebabcase` dep as it's not that much code to kebab-ise a string...
-    const kebabClassName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
-
-    const deploymentName = [kebabClassName, "cfn", stack].join("-");
+    const kebabClassName = className?.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+    const deploymentName = [kebabClassName, "cfn", stack, region].join("-");
 
     return {
       name: deploymentName,
       props: {
         type: "cloud-formation",
-        regions: new Set([region]),
-        stacks: new Set([stack]),
-        app: kebabClassName,
+        regions,
+        stacks: stackTags,
+        app: kebabClassName ?? "this should not happen as we've previously asserted against the size of `classNames`", // TODO how does Riff-Raff use this property?
         contentDirectory: this.outDir,
         parameters: {
-          templateStagePaths: {
-            [stage]: templateFile, // TODO construct this correctly!
-          },
+          templateStagePaths: cdkStacks.reduce((acc, { stage, templateFile }) => {
+            return { ...acc, [stage]: templateFile };
+          }, {}),
         },
       },
     };
@@ -148,8 +222,9 @@ export class RiffRaffYamlFile {
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
     const allowedStages = new Set(this.allCdkStacks.map(({ stage }) => stage));
-    this.allStages = Array.from(allowedStages);
-    this.allStackNames = Array.from(new Set(this.allCdkStacks.map(({ stack }) => stack)));
+    this.allStageTags = Array.from(allowedStages);
+    this.allStackTags = Array.from(new Set(this.allCdkStacks.map(({ stack }) => stack)));
+    this.allRegions = Array.from(new Set(this.allCdkStacks.map(({ region }) => region)));
 
     this.validateStacksInApp();
     this.validateAllRegionsAreResolved();
@@ -158,9 +233,17 @@ export class RiffRaffYamlFile {
 
     const deployments = new Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>();
 
-    this.allCdkStacks.forEach((stack) => {
-      const { name: cfnDeployName, props: cfnDeployProps } = this.getCloudFormationDeployment(stack);
-      deployments.set(cfnDeployName, cfnDeployProps);
+    const stacksGroupedByClass = this.groupByClassNameStackRegionStage(this.allCdkStacks);
+
+    Object.values(stacksGroupedByClass).forEach((stacksGroupedByStackName) => {
+      Object.values(stacksGroupedByStackName).forEach((stacksGroupedByRegion) => {
+        Object.values(stacksGroupedByRegion).forEach((stacksGroupedByStage) => {
+          const { name: cfnDeployName, props: cfnDeployProps } = this.getCloudFormationDeployment(
+            Object.values(stacksGroupedByStage).flat()
+          );
+          deployments.set(cfnDeployName, cfnDeployProps);
+        });
+      });
     });
 
     this.riffRaffYaml = {

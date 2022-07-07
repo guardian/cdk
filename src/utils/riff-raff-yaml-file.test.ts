@@ -9,11 +9,21 @@ describe("The RiffRaffYamlFile class", () => {
     class MyApplicationStack extends GuStack {}
     class MyDatabaseStack extends GuStack {}
 
-    new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
-    new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD" });
-    new MyApplicationStack(app, "App-PROD-media-service", { stack: "media-service", stage: "PROD" });
+    const region = {
+      env: {
+        region: "eu-west-1",
+      },
+    };
 
-    new MyDatabaseStack(app, "Database-CODE-deploy", { stack: "deploy", stage: "PROD" });
+    new MyApplicationStack(app, "App-CODE-deploy", { ...region, stack: "deploy", stage: "CODE" });
+    new MyApplicationStack(app, "App-PROD-media-service", {
+      ...region,
+      stack: "media-service",
+      stage: "PROD",
+    });
+
+    new MyApplicationStack(app, "App-PROD-deploy", { ...region, stack: "deploy", stage: "PROD" });
+    new MyDatabaseStack(app, "Database-CODE-deploy", { ...region, stack: "deploy", stage: "PROD" });
 
     expect(() => {
       new RiffRaffYamlFile(app);
@@ -42,7 +52,7 @@ describe("The RiffRaffYamlFile class", () => {
       "allowedStages:
         - PROD
       deployments:
-        my-application-stack-cfn-deploy:
+        my-application-stack-cfn-deploy-eu-west-1:
           type: cloud-formation
           regions:
             - eu-west-1
@@ -53,6 +63,35 @@ describe("The RiffRaffYamlFile class", () => {
           parameters:
             templateStagePaths:
               PROD: App-PROD-deploy.template.json
+      "
+      `);
+  });
+
+  it("Should add a cloud-formation deployment with multiple stages", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+    class MyApplicationStack extends GuStack {}
+    new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD", env: { region: "eu-west-1" } });
+    new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFile(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - PROD
+        - CODE
+      deployments:
+        my-application-stack-cfn-deploy-eu-west-1:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              PROD: App-PROD-deploy.template.json
+              CODE: App-CODE-deploy.template.json
       "
       `);
   });
