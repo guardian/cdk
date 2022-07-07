@@ -1,4 +1,5 @@
-import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment } from "../types";
+import type { GuAutoScalingGroup } from "../../../constructs/autoscaling";
+import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentProps } from "../types";
 
 export function cloudFormationDeployment(
   cdkStacks: CdkStacksDifferingOnlyByStage,
@@ -42,6 +43,30 @@ export function cloudFormationDeployment(
       },
       // only add the `dependencies` property if there are some
       ...(dependencies.length > 0 && { dependencies: dependencies.map(({ name }) => name) }),
+    },
+  };
+}
+
+export function addAmiParametersToCloudFormationDeployment(
+  cfnDeployment: RiffRaffDeployment,
+  asg: GuAutoScalingGroup
+): RiffRaffDeploymentProps {
+  const { imageRecipe, app, amiParameter } = asg;
+
+  if (!imageRecipe) {
+    throw new Error(`Unable to produce a working riff-raff.yaml file; imageRecipe missing from ASG ${app}`);
+  }
+
+  return {
+    ...cfnDeployment.props,
+    parameters: {
+      ...cfnDeployment.props.parameters,
+      amiParameter: amiParameter.node.id,
+      amiTags: {
+        BuiltBy: "amigo",
+        Recipe: imageRecipe,
+        AmigoStage: "PROD",
+      },
     },
   };
 }

@@ -1,12 +1,14 @@
 import { App, Duration } from "aws-cdk-lib";
+import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { AccessScope } from "../../constants";
 import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
-import { GuScheduledLambda } from "../../patterns";
+import { GuEc2App, GuScheduledLambda } from "../../patterns";
 import { RiffRaffYamlFileExperimental } from "./index";
 
-describe("The RiffRaffYamlFile class", () => {
+describe("The RiffRaffYamlFileExperimental class", () => {
   it("Should throw when there are missing stack definitions", () => {
     const app = new App();
 
@@ -231,6 +233,310 @@ describe("The RiffRaffYamlFile class", () => {
             - updateLambda
           dependencies:
             - cfn-eu-west-1-test-my-application-stack
+      "
+    `);
+  });
+
+  it("Should add autoscaling deployments", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        const appName = "my-app";
+
+        new GuEc2App(this, {
+          app: appName,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `${appName}.deb`,
+              executionStatement: `dpkg -i /${appName}/${appName}.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "rip.gu.com",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          applicationPort: 9000,
+          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - TEST
+      deployments:
+        asg-upload-eu-west-1-test-my-app:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-app
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              TEST: test-stack.template.json
+            amiParameter: AMIMyapp
+            amiTags:
+              BuiltBy: amigo
+              Recipe: arm64-bionic-java11-deploy-infrastructure
+              AmigoStage: PROD
+          dependencies:
+            - asg-upload-eu-west-1-test-my-app
+        asg-update-eu-west-1-test-my-app:
+          type: autoscaling
+          actions:
+            - deploy
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          contentDirectory: my-app
+      "
+    `);
+  });
+
+  it("Should add all deployment types in within a stack", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuScheduledLambda(this, "test", {
+          app: "my-lambda-app",
+          runtime: Runtime.NODEJS_16_X,
+          fileName: "my-lambda-app.zip",
+          handler: "handler.main",
+          rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
+          monitoringConfiguration: { noMonitoring: true },
+          timeout: Duration.minutes(1),
+        });
+
+        new GuEc2App(this, {
+          app: "my-ec2-app",
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `my-ec2-app.deb`,
+              executionStatement: `dpkg -i /my-ec2-app/my-ec2-app.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "rip.gu.com",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          applicationPort: 9000,
+          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack-eu-CODE", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
+    new MyApplicationStack(app, "test-stack-us-CODE", { stack: "test", stage: "CODE", env: { region: "us-east-1" } });
+    new MyApplicationStack(app, "test-stack-eu-PROD", { stack: "test", stage: "PROD", env: { region: "eu-west-1" } });
+    new MyApplicationStack(app, "test-stack-us-PROD", { stack: "test", stage: "PROD", env: { region: "us-east-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+        - PROD
+      deployments:
+        lambda-upload-eu-west-1-test-my-lambda-app:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda-app
+          contentDirectory: my-lambda-app
+          parameters:
+            bucketSsmLookup: true
+            lookupByTags: true
+            fileName: my-lambda-app.zip
+          actions:
+            - uploadLambda
+        asg-upload-eu-west-1-test-my-ec2-app:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-ec2-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-ec2-app
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: test-stack-eu-CODE.template.json
+              PROD: test-stack-eu-PROD.template.json
+            amiParameter: AMIMyec2app
+            amiTags:
+              BuiltBy: amigo
+              Recipe: arm64-bionic-java11-deploy-infrastructure
+              AmigoStage: PROD
+          dependencies:
+            - lambda-upload-eu-west-1-test-my-lambda-app
+            - asg-upload-eu-west-1-test-my-ec2-app
+        lambda-update-eu-west-1-test-my-lambda-app:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda-app
+          contentDirectory: my-lambda-app
+          parameters:
+            bucketSsmLookup: true
+            lookupByTags: true
+            fileName: my-lambda-app.zip
+          actions:
+            - updateLambda
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+        asg-update-eu-west-1-test-my-ec2-app:
+          type: autoscaling
+          actions:
+            - deploy
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-ec2-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          contentDirectory: my-ec2-app
+        lambda-upload-us-east-1-test-my-lambda-app:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - us-east-1
+          app: my-lambda-app
+          contentDirectory: my-lambda-app
+          parameters:
+            bucketSsmLookup: true
+            lookupByTags: true
+            fileName: my-lambda-app.zip
+          actions:
+            - uploadLambda
+        asg-upload-us-east-1-test-my-ec2-app:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - us-east-1
+          stacks:
+            - test
+          app: my-ec2-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-ec2-app
+        cfn-us-east-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - us-east-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: test-stack-us-CODE.template.json
+              PROD: test-stack-us-PROD.template.json
+            amiParameter: AMIMyec2app
+            amiTags:
+              BuiltBy: amigo
+              Recipe: arm64-bionic-java11-deploy-infrastructure
+              AmigoStage: PROD
+          dependencies:
+            - lambda-upload-us-east-1-test-my-lambda-app
+            - asg-upload-us-east-1-test-my-ec2-app
+        lambda-update-us-east-1-test-my-lambda-app:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - us-east-1
+          app: my-lambda-app
+          contentDirectory: my-lambda-app
+          parameters:
+            bucketSsmLookup: true
+            lookupByTags: true
+            fileName: my-lambda-app.zip
+          actions:
+            - updateLambda
+          dependencies:
+            - cfn-us-east-1-test-my-application-stack
+        asg-update-us-east-1-test-my-ec2-app:
+          type: autoscaling
+          actions:
+            - deploy
+          regions:
+            - us-east-1
+          stacks:
+            - test
+          app: my-ec2-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          dependencies:
+            - cfn-us-east-1-test-my-application-stack
+          contentDirectory: my-ec2-app
       "
     `);
   });

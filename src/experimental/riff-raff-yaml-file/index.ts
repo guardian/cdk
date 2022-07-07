@@ -4,9 +4,11 @@ import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
+import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
 import { GuLambdaFunction } from "../../constructs/lambda";
-import { cloudFormationDeployment } from "./deployments/cloudformation";
+import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
+import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
@@ -169,6 +171,10 @@ export class RiffRaffYamlFileExperimental {
     return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction) as GuLambdaFunction[];
   }
 
+  private getAutoScalingGroups(cdkStack: GuStack): GuAutoScalingGroup[] {
+    return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
@@ -200,8 +206,12 @@ export class RiffRaffYamlFileExperimental {
           const stack = stacks[0]!;
 
           const lambdas = this.getLambdas(stack);
+          const autoscalingGroups = this.getAutoScalingGroups(stack);
 
-          const artifactUploads: RiffRaffDeployment[] = lambdas.map(uploadLambdaArtifact);
+          const artifactUploads: RiffRaffDeployment[] = [
+            lambdas.map(uploadLambdaArtifact),
+            autoscalingGroups.map(uploadAutoscalingArtifact),
+          ].flat();
           artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
 
           const cfnDeployment = cloudFormationDeployment(stacks, artifactUploads, this.outdir);
@@ -210,6 +220,13 @@ export class RiffRaffYamlFileExperimental {
           lambdas.forEach((lambda) => {
             const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
             deployments.set(lambdaDeployment.name, lambdaDeployment.props);
+          });
+
+          autoscalingGroups.forEach((asg) => {
+            const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
+            deployments.set(asgDeployment.name, asgDeployment.props);
+
+            deployments.set(cfnDeployment.name, addAmiParametersToCloudFormationDeployment(cfnDeployment, asg));
           });
         });
       });
