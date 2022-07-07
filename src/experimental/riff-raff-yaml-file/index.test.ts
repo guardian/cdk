@@ -1,5 +1,9 @@
-import { App } from "aws-cdk-lib";
+import { App, Duration } from "aws-cdk-lib";
+import { Schedule } from "aws-cdk-lib/aws-events";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
+import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
+import { GuScheduledLambda } from "../../patterns";
 import { RiffRaffYamlFileExperimental } from "./index";
 
 describe("The RiffRaffYamlFile class", () => {
@@ -152,6 +156,81 @@ describe("The RiffRaffYamlFile class", () => {
             templateStagePaths:
               PROD: App-PROD-deploy-us-east-1.template.json
               CODE: App-CODE-deploy-us-east-1.template.json
+      "
+    `);
+  });
+
+  it("Should add aws-lambda deployments", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuScheduledLambda(this, "test", {
+          app: "my-lambda",
+          runtime: Runtime.NODEJS_16_X,
+          fileName: "my-lambda-artifact.zip",
+          handler: "handler.main",
+          rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
+          monitoringConfiguration: { noMonitoring: true },
+          timeout: Duration.minutes(1),
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - TEST
+      deployments:
+        lambda-upload-eu-west-1-test-my-lambda:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda
+          contentDirectory: my-lambda-artifact
+          parameters:
+            bucketSsmLookup: true
+            lookupByTags: true
+            fileName: my-lambda-artifact.zip
+          actions:
+            - uploadLambda
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              TEST: test-stack.template.json
+          dependencies:
+            - lambda-upload-eu-west-1-test-my-lambda
+        lambda-update-eu-west-1-test-my-lambda:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda
+          contentDirectory: my-lambda-artifact
+          parameters:
+            bucketSsmLookup: true
+            lookupByTags: true
+            fileName: my-lambda-artifact.zip
+          actions:
+            - updateLambda
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
       "
     `);
   });

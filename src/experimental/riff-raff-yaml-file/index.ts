@@ -5,12 +5,15 @@ import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
 import { GuStack } from "../../constructs/core";
+import { GuLambdaFunction } from "../../constructs/lambda";
 import { cloudFormationDeployment } from "./deployments/cloudformation";
+import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
   ClassName,
   GroupedCdkStacks,
   Region,
+  RiffRaffDeployment,
   RiffRaffDeploymentName,
   RiffRaffDeploymentProps,
   RiffRaffYaml,
@@ -162,6 +165,10 @@ export class RiffRaffYamlFileExperimental {
     }
   }
 
+  private getLambdas(cdkStack: GuStack): GuLambdaFunction[] {
+    return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction) as GuLambdaFunction[];
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
@@ -182,11 +189,28 @@ export class RiffRaffYamlFileExperimental {
     Object.values(groupedStacks).forEach((stackTagGroup) => {
       Object.values(stackTagGroup).forEach((regionGroup) => {
         Object.values(regionGroup).forEach((stageGroup) => {
-          const { name: cfnDeployName, props: cfnDeployProps } = cloudFormationDeployment(
-            Object.values(stageGroup).flat(),
-            this.outdir
-          );
-          deployments.set(cfnDeployName, cfnDeployProps);
+          const stacks: GuStack[] = Object.values(stageGroup).flat();
+
+          if (stacks.length === 0) {
+            throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
+          }
+
+          // The items in `stacks` only differ by stage, so we can just use the first item in the list.
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length of `stacks` is checked above
+          const stack = stacks[0]!;
+
+          const lambdas = this.getLambdas(stack);
+
+          const artifactUploads: RiffRaffDeployment[] = lambdas.map(uploadLambdaArtifact);
+          artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
+
+          const cfnDeployment = cloudFormationDeployment(stacks, artifactUploads, this.outdir);
+          deployments.set(cfnDeployment.name, cfnDeployment.props);
+
+          lambdas.forEach((lambda) => {
+            const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
+            deployments.set(lambdaDeployment.name, lambdaDeployment.props);
+          });
         });
       });
     });

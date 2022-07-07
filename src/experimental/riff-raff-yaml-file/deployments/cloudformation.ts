@@ -2,6 +2,7 @@ import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment } from "../types
 
 export function cloudFormationDeployment(
   cdkStacks: CdkStacksDifferingOnlyByStage,
+  dependencies: RiffRaffDeployment[],
   contentDirectory: string
 ): RiffRaffDeployment {
   if (cdkStacks.length === 0) {
@@ -39,6 +40,8 @@ export function cloudFormationDeployment(
       parameters: {
         templateStagePaths,
       },
+      // only add the `dependencies` property if there are some
+      ...(dependencies.length > 0 && { dependencies: dependencies.map(({ name }) => name) }),
     },
   };
 }
