@@ -5,7 +5,7 @@ import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
-import { GuStack } from "../constructs/core";
+import { GuStack } from "../constructs/core/stack";
 import { groupBy } from "./array";
 
 // type aliases to, hopefully, improve readability

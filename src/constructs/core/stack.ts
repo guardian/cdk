@@ -97,6 +97,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       .reduce((acc, param) => ({ ...acc, [param.node.id]: param as CfnParameter }), {});
   }
 
+  // TODO change type `app` param to `GuRoot` once fully tested?
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(app: App, id: string, props: GuStackProps) {
     const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, withoutTags } = props;
