@@ -1,4 +1,4 @@
-import { SSM_PARAMETER_PATHS } from "../../../constants";
+import { NAMED_SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
 import { GuParameter } from "./base";
@@ -20,8 +20,8 @@ export class GuVpcParameter extends GuParameter {
 
   private constructor(scope: GuStack) {
     super(scope, "VpcId", {
-      description: SSM_PARAMETER_PATHS.PrimaryVpcId.description,
-      default: SSM_PARAMETER_PATHS.PrimaryVpcId.path,
+      description: NAMED_SSM_PARAMETER_PATHS.PrimaryVpcId.description,
+      default: NAMED_SSM_PARAMETER_PATHS.PrimaryVpcId.path,
       type: "AWS::EC2::VPC::Id",
       fromSSM: true,
     });

@@ -1,13 +1,13 @@
 import type AWS from "aws-sdk";
 import type { DescribeSubnetsResult, DescribeVpcsResult, SubnetList, Vpc, VpcList } from "aws-sdk/clients/ec2";
 import type { ParameterList } from "aws-sdk/clients/ssm";
-import { SSM_PARAMETER_PATHS, VPC_SSM_PARAMETER_PREFIX } from "../../constants";
+import { ALL_SSM_PARAMETER_PATHS, VPC_SSM_PARAMETER_PREFIX } from "../../constants";
 import type { VpcInDetail } from "../../types/cli";
 import { sum } from "../math";
 
-export const primaryVpcSsmParameterPaths: string[] = Object.values(SSM_PARAMETER_PATHS)
-  .map((_) => _.path)
-  .filter((_) => _.startsWith(VPC_SSM_PARAMETER_PREFIX));
+export const primaryVpcSsmParameterPaths: string[] = ALL_SSM_PARAMETER_PATHS.map((_) => _.path).filter((_) =>
+  _.startsWith(VPC_SSM_PARAMETER_PREFIX)
+);
 
 export const vpcSsmParameterPaths: RegExp[] = primaryVpcSsmParameterPaths.map((primaryPath) => {
   const reBody = primaryPath.replace("primary", "([A-z0-9.-_])+");

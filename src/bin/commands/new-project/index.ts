@@ -7,7 +7,7 @@ import type { CliCommandResponse } from "../../../types/cli";
 import { execute } from "../../../utils/exec";
 import { gitRootOrCwd } from "../../../utils/git";
 import { constructApp } from "./utils/app";
-import { newAppImports, newStackImports, newTestImports } from "./utils/imports";
+import { Imports } from "./utils/imports";
 import { buildDirectory } from "./utils/init";
 import { constructTest } from "./utils/snapshot";
 import { constructStack } from "./utils/stack";
@@ -111,13 +111,13 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     outputFile: "cdk.ts",
     outputDir: dirname(config.appPath),
     stack: config.stackName,
-    imports: newAppImports(config.appName),
+    imports: Imports.newAppImports(config.appName),
     stages: config.stages,
   });
 
   // lib directory
   await constructStack({
-    imports: newStackImports(),
+    imports: Imports.newStackImports(),
     appName: config.appName,
     outputFile: basename(config.stackPath),
     outputDir: dirname(config.stackPath),
@@ -126,7 +126,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
 
   // lib directory
   await constructTest({
-    imports: newTestImports(config.appName),
+    imports: Imports.newTestImports(config.appName),
     stackName: config.stackName,
     appName: config.appName,
     outputFile: basename(config.testPath),

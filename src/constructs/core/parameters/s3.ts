@@ -1,4 +1,4 @@
-import { SSM_PARAMETER_PATHS } from "../../../constants";
+import { NAMED_SSM_PARAMETER_PATHS } from "../../../constants";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../stack";
 import { GuStringParameter } from "./base";
@@ -12,8 +12,8 @@ export class GuDistributionBucketParameter extends GuStringParameter {
 
   private constructor(scope: GuStack) {
     super(scope, "DistributionBucketName", {
-      description: SSM_PARAMETER_PATHS.DistributionBucket.description,
-      default: SSM_PARAMETER_PATHS.DistributionBucket.path,
+      description: NAMED_SSM_PARAMETER_PATHS.DistributionBucket.description,
+      default: NAMED_SSM_PARAMETER_PATHS.DistributionBucket.path,
       fromSSM: true,
     });
   }
@@ -32,8 +32,8 @@ export class GuPrivateConfigBucketParameter extends GuStringParameter {
 
   constructor(scope: GuStack) {
     super(scope, GuPrivateConfigBucketParameter.parameterName, {
-      description: SSM_PARAMETER_PATHS.ConfigurationBucket.description,
-      default: SSM_PARAMETER_PATHS.ConfigurationBucket.path,
+      description: NAMED_SSM_PARAMETER_PATHS.ConfigurationBucket.description,
+      default: NAMED_SSM_PARAMETER_PATHS.ConfigurationBucket.path,
       fromSSM: true,
     });
   }

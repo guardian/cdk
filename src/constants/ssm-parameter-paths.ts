@@ -8,9 +8,21 @@ export interface SsmParameterPath {
   namingPattern?: string;
 }
 
+interface NamedSsmParameterPaths {
+  Anghammarad: SsmParameterPath;
+  LoggingStreamName: SsmParameterPath;
+  DistributionBucket: SsmParameterPath;
+  AccessLoggingBucket: SsmParameterPath;
+  ConfigurationBucket: SsmParameterPath;
+  PrimaryVpcId: SsmParameterPath;
+  PrimaryVpcPrivateSubnets: SsmParameterPath;
+  PrimaryVpcPublicSubnets: SsmParameterPath;
+  FastlyCustomerId: SsmParameterPath;
+}
+
 export const VPC_SSM_PARAMETER_PREFIX = "/account/vpc";
 
-export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
+export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
   Anghammarad: {
     path: "/account/services/anghammarad.topic.arn",
     description: "SSM parameter containing the ARN of the Anghammarad SNS topic",
@@ -52,3 +64,7 @@ export const SSM_PARAMETER_PATHS: Record<string, SsmParameterPath> = {
     optional: true,
   },
 };
+
+export const ALL_SSM_PARAMETER_PATHS: SsmParameterPath[] = Object.values(
+  NAMED_SSM_PARAMETER_PATHS
+) as SsmParameterPath[];

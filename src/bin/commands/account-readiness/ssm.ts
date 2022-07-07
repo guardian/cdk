@@ -1,7 +1,7 @@
 import AWS from "aws-sdk";
 import chalk from "chalk";
 import type { SsmParameterPath } from "../../../constants";
-import { SSM_PARAMETER_PATHS } from "../../../constants";
+import { ALL_SSM_PARAMETER_PATHS } from "../../../constants";
 import type { AwsConfig } from "../../../types/cli";
 import { getSsmParametersForVpc, getVpcsInDetail } from "../../../utils/cli/vpc";
 import type { Report } from ".";
@@ -23,8 +23,8 @@ const ssmParamReadiness = async ({ credentialProvider, region }: AwsConfig): Pro
     region,
   });
 
-  const ssmParams = Object.values(SSM_PARAMETER_PATHS).filter((param) => !param.optional);
-  const paths: string[] = ssmParams.map((param) => param.path);
+  const ssmParams = ALL_SSM_PARAMETER_PATHS.filter((param) => !param.optional);
+  const paths: string[] = ssmParams.map((param: SsmParameterPath) => param.path);
 
   const awsResponse = await ssmClient.getParameters({ Names: paths }).promise();
 

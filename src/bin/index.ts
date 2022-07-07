@@ -125,7 +125,7 @@ parseCommandLineArguments()
         });
       }
       default:
-        throw new Error(`Unknown command: ${command}`);
+        throw new Error(`Unknown command: ${command ?? ""}`);
     }
   })
   .then((commandResponse) => {

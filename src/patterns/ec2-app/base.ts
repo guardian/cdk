@@ -5,7 +5,7 @@ import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
-import { AccessScope, SSM_PARAMETER_PATHS, TagKeys } from "../../constants";
+import { AccessScope, NAMED_SSM_PARAMETER_PATHS, TagKeys } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
@@ -427,8 +427,8 @@ export class GuEc2App {
 
     if (accessLogging.enabled) {
       const accessLoggingBucket = new GuStringParameter(scope, "AccessLoggingBucket", {
-        description: SSM_PARAMETER_PATHS.AccessLoggingBucket.description,
-        default: SSM_PARAMETER_PATHS.AccessLoggingBucket.path,
+        description: NAMED_SSM_PARAMETER_PATHS.AccessLoggingBucket.description,
+        default: NAMED_SSM_PARAMETER_PATHS.AccessLoggingBucket.path,
         fromSSM: true,
       });
 
