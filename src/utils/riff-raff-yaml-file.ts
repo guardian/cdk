@@ -4,6 +4,7 @@ import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
+import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { groupBy } from "./array";
@@ -27,8 +28,8 @@ interface RiffRaffDeploymentProps {
   regions: Set<Region>;
   stacks: Set<StackTag>;
   app: string;
-  contentDirectory: string;
-  parameters: Record<string, string | boolean | Record<string, string>>;
+  contentDirectory?: string;
+  parameters: Record<string, unknown>;
   dependencies?: RiffRaffDeploymentName[];
   actions?: string[];
 }
@@ -334,6 +335,66 @@ export class RiffRaffYamlFile {
     };
   }
 
+  private getAutoScalingGroups(cdkStack: GuStack): GuAutoScalingGroup[] {
+    return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
+  }
+
+  private getUpdateAmiDeployment(
+    asg: GuAutoScalingGroup,
+    { name: cfnDeployName }: RiffRaffDeployment
+  ): RiffRaffDeployment {
+    const { app, amiParameter, imageRecipe } = asg;
+    const { stack, region } = asg.stack as GuStack;
+
+    if (!imageRecipe) {
+      throw new Error("ASG missing imageRecipe prop");
+    }
+
+    return {
+      name: [app, "ami", stack, region].join("-"),
+      props: {
+        type: "ami-cloudformation-parameter",
+        regions: new Set([region]),
+        stacks: new Set([stack]),
+        app,
+        parameters: {
+          cloudFormationStackByTags: true,
+          amiParametersToTags: {
+            [amiParameter.node.id]: {
+              BuiltBy: "amigo",
+              AmigoStage: "PROD",
+              Recipe: imageRecipe,
+            },
+          },
+        },
+        dependencies: [cfnDeployName],
+      },
+    };
+  }
+
+  private getAutoscalingDeployment(
+    asg: GuAutoScalingGroup,
+    { name: updateAmiDeployName }: RiffRaffDeployment
+  ): RiffRaffDeployment {
+    const { app } = asg;
+    const { stack, region } = asg.stack as GuStack;
+
+    return {
+      name: [app, "asg", stack, region].join("-"),
+      props: {
+        type: "autoscaling",
+        regions: new Set([region]),
+        stacks: new Set([stack]),
+        app,
+        parameters: {
+          bucketSsmLookup: true,
+        },
+        dependencies: [updateAmiDeployName],
+        contentDirectory: app,
+      },
+    };
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
@@ -377,6 +438,14 @@ export class RiffRaffYamlFile {
           lambdas
             .map((_) => this.getUpdateLambdaDeployment(_, cfnDeployment))
             .forEach(({ name, props }) => deployments.set(name, props));
+
+          this.getAutoScalingGroups(stack).forEach((asg) => {
+            const amiDeployment = this.getUpdateAmiDeployment(asg, cfnDeployment);
+            const asgDeployment = this.getAutoscalingDeployment(asg, amiDeployment);
+
+            deployments.set(amiDeployment.name, amiDeployment.props);
+            deployments.set(asgDeployment.name, asgDeployment.props);
+          });
         });
       });
     });

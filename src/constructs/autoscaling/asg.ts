@@ -30,6 +30,7 @@ export interface GuAutoScalingGroupProps
     AppIdentity,
     GuAsgCapacity {
   imageId?: GuAmiParameter;
+  imageRecipe?: string;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
@@ -57,11 +58,16 @@ export interface GuAutoScalingGroupProps
  * [IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html).
  */
 export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
+  public readonly app: string;
+  public readonly amiParameter: GuAmiParameter;
+  public readonly imageRecipe?: string;
+
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const {
       app,
       additionalSecurityGroups = [],
       imageId = new GuAmiParameter(scope, { app }),
+      imageRecipe,
       minimumInstances,
       maximumInstances,
       role = new GuInstanceRole(scope, { app }),
@@ -102,6 +108,9 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     };
 
     super(scope, id, mergedProps);
+    this.app = app;
+    this.amiParameter = imageId;
+    this.imageRecipe = imageRecipe;
 
     targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 

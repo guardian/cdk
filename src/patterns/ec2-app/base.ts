@@ -141,6 +141,7 @@ export interface GuEc2AppProps extends AppIdentity {
   scaling: GuAsgCapacity;
   certificateProps: GuDomainName;
   withoutImdsv2?: boolean;
+  imageRecipe?: string;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -344,6 +345,7 @@ export class GuEc2App {
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData,
       withoutImdsv2,
+      imageRecipe,
     } = props;
 
     // We should really prevent users from doing this via the type system,
@@ -388,6 +390,7 @@ export class GuEc2App {
       userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
       vpcSubnets: { subnets: privateSubnets },
       ...(blockDevices && { blockDevices }),
+      imageRecipe,
     });
 
     // We are selectively tagging the ASG so that we can expose the number of stacks using this pattern
