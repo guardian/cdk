@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, unlinkSync, linkSync } from "fs";
+import { existsSync, unlinkSync, linkSync } from "fs";
 import { basename, dirname, join } from "path";
 import { CliUx } from "@oclif/core";
 import chalk from "chalk";
