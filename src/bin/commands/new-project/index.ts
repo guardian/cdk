@@ -1,4 +1,4 @@
-import { existsSync } from "fs";
+import { copyFileSync, existsSync, unlinkSync, linkSync } from "fs";
 import { basename, dirname, join } from "path";
 import { CliUx } from "@oclif/core";
 import chalk from "chalk";
@@ -23,6 +23,7 @@ interface NewProjectProps {
   stages: string[];
   yamlTemplateLocation?: string;
   packageManager: PackageManager;
+  recreate?: boolean;
 }
 
 interface NewProjectConfig extends Omit<NewProjectProps, "stack" | "app"> {
@@ -106,14 +107,19 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   console.log(`New stack ${config.stackName.pascal} will be written to ${config.stackPath}`);
 
   // bin directory
-  await constructApp({
-    appName: config.appName,
-    outputFile: "cdk.ts",
-    outputDir: dirname(config.appPath),
-    stack: config.stackName,
-    imports: Imports.newAppImports(config.appName),
-    stages: config.stages,
-  });
+  if (props.recreate) {
+    unlinkSync("cdk/bin/cdk.ts")
+    linkSync("cdk-src/cdk.ts", "cdk/bin/cdk.ts");
+  } else {
+    await constructApp({
+      appName: config.appName,
+      outputFile: "cdk.ts",
+      outputDir: dirname(config.appPath),
+      stack: config.stackName,
+      imports: Imports.newAppImports(config.appName),
+      stages: config.stages,
+    });
+  }
 
   // lib directory
   await constructStack({
@@ -123,6 +129,15 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     outputDir: dirname(config.stackPath),
     yamlTemplateLocation: config.yamlTemplateLocation,
   });
+
+  if (props.recreate) {
+    unlinkSync(`cdk/lib/__snapshots__/${config.appName.pascal}.test.ts.snap`);
+    linkSync(`cdk-src/${config.appName.pascal}.test.ts.snap`, `cdk/lib/__snapshots__/${config.appName.pascal}.test.ts.snap`);
+    unlinkSync(`cdk/lib/${config.appName.pascal}.test.ts`);
+    linkSync(`cdk-src/${config.appName.pascal}.test.ts`, `cdk/lib/${config.appName.pascal}.test.ts`);
+    unlinkSync(`cdk/lib/${config.appName.pascal}.ts`);
+    linkSync(`cdk-src/${config.appName.pascal}.ts`, `cdk/lib/${config.appName.pascal}.ts`);
+  }
 
   // lib directory
   await constructTest({

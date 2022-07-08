@@ -15,6 +15,7 @@ const Commands = {
   AccountReadiness: "account-readiness",
   New: "new",
   Bootstrap: "bootstrap",
+  Recreate: "recreate",
 };
 
 const parseCommandLineArguments = () => {
@@ -122,6 +123,19 @@ parseCommandLineArguments()
           yamlTemplateLocation,
           stages,
           packageManager: packageManager as PackageManager,
+        });
+      }
+      case Commands.Recreate: {
+        const { init, app, stack, yamlTemplateLocation, stage, packageManager } = argv;
+        const stages = stage.map((_) => (_ as string).toUpperCase());
+        return newCdkProject({
+          init,
+          app,
+          stack,
+          yamlTemplateLocation,
+          stages,
+          packageManager: packageManager as PackageManager,
+          recreate: true,
         });
       }
       default:
