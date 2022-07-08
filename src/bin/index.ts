@@ -85,6 +85,44 @@ const parseCommandLineArguments = () => {
               demandOption: true,
             })
       )
+      .command(
+        Commands.Recreate,
+        "Creates a new CDK project within a `cdk` directory at the root of the repository",
+        (yargs) =>
+          yargs
+            .option("init", {
+              type: "boolean",
+              description: "Create the cdk directory before building the app and stack files (defaults to true)",
+              default: true,
+            })
+            .option("app", {
+              type: "string",
+              description: "The name of your application e.g. Amigo",
+              demandOption: true,
+            })
+            .option("stack", {
+              type: "string",
+              description:
+                "The Guardian stack being used (as defined in your riff-raff.yaml). This will be applied as a tag to all of your resources.",
+              demandOption: true,
+            })
+            .option("yaml-template-location", {
+              type: "string",
+              description: "Path to the YAML CloudFormation template",
+            })
+            .option("stage", {
+              description:
+                "The stage(s) for your stack. Can be specified multiple times, e.g. --stage CODE --stage PROD",
+              type: "array",
+              demandOption: true,
+            })
+            .option("package-manager", {
+              description:
+                "The Node package manager to use. Match this to the repository (package-lock.json = npm, yarn.lock = yarn). If the repository has neither file, and there is no strong convention in your team, we recommend npm.",
+              choices: ["npm", "yarn"],
+              demandOption: true,
+            })
+      )
       .version(
         `${LibraryInfo.VERSION} (using aws-cdk-lib ${LibraryInfo.AWS_CDK_VERSION}, constructs ${LibraryInfo.CONSTRUCTS_VERSION})`
       )
