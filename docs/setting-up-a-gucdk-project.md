@@ -48,7 +48,7 @@ Patterns are TypeScript classes that create the requisite AWS resources for a co
 (e.g. when using [`serverless-express`](https://github.com/vendia/serverless-express))
   * when [routing different requests to different Lambda functions based on the path](https://guardian.github.io/cdk/classes/patterns.GuApiGatewayWithLambdaByPath.html)
 
-> Tip: You can find a full list of available patterns [here](https://guardian.github.io/cdk/modules/patterns.html).
+> Tip: You can find a full list of the available patterns [here](https://guardian.github.io/cdk/modules/patterns.html).
 
 Patterns can be imported from the top level of the library:
 
