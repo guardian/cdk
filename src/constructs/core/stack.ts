@@ -4,7 +4,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
-import { ContextKeys, LibraryInfo, TagKeys, TrackingTag } from "../../constants";
+import { ContextKeys, LibraryInfo, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
@@ -155,7 +155,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
       const repositoryUrl: string = urlFromContext ?? gitRemoteOriginUrl();
       const repositoryName = gitUrlParse(repositoryUrl).full_name;
-      this.addTag(TagKeys.REPOSITORY_NAME, repositoryName);
+      this.addTag(MetadataKeys.REPOSITORY_NAME, repositoryName);
     } catch {
       console.info(
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
