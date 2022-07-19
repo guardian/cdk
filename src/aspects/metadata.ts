@@ -2,8 +2,8 @@ import type { IAspect, Stack } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
 import { LibraryInfo, MetadataKeys } from "../constants";
 
-type GuConstruct = {
-  guConstructID: string;
+export type GuConstruct = {
+  readonly guConstructID: string;
 };
 
 const isGuConstruct = (construct: unknown): construct is GuConstruct => {
