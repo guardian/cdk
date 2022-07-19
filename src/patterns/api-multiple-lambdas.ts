@@ -1,5 +1,6 @@
 import type { RestApiProps } from "aws-cdk-lib/aws-apigateway";
 import { LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
+import type { GuConstruct } from "../aspects/metadata";
 import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
 import type { AppIdentity, GuStack } from "../constructs/core";
@@ -119,8 +120,10 @@ function isNoMonitoring(
  *
  * For details on configuring the individual Lambda functions, see [[`GuLambdaFunction`]].
  */
-export class GuApiGatewayWithLambdaByPath {
+export class GuApiGatewayWithLambdaByPath implements GuConstruct {
   public readonly api: RestApi;
+  readonly guConstructID = "GuApiGatewayWithLambdaByPath";
+
   constructor(scope: GuStack, props: GuApiGatewayWithLambdaByPathProps) {
     const apiGateway = new RestApi(scope, "RestApi", {
       // Override to avoid clashes as default is just api ID, which is often shared across stages.

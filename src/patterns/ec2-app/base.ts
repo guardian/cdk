@@ -5,6 +5,7 @@ import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
+import type { GuConstruct } from "../../aspects/metadata";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
@@ -313,7 +314,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  * cfnLb.securityGroups = [sg.securityGroupId];
  * ```
  */
-export class GuEc2App {
+export class GuEc2App implements GuConstruct {
   /*
    * These are public for now, as this allows users to
    * modify these constructs as desired to fit their
@@ -328,6 +329,8 @@ export class GuEc2App {
   public readonly autoScalingGroup: GuAutoScalingGroup;
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroup: GuApplicationTargetGroup;
+
+  guConstructID = "GuEc2App";
 
   constructor(scope: GuStack, props: GuEc2AppProps) {
     const {

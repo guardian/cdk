@@ -2,6 +2,7 @@ import { CfnOutput } from "aws-cdk-lib";
 import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { ITopic } from "aws-cdk-lib/aws-sns";
 import { Topic } from "aws-cdk-lib/aws-sns";
+import type { GuConstruct } from "../../aspects/metadata";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../../constructs/cloudwatch";
 import { AppIdentity } from "../../constructs/core";
 import type { GuStack } from "../../constructs/core";
@@ -63,8 +64,9 @@ export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  *
  * @experimental This pattern is in early development. The API is likely to change in future releases.
  */
-export class GuSnsLambdaExperimental extends GuLambdaFunction {
+export class GuSnsLambdaExperimental extends GuLambdaFunction implements GuConstruct {
   public readonly snsTopic: ITopic;
+  readonly guConstructID = "GuSnsLambda";
 
   constructor(scope: GuStack, id: string, props: GuSnsLambdaProps) {
     super(scope, id, {

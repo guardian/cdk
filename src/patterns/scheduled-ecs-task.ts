@@ -1,6 +1,7 @@
 import type { Schedule } from "aws-cdk-lib/aws-events";
 import { Rule } from "aws-cdk-lib/aws-events";
 import { SfnStateMachine } from "aws-cdk-lib/aws-events-targets";
+import type { GuConstruct } from "../aspects/metadata";
 import type { GuStack } from "../constructs/core";
 import type { GuEcsTaskProps } from "../constructs/ecs";
 import { GuEcsTask } from "../constructs/ecs";
@@ -47,7 +48,9 @@ export interface GuScheduledEcsTaskProps extends GuEcsTaskProps {
  * Note that if your task reliably completes in less than 15 minutes then you should probably use a [[`GuScheduledLambda`]] instead. This
  * pattern was mainly created to work around the 15 minute lambda timeout.
  */
-export class GuScheduledEcsTask extends GuAppAwareConstruct(GuEcsTask) {
+export class GuScheduledEcsTask extends GuAppAwareConstruct(GuEcsTask) implements GuConstruct {
+  readonly guConstructID = "GuScheduledEcsTask";
+
   constructor(scope: GuStack, id: string, props: GuScheduledEcsTaskProps) {
     super(scope, id, props);
 
