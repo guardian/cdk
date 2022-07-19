@@ -33,7 +33,9 @@ for specific details.</li>
 <ul class="tsd-hierarchy">
 <li><span class="tsd-signature-type">Mixin</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><a href="constructs_iam.GuRole.html" class="tsd-signature-type" data-tsd-kind="Class">GuRole</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="constructs_iam.GuRole.html" class="tsd-signature-type" data-tsd-kind="Class">GuRole</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 <ul class="tsd-hierarchy">
-<li><span class="target">GuInstanceRole</span></li></ul></li></ul></section>
+<li><span class="target">GuInstanceRole</span></li></ul></li></ul></section><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0716f1/src/constructs/iam/roles/instance-role.ts#L43">src/constructs/iam/roles/instance-role.ts:43</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -87,8 +89,7 @@ for specific details.</li>
 <section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class"><a id="constructor" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>constructor</span><a href="#constructor" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-<li class="tsd-signature" id="constructor.new_GuInstanceRole">new <wbr/>Gu<wbr/>Instance<wbr/>Role<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, props<span class="tsd-signature-symbol">: </span><a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html" class="tsd-signature-type" data-tsd-kind="Type alias">GuInstanceRolePropsWithApp</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="constructs_iam.GuInstanceRole.html" class="tsd-signature-type" data-tsd-kind="Class">GuInstanceRole</a></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="constructor.new_GuInstanceRole">new <wbr/>Gu<wbr/>Instance<wbr/>Role<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, props<span class="tsd-signature-symbol">: </span><a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html" class="tsd-signature-type" data-tsd-kind="Type alias">GuInstanceRolePropsWithApp</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="constructs_iam.GuInstanceRole.html" class="tsd-signature-type" data-tsd-kind="Class">GuInstanceRole</a><a href="#constructor.new_GuInstanceRole" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -98,7 +99,9 @@ for specific details.</li>
 <li>
 <h5>props: <a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html" class="tsd-signature-type" data-tsd-kind="Type alias">GuInstanceRolePropsWithApp</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="constructs_iam.GuInstanceRole.html" class="tsd-signature-type" data-tsd-kind="Class">GuInstanceRole</a></h4><aside class="tsd-sources">
-<p>Overrides GuAppAwareConstruct(GuRole).constructor</p></aside></li></ul></section></section>
+<p>Overrides GuAppAwareConstruct(GuRole).constructor</p>
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0716f1/src/constructs/iam/roles/instance-role.ts#L44">src/constructs/iam/roles/instance-role.ts:44</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="assumeRoleAction" class="tsd-anchor"></a>
@@ -135,7 +138,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/adc5c3a/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0716f1/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="node" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>node</span><a href="#node" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Node</span></div>
@@ -219,8 +222,7 @@ AIDAJQABLZS4A3QDU576Q.</p>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="_enableCrossEnvironment" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>_enable<wbr/>Cross<wbr/>Environment</span><a href="#_enableCrossEnvironment" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="_enableCrossEnvironment._enableCrossEnvironment-1">_enable<wbr/>Cross<wbr/>Environment<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="_enableCrossEnvironment._enableCrossEnvironment-1">_enable<wbr/>Cross<wbr/>Environment<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#_enableCrossEnvironment._enableCrossEnvironment-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description"><code class="tsd-tag ts-flagInternal">Internal</code> 
 <div class="tsd-comment tsd-typography"><p>Called when this resource is referenced across environments
 (account/region) to order to request that a physical name will be generated
@@ -228,12 +230,13 @@ for this resource during synthesis, so the resource can be referenced
 through it&#39;s absolute name/arn.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole)._enableCrossEnvironment</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole)._enableCrossEnvironment</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:135</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="addManagedPolicy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>add<wbr/>Managed<wbr/>Policy</span><a href="#addManagedPolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="addManagedPolicy.addManagedPolicy-1">add<wbr/>Managed<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IManagedPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="addManagedPolicy.addManagedPolicy-1">add<wbr/>Managed<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IManagedPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#addManagedPolicy.addManagedPolicy-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Attaches a managed policy to this role.</p>
 </div>
@@ -245,12 +248,13 @@ through it&#39;s absolute name/arn.</p>
 <div class="tsd-comment tsd-typography"><p>The the managed policy to attach.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).addManagedPolicy</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).addManagedPolicy</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:239</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="addToPolicy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>add<wbr/>To<wbr/>Policy</span><a href="#addToPolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="addToPolicy.addToPolicy-1">add<wbr/>To<wbr/>Policy<span class="tsd-signature-symbol">(</span>statement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="addToPolicy.addToPolicy-1">add<wbr/>To<wbr/>Policy<span class="tsd-signature-symbol">(</span>statement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#addToPolicy.addToPolicy-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -258,12 +262,13 @@ through it&#39;s absolute name/arn.</p>
 <li>
 <h5>statement: <span class="tsd-signature-type">PolicyStatement</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).addToPolicy</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).addToPolicy</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:234</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="addToPrincipalPolicy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>add<wbr/>To<wbr/>Principal<wbr/>Policy</span><a href="#addToPrincipalPolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="addToPrincipalPolicy.addToPrincipalPolicy-1">add<wbr/>To<wbr/>Principal<wbr/>Policy<span class="tsd-signature-symbol">(</span>statement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AddToPrincipalPolicyResult</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="addToPrincipalPolicy.addToPrincipalPolicy-1">add<wbr/>To<wbr/>Principal<wbr/>Policy<span class="tsd-signature-symbol">(</span>statement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AddToPrincipalPolicyResult</span><a href="#addToPrincipalPolicy.addToPrincipalPolicy-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Adds a permission to the role&#39;s default policy document.
 If there is no default policy attached to this role, it will be created.</p>
@@ -276,12 +281,13 @@ If there is no default policy attached to this role, it will be created.</p>
 <div class="tsd-comment tsd-typography"><p>The permission statement to add to the policy document</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AddToPrincipalPolicyResult</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).addToPrincipalPolicy</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).addToPrincipalPolicy</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:233</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="applyRemovalPolicy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>apply<wbr/>Removal<wbr/>Policy</span><a href="#applyRemovalPolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="applyRemovalPolicy.applyRemovalPolicy-1">apply<wbr/>Removal<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RemovalPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="applyRemovalPolicy.applyRemovalPolicy-1">apply<wbr/>Removal<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RemovalPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#applyRemovalPolicy.applyRemovalPolicy-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Apply the given removal policy to this resource</p>
 <p>The Removal Policy controls what happens to this resource when it stops
@@ -297,12 +303,13 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <li>
 <h5>policy: <span class="tsd-signature-type">RemovalPolicy</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).applyRemovalPolicy</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).applyRemovalPolicy</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:147</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="attachInlinePolicy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>attach<wbr/>Inline<wbr/>Policy</span><a href="#attachInlinePolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="attachInlinePolicy.attachInlinePolicy-1">attach<wbr/>Inline<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Policy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="attachInlinePolicy.attachInlinePolicy-1">attach<wbr/>Inline<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Policy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#attachInlinePolicy.attachInlinePolicy-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Attaches a policy to this role.</p>
 </div>
@@ -314,20 +321,22 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <div class="tsd-comment tsd-typography"><p>The policy to attach</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).attachInlinePolicy</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).attachInlinePolicy</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:244</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="generatePhysicalName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>generate<wbr/>Physical<wbr/>Name</span><a href="#generatePhysicalName" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="generatePhysicalName.generatePhysicalName-1">generate<wbr/>Physical<wbr/>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="generatePhysicalName.generatePhysicalName-1">generate<wbr/>Physical<wbr/>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#generatePhysicalName.generatePhysicalName-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).generatePhysicalName</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).generatePhysicalName</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:148</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="getResourceArnAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>get<wbr/>Resource<wbr/>Arn<wbr/>Attribute</span><a href="#getResourceArnAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="getResourceArnAttribute.getResourceArnAttribute-1">get<wbr/>Resource<wbr/>Arn<wbr/>Attribute<span class="tsd-signature-symbol">(</span>arnAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, arnComponents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArnComponents</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="getResourceArnAttribute.getResourceArnAttribute-1">get<wbr/>Resource<wbr/>Arn<wbr/>Attribute<span class="tsd-signature-symbol">(</span>arnAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, arnComponents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArnComponents</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#getResourceArnAttribute.getResourceArnAttribute-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns an environment-sensitive token that should be used for the
 resource&#39;s &quot;ARN&quot; attribute (e.g. <code>bucket.bucketArn</code>).</p>
@@ -352,12 +361,13 @@ reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).getResourceArnAttribute</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).getResourceArnAttribute</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:178</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="getResourceNameAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>get<wbr/>Resource<wbr/>Name<wbr/>Attribute</span><a href="#getResourceNameAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="getResourceNameAttribute.getResourceNameAttribute-1">get<wbr/>Resource<wbr/>Name<wbr/>Attribute<span class="tsd-signature-symbol">(</span>nameAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="getResourceNameAttribute.getResourceNameAttribute-1">get<wbr/>Resource<wbr/>Name<wbr/>Attribute<span class="tsd-signature-symbol">(</span>nameAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#getResourceNameAttribute.getResourceNameAttribute-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns an environment-sensitive token that should be used for the
 resource&#39;s &quot;name&quot; attribute (e.g. <code>bucket.bucketName</code>).</p>
@@ -374,12 +384,13 @@ which will be a concrete name.</p>
 Commonly this is the resource&#39;s <code>ref</code>.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).getResourceNameAttribute</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).getResourceNameAttribute</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:160</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="grant" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>grant</span><a href="#grant" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="grant.grant-1">grant<span class="tsd-signature-symbol">(</span>grantee<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPrincipal</span>, <span class="tsd-signature-symbol">...</span>actions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Grant</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="grant.grant-1">grant<span class="tsd-signature-symbol">(</span>grantee<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPrincipal</span>, <span class="tsd-signature-symbol">...</span>actions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Grant</span><a href="#grant.grant-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Grant the actions defined in actions to the identity Principal on this resource.</p>
 </div>
@@ -391,12 +402,13 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span>actions: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Grant</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).grant</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).grant</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:248</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="grantAssumeRole" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>grant<wbr/>Assume<wbr/>Role</span><a href="#grantAssumeRole" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="grantAssumeRole.grantAssumeRole-1">grant<wbr/>Assume<wbr/>Role<span class="tsd-signature-symbol">(</span>identity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPrincipal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Grant</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="grantAssumeRole.grantAssumeRole-1">grant<wbr/>Assume<wbr/>Role<span class="tsd-signature-symbol">(</span>identity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPrincipal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Grant</span><a href="#grantAssumeRole.grantAssumeRole-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Grant permissions to the given principal to assume this role.</p>
 </div>
@@ -406,12 +418,13 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5>identity: <span class="tsd-signature-type">IPrincipal</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Grant</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).grantAssumeRole</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).grantAssumeRole</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:256</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="grantPassRole" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>grant<wbr/>Pass<wbr/>Role</span><a href="#grantPassRole" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="grantPassRole.grantPassRole-1">grant<wbr/>Pass<wbr/>Role<span class="tsd-signature-symbol">(</span>identity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPrincipal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Grant</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="grantPassRole.grantPassRole-1">grant<wbr/>Pass<wbr/>Role<span class="tsd-signature-symbol">(</span>identity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IPrincipal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Grant</span><a href="#grantPassRole.grantPassRole-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Grant permissions to the given principal to pass this role.</p>
 </div>
@@ -421,22 +434,24 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5>identity: <span class="tsd-signature-type">IPrincipal</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Grant</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).grantPassRole</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).grantPassRole</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:252</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="toString" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>to<wbr/>String</span><a href="#toString" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="toString.toString-1">to<wbr/>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="toString.toString-1">to<wbr/>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#toString.toString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns a string representation of an object.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).toString</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).toString</p>
+<ul>
+<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:127</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="withoutPolicyUpdates" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>without<wbr/>Policy<wbr/>Updates</span><a href="#withoutPolicyUpdates" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="withoutPolicyUpdates.withoutPolicyUpdates-1">without<wbr/>Policy<wbr/>Updates<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">WithoutPolicyUpdatesOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IRole</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="withoutPolicyUpdates.withoutPolicyUpdates-1">without<wbr/>Policy<wbr/>Updates<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">WithoutPolicyUpdatesOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IRole</span><a href="#withoutPolicyUpdates.withoutPolicyUpdates-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Return a copy of this Role object whose Policies will not be updated</p>
 <p>Use the object returned by this method if you want this Role to be used by
@@ -450,12 +465,13 @@ Role&#39;s policies yourself.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> options: <span class="tsd-signature-type">WithoutPolicyUpdatesOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IRole</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).withoutPolicyUpdates</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).withoutPolicyUpdates</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:266</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="fromRoleArn" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>from<wbr/>Role<wbr/>Arn</span><a href="#fromRoleArn" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="fromRoleArn.fromRoleArn-1">from<wbr/>Role<wbr/>Arn<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, roleArn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FromRoleArnOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IRole</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="fromRoleArn.fromRoleArn-1">from<wbr/>Role<wbr/>Arn<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, roleArn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FromRoleArnOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IRole</span><a href="#fromRoleArn.fromRoleArn-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Import an external role by ARN.</p>
 <p>If the imported Role ARN is a Token (such as a
@@ -487,12 +503,13 @@ expression. In this scenario the Role ARN should be supplied without the
 <div class="tsd-comment tsd-typography"><p>allow customizing the behavior of the returned role</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IRole</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).fromRoleArn</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).fromRoleArn</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:177</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="fromRoleName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>from<wbr/>Role<wbr/>Name</span><a href="#fromRoleName" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="fromRoleName.fromRoleName-1">from<wbr/>Role<wbr/>Name<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, roleName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FromRoleNameOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IRole</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="fromRoleName.fromRoleName-1">from<wbr/>Role<wbr/>Name<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, roleName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FromRoleNameOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IRole</span><a href="#fromRoleName.fromRoleName-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Import an external role by name.</p>
 <p>The imported role is assumed to exist in the same account as the account
@@ -518,12 +535,13 @@ the scope&#39;s containing Stack is being deployed to.</p>
 <div class="tsd-comment tsd-typography"><p>allow customizing the behavior of the returned role</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IRole</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).fromRoleName</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).fromRoleName</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/role.d.ts:189</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="isConstruct.isConstruct-1">is<wbr/>Construct<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1">is<wbr/>Construct<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -549,12 +567,13 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).isConstruct</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).isConstruct</p>
+<ul>
+<li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="isOwnedResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Owned<wbr/>Resource</span><a href="#isOwnedResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="isOwnedResource.isOwnedResource-1">is<wbr/>Owned<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="isOwnedResource.isOwnedResource-1">is<wbr/>Owned<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isOwnedResource.isOwnedResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns true if the construct was created by CDK, and false otherwise</p>
 </div>
@@ -564,12 +583,13 @@ this type-testing method instead.</p>
 <li>
 <h5>construct: <span class="tsd-signature-type">IConstruct</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).isOwnedResource</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(GuRole).isOwnedResource</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:109</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="isResource.isResource-1">is<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Resource</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1">is<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -579,7 +599,9 @@ this type-testing method instead.</p>
 <li>
 <h5>construct: <span class="tsd-signature-type">IConstruct</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Resource</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(GuRole).isResource</p></aside></li></ul></section></section></div>
+<p>Inherited from GuAppAwareConstruct(GuRole).isResource</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">

@@ -28,7 +28,9 @@ to route traffic to your application. For more details on these three components
 <ul class="tsd-hierarchy">
 <li><span class="tsd-signature-type">Mixin</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">ApplicationLoadBalancer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ApplicationLoadBalancer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 <ul class="tsd-hierarchy">
-<li><span class="target">GuApplicationLoadBalancer</span></li></ul></li></ul></section>
+<li><span class="target">GuApplicationLoadBalancer</span></li></ul></li></ul></section><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0716f1/src/constructs/loadbalancing/alb/application-load-balancer.ts#L26">src/constructs/loadbalancing/alb/application-load-balancer.ts:26</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -106,8 +108,7 @@ to route traffic to your application. For more details on these three components
 <section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class"><a id="constructor" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>constructor</span><a href="#constructor" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-<li class="tsd-signature" id="constructor.new_GuApplicationLoadBalancer">new <wbr/>Gu<wbr/>Application<wbr/>Load<wbr/>Balancer<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuApplicationLoadBalancerProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="constructs_loadbalancing.GuApplicationLoadBalancer.html" class="tsd-signature-type" data-tsd-kind="Class">GuApplicationLoadBalancer</a></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="constructor.new_GuApplicationLoadBalancer">new <wbr/>Gu<wbr/>Application<wbr/>Load<wbr/>Balancer<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><a href="constructs_core.GuStack.html" class="tsd-signature-type" data-tsd-kind="Class">GuStack</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuApplicationLoadBalancerProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="constructs_loadbalancing.GuApplicationLoadBalancer.html" class="tsd-signature-type" data-tsd-kind="Class">GuApplicationLoadBalancer</a><a href="#constructor.new_GuApplicationLoadBalancer" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -119,7 +120,9 @@ to route traffic to your application. For more details on these three components
 <li>
 <h5>props: <span class="tsd-signature-type">GuApplicationLoadBalancerProps</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="constructs_loadbalancing.GuApplicationLoadBalancer.html" class="tsd-signature-type" data-tsd-kind="Class">GuApplicationLoadBalancer</a></h4><aside class="tsd-sources">
-<p>Overrides GuAppAwareConstruct(ApplicationLoadBalancer).constructor</p></aside></li></ul></section></section>
+<p>Overrides GuAppAwareConstruct(ApplicationLoadBalancer).constructor</p>
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0716f1/src/constructs/loadbalancing/alb/application-load-balancer.ts#L27">src/constructs/loadbalancing/alb/application-load-balancer.ts:27</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="connections" class="tsd-anchor"></a>
@@ -142,7 +145,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/adc5c3a/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0716f1/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="ipAddressType" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>ip<wbr/>Address<wbr/>Type</span><a href="#ipAddressType" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">ip<wbr/>Address<wbr/>Type<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IpAddressType</span></div><aside class="tsd-sources">
@@ -257,8 +260,7 @@ cross-environment scenarios.</li>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="_enableCrossEnvironment" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>_enable<wbr/>Cross<wbr/>Environment</span><a href="#_enableCrossEnvironment" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="_enableCrossEnvironment._enableCrossEnvironment-1">_enable<wbr/>Cross<wbr/>Environment<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="_enableCrossEnvironment._enableCrossEnvironment-1">_enable<wbr/>Cross<wbr/>Environment<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#_enableCrossEnvironment._enableCrossEnvironment-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description"><code class="tsd-tag ts-flagInternal">Internal</code> 
 <div class="tsd-comment tsd-typography"><p>Called when this resource is referenced across environments
 (account/region) to order to request that a physical name will be generated
@@ -266,12 +268,13 @@ for this resource during synthesis, so the resource can be referenced
 through it&#39;s absolute name/arn.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer)._enableCrossEnvironment</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer)._enableCrossEnvironment</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:135</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="addListener" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>add<wbr/>Listener</span><a href="#addListener" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="addListener.addListener-1">add<wbr/>Listener<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BaseApplicationListenerProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationListener</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="addListener.addListener-1">add<wbr/>Listener<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BaseApplicationListenerProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationListener</span><a href="#addListener.addListener-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Add a new listener to this load balancer</p>
 </div>
@@ -283,12 +286,13 @@ through it&#39;s absolute name/arn.</p>
 <li>
 <h5>props: <span class="tsd-signature-type">BaseApplicationListenerProps</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ApplicationListener</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).addListener</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).addListener</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:65</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="addRedirect" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>add<wbr/>Redirect</span><a href="#addRedirect" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="addRedirect.addRedirect-1">add<wbr/>Redirect<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ApplicationLoadBalancerRedirectConfig</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationListener</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="addRedirect.addRedirect-1">add<wbr/>Redirect<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ApplicationLoadBalancerRedirectConfig</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationListener</span><a href="#addRedirect.addRedirect-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Add a redirection listener to this load balancer</p>
 </div>
@@ -298,12 +302,13 @@ through it&#39;s absolute name/arn.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">ApplicationLoadBalancerRedirectConfig</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ApplicationListener</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).addRedirect</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).addRedirect</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:69</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="addSecurityGroup" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>add<wbr/>Security<wbr/>Group</span><a href="#addSecurityGroup" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="addSecurityGroup.addSecurityGroup-1">add<wbr/>Security<wbr/>Group<span class="tsd-signature-symbol">(</span>securityGroup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="addSecurityGroup.addSecurityGroup-1">add<wbr/>Security<wbr/>Group<span class="tsd-signature-symbol">(</span>securityGroup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#addSecurityGroup.addSecurityGroup-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Add a security group to this load balancer</p>
 </div>
@@ -313,12 +318,13 @@ through it&#39;s absolute name/arn.</p>
 <li>
 <h5>securityGroup: <span class="tsd-signature-type">ISecurityGroup</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).addSecurityGroup</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).addSecurityGroup</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:73</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="applyRemovalPolicy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>apply<wbr/>Removal<wbr/>Policy</span><a href="#applyRemovalPolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="applyRemovalPolicy.applyRemovalPolicy-1">apply<wbr/>Removal<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RemovalPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="applyRemovalPolicy.applyRemovalPolicy-1">apply<wbr/>Removal<wbr/>Policy<span class="tsd-signature-symbol">(</span>policy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RemovalPolicy</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#applyRemovalPolicy.applyRemovalPolicy-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Apply the given removal policy to this resource</p>
 <p>The Removal Policy controls what happens to this resource when it stops
@@ -334,20 +340,22 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <li>
 <h5>policy: <span class="tsd-signature-type">RemovalPolicy</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).applyRemovalPolicy</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).applyRemovalPolicy</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:147</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="generatePhysicalName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>generate<wbr/>Physical<wbr/>Name</span><a href="#generatePhysicalName" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="generatePhysicalName.generatePhysicalName-1">generate<wbr/>Physical<wbr/>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="generatePhysicalName.generatePhysicalName-1">generate<wbr/>Physical<wbr/>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#generatePhysicalName.generatePhysicalName-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).generatePhysicalName</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).generatePhysicalName</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:148</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="getResourceArnAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>get<wbr/>Resource<wbr/>Arn<wbr/>Attribute</span><a href="#getResourceArnAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="getResourceArnAttribute.getResourceArnAttribute-1">get<wbr/>Resource<wbr/>Arn<wbr/>Attribute<span class="tsd-signature-symbol">(</span>arnAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, arnComponents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArnComponents</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="getResourceArnAttribute.getResourceArnAttribute-1">get<wbr/>Resource<wbr/>Arn<wbr/>Attribute<span class="tsd-signature-symbol">(</span>arnAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, arnComponents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArnComponents</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#getResourceArnAttribute.getResourceArnAttribute-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns an environment-sensitive token that should be used for the
 resource&#39;s &quot;ARN&quot; attribute (e.g. <code>bucket.bucketArn</code>).</p>
@@ -372,12 +380,13 @@ reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).getResourceArnAttribute</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).getResourceArnAttribute</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:178</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="getResourceNameAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>get<wbr/>Resource<wbr/>Name<wbr/>Attribute</span><a href="#getResourceNameAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="getResourceNameAttribute.getResourceNameAttribute-1">get<wbr/>Resource<wbr/>Name<wbr/>Attribute<span class="tsd-signature-symbol">(</span>nameAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="getResourceNameAttribute.getResourceNameAttribute-1">get<wbr/>Resource<wbr/>Name<wbr/>Attribute<span class="tsd-signature-symbol">(</span>nameAttr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#getResourceNameAttribute.getResourceNameAttribute-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns an environment-sensitive token that should be used for the
 resource&#39;s &quot;name&quot; attribute (e.g. <code>bucket.bucketName</code>).</p>
@@ -394,12 +403,13 @@ which will be a concrete name.</p>
 Commonly this is the resource&#39;s <code>ref</code>.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).getResourceNameAttribute</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).getResourceNameAttribute</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:160</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="logAccessLogs" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>log<wbr/>Access<wbr/>Logs</span><a href="#logAccessLogs" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="logAccessLogs.logAccessLogs-1">log<wbr/>Access<wbr/>Logs<span class="tsd-signature-symbol">(</span>bucket<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IBucket</span>, prefix<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="logAccessLogs.logAccessLogs-1">log<wbr/>Access<wbr/>Logs<span class="tsd-signature-symbol">(</span>bucket<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IBucket</span>, prefix<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#logAccessLogs.logAccessLogs-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Enable access logging for this load balancer.</p>
 <p>A region must be specified on the stack containing the load balancer; you cannot enable logging on
@@ -413,12 +423,13 @@ environment-agnostic stacks. See <a href="https://docs.aws.amazon.com/cdk/latest
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> prefix: <span class="tsd-signature-type">string</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).logAccessLogs</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).logAccessLogs</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:158</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metric" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric</span><a href="#metric" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metric.metric-1">metric<span class="tsd-signature-symbol">(</span>metricName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metric.metric-1">metric<span class="tsd-signature-symbol">(</span>metricName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metric.metric-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Return the given named metric for this Application Load Balancer</p>
 
@@ -432,12 +443,13 @@ environment-agnostic stacks. See <a href="https://docs.aws.amazon.com/cdk/latest
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metric</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metric</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:79</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricActiveConnectionCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Active<wbr/>Connection<wbr/>Count</span><a href="#metricActiveConnectionCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricActiveConnectionCount.metricActiveConnectionCount-1">metric<wbr/>Active<wbr/>Connection<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricActiveConnectionCount.metricActiveConnectionCount-1">metric<wbr/>Active<wbr/>Connection<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricActiveConnectionCount.metricActiveConnectionCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The total number of concurrent TCP connections active from clients to the
 load balancer and from the load balancer to targets.</p>
@@ -450,12 +462,13 @@ load balancer and from the load balancer to targets.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricActiveConnectionCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricActiveConnectionCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:86</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricClientTlsNegotiationErrorCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Client<wbr/>Tls<wbr/>Negotiation<wbr/>Error<wbr/>Count</span><a href="#metricClientTlsNegotiationErrorCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricClientTlsNegotiationErrorCount.metricClientTlsNegotiationErrorCount-1">metric<wbr/>Client<wbr/>Tls<wbr/>Negotiation<wbr/>Error<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricClientTlsNegotiationErrorCount.metricClientTlsNegotiationErrorCount-1">metric<wbr/>Client<wbr/>Tls<wbr/>Negotiation<wbr/>Error<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricClientTlsNegotiationErrorCount.metricClientTlsNegotiationErrorCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of TLS connections initiated by the client that did not
 establish a session with the load balancer. Possible causes include a
@@ -469,12 +482,13 @@ mismatch of ciphers or protocols.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricClientTlsNegotiationErrorCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricClientTlsNegotiationErrorCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:94</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricConsumedLCUs" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>ConsumedLCUs</span><a href="#metricConsumedLCUs" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricConsumedLCUs.metricConsumedLCUs-1">metric<wbr/>ConsumedLCUs<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricConsumedLCUs.metricConsumedLCUs-1">metric<wbr/>ConsumedLCUs<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricConsumedLCUs.metricConsumedLCUs-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of load balancer capacity units (LCU) used by your load balancer.</p>
 
@@ -486,12 +500,13 @@ mismatch of ciphers or protocols.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricConsumedLCUs</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricConsumedLCUs</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:100</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricElbAuthError" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Elb<wbr/>Auth<wbr/>Error</span><a href="#metricElbAuthError" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricElbAuthError.metricElbAuthError-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Error<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricElbAuthError.metricElbAuthError-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Error<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricElbAuthError.metricElbAuthError-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of user authentications that could not be completed</p>
 <p>Because an authenticate action was misconfigured, the load balancer
@@ -506,12 +521,13 @@ couldn&#39;t complete the authentication flow due to an internal error.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthError</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthError</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:212</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricElbAuthFailure" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Elb<wbr/>Auth<wbr/>Failure</span><a href="#metricElbAuthFailure" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricElbAuthFailure.metricElbAuthFailure-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Failure<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricElbAuthFailure.metricElbAuthFailure-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Failure<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricElbAuthFailure.metricElbAuthFailure-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of user authentications that could not be completed because the
 IdP denied access to the user or an authorization code was used more than
@@ -525,12 +541,13 @@ once.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthFailure</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthFailure</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:220</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricElbAuthLatency" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Elb<wbr/>Auth<wbr/>Latency</span><a href="#metricElbAuthLatency" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricElbAuthLatency.metricElbAuthLatency-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Latency<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricElbAuthLatency.metricElbAuthLatency-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Latency<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricElbAuthLatency.metricElbAuthLatency-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The time elapsed, in milliseconds, to query the IdP for the ID token and user info.</p>
 <p>If one or more of these operations fail, this is the time to failure.</p>
@@ -543,12 +560,13 @@ once.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthLatency</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthLatency</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:228</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricElbAuthSuccess" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Elb<wbr/>Auth<wbr/>Success</span><a href="#metricElbAuthSuccess" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricElbAuthSuccess.metricElbAuthSuccess-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Success<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricElbAuthSuccess.metricElbAuthSuccess-1">metric<wbr/>Elb<wbr/>Auth<wbr/>Success<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricElbAuthSuccess.metricElbAuthSuccess-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of authenticate actions that were successful.</p>
 <p>This metric is incremented at the end of the authentication workflow,
@@ -562,12 +580,13 @@ after the load balancer has retrieved the user claims from the IdP.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthSuccess</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricElbAuthSuccess</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:237</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricHttpCodeElb" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Http<wbr/>Code<wbr/>Elb</span><a href="#metricHttpCodeElb" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricHttpCodeElb.metricHttpCodeElb-1">metric<wbr/>Http<wbr/>Code<wbr/>Elb<span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HttpCodeElb</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricHttpCodeElb.metricHttpCodeElb-1">metric<wbr/>Http<wbr/>Code<wbr/>Elb<span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HttpCodeElb</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricHttpCodeElb.metricHttpCodeElb-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of HTTP 3xx/4xx/5xx codes that originate from the load balancer.</p>
 <p>This does not include any response codes generated by the targets.</p>
@@ -582,12 +601,13 @@ after the load balancer has retrieved the user claims from the IdP.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpCodeElb</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpCodeElb</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:127</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricHttpCodeTarget" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Http<wbr/>Code<wbr/>Target</span><a href="#metricHttpCodeTarget" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricHttpCodeTarget.metricHttpCodeTarget-1">metric<wbr/>Http<wbr/>Code<wbr/>Target<span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HttpCodeTarget</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricHttpCodeTarget.metricHttpCodeTarget-1">metric<wbr/>Http<wbr/>Code<wbr/>Target<span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HttpCodeTarget</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricHttpCodeTarget.metricHttpCodeTarget-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of HTTP 2xx/3xx/4xx/5xx response codes generated by all targets
 in the load balancer.</p>
@@ -603,12 +623,13 @@ in the load balancer.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpCodeTarget</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpCodeTarget</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:136</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricHttpFixedResponseCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Http<wbr/>Fixed<wbr/>Response<wbr/>Count</span><a href="#metricHttpFixedResponseCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricHttpFixedResponseCount.metricHttpFixedResponseCount-1">metric<wbr/>Http<wbr/>Fixed<wbr/>Response<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricHttpFixedResponseCount.metricHttpFixedResponseCount-1">metric<wbr/>Http<wbr/>Fixed<wbr/>Response<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricHttpFixedResponseCount.metricHttpFixedResponseCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of fixed-response actions that were successful.</p>
 
@@ -620,12 +641,13 @@ in the load balancer.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpFixedResponseCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpFixedResponseCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:106</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricHttpRedirectCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Http<wbr/>Redirect<wbr/>Count</span><a href="#metricHttpRedirectCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricHttpRedirectCount.metricHttpRedirectCount-1">metric<wbr/>Http<wbr/>Redirect<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricHttpRedirectCount.metricHttpRedirectCount-1">metric<wbr/>Http<wbr/>Redirect<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricHttpRedirectCount.metricHttpRedirectCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of redirect actions that were successful.</p>
 
@@ -637,12 +659,13 @@ in the load balancer.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpRedirectCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpRedirectCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:112</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricHttpRedirectUrlLimitExceededCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Http<wbr/>Redirect<wbr/>Url<wbr/>Limit<wbr/>Exceeded<wbr/>Count</span><a href="#metricHttpRedirectUrlLimitExceededCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricHttpRedirectUrlLimitExceededCount.metricHttpRedirectUrlLimitExceededCount-1">metric<wbr/>Http<wbr/>Redirect<wbr/>Url<wbr/>Limit<wbr/>Exceeded<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricHttpRedirectUrlLimitExceededCount.metricHttpRedirectUrlLimitExceededCount-1">metric<wbr/>Http<wbr/>Redirect<wbr/>Url<wbr/>Limit<wbr/>Exceeded<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricHttpRedirectUrlLimitExceededCount.metricHttpRedirectUrlLimitExceededCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of redirect actions that couldn&#39;t be completed because the URL
 in the response location header is larger than 8K.</p>
@@ -655,12 +678,13 @@ in the response location header is larger than 8K.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpRedirectUrlLimitExceededCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricHttpRedirectUrlLimitExceededCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:119</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricIpv6ProcessedBytes" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Ipv6<wbr/>Processed<wbr/>Bytes</span><a href="#metricIpv6ProcessedBytes" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricIpv6ProcessedBytes.metricIpv6ProcessedBytes-1">metric<wbr/>Ipv6<wbr/>Processed<wbr/>Bytes<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricIpv6ProcessedBytes.metricIpv6ProcessedBytes-1">metric<wbr/>Ipv6<wbr/>Processed<wbr/>Bytes<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricIpv6ProcessedBytes.metricIpv6ProcessedBytes-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The total number of bytes processed by the load balancer over IPv6.</p>
 
@@ -672,12 +696,13 @@ in the response location header is larger than 8K.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricIpv6ProcessedBytes</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricIpv6ProcessedBytes</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:142</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricIpv6RequestCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Ipv6<wbr/>Request<wbr/>Count</span><a href="#metricIpv6RequestCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricIpv6RequestCount.metricIpv6RequestCount-1">metric<wbr/>Ipv6<wbr/>Request<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricIpv6RequestCount.metricIpv6RequestCount-1">metric<wbr/>Ipv6<wbr/>Request<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricIpv6RequestCount.metricIpv6RequestCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of IPv6 requests received by the load balancer.</p>
 
@@ -689,12 +714,13 @@ in the response location header is larger than 8K.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricIpv6RequestCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricIpv6RequestCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:148</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricNewConnectionCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>New<wbr/>Connection<wbr/>Count</span><a href="#metricNewConnectionCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricNewConnectionCount.metricNewConnectionCount-1">metric<wbr/>New<wbr/>Connection<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricNewConnectionCount.metricNewConnectionCount-1">metric<wbr/>New<wbr/>Connection<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricNewConnectionCount.metricNewConnectionCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The total number of new TCP connections established from clients to the
 load balancer and from the load balancer to targets.</p>
@@ -707,12 +733,13 @@ load balancer and from the load balancer to targets.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricNewConnectionCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricNewConnectionCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:155</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricProcessedBytes" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Processed<wbr/>Bytes</span><a href="#metricProcessedBytes" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricProcessedBytes.metricProcessedBytes-1">metric<wbr/>Processed<wbr/>Bytes<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricProcessedBytes.metricProcessedBytes-1">metric<wbr/>Processed<wbr/>Bytes<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricProcessedBytes.metricProcessedBytes-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The total number of bytes processed by the load balancer over IPv4 and IPv6.</p>
 
@@ -724,12 +751,13 @@ load balancer and from the load balancer to targets.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricProcessedBytes</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricProcessedBytes</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:161</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricRejectedConnectionCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Rejected<wbr/>Connection<wbr/>Count</span><a href="#metricRejectedConnectionCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricRejectedConnectionCount.metricRejectedConnectionCount-1">metric<wbr/>Rejected<wbr/>Connection<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricRejectedConnectionCount.metricRejectedConnectionCount-1">metric<wbr/>Rejected<wbr/>Connection<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricRejectedConnectionCount.metricRejectedConnectionCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of connections that were rejected because the load balancer had
 reached its maximum number of connections.</p>
@@ -742,12 +770,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricRejectedConnectionCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricRejectedConnectionCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:168</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricRequestCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Request<wbr/>Count</span><a href="#metricRequestCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricRequestCount.metricRequestCount-1">metric<wbr/>Request<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricRequestCount.metricRequestCount-1">metric<wbr/>Request<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricRequestCount.metricRequestCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of requests processed over IPv4 and IPv6.</p>
 <p>This count includes only the requests with a response generated by a target of the load balancer.</p>
@@ -760,12 +789,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricRequestCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricRequestCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:176</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricRuleEvaluations" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Rule<wbr/>Evaluations</span><a href="#metricRuleEvaluations" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricRuleEvaluations.metricRuleEvaluations-1">metric<wbr/>Rule<wbr/>Evaluations<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricRuleEvaluations.metricRuleEvaluations-1">metric<wbr/>Rule<wbr/>Evaluations<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricRuleEvaluations.metricRuleEvaluations-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of rules processed by the load balancer given a request rate averaged over an hour.</p>
 
@@ -777,12 +807,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricRuleEvaluations</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricRuleEvaluations</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:182</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricTargetConnectionErrorCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Target<wbr/>Connection<wbr/>Error<wbr/>Count</span><a href="#metricTargetConnectionErrorCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricTargetConnectionErrorCount.metricTargetConnectionErrorCount-1">metric<wbr/>Target<wbr/>Connection<wbr/>Error<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricTargetConnectionErrorCount.metricTargetConnectionErrorCount-1">metric<wbr/>Target<wbr/>Connection<wbr/>Error<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricTargetConnectionErrorCount.metricTargetConnectionErrorCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of connections that were not successfully established between the load balancer and target.</p>
 
@@ -794,12 +825,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricTargetConnectionErrorCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricTargetConnectionErrorCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:188</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricTargetResponseTime" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>Target<wbr/>Response<wbr/>Time</span><a href="#metricTargetResponseTime" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricTargetResponseTime.metricTargetResponseTime-1">metric<wbr/>Target<wbr/>Response<wbr/>Time<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricTargetResponseTime.metricTargetResponseTime-1">metric<wbr/>Target<wbr/>Response<wbr/>Time<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricTargetResponseTime.metricTargetResponseTime-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The time elapsed, in seconds, after the request leaves the load balancer until a response from the target is received.</p>
 
@@ -811,12 +843,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricTargetResponseTime</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricTargetResponseTime</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:194</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="metricTargetTLSNegotiationErrorCount" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>metric<wbr/>TargetTLSNegotiation<wbr/>Error<wbr/>Count</span><a href="#metricTargetTLSNegotiationErrorCount" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="metricTargetTLSNegotiationErrorCount.metricTargetTLSNegotiationErrorCount-1">metric<wbr/>TargetTLSNegotiation<wbr/>Error<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="metricTargetTLSNegotiationErrorCount.metricTargetTLSNegotiationErrorCount-1">metric<wbr/>TargetTLSNegotiation<wbr/>Error<wbr/>Count<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">MetricOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Metric</span><a href="#metricTargetTLSNegotiationErrorCount.metricTargetTLSNegotiationErrorCount-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The number of TLS connections initiated by the load balancer that did not establish a session with the target.</p>
 <p>Possible causes include a mismatch of ciphers or protocols.</p>
@@ -829,12 +862,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> props: <span class="tsd-signature-type">MetricOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Metric</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricTargetTLSNegotiationErrorCount</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).metricTargetTLSNegotiationErrorCount</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:202</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="removeAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>remove<wbr/>Attribute</span><a href="#removeAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="removeAttribute.removeAttribute-1">remove<wbr/>Attribute<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="removeAttribute.removeAttribute-1">remove<wbr/>Attribute<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#removeAttribute.removeAttribute-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Remove an attribute from the load balancer</p>
 </div>
@@ -844,12 +878,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5>key: <span class="tsd-signature-type">string</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).removeAttribute</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).removeAttribute</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:168</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="setAttribute" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>set<wbr/>Attribute</span><a href="#setAttribute" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="setAttribute.setAttribute-1">set<wbr/>Attribute<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="setAttribute.setAttribute-1">set<wbr/>Attribute<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setAttribute.setAttribute-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Set a non-standard attribute on the load balancer</p>
 
@@ -863,30 +898,33 @@ reached its maximum number of connections.</p>
 <li>
 <h5>value: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).setAttribute</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).setAttribute</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:164</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="toString" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>to<wbr/>String</span><a href="#toString" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="toString.toString-1">to<wbr/>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="toString.toString-1">to<wbr/>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#toString.toString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns a string representation of an object.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).toString</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).toString</p>
+<ul>
+<li>Defined in node_modules/typescript/lib/lib.es5.d.ts:127</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="validateLoadBalancer" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>validate<wbr/>Load<wbr/>Balancer</span><a href="#validateLoadBalancer" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="validateLoadBalancer.validateLoadBalancer-1">validate<wbr/>Load<wbr/>Balancer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="validateLoadBalancer.validateLoadBalancer-1">validate<wbr/>Load<wbr/>Balancer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><a href="#validateLoadBalancer.validateLoadBalancer-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).validateLoadBalancer</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).validateLoadBalancer</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:169</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="_queryContextProvider" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagProtected">Protected</code> <span>_query<wbr/>Context<wbr/>Provider</span><a href="#_queryContextProvider" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="_queryContextProvider._queryContextProvider-1">_query<wbr/>Context<wbr/>Provider<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancerQueryContextProviderOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancerContextResponse</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="_queryContextProvider._queryContextProvider-1">_query<wbr/>Context<wbr/>Provider<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancerQueryContextProviderOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LoadBalancerContextResponse</span><a href="#_queryContextProvider._queryContextProvider-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description"><code class="tsd-tag ts-flagInternal">Internal</code> 
 <div class="tsd-comment tsd-typography"><p>Queries the load balancer context provider for load balancer info.</p>
 </div>
@@ -898,12 +936,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5>options: <span class="tsd-signature-type">LoadBalancerQueryContextProviderOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">LoadBalancerContextResponse</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer)._queryContextProvider</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer)._queryContextProvider</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/shared/base-load-balancer.d.ts:96</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="fromApplicationLoadBalancerAttributes" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>from<wbr/>Application<wbr/>Load<wbr/>Balancer<wbr/>Attributes</span><a href="#fromApplicationLoadBalancerAttributes" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="fromApplicationLoadBalancerAttributes.fromApplicationLoadBalancerAttributes-1">from<wbr/>Application<wbr/>Load<wbr/>Balancer<wbr/>Attributes<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, attrs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationLoadBalancerAttributes</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IApplicationLoadBalancer</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="fromApplicationLoadBalancerAttributes.fromApplicationLoadBalancerAttributes-1">from<wbr/>Application<wbr/>Load<wbr/>Balancer<wbr/>Attributes<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, attrs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationLoadBalancerAttributes</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IApplicationLoadBalancer</span><a href="#fromApplicationLoadBalancerAttributes.fromApplicationLoadBalancerAttributes-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Import an existing Application Load Balancer</p>
 </div>
@@ -917,12 +956,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5>attrs: <span class="tsd-signature-type">ApplicationLoadBalancerAttributes</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IApplicationLoadBalancer</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).fromApplicationLoadBalancerAttributes</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).fromApplicationLoadBalancerAttributes</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:57</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="fromLookup" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>from<wbr/>Lookup</span><a href="#fromLookup" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="fromLookup.fromLookup-1">from<wbr/>Lookup<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationLoadBalancerLookupOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IApplicationLoadBalancer</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="fromLookup.fromLookup-1">from<wbr/>Lookup<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Construct</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ApplicationLoadBalancerLookupOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IApplicationLoadBalancer</span><a href="#fromLookup.fromLookup-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Look up an application load balancer.</p>
 </div>
@@ -936,12 +976,13 @@ reached its maximum number of connections.</p>
 <li>
 <h5>options: <span class="tsd-signature-type">ApplicationLoadBalancerLookupOptions</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IApplicationLoadBalancer</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).fromLookup</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).fromLookup</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-load-balancer.d.ts:53</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="isConstruct.isConstruct-1">is<wbr/>Construct<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1">is<wbr/>Construct<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -967,12 +1008,13 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Construct</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).isConstruct</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).isConstruct</p>
+<ul>
+<li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="isOwnedResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Owned<wbr/>Resource</span><a href="#isOwnedResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="isOwnedResource.isOwnedResource-1">is<wbr/>Owned<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="isOwnedResource.isOwnedResource-1">is<wbr/>Owned<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isOwnedResource.isOwnedResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns true if the construct was created by CDK, and false otherwise</p>
 </div>
@@ -982,12 +1024,13 @@ this type-testing method instead.</p>
 <li>
 <h5>construct: <span class="tsd-signature-type">IConstruct</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).isOwnedResource</p></aside></li></ul></section>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).isOwnedResource</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:109</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-<li class="tsd-signature" id="isResource.isResource-1">is<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Resource</span></li></ul>
-<ul class="tsd-descriptions">
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1">is<wbr/>Resource<span class="tsd-signature-symbol">(</span>construct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IConstruct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -997,7 +1040,9 @@ this type-testing method instead.</p>
 <li>
 <h5>construct: <span class="tsd-signature-type">IConstruct</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">Resource</span></h4><aside class="tsd-sources">
-<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).isResource</p></aside></li></ul></section></section></div>
+<p>Inherited from GuAppAwareConstruct(ApplicationLoadBalancer).isResource</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
