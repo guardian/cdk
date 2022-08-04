@@ -2,11 +2,11 @@ import { App, Duration } from "aws-cdk-lib";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { AccessScope } from "../constants";
-import type { GuStackProps } from "../constructs/core";
-import { GuStack } from "../constructs/core";
-import { GuEc2App, GuScheduledLambda } from "../patterns";
-import { RiffRaffYamlFile } from "./riff-raff-yaml-file";
+import { AccessScope } from "../../constants";
+import type { GuStackProps } from "../../constructs/core";
+import { GuStack } from "../../constructs/core";
+import { GuEc2App, GuScheduledLambda } from "../../patterns";
+import { RiffRaffYamlFile } from "./index";
 
 describe("The RiffRaffYamlFile class", () => {
   it("Should throw when there are missing stack definitions", () => {

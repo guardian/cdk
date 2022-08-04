@@ -4,10 +4,10 @@ import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import chalk from "chalk";
 import { dump } from "js-yaml";
-import { GuAutoScalingGroup } from "../constructs/autoscaling";
-import { GuStack } from "../constructs/core";
-import { GuLambdaFunction } from "../constructs/lambda";
-import { groupBy } from "./array";
+import { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import { GuStack } from "../../constructs/core";
+import { GuLambdaFunction } from "../../constructs/lambda";
+import { groupBy } from "../array";
 
 // type aliases to, hopefully, improve readability
 type ClassName = string;
