@@ -523,7 +523,7 @@ Object {
         "lambdaapiANY4EBCADD1",
       ],
       "Properties": Object {
-        "Description": "Automatically created by the RestApi construct",
+        "Description": "this is a test",
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
         },
@@ -1223,7 +1223,7 @@ Object {
         "lambdaapiANY4EBCADD1",
       ],
       "Properties": Object {
-        "Description": "Automatically created by the RestApi construct",
+        "Description": "this is a test",
         "RestApiId": Object {
           "Ref": "lambdaapiC1812993",
         },
