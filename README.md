@@ -6,12 +6,12 @@
 [badge-npm]: https://img.shields.io/npm/v/@guardian/cdk?style=flat-square
 [internal-cd-file]: https://github.com/guardian/cdk/actions/workflows/cd.yaml
 
-The [AWS Cloud Development Kit](aws-cdk) (AWS CDK) is an open-source software
+The [AWS Cloud Development Kit](https://github.com/aws/aws-cdk) (AWS CDK) is an open-source software
 development framework to define cloud infrastructure in code and provision it
 through AWS CloudFormation.
 
-`@guardian/cdk` builds on CDK to provide Guardian-specific patterns and
-constructs. It is an opinionated and secure-by-default way to describe and
+`@guardian/cdk` builds on CDK to provide Guardian-specific [patterns](./src/patterns) and
+[constructs](./src/construcst). It is an opinionated and secure-by-default way to describe and
 provision your AWS resources.
 
 Jump to:
