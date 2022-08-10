@@ -10,8 +10,8 @@ The [AWS Cloud Development Kit](https://github.com/aws/aws-cdk) (AWS CDK) is an 
 development framework to define cloud infrastructure in code and provision it
 through AWS CloudFormation.
 
-`@guardian/cdk` builds on CDK to provide Guardian-specific patterns and
-constructs. It is an opinionated and secure-by-default way to describe and
+`@guardian/cdk` builds on CDK to provide Guardian-specific [patterns](./src/patterns) and
+[constructs](./src/construcst). It is an opinionated and secure-by-default way to describe and
 provision your AWS resources.
 
 Jump to:
