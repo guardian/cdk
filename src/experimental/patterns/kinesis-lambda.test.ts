@@ -3,11 +3,11 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
 import { StreamEncryption } from "aws-cdk-lib/aws-kinesis";
 import { Runtime, StartingPosition } from "aws-cdk-lib/aws-lambda";
-import type { NoMonitoring } from "../constructs/cloudwatch";
-import { StreamRetry } from "../utils/lambda";
-import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
-import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
-import { GuKinesisLambda } from "./kinesis-lambda";
+import type { NoMonitoring } from "../../constructs/cloudwatch";
+import { StreamRetry } from "../../utils/lambda";
+import type { StreamErrorHandlingProps, StreamProcessingProps } from "../../utils/lambda";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { GuKinesisLambdaExperimental } from "./kinesis-lambda";
 
 describe("The GuKinesisLambda pattern", () => {
   it("should create the correct resources for a new stack with minimal config", () => {
@@ -26,7 +26,7 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
@@ -46,7 +46,7 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
-    const { kinesisStream } = new GuKinesisLambda(stack, "my-lambda-function", props);
+    const { kinesisStream } = new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     stack.overrideLogicalId(kinesisStream, { logicalId: "pre-existing-kinesis-stream", reason: "testing" });
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
   });
@@ -68,7 +68,7 @@ describe("The GuKinesisLambda pattern", () => {
       existingKinesisStream: { externalKinesisStreamName: "kinesis-stream-from-another-stack" },
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
 
     const template = Template.fromStack(stack);
     template.hasResourceProperties("AWS::Lambda::EventSourceMapping", {
@@ -110,7 +110,7 @@ describe("The GuKinesisLambda pattern", () => {
       },
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
@@ -130,7 +130,7 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::Kinesis::Stream", {
       StreamEncryption: {
         EncryptionType: "KMS",
@@ -158,7 +158,7 @@ describe("The GuKinesisLambda pattern", () => {
       },
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
 
     Template.fromStack(stack).hasResourceProperties("AWS::Kinesis::Stream", {
       StreamEncryption: Match.absent(),
@@ -187,7 +187,7 @@ describe("The GuKinesisLambda pattern", () => {
       kinesisStreamProps: kinesisStreamProps,
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::Kinesis::Stream", {
       Name: "custom-kinesis-stream-name",
       RetentionPeriodHours: 100,
@@ -219,7 +219,7 @@ describe("The GuKinesisLambda pattern", () => {
       processingProps: processingProps,
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       BatchSize: 11,
       ParallelizationFactor: 2,
@@ -245,7 +245,7 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       BisectBatchOnFunctionError: true,
       MaximumRetryAttempts: 5,
@@ -268,7 +268,7 @@ describe("The GuKinesisLambda pattern", () => {
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
-    new GuKinesisLambda(stack, "my-lambda-function", props);
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
       BisectBatchOnFunctionError: true,
       MaximumRecordAgeInSeconds: 300,

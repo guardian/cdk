@@ -3,14 +3,14 @@ import type { IStream, StreamProps } from "aws-cdk-lib/aws-kinesis";
 import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
-import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import { AppIdentity } from "../constructs/core";
-import type { GuStack } from "../constructs/core";
-import { GuKinesisStream } from "../constructs/kinesis";
-import { GuLambdaFunction } from "../constructs/lambda";
-import type { GuFunctionProps } from "../constructs/lambda";
-import { toAwsErrorHandlingProps } from "../utils/lambda";
-import type { StreamErrorHandlingProps, StreamProcessingProps } from "../utils/lambda";
+import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../../constructs/cloudwatch";
+import { AppIdentity } from "../../constructs/core";
+import type { GuStack } from "../../constructs/core";
+import { GuKinesisStream } from "../../constructs/kinesis";
+import { GuLambdaFunction } from "../../constructs/lambda";
+import type { GuFunctionProps } from "../../constructs/lambda";
+import { toAwsErrorHandlingProps } from "../../utils/lambda";
+import type { StreamErrorHandlingProps, StreamProcessingProps } from "../../utils/lambda";
 
 /**
  * Used to provide information about an existing Kinesis stream to the [[`GuKinesisLambda`]] pattern.
@@ -76,9 +76,9 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
  * The Kinesis stream is stateful, and is accessible via `kinesisStream`.
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  *
- * @alpha This pattern is in early development. The API is likely to change in future releases.
+ * @experimental This pattern is in early development. The API is likely to change in future releases.
  */
-export class GuKinesisLambda extends GuLambdaFunction {
+export class GuKinesisLambdaExperimental extends GuLambdaFunction {
   public readonly kinesisStream: IStream;
 
   constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
