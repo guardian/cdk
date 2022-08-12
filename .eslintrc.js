@@ -15,6 +15,7 @@ module.exports = {
     "@typescript-eslint/no-inferrable-types": 0,
     "import/no-namespace": 2,
     "custom-rules/valid-constructors": 2,
+    "custom-rules/experimental-classes": 0,
   },
   root: true,
   ignorePatterns: ["**/*.js", "node_modules"],
@@ -23,6 +24,14 @@ module.exports = {
       files: ["src/bin/**"],
       rules: {
         "custom-rules/valid-constructors": 0,
+      },
+    },
+
+    // This rule is applied within `overrides` as it only applies to the `experimental` directory, and the rule's test.
+    {
+      files: ["src/experimental/**", "tools/eslint/rules/experimental-classes.test.ts"],
+      rules: {
+        "custom-rules/experimental-classes": 2,
       },
     },
   ],
