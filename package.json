@@ -17,7 +17,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
-    "test:custom-lint-rule": "eslint tools/eslint/rules/valid-constructors.test.ts",
+    "test:custom-lint-rule": "eslint tools/eslint/rules/*.test.ts",
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepare": "tsc",
     "prepack": "cp -r src/bin/commands/new-project/template lib/bin/commands/new-project/template",

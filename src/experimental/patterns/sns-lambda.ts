@@ -2,12 +2,12 @@ import { CfnOutput } from "aws-cdk-lib";
 import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { ITopic } from "aws-cdk-lib/aws-sns";
 import { Topic } from "aws-cdk-lib/aws-sns";
-import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
-import { AppIdentity } from "../constructs/core";
-import type { GuStack } from "../constructs/core";
-import { GuLambdaFunction } from "../constructs/lambda";
-import type { GuFunctionProps } from "../constructs/lambda";
-import { GuSnsTopic } from "../constructs/sns";
+import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../../constructs/cloudwatch";
+import { AppIdentity } from "../../constructs/core";
+import type { GuStack } from "../../constructs/core";
+import { GuLambdaFunction } from "../../constructs/lambda";
+import type { GuFunctionProps } from "../../constructs/lambda";
+import { GuSnsTopic } from "../../constructs/sns";
 
 /**
  * Used to provide information about an existing SNS topic to the [[`GuSnsLambda`]] pattern.
@@ -61,9 +61,9 @@ export interface GuSnsLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * The SNS topic is stateful, and is accessible via `snsTopic`.
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  *
- * @alpha This pattern is in early development. The API is likely to change in future releases.
+ * @experimental This pattern is in early development. The API is likely to change in future releases.
  */
-export class GuSnsLambda extends GuLambdaFunction {
+export class GuSnsLambdaExperimental extends GuLambdaFunction {
   public readonly snsTopic: ITopic;
 
   constructor(scope: GuStack, id: string, props: GuSnsLambdaProps) {
