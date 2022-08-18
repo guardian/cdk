@@ -1,7 +1,7 @@
-import { Annotations, Duration } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Code, Function, Runtime, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
-import type { FunctionProps } from "aws-cdk-lib/aws-lambda";
+import { Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
+import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { GuDistributable } from "../../types";
 import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
@@ -9,14 +9,6 @@ import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitori
 import type { GuStack } from "../core";
 import { AppIdentity, GuDistributionBucketParameter } from "../core";
 import { ReadParametersByName, ReadParametersByPath } from "../iam";
-
-const DEPRECATED_RUNTIMES: Runtime[] = [
-  Runtime.NODEJS_4_3,
-  Runtime.NODEJS_6_10,
-  Runtime.NODEJS_8_10,
-  Runtime.NODEJS_10_X,
-  Runtime.NODEJS_12_X,
-];
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   /**
@@ -97,10 +89,6 @@ export class GuLambdaFunction extends Function {
       timeout: timeout ?? Duration.seconds(30),
       code,
     });
-
-    if (DEPRECATED_RUNTIMES.includes(runtime)) {
-      Annotations.of(this).addError(`The runtime ${runtime.name} is deprecated or not LTS. Consider updating.`);
-    }
 
     this.app = app;
 

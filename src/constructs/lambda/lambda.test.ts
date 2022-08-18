@@ -1,45 +1,10 @@
-import { Annotations, Duration } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {
-  const error = jest.spyOn(Annotations.prototype, "addError");
-
-  afterEach(() => {
-    error.mockReset();
-  });
-
-  it("should warn against using deprecated runtimes", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuLambdaFunction(stack, "lambda", {
-      fileName: "my-app.zip",
-      handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
-      app: "testing",
-    });
-
-    expect(error).toHaveBeenCalledWith("The runtime nodejs12.x is deprecated or not LTS. Consider updating.");
-  });
-
-  it("should not warn about runtimes when using the latest", () => {
-    const stack = simpleGuStackForTesting();
-
-    new GuLambdaFunction(stack, "lambda", {
-      fileName: "my-app.zip",
-      handler: "handler.ts",
-      runtime: Runtime.NODEJS,
-      app: "testing",
-    });
-
-    expect(error).toHaveBeenCalledTimes(0);
-    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
-      Runtime: "nodejs",
-    });
-  });
-
   it("should create the code object from the bucket and key passed in", () => {
     const stack = simpleGuStackForTesting();
 
