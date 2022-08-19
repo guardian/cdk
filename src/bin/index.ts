@@ -6,7 +6,6 @@ import type { CliCommandResponse } from "../types/cli";
 import { awsCredentialProviderChain } from "./aws-credential-provider";
 import { accountReadinessCommand } from "./commands/account-readiness";
 import { awsCdkVersionCommand } from "./commands/aws-cdk-version";
-import { bootstrapCommand } from "./commands/bootstrap";
 import type { PackageManager } from "./commands/new-project";
 import { newCdkProject } from "./commands/new-project";
 
@@ -14,7 +13,6 @@ const Commands = {
   AwsCdkVersion: "aws-cdk-version",
   AccountReadiness: "account-readiness",
   New: "new",
-  Bootstrap: "bootstrap",
 };
 
 const parseCommandLineArguments = () => {
@@ -28,19 +26,6 @@ const parseCommandLineArguments = () => {
     yargs
       .usage("$0 COMMAND [args]")
       .command(Commands.AwsCdkVersion, "Print the version of AWS CDK libraries being used")
-      .command(Commands.Bootstrap, "Bootstrap an AWS account for @guardian/cdk", (yargs) =>
-        yargs
-          .option("profile", {
-            type: "string",
-            description: "AWS profile",
-            demandOption: true,
-          })
-          .option("dry-run", {
-            type: "boolean",
-            description: "If set, AWS stack will not be created but the template will be printed to stdout.",
-          })
-          .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
-      )
       .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready", (yargs) =>
         yargs
           .option("profile", { type: "string", description: "AWS profile" })
@@ -99,14 +84,6 @@ parseCommandLineArguments()
     switch (command) {
       case Commands.AwsCdkVersion: {
         return awsCdkVersionCommand();
-      }
-      case Commands.Bootstrap: {
-        const { profile, region, dryRun } = argv;
-        return bootstrapCommand({
-          credentialProvider: awsCredentialProviderChain(profile),
-          dryRun: dryRun ?? false,
-          region,
-        });
       }
       case Commands.AccountReadiness: {
         const { profile, region } = argv;

@@ -17,11 +17,9 @@ export const accountReadinessCommand = async (props: AwsConfig): CliCommandRespo
   console.log(chalk.bold(report.name + ":") + " " + (report.isPass ? "✅ Pass" : "❌ Fail"));
 
   if (report.parametersFound === 0) {
-    console.log(`It looks like this account has not been set up for @guardian/cdk yet. Run:
-
-    npx @guardian/cdk bootstrap
-
-to bootstrap the account.`);
+    console.log(
+      `It looks like this account has not been set up for @guardian/cdk yet. See https://github.com/guardian/aws-account-setup`
+    );
 
     return 1;
   }

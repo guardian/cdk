@@ -6,10 +6,6 @@ export interface AwsConfig {
   region: string;
 }
 
-export interface AwsBootstrap extends AwsConfig {
-  dryRun: boolean;
-}
-
 // A CLI command can return...
 export type CliCommandResponse = Promise<
   // ...a simple message to be printed
