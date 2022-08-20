@@ -1,0 +1,20 @@
+name: Analyse commits and view release notes
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  SemanticReleaseDryRun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: |
+          npm ci
+          npm run release -- \
+            --dry-run \
+            --plugins "@semantic-release/commit-analyzer, @semantic-release/release-notes-generator" \
+            --branches ${GITHUB_REF##*/} \
+            --no-ci
