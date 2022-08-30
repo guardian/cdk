@@ -14,6 +14,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --ext .ts",
+    "prettier:check": "prettier --check \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
