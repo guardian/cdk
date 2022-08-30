@@ -353,6 +353,10 @@ Object {
       "Type": "AWS::EC2::EIP",
     },
     "MyVpcingressSubnet1NATGatewayC15F3CF1": Object {
+      "DependsOn": Array [
+        "MyVpcingressSubnet1DefaultRoute5C0E02BD",
+        "MyVpcingressSubnet1RouteTableAssociationCA312C68",
+      ],
       "Properties": Object {
         "AllocationId": Object {
           "Fn::GetAtt": Array [
@@ -521,6 +525,10 @@ Object {
       "Type": "AWS::EC2::EIP",
     },
     "MyVpcingressSubnet2NATGateway220B5C59": Object {
+      "DependsOn": Array [
+        "MyVpcingressSubnet2DefaultRouteF6D3CDFA",
+        "MyVpcingressSubnet2RouteTableAssociation10D8624C",
+      ],
       "Properties": Object {
         "AllocationId": Object {
           "Fn::GetAtt": Array [

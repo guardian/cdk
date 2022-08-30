@@ -129,6 +129,7 @@ Object {
       "Type": "AWS::ApiGateway::RestApi",
     },
     "RestApiAccount7C83CF5A": Object {
+      "DeletionPolicy": "Retain",
       "DependsOn": Array [
         "RestApi0C43BF4B",
       ],
@@ -141,8 +142,10 @@ Object {
         },
       },
       "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
     },
     "RestApiCloudWatchRoleE3ED6605": Object {
+      "DeletionPolicy": "Retain",
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -190,6 +193,7 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
     "RestApiDeployment180EC50354bd4ad342d73c9ba2d68e58585d62d5": Object {
       "DependsOn": Array [

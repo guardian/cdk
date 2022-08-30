@@ -421,6 +421,7 @@ Object {
       "Type": "AWS::Lambda::Permission",
     },
     "lambdaapiAccountAF0DCB01": Object {
+      "DeletionPolicy": "Retain",
       "DependsOn": Array [
         "lambdaapiC1812993",
       ],
@@ -433,6 +434,7 @@ Object {
         },
       },
       "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
     },
     "lambdaapiC1812993": Object {
       "Properties": Object {
@@ -464,6 +466,7 @@ Object {
       "Type": "AWS::ApiGateway::RestApi",
     },
     "lambdaapiCloudWatchRole7E36513A": Object {
+      "DeletionPolicy": "Retain",
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -515,6 +518,7 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
     "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": Object {
       "DependsOn": Array [
@@ -1121,6 +1125,7 @@ Object {
       "Type": "AWS::Lambda::Permission",
     },
     "lambdaapiAccountAF0DCB01": Object {
+      "DeletionPolicy": "Retain",
       "DependsOn": Array [
         "lambdaapiC1812993",
       ],
@@ -1133,6 +1138,7 @@ Object {
         },
       },
       "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
     },
     "lambdaapiC1812993": Object {
       "Properties": Object {
@@ -1164,6 +1170,7 @@ Object {
       "Type": "AWS::ApiGateway::RestApi",
     },
     "lambdaapiCloudWatchRole7E36513A": Object {
+      "DeletionPolicy": "Retain",
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1215,6 +1222,7 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
     "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": Object {
       "DependsOn": Array [
