@@ -26,6 +26,7 @@ export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
   Anghammarad: {
     path: "/account/services/anghammarad.topic.arn",
     description: "SSM parameter containing the ARN of the Anghammarad SNS topic",
+    optional: true,
   },
   LoggingStreamName: {
     path: "/account/services/logging.stream.name",
