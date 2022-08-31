@@ -9,8 +9,15 @@ import { simpleGuStackForTesting } from "../utils/test";
 import { Metadata } from "./metadata";
 
 class GuExampleConstruct extends Bucket {
-  readonly guConstructID = "GuExampleConstruct";
+  // eslint-disable-next-line custom-rules/valid-constructors -- explicitly do not want to couple to GuStack as that already registers this aspect
+  constructor(scope: Stack, id: string, props: BucketProps) {
+    super(scope, id, {
+      ...props,
+    });
+  }
+}
 
+class NotGuExampleConstruct extends Bucket {
   // eslint-disable-next-line custom-rules/valid-constructors -- explicitly do not want to couple to GuStack as that already registers this aspect
   constructor(scope: Stack, id: string, props: BucketProps) {
     super(scope, id, {
@@ -23,6 +30,7 @@ describe("Metadata aspect", () => {
   it("should include a list of Guardian constructs", () => {
     const stack = new Stack();
     new GuExampleConstruct(stack, "some-id", {});
+    new NotGuExampleConstruct(stack, "some-other-id", {});
 
     Aspects.of(stack).add(new Metadata(stack));
 

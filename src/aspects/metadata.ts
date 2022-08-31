@@ -2,15 +2,6 @@ import type { IAspect, Stack } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
 import { LibraryInfo, MetadataKeys } from "../constants";
 
-export type GuConstruct = {
-  readonly guConstructID: string;
-};
-
-const isGuConstruct = (construct: unknown): construct is GuConstruct => {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- may be required
-  return (construct as GuConstruct).guConstructID !== undefined;
-};
-
 export class Metadata implements IAspect {
   readonly stack: Stack;
 
@@ -25,9 +16,11 @@ export class Metadata implements IAspect {
 
   public visit(node: IConstruct): void {
     const metadata = this.stack.templateOptions.metadata;
+    const name = node.constructor.name;
 
-    if (metadata && isGuConstruct(node)) {
-      (metadata[MetadataKeys.CONSTRUCTS_KEY] as string[]).push(node.guConstructID);
+    // We assume any construct named Gu* is part of our public API.
+    if (metadata && name.startsWith("Gu")) {
+      (metadata[MetadataKeys.CONSTRUCTS_KEY] as string[]).push(name);
     }
   }
 }

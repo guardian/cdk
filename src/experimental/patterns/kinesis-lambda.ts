@@ -3,7 +3,6 @@ import type { IStream, StreamProps } from "aws-cdk-lib/aws-kinesis";
 import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import type { KinesisEventSourceProps } from "aws-cdk-lib/aws-lambda-event-sources";
-import type { GuConstruct } from "../../aspects/metadata";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../../constructs/cloudwatch";
 import { AppIdentity } from "../../constructs/core";
 import type { GuStack } from "../../constructs/core";
@@ -79,9 +78,8 @@ export interface GuKinesisLambdaProps extends Omit<GuFunctionProps, "errorPercen
  *
  * @experimental This pattern is in early development. The API is likely to change in future releases.
  */
-export class GuKinesisLambdaExperimental extends GuLambdaFunction implements GuConstruct {
+export class GuKinesisLambdaExperimental extends GuLambdaFunction {
   public readonly kinesisStream: IStream;
-  readonly guConstructID = "GuKinesisLambda";
 
   constructor(scope: GuStack, id: string, props: GuKinesisLambdaProps) {
     super(scope, id, {

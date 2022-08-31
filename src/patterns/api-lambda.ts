@@ -1,6 +1,5 @@
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import type { LambdaRestApiProps } from "aws-cdk-lib/aws-apigateway";
-import type { GuConstruct } from "../aspects/metadata";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
 import type { GuStack } from "../constructs/core";
@@ -59,9 +58,8 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
  * });
  * ```
  */
-export class GuApiLambda extends GuLambdaFunction implements GuConstruct {
+export class GuApiLambda extends GuLambdaFunction {
   public readonly api: LambdaRestApi;
-  readonly guConstructID = "GuApiLambda";
 
   constructor(scope: GuStack, id: string, props: GuApiLambdaProps) {
     super(scope, id, {
