@@ -2,6 +2,13 @@
 
 exports[`The GuStackSet construct should correctly provision a stack with a stack set resource 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuStackSet",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "StackSet": Object {
       "Properties": Object {
@@ -46,6 +53,13 @@ Object {
           },
         ],
         "TemplateBody": "{
+  \\"Metadata\\": {
+    \\"gu:cdk:constructs\\": [
+      \\"GuStackForStackSetInstance\\",
+      \\"GuKinesisStream\\"
+    ],
+    \\"gu:cdk:version\\": \\"1.0.0\\"
+  },
   \\"Resources\\": {
     \\"accountloggingstreamB8733874\\": {
       \\"Type\\": \\"AWS::Kinesis::Stream\\",
@@ -120,6 +134,14 @@ Object {
 
 exports[`The GuStackSet construct should support parameters in the stack set instance 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuSnsTopic",
+      "GuStackSet",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "StackSet": Object {
       "Properties": Object {
@@ -171,6 +193,13 @@ Object {
           },
         ],
         "TemplateBody": "{
+  \\"Metadata\\": {
+    \\"gu:cdk:constructs\\": [
+      \\"GuStackForStackSetInstance\\",
+      \\"GuStringParameter\\"
+    ],
+    \\"gu:cdk:version\\": \\"1.0.0\\"
+  },
   \\"Parameters\\": {
     \\"CentralSnsTopicArn\\": {
       \\"Type\\": \\"String\\",

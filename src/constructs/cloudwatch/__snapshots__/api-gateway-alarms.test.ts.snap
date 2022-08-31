@@ -2,6 +2,13 @@
 
 exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuApiGateway5xxPercentageAlarm",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "RestApiEndpoint0551178A": Object {
       "Value": Object {

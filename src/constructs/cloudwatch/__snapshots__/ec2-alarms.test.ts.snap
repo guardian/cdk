@@ -2,6 +2,14 @@
 
 exports[`The GuAlb5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuApplicationLoadBalancer",
+      "GuAlb5xxPercentageAlarm",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "ApplicationLoadBalancerTestingDnsName": Object {
       "Description": "DNS entry for ApplicationLoadBalancerTesting",
@@ -210,6 +218,15 @@ Object {
 
 exports[`The GuUnhealthyInstancesAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuUnhealthyInstancesAlarm",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "ApplicationLoadBalancerTestingDnsName": Object {
       "Description": "DNS entry for ApplicationLoadBalancerTesting",

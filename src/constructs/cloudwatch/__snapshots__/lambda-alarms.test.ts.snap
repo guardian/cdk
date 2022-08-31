@@ -2,6 +2,15 @@
 
 exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuLambdaFunction",
+      "GuLambdaThrottlingAlarm",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -276,6 +285,15 @@ Object {
 
 exports[`The GuLambdaErrorPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuLambdaFunction",
+      "GuLambdaErrorPercentageAlarm",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",

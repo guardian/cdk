@@ -2,6 +2,15 @@
 
 exports[`The GuKinesisLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuKinesisLambdaExperimental",
+      "GuKinesisStream",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",

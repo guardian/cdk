@@ -2,6 +2,32 @@
 
 exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specific CIDR ranges 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuVpcParameter",
+      "GuSubnetListParameter",
+      "GuCertificate",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+      "GuAmiParameter",
+      "GuHttpsEgressSecurityGroup",
+      "GuAutoScalingGroup",
+      "GuWazuhAccess",
+      "GuSubnetListParameter",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuHttpsApplicationListener",
+      "GuSecurityGroup",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "LoadBalancerTestguec2appDnsName": Object {
       "Description": "DNS entry for LoadBalancerTestguec2app",
@@ -800,6 +826,31 @@ Object {
 
 exports[`the GuEC2App pattern should produce a functional EC2 app with minimal arguments 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuVpcParameter",
+      "GuSubnetListParameter",
+      "GuCertificate",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+      "GuAmiParameter",
+      "GuHttpsEgressSecurityGroup",
+      "GuAutoScalingGroup",
+      "GuWazuhAccess",
+      "GuSubnetListParameter",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuHttpsApplicationListener",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "LoadBalancerTestguec2appDnsName": Object {
       "Description": "DNS entry for LoadBalancerTestguec2app",

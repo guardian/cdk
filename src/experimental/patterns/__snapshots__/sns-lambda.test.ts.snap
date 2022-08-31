@@ -2,6 +2,15 @@
 
 exports[`The GuSnsLambda pattern should create the correct resources for a new stack with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuSnsLambdaExperimental",
+      "GuSnsTopic",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "mylambdafunctionTopicNameA4E69772": Object {
       "Value": Object {

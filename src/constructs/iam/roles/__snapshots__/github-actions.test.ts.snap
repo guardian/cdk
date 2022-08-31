@@ -2,6 +2,14 @@
 
 exports[`The GitHubActionsRole construct should create the correct resources with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuGetS3ObjectsPolicy",
+      "GuGithubActionsRole",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "GithubActionsRoleGithubActionsRoleArnC13D9654": Object {
       "Value": Object {

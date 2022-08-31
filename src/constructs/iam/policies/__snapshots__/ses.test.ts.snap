@@ -2,6 +2,14 @@
 
 exports[`GuSESSenderPolicy should add a parameter to the stack for the sending email address 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuGuardianEmailSenderParameter",
+      "GuSESSenderPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "EmailSenderAddress": Object {
       "AllowedPattern": "^[a-zA-Z]+(\\\\.[a-zA-Z]+)*@theguardian.com$",

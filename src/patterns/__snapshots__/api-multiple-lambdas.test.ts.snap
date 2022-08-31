@@ -2,6 +2,16 @@
 
 exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct resources with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuLambdaFunction",
+      "GuLambdaFunction",
+      "GuLambdaFunction",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "RestApiEndpoint0551178A": Object {
       "Value": Object {
