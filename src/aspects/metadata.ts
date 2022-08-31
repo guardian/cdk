@@ -8,7 +8,7 @@ export type GuConstruct = {
 
 const isGuConstruct = (construct: unknown): construct is GuConstruct => {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- may be required
-  return (construct as GuConstruct).guConstructID != undefined;
+  return (construct as GuConstruct).guConstructID !== undefined;
 };
 
 export class Metadata implements IAspect {
@@ -17,8 +17,10 @@ export class Metadata implements IAspect {
   // eslint-disable-next-line custom-rules/valid-constructors -- doesn't apply here
   public constructor(s: Stack) {
     this.stack = s;
-    this.stack.templateOptions.metadata = { [MetadataKeys.CONSTRUCTS_KEY]: [] };
-    this.stack.templateOptions.metadata[MetadataKeys.VERSION] = LibraryInfo.VERSION;
+    this.stack.templateOptions.metadata = {
+      [MetadataKeys.CONSTRUCTS_KEY]: [],
+      [MetadataKeys.VERSION]: LibraryInfo.VERSION,
+    };
   }
 
   public visit(node: IConstruct): void {
