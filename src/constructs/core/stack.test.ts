@@ -33,10 +33,14 @@ describe("The GuStack construct", () => {
   });
 
   it("should prefer context values for repository information", () => {
-    const stack = new GuStack(new App({ context: { [ContextKeys.REPOSITORY_URL]: "my-repository" } }), "Test", {
-      stack: "test",
-      stage: "TEST",
-    });
+    const stack = new GuStack(
+      new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repository" } }),
+      "Test",
+      {
+        stack: "test",
+        stage: "TEST",
+      }
+    );
 
     new Role(stack, "MyRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
@@ -46,7 +50,7 @@ describe("The GuStack construct", () => {
       additionalTags: [
         {
           Key: TagKeys.REPOSITORY_NAME,
-          Value: "my-repository",
+          Value: "guardian/my-repository",
         },
       ],
     });
