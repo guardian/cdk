@@ -1,3 +1,4 @@
+import { Token } from "aws-cdk-lib";
 import type { VpcProps } from "aws-cdk-lib/aws-ec2";
 import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
 import { StringListParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
@@ -30,17 +31,16 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps {}
 /**
  * Construct which creates a Virtual Private Cloud.
  *
- * NOTE: this construct requires an
+ * NOTE: This construct requires an
  * [environment](https://docs.aws.amazon.com/cdk/latest/guide/environments.html)
  * to be set to function correctly. Without this, an environment-agnostic
  * template will be produced, which will only use two AZs even if the region
  * contains more than that. To set this, set the `env` prop when instantiating
- * your stack, synthesise locally, and then commit the resulting
- * `cdk.context.json` file, which will contain AZ context for your region. You
- * can see an example of setting env
- * [here](https://github.com/guardian/security-platform/commit/f534c915f1b0b21335c1123142768486a3a803e9#diff-670bd823c8f00bb3feb2eaf95e1ed4606f7c6b0a23776f744aedad04a89b4032R13).
- * And the resulting context to commit
- * [here](https://github.com/guardian/security-platform/commit/f534c915f1b0b21335c1123142768486a3a803e9#diff-5622c70a58b7fe378a6fcda75140ab471187b621674d563be7eefcff05c2660a).
+ * your stack.
+ *
+ * NOTE: If using this construct outside eu-west-1, you'll need to commit the
+ * `cdk.context.json` file that's created after synthesising locally.
+ *
  * Be aware that account IDs are considered sensitive information and should NOT
  * be committed to public repos.
  *
@@ -69,6 +69,28 @@ export interface GuVpcProps extends GuVpcCustomProps, VpcProps {}
  * https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html.
  */
 export class GuVpc extends Vpc {
+  /**
+   * Programmatically sets the CDK context with a list of AZs for eu-west-1.
+   * This means consuming stacks do NOT have to commit a `cdk.context.json`
+   * file when using this construct in eu-west-1.
+   *
+   * @throws {Error} if the account ID has not been explicitly set on the parent GuStack
+   * @private
+   */
+  private static setAvailabilityZoneContext({ account, node }: GuStack) {
+    if (Token.isUnresolved(account)) {
+      throw new Error(
+        `Account ID not set - the resulting VPC might not be shaped how you'd expect. See https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.StackProps.html#env`
+      );
+    }
+
+    node.setContext(`availability-zones:account=${account}:region=eu-west-1`, [
+      "eu-west-1a",
+      "eu-west-1b",
+      "eu-west-1c",
+    ]);
+  }
+
   constructor(scope: GuStack, id: string, props?: GuVpcProps) {
     const defaultVpcProps: VpcProps = {
       gatewayEndpoints: {
@@ -96,6 +118,9 @@ export class GuVpc extends Vpc {
       ssmParameters: true,
       ssmParametersNamespace: "primary",
     };
+
+    // Set the context BEFORE the `super` call to avoid `Error: Cannot set context after children have been added`
+    GuVpc.setAvailabilityZoneContext(scope);
 
     super(scope, id, { ...defaultVpcProps, ...props });
 
