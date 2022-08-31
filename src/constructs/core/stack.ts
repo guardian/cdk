@@ -1,9 +1,10 @@
-import { Annotations, App, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
+import { Metadata } from "../../aspects/metadata";
 import { ContextKeys, LibraryInfo, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
@@ -121,6 +122,8 @@ export class GuStack extends Stack implements StackStageIdentity {
 
       this.tryAddRepositoryTag();
     }
+
+    Aspects.of(this).add(new Metadata(this));
 
     const { node } = this;
 
