@@ -4,13 +4,16 @@ import { GuVpc } from "./vpc";
 
 describe("The GuVpc construct", () => {
   it("should match snapshot", () => {
-    const stack = simpleGuStackForTesting({ stack: "test-stack" });
+    const stack = simpleGuStackForTesting({
+      stack: "test-stack",
+      env: { region: "eu-west-1", account: "000000000000" },
+    });
     new GuVpc(stack, "MyVpc");
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create VPC SSM parameters by default", () => {
-    const stack = simpleGuStackForTesting({ stack: "test-stack" });
+    const stack = simpleGuStackForTesting({ stack: "test-stack", env: { account: "000000000000" } });
     new GuVpc(stack, "MyVpc", { ssmParameters: true });
 
     const template = Template.fromStack(stack);
@@ -25,7 +28,7 @@ describe("The GuVpc construct", () => {
   });
 
   it("should not create VPC SSM parameters if set to false", () => {
-    const stack = simpleGuStackForTesting({ stack: "test-stack" });
+    const stack = simpleGuStackForTesting({ stack: "test-stack", env: { account: "000000000000" } });
     new GuVpc(stack, "MyVpc", { ssmParameters: false });
 
     Template.fromStack(stack).resourceCountIs("AWS::SSM::Parameter", 0);
