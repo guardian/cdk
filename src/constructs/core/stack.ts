@@ -29,6 +29,13 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
    * This should only be turned on as part of an initial migration from CloudFormation.
    */
   withoutTags?: boolean;
+
+  /**
+   * Set to disable CDK metadata. Only for internal use (for disabling for some
+   * snapshot tests). We rely on tracking data to prioritise future work so
+   * please do not override this.
+   */
+  withoutMetadata?: boolean;
 }
 
 /**
@@ -123,7 +130,9 @@ export class GuStack extends Stack implements StackStageIdentity {
       this.tryAddRepositoryTag();
     }
 
-    Aspects.of(this).add(new Metadata(this));
+    if (!props.withoutMetadata) {
+      Aspects.of(this).add(new Metadata(this));
+    }
 
     const { node } = this;
 
