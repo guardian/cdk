@@ -41,7 +41,7 @@
     "@types/yargs": "^17.0.12",
     "aws-cdk": "2.39.1",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.19.0",
+    "eslint": "^8.23.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
     "gh-pages": "^4.0.0",
     "jest": "^27.5.1",
