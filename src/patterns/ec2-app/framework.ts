@@ -15,6 +15,7 @@ type GuEc2FrameworkAppProps = Omit<GuEc2AppProps, "applicationPort">;
  */
 export class GuPlayApp extends GuEc2App {
   static readonly PORT: number = 9000;
+
   constructor(scope: GuStack, props: GuEc2FrameworkAppProps) {
     super(scope, { ...props, applicationPort: GuPlayApp.PORT });
   }
@@ -25,6 +26,7 @@ export class GuPlayApp extends GuEc2App {
  */
 export class GuNodeApp extends GuEc2App {
   static readonly PORT: number = 3000;
+
   constructor(scope: GuStack, props: GuEc2FrameworkAppProps) {
     super(scope, { ...props, applicationPort: GuNodeApp.PORT });
   }

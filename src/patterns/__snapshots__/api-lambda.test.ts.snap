@@ -2,6 +2,15 @@
 
 exports[`The GuApiLambda pattern should allow us to link a domain name to a LambdaRestApi 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuApiLambda",
+      "GuCertificate",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "lambdaapiEndpoint3B6C471A": Object {
       "Value": Object {
@@ -760,6 +769,14 @@ Object {
 
 exports[`The GuApiLambda pattern should create the correct resources with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuApiLambda",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "lambdaapiEndpoint3B6C471A": Object {
       "Value": Object {

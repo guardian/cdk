@@ -2,6 +2,14 @@
 
 exports[`The GuLogShippingPolicy singleton class will only be defined once in a stack, even when attached to multiple roles 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "LoggingStreamName": Object {
       "Default": "/account/services/logging.stream.name",

@@ -2,6 +2,13 @@
 
 exports[`The GuS3Bucket construct should set the bucket's policy to 'retain' 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuS3Bucket",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "MyBucketTest262E966E": Object {
       "DeletionPolicy": "Retain",

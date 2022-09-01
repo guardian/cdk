@@ -96,6 +96,13 @@ Object {
       },
     },
   },
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Outputs": Object {
     "testecstaskecstestStateMachineArnOutput": Object {
       "Value": Object {

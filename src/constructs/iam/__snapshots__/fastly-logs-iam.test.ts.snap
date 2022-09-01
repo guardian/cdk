@@ -2,6 +2,15 @@
 
 exports[`The GuFastlyLogsIamRole construct correctly wires up the policy 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuFastlyCustomerIdParameter",
+      "GuFastlyLogsIamRole",
+      "GuPutS3ObjectsPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "FastlyCustomerId": Object {
       "Default": "/account/external/fastly/customer.id",

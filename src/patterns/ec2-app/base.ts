@@ -5,7 +5,7 @@ import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
-import { AccessScope, NAMED_SSM_PARAMETER_PATHS, TagKeys } from "../../constants";
+import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
@@ -397,12 +397,12 @@ export class GuEc2App {
     //  based on which autoscaling groups possess this tag. It may become useful or necessary to tag all resources in the future,
     //  but we have decided that this is sufficient for now.
     // TODO: Do we need to tag all resources with this value? What would the use-cases be?
-    Tags.of(autoScalingGroup).add(TagKeys.PATTERN_NAME, this.constructor.name, { applyToLaunchedInstances: true });
+    Tags.of(autoScalingGroup).add(MetadataKeys.PATTERN_NAME, this.constructor.name, { applyToLaunchedInstances: true });
 
     // This allows automatic shipping of instance Cloud Init logs when using the
     // `cdk-base` Amigo role on your AMI.
     Tags.of(autoScalingGroup).add(
-      TagKeys.LOG_KINESIS_STREAM_NAME,
+      MetadataKeys.LOG_KINESIS_STREAM_NAME,
       GuLoggingStreamNameParameter.getInstance(scope).valueAsString
     );
 
@@ -410,7 +410,7 @@ export class GuEc2App {
       // This allows automatic shipping of application logs when using the
       // `cdk-base` Amigo role on your AMI.
       Tags.of(autoScalingGroup).add(
-        TagKeys.SYSTEMD_UNIT,
+        MetadataKeys.SYSTEMD_UNIT,
         applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`
       );
     }

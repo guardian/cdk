@@ -2,6 +2,19 @@
 
 exports[`The GuInstanceRole construct should allow additional policies to be specified 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuGetS3ObjectsPolicy",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -240,6 +253,23 @@ Object {
 
 exports[`The GuInstanceRole construct should be possible to create multiple instance roles in a single stack 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+      "GuInstanceRole",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -654,6 +684,20 @@ Object {
 
 exports[`The GuInstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",
@@ -918,6 +962,18 @@ Object {
 
 exports[`The GuInstanceRole construct should create the correct resources with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",

@@ -2,6 +2,14 @@
 
 exports[`The GuScheduledLambda pattern should create the correct resources with minimal config 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuScheduledLambda",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Parameters": Object {
     "DistributionBucketName": Object {
       "Default": "/account/services/artifact.bucket",

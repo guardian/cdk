@@ -4,7 +4,7 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Queue } from "aws-cdk-lib/aws-sqs";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
-import { ContextKeys, LibraryInfo, TagKeys } from "../../constants";
+import { ContextKeys, LibraryInfo, MetadataKeys } from "../../constants";
 import { GuTemplate } from "../../utils/test";
 import type { GuStackProps } from "./stack";
 import { GuStack } from "./stack";
@@ -49,7 +49,7 @@ describe("The GuStack construct", () => {
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::Role", {
       additionalTags: [
         {
-          Key: TagKeys.REPOSITORY_NAME,
+          Key: MetadataKeys.REPOSITORY_NAME,
           Value: "guardian/my-repository",
         },
       ],

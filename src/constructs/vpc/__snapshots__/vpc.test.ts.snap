@@ -2,6 +2,13 @@
 
 exports[`The GuVpc construct should match snapshot 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuVpc",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "MyVpcF9F0CA6F": Object {
       "Properties": Object {

@@ -2,6 +2,13 @@
 
 exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuCertificate",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",
@@ -40,6 +47,13 @@ Object {
 
 exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+      "GuCertificate",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "CertificateTesting28FCAC6D": Object {
       "DeletionPolicy": "Retain",

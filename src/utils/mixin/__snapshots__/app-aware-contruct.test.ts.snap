@@ -2,6 +2,12 @@
 
 exports[`The GuAppAwareConstruct mixin should add the app tag 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuStack",
+    ],
+    "gu:cdk:version": "1.0.0",
+  },
   "Resources": Object {
     "MyBucketTest262E966E": Object {
       "DeletionPolicy": "Retain",
