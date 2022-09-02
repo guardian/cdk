@@ -1,4 +1,3 @@
-import path from "path";
 import type { GuStack } from "../../../constructs/core";
 import type { GuLambdaFunction } from "../../../constructs/lambda";
 import type { RiffRaffDeployment } from "../types";
@@ -14,7 +13,7 @@ export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployme
       stacks: new Set([stack]),
       regions: new Set([region]),
       app,
-      contentDirectory: path.parse(fileName).name,
+      contentDirectory: app,
       parameters: {
         bucketSsmLookup: true,
         lookupByTags: true,
@@ -39,7 +38,7 @@ export function updateLambdaDeployment(
       stacks: new Set([stack]),
       regions: new Set([region]),
       app,
-      contentDirectory: path.parse(fileName).name,
+      contentDirectory: app,
       parameters: {
         bucketSsmLookup: true,
         lookupByTags: true,
