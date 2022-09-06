@@ -688,7 +688,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/my-app-1.zip",
                     ],
                   ],
                 },
@@ -948,7 +948,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/my-app-3.zip",
                     ],
                   ],
                 },
@@ -1155,7 +1155,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/my-app-2.zip",
                     ],
                   ],
                 },

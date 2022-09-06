@@ -165,7 +165,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/lambda.zip",
                     ],
                   ],
                 },
@@ -448,7 +448,7 @@ Object {
                       Object {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/lambda.zip",
                     ],
                   ],
                 },
