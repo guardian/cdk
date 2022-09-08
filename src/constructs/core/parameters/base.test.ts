@@ -19,7 +19,7 @@ describe("The GuParameter class", () => {
     new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true });
 
     Template.fromStack(stack).hasParameter("Parameter", {
-      Default: "/$STAGE/$STACK/$APP/parameter",
+      Default: "Add the SSM path as the default value e.g. /$stage/$stack/$app/$param",
       Type: "AWS::SSM::Parameter::Value<Boolean>",
     });
   });
@@ -30,7 +30,7 @@ describe("The GuParameter class", () => {
     new GuParameter(stack, "Parameter", { fromSSM: true });
 
     Template.fromStack(stack).hasParameter("Parameter", {
-      Default: "/$STAGE/$STACK/$APP/parameter",
+      Default: "Add the SSM path as the default value e.g. /$stage/$stack/$app/$param",
       Type: "AWS::SSM::Parameter::Value<String>",
     });
   });
@@ -41,7 +41,7 @@ describe("The GuParameter class", () => {
     new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true, description: "This is a test" });
 
     Template.fromStack(stack).hasParameter("Parameter", {
-      Default: "/$STAGE/$STACK/$APP/parameter",
+      Default: "Add the SSM path as the default value e.g. /$stage/$stack/$app/$param",
       Type: "AWS::SSM::Parameter::Value<Boolean>",
       Description: "This is a test",
     });
@@ -53,7 +53,7 @@ describe("The GuParameter class", () => {
     new GuParameter(stack, "Parameter", { fromSSM: true });
 
     Template.fromStack(stack).hasParameter("Parameter", {
-      Default: "/$STAGE/$STACK/$APP/parameter",
+      Default: "Add the SSM path as the default value e.g. /$stage/$stack/$app/$param",
     });
   });
 
