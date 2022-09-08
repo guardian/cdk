@@ -30,6 +30,7 @@ To use it, first, create `jest.setup.js` and add the global mock:
 
 ```javascript
 jest.mock("@guardian/cdk/lib/constants/tracking-tag");
+jest.mock("@guardian/cdk/lib/constants/version-info");
 ```
 
 Next, edit `jest.config.js` setting the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) property:
