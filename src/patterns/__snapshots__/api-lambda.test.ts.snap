@@ -9,7 +9,7 @@ Object {
       "GuApiLambda",
       "GuCertificate",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "lambdaapiEndpoint3B6C471A": Object {
@@ -775,7 +775,7 @@ Object {
       "GuDistributionBucketParameter",
       "GuApiLambda",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "lambdaapiEndpoint3B6C471A": Object {

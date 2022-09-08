@@ -13,7 +13,7 @@ Object {
       "GuGetDistributablePolicy",
       "GuParameterStoreReadPolicy",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Parameters": Object {
     "DistributionBucketName": Object {
@@ -268,7 +268,7 @@ Object {
       "GuGetDistributablePolicy",
       "GuParameterStoreReadPolicy",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Parameters": Object {
     "DistributionBucketName": Object {
@@ -696,7 +696,7 @@ Object {
       "GuGetDistributablePolicy",
       "GuParameterStoreReadPolicy",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Parameters": Object {
     "DistributionBucketName": Object {
@@ -972,7 +972,7 @@ Object {
       "GuGetDistributablePolicy",
       "GuParameterStoreReadPolicy",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Parameters": Object {
     "DistributionBucketName": Object {

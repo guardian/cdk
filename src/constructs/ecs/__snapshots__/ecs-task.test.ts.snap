@@ -101,7 +101,7 @@ Object {
       "GuStack",
       "GuDistributionBucketParameter",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "testecstaskecstestStateMachineArnOutput": Object {
