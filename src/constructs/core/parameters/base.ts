@@ -16,7 +16,7 @@ export class GuParameter extends CfnParameter {
 
   constructor(scope: GuStack, id: string, props: GuParameterProps) {
     super(scope, id, {
-      ...(props.fromSSM && { default: "/$STAGE/$STACK/$APP/parameter" }),
+      ...(props.fromSSM && { default: "Add the SSM path as the default value e.g. /$stage/$stack/$app/$param" }),
       ...props,
       type: props.fromSSM ? `AWS::SSM::Parameter::Value<${props.type ?? "String"}>` : props.type,
     });
