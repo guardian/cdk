@@ -6,7 +6,7 @@ Object {
     "gu:cdk:constructs": Array [
       "GuStack",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Resources": Object {
     "MyBucketTest262E966E": Object {

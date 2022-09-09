@@ -7,7 +7,7 @@ Object {
       "GuStack",
       "GuStackSet",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Resources": Object {
     "StackSet": Object {
@@ -58,7 +58,7 @@ Object {
       \\"GuStackForStackSetInstance\\",
       \\"GuKinesisStream\\"
     ],
-    \\"gu:cdk:version\\": \\"1.0.0\\"
+    \\"gu:cdk:version\\": \\"TEST\\"
   },
   \\"Resources\\": {
     \\"accountloggingstreamB8733874\\": {
@@ -140,7 +140,7 @@ Object {
       "GuSnsTopic",
       "GuStackSet",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Resources": Object {
     "StackSet": Object {
@@ -198,7 +198,7 @@ Object {
       \\"GuStackForStackSetInstance\\",
       \\"GuStringParameter\\"
     ],
-    \\"gu:cdk:version\\": \\"1.0.0\\"
+    \\"gu:cdk:version\\": \\"TEST\\"
   },
   \\"Parameters\\": {
     \\"CentralSnsTopicArn\\": {

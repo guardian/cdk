@@ -7,7 +7,7 @@ Object {
       "GuStack",
       "GuCertificate",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Resources": Object {
     "CertificateTesting28FCAC6D": Object {
@@ -52,7 +52,7 @@ Object {
       "GuStack",
       "GuCertificate",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Resources": Object {
     "CertificateTesting28FCAC6D": Object {

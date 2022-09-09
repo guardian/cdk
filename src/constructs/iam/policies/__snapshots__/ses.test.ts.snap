@@ -8,7 +8,7 @@ Object {
       "GuGuardianEmailSenderParameter",
       "GuSESSenderPolicy",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Parameters": Object {
     "EmailSenderAddress": Object {

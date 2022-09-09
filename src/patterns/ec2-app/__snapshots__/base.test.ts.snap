@@ -26,7 +26,7 @@ Object {
       "GuHttpsApplicationListener",
       "GuSecurityGroup",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "LoadBalancerTestguec2appDnsName": Object {
@@ -849,7 +849,7 @@ Object {
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "LoadBalancerTestguec2appDnsName": Object {

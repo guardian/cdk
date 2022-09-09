@@ -9,7 +9,7 @@ Object {
       "GuSnsLambdaExperimental",
       "GuSnsTopic",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "mylambdafunctionTopicNameA4E69772": Object {

@@ -8,7 +8,7 @@ Object {
       "GuApplicationLoadBalancer",
       "GuAlb5xxPercentageAlarm",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "ApplicationLoadBalancerTestingDnsName": Object {
@@ -225,7 +225,7 @@ Object {
       "GuApplicationTargetGroup",
       "GuUnhealthyInstancesAlarm",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "ApplicationLoadBalancerTestingDnsName": Object {

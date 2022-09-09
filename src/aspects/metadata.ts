@@ -1,6 +1,6 @@
 import type { IAspect, Stack } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
-import { LibraryInfo, MetadataKeys } from "../constants";
+import { MetadataKeys, TrackingTag } from "../constants";
 
 export class Metadata implements IAspect {
   readonly stack: Stack;
@@ -10,7 +10,12 @@ export class Metadata implements IAspect {
     this.stack = s;
     this.stack.templateOptions.metadata = {
       [MetadataKeys.CONSTRUCTS_KEY]: [],
-      [MetadataKeys.VERSION]: LibraryInfo.VERSION,
+
+      /*
+      `TrackingTag.Value` is a proxy to `LibraryInfo.VERSION`.
+      Intentionally using `TrackingTag.Value` so that the published mock can be used.
+       */
+      [MetadataKeys.VERSION]: TrackingTag.Value,
     };
   }
 

@@ -7,7 +7,7 @@ Object {
       "GuStack",
       "GuVpc",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Resources": Object {
     "MyVpcF9F0CA6F": Object {

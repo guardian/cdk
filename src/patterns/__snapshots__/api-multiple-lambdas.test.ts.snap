@@ -10,7 +10,7 @@ Object {
       "GuLambdaFunction",
       "GuLambdaFunction",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "RestApiEndpoint0551178A": Object {

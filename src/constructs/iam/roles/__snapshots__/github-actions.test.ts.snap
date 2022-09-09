@@ -8,7 +8,7 @@ Object {
       "GuGetS3ObjectsPolicy",
       "GuGithubActionsRole",
     ],
-    "gu:cdk:version": "1.0.0",
+    "gu:cdk:version": "TEST",
   },
   "Outputs": Object {
     "GithubActionsRoleGithubActionsRoleArnC13D9654": Object {
