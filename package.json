@@ -29,7 +29,7 @@
     "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "1.0.9",
+    "@guardian/eslint-config-typescript": "1.0.10",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^27.5.0",
     "@types/js-yaml": "^4.0.5",
