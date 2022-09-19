@@ -20,6 +20,9 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 
   stage: string;
 
+  /**
+   * Optional name of the app. If defined, all resources will have an App tag.
+   */
   appName?: string;
 
   /**
