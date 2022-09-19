@@ -20,6 +20,8 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 
   stage: string;
 
+  appName?: string;
+
   /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
    * @defaultValue the `GU_CFN_STACK_NAME` environment variable
@@ -69,6 +71,7 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
+  private readonly _appName?: string;
 
   get stage(): string {
     return this._stage;
@@ -76,6 +79,10 @@ export class GuStack extends Stack implements StackStageIdentity {
 
   get stack(): string {
     return this._stack;
+  }
+
+  get appName(): string | undefined {
+    return this._appName;
   }
 
   /**
@@ -127,6 +134,9 @@ export class GuStack extends Stack implements StackStageIdentity {
 
       this.addTag("Stack", this.stack);
       this.addTag("Stage", this.stage);
+      if (this.appName) {
+        this.addTag("App", this.appName);
+      }
 
       this.tryAddRepositoryTag();
     }
