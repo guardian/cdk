@@ -5,49 +5,16 @@ set -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 ROOT_DIR=$DIR/..
 
-checkDependencies() {
-  if ! [ -x "$(command -v gh)" ]; then
-    echo 'Error: gh is not installed but required. To install run `brew install gh` or see https://cli.github.com/.' >&2
-    exit 1
-  fi
-
-  if ! [ -x "$(command -v jq)" ]; then
-    echo 'Error: jq is not installed but required. To install, run `brew install jq` or see https://stedolan.github.io/jq/.' >&2
-    exit 1
-  fi
-}
-
-checkYarnLock() {
-  "${DIR}"/check-yarn-lock
-}
-
-ensureAtHeadOfOrigin() {
-  DEFAULT_BRANCH=main
-
-  CURRENT_BRANCH=$(git branch --show-current)
-  if [ $CURRENT_BRANCH != $DEFAULT_BRANCH ] ; then
-    echo "ERROR: Please switch to the branch $DEFAULT_BRANCH"
-    exit 1
-  fi
-
-  DIFF_WITH_ORIGIN=$(git rev-list --count origin/$DEFAULT_BRANCH...$DEFAULT_BRANCH)
-  if [ $DIFF_WITH_ORIGIN -ne 0 ] ; then
-    echo "ERROR: You are $DIFF_WITH_ORIGIN commits out of sync with origin/$DEFAULT_BRANCH. Please update first."
-    exit 1
-  fi
-
-  if ! git diff --quiet; then
-    echo "ERROR: There are local changes. Please stash them."
-    exit 1
-  fi
+installDependencies() {
+  npm ci --ignore-scripts
 }
 
 updateAwsCdk() {
   npm run update-aws-cdk
 }
 
-installAwsCdkUpdates() {
-  npm install && cd tools/integration-test && npm install && cd $ROOT_DIR
+installUpdatedDependencies() {
+  npm install && cd tools/integration-test && npm install && cd "$ROOT_DIR"
 }
 
 checkForLocalChanges() {
@@ -55,6 +22,11 @@ checkForLocalChanges() {
     echo "No changes. No further action needed."
     exit 0
   fi
+}
+
+configureGit() {
+  git config user.name "github-actions"
+  git config user.email "github-actions@github.com"
 }
 
 raisePR() {
@@ -65,7 +37,7 @@ raisePR() {
   COMMIT_SUBJECT="fix(deps): Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
   COMMIT_BODY="Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
 
-  git checkout -b $BRANCH_NAME
+  git checkout -b "$BRANCH_NAME"
 
   for file in package.json package-lock.json tools/integration-test/package.json; do
     git add $file
@@ -73,17 +45,16 @@ raisePR() {
 
   git commit -m "$COMMIT_SUBJECT" -m "$COMMIT_BODY"
 
-  git push -u origin $BRANCH_NAME
+  git push -u origin "$BRANCH_NAME"
   gh pr create --title "$COMMIT_SUBJECT" --body "$COMMIT_BODY"
 }
 
 main() {
-  checkDependencies
-  ensureAtHeadOfOrigin
-  checkYarnLock
+  installDependencies
   updateAwsCdk
-  installAwsCdkUpdates
+  installUpdatedDependencies
   checkForLocalChanges
+  configureGit
   raisePR
 }
 
