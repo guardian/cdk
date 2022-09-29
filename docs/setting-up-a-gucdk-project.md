@@ -89,7 +89,7 @@ If your CI is executing a bash script, then we'd add something similar to this (
   cd cdk
   npm ci
   npm run lint
-  npm test
+  npm test -- --ci
   npm run synth
 )
 ```
