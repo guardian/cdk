@@ -1,0 +1,20 @@
+on:
+  schedule:
+    - cron: '0 10 * * 5' # Friday, 10AM - https://crontab.guru/#0_10_*_*_5
+
+  # for testing
+  workflow_dispatch:
+  pull_request:
+jobs:
+  update-aws-cdk:
+    runs-on: ubuntu-latest
+    name: Bump CDK versions
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: ./script/update-aws-cdk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
