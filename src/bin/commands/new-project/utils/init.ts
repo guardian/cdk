@@ -92,8 +92,8 @@ function createPackageJson(outputDirectory: string): void {
        */
     ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
 
-    "aws-cdk": LibraryInfo.AWS_CDK_VERSION,
-    "aws-cdk-lib": LibraryInfo.AWS_CDK_VERSION,
+    "aws-cdk": "2.39.1",
+    "aws-cdk-lib": "2.44.0",
     constructs: LibraryInfo.CONSTRUCTS_VERSION,
   };
 
