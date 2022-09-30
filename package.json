@@ -25,7 +25,6 @@
     "release": "semantic-release",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target",
-    "update-aws-cdk": "ncu \"aws-cdk-lib\" \"aws-cdk\" \"constructs\" --upgrade --deep --target minor",
     "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
@@ -38,13 +37,12 @@
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/node": "18.7.15",
     "@types/yargs": "^17.0.12",
-    "aws-cdk": "2.39.1",
+    "aws-cdk": "2.44.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.23.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
     "gh-pages": "^4.0.0",
     "jest": "^27.5.1",
-    "npm-check-updates": "^16.1.0",
     "prettier": "^2.7.1",
     "semantic-release": "^19.0.5",
     "serve": "^14.0.1",
@@ -55,11 +53,11 @@
   },
   "dependencies": {
     "@oclif/core": "1.16.0",
-    "aws-cdk-lib": "2.39.1",
+    "aws-cdk-lib": "2.44.0",
     "aws-sdk": "^2.1214.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.67.0",
-    "constructs": "10.1.91",
+    "constructs": "10.1.117",
     "git-url-parse": "^13.0.0",
     "js-yaml": "^4.1.0",
     "lodash.camelcase": "^4.3.0",
@@ -69,9 +67,9 @@
     "yargs": "^17.5.1"
   },
   "peerDependencies": {
-    "aws-cdk": "2.39.1",
-    "aws-cdk-lib": "2.39.1",
-    "constructs": "10.1.91"
+    "aws-cdk": "2.44.0",
+    "aws-cdk-lib": "2.44.0",
+    "constructs": "10.1.117"
   },
   "config": {
     "commitizen": {

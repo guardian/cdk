@@ -1,0 +1,28 @@
+on:
+  schedule:
+    # At 10:00 on day-of-month 10.
+    # See https://crontab.guru/#0_10_10_*_*
+    - cron: '0 10 10 * *'
+
+    # only temporary for today, will remove afterwards
+    - cron: '0 13 * * *'
+jobs:
+  update-aws-cdk:
+    runs-on: ubuntu-latest
+    name: Bump CDK versions
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - name: "AWS CDK update"
+        env:
+          # This action will raise a PR to edit package.json and package-lock.json.
+          # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI, so we need to provide a different token.
+          # This is a PAT for the guardian-ci user.
+          # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
+          GITHUB_TOKEN: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
+        run: ./script/update-aws-cdk
