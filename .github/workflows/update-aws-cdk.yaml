@@ -3,6 +3,9 @@ on:
     # At 10:00 on day-of-month 10.
     # See https://crontab.guru/#0_10_10_*_*
     - cron: '0 10 10 * *'
+
+    # only temporary for today, will remove afterwards
+    - cron: '0 13 * * *'
 jobs:
   update-aws-cdk:
     runs-on: ubuntu-latest
