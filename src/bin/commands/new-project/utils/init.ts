@@ -115,6 +115,7 @@ function createPackageJson(outputDirectory: string): void {
     scripts: {
       build: "tsc",
       test: "jest",
+      "test:ci": "jest --ci",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
       lint: "eslint lib/** bin/** --ext .ts --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
