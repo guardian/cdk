@@ -1,53 +1,28 @@
 #!/usr/bin/env bash
 
+# This file is run on a schedule via GitHub.
+# See `.github/workflows/update-aws-cdk.yaml`
+
 set -e
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 ROOT_DIR=$DIR/..
 
-checkDependencies() {
-  if ! [ -x "$(command -v gh)" ]; then
-    echo 'Error: gh is not installed but required. To install run `brew install gh` or see https://cli.github.com/.' >&2
-    exit 1
-  fi
-
-  if ! [ -x "$(command -v jq)" ]; then
-    echo 'Error: jq is not installed but required. To install, run `brew install jq` or see https://stedolan.github.io/jq/.' >&2
-    exit 1
-  fi
-}
-
-checkYarnLock() {
-  "${DIR}"/check-yarn-lock
-}
-
-ensureAtHeadOfOrigin() {
-  DEFAULT_BRANCH=main
-
-  CURRENT_BRANCH=$(git branch --show-current)
-  if [ $CURRENT_BRANCH != $DEFAULT_BRANCH ] ; then
-    echo "ERROR: Please switch to the branch $DEFAULT_BRANCH"
-    exit 1
-  fi
-
-  DIFF_WITH_ORIGIN=$(git rev-list --count origin/$DEFAULT_BRANCH...$DEFAULT_BRANCH)
-  if [ $DIFF_WITH_ORIGIN -ne 0 ] ; then
-    echo "ERROR: You are $DIFF_WITH_ORIGIN commits out of sync with origin/$DEFAULT_BRANCH. Please update first."
-    exit 1
-  fi
-
-  if ! git diff --quiet; then
-    echo "ERROR: There are local changes. Please stash them."
-    exit 1
-  fi
-}
-
 updateAwsCdk() {
-  npm run update-aws-cdk
-}
+  # `npx` to avoid a devDependency (and the Dependabot PRs)
+  # See https://www.npmjs.com/package/npm-check-updates
+  npx npm-check-updates "aws-cdk-lib" "aws-cdk" "constructs" --upgrade --deep --target minor
 
-installAwsCdkUpdates() {
-  npm install && cd tools/integration-test && npm install && cd $ROOT_DIR
+  # Deliberately NOT `npm ci` as we're going to raise a PR with the resulting changes to package-lock.json
+  # --ignore-scripts for speed
+  npm install --ignore-scripts
+
+  (
+    cd tools/integration-test
+
+    # --ignore-scripts for speed
+    npm install --ignore-scripts
+  )
 }
 
 checkForLocalChanges() {
@@ -58,14 +33,18 @@ checkForLocalChanges() {
 }
 
 raisePR() {
-  LIBRARY_TO_CHECK="aws-cdk-lib"
-  INSTALLED_VERSION_NUMBER=$(jq -r ".dependencies.\"${LIBRARY_TO_CHECK}\"" < "$DIR/../package.json")
+  AWSCDK_VERSION=$(jq -r '.peerDependencies."aws-cdk"' < "$ROOT_DIR/package.json")
+  AWSCDKLIB_VERSION=$(jq -r '.peerDependencies."aws-cdk-lib"' < "$ROOT_DIR/package.json")
+  CONSTRUCT_VERSION=$(jq -r '.peerDependencies.constructs' < "$ROOT_DIR/package.json")
 
-  BRANCH_NAME="update-aws-cdk-$INSTALLED_VERSION_NUMBER"
-  COMMIT_SUBJECT="fix(deps): Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
-  COMMIT_BODY="Update ${LIBRARY_TO_CHECK} to $INSTALLED_VERSION_NUMBER"
+  BRANCH_NAME="update-aws-cdk-$AWSCDK_VERSION"
+  COMMIT_SUBJECT="fix(deps): Update AWS CDK libraries to $AWSCDK_VERSION, and constructs to $CONSTRUCT_VERSION"
+  COMMIT_BODY="Update aws-cdk to $AWSCDK_VERSION, aws-cdk-lib to $AWSCDKLIB_VERSION, constructs to $CONSTRUCT_VERSION"
 
-  git checkout -b $BRANCH_NAME
+  git config user.name guardian-ci
+  git config user.email guardian-ci@@users.noreply.github.com
+
+  git checkout -b "$BRANCH_NAME"
 
   for file in package.json package-lock.json tools/integration-test/package.json; do
     git add $file
@@ -73,16 +52,12 @@ raisePR() {
 
   git commit -m "$COMMIT_SUBJECT" -m "$COMMIT_BODY"
 
-  git push -u origin $BRANCH_NAME
+  git push -u origin "$BRANCH_NAME"
   gh pr create --title "$COMMIT_SUBJECT" --body "$COMMIT_BODY"
 }
 
 main() {
-  checkDependencies
-  ensureAtHeadOfOrigin
-  checkYarnLock
   updateAwsCdk
-  installAwsCdkUpdates
   checkForLocalChanges
   raisePR
 }
