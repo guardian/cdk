@@ -1,35 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuAppAwareConstruct mixin should add the app tag 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Resources": Object {
-    "MyBucketTest262E966E": Object {
+  "Resources": {
+    "MyBucketTest262E966E": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "Test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },

@@ -1,37 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuScheduledLambda pattern should create the correct resources with minimal config 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuDistributionBucketParameter",
       "GuScheduledLambda",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "mylambdafunction8D341B54": Object {
-      "DependsOn": Array [
+  "Resources": {
+    "mylambdafunction8D341B54": {
+      "DependsOn": [
         "mylambdafunctionServiceRoleDefaultPolicy769897D4",
         "mylambdafunctionServiceRoleE82C2E25",
       ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
           "S3Key": "test-stack/TEST/testing/lambda.zip",
         },
-        "Environment": Object {
-          "Variables": Object {
+        "Environment": {
+          "Variables": {
             "APP": "testing",
             "STACK": "test-stack",
             "STAGE": "TEST",
@@ -40,31 +40,31 @@ Object {
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
         "MemorySize": 512,
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "mylambdafunctionServiceRoleE82C2E25",
             "Arn",
           ],
         },
         "Runtime": "nodejs12.x",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -73,43 +73,43 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mylambdafunctionServiceRoleDefaultPolicy769897D4": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "mylambdafunctionServiceRoleDefaultPolicy769897D4": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
               ],
               "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::Join": Array [
+              "Resource": [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
                     ],
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
                       "/test-stack/TEST/testing/lambda.zip",
@@ -118,19 +118,19 @@ Object {
                 },
               ],
             },
-            Object {
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing",
@@ -138,22 +138,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing/*",
@@ -165,35 +165,35 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "mylambdafunctionServiceRoleDefaultPolicy769897D4",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "mylambdafunctionServiceRoleE82C2E25",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mylambdafunctionServiceRoleE82C2E25": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "mylambdafunctionServiceRoleE82C2E25": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
@@ -201,24 +201,24 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -226,14 +226,14 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "mylambdafunctionmylambdafunctionrate1minute06AD0015D": Object {
-      "Properties": Object {
+    "mylambdafunctionmylambdafunctionrate1minute06AD0015D": {
+      "Properties": {
         "ScheduleExpression": "rate(1 minute)",
         "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
                 "mylambdafunction8D341B54",
                 "Arn",
               ],
@@ -244,18 +244,18 @@ Object {
       },
       "Type": "AWS::Events::Rule",
     },
-    "mylambdafunctionmylambdafunctionrate1minute0AllowEventRuleTestmylambdafunction4858F7ED96852F99": Object {
-      "Properties": Object {
+    "mylambdafunctionmylambdafunctionrate1minute0AllowEventRuleTestmylambdafunction4858F7ED96852F99": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "mylambdafunction8D341B54",
             "Arn",
           ],
         },
         "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
+        "SourceArn": {
+          "Fn::GetAtt": [
             "mylambdafunctionmylambdafunctionrate1minute06AD0015D",
             "Arn",
           ],

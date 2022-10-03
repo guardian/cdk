@@ -1,45 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GuSESSenderPolicy should add a parameter to the stack for the sending email address 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuGuardianEmailSenderParameter",
       "GuSESSenderPolicy",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "EmailSenderAddress": Object {
-      "AllowedPattern": "^[a-zA-Z]+(\\\\.[a-zA-Z]+)*@theguardian.com$",
+  "Parameters": {
+    "EmailSenderAddress": {
+      "AllowedPattern": "^[a-zA-Z]+(\\.[a-zA-Z]+)*@theguardian.com$",
       "ConstraintDescription": "Must be an @theguardian.com email address",
       "Description": "The sender of emails sent using SES.",
       "Type": "String",
     },
   },
-  "Resources": Object {
-    "GuSESSenderPolicy2E2A75A2": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+  "Resources": {
+    "GuSESSenderPolicy2E2A75A2": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ses:SendEmail",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ses:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":identity/",
-                    Object {
+                    {
                       "Ref": "EmailSenderAddress",
                     },
                   ],
@@ -50,28 +50,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuSESSenderPolicy2E2A75A2",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "TestRole6C9272DF",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TestRole6C9272DF": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "TestRole6C9272DF": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -82,24 +82,24 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
