@@ -36,7 +36,7 @@
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/node": "18.8.0",
-    "@types/yargs": "^17.0.12",
+    "@types/yargs": "^17.0.13",
     "aws-cdk": "2.44.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.23.0",
@@ -64,7 +64,7 @@
     "lodash.kebabcase": "^4.1.1",
     "lodash.upperfirst": "^4.3.1",
     "read-pkg-up": "7.0.1",
-    "yargs": "^17.5.1"
+    "yargs": "^17.6.0"
   },
   "peerDependencies": {
     "aws-cdk": "2.44.0",
