@@ -1,135 +1,135 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuEcsTask pattern should create the correct resources with lots of config 1`] = `
-Object {
-  "Mappings": Object {
-    "ServiceprincipalMap": Object {
-      "af-south-1": Object {
+{
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
         "states": "states.af-south-1.amazonaws.com",
       },
-      "ap-east-1": Object {
+      "ap-east-1": {
         "states": "states.ap-east-1.amazonaws.com",
       },
-      "ap-northeast-1": Object {
+      "ap-northeast-1": {
         "states": "states.ap-northeast-1.amazonaws.com",
       },
-      "ap-northeast-2": Object {
+      "ap-northeast-2": {
         "states": "states.ap-northeast-2.amazonaws.com",
       },
-      "ap-northeast-3": Object {
+      "ap-northeast-3": {
         "states": "states.ap-northeast-3.amazonaws.com",
       },
-      "ap-south-1": Object {
+      "ap-south-1": {
         "states": "states.ap-south-1.amazonaws.com",
       },
-      "ap-southeast-1": Object {
+      "ap-southeast-1": {
         "states": "states.ap-southeast-1.amazonaws.com",
       },
-      "ap-southeast-2": Object {
+      "ap-southeast-2": {
         "states": "states.ap-southeast-2.amazonaws.com",
       },
-      "ap-southeast-3": Object {
+      "ap-southeast-3": {
         "states": "states.ap-southeast-3.amazonaws.com",
       },
-      "ca-central-1": Object {
+      "ca-central-1": {
         "states": "states.ca-central-1.amazonaws.com",
       },
-      "cn-north-1": Object {
+      "cn-north-1": {
         "states": "states.cn-north-1.amazonaws.com",
       },
-      "cn-northwest-1": Object {
+      "cn-northwest-1": {
         "states": "states.cn-northwest-1.amazonaws.com",
       },
-      "eu-central-1": Object {
+      "eu-central-1": {
         "states": "states.eu-central-1.amazonaws.com",
       },
-      "eu-north-1": Object {
+      "eu-north-1": {
         "states": "states.eu-north-1.amazonaws.com",
       },
-      "eu-south-1": Object {
+      "eu-south-1": {
         "states": "states.eu-south-1.amazonaws.com",
       },
-      "eu-south-2": Object {
+      "eu-south-2": {
         "states": "states.eu-south-2.amazonaws.com",
       },
-      "eu-west-1": Object {
+      "eu-west-1": {
         "states": "states.eu-west-1.amazonaws.com",
       },
-      "eu-west-2": Object {
+      "eu-west-2": {
         "states": "states.eu-west-2.amazonaws.com",
       },
-      "eu-west-3": Object {
+      "eu-west-3": {
         "states": "states.eu-west-3.amazonaws.com",
       },
-      "me-south-1": Object {
+      "me-south-1": {
         "states": "states.me-south-1.amazonaws.com",
       },
-      "sa-east-1": Object {
+      "sa-east-1": {
         "states": "states.sa-east-1.amazonaws.com",
       },
-      "us-east-1": Object {
+      "us-east-1": {
         "states": "states.us-east-1.amazonaws.com",
       },
-      "us-east-2": Object {
+      "us-east-2": {
         "states": "states.us-east-2.amazonaws.com",
       },
-      "us-gov-east-1": Object {
+      "us-gov-east-1": {
         "states": "states.us-gov-east-1.amazonaws.com",
       },
-      "us-gov-west-1": Object {
+      "us-gov-west-1": {
         "states": "states.us-gov-west-1.amazonaws.com",
       },
-      "us-iso-east-1": Object {
+      "us-iso-east-1": {
         "states": "states.amazonaws.com",
       },
-      "us-iso-west-1": Object {
+      "us-iso-west-1": {
         "states": "states.amazonaws.com",
       },
-      "us-isob-east-1": Object {
+      "us-isob-east-1": {
         "states": "states.amazonaws.com",
       },
-      "us-west-1": Object {
+      "us-west-1": {
         "states": "states.us-west-1.amazonaws.com",
       },
-      "us-west-2": Object {
+      "us-west-2": {
         "states": "states.us-west-2.amazonaws.com",
       },
     },
   },
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuDistributionBucketParameter",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Outputs": Object {
-    "testecstaskecstestStateMachineArnOutput": Object {
-      "Value": Object {
+  "Outputs": {
+    "testecstaskecstestStateMachineArnOutput": {
+      "Value": {
         "Ref": "testecstaskecstestStateMachineC0B6383F",
       },
     },
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "ecstestexecutionfailedC93F511B": Object {
-      "Properties": Object {
+  "Resources": {
+    "ecstestexecutionfailedC93F511B": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
+        "AlarmActions": [
           "arn:something:else:here:we:goalarm-topic",
         ],
         "AlarmDescription": "ecs-test-TEST job failed ",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "StateMachineArn",
-            "Value": Object {
+            "Value": {
               "Ref": "testecstaskecstestStateMachineC0B6383F",
             },
           },
@@ -144,18 +144,18 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ecstesttimeoutFE335653": Object {
-      "Properties": Object {
+    "ecstesttimeoutFE335653": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
+        "AlarmActions": [
           "arn:something:else:here:we:goalarm-topic",
         ],
         "AlarmDescription": "ecs-test-TEST job timed out ",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "StateMachineArn",
-            "Value": Object {
+            "Value": {
               "Ref": "testecstaskecstestStateMachineC0B6383F",
             },
           },
@@ -170,40 +170,40 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "testecstaskecstestCluster71BC62CB": Object {
-      "Properties": Object {
-        "CapacityProviders": Array [
+    "testecstaskecstestCluster71BC62CB": {
+      "Properties": {
+        "CapacityProviders": [
           "FARGATE",
           "FARGATE_SPOT",
         ],
-        "Cluster": Object {
+        "Cluster": {
           "Ref": "testecstaskecstestClusterCBD4036C",
         },
-        "DefaultCapacityProviderStrategy": Array [],
+        "DefaultCapacityProviderStrategy": [],
       },
       "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
     },
-    "testecstaskecstestClusterCBD4036C": Object {
-      "Properties": Object {
+    "testecstaskecstestClusterCBD4036C": {
+      "Properties": {
         "ClusterName": "ecs-test-cluster-TEST",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -211,56 +211,56 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
-    "testecstaskecstestStateMachineC0B6383F": Object {
-      "DependsOn": Array [
+    "testecstaskecstestStateMachineC0B6383F": {
+      "DependsOn": [
         "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5",
         "testecstaskecstestStateMachineRole93D08A02",
       ],
-      "Properties": Object {
-        "DefinitionString": Object {
-          "Fn::Join": Array [
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
             "",
-            Array [
-              "{\\"StartAt\\":\\"test-ecs-task-ecs-test-task\\",\\"States\\":{\\"test-ecs-task-ecs-test-task\\":{\\"End\\":true,\\"Type\\":\\"Task\\",\\"TimeoutSeconds\\":3600,\\"ResultPath\\":null,\\"Resource\\":\\"arn:",
-              Object {
+            [
+              "{"StartAt":"test-ecs-task-ecs-test-task","States":{"test-ecs-task-ecs-test-task":{"End":true,"Type":"Task","TimeoutSeconds":3600,"ResultPath":null,"Resource":"arn:",
+              {
                 "Ref": "AWS::Partition",
               },
-              ":states:::ecs:runTask.sync\\",\\"Parameters\\":{\\"Cluster\\":\\"",
-              Object {
-                "Fn::GetAtt": Array [
+              ":states:::ecs:runTask.sync","Parameters":{"Cluster":"",
+              {
+                "Fn::GetAtt": [
                   "testecstaskecstestClusterCBD4036C",
                   "Arn",
                 ],
               },
-              "\\",\\"TaskDefinition\\":\\"test-stack-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[\\"id-123\\"]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"test-ecs-task-ecs-test-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}",
+              "","TaskDefinition":"test-stack-TEST-ecs-test","NetworkConfiguration":{"AwsvpcConfiguration":{"Subnets":["abc-123"],"SecurityGroups":["id-123"]}},"Overrides":{"ContainerOverrides":[{"Name":"test-ecs-task-ecs-test-TaskContainer"}]},"LaunchType":"FARGATE","PlatformVersion":"LATEST"}}}}",
             ],
           ],
         },
-        "RoleArn": Object {
-          "Fn::GetAtt": Array [
+        "RoleArn": {
+          "Fn::GetAtt": [
             "testecstaskecstestStateMachineRole93D08A02",
             "Arn",
           ],
         },
         "StateMachineName": "ecs-test-TEST",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -268,18 +268,18 @@ Object {
       },
       "Type": "AWS::StepFunctions::StateMachine",
     },
-    "testecstaskecstestStateMachineRole93D08A02": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "testecstaskecstestStateMachineRole93D08A02": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::FindInMap": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
                     "ServiceprincipalMap",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     "states",
@@ -290,24 +290,24 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -315,25 +315,25 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ecs:RunTask",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:",
-                    Object {
-                      "Fn::Select": Array [
+                    {
+                      "Fn::Select": [
                         1,
-                        Object {
-                          "Fn::Split": Array [
+                        {
+                          "Fn::Split": [
                             ":",
-                            Object {
+                            {
                               "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
@@ -341,13 +341,13 @@ Object {
                       ],
                     },
                     ":",
-                    Object {
-                      "Fn::Select": Array [
+                    {
+                      "Fn::Select": [
                         2,
-                        Object {
-                          "Fn::Split": Array [
+                        {
+                          "Fn::Split": [
                             ":",
-                            Object {
+                            {
                               "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
@@ -355,13 +355,13 @@ Object {
                       ],
                     },
                     ":",
-                    Object {
-                      "Fn::Select": Array [
+                    {
+                      "Fn::Select": [
                         3,
-                        Object {
-                          "Fn::Split": Array [
+                        {
+                          "Fn::Split": [
                             ":",
-                            Object {
+                            {
                               "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
@@ -369,13 +369,13 @@ Object {
                       ],
                     },
                     ":",
-                    Object {
-                      "Fn::Select": Array [
+                    {
+                      "Fn::Select": [
                         4,
-                        Object {
-                          "Fn::Split": Array [
+                        {
+                          "Fn::Split": [
                             ":",
-                            Object {
+                            {
                               "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                             },
                           ],
@@ -383,19 +383,19 @@ Object {
                       ],
                     },
                     ":",
-                    Object {
-                      "Fn::Select": Array [
+                    {
+                      "Fn::Select": [
                         0,
-                        Object {
-                          "Fn::Split": Array [
+                        {
+                          "Fn::Split": [
                             "/",
-                            Object {
-                              "Fn::Select": Array [
+                            {
+                              "Fn::Select": [
                                 5,
-                                Object {
-                                  "Fn::Split": Array [
+                                {
+                                  "Fn::Split": [
                                     ":",
-                                    Object {
+                                    {
                                       "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                                     },
                                   ],
@@ -407,19 +407,19 @@ Object {
                       ],
                     },
                     "/",
-                    Object {
-                      "Fn::Select": Array [
+                    {
+                      "Fn::Select": [
                         1,
-                        Object {
-                          "Fn::Split": Array [
+                        {
+                          "Fn::Split": [
                             "/",
-                            Object {
-                              "Fn::Select": Array [
+                            {
+                              "Fn::Select": [
                                 5,
-                                Object {
-                                  "Fn::Split": Array [
+                                {
+                                  "Fn::Split": [
                                     ":",
-                                    Object {
+                                    {
                                       "Ref": "testecstaskecstestTaskDefinition4BF687D5",
                                     },
                                   ],
@@ -434,53 +434,53 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ecs:StopTask",
                 "ecs:DescribeTasks",
               ],
               "Effect": "Allow",
               "Resource": "*",
             },
-            Object {
+            {
               "Action": "iam:PassRole",
               "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
                     "testecstaskecstestTaskDefinitionTaskRole4D626B6F",
                     "Arn",
                   ],
                 },
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",
                     "Arn",
                   ],
                 },
               ],
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "events:PutTargets",
                 "events:PutRule",
                 "events:DescribeRule",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:",
-                    Object {
+                    {
                       "Ref": "AWS::Partition",
                     },
                     ":events:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":rule/StepFunctionsGetEventsForECSTaskRule",
@@ -492,35 +492,35 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "testecstaskecstestStateMachineRole93D08A02",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "testecstaskecstestTaskDefinition4BF687D5": Object {
-      "Properties": Object {
-        "ContainerDefinitions": Array [
-          Object {
-            "Command": Array [
+    "testecstaskecstestTaskDefinition4BF687D5": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Command": [
               "-c",
-              "echo \\"yo ho row ho it's a pirates life for me\\"",
+              "echo "yo ho row ho it's a pirates life for me"",
             ],
             "Cpu": 1024,
-            "EntryPoint": Array [
+            "EntryPoint": [
               "/bin/sh",
             ],
             "Essential": true,
             "Image": "node:10",
-            "LogConfiguration": Object {
+            "LogConfiguration": {
               "LogDriver": "awslogs",
-              "Options": Object {
-                "awslogs-group": Object {
+              "Options": {
+                "awslogs-group": {
                   "Ref": "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A",
                 },
-                "awslogs-region": Object {
+                "awslogs-region": {
                   "Ref": "AWS::Region",
                 },
                 "awslogs-stream-prefix": "ecs-test",
@@ -531,11 +531,11 @@ Object {
           },
         ],
         "Cpu": "1024",
-        "EphemeralStorage": Object {
+        "EphemeralStorage": {
           "SizeInGiB": 30,
         },
-        "ExecutionRoleArn": Object {
-          "Fn::GetAtt": Array [
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
             "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",
             "Arn",
           ],
@@ -543,33 +543,33 @@ Object {
         "Family": "test-stack-TEST-ecs-test",
         "Memory": "1024",
         "NetworkMode": "awsvpc",
-        "RequiresCompatibilities": Array [
+        "RequiresCompatibilities": [
           "FARGATE",
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "TaskRoleArn": Object {
-          "Fn::GetAtt": Array [
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
             "testecstaskecstestTaskDefinitionTaskRole4D626B6F",
             "Arn",
           ],
@@ -577,18 +577,18 @@ Object {
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
-    "testecstaskecstestTaskDefinitionExecutionRoleDefaultPolicy85ED5386": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "testecstaskecstestTaskDefinitionExecutionRoleDefaultPolicy85ED5386": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
+              "Resource": {
+                "Fn::GetAtt": [
                   "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A",
                   "Arn",
                 ],
@@ -598,46 +598,46 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "testecstaskecstestTaskDefinitionExecutionRoleDefaultPolicy85ED5386",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "testecstaskecstestTaskDefinitionExecutionRoleF588BC50",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "testecstaskecstestTaskDefinitionExecutionRoleF588BC50": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "testecstaskecstestTaskDefinitionExecutionRoleF588BC50": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ecs-tasks.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -645,38 +645,38 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "testecstaskecstestTaskDefinitionTaskRole4D626B6F": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "testecstaskecstestTaskDefinitionTaskRole4D626B6F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ecs-tasks.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -684,19 +684,19 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "testecstaskecstestTaskDefinitionTaskRoleDefaultPolicy65D034C8": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "testecstaskecstestTaskDefinitionTaskRoleDefaultPolicy65D034C8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/test-stack/TEST/ecs-test/*",
@@ -704,7 +704,7 @@ Object {
                 ],
               },
             },
-            Object {
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Resource": "databaseSecretArn",
@@ -713,36 +713,36 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "testecstaskecstestTaskDefinitionTaskRoleDefaultPolicy65D034C8",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "testecstaskecstestTaskDefinitionTaskRole4D626B6F",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A": Object {
+    "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
+      "Properties": {
         "RetentionInDays": 14,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "ecs-test",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },

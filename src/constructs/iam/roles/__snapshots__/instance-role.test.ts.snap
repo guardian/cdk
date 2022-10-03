@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuInstanceRole construct should allow additional policies to be specified 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuGetS3ObjectsPolicy",
       "GuInstanceRole",
@@ -15,20 +15,20 @@ Object {
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "DescribeEC2PolicyFF5F9295": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+  "Resources": {
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "autoscaling:DescribeAutoScalingInstances",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ec2:DescribeTags",
@@ -41,19 +41,19 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetConfigPolicy6F934A1C": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetConfigPolicy6F934A1C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::config/*",
@@ -62,27 +62,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetConfigPolicy6F934A1C",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyTestingF9D43A3E": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyTestingF9D43A3E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/test-stack/TEST/testing/*",
@@ -94,28 +94,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRoleTestingCB7BD146": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleTestingCB7BD146": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -127,24 +127,24 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -152,23 +152,23 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreReadTesting0F3B634A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadTesting0F3B634A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing",
@@ -176,22 +176,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing/*",
@@ -203,20 +203,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "SSMRunCommandPolicy244E1613": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ec2messages:AcknowledgeMessage",
                 "ec2messages:DeleteMessage",
                 "ec2messages:FailMessage",
@@ -239,8 +239,8 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "ssm-run-command-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
@@ -252,9 +252,9 @@ Object {
 `;
 
 exports[`The GuInstanceRole construct should be possible to create multiple instance roles in a single stack 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuInstanceRole",
       "GuSSMRunCommandPolicy",
@@ -270,25 +270,25 @@ Object {
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "LoggingStreamName": Object {
+    "LoggingStreamName": {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "DescribeEC2PolicyFF5F9295": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+  "Resources": {
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "autoscaling:DescribeAutoScalingInstances",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ec2:DescribeTags",
@@ -301,30 +301,30 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMyfirstapp5C11A22B",
           },
-          Object {
+          {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyMyfirstappB56CBAB1": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyMyfirstappB56CBAB1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/test-stack/TEST/my-first-app/*",
@@ -336,27 +336,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyMyfirstappB56CBAB1",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMyfirstapp5C11A22B",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyMysecondapp5096BFDB": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyMysecondapp5096BFDB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/test-stack/TEST/my-second-app/*",
@@ -368,38 +368,38 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyMysecondapp5096BFDB",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuLogShippingPolicy981BFE5A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "GuLogShippingPolicy981BFE5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "kinesis:Describe*",
                 "kinesis:Put*",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:kinesis:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":stream/",
-                    Object {
+                    {
                       "Ref": "LoggingStreamName",
                     },
                   ],
@@ -410,31 +410,31 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuLogShippingPolicy981BFE5A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMyfirstapp5C11A22B",
           },
-          Object {
+          {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRoleMyfirstapp5C11A22B": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleMyfirstapp5C11A22B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -446,24 +446,24 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "my-first-app",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -471,20 +471,20 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "InstanceRoleMysecondapp48DD15D7": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleMysecondapp48DD15D7": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -496,24 +496,24 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "my-second-app",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -521,23 +521,23 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreReadMyfirstappE5C5C329": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadMyfirstappE5C5C329": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/my-first-app",
@@ -545,22 +545,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/my-first-app/*",
@@ -572,31 +572,31 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMyfirstapp5C11A22B",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ParameterStoreReadMysecondapp76C0E32C": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadMysecondapp76C0E32C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/my-second-app",
@@ -604,22 +604,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/my-second-app/*",
@@ -631,20 +631,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "SSMRunCommandPolicy244E1613": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ec2messages:AcknowledgeMessage",
                 "ec2messages:DeleteMessage",
                 "ec2messages:FailMessage",
@@ -667,11 +667,11 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "ssm-run-command-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleMyfirstapp5C11A22B",
           },
-          Object {
+          {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
           },
         ],
@@ -683,9 +683,9 @@ Object {
 `;
 
 exports[`The GuInstanceRole construct should create an additional logging policy if logging stream is specified 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuInstanceRole",
       "GuSSMRunCommandPolicy",
@@ -698,25 +698,25 @@ Object {
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "LoggingStreamName": Object {
+    "LoggingStreamName": {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "DescribeEC2PolicyFF5F9295": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+  "Resources": {
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "autoscaling:DescribeAutoScalingInstances",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ec2:DescribeTags",
@@ -729,27 +729,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyTestingF9D43A3E": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyTestingF9D43A3E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/test-stack/TEST/testing/*",
@@ -761,38 +761,38 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuLogShippingPolicy981BFE5A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "GuLogShippingPolicy981BFE5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "kinesis:Describe*",
                 "kinesis:Put*",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:kinesis:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":stream/",
-                    Object {
+                    {
                       "Ref": "LoggingStreamName",
                     },
                   ],
@@ -803,28 +803,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuLogShippingPolicy981BFE5A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRoleTestingCB7BD146": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleTestingCB7BD146": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -836,24 +836,24 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -861,23 +861,23 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreReadTesting0F3B634A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadTesting0F3B634A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing",
@@ -885,22 +885,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing/*",
@@ -912,20 +912,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "SSMRunCommandPolicy244E1613": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ec2messages:AcknowledgeMessage",
                 "ec2messages:DeleteMessage",
                 "ec2messages:FailMessage",
@@ -948,8 +948,8 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "ssm-run-command-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
@@ -961,9 +961,9 @@ Object {
 `;
 
 exports[`The GuInstanceRole construct should create the correct resources with minimal config 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuInstanceRole",
       "GuSSMRunCommandPolicy",
@@ -974,20 +974,20 @@ Object {
     ],
     "gu:cdk:version": "TEST",
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "DescribeEC2PolicyFF5F9295": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+  "Resources": {
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "autoscaling:DescribeAutoScalingInstances",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ec2:DescribeTags",
@@ -1000,27 +1000,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyTestingF9D43A3E": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyTestingF9D43A3E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/test-stack/TEST/testing/*",
@@ -1032,28 +1032,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRoleTestingCB7BD146": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleTestingCB7BD146": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -1065,24 +1065,24 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -1090,23 +1090,23 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ParameterStoreReadTesting0F3B634A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadTesting0F3B634A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing",
@@ -1114,22 +1114,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing/*",
@@ -1141,20 +1141,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "SSMRunCommandPolicy244E1613": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ec2messages:AcknowledgeMessage",
                 "ec2messages:DeleteMessage",
                 "ec2messages:FailMessage",
@@ -1177,8 +1177,8 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "ssm-run-command-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleTestingCB7BD146",
           },
         ],

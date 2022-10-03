@@ -21,10 +21,4 @@ module.exports = {
     - #448
    */
   modulePathIgnorePatterns: ["<rootDir>/lib"],
-
-  // (temporary) Retain snapshot format from Jest 28. See https://jestjs.io/docs/upgrading-to-jest29#snapshot-format.
-  snapshotFormat: {
-    escapeString: true,
-    printBasicPrototype: true,
-  },
 };

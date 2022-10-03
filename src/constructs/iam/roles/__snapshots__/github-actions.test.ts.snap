@@ -1,31 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GitHubActionsRole construct should create the correct resources with minimal config 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuStack",
       "GuGetS3ObjectsPolicy",
       "GuGithubActionsRole",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Outputs": Object {
-    "GithubActionsRoleGithubActionsRoleArnC13D9654": Object {
-      "Value": Object {
-        "Fn::GetAtt": Array [
+  "Outputs": {
+    "GithubActionsRoleGithubActionsRoleArnC13D9654": {
+      "Value": {
+        "Fn::GetAtt": [
           "GithubActionsRoleF5CC769F",
           "Arn",
         ],
       },
     },
   },
-  "Resources": Object {
-    "GetObjectsDE66E0D1": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+  "Resources": {
+    "GetObjectsDE66E0D1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::super-secret-stuff/*",
@@ -34,40 +34,40 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetObjectsDE66E0D1",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "GithubActionsRoleF5CC769F",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GithubActionsOidc": Object {
-      "Properties": Object {
-        "ClientIdList": Array [
+    "GithubActionsOidc": {
+      "Properties": {
+        "ClientIdList": [
           "sts.amazonaws.com",
         ],
-        "ThumbprintList": Array [
+        "ThumbprintList": [
           "6938fd4d98bab03faadb97b34396831e3780aea1",
         ],
         "Url": "https://token.actions.githubusercontent.com",
       },
       "Type": "AWS::IAM::OIDCProvider",
     },
-    "GithubActionsRoleF5CC769F": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GithubActionsRoleF5CC769F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRoleWithWebIdentity",
-              "Condition": Object {
-                "StringLike": Object {
+              "Condition": {
+                "StringLike": {
                   "token.actions.githubusercontent.com:sub": "repo:guardian/*",
                 },
               },
               "Effect": "Allow",
-              "Principal": Object {
-                "Federated": Object {
+              "Principal": {
+                "Federated": {
                   "Ref": "GithubActionsOidc",
                 },
               },
@@ -75,20 +75,20 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
