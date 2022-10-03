@@ -1,7 +1,12 @@
 module.exports = {
   testMatch: ["<rootDir>/src/**/*.test.ts"],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.test.json",
+      },
+    ],
   },
   setupFilesAfterEnv: ["./jest.setup.js"],
 
@@ -16,9 +21,10 @@ module.exports = {
     - #448
    */
   modulePathIgnorePatterns: ["<rootDir>/lib"],
-  globals: {
-    "ts-jest": {
-      tsconfig: "tsconfig.test.json",
-    },
+
+  // (temporary) Retain snapshot format from Jest 28. See https://jestjs.io/docs/upgrading-to-jest29#snapshot-format.
+  snapshotFormat: {
+    escapeString: true,
+    printBasicPrototype: true,
   },
 };
