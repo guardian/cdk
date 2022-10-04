@@ -5,6 +5,7 @@ import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
@@ -313,7 +314,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  * cfnLb.securityGroups = [sg.securityGroupId];
  * ```
  */
-export class GuEc2App {
+export class GuEc2App extends Construct {
   /*
    * These are public for now, as this allows users to
    * modify these constructs as desired to fit their
@@ -347,6 +348,8 @@ export class GuEc2App {
       withoutImdsv2,
       imageRecipe,
     } = props;
+
+    super(scope, app); // The assumption is `app` is unique
 
     // We should really prevent users from doing this via the type system,
     // but that requires a breaking change to the API
