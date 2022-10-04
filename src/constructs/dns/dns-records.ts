@@ -1,5 +1,6 @@
 import type { Duration } from "aws-cdk-lib";
 import { CfnResource } from "aws-cdk-lib";
+import { Construct } from "constructs";
 import type { GuDomainName } from "../../types";
 import type { AppIdentity, GuStack } from "../core";
 
@@ -20,10 +21,20 @@ export interface GuDnsRecordSetProps {
  * Prefer to use [[`GuCname`]] when creating a CNAME for a load balancer,
  * as this requires less boilerplate.
  */
-export class GuDnsRecordSet {
+export class GuDnsRecordSet extends Construct {
   constructor(scope: GuStack, id: string, props: GuDnsRecordSetProps) {
     const { name, recordType, resourceRecords, ttl } = props;
     const { stage } = scope;
+
+    /*
+    Nodes in the CDK tree must have a unique ID. This class adds two nodes to the tree, so we have two IDs.
+    `id`, by definition, must be unique. `name` represents a fully qualified domain name, which must also be unique.
+    `id` being given to the level 1 construct means it also becomes the logicalId in the template.
+     */
+    const level2ConstructId = name;
+    const level1ConstructId = id;
+
+    super(scope, level2ConstructId);
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- more `RecordType`s will be added soon!
     if (recordType === RecordType.CNAME) {
@@ -45,7 +56,7 @@ export class GuDnsRecordSet {
 
     // The spec for this private resource type can be found here:
     // https://github.com/guardian/cfn-private-resource-types/tree/main/dns/guardian-dns-record-set-type/docs#syntax
-    new CfnResource(scope, id, {
+    new CfnResource(scope, level1ConstructId, {
       type: "Guardian::DNS::RecordSet",
       properties: {
         Name: name,

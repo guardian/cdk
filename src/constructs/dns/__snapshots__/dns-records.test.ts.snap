@@ -5,6 +5,7 @@ exports[`The GuCname construct should create the correct resources with minimal 
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
+      "GuCname",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -30,6 +31,7 @@ exports[`The GuDnsRecordSet construct should create the correct resources with m
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
+      "GuDnsRecordSet",
     ],
     "gu:cdk:version": "TEST",
   },
