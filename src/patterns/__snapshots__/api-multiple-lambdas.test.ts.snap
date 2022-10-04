@@ -9,6 +9,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       "GuLambdaFunction",
       "GuLambdaFunction",
       "GuLambdaFunction",
+      "GuApiGatewayWithLambdaByPath",
     ],
     "gu:cdk:version": "TEST",
   },
