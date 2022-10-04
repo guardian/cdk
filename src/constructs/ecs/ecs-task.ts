@@ -16,6 +16,7 @@ import { Topic } from "aws-cdk-lib/aws-sns";
 import { IntegrationPattern, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
 import type { TaskEnvironmentVariable } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { EcsFargateLaunchTarget, EcsRunTask } from "aws-cdk-lib/aws-stepfunctions-tasks";
+import { Construct } from "constructs";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
@@ -135,10 +136,12 @@ const getContainer = (config: ContainerConfiguration) => {
  * Note that if your task reliably completes in less than 15 minutes then you should probably use a [[`GuLambda`]] instead. This
  * pattern was mainly created to work around the 15 minute lambda timeout.
  */
-export class GuEcsTask {
+export class GuEcsTask extends Construct {
   stateMachine: StateMachine;
 
   constructor(scope: GuStack, id: string, props: GuEcsTaskProps) {
+    super(scope, id);
+
     const {
       app,
 

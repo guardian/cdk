@@ -99,6 +99,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
+      "GuEcsTask",
       "GuDistributionBucketParameter",
     ],
     "gu:cdk:version": "TEST",
