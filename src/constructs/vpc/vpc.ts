@@ -1,32 +1,9 @@
 import { Token } from "aws-cdk-lib";
 import type { VpcProps } from "aws-cdk-lib/aws-ec2";
 import { GatewayVpcEndpointAwsService, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
-import { StringListParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
-import { VPC_SSM_PARAMETER_PREFIX } from "../../constants";
 import type { GuStack } from "../core";
 
-export interface GuVpcCustomProps {
-  /**
-   * Whether to add SSM Parameters containing VPC metadata, which are expected
-   * to exist by many other Guardian CDK patterns.
-   *
-   * Defaults to 'true'.
-   */
-  ssmParameters?: boolean;
-
-  /**
-   * An identifier for the VPC to namespace SSM parameters. Customise when you
-   * have multiple teams/VPCs in the same account.
-   *
-   * This will be combined with the /account/vpc prefix for the full parameter
-   * name. e.g. '/account/vpc/primary'.
-   *
-   * Defaults to 'primary'.
-   */
-  ssmParametersNamespace?: string;
-}
-
-export interface GuVpcProps extends GuVpcCustomProps, VpcProps {}
+export type GuVpcProps = VpcProps;
 
 /**
  * Construct which creates a Virtual Private Cloud.
@@ -114,34 +91,9 @@ export class GuVpc extends Vpc {
       ],
     };
 
-    const defaultCustomProps: Required<GuVpcCustomProps> = {
-      ssmParameters: true,
-      ssmParametersNamespace: "primary",
-    };
-
     // Set the context BEFORE the `super` call to avoid `Error: Cannot set context after children have been added`
     GuVpc.setAvailabilityZoneContext(scope);
 
     super(scope, id, { ...defaultVpcProps, ...props });
-
-    if (props?.ssmParameters ?? defaultCustomProps.ssmParameters) {
-      const namespace = props?.ssmParametersNamespace ?? defaultCustomProps.ssmParametersNamespace;
-      const prefix = `${VPC_SSM_PARAMETER_PREFIX}/${namespace}`;
-
-      new StringParameter(scope, "vpcID", {
-        parameterName: `${prefix}/id`,
-        stringValue: this.vpcId,
-      });
-
-      new StringListParameter(scope, "publicSubnets", {
-        parameterName: `${prefix}/subnets/public`,
-        stringListValue: this.publicSubnets.map((subnet) => subnet.subnetId),
-      });
-
-      new StringListParameter(scope, "privateSubnets", {
-        parameterName: `${prefix}/subnets/private`,
-        stringListValue: this.privateSubnets.map((subnet) => subnet.subnetId),
-      });
-    }
   }
 }
