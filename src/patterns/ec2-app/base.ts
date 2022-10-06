@@ -143,7 +143,7 @@ export interface GuEc2AppProps extends AppIdentity {
   certificateProps: GuDomainName;
   withoutImdsv2?: boolean;
   imageRecipe?: string;
-  vpcOverride?: GuVpc;
+  vpcOverride?: IVpc;
   deploymentSubnetsOverride?: ISubnet[];
 }
 
@@ -364,7 +364,7 @@ export class GuEc2App extends Construct {
       );
     }
 
-    const vpc:GuVpc = vpcOverride ?? GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
+    const vpc:IVpc = vpcOverride ?? GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
     const privateSubnets = deploymentSubnetsOverride ?? GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
     AppAccess.validate(access);
