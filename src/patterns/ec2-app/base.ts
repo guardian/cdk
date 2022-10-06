@@ -1,7 +1,7 @@
 import { Duration, Tags } from "aws-cdk-lib";
 import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
-import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
+import type {InstanceType, IPeer, ISubnet, IVpc} from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
@@ -143,6 +143,8 @@ export interface GuEc2AppProps extends AppIdentity {
   certificateProps: GuDomainName;
   withoutImdsv2?: boolean;
   imageRecipe?: string;
+  vpcOverride?: GuVpc;
+  deploymentSubnetsOverride?: ISubnet[];
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -347,6 +349,8 @@ export class GuEc2App extends Construct {
       userData,
       withoutImdsv2,
       imageRecipe,
+      vpcOverride,
+      deploymentSubnetsOverride
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -360,8 +364,8 @@ export class GuEc2App extends Construct {
       );
     }
 
-    const vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
-    const privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
+    const vpc:GuVpc = vpcOverride ?? GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC"));
+    const privateSubnets = deploymentSubnetsOverride ?? GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
 
     AppAccess.validate(access);
 
