@@ -5,9 +5,9 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuEc2App",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
       "GuSSMRunCommandPolicy",
@@ -830,9 +830,9 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuEc2App",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
       "GuSSMRunCommandPolicy",
