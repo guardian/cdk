@@ -30,7 +30,7 @@
   "devDependencies": {
     "@guardian/eslint-config-typescript": "1.0.11",
     "@types/git-url-parse": "^9.0.1",
-    "@types/jest": "^29.1.1",
+    "@types/jest": "^29.1.2",
     "@types/js-yaml": "^4.0.5",
     "@types/lodash.camelcase": "^4.3.7",
     "@types/lodash.kebabcase": "^4.1.7",
