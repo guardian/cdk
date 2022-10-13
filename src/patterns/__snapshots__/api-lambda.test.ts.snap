@@ -1,27 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuApiLambda pattern should allow us to link a domain name to a LambdaRestApi 1`] = `
-Object {
-  "Outputs": Object {
-    "lambdaapiEndpoint3B6C471A": Object {
-      "Value": Object {
-        "Fn::Join": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuApiLambda",
+      "GuCertificate",
+      "GuCname",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Outputs": {
+    "lambdaapiEndpoint3B6C471A": {
+      "Value": {
+        "Fn::Join": [
           "",
-          Array [
+          [
             "https://",
-            Object {
+            {
               "Ref": "lambdaapiC1812993",
             },
             ".execute-api.",
-            Object {
+            {
               "Ref": "AWS::Region",
             },
             ".",
-            Object {
+            {
               "Ref": "AWS::URLSuffix",
             },
             "/",
-            Object {
+            {
               "Ref": "lambdaapiDeploymentStageprod9598BC2F",
             },
             "/",
@@ -30,42 +40,42 @@ Object {
       },
     },
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "CertificateTesting28FCAC6D": Object {
+  "Resources": {
+    "CertificateTesting28FCAC6D": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
+      "Properties": {
         "DomainName": "code.theguardian.com",
-        "DomainValidationOptions": Array [
-          Object {
+        "DomainValidationOptions": [
+          {
             "DomainName": "code.theguardian.com",
             "HostedZoneId": "id123",
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -75,13 +85,13 @@ Object {
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Retain",
     },
-    "DNS": Object {
-      "Properties": Object {
+    "DNS": {
+      "Properties": {
         "Name": "code.theguardian.com",
         "RecordType": "CNAME",
-        "ResourceRecords": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
               "lambdaapidomain77C40062",
               "RegionalDomainName",
             ],
@@ -92,20 +102,20 @@ Object {
       },
       "Type": "Guardian::DNS::RecordSet",
     },
-    "lambda8B5974B5": Object {
-      "DependsOn": Array [
+    "lambda8B5974B5": {
+      "DependsOn": [
         "lambdaServiceRoleDefaultPolicyBF6FA5E7",
         "lambdaServiceRole494E4CA6",
       ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
           "S3Key": "test-stack/TEST/testing/my-app.zip",
         },
-        "Environment": Object {
-          "Variables": Object {
+        "Environment": {
+          "Variables": {
             "APP": "testing",
             "STACK": "test-stack",
             "STAGE": "TEST",
@@ -113,31 +123,31 @@ Object {
         },
         "Handler": "handler.ts",
         "MemorySize": 512,
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "lambdaServiceRole494E4CA6",
             "Arn",
           ],
         },
         "Runtime": "nodejs12.x",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -146,27 +156,27 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "lambdaServiceRole494E4CA6": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "lambdaServiceRole494E4CA6": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
@@ -174,24 +184,24 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -199,64 +209,64 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "lambdaServiceRoleDefaultPolicyBF6FA5E7": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
               ],
               "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::Join": Array [
+              "Resource": [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
                     ],
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/my-app.zip",
                     ],
                   ],
                 },
               ],
             },
-            Object {
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing",
@@ -264,22 +274,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing/*",
@@ -291,36 +301,36 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "lambdaServiceRole494E4CA6",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "lambdaapiANY4EBCADD1": Object {
-      "Properties": Object {
+    "lambdaapiANY4EBCADD1": {
+      "Properties": {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
-        "Integration": Object {
+        "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
+          "Uri": {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":apigateway:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "lambda8B5974B5",
                     "Arn",
                   ],
@@ -330,46 +340,46 @@ Object {
             ],
           },
         },
-        "ResourceId": Object {
-          "Fn::GetAtt": Array [
+        "ResourceId": {
+          "Fn::GetAtt": [
             "lambdaapiC1812993",
             "RootResourceId",
           ],
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiANYApiPermissionTestTestlambdaapi0E958EEBANY3DF279D1": Object {
-      "Properties": Object {
+    "lambdaapiANYApiPermissionTestTestlambdaapi0E958EEBANY3DF279D1": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/test-invoke-stage/*/",
@@ -379,38 +389,38 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiANYApiPermissionTestlambdaapi0E958EEBANYA0BDE5E2": Object {
-      "Properties": Object {
+    "lambdaapiANYApiPermissionTestlambdaapi0E958EEBANYA0BDE5E2": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/",
-              Object {
+              {
                 "Ref": "lambdaapiDeploymentStageprod9598BC2F",
               },
               "/*/",
@@ -420,42 +430,44 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiAccountAF0DCB01": Object {
-      "DependsOn": Array [
+    "lambdaapiAccountAF0DCB01": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
         "lambdaapiC1812993",
       ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
             "lambdaapiCloudWatchRole7E36513A",
             "Arn",
           ],
         },
       },
       "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiC1812993": Object {
-      "Properties": Object {
+    "lambdaapiC1812993": {
+      "Properties": {
         "Description": "this is a test",
         "Name": "test-stack-TEST-api",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -463,27 +475,28 @@ Object {
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "lambdaapiCloudWatchRole7E36513A": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "lambdaapiCloudWatchRole7E36513A": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "apigateway.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
@@ -491,75 +504,76 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": Object {
-      "DependsOn": Array [
+    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": {
+      "DependsOn": [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
         "lambdaapiANY4EBCADD1",
       ],
-      "Properties": Object {
+      "Properties": {
         "Description": "this is a test",
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "lambdaapiDeploymentStageprod9598BC2F": Object {
-      "DependsOn": Array [
+    "lambdaapiDeploymentStageprod9598BC2F": {
+      "DependsOn": [
         "lambdaapiAccountAF0DCB01",
       ],
-      "Properties": Object {
-        "DeploymentId": Object {
+      "Properties": {
+        "DeploymentId": {
           "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
         "StageName": "prod",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -567,35 +581,35 @@ Object {
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "lambdaapidomain77C40062": Object {
-      "Properties": Object {
+    "lambdaapidomain77C40062": {
+      "Properties": {
         "DomainName": "code.theguardian.com",
-        "EndpointConfiguration": Object {
-          "Types": Array [
+        "EndpointConfiguration": {
+          "Types": [
             "REGIONAL",
           ],
         },
-        "RegionalCertificateArn": Object {
+        "RegionalCertificateArn": {
           "Ref": "CertificateTesting28FCAC6D",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -603,42 +617,42 @@ Object {
       },
       "Type": "AWS::ApiGateway::DomainName",
     },
-    "lambdaapidomainMapTestlambdaapi0E958EEBADCBFBAA": Object {
-      "Properties": Object {
-        "DomainName": Object {
+    "lambdaapidomainMapTestlambdaapi0E958EEBADCBFBAA": {
+      "Properties": {
+        "DomainName": {
           "Ref": "lambdaapidomain77C40062",
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
-        "Stage": Object {
+        "Stage": {
           "Ref": "lambdaapiDeploymentStageprod9598BC2F",
         },
       },
       "Type": "AWS::ApiGateway::BasePathMapping",
     },
-    "lambdaapiproxyANYA94E968A": Object {
-      "Properties": Object {
+    "lambdaapiproxyANYA94E968A": {
+      "Properties": {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
-        "Integration": Object {
+        "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
+          "Uri": {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":apigateway:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "lambda8B5974B5",
                     "Arn",
                   ],
@@ -648,43 +662,43 @@ Object {
             ],
           },
         },
-        "ResourceId": Object {
+        "ResourceId": {
           "Ref": "lambdaapiproxyB573C729",
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiproxyANYApiPermissionTestTestlambdaapi0E958EEBANYproxy716A4EB4": Object {
-      "Properties": Object {
+    "lambdaapiproxyANYApiPermissionTestTestlambdaapi0E958EEBANYproxy716A4EB4": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/test-invoke-stage/*/*",
@@ -694,38 +708,38 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyANYApiPermissionTestlambdaapi0E958EEBANYproxy81BB250D": Object {
-      "Properties": Object {
+    "lambdaapiproxyANYApiPermissionTestlambdaapi0E958EEBANYproxy81BB250D": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/",
-              Object {
+              {
                 "Ref": "lambdaapiDeploymentStageprod9598BC2F",
               },
               "/*/*",
@@ -735,16 +749,16 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyB573C729": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
+    "lambdaapiproxyB573C729": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
             "lambdaapiC1812993",
             "RootResourceId",
           ],
         },
         "PathPart": "{proxy+}",
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
@@ -755,27 +769,35 @@ Object {
 `;
 
 exports[`The GuApiLambda pattern should create the correct resources with minimal config 1`] = `
-Object {
-  "Outputs": Object {
-    "lambdaapiEndpoint3B6C471A": Object {
-      "Value": Object {
-        "Fn::Join": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuDistributionBucketParameter",
+      "GuApiLambda",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Outputs": {
+    "lambdaapiEndpoint3B6C471A": {
+      "Value": {
+        "Fn::Join": [
           "",
-          Array [
+          [
             "https://",
-            Object {
+            {
               "Ref": "lambdaapiC1812993",
             },
             ".execute-api.",
-            Object {
+            {
               "Ref": "AWS::Region",
             },
             ".",
-            Object {
+            {
               "Ref": "AWS::URLSuffix",
             },
             "/",
-            Object {
+            {
               "Ref": "lambdaapiDeploymentStageprod9598BC2F",
             },
             "/",
@@ -784,28 +806,28 @@ Object {
       },
     },
   },
-  "Parameters": Object {
-    "DistributionBucketName": Object {
+  "Parameters": {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "lambda8B5974B5": Object {
-      "DependsOn": Array [
+  "Resources": {
+    "lambda8B5974B5": {
+      "DependsOn": [
         "lambdaServiceRoleDefaultPolicyBF6FA5E7",
         "lambdaServiceRole494E4CA6",
       ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
           "S3Key": "test-stack/TEST/testing/my-app.zip",
         },
-        "Environment": Object {
-          "Variables": Object {
+        "Environment": {
+          "Variables": {
             "APP": "testing",
             "STACK": "test-stack",
             "STAGE": "TEST",
@@ -813,31 +835,31 @@ Object {
         },
         "Handler": "handler.ts",
         "MemorySize": 512,
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "lambdaServiceRole494E4CA6",
             "Arn",
           ],
         },
         "Runtime": "nodejs12.x",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -846,27 +868,27 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "lambdaServiceRole494E4CA6": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "lambdaServiceRole494E4CA6": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
@@ -874,24 +896,24 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -899,64 +921,64 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "lambdaServiceRoleDefaultPolicyBF6FA5E7": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "lambdaServiceRoleDefaultPolicyBF6FA5E7": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
               ],
               "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::Join": Array [
+              "Resource": [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
                     ],
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":s3:::",
-                      Object {
+                      {
                         "Ref": "DistributionBucketName",
                       },
-                      "/*",
+                      "/test-stack/TEST/testing/my-app.zip",
                     ],
                   ],
                 },
               ],
             },
-            Object {
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing",
@@ -964,22 +986,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/TEST/test-stack/testing/*",
@@ -991,36 +1013,36 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "lambdaServiceRoleDefaultPolicyBF6FA5E7",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "lambdaServiceRole494E4CA6",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "lambdaapiANY4EBCADD1": Object {
-      "Properties": Object {
+    "lambdaapiANY4EBCADD1": {
+      "Properties": {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
-        "Integration": Object {
+        "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
+          "Uri": {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":apigateway:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "lambda8B5974B5",
                     "Arn",
                   ],
@@ -1030,46 +1052,46 @@ Object {
             ],
           },
         },
-        "ResourceId": Object {
-          "Fn::GetAtt": Array [
+        "ResourceId": {
+          "Fn::GetAtt": [
             "lambdaapiC1812993",
             "RootResourceId",
           ],
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiANYApiPermissionTestTestlambdaapi0E958EEBANY3DF279D1": Object {
-      "Properties": Object {
+    "lambdaapiANYApiPermissionTestTestlambdaapi0E958EEBANY3DF279D1": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/test-invoke-stage/*/",
@@ -1079,38 +1101,38 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiANYApiPermissionTestlambdaapi0E958EEBANYA0BDE5E2": Object {
-      "Properties": Object {
+    "lambdaapiANYApiPermissionTestlambdaapi0E958EEBANYA0BDE5E2": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/",
-              Object {
+              {
                 "Ref": "lambdaapiDeploymentStageprod9598BC2F",
               },
               "/*/",
@@ -1120,42 +1142,44 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiAccountAF0DCB01": Object {
-      "DependsOn": Array [
+    "lambdaapiAccountAF0DCB01": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
         "lambdaapiC1812993",
       ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
             "lambdaapiCloudWatchRole7E36513A",
             "Arn",
           ],
         },
       },
       "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiC1812993": Object {
-      "Properties": Object {
+    "lambdaapiC1812993": {
+      "Properties": {
         "Description": "this is a test",
         "Name": "test-stack-TEST-api",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -1163,27 +1187,28 @@ Object {
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "lambdaapiCloudWatchRole7E36513A": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "lambdaapiCloudWatchRole7E36513A": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "apigateway.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
@@ -1191,75 +1216,76 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": Object {
-      "DependsOn": Array [
+    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": {
+      "DependsOn": [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
         "lambdaapiANY4EBCADD1",
       ],
-      "Properties": Object {
+      "Properties": {
         "Description": "this is a test",
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "lambdaapiDeploymentStageprod9598BC2F": Object {
-      "DependsOn": Array [
+    "lambdaapiDeploymentStageprod9598BC2F": {
+      "DependsOn": [
         "lambdaapiAccountAF0DCB01",
       ],
-      "Properties": Object {
-        "DeploymentId": Object {
+      "Properties": {
+        "DeploymentId": {
           "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
         "StageName": "prod",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -1267,28 +1293,28 @@ Object {
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "lambdaapiproxyANYA94E968A": Object {
-      "Properties": Object {
+    "lambdaapiproxyANYA94E968A": {
+      "Properties": {
         "AuthorizationType": "NONE",
         "HttpMethod": "ANY",
-        "Integration": Object {
+        "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
+          "Uri": {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":apigateway:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
+                {
+                  "Fn::GetAtt": [
                     "lambda8B5974B5",
                     "Arn",
                   ],
@@ -1298,43 +1324,43 @@ Object {
             ],
           },
         },
-        "ResourceId": Object {
+        "ResourceId": {
           "Ref": "lambdaapiproxyB573C729",
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "lambdaapiproxyANYApiPermissionTestTestlambdaapi0E958EEBANYproxy716A4EB4": Object {
-      "Properties": Object {
+    "lambdaapiproxyANYApiPermissionTestTestlambdaapi0E958EEBANYproxy716A4EB4": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/test-invoke-stage/*/*",
@@ -1344,38 +1370,38 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyANYApiPermissionTestlambdaapi0E958EEBANYproxy81BB250D": Object {
-      "Properties": Object {
+    "lambdaapiproxyANYApiPermissionTestlambdaapi0E958EEBANYproxy81BB250D": {
+      "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
+        "FunctionName": {
+          "Fn::GetAtt": [
             "lambda8B5974B5",
             "Arn",
           ],
         },
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
+        "SourceArn": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "arn:",
-              Object {
+              {
                 "Ref": "AWS::Partition",
               },
               ":execute-api:",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ":",
-              Object {
+              {
                 "Ref": "AWS::AccountId",
               },
               ":",
-              Object {
+              {
                 "Ref": "lambdaapiC1812993",
               },
               "/",
-              Object {
+              {
                 "Ref": "lambdaapiDeploymentStageprod9598BC2F",
               },
               "/*/*",
@@ -1385,16 +1411,16 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "lambdaapiproxyB573C729": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
+    "lambdaapiproxyB573C729": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
             "lambdaapiC1812993",
             "RootResourceId",
           ],
         },
         "PathPart": "{proxy+}",
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "lambdaapiC1812993",
         },
       },

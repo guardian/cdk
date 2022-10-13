@@ -197,7 +197,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           regions:
             - eu-west-1
           app: my-lambda
-          contentDirectory: my-lambda-artifact
+          contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
             lookupByTags: true
@@ -224,7 +224,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           regions:
             - eu-west-1
           app: my-lambda
-          contentDirectory: my-lambda-artifact
+          contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
             lookupByTags: true

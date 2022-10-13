@@ -1,36 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuFastlyLogsIamRole construct correctly wires up the policy 1`] = `
-Object {
-  "Parameters": Object {
-    "FastlyCustomerId": Object {
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuFastlyCustomerIdParameter",
+      "GuFastlyLogsIamRole",
+      "GuPutS3ObjectsPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "FastlyCustomerId": {
       "Default": "/account/external/fastly/customer.id",
       "Description": "SSM parameter containing the Fastly Customer ID. Can be obtained from https://manage.fastly.com/account/company by an admin",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },
-  "Resources": Object {
-    "GuFastlyLogsIamRoleE2DAFAB3": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+  "Resources": {
+    "GuFastlyLogsIamRoleE2DAFAB3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
-              "Condition": Object {
-                "StringEquals": Object {
-                  "sts:ExternalId": Object {
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": {
                     "Ref": "FastlyCustomerId",
                   },
                 },
               },
               "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":iam::717331877981:root",
@@ -42,20 +51,20 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -63,11 +72,11 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "GuFastlyLogsIamRolePolicy5BF3CDCA": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GuFastlyLogsIamRolePolicy5BF3CDCA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:PutObject",
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::test/TEST/stack/app/*",
@@ -76,8 +85,8 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuFastlyLogsIamRolePolicy5BF3CDCA",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "GuFastlyLogsIamRoleE2DAFAB3",
           },
         ],

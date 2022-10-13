@@ -99,7 +99,7 @@ describe("The GuLambdaFunction class", () => {
                     {
                       Ref: "DistributionBucketName",
                     },
-                    "/*",
+                    "/test-stack/TEST/testing/my-app.zip",
                   ],
                 ],
               },

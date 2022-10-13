@@ -1,7 +1,7 @@
 {
   "name": "@guardian/cdk",
   "description": "Generic Guardian flavoured AWS CDK components",
-  "version": "47.1.0",
+  "version": "48.0.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -14,6 +14,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --ext .ts",
+    "prettier:check": "prettier --check \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "watch": "tsc -w",
     "test": "jest --detectOpenHandles --runInBand",
@@ -24,54 +25,51 @@
     "release": "semantic-release",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && serve target",
-    "update-aws-cdk": "ncu \"aws-cdk-lib\" \"aws-cdk\" \"constructs\" --upgrade --deep --target minor",
     "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "1.0.2",
-    "@types/aws-lambda": "^8.10.101",
+    "@guardian/eslint-config-typescript": "1.0.11",
     "@types/git-url-parse": "^9.0.1",
-    "@types/jest": "^27.5.0",
+    "@types/jest": "^29.1.2",
     "@types/js-yaml": "^4.0.5",
     "@types/lodash.camelcase": "^4.3.7",
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/lodash.upperfirst": "^4.3.7",
-    "@types/node": "18.0.3",
-    "@types/yargs": "^17.0.10",
-    "aws-cdk": "2.35.0",
+    "@types/node": "18.8.4",
+    "@types/yargs": "^17.0.13",
+    "aws-cdk": "2.45.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.19.0",
+    "eslint": "^8.25.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
     "gh-pages": "^4.0.0",
-    "jest": "^27.5.1",
-    "npm-check-updates": "^15.2.6",
+    "jest": "^29.1.2",
     "prettier": "^2.7.1",
-    "semantic-release": "^19.0.3",
-    "serve": "^13.0.4",
-    "ts-jest": "^27.1.4",
+    "semantic-release": "^19.0.5",
+    "serve": "^14.0.1",
+    "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
-    "typedoc": "^0.23.8",
-    "typescript": "~4.7.4"
+    "typedoc": "^0.23.16",
+    "typescript": "~4.8.4"
   },
   "dependencies": {
-    "@oclif/core": "1.11.0",
-    "aws-cdk-lib": "2.35.0",
-    "aws-sdk": "^2.1173.0",
+    "@oclif/core": "1.16.5",
+    "aws-cdk-lib": "2.45.0",
+    "aws-sdk": "^2.1231.0",
     "chalk": "^4.1.2",
-    "codemaker": "^1.61.0",
-    "constructs": "10.1.70",
-    "git-url-parse": "^12.0.0",
+    "codemaker": "^1.69.0",
+    "constructs": "10.1.127",
+    "git-url-parse": "^13.1.0",
     "js-yaml": "^4.1.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
     "lodash.upperfirst": "^4.3.1",
     "read-pkg-up": "7.0.1",
-    "yargs": "^17.5.1"
+    "yargs": "^17.6.0"
   },
   "peerDependencies": {
-    "aws-cdk": "2.35.0",
-    "aws-cdk-lib": "2.35.0",
-    "constructs": "10.1.70"
+    "aws-cdk": "2.45.0",
+    "aws-cdk-lib": "2.45.0",
+    "constructs": "10.1.127"
   },
   "config": {
     "commitizen": {

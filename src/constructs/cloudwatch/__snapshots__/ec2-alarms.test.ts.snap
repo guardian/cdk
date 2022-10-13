@@ -1,57 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuAlb5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
-Object {
-  "Outputs": Object {
-    "ApplicationLoadBalancerTestingDnsName": Object {
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuApplicationLoadBalancer",
+      "GuAlb5xxPercentageAlarm",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Outputs": {
+    "ApplicationLoadBalancerTestingDnsName": {
       "Description": "DNS entry for ApplicationLoadBalancerTesting",
-      "Value": Object {
-        "Fn::GetAtt": Array [
+      "Value": {
+        "Fn::GetAtt": [
           "ApplicationLoadBalancerTesting172A253B",
           "DNSName",
         ],
       },
     },
   },
-  "Resources": Object {
-    "ApplicationLoadBalancerTesting172A253B": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
+  "Resources": {
+    "ApplicationLoadBalancerTesting172A253B": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
             "Key": "deletion_protection.enabled",
             "Value": "true",
           },
         ],
         "Scheme": "internal",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
               "ApplicationLoadBalancerTestingSecurityGroup883A01A4",
               "GroupId",
             ],
           },
         ],
-        "Subnets": Array [
+        "Subnets": [
           "",
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -60,11 +68,11 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "ApplicationLoadBalancerTestingSecurityGroup883A01A4": Object {
-      "Properties": Object {
+    "ApplicationLoadBalancerTestingSecurityGroup883A01A4": {
+      "Properties": {
         "GroupDescription": "Automatically created Security Group for ELB TestApplicationLoadBalancerTesting8F9EA5A8",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "255.255.255.255/32",
             "Description": "Disallow all traffic",
             "FromPort": 252,
@@ -72,24 +80,24 @@ Object {
             "ToPort": 86,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -98,20 +106,20 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "High5xxPercentageAlarmTesting9E960B0F": Object {
-      "Properties": Object {
+    "High5xxPercentageAlarmTesting9E960B0F": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":test-topic",
@@ -123,21 +131,21 @@ Object {
         "AlarmName": "High 5XX error % from testing in TEST",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
-        "Metrics": Array [
-          Object {
+        "Metrics": [
+          {
             "Expression": "100*(m1+m2)/m3",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for testing (load balancer and instances combined)",
           },
-          Object {
+          {
             "Id": "m1",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "ApplicationLoadBalancerTesting172A253B",
                         "LoadBalancerFullName",
                       ],
@@ -152,15 +160,15 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m2",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "ApplicationLoadBalancerTesting172A253B",
                         "LoadBalancerFullName",
                       ],
@@ -175,15 +183,15 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m3",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "ApplicationLoadBalancerTesting172A253B",
                         "LoadBalancerFullName",
                       ],
@@ -209,30 +217,39 @@ Object {
 `;
 
 exports[`The GuUnhealthyInstancesAlarm construct should create the correct alarm resource with minimal config 1`] = `
-Object {
-  "Outputs": Object {
-    "ApplicationLoadBalancerTestingDnsName": Object {
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuUnhealthyInstancesAlarm",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Outputs": {
+    "ApplicationLoadBalancerTestingDnsName": {
       "Description": "DNS entry for ApplicationLoadBalancerTesting",
-      "Value": Object {
-        "Fn::GetAtt": Array [
+      "Value": {
+        "Fn::GetAtt": [
           "ApplicationLoadBalancerTesting172A253B",
           "DNSName",
         ],
       },
     },
   },
-  "Resources": Object {
-    "ApplicationListener62E539D0": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
+  "Resources": {
+    "ApplicationListener62E539D0": {
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
               "Ref": "ApplicationTargetGroupTesting080C2FF2",
             },
             "Type": "forward",
           },
         ],
-        "LoadBalancerArn": Object {
+        "LoadBalancerArn": {
           "Ref": "ApplicationLoadBalancerTesting172A253B",
         },
         "Port": 80,
@@ -240,44 +257,44 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "ApplicationLoadBalancerTesting172A253B": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
+    "ApplicationLoadBalancerTesting172A253B": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
             "Key": "deletion_protection.enabled",
             "Value": "true",
           },
         ],
         "Scheme": "internal",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
               "ApplicationLoadBalancerTestingSecurityGroup883A01A4",
               "GroupId",
             ],
           },
         ],
-        "Subnets": Array [
+        "Subnets": [
           "",
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -286,11 +303,11 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "ApplicationLoadBalancerTestingSecurityGroup883A01A4": Object {
-      "Properties": Object {
+    "ApplicationLoadBalancerTestingSecurityGroup883A01A4": {
+      "Properties": {
         "GroupDescription": "Automatically created Security Group for ELB TestApplicationLoadBalancerTesting8F9EA5A8",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "255.255.255.255/32",
             "Description": "Disallow all traffic",
             "FromPort": 252,
@@ -298,8 +315,8 @@ Object {
             "ToPort": 86,
           },
         ],
-        "SecurityGroupIngress": Array [
-          Object {
+        "SecurityGroupIngress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow from anyone on port 80",
             "FromPort": 80,
@@ -307,24 +324,24 @@ Object {
             "ToPort": 80,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -333,8 +350,8 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "ApplicationTargetGroupTesting080C2FF2": Object {
-      "Properties": Object {
+    "ApplicationTargetGroupTesting080C2FF2": {
+      "Properties": {
         "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
@@ -342,34 +359,34 @@ Object {
         "HealthyThresholdCount": 5,
         "Port": 80,
         "Protocol": "HTTP",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "testing",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "TargetGroupAttributes": Array [
-          Object {
+        "TargetGroupAttributes": [
+          {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "30",
           },
-          Object {
+          {
             "Key": "stickiness.enabled",
             "Value": "false",
           },
@@ -379,20 +396,20 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "UnhealthyInstancesAlarmTestingD3AE50F4": Object {
-      "Properties": Object {
+    "UnhealthyInstancesAlarmTestingD3AE50F4": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":test-topic",
@@ -408,20 +425,20 @@ Object {
         "AlarmName": "Unhealthy instances for testing in TEST",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "DatapointsToAlarm": 30,
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::Join": Array [
+            "Value": {
+              "Fn::Join": [
                 "",
-                Array [
-                  Object {
-                    "Fn::Select": Array [
+                [
+                  {
+                    "Fn::Select": [
                       1,
-                      Object {
-                        "Fn::Split": Array [
+                      {
+                        "Fn::Split": [
                           "/",
-                          Object {
+                          {
                             "Ref": "ApplicationListener62E539D0",
                           },
                         ],
@@ -429,13 +446,13 @@ Object {
                     ],
                   },
                   "/",
-                  Object {
-                    "Fn::Select": Array [
+                  {
+                    "Fn::Select": [
                       2,
-                      Object {
-                        "Fn::Split": Array [
+                      {
+                        "Fn::Split": [
                           "/",
-                          Object {
+                          {
                             "Ref": "ApplicationListener62E539D0",
                           },
                         ],
@@ -443,13 +460,13 @@ Object {
                     ],
                   },
                   "/",
-                  Object {
-                    "Fn::Select": Array [
+                  {
+                    "Fn::Select": [
                       3,
-                      Object {
-                        "Fn::Split": Array [
+                      {
+                        "Fn::Split": [
                           "/",
-                          Object {
+                          {
                             "Ref": "ApplicationListener62E539D0",
                           },
                         ],
@@ -460,10 +477,10 @@ Object {
               ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "ApplicationTargetGroupTesting080C2FF2",
                 "TargetGroupFullName",
               ],

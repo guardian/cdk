@@ -1,27 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct alarm resource with minimal config 1`] = `
-Object {
-  "Outputs": Object {
-    "RestApiEndpoint0551178A": Object {
-      "Value": Object {
-        "Fn::Join": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuApiGateway5xxPercentageAlarm",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Outputs": {
+    "RestApiEndpoint0551178A": {
+      "Value": {
+        "Fn::Join": [
           "",
-          Array [
+          [
             "https://",
-            Object {
+            {
               "Ref": "RestApi0C43BF4B",
             },
             ".execute-api.",
-            Object {
+            {
               "Ref": "AWS::Region",
             },
             ".",
-            Object {
+            {
               "Ref": "AWS::URLSuffix",
             },
             "/",
-            Object {
+            {
               "Ref": "RestApiDeploymentStageprod3855DE66",
             },
             "/",
@@ -30,21 +37,21 @@ Object {
       },
     },
   },
-  "Resources": Object {
-    "ApiGatewayHigh5xxPercentageAlarmTesting67154503": Object {
-      "Properties": Object {
+  "Resources": {
+    "ApiGatewayHigh5xxPercentageAlarmTesting67154503": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":test-topic",
@@ -56,18 +63,18 @@ Object {
         "AlarmName": "High 5XX error % from testing (ApiGateway) in TEST",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
-        "Metrics": Array [
-          Object {
+        "Metrics": [
+          {
             "Expression": "100*m1/m2",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for testing",
           },
-          Object {
+          {
             "Id": "m1",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "ApiName",
                     "Value": "RestApi",
                   },
@@ -80,12 +87,12 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m2",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "ApiName",
                     "Value": "RestApi",
                   },
@@ -104,23 +111,23 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "RestApi0C43BF4B": Object {
-      "Properties": Object {
+    "RestApi0C43BF4B": {
+      "Properties": {
         "Name": "RestApi",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -128,41 +135,44 @@ Object {
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "RestApiAccount7C83CF5A": Object {
-      "DependsOn": Array [
+    "RestApiAccount7C83CF5A": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
         "RestApi0C43BF4B",
       ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
             "RestApiCloudWatchRoleE3ED6605",
             "Arn",
           ],
         },
       },
       "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
     },
-    "RestApiCloudWatchRoleE3ED6605": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "RestApiCloudWatchRoleE3ED6605": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "apigateway.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
@@ -170,66 +180,67 @@ Object {
             ],
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC50354bd4ad342d73c9ba2d68e58585d62d5": Object {
-      "DependsOn": Array [
+    "RestApiDeployment180EC50354bd4ad342d73c9ba2d68e58585d62d5": {
+      "DependsOn": [
         "RestApiGET0F59260B",
         "RestApitest9059D171",
       ],
-      "Properties": Object {
+      "Properties": {
         "Description": "Automatically created by the RestApi construct",
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "RestApi0C43BF4B",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "RestApiDeploymentStageprod3855DE66": Object {
-      "DependsOn": Array [
+    "RestApiDeploymentStageprod3855DE66": {
+      "DependsOn": [
         "RestApiAccount7C83CF5A",
       ],
-      "Properties": Object {
-        "DeploymentId": Object {
+      "Properties": {
+        "DeploymentId": {
           "Ref": "RestApiDeployment180EC50354bd4ad342d73c9ba2d68e58585d62d5",
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "RestApi0C43BF4B",
         },
         "StageName": "prod",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -237,35 +248,35 @@ Object {
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "RestApiGET0F59260B": Object {
-      "Properties": Object {
+    "RestApiGET0F59260B": {
+      "Properties": {
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
-        "Integration": Object {
+        "Integration": {
           "Type": "MOCK",
         },
-        "ResourceId": Object {
-          "Fn::GetAtt": Array [
+        "ResourceId": {
+          "Fn::GetAtt": [
             "RestApi0C43BF4B",
             "RootResourceId",
           ],
         },
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "RestApi0C43BF4B",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "RestApitest9059D171": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
+    "RestApitest9059D171": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
             "RestApi0C43BF4B",
             "RootResourceId",
           ],
         },
         "PathPart": "test",
-        "RestApiId": Object {
+        "RestApiId": {
           "Ref": "RestApi0C43BF4B",
         },
       },

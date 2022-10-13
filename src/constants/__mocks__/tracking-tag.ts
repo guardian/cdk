@@ -1,6 +1,6 @@
-import { TagKeys } from "../tag-keys";
+import { MetadataKeys } from "../metadata-keys";
 
 export const TrackingTag = {
-  Key: TagKeys.TRACKING_TAG,
+  Key: MetadataKeys.VERSION,
   Value: "TEST",
 };

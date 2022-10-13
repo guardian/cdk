@@ -2,7 +2,7 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { AccessScope, TagKeys } from "../../constants";
+import { AccessScope, MetadataKeys } from "../../constants";
 import { GuPrivateConfigBucketParameter } from "../../constructs/core";
 import { GuSecurityGroup } from "../../constructs/ec2";
 import { GuDynamoDBWritePolicy } from "../../constructs/iam";
@@ -579,8 +579,8 @@ describe("the GuEC2App pattern", function () {
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupPlayApp" },
-        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
-        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
 
@@ -589,8 +589,8 @@ describe("the GuEC2App pattern", function () {
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupNodeApp" },
-        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
-        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
   });
@@ -677,9 +677,9 @@ describe("the GuEC2App pattern", function () {
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
-        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
-        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-        { Key: TagKeys.SYSTEMD_UNIT, Value: "test-gu-ec2-app.service" },
+        { Key: MetadataKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.SYSTEMD_UNIT, Value: "test-gu-ec2-app.service" },
       ],
     });
   });
@@ -708,9 +708,9 @@ describe("the GuEC2App pattern", function () {
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
-        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
-        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-        { Key: TagKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
+        { Key: MetadataKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
       ],
     });
   });
@@ -767,8 +767,8 @@ describe("the GuEC2App pattern", function () {
       propagateAtLaunch: true,
       additionalTags: [
         { Key: "Name", Value: "Test/AutoScalingGroupApp" },
-        { Key: TagKeys.PATTERN_NAME, Value: "GuEc2App" },
-        { Key: TagKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.PATTERN_NAME, Value: "GuEc2App" },
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
   });

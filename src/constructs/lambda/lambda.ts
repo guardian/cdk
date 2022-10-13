@@ -108,7 +108,7 @@ export class GuLambdaFunction extends Function {
       });
     }
 
-    bucket.grantRead(this);
+    bucket.grantRead(this, objectKey);
 
     const ssmParamReadPolicies: PolicyStatement[] = [
       new ReadParametersByPath(scope, props),

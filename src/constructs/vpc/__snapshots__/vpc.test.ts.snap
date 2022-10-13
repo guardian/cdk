@@ -1,32 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The GuVpc construct should match snapshot 1`] = `
-Object {
-  "Resources": Object {
-    "MyVpcF9F0CA6F": Object {
-      "Properties": Object {
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuVpc",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "MyVpcF9F0CA6F": {
+      "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
         "EnableDnsSupport": true,
         "InstanceTenancy": "default",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -34,26 +41,26 @@ Object {
       },
       "Type": "AWS::EC2::VPC",
     },
-    "MyVpcIGW5C4A4F63": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "MyVpcIGW5C4A4F63": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -61,241 +68,327 @@ Object {
       },
       "Type": "AWS::EC2::InternetGateway",
     },
-    "MyVpcVPCGW488ACE0D": Object {
-      "Properties": Object {
-        "InternetGatewayId": Object {
+    "MyVpcVPCGW488ACE0D": {
+      "Properties": {
+        "InternetGatewayId": {
           "Ref": "MyVpcIGW5C4A4F63",
         },
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::VPCGatewayAttachment",
     },
-    "MyVpcapplicationSubnet1DefaultRoute4B900A14": Object {
-      "Properties": Object {
+    "MyVpcapplicationSubnet1DefaultRoute4B900A14": {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
+        "NatGatewayId": {
           "Ref": "MyVpcingressSubnet1NATGatewayC15F3CF1",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "MyVpcapplicationSubnet1RouteTableFCDD946D",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "MyVpcapplicationSubnet1RouteTableAssociation37281D7C": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "MyVpcapplicationSubnet1RouteTableAssociation37281D7C": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "MyVpcapplicationSubnet1RouteTableFCDD946D",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "MyVpcapplicationSubnet1Subnet0A4FCBEC",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "MyVpcapplicationSubnet1RouteTableFCDD946D": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "MyVpcapplicationSubnet1RouteTableFCDD946D": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/applicationSubnet1",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "MyVpcapplicationSubnet1Subnet0A4FCBEC": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
-            0,
-            Object {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "10.0.128.0/18",
+    "MyVpcapplicationSubnet1Subnet0A4FCBEC": {
+      "Properties": {
+        "AvailabilityZone": "eu-west-1a",
+        "CidrBlock": "10.0.96.0/19",
         "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "application",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/applicationSubnet1",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "MyVpcapplicationSubnet2DefaultRouteA21A20B8": Object {
-      "Properties": Object {
+    "MyVpcapplicationSubnet2DefaultRouteA21A20B8": {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
+        "NatGatewayId": {
           "Ref": "MyVpcingressSubnet2NATGateway220B5C59",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "MyVpcapplicationSubnet2RouteTable1A5026C8",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "MyVpcapplicationSubnet2RouteTable1A5026C8": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "MyVpcapplicationSubnet2RouteTable1A5026C8": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/applicationSubnet2",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "MyVpcapplicationSubnet2RouteTableAssociationD1C39589": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "MyVpcapplicationSubnet2RouteTableAssociationD1C39589": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "MyVpcapplicationSubnet2RouteTable1A5026C8",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "MyVpcapplicationSubnet2Subnet04E944F4",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "MyVpcapplicationSubnet2Subnet04E944F4": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
-            1,
-            Object {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "10.0.192.0/18",
+    "MyVpcapplicationSubnet2Subnet04E944F4": {
+      "Properties": {
+        "AvailabilityZone": "eu-west-1b",
+        "CidrBlock": "10.0.128.0/19",
         "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "application",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/applicationSubnet2",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "MyVpcdynamodb4933D0A6": Object {
-      "Properties": Object {
-        "RouteTableIds": Array [
-          Object {
-            "Ref": "MyVpcapplicationSubnet1RouteTableFCDD946D",
+    "MyVpcapplicationSubnet3DefaultRouteD7A3BDF3": {
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "MyVpcingressSubnet3NATGateway8C3F8115",
+        },
+        "RouteTableId": {
+          "Ref": "MyVpcapplicationSubnet3RouteTable94563292",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "MyVpcapplicationSubnet3RouteTable94563292": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
           },
-          Object {
-            "Ref": "MyVpcapplicationSubnet2RouteTable1A5026C8",
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
-          Object {
-            "Ref": "MyVpcingressSubnet1RouteTableBD23564A",
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc/applicationSubnet3",
           },
-          Object {
-            "Ref": "MyVpcingressSubnet2RouteTable17765BD0",
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
+        "VpcId": {
+          "Ref": "MyVpcF9F0CA6F",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "MyVpcapplicationSubnet3RouteTableAssociationE29CB40A": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "MyVpcapplicationSubnet3RouteTable94563292",
+        },
+        "SubnetId": {
+          "Ref": "MyVpcapplicationSubnet3Subnet36843A8F",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "MyVpcapplicationSubnet3Subnet36843A8F": {
+      "Properties": {
+        "AvailabilityZone": "eu-west-1c",
+        "CidrBlock": "10.0.160.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "application",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc/applicationSubnet3",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": {
+          "Ref": "MyVpcF9F0CA6F",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "MyVpcdynamodb4933D0A6": {
+      "Properties": {
+        "RouteTableIds": [
+          {
+            "Ref": "MyVpcapplicationSubnet1RouteTableFCDD946D",
+          },
+          {
+            "Ref": "MyVpcapplicationSubnet2RouteTable1A5026C8",
+          },
+          {
+            "Ref": "MyVpcapplicationSubnet3RouteTable94563292",
+          },
+          {
+            "Ref": "MyVpcingressSubnet1RouteTableBD23564A",
+          },
+          {
+            "Ref": "MyVpcingressSubnet2RouteTable17765BD0",
+          },
+          {
+            "Ref": "MyVpcingressSubnet3RouteTable218CD36A",
+          },
+        ],
+        "ServiceName": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "com.amazonaws.",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ".dynamodb",
@@ -303,48 +396,48 @@ Object {
           ],
         },
         "VpcEndpointType": "Gateway",
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "MyVpcingressSubnet1DefaultRoute5C0E02BD": Object {
-      "DependsOn": Array [
+    "MyVpcingressSubnet1DefaultRoute5C0E02BD": {
+      "DependsOn": [
         "MyVpcVPCGW488ACE0D",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
+        "GatewayId": {
           "Ref": "MyVpcIGW5C4A4F63",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "MyVpcingressSubnet1RouteTableBD23564A",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "MyVpcingressSubnet1EIPD447827A": Object {
-      "Properties": Object {
+    "MyVpcingressSubnet1EIPD447827A": {
+      "Properties": {
         "Domain": "vpc",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet1",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -352,35 +445,39 @@ Object {
       },
       "Type": "AWS::EC2::EIP",
     },
-    "MyVpcingressSubnet1NATGatewayC15F3CF1": Object {
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
+    "MyVpcingressSubnet1NATGatewayC15F3CF1": {
+      "DependsOn": [
+        "MyVpcingressSubnet1DefaultRoute5C0E02BD",
+        "MyVpcingressSubnet1RouteTableAssociationCA312C68",
+      ],
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
             "MyVpcingressSubnet1EIPD447827A",
             "AllocationId",
           ],
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "MyVpcingressSubnet1Subnet05B4D133",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet1",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -388,131 +485,124 @@ Object {
       },
       "Type": "AWS::EC2::NatGateway",
     },
-    "MyVpcingressSubnet1RouteTableAssociationCA312C68": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "MyVpcingressSubnet1RouteTableAssociationCA312C68": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "MyVpcingressSubnet1RouteTableBD23564A",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "MyVpcingressSubnet1Subnet05B4D133",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "MyVpcingressSubnet1RouteTableBD23564A": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "MyVpcingressSubnet1RouteTableBD23564A": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet1",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "MyVpcingressSubnet1Subnet05B4D133": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
-            0,
-            Object {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "10.0.0.0/18",
+    "MyVpcingressSubnet1Subnet05B4D133": {
+      "Properties": {
+        "AvailabilityZone": "eu-west-1a",
+        "CidrBlock": "10.0.0.0/19",
         "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "ingress",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet1",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "MyVpcingressSubnet2DefaultRouteF6D3CDFA": Object {
-      "DependsOn": Array [
+    "MyVpcingressSubnet2DefaultRouteF6D3CDFA": {
+      "DependsOn": [
         "MyVpcVPCGW488ACE0D",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
+        "GatewayId": {
           "Ref": "MyVpcIGW5C4A4F63",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "MyVpcingressSubnet2RouteTable17765BD0",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "MyVpcingressSubnet2EIP1342BA84": Object {
-      "Properties": Object {
+    "MyVpcingressSubnet2EIP1342BA84": {
+      "Properties": {
         "Domain": "vpc",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet2",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -520,35 +610,39 @@ Object {
       },
       "Type": "AWS::EC2::EIP",
     },
-    "MyVpcingressSubnet2NATGateway220B5C59": Object {
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
+    "MyVpcingressSubnet2NATGateway220B5C59": {
+      "DependsOn": [
+        "MyVpcingressSubnet2DefaultRouteF6D3CDFA",
+        "MyVpcingressSubnet2RouteTableAssociation10D8624C",
+      ],
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
             "MyVpcingressSubnet2EIP1342BA84",
             "AllocationId",
           ],
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "MyVpcingressSubnet2Subnet6E3FCA55",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet2",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
@@ -556,117 +650,281 @@ Object {
       },
       "Type": "AWS::EC2::NatGateway",
     },
-    "MyVpcingressSubnet2RouteTable17765BD0": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+    "MyVpcingressSubnet2RouteTable17765BD0": {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet2",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "MyVpcingressSubnet2RouteTableAssociation10D8624C": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
+    "MyVpcingressSubnet2RouteTableAssociation10D8624C": {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "MyVpcingressSubnet2RouteTable17765BD0",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "MyVpcingressSubnet2Subnet6E3FCA55",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "MyVpcingressSubnet2Subnet6E3FCA55": Object {
-      "Properties": Object {
-        "AvailabilityZone": Object {
-          "Fn::Select": Array [
-            1,
-            Object {
-              "Fn::GetAZs": "",
-            },
-          ],
-        },
-        "CidrBlock": "10.0.64.0/18",
+    "MyVpcingressSubnet2Subnet6E3FCA55": {
+      "Properties": {
+        "AvailabilityZone": "eu-west-1b",
+        "CidrBlock": "10.0.32.0/19",
         "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "ingress",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "Test/MyVpc/ingressSubnet2",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "TEST",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "MyVpcs3D9E23531": Object {
-      "Properties": Object {
-        "RouteTableIds": Array [
-          Object {
-            "Ref": "MyVpcapplicationSubnet1RouteTableFCDD946D",
+    "MyVpcingressSubnet3DefaultRouteEEE78E68": {
+      "DependsOn": [
+        "MyVpcVPCGW488ACE0D",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "MyVpcIGW5C4A4F63",
+        },
+        "RouteTableId": {
+          "Ref": "MyVpcingressSubnet3RouteTable218CD36A",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "MyVpcingressSubnet3EIPCC82CF52": {
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
           },
-          Object {
-            "Ref": "MyVpcapplicationSubnet2RouteTable1A5026C8",
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
           },
-          Object {
-            "Ref": "MyVpcingressSubnet1RouteTableBD23564A",
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc/ingressSubnet3",
           },
-          Object {
-            "Ref": "MyVpcingressSubnet2RouteTable17765BD0",
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "MyVpcingressSubnet3NATGateway8C3F8115": {
+      "DependsOn": [
+        "MyVpcingressSubnet3DefaultRouteEEE78E68",
+        "MyVpcingressSubnet3RouteTableAssociation0850FC5F",
+      ],
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "MyVpcingressSubnet3EIPCC82CF52",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": {
+          "Ref": "MyVpcingressSubnet3SubnetB43CCB2C",
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc/ingressSubnet3",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "MyVpcingressSubnet3RouteTable218CD36A": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc/ingressSubnet3",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": {
+          "Ref": "MyVpcF9F0CA6F",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "MyVpcingressSubnet3RouteTableAssociation0850FC5F": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "MyVpcingressSubnet3RouteTable218CD36A",
+        },
+        "SubnetId": {
+          "Ref": "MyVpcingressSubnet3SubnetB43CCB2C",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "MyVpcingressSubnet3SubnetB43CCB2C": {
+      "Properties": {
+        "AvailabilityZone": "eu-west-1c",
+        "CidrBlock": "10.0.64.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "ingress",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc/ingressSubnet3",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": {
+          "Ref": "MyVpcF9F0CA6F",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "MyVpcs3D9E23531": {
+      "Properties": {
+        "RouteTableIds": [
+          {
+            "Ref": "MyVpcapplicationSubnet1RouteTableFCDD946D",
+          },
+          {
+            "Ref": "MyVpcapplicationSubnet2RouteTable1A5026C8",
+          },
+          {
+            "Ref": "MyVpcapplicationSubnet3RouteTable94563292",
+          },
+          {
+            "Ref": "MyVpcingressSubnet1RouteTableBD23564A",
+          },
+          {
+            "Ref": "MyVpcingressSubnet2RouteTable17765BD0",
+          },
+          {
+            "Ref": "MyVpcingressSubnet3RouteTable218CD36A",
+          },
+        ],
+        "ServiceName": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "com.amazonaws.",
-              Object {
+              {
                 "Ref": "AWS::Region",
               },
               ".s3",
@@ -674,81 +932,11 @@ Object {
           ],
         },
         "VpcEndpointType": "Gateway",
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "privateSubnetsEA64D674": Object {
-      "Properties": Object {
-        "Name": "/account/vpc/primary/subnets/private",
-        "Tags": Object {
-          "Stack": "test-stack",
-          "Stage": "TEST",
-          "gu:cdk:version": "TEST",
-          "gu:repo": "guardian/cdk",
-        },
-        "Type": "StringList",
-        "Value": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "MyVpcapplicationSubnet1Subnet0A4FCBEC",
-              },
-              ",",
-              Object {
-                "Ref": "MyVpcapplicationSubnet2Subnet04E944F4",
-              },
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::SSM::Parameter",
-    },
-    "publicSubnetsFE05F27B": Object {
-      "Properties": Object {
-        "Name": "/account/vpc/primary/subnets/public",
-        "Tags": Object {
-          "Stack": "test-stack",
-          "Stage": "TEST",
-          "gu:cdk:version": "TEST",
-          "gu:repo": "guardian/cdk",
-        },
-        "Type": "StringList",
-        "Value": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "MyVpcingressSubnet1Subnet05B4D133",
-              },
-              ",",
-              Object {
-                "Ref": "MyVpcingressSubnet2Subnet6E3FCA55",
-              },
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::SSM::Parameter",
-    },
-    "vpcIDEC623FC3": Object {
-      "Properties": Object {
-        "Name": "/account/vpc/primary/id",
-        "Tags": Object {
-          "Stack": "test-stack",
-          "Stage": "TEST",
-          "gu:cdk:version": "TEST",
-          "gu:repo": "guardian/cdk",
-        },
-        "Type": "String",
-        "Value": Object {
-          "Ref": "MyVpcF9F0CA6F",
-        },
-      },
-      "Type": "AWS::SSM::Parameter",
     },
   },
 }

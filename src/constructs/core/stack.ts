@@ -1,10 +1,11 @@
-import { Annotations, App, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
-import { ContextKeys, LibraryInfo, TagKeys, TrackingTag } from "../../constants";
+import { Metadata } from "../../aspects/metadata";
+import { ContextKeys, LibraryInfo, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
@@ -28,6 +29,13 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
    * This should only be turned on as part of an initial migration from CloudFormation.
    */
   withoutTags?: boolean;
+
+  /**
+   * Set to disable CDK metadata. Only for internal use (for disabling for some
+   * snapshot tests). We rely on tracking data to prioritise future work so
+   * please do not override this.
+   */
+  withoutMetadata?: boolean;
 }
 
 /**
@@ -122,6 +130,10 @@ export class GuStack extends Stack implements StackStageIdentity {
       this.tryAddRepositoryTag();
     }
 
+    if (!props.withoutMetadata) {
+      Aspects.of(this).add(new Metadata(this));
+    }
+
     const { node } = this;
 
     node.addValidation({
@@ -155,7 +167,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
       const repositoryUrl: string = urlFromContext ?? gitRemoteOriginUrl();
       const repositoryName = gitUrlParse(repositoryUrl).full_name;
-      this.addTag(TagKeys.REPOSITORY_NAME, repositoryName);
+      this.addTag(MetadataKeys.REPOSITORY_NAME, repositoryName);
     } catch {
       console.info(
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`

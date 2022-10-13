@@ -5,7 +5,14 @@ import { IntegrationTestStack } from "./integration-test-stack";
 describe("The Cdk stack", () => {
   it("matches the snapshot", () => {
     const app = new App();
-    const stack = new IntegrationTestStack(app, "cdk", { stack: "integration-test", stage: "PROD" });
+
+    // Note, we disable metadata here as mocking parts of the @guardian/cdk
+    // dependency to stabilise the snapshot is tricky here.
+    const stack = new IntegrationTestStack(app, "cdk", {
+      stack: "integration-test",
+      stage: "PROD",
+      withoutMetadata: true,
+    });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
