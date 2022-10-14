@@ -1,3 +1,4 @@
+name: Update AWS CDK libraries
 on:
   schedule:
     # At 10:00 on day-of-month 10.
