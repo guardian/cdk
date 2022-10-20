@@ -55,7 +55,7 @@
     "@oclif/core": "1.16.5",
     "aws-cdk-lib": "2.45.0",
     "aws-sdk": "^2.1235.0",
-    "chalk": "^4.1.2",
+    "chalk": "^5.1.2",
     "codemaker": "^1.69.0",
     "constructs": "10.1.127",
     "git-url-parse": "^13.1.0",
