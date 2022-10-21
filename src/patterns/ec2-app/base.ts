@@ -145,6 +145,7 @@ export interface GuEc2AppProps extends AppIdentity {
   imageRecipe?: string;
   vpc?: IVpc;
   privateSubnets?: ISubnet[];
+  publicSubnets?: ISubnet[];
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -290,7 +291,8 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  * ```
  *
  * If you _must_ support a non-standard VPC setup, it's possible to override the VPC and subnet selection into which
- * instances will be started. This is done by setting the `vpc` and `privateSubnets` props.
+ * instances will be started. This is done by setting the `vpc` and `privateSubnets` props.  You can also override
+ * the (public-facing) loadbalancer subnets with the `publicSubnets` prop.
  * You won't need to do this under normal circumstances, these will be set for you based on your account's defaults
  * which are suitable for most cases.
  *
@@ -355,6 +357,7 @@ export class GuEc2App extends Construct {
       imageRecipe,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
+      publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app })
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -432,7 +435,7 @@ export class GuEc2App extends Construct {
         subnets:
           access.scope === AccessScope.INTERNAL
             ? privateSubnets
-            : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
+            : publicSubnets
       },
     });
 
