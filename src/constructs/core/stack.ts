@@ -1,11 +1,11 @@
 import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
+import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
 import { Metadata } from "../../aspects/metadata";
-import { ContextKeys, LibraryInfo, MetadataKeys, TrackingTag } from "../../constants";
+import { ContextKeys, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
@@ -134,24 +134,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       Aspects.of(this).add(new Metadata(this));
     }
 
-    const { node } = this;
-
-    node.addValidation({
-      validate(): string[] {
-        const NO_ERRORS: string[] = [];
-
-        node
-          .findAll()
-          .filter((construct) => construct instanceof CfnInclude)
-          .map((cfnInclude) => {
-            Annotations.of(cfnInclude).addWarning(
-              `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! See https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md.`
-            );
-          });
-
-        return NO_ERRORS;
-      },
-    });
+    Aspects.of(this).add(new CfnIncludeReporter());
   }
 
   /**
