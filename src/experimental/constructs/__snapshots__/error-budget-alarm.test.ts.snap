@@ -1,0 +1,1033 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The ErrorBudgetAlarmExperimental construct should accept math expressions for more complicated definitions of bad/valid events 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuErrorBudgetAlarmExperimental",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "ChildAlarmForFastBurnOver1hour45C7AB22": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForFastBurnOver1 hour",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 3600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 3600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 3600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 3600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.014400000000000013,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForFastBurnOver5minutes67EDAF36": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForFastBurnOver5 minutes",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.014400000000000013,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForMediumBurnOver30minutesF70BC2E5": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForMediumBurnOver30 minutes",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.006000000000000005,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForMediumBurnOver6hoursC8B7C019": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForMediumBurnOver6 hours",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 21600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 21600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 21600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 21600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.006000000000000005,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForSlowBurnOver1day9466C64F": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForSlowBurnOver1 day",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 86400,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 86400,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 86400,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 86400,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.0030000000000000027,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForSlowBurnOver2hoursC240626B": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForSlowBurnOver2 hours",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 7200,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 7200,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 7200,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 7200,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.0030000000000000027,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "MapiFrontsAvailabilityFastBurnCompositeAlarmA8F736A8": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-sns-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "TestMapiFrontsAvailabilityFastBurnCompositeAlarmF4979734",
+        "AlarmRule": {
+          "Fn::Join": [
+            "",
+            [
+              "(ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForFastBurnOver1hour45C7AB22",
+                  "Arn",
+                ],
+              },
+              "") AND ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForFastBurnOver5minutes67EDAF36",
+                  "Arn",
+                ],
+              },
+              ""))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+    "MapiFrontsAvailabilityMediumBurnCompositeAlarmEC8DC379": {
+      "Properties": {
+        "ActionsSuppressor": {
+          "Fn::GetAtt": [
+            "MapiFrontsAvailabilityFastBurnCompositeAlarmA8F736A8",
+            "Arn",
+          ],
+        },
+        "ActionsSuppressorExtensionPeriod": 1800,
+        "ActionsSuppressorWaitPeriod": 120,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-sns-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "TestMapiFrontsAvailabilityMediumBurnCompositeAlarm7022D40E",
+        "AlarmRule": {
+          "Fn::Join": [
+            "",
+            [
+              "(ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForMediumBurnOver6hoursC8B7C019",
+                  "Arn",
+                ],
+              },
+              "") AND ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForMediumBurnOver30minutesF70BC2E5",
+                  "Arn",
+                ],
+              },
+              ""))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+    "MapiFrontsAvailabilitySlowBurnCompositeAlarm1198F7B4": {
+      "Properties": {
+        "ActionsSuppressor": {
+          "Fn::GetAtt": [
+            "MapiFrontsAvailabilityMediumBurnCompositeAlarmEC8DC379",
+            "Arn",
+          ],
+        },
+        "ActionsSuppressorExtensionPeriod": 7200,
+        "ActionsSuppressorWaitPeriod": 120,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-sns-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "TestMapiFrontsAvailabilitySlowBurnCompositeAlarm5EDECA5E",
+        "AlarmRule": {
+          "Fn::Join": [
+            "",
+            [
+              "(ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForSlowBurnOver1day9466C64F",
+                  "Arn",
+                ],
+              },
+              "") AND ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForSlowBurnOver2hoursC240626B",
+                  "Arn",
+                ],
+              },
+              ""))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+  },
+}
+`;
+
+exports[`The ErrorBudgetAlarmExperimental construct should create the correct resources with basic config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuErrorBudgetAlarmExperimental",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "ChildAlarmForFastBurnOver1hour45C7AB22": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForFastBurnOver1 hour",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 3600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 3600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.014400000000000013,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForFastBurnOver5minutes67EDAF36": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForFastBurnOver5 minutes",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.014400000000000013,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForMediumBurnOver30minutesF70BC2E5": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForMediumBurnOver30 minutes",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.006000000000000005,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForMediumBurnOver6hoursC8B7C019": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForMediumBurnOver6 hours",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 21600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 21600,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.006000000000000005,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForSlowBurnOver1day9466C64F": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForSlowBurnOver1 day",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 86400,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 86400,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.0030000000000000027,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmForSlowBurnOver2hoursC240626B": {
+      "Properties": {
+        "AlarmName": "ChildAlarmForSlowBurnOver2 hours",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 7200,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 7200,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.0030000000000000027,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "MapiFrontsAvailabilityFastBurnCompositeAlarmA8F736A8": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-sns-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "TestMapiFrontsAvailabilityFastBurnCompositeAlarmF4979734",
+        "AlarmRule": {
+          "Fn::Join": [
+            "",
+            [
+              "(ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForFastBurnOver1hour45C7AB22",
+                  "Arn",
+                ],
+              },
+              "") AND ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForFastBurnOver5minutes67EDAF36",
+                  "Arn",
+                ],
+              },
+              ""))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+    "MapiFrontsAvailabilityMediumBurnCompositeAlarmEC8DC379": {
+      "Properties": {
+        "ActionsSuppressor": {
+          "Fn::GetAtt": [
+            "MapiFrontsAvailabilityFastBurnCompositeAlarmA8F736A8",
+            "Arn",
+          ],
+        },
+        "ActionsSuppressorExtensionPeriod": 1800,
+        "ActionsSuppressorWaitPeriod": 120,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-sns-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "TestMapiFrontsAvailabilityMediumBurnCompositeAlarm7022D40E",
+        "AlarmRule": {
+          "Fn::Join": [
+            "",
+            [
+              "(ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForMediumBurnOver6hoursC8B7C019",
+                  "Arn",
+                ],
+              },
+              "") AND ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForMediumBurnOver30minutesF70BC2E5",
+                  "Arn",
+                ],
+              },
+              ""))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+    "MapiFrontsAvailabilitySlowBurnCompositeAlarm1198F7B4": {
+      "Properties": {
+        "ActionsSuppressor": {
+          "Fn::GetAtt": [
+            "MapiFrontsAvailabilityMediumBurnCompositeAlarmEC8DC379",
+            "Arn",
+          ],
+        },
+        "ActionsSuppressorExtensionPeriod": 7200,
+        "ActionsSuppressorWaitPeriod": 120,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":test-sns-topic",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "TestMapiFrontsAvailabilitySlowBurnCompositeAlarm5EDECA5E",
+        "AlarmRule": {
+          "Fn::Join": [
+            "",
+            [
+              "(ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForSlowBurnOver1day9466C64F",
+                  "Arn",
+                ],
+              },
+              "") AND ALARM("",
+              {
+                "Fn::GetAtt": [
+                  "ChildAlarmForSlowBurnOver2hoursC240626B",
+                  "Arn",
+                ],
+              },
+              ""))",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudWatch::CompositeAlarm",
+    },
+  },
+}
+`;
