@@ -15,6 +15,16 @@ import { Topic } from "aws-cdk-lib/aws-sns";
 import { Construct } from "constructs";
 import type { GuStack } from "../../constructs/core";
 
+/**
+ * Props for creating an ErrorBudgetAlarm
+ *
+ * - sloName: The name of the SLO
+ * - sloTarget: The percentange target for the SLO, expressed as a decimal floating point number. Must be between 0.95 and 0.995
+ * - badEvents: the metric representing the bad events. Can be any IMetric type, like Metric or MathExpression
+ * - validEvents: the metric representing the events to be considered. Can be any IMetric type, like Metric or MathExpression
+ * - snsTopicNameForAlerts: the sns topic used by the alarm to send email alerts
+ *
+ */
 export interface ErrorBudgetAlarmProps {
   sloName: string;
   sloTarget: number;
@@ -76,9 +86,20 @@ interface CompositeBurnRateAlarmProps {
  * The composite alarms have an awareness of priority, meaning that low priority alarm notifications are suppressed if
  * a higher priority alarm is already firing. That is, if you receive an alert about fast error budget consumption, you
  * should not receive an alert from the medium or slow versions of the alarm.
+ *
+ * For how to instantiate an ErrorBudgetAlarm check the unit-test in error-budget-alarm.test.ts,
+ * and for a description of the props that need to be passed see [[ErrorBudgetAlarmProps]]
  */
 export class GuErrorBudgetAlarmExperimental extends Construct {
   constructor(scope: GuStack, props: ErrorBudgetAlarmProps) {
+    const lowestTargetAllowed = 0.95;
+    const highestTargetAllowed = 0.9995;
+    if (!(props.sloTarget >= lowestTargetAllowed && props.sloTarget <= highestTargetAllowed)) {
+      throw new Error(
+        `ErrorBudgetAlarm only works with SLO targets between ${lowestTargetAllowed} and ${highestTargetAllowed}`
+      );
+    }
+
     super(scope, props.sloName); // The assumption here is that `sloName` will be unique (per stack)
 
     const errorBudget = 1 - props.sloTarget;
