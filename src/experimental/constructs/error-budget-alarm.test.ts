@@ -39,4 +39,24 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
+
+  it("should support multiple GuErrorBudgetAlarmExperimentals in a single stack", () => {
+    const stack = simpleGuStackForTesting();
+    new GuErrorBudgetAlarmExperimental(stack, {
+      sloName: "MapiFrontsAvailability",
+      sloTarget: 0.999,
+      badEvents: new Metric({ metricName: "HttpErrors", namespace: "TestLoadBalancerMetrics" }),
+      validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
+      snsTopicNameForAlerts: "test-sns-topic",
+    });
+    new GuErrorBudgetAlarmExperimental(stack, {
+      sloName: "MapiFrontsLatency",
+      sloTarget: 0.999,
+      badEvents: new Metric({ metricName: "SlowResponses", namespace: "TestLoadBalancerMetrics" }),
+      validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
+      snsTopicNameForAlerts: "test-sns-topic",
+    });
+    // Each GuErrorBudgetAlarmExperimental creates 3 composite alarms (fast, medium, slow) so we expect 6 in total here
+    Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::CompositeAlarm", 6);
+  });
 });
