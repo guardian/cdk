@@ -10,9 +10,9 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
     "gu:cdk:version": "TEST",
   },
   "Resources": {
-    "ChildAlarmForFastBurnOver1hour45C7AB22": {
+    "ChildAlarmLongPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmF1A44641": {
       "Properties": {
-        "AlarmName": "ChildAlarmForFastBurnOver1 hour",
+        "AlarmName": "ChildAlarmLongPeriodMapiFrontsAvailabilityFastBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -85,159 +85,9 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ChildAlarmForFastBurnOver5minutes67EDAF36": {
+    "ChildAlarmLongPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmB28EFC34": {
       "Properties": {
-        "AlarmName": "ChildAlarmForFastBurnOver5 minutes",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "Metrics": [
-          {
-            "Expression": "badEvents/validEvents",
-            "Id": "expr_1",
-            "Label": "Observed failure rate",
-          },
-          {
-            "Expression": "loadBalancerErrors + targetErrors",
-            "Id": "badEvents",
-            "ReturnData": false,
-          },
-          {
-            "Id": "loadBalancerErrors",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "LbHttpErrors",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 300,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "targetErrors",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "TargetHttpErrors",
-                "Namespace": "TestTargetMetrics",
-              },
-              "Period": 300,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Expression": "allRequests - invalidRequests",
-            "Id": "validEvents",
-            "ReturnData": false,
-          },
-          {
-            "Id": "allRequests",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "HttpRequests",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 300,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "invalidRequests",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "BadRequests",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 300,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-        ],
-        "Threshold": 0.014400000000000013,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "ChildAlarmForMediumBurnOver30minutesF70BC2E5": {
-      "Properties": {
-        "AlarmName": "ChildAlarmForMediumBurnOver30 minutes",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "Metrics": [
-          {
-            "Expression": "badEvents/validEvents",
-            "Id": "expr_1",
-            "Label": "Observed failure rate",
-          },
-          {
-            "Expression": "loadBalancerErrors + targetErrors",
-            "Id": "badEvents",
-            "ReturnData": false,
-          },
-          {
-            "Id": "loadBalancerErrors",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "LbHttpErrors",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 1800,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "targetErrors",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "TargetHttpErrors",
-                "Namespace": "TestTargetMetrics",
-              },
-              "Period": 1800,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Expression": "allRequests - invalidRequests",
-            "Id": "validEvents",
-            "ReturnData": false,
-          },
-          {
-            "Id": "allRequests",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "HttpRequests",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 1800,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "invalidRequests",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "BadRequests",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 1800,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-        ],
-        "Threshold": 0.006000000000000005,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "ChildAlarmForMediumBurnOver6hoursC8B7C019": {
-      "Properties": {
-        "AlarmName": "ChildAlarmForMediumBurnOver6 hours",
+        "AlarmName": "ChildAlarmLongPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -310,9 +160,9 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ChildAlarmForSlowBurnOver1day9466C64F": {
+    "ChildAlarmLongPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm31625779": {
       "Properties": {
-        "AlarmName": "ChildAlarmForSlowBurnOver1 day",
+        "AlarmName": "ChildAlarmLongPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -385,9 +235,159 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ChildAlarmForSlowBurnOver2hoursC240626B": {
+    "ChildAlarmShortPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmCF3AFF0A": {
       "Properties": {
-        "AlarmName": "ChildAlarmForSlowBurnOver2 hours",
+        "AlarmName": "ChildAlarmShortPeriodMapiFrontsAvailabilityFastBurnCompositeAlarm",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.014400000000000013,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmShortPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmDBEC21EA": {
+      "Properties": {
+        "AlarmName": "ChildAlarmShortPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarm",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Expression": "loadBalancerErrors + targetErrors",
+            "Id": "badEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "loadBalancerErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "LbHttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "targetErrors",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "TargetHttpErrors",
+                "Namespace": "TestTargetMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Expression": "allRequests - invalidRequests",
+            "Id": "validEvents",
+            "ReturnData": false,
+          },
+          {
+            "Id": "allRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "invalidRequests",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "BadRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.006000000000000005,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmShortPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarmCA6C81C2": {
+      "Properties": {
+        "AlarmName": "ChildAlarmShortPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -488,14 +488,14 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
               "(ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForFastBurnOver1hour45C7AB22",
+                  "ChildAlarmLongPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmF1A44641",
                   "Arn",
                 ],
               },
               "") AND ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForFastBurnOver5minutes67EDAF36",
+                  "ChildAlarmShortPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmCF3AFF0A",
                   "Arn",
                 ],
               },
@@ -542,14 +542,14 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
               "(ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForMediumBurnOver6hoursC8B7C019",
+                  "ChildAlarmLongPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmB28EFC34",
                   "Arn",
                 ],
               },
               "") AND ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForMediumBurnOver30minutesF70BC2E5",
+                  "ChildAlarmShortPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmDBEC21EA",
                   "Arn",
                 ],
               },
@@ -596,14 +596,14 @@ exports[`The ErrorBudgetAlarmExperimental construct should accept math expressio
               "(ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForSlowBurnOver1day9466C64F",
+                  "ChildAlarmLongPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm31625779",
                   "Arn",
                 ],
               },
               "") AND ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForSlowBurnOver2hoursC240626B",
+                  "ChildAlarmShortPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarmCA6C81C2",
                   "Arn",
                 ],
               },
@@ -628,9 +628,9 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
     "gu:cdk:version": "TEST",
   },
   "Resources": {
-    "ChildAlarmForFastBurnOver1hour45C7AB22": {
+    "ChildAlarmLongPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmF1A44641": {
       "Properties": {
-        "AlarmName": "ChildAlarmForFastBurnOver1 hour",
+        "AlarmName": "ChildAlarmLongPeriodMapiFrontsAvailabilityFastBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -669,91 +669,9 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ChildAlarmForFastBurnOver5minutes67EDAF36": {
+    "ChildAlarmLongPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmB28EFC34": {
       "Properties": {
-        "AlarmName": "ChildAlarmForFastBurnOver5 minutes",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "Metrics": [
-          {
-            "Expression": "badEvents/validEvents",
-            "Id": "expr_1",
-            "Label": "Observed failure rate",
-          },
-          {
-            "Id": "badEvents",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "HttpErrors",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 300,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "validEvents",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "HttpRequests",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 300,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-        ],
-        "Threshold": 0.014400000000000013,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "ChildAlarmForMediumBurnOver30minutesF70BC2E5": {
-      "Properties": {
-        "AlarmName": "ChildAlarmForMediumBurnOver30 minutes",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "Metrics": [
-          {
-            "Expression": "badEvents/validEvents",
-            "Id": "expr_1",
-            "Label": "Observed failure rate",
-          },
-          {
-            "Id": "badEvents",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "HttpErrors",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 1800,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "validEvents",
-            "MetricStat": {
-              "Metric": {
-                "MetricName": "HttpRequests",
-                "Namespace": "TestLoadBalancerMetrics",
-              },
-              "Period": 1800,
-              "Stat": "Average",
-            },
-            "ReturnData": false,
-          },
-        ],
-        "Threshold": 0.006000000000000005,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "ChildAlarmForMediumBurnOver6hoursC8B7C019": {
-      "Properties": {
-        "AlarmName": "ChildAlarmForMediumBurnOver6 hours",
+        "AlarmName": "ChildAlarmLongPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -792,9 +710,9 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ChildAlarmForSlowBurnOver1day9466C64F": {
+    "ChildAlarmLongPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm31625779": {
       "Properties": {
-        "AlarmName": "ChildAlarmForSlowBurnOver1 day",
+        "AlarmName": "ChildAlarmLongPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -833,9 +751,91 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ChildAlarmForSlowBurnOver2hoursC240626B": {
+    "ChildAlarmShortPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmCF3AFF0A": {
       "Properties": {
-        "AlarmName": "ChildAlarmForSlowBurnOver2 hours",
+        "AlarmName": "ChildAlarmShortPeriodMapiFrontsAvailabilityFastBurnCompositeAlarm",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 300,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.014400000000000013,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmShortPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmDBEC21EA": {
+      "Properties": {
+        "AlarmName": "ChildAlarmShortPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarm",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "badEvents/validEvents",
+            "Id": "expr_1",
+            "Label": "Observed failure rate",
+          },
+          {
+            "Id": "badEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpErrors",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "validEvents",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "HttpRequests",
+                "Namespace": "TestLoadBalancerMetrics",
+              },
+              "Period": 1800,
+              "Stat": "Average",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0.006000000000000005,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ChildAlarmShortPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarmCA6C81C2": {
+      "Properties": {
+        "AlarmName": "ChildAlarmShortPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -902,14 +902,14 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
               "(ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForFastBurnOver1hour45C7AB22",
+                  "ChildAlarmLongPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmF1A44641",
                   "Arn",
                 ],
               },
               "") AND ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForFastBurnOver5minutes67EDAF36",
+                  "ChildAlarmShortPeriodMapiFrontsAvailabilityFastBurnCompositeAlarmCF3AFF0A",
                   "Arn",
                 ],
               },
@@ -956,14 +956,14 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
               "(ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForMediumBurnOver6hoursC8B7C019",
+                  "ChildAlarmLongPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmB28EFC34",
                   "Arn",
                 ],
               },
               "") AND ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForMediumBurnOver30minutesF70BC2E5",
+                  "ChildAlarmShortPeriodMapiFrontsAvailabilityMediumBurnCompositeAlarmDBEC21EA",
                   "Arn",
                 ],
               },
@@ -1010,14 +1010,14 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
               "(ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForSlowBurnOver1day9466C64F",
+                  "ChildAlarmLongPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarm31625779",
                   "Arn",
                 ],
               },
               "") AND ALARM("",
               {
                 "Fn::GetAtt": [
-                  "ChildAlarmForSlowBurnOver2hoursC240626B",
+                  "ChildAlarmShortPeriodMapiFrontsAvailabilitySlowBurnCompositeAlarmCA6C81C2",
                   "Arn",
                 ],
               },

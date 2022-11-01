@@ -145,9 +145,8 @@ export class GuErrorBudgetAlarmExperimental extends Construct {
 class MonitorBurnRateForPeriod extends Alarm {
   constructor(scope: GuStack, props: MonitorBurnRateForPeriodProps) {
     const undesirableErrorBudgetConsumption = props.errorBudget * props.burnRateSpeed.burnRate;
-    const alarmName = `ChildAlarmFor${props.burnRateSpeed.speed}BurnOver${props.period.toHumanString()}`;
-    super(scope, alarmName, {
-      alarmName: alarmName,
+    super(scope, props.alarmName, {
+      alarmName: props.alarmName,
       metric: new MathExpression({
         expression: "badEvents/validEvents",
         label: "Observed failure rate",
