@@ -16,6 +16,32 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
+  it("should fail to create Alarm when slo target is above 99.95%", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuErrorBudgetAlarmExperimental(stack, {
+        sloName: "MapiFrontsAvailability",
+        sloTarget: 0.9996,
+        badEvents: new Metric({ metricName: "HttpErrors", namespace: "TestLoadBalancerMetrics" }),
+        validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
+        snsTopicNameForAlerts: "test-sns-topic",
+      });
+    }).toThrowError("ErrorBudgetAlarm only works with SLO targets between 0.95 and 0.9995");
+  });
+
+  it("should fail to create Alarm when slo target is below 95%", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuErrorBudgetAlarmExperimental(stack, {
+        sloName: "MapiFrontsAvailability",
+        sloTarget: 0.9499,
+        badEvents: new Metric({ metricName: "HttpErrors", namespace: "TestLoadBalancerMetrics" }),
+        validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
+        snsTopicNameForAlerts: "test-sns-topic",
+      });
+    }).toThrowError("ErrorBudgetAlarm only works with SLO targets between 0.95 and 0.9995");
+  });
+
   it("should accept math expressions for more complicated definitions of bad/valid events", () => {
     const stack = simpleGuStackForTesting();
     new GuErrorBudgetAlarmExperimental(stack, {
