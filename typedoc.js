@@ -1,6 +1,7 @@
 const { readdirSync, existsSync } = require("fs");
 
 const constructsDir = "src/constructs";
+const experimentalDir = "src/experimental";
 const utilsDir = "src/utils";
 
 function getEntryPointsFromSubdirectories(directory) {
@@ -16,8 +17,9 @@ module.exports = {
     "src/patterns/index.ts",
     "src/constants/index.ts",
     "src/types/index.ts",
-    // we purposefully do not have an index.ts in `src/constructs` or `src/utils`
+    // we purposefully do not have an index.ts in `src/constructs`, `src/experimental` or `src/utils`
     ...getEntryPointsFromSubdirectories(constructsDir),
+    ...getEntryPointsFromSubdirectories(experimentalDir),
     ...getEntryPointsFromSubdirectories(utilsDir),
   ],
   out: "target",
