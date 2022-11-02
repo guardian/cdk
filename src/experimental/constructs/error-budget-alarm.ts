@@ -22,7 +22,7 @@ import type { GuStack } from "../../constructs/core";
  * - sloTarget: The percentange target for the SLO, expressed as a decimal floating point number. Must be between 0.95 and 0.995
  * - badEvents: the metric representing the bad events. Can be any IMetric type, like Metric or MathExpression
  * - validEvents: the metric representing the events to be considered. Can be any IMetric type, like Metric or MathExpression
- * - snsTopicNameForAlerts: the sns topic used by the alarm to send email alerts
+ * - snsTopicNameForAlerts: the sns topic name (not the full arn) used by the alarm to send email alerts
  *
  */
 export interface ErrorBudgetAlarmProps {
