@@ -26,7 +26,7 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
         validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
         snsTopicNameForAlerts: "test-sns-topic",
       });
-    }).toThrowError();
+    }).toThrowError("ErrorBudgetAlarm only works with SLO targets between 0.95 and 0.9995");
   });
 
   it("should fail to create Alarm when slo target is below 95%", () => {
@@ -39,7 +39,7 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
         validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
         snsTopicNameForAlerts: "test-sns-topic",
       });
-    }).toThrowError();
+    }).toThrowError("ErrorBudgetAlarm only works with SLO targets between 0.95 and 0.9995");
   });
 
   it("should accept math expressions for more complicated definitions of bad/valid events", () => {

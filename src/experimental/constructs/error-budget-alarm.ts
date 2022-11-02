@@ -15,9 +15,6 @@ import { Topic } from "aws-cdk-lib/aws-sns";
 import { Construct } from "constructs";
 import type { GuStack } from "../../constructs/core";
 
-/**
- * Props for creating an ErrorBudgetAlarm
- */
 export interface ErrorBudgetAlarmProps {
   /**
    * The name of the SLO. Assumed to be unique per stack.
