@@ -4,6 +4,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
 import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
+import { CfnParameterReporter } from "../../aspects/cfn-parameter-reporter";
 import { Metadata } from "../../aspects/metadata";
 import { ContextKeys, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
@@ -135,6 +136,7 @@ export class GuStack extends Stack implements StackStageIdentity {
     }
 
     Aspects.of(this).add(new CfnIncludeReporter());
+    Aspects.of(this).add(new CfnParameterReporter());
   }
 
   /**
