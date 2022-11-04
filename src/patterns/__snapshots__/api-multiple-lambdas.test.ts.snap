@@ -9,6 +9,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       "GuLambdaFunction",
       "GuLambdaFunction",
       "GuLambdaFunction",
+      "GuLambdaFunction",
       "GuApiGatewayWithLambdaByPath",
     ],
     "gu:cdk:version": "TEST",
@@ -140,12 +141,14 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC50379728be2fcf730be7407c2847944bca5": {
+    "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b": {
       "DependsOn": [
         "RestApitestalongpathGET4832AA08",
         "RestApitestalongpath289D7A7A",
         "RestApitestalong4FF54021",
         "RestApitesta85B86F6B",
+        "RestApitestapikeyGET1702B039",
+        "RestApitestapikey06021A80",
         "RestApitestGET8B10FED0",
         "RestApitestPOSTEE6B79A5",
         "RestApitest9059D171",
@@ -164,7 +167,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC50379728be2fcf730be7407c2847944bca5",
+          "Ref": "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -595,6 +598,344 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         },
       },
       "Type": "AWS::Lambda::Permission",
+    },
+    "RestApitestapikey06021A80": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "RestApitest9059D171",
+        },
+        "PathPart": "api-key",
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "RestApitestapikeyGET1702B039": {
+      "Properties": {
+        "ApiKeyRequired": true,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "lambdafour0ED67C43",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "RestApitestapikey06021A80",
+        },
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "RestApitestapikeyGETApiPermissionTestRestApiF6F94545GETtestapikey32823AD8": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdafour0ED67C43",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "RestApi0C43BF4B",
+              },
+              "/",
+              {
+                "Ref": "RestApiDeploymentStageprod3855DE66",
+              },
+              "/GET/test/api-key",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "RestApitestapikeyGETApiPermissionTestTestRestApiF6F94545GETtestapikey743ED656": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdafour0ED67C43",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "RestApi0C43BF4B",
+              },
+              "/test-invoke-stage/GET/test/api-key",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "lambdafour0ED67C43": {
+      "DependsOn": [
+        "lambdafourServiceRoleDefaultPolicyA62AFE29",
+        "lambdafourServiceRole304B6DE3",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "test-stack/TEST/testing/my-app-4.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "APP": "testing",
+            "STACK": "test-stack",
+            "STAGE": "TEST",
+          },
+        },
+        "Handler": "handler.ts",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "lambdafourServiceRole304B6DE3",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "lambdafourServiceRole304B6DE3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdafourServiceRoleDefaultPolicyA62AFE29": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/test-stack/TEST/testing/my-app-4.zip",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/test-stack/testing",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/test-stack/testing/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdafourServiceRoleDefaultPolicyA62AFE29",
+        "Roles": [
+          {
+            "Ref": "lambdafourServiceRole304B6DE3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "lambdaoneA536F07A": {
       "DependsOn": [

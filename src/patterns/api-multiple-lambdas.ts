@@ -22,6 +22,10 @@ export interface ApiTarget {
    * The Lambda function responsible for handling the request.
    */
   lambda: GuLambdaFunction;
+  /**
+   * Whether an apiKey is required for this method.
+   */
+  apiKeyRequired?: true;
 }
 
 /**
@@ -134,7 +138,9 @@ export class GuApiGatewayWithLambdaByPath extends Construct {
     this.api = apiGateway;
     props.targets.map((target) => {
       const resource = apiGateway.root.resourceForPath(target.path);
-      resource.addMethod(target.httpMethod, new LambdaIntegration(target.lambda));
+      resource.addMethod(target.httpMethod, new LambdaIntegration(target.lambda), {
+        apiKeyRequired: target.apiKeyRequired,
+      });
     });
     if (!isNoMonitoring(props.monitoringConfiguration)) {
       new GuApiGateway5xxPercentageAlarm(scope, {
