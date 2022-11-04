@@ -31,7 +31,7 @@ export class GuDnsRecordSet extends Construct {
     `id`, by definition, must be unique. `name` represents a fully qualified domain name, which must also be unique.
     `id` being given to the level 1 construct means it also becomes the logicalId in the template.
      */
-    const level2ConstructId = name;
+    const level2ConstructId = `${name}-DnsRecordSet`;
     const level1ConstructId = id;
 
     super(scope, level2ConstructId);
