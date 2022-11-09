@@ -52,7 +52,7 @@
     "typescript": "~4.8.4"
   },
   "dependencies": {
-    "@oclif/core": "1.20.2",
+    "@oclif/core": "1.20.4",
     "aws-cdk-lib": "2.45.0",
     "aws-sdk": "^2.1245.0",
     "chalk": "^4.1.2",
