@@ -1,4 +1,5 @@
 import { Duration } from "aws-cdk-lib";
+import { CfnRuleGroupsNamespace } from "aws-cdk-lib/aws-aps";
 import type { CfnCompositeAlarm, IMetric } from "aws-cdk-lib/aws-cloudwatch";
 import {
   Alarm,
@@ -15,7 +16,7 @@ import { Topic } from "aws-cdk-lib/aws-sns";
 import { Construct } from "constructs";
 import type { GuStack } from "../../constructs/core";
 
-export interface ErrorBudgetAlarmProps {
+export interface CloudWatchErrorBudgetAlarmProps {
   /**
    * The name of the SLO. Assumed to be unique per stack.
    */
@@ -38,14 +39,32 @@ export interface ErrorBudgetAlarmProps {
   snsTopicNameForAlerts: string;
 }
 
+export interface PrometheusErrorBudgetAlarmProps {
+  /**
+   * The name of the SLO. Assumed to be unique per stack.
+   */
+  sloName: string;
+  /**
+   * The percentage target for the SLO, expressed as a decimal floating point number. Must be between 0.95 and 0.995.
+   */
+  sloTarget: number;
+  badEvents: string; // TODO: explain this once it is properly understood!
+  validEvents: string; // TODO: explain this once it is properly understood!
+}
+
 interface BurnRate {
   speed: "Fast" | "Medium" | "Slow";
   burnRate: number;
 }
 
-interface BurnRateMonitoring extends BurnRate {
+interface CloudWatchBurnRateMonitoring extends BurnRate {
   longPeriod: Duration;
   shortPeriod: Duration;
+}
+
+interface PrometheusBurnRateMonitoring extends BurnRate {
+  longWindow: string;
+  shortWindow: string;
 }
 
 interface MonitorBurnRateForPeriodProps {
@@ -59,12 +78,103 @@ interface MonitorBurnRateForPeriodProps {
 
 interface CompositeBurnRateAlarmProps {
   sloName: string;
-  burnRateMonitoring: BurnRateMonitoring;
+  burnRateMonitoring: CloudWatchBurnRateMonitoring;
   errorBudget: number;
   badEvents: IMetric;
   validEvents: IMetric;
   snsTopic: ITopic;
   suppressorAlarm?: CompositeBurnRateAlarm;
+}
+
+// If we use a single shared Prometheus instance in the Deploy Tools account, this construct would need to be deployed
+// into that account only.
+export class GuPrometheusErrorBudgetAlarmExperimental extends CfnRuleGroupsNamespace {
+  constructor(scope: GuStack, props: PrometheusErrorBudgetAlarmProps) {
+    const lowestTargetAllowed = 0.95;
+    const highestTargetAllowed = 0.9995;
+    if (!(props.sloTarget >= lowestTargetAllowed && props.sloTarget <= highestTargetAllowed)) {
+      throw new Error(
+        `ErrorBudgetAlarm only works with SLO targets between ${lowestTargetAllowed} and ${highestTargetAllowed}`
+      );
+    }
+
+    const errorBudget = 1 - props.sloTarget;
+
+    const fastBurnRate: PrometheusBurnRateMonitoring = {
+      speed: "Fast",
+      burnRate: 14.4,
+      longWindow: "1h",
+      shortWindow: "5m",
+    };
+
+    const mediumBurnRate: PrometheusBurnRateMonitoring = {
+      speed: "Medium",
+      burnRate: 6,
+      longWindow: "6h",
+      shortWindow: "30m",
+    };
+
+    const slowBurnRate: PrometheusBurnRateMonitoring = {
+      speed: "Slow",
+      burnRate: 3,
+      longWindow: "1d",
+      shortWindow: "2h",
+    };
+
+    const recordingRulePrefix = `sli_for_${props.sloName}`;
+
+    const fastBurnShortWindowRule = `${recordingRulePrefix}_${fastBurnRate.shortWindow}`;
+    const fastBurnLongWindowRule = `${recordingRulePrefix}_${fastBurnRate.longWindow}`;
+    const mediumBurnShortWindowRule = `${recordingRulePrefix}_${mediumBurnRate.shortWindow}`;
+    const mediumBurnLongWindowRule = `${recordingRulePrefix}_${mediumBurnRate.longWindow}`;
+    const slowBurnShortWindowRule = `${recordingRulePrefix}_${slowBurnRate.shortWindow}`;
+    const slowBurnLongWindowRule = `${recordingRulePrefix}_${slowBurnRate.longWindow}`;
+
+    const fastBurnThreshold: number = errorBudget * fastBurnRate.burnRate;
+    const mediumBurnThreshold: number = errorBudget * mediumBurnRate.burnRate;
+    const slowBurnThreshold: number = errorBudget * slowBurnRate.burnRate;
+
+    // Currently we assume that the job label refers to a unique app. This works fine with our simple test data but will not scale out properly.
+    // Perhaps we will need to sum by (${props.app}, ${scope.stack}, ${scope.stage}) in order to scale up?
+    const prometheusRules = `groups:
+  - name: multiwindow_recording_rules
+    rules:
+      - record: ${fastBurnShortWindowRule}
+        expr: sum by (job) (rate(${props.badEvents}[${fastBurnRate.shortWindow}])) / sum by (job) (rate(${props.validEvents}[${fastBurnRate.shortWindow}]))
+      - record: ${mediumBurnShortWindowRule}
+        expr: sum by (job) (rate(${props.badEvents}[${mediumBurnRate.shortWindow}])) / sum by (job) (rate(${props.validEvents}[${mediumBurnRate.shortWindow}]))
+      - record: ${fastBurnLongWindowRule}
+        expr: sum by (job) (rate(${props.badEvents}[${fastBurnRate.longWindow}])) / sum by (job) (rate(${props.validEvents}[${fastBurnRate.longWindow}]))
+      - record: ${slowBurnShortWindowRule}
+        expr: sum by (job) (rate(${props.badEvents}[${slowBurnRate.shortWindow}])) / sum by (job) (rate(${props.validEvents}[${slowBurnRate.shortWindow}]))
+      - record: ${mediumBurnLongWindowRule}
+        expr: sum by (job) (rate(${props.badEvents}[${mediumBurnRate.longWindow}])) / sum by (job) (rate(${props.validEvents}[${mediumBurnRate.longWindow}]))
+      - record: ${slowBurnLongWindowRule}
+        expr: sum by (job) (rate(${props.badEvents}[${slowBurnRate.longWindow}])) / sum by (job) (rate(${props.validEvents}[${slowBurnRate.longWindow}]))
+  - name: multiwindow_alerts
+    rules:
+      - alert: FastBurnAlarm
+        expr: (${fastBurnShortWindowRule} > ${fastBurnThreshold}) and (${fastBurnLongWindowRule} > ${fastBurnThreshold})
+      - alert: MediumBurnAlarm
+        expr: (${mediumBurnShortWindowRule} > ${mediumBurnThreshold}) and (${mediumBurnLongWindowRule} > ${mediumBurnThreshold})
+      - alert: SlowBurnAlarm
+        expr: (${slowBurnShortWindowRule} > ${slowBurnThreshold}) and (${slowBurnLongWindowRule} > ${slowBurnThreshold})
+  `;
+
+    // TODO: figure out how to do alert silencing for lower priority alerts - presumably via a separate config file?
+
+    super(scope, props.sloName, {
+      // TODO: it would probably be better to get this ARN from parameter store
+      workspace: `arn:aws:aps:${scope.region}:${scope.account}:workspace/ws-e4fe0f0b-2372-4309-901b-9aae06e4d9ba`,
+      // N.B. there is an AWS quota limit for unique namespaces. For this simple test we are using a namespace for a
+      // single SLO. This model will not scale. If AWS allow us to increase the namespace limit significantly we could
+      // potentially use a namespace per service. However, it might be better to model this as one namespace per team.
+      // In either case we'd need to generate the data section only (per SLO) and then combine the list of rules under a
+      // single namespace.
+      name: "test-cdk-rules",
+      data: prometheusRules,
+    });
+  }
 }
 
 /**
@@ -96,7 +206,7 @@ interface CompositeBurnRateAlarmProps {
  * and for a description of the props that need to be passed see [[ErrorBudgetAlarmProps]]
  */
 export class GuErrorBudgetAlarmExperimental extends Construct {
-  constructor(scope: GuStack, props: ErrorBudgetAlarmProps) {
+  constructor(scope: GuStack, props: CloudWatchErrorBudgetAlarmProps) {
     const lowestTargetAllowed = 0.95;
     const highestTargetAllowed = 0.9995;
     if (!(props.sloTarget >= lowestTargetAllowed && props.sloTarget <= highestTargetAllowed)) {
@@ -115,7 +225,7 @@ export class GuErrorBudgetAlarmExperimental extends Construct {
       `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicNameForAlerts}`
     );
 
-    const fastBurnRate: BurnRateMonitoring = {
+    const fastBurnRate: CloudWatchBurnRateMonitoring = {
       speed: "Fast",
       burnRate: 14.4,
       longPeriod: Duration.hours(1),
@@ -131,7 +241,7 @@ export class GuErrorBudgetAlarmExperimental extends Construct {
       validEvents: props.validEvents,
     });
 
-    const mediumBurnRateMonitoring: BurnRateMonitoring = {
+    const mediumBurnRateMonitoring: CloudWatchBurnRateMonitoring = {
       speed: "Medium",
       burnRate: 6,
       longPeriod: Duration.hours(6),
@@ -148,7 +258,7 @@ export class GuErrorBudgetAlarmExperimental extends Construct {
       suppressorAlarm: fastBurnAlarm,
     });
 
-    const slowBurnRate: BurnRateMonitoring = {
+    const slowBurnRate: CloudWatchBurnRateMonitoring = {
       speed: "Slow",
       burnRate: 3,
       longPeriod: Duration.days(1),
