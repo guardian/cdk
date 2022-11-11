@@ -1031,3 +1031,82 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
   },
 }
 `;
+
+exports[`The GuPrometheusErrorBudgetAlarmExperimental construct should create the correct resources with basic config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuPrometheusErrorBudgetAlarmExperimental",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "MapiFrontsAvailability": {
+      "Properties": {
+        "Data": "
+    groups:
+      - name: multiwindow_recording_rules
+        rules:
+          - record: sli_for_MapiFrontsAvailability_5m
+            expr: sum by (job) (rate(http_requests_total{status="500"}[5m])) / sum by (job) (rate(http_requests_total[5m]))
+          - record: sli_for_MapiFrontsAvailability_30m
+            expr: sum by (job) (rate(http_requests_total{status="500"}[30m])) / sum by (job) (rate(http_requests_total[30m]))
+          - record: sli_for_MapiFrontsAvailability_1h
+            expr: sum by (job) (rate(http_requests_total{status="500"}[1h])) / sum by (job) (rate(http_requests_total[1h]))
+          - record: sli_for_MapiFrontsAvailability_2h
+            expr: sum by (job) (rate(http_requests_total{status="500"}[2h])) / sum by (job) (rate(http_requests_total[2h]))
+          - record: sli_for_MapiFrontsAvailability_6h
+            expr: sum by (job) (rate(http_requests_total{status="500"}[6h])) / sum by (job) (rate(http_requests_total[6h]))
+          - record: sli_for_MapiFrontsAvailability_1d
+            expr: sum by (job) (rate(http_requests_total{status="500"}[1d])) / sum by (job) (rate(http_requests_total[1d]))
+      - name: multiwindow_alerts
+        rules:
+          - alert: FastBurnAlarm
+            expr: (sli_for_MapiFrontsAvailability_5m > 0.014400000000000013) and (sli_for_MapiFrontsAvailability_1h > 0.014400000000000013)
+          - alert: MediumBurnAlarm
+            expr: (sli_for_MapiFrontsAvailability_30m > 0.006000000000000005) and (sli_for_MapiFrontsAvailability_6h > 0.006000000000000005)
+          - alert: SlowBurnAlarm
+            expr: (sli_for_MapiFrontsAvailability_2h > 0.0030000000000000027) and (sli_for_MapiFrontsAvailability_1d > 0.0030000000000000027)
+    ",
+        "Name": "test-cdk-rules",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Workspace": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:aps:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":workspace/ws-e4fe0f0b-2372-4309-901b-9aae06e4d9ba",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::APS::RuleGroupsNamespace",
+    },
+  },
+}
+`;
