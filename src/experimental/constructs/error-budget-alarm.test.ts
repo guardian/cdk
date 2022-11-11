@@ -1,7 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { MathExpression, Metric } from "aws-cdk-lib/aws-cloudwatch";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuErrorBudgetAlarmExperimental } from "./error-budget-alarm";
+import { GuErrorBudgetAlarmExperimental, GuPrometheusErrorBudgetAlarmExperimental } from "./error-budget-alarm";
 
 describe("The ErrorBudgetAlarmExperimental construct", () => {
   it("should create the correct resources with basic config", () => {
@@ -84,5 +84,18 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
     });
     // Each GuErrorBudgetAlarmExperimental creates 3 composite alarms (fast, medium, slow) so we expect 6 in total here
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::CompositeAlarm", 6);
+  });
+});
+
+describe("The GuPrometheusErrorBudgetAlarmExperimental construct", () => {
+  it("should create the correct resources with basic config", () => {
+    const stack = simpleGuStackForTesting();
+    new GuPrometheusErrorBudgetAlarmExperimental(stack, {
+      sloName: "MapiFrontsAvailability",
+      sloTarget: 0.999,
+      badEvents: 'http_requests_total{status="500"}',
+      validEvents: "http_requests_total",
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
