@@ -199,6 +199,10 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             "Value": "guardian/cdk",
           },
           {
+            "Key": "Name",
+            "Value": "Test/CertificateTestguec2app",
+          },
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -1021,6 +1025,10 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/CertificateTestguec2app",
           },
           {
             "Key": "Stack",

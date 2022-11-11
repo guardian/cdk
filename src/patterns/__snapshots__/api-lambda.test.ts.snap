@@ -72,6 +72,10 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
             "Value": "guardian/cdk",
           },
           {
+            "Key": "Name",
+            "Value": "Test/CertificateTesting",
+          },
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },

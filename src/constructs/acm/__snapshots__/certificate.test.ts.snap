@@ -28,6 +28,10 @@ exports[`The GuCertificate class should create a new certificate (which requires
             "Value": "guardian/cdk",
           },
           {
+            "Key": "Name",
+            "Value": "Test/CertificateTesting",
+          },
+          {
             "Key": "Stack",
             "Value": "test-stack",
           },
@@ -77,6 +81,10 @@ exports[`The GuCertificate class should create a new certificate when hosted zon
           {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/CertificateTesting",
           },
           {
             "Key": "Stack",
