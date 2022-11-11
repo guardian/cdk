@@ -88,11 +88,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             "Value": "test-gu-ec2-app",
           },
           {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
-          },
-          {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
             "Value": "TEST",
@@ -914,11 +909,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "test-gu-ec2-app",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           {
             "Key": "gu:cdk:version",

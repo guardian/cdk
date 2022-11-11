@@ -410,12 +410,6 @@ export class GuEc2App extends Construct {
       imageRecipe,
     });
 
-    // We are selectively tagging the ASG so that we can expose the number of stacks using this pattern
-    //  based on which autoscaling groups possess this tag. It may become useful or necessary to tag all resources in the future,
-    //  but we have decided that this is sufficient for now.
-    // TODO: Do we need to tag all resources with this value? What would the use-cases be?
-    Tags.of(autoScalingGroup).add(MetadataKeys.PATTERN_NAME, this.constructor.name, { applyToLaunchedInstances: true });
-
     // This allows automatic shipping of instance Cloud Init logs when using the
     // `cdk-base` Amigo role on your AMI.
     Tags.of(autoScalingGroup).add(
