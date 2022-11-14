@@ -767,4 +767,33 @@ describe("the GuEC2App pattern", function () {
       ],
     });
   });
+
+  it("tags google-auth usage", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "App";
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      accessLogging: { enabled: false },
+      googleAuth: { enabled: true },
+    });
+
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      additionalTags: [
+        { Key: "Name", Value: "Test/AutoScalingGroupApp" },
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.CDK_FEATURE, Value: "google-auth" },
+      ],
+    });
+  });
 });

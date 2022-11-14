@@ -1,10 +1,11 @@
-import { Duration, Tags } from "aws-cdk-lib";
+import { Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -60,6 +61,45 @@ export interface Alarms {
   http5xxAlarm: false | Http5xxAlarmProps;
   unhealthyInstancesAlarm: boolean;
   noMonitoring?: false;
+}
+
+/*
+ * GoogleAuthProps adds Google Auth at the ALB level using OIDC.
+ *
+ * For this to work you will need a suitable Google Project with credentials,
+ * which must be added to the relevant locations (see props for details). In
+ * addition, you MUST set 'User Type' to 'Internal' in the Google Console Consent
+ * Screen to ensure only @guardian.co.uk members can access your app.
+ *
+ * To access the user's email information, for example to check Google group
+ * membership or otherwise narrow access, validate the JWT token in the
+ * x-amzn-oidc-data` header and access the claims. To do this, you MUST check
+ * that the token is a valid JWT token - specifically, that it was encoded using
+ * the `ES256` algorithm and that the contained `email` claim is a
+ * @guardian.co.uk email address. See
+ * https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html#user-claims-encoding
+ * for some example code.
+ *
+ * WARNING: any access to your EC2 instances that does not go via the ALB will
+ * *bypass* the Google auth. Typically you should ensure that your EC2 security
+ * groups only allow access via the ALB (this pattern's default behaviour).
+ *
+ * For more information, see:
+ * https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html.
+ *
+ */
+export interface GoogleAuthProps {
+  enabled: true;
+
+  // Parameter Store path containing your Google Client ID. Defaults to
+  // `/:STAGE/:stack/:app/googleClientId`.
+  clientIdPath?: string;
+
+  // *Secrets Manager* (NOT Parameter Store) path containing your Google Client
+  // Secret. Defaults to `/:STAGE/:stack/:app/googleClientSecret`. Nb. you
+  // should store your secret as plaintext rather than key-value structured data
+  // when creating it.
+  clientSecretPath?: string;
 }
 
 /**
@@ -146,6 +186,7 @@ export interface GuEc2AppProps extends AppIdentity {
   vpc?: IVpc;
   privateSubnets?: ISubnet[];
   publicSubnets?: ISubnet[];
+  googleAuth?: GoogleAuthProps;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -469,6 +510,45 @@ export class GuEc2App extends Construct {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC,
     });
+
+    if (props.googleAuth?.enabled) {
+      const configPrefix = `${scope.stage}/${scope.stack}/${app}`;
+      const clientIdPath = props.googleAuth.clientIdPath ?? `/${configPrefix}/googleClientID`;
+
+      const clientId = StringParameter.fromStringParameterAttributes(this, "clientID", {
+        parameterName: clientIdPath,
+      }).stringValue;
+
+      // Unfortunately, Cloudformation doesn't support directly using secret
+      // Parameter Store values. But it is possible to use Secrets Manager.
+      const secretPath = props.googleAuth.clientSecretPath ?? `${configPrefix}/clientSecret`;
+      const clientSecret = SecretValue.secretsManager(secretPath);
+
+      const authAction = ListenerAction.authenticateOidc({
+        next: ListenerAction.forward([targetGroup]),
+        clientId: clientId,
+        clientSecret: clientSecret,
+        scope: "openid email",
+
+        // See the `hd` section of
+        // https://developers.google.com/identity/protocols/oauth2/openid-connect#authenticationuriparameters.
+        // Note, this is NOT sufficient to ensure access is limited to Guardian
+        // emails. Users should also ensure set 'User Type' to 'Internal' in the
+        // Google Console Consent Screen to ensure only @guardian.co.uk members
+        // can access your app and ensure (through Security Groups) that only
+        // the ALB is able to access the EC2 instances.
+        authenticationRequestExtraParams: { hd: "guardian.co.uk" },
+
+        authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
+        issuer: "https://accounts.google.com",
+        tokenEndpoint: "https://oauth2.googleapis.com/token",
+        userInfoEndpoint: "https://openidconnect.googleapis.com/v1/userinfo",
+      });
+
+      listener.addAction("auth", { action: authAction });
+
+      Tags.of(loadBalancer).add(MetadataKeys.CDK_FEATURE, "google-auth");
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
