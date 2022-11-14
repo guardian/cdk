@@ -21,6 +21,11 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
   stage: string;
 
   /**
+   * Optional name of the app. If defined, all resources will have an App tag.
+   */
+  app?: string;
+
+  /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
    * @defaultValue the `GU_CFN_STACK_NAME` environment variable
    */
@@ -69,6 +74,7 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
+  private readonly _app?: string;
 
   get stage(): string {
     return this._stage;
@@ -76,6 +82,10 @@ export class GuStack extends Stack implements StackStageIdentity {
 
   get stack(): string {
     return this._stack;
+  }
+
+  get app(): string | undefined {
+    return this._app;
   }
 
   /**
@@ -107,10 +117,10 @@ export class GuStack extends Stack implements StackStageIdentity {
   }
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
-  constructor(app: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: GuStackProps) {
     const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, withoutTags } = props;
 
-    super(app, id, {
+    super(scope, id, {
       ...props,
       stackName: cloudFormationStackName,
 
@@ -127,6 +137,9 @@ export class GuStack extends Stack implements StackStageIdentity {
 
       this.addTag("Stack", this.stack);
       this.addTag("Stage", this.stage);
+      if (this.app) {
+        this.addTag("App", this.app);
+      }
 
       this.tryAddRepositoryTag();
     }
