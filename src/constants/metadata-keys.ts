@@ -5,4 +5,5 @@ export const MetadataKeys = {
   PATTERN_NAME: "gu:cdk:pattern-name",
   LOG_KINESIS_STREAM_NAME: "LogKinesisStreamName",
   SYSTEMD_UNIT: "SystemdUnit",
+  CDK_FEATURE: "gu:cdk:feature",
 };

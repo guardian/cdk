@@ -531,6 +531,8 @@ export class GuEc2App extends Construct {
       });
 
       listener.addAction("auth", { action: authAction });
+
+      Tags.of(loadBalancer).add(MetadataKeys.CDK_FEATURE, "google-auth");
     }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
