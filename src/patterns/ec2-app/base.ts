@@ -1,10 +1,11 @@
-import { Duration, Tags } from "aws-cdk-lib";
+import { Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -60,6 +61,30 @@ export interface Alarms {
   http5xxAlarm: false | Http5xxAlarmProps;
   unhealthyInstancesAlarm: boolean;
   noMonitoring?: false;
+}
+
+/**
+ * Use this to enable Google Auth for your service.
+ *
+ * As part of using this, you'll need to do two things:
+ *
+ * 1. Create a Google app and generate OAuth credentials for it. Store the
+ *    `clientSecret` in AWS Secrets Manager. See the `clientSecretPath` prop for
+ *    the path to use here (and override the default if required).
+ * 2. Update your app to validate the JWT token, which gets passed via the
+ *    `x-amzn-oidc-data` header. You MUST check that the token is a valid JWT
+ *    token - specifically, that it was encoded using the `ES256` algorithm and
+ *    that the contained `email` claim is a @guardian.co.uk email address.
+ *
+ * For more information, see:
+ * https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html.
+ */
+export interface GoogleAuthProps {
+  clientId: string;
+
+  // The Secrets Manager path containing your Google Client Secret. Defaults to
+  // `/:STAGE/:stack/:app/googleClientSecret`.
+  clientSecretPath?: string;
 }
 
 /**
@@ -146,6 +171,7 @@ export interface GuEc2AppProps extends AppIdentity {
   vpc?: IVpc;
   privateSubnets?: ISubnet[];
   publicSubnets?: ISubnet[];
+  googleAuth?: GoogleAuthProps;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -475,6 +501,37 @@ export class GuEc2App extends Construct {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC,
     });
+
+    if (props.googleAuth) {
+      const configPrefix = `${scope.stage}/${scope.stack}/${app}`;
+      const clientId = StringParameter.fromStringParameterAttributes(this, "clientID", {
+        parameterName: `/${configPrefix}/googleClientID`,
+      }).stringValue;
+
+      const secretPath = props.googleAuth.clientSecretPath ?? `${configPrefix}/clientSecret`;
+      const clientSecret = SecretValue.secretsManager(secretPath);
+
+      const authAction = ListenerAction.authenticateOidc({
+        next: ListenerAction.forward([targetGroup]),
+        clientId: clientId,
+        clientSecret: clientSecret,
+        scope: "openid email",
+
+        // See the `hd` section of
+        // https://developers.google.com/identity/protocols/oauth2/openid-connect#authenticationuriparameters.
+        // Note, this is NOT sufficient to ensure access is limited to Guardian
+        // emails. Users should also validate the token and check the domain in
+        // their app.
+        authenticationRequestExtraParams: { hd: "guardian.co.uk" },
+
+        authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
+        issuer: "https://accounts.google.com",
+        tokenEndpoint: "https://oauth2.googleapis.com/token",
+        userInfoEndpoint: "https://openidconnect.googleapis.com/v1/userinfo",
+      });
+
+      listener.addAction("auth", { action: authAction });
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
