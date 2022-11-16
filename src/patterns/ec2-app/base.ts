@@ -80,10 +80,12 @@ export interface Alarms {
  * https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html.
  */
 export interface GoogleAuthProps {
-  clientId: string;
+  // Parameter Store path containing your Google Client ID. Defaults to
+  // `/:STAGE/:stack/:app/googleClientId`.
+  clientIdPath?: string;
 
-  // The Secrets Manager path containing your Google Client Secret. Defaults to
-  // `/:STAGE/:stack/:app/googleClientSecret`.
+  // *Secrets Manager* (NOT Parameter Store) path containing your Google Client
+  // Secret. Defaults to `/:STAGE/:stack/:app/googleClientSecret`.
   clientSecretPath?: string;
 }
 
@@ -504,8 +506,10 @@ export class GuEc2App extends Construct {
 
     if (props.googleAuth) {
       const configPrefix = `${scope.stage}/${scope.stack}/${app}`;
+      const clientIdPath = props.googleAuth.clientIdPath ?? `/${configPrefix}/googleClientID`;
+
       const clientId = StringParameter.fromStringParameterAttributes(this, "clientID", {
-        parameterName: `/${configPrefix}/googleClientID`,
+        parameterName: clientIdPath,
       }).stringValue;
 
       const secretPath = props.googleAuth.clientSecretPath ?? `${configPrefix}/clientSecret`;
