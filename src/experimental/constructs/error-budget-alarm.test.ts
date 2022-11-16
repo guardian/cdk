@@ -1,5 +1,9 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { MathExpression, Metric } from "aws-cdk-lib/aws-cloudwatch";
+import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import { HttpCodeElb, HttpCodeTarget } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { AccessScope } from "../../constants";
+import { GuEc2App } from "../../patterns";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuErrorBudgetAlarmExperimental } from "./error-budget-alarm";
 
@@ -11,6 +15,66 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
       sloTarget: 0.999,
       badEvents: new Metric({ metricName: "HttpErrors", namespace: "TestLoadBalancerMetrics" }),
       validEvents: new Metric({ metricName: "HttpRequests", namespace: "TestLoadBalancerMetrics" }),
+      snsTopicNameForAlerts: "test-sns-topic",
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should create the correct resources for a simple Availability SLO", () => {
+    const stack = simpleGuStackForTesting();
+    const ec2App = new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+    });
+    new GuErrorBudgetAlarmExperimental(stack, {
+      sloName: "MapiFrontsAvailability",
+      sloTarget: 0.999,
+      badEvents: new MathExpression({
+        expression: "loadBalancer5xxErrors + instance5xxErrors",
+        usingMetrics: {
+          loadBalancer5xxErrors: ec2App.loadBalancer.metricHttpCodeTarget(HttpCodeTarget.TARGET_5XX_COUNT),
+          instance5xxErrors: ec2App.loadBalancer.metricHttpCodeElb(HttpCodeElb.ELB_5XX_COUNT),
+        },
+      }),
+      validEvents: ec2App.loadBalancer.metricRequestCount(),
+      snsTopicNameForAlerts: "test-sns-topic",
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should create the correct resources for a simple Latency SLO", () => {
+    const stack = simpleGuStackForTesting();
+    const ec2App = new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "code-guardian.com",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+    });
+    new GuErrorBudgetAlarmExperimental(stack, {
+      sloName: "MapiFrontsLatency",
+      sloTarget: 0.999,
+      badEvents: ec2App.loadBalancer.metricTargetResponseTime({
+        statistic: "TC(0.5:)", // This gets a count of slow requests i.e. the number of requests that completed in 0.5 seconds or more
+      }),
+      validEvents: ec2App.loadBalancer.metricRequestCount(),
       snsTopicNameForAlerts: "test-sns-topic",
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
