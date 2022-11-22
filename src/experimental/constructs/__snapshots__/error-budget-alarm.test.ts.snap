@@ -706,11 +706,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
             "Value": "test-gu-ec2-app",
           },
           {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
-          },
-          {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
             "Value": "TEST",
@@ -2154,11 +2149,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "test-gu-ec2-app",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           {
             "Key": "gu:cdk:version",
