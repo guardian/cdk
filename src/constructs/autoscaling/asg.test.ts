@@ -180,7 +180,7 @@ describe("The GuAutoScalingGroup", () => {
           {
             Action: "sts:AssumeRole",
             Effect: "Allow",
-            Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
+            Principal: { Service: "ec2.amazonaws.com" },
           },
         ],
       },
@@ -215,7 +215,7 @@ describe("The GuAutoScalingGroup", () => {
           {
             Action: "sts:AssumeRole",
             Effect: "Allow",
-            Principal: { Service: { "Fn::Join": ["", ["ec2.", { Ref: "AWS::URLSuffix" }]] } },
+            Principal: { Service: "ec2.amazonaws.com" },
           },
         ],
         Version: "2012-10-17",
