@@ -45,7 +45,7 @@ Generally speaking, we've found this to be a good process to follow when migrati
    npm run diff -- --template cloudformation/<app>.cfn.yaml <STACK ID FROM bin/cdk.ts>
    ```
 
-   Again taking trigr as an example we could do
+   Again taking `trigr` as an example we could do:
    ```shell
    npm run diff -- --template cloudformation/trigr.cfn.yaml Trigr-PROD
    ```
