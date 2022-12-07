@@ -49,7 +49,10 @@ Generally speaking, we've found this to be a good process to follow when migrati
    ```shell
    npm run diff -- --template cloudformation/trigr.cfn.yaml Trigr-PROD
    ```
-   user Trig-PROD as found in cdk.ts (new Trigr(app, "Trigr-PROD", { stack: "ophan", stage: "PROD" });)
+   Use `Trig-PROD` as found in `cdk.ts`:  
+   
+   `(new Trigr(app, "Trigr-PROD", { stack: "ophan", stage: "PROD" });)`
+
 
    This should only show differences in how resources are tagged; GuCDK will add various tags to _all_ resources in the stack.
    If you find this initial diff too noisy, you could temporarily exclude these tags by amending your [stack's props](https://guardian.github.io/cdk/interfaces/constructs_core.GuStackProps.html#withoutTags),
