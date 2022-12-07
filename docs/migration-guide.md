@@ -20,18 +20,46 @@ Then follow the instructions for any errors.
 Generally speaking, we've found this to be a good process to follow when migrating a stack to GuCDK (assumes use of `npm`):
 
 ### Introduce CDK to the repository with CI/CD
-1. Create a [new project](setting-up-a-gucdk-project.md) specifying the `--yaml-template-location` flag.
+1. Create a new project specifying the `--yaml-template-location` flag.
+
+   ```shell
+   npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] --package-manager [npm|yarn] --yaml-template-location
+   ```
+
+   For example for the app trigr we do
+   ```shell
+   npx @guardian/cdk@latest new --app trigr --stack ophan --stage PROD  --package-manager npm --yaml-template-location cloudformation/trigr.cfn.yaml
+   ```
+
+   See the [new project](setting-up-a-gucdk-project.md) guide for further reading
+
 2. Check to see what changes will be made to the stack:
 
    ```shell
    npm run diff -- --profile <AWS PROFILE NAME> <STACK ID FROM bin/cdk.ts>
    ```
 
+   Or you could check against local:
+
+   ```shell
+   npm run diff -- --template cloudformation/<app>.cfn.yaml <STACK ID FROM bin/cdk.ts>
+   ```
+
+   Again taking `trigr` as an example we could do:
+   ```shell
+   npm run diff -- --template cloudformation/trigr.cfn.yaml Trigr-PROD
+   ```
+   Use `Trig-PROD` as found in `cdk.ts`:  
+   
+   `(new Trigr(app, "Trigr-PROD", { stack: "ophan", stage: "PROD" });)`
+
+
    This should only show differences in how resources are tagged; GuCDK will add various tags to _all_ resources in the stack.
    If you find this initial diff too noisy, you could temporarily exclude these tags by amending your [stack's props](https://guardian.github.io/cdk/interfaces/constructs_core.GuStackProps.html#withoutTags),
    specifically set `withoutTags` to `true`.
 
-4. Configure CI and CD. See [here](setting-up-a-gucdk-project.md) for more detail.
+4. Configure CI and CD. See [Setting up a GuCDK project](setting-up-a-gucdk-project.md) for more detail.
+
 5. Raise a PR and merge.
 
 ### Migration to CDK
