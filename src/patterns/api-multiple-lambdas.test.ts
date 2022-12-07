@@ -24,6 +24,10 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
       ...defaultProps,
       fileName: "my-app-3.zip",
     });
+    const lambdaFour = new GuLambdaFunction(stack, "lambda-four", {
+      ...defaultProps,
+      fileName: "my-app-4.zip",
+    });
     new GuApiGatewayWithLambdaByPath(stack, {
       app: "testing",
       monitoringConfiguration: { noMonitoring: true },
@@ -42,6 +46,12 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
           path: "/test/a/long/path",
           httpMethod: "GET",
           lambda: lambdaThree,
+        },
+        {
+          path: "/test/api-key",
+          httpMethod: "GET",
+          lambda: lambdaFour,
+          apiKeyRequired: true,
         },
       ],
     });

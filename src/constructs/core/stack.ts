@@ -1,11 +1,12 @@
 import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
+import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
+import { CfnParameterReporter } from "../../aspects/cfn-parameter-reporter";
 import { Metadata } from "../../aspects/metadata";
-import { ContextKeys, LibraryInfo, MetadataKeys, TrackingTag } from "../../constants";
+import { ContextKeys, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
@@ -18,6 +19,11 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
   stack: string;
 
   stage: string;
+
+  /**
+   * Optional name of the app. If defined, all resources will have an App tag.
+   */
+  app?: string;
 
   /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
@@ -68,6 +74,7 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
+  private readonly _app?: string;
 
   get stage(): string {
     return this._stage;
@@ -75,6 +82,10 @@ export class GuStack extends Stack implements StackStageIdentity {
 
   get stack(): string {
     return this._stack;
+  }
+
+  get app(): string | undefined {
+    return this._app;
   }
 
   /**
@@ -106,10 +117,10 @@ export class GuStack extends Stack implements StackStageIdentity {
   }
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
-  constructor(app: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: GuStackProps) {
     const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, withoutTags } = props;
 
-    super(app, id, {
+    super(scope, id, {
       ...props,
       stackName: cloudFormationStackName,
 
@@ -126,6 +137,9 @@ export class GuStack extends Stack implements StackStageIdentity {
 
       this.addTag("Stack", this.stack);
       this.addTag("Stage", this.stage);
+      if (this.app) {
+        this.addTag("App", this.app);
+      }
 
       this.tryAddRepositoryTag();
     }
@@ -134,24 +148,8 @@ export class GuStack extends Stack implements StackStageIdentity {
       Aspects.of(this).add(new Metadata(this));
     }
 
-    const { node } = this;
-
-    node.addValidation({
-      validate(): string[] {
-        const NO_ERRORS: string[] = [];
-
-        node
-          .findAll()
-          .filter((construct) => construct instanceof CfnInclude)
-          .map((cfnInclude) => {
-            Annotations.of(cfnInclude).addWarning(
-              `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! See https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md.`
-            );
-          });
-
-        return NO_ERRORS;
-      },
-    });
+    Aspects.of(this).add(new CfnIncludeReporter());
+    Aspects.of(this).add(new CfnParameterReporter());
   }
 
   /**

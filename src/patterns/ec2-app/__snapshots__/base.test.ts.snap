@@ -7,6 +7,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "GuStack",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuSubnetListParameter",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
@@ -21,7 +22,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "GuHttpsEgressSecurityGroup",
       "GuAutoScalingGroup",
       "GuWazuhAccess",
-      "GuSubnetListParameter",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -86,11 +86,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "test-gu-ec2-app",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           {
             "Key": "gu:cdk:version",
@@ -197,6 +192,10 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/CertificateTestguec2app",
           },
           {
             "Key": "Stack",
@@ -402,17 +401,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
@@ -832,6 +821,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "GuStack",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuSubnetListParameter",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
@@ -846,7 +836,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "GuHttpsEgressSecurityGroup",
       "GuAutoScalingGroup",
       "GuWazuhAccess",
-      "GuSubnetListParameter",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -910,11 +899,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "test-gu-ec2-app",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           {
             "Key": "gu:cdk:version",
@@ -1021,6 +1005,10 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           {
             "Key": "gu:repo",
             "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/CertificateTestguec2app",
           },
           {
             "Key": "Stack",
@@ -1205,17 +1193,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
