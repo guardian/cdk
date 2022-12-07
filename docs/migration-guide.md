@@ -39,7 +39,7 @@ Generally speaking, we've found this to be a good process to follow when migrati
    npm run diff -- --profile <AWS PROFILE NAME> <STACK ID FROM bin/cdk.ts>
    ```
 
-   or you could check agains local
+   Or you could check against local:
 
    ```shell
    npm run diff -- --template cloudformation/<app>.cfn.yaml <STACK ID FROM bin/cdk.ts>
