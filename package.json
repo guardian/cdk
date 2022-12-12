@@ -1,7 +1,7 @@
 {
   "name": "@guardian/cdk",
   "description": "Generic Guardian flavoured AWS CDK components",
-  "version": "48.5.2",
+  "version": "48.5.3",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
