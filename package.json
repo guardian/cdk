@@ -37,7 +37,7 @@
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/node": "18.11.9",
     "@types/yargs": "^17.0.17",
-    "aws-cdk": "2.51.1",
+    "aws-cdk": "2.54.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.28.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -53,11 +53,11 @@
   },
   "dependencies": {
     "@oclif/core": "1.21.0",
-    "aws-cdk-lib": "2.51.1",
+    "aws-cdk-lib": "2.54.0",
     "aws-sdk": "^2.1272.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.72.0",
-    "constructs": "10.1.167",
+    "constructs": "10.1.187",
     "git-url-parse": "^13.1.0",
     "js-yaml": "^4.1.0",
     "lodash.camelcase": "^4.3.0",
@@ -67,9 +67,9 @@
     "yargs": "^17.6.2"
   },
   "peerDependencies": {
-    "aws-cdk": "2.51.1",
-    "aws-cdk-lib": "2.51.1",
-    "constructs": "10.1.167"
+    "aws-cdk": "2.54.0",
+    "aws-cdk-lib": "2.54.0",
+    "constructs": "10.1.187"
   },
   "config": {
     "commitizen": {
