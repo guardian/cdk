@@ -7,7 +7,6 @@ import { AppIdentity } from "../../constructs/core";
 import type { GuStack } from "../../constructs/core";
 import { GuLambdaFunction } from "../../constructs/lambda";
 import type { GuFunctionProps } from "../../constructs/lambda";
-import { GuSnsTopic } from "../../constructs/sns";
 
 /**
  * Used to provide information about an existing SNS topic to the [[`GuSnsLambda`]] pattern.
@@ -81,7 +80,7 @@ export class GuSnsLambdaExperimental extends GuLambdaFunction {
           `${id}-SnsExistingIncomingEventsTopic`,
           `arn:aws:sns:${region}:${account}:${existingSnsTopic.externalTopicName}`
         )
-      : AppIdentity.taggedConstruct(props, new GuSnsTopic(scope, "SnsIncomingEventsTopic"));
+      : AppIdentity.taggedConstruct(props, new Topic(scope, "SnsIncomingEventsTopic"));
 
     this.addEventSource(new SnsEventSource(this.snsTopic));
     new CfnOutput(this, "TopicName", { value: this.snsTopic.topicName });

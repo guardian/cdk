@@ -7,7 +7,6 @@ exports[`The GuSnsLambda pattern should create the correct resources for a new s
       "GuStack",
       "GuDistributionBucketParameter",
       "GuSnsLambdaExperimental",
-      "GuSnsTopic",
     ],
     "gu:cdk:version": "TEST",
   },
