@@ -225,6 +225,7 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
                 "kinesis:SubscribeToShard",
                 "kinesis:DescribeStream",
                 "kinesis:ListStreams",
+                "kinesis:DescribeStreamConsumer",
               ],
               "Effect": "Allow",
               "Resource": {
