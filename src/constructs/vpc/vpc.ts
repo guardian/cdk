@@ -86,7 +86,7 @@ export class GuVpc extends Vpc {
         },
         {
           name: "application",
-          subnetType: SubnetType.PRIVATE_WITH_NAT,
+          subnetType: SubnetType.PRIVATE_WITH_EGRESS,
         },
       ],
     };

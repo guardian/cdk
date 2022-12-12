@@ -11,7 +11,7 @@ ROOT_DIR=$DIR/..
 updateAwsCdk() {
   # `npx` to avoid a devDependency (and the Dependabot PRs)
   # See https://www.npmjs.com/package/npm-check-updates
-  npx npm-check-updates "aws-cdk-lib" "aws-cdk" "constructs" --upgrade --deep --target minor
+  npx npm-check-updates@16.3.25 "aws-cdk-lib" "aws-cdk" "constructs" --upgrade --deep --target minor
 
   # Deliberately NOT `npm ci` as we're going to raise a PR with the resulting changes to package-lock.json
   # --ignore-scripts for speed
