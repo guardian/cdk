@@ -5,7 +5,6 @@ import { RegexPattern } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuStackForStackSetInstance, GuStringParameter } from "../core";
 import { GuKinesisStream } from "../kinesis";
-import { GuSnsTopic } from "../sns";
 import { GuStackSet } from "./stack-set";
 
 describe("The GuStackSet construct", () => {
@@ -36,7 +35,7 @@ describe("The GuStackSet construct", () => {
 
     const awsOrgId = "o-12345abcde";
     const parentStack = simpleGuStackForTesting({ stack: "test" });
-    const centralTopic = new GuSnsTopic(parentStack, "account-alerts");
+    const centralTopic = new Topic(parentStack, "account-alerts");
     centralTopic.grantPublish(new OrganizationPrincipal(awsOrgId));
 
     new GuStackSet(parentStack, "StackSet", {

@@ -137,7 +137,6 @@ exports[`The GuStackSet construct should support parameters in the stack set ins
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuSnsTopic",
       "GuStackSet",
     ],
     "gu:cdk:version": "TEST",
