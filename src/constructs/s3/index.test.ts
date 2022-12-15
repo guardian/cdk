@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
-import { GuS3Bucket } from "./index";
+import { GuS3Bucket, GuS3OriginBucket } from "./index";
 
 describe("The GuS3Bucket construct", () => {
   it("should set the bucket's policy to 'retain'", () => {
@@ -27,6 +27,35 @@ describe("The GuS3Bucket construct", () => {
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::S3::Bucket", {
       appIdentity: { app },
+    });
+  });
+});
+
+describe("The GuS3OriginBucket construct", () => {
+  it("should create a stage aware SSM parameter by default", () => {
+    const stack = simpleGuStackForTesting();
+    const app = "wordiply";
+
+    new GuS3OriginBucket(stack, `${app}-origin`, {
+      app,
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::SSM::Parameter", {
+      Name: "/TEST/test-stack/wordiply/wordiply-origin-bucket",
+    });
+  });
+
+  it("should be configurable to be stage agnostic", () => {
+    const stack = simpleGuStackForTesting();
+    const app = "wordiply";
+
+    new GuS3OriginBucket(stack, `${app}-origin`, {
+      app,
+      withoutStageAwareness: true,
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::SSM::Parameter", {
+      Name: "/test-stack/wordiply/wordiply-origin-bucket",
     });
   });
 });
