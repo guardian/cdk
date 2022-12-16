@@ -20,7 +20,7 @@ export interface RiffRaffDeploymentProps {
   stacks: Set<StackTag>;
   app: string;
   contentDirectory: string;
-  parameters: Record<string, string | boolean | Record<string, string>>;
+  parameters: Record<string, string | boolean | Record<string, string> | Array<Record<string, string>>>;
   dependencies?: RiffRaffDeploymentName[];
   actions?: string[];
 }

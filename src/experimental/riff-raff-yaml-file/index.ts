@@ -7,9 +7,11 @@ import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
 import { GuLambdaFunction } from "../../constructs/lambda";
+import { GuS3OriginBucket } from "../../constructs/s3";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
 import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
+import { uploadStaticFilesDeployment } from "./deployments/s3";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
   ClassName,
@@ -33,6 +35,7 @@ import type {
  *   - Multiple regions
  *   - Lambda applications
  *   - EC2 (autoscaling) applications
+ *   - Upload of static files to S3
  *
  * For lambda applications, 3 deployments will be defined:
  *   1. Lambda upload (`aws-lambda`, `action: [uploadLambda]`)
@@ -41,8 +44,12 @@ import type {
  *
  * For EC2 applications, 3 deployments will be defined:
  *   1. Artifact upload (`autoscaling`, `action: [uploadArtifacts]`)
- *  2. CloudFormation deploy (`cloud-formation`)
+ *   2. CloudFormation deploy (`cloud-formation`)
  *   3. Autoscaling deploy (`autoscaling`, `action: [deploy]`)
+ *
+ * For S3 uploads, 2 deployments will be defined:
+ *   1. Artifact upload (`aws-s3`, `action: [uploadStaticFiles]`)
+ *   2. CloudFormation deploy (`cloud-formation`)
  *
  * It assumes a Riff-Raff bundle structure as follows:
  *
@@ -52,8 +59,12 @@ import type {
  * │   └── MyApplication.template.json
  * ├── my-application
  * │   └── my-application.deb
- * └── my-lambda
- *     └── my-lambda.zip
+ * ├── my-lambda
+ * │   └── my-lambda.zip
+ * └── my-static-site
+ *     ├── index.html
+ *     ├── main.js
+ *     └── index.css
  * ```
  *
  * That is, all CloudFormation templates are in a `cdk.out` directory, and there is a directory per app.
@@ -218,6 +229,11 @@ export class RiffRaffYamlFileExperimental {
     return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
   }
 
+  private getOriginBuckets(cdkStack: GuStack): GuS3OriginBucket[] {
+    // `GuS3OriginBucket` implements `IConstruct` to remove a `SuspiciousTypeOfGuard` warning here
+    return cdkStack.node.findAll().filter((_) => _ instanceof GuS3OriginBucket) as GuS3OriginBucket[];
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
@@ -250,6 +266,7 @@ export class RiffRaffYamlFileExperimental {
 
           const lambdas = this.getLambdas(stack);
           const autoscalingGroups = this.getAutoScalingGroups(stack);
+          const originBuckets = this.getOriginBuckets(stack);
 
           const artifactUploads: RiffRaffDeployment[] = [
             lambdas.map(uploadLambdaArtifact),
@@ -270,6 +287,11 @@ export class RiffRaffYamlFileExperimental {
             deployments.set(asgDeployment.name, asgDeployment.props);
 
             deployments.set(cfnDeployment.name, addAmiParametersToCloudFormationDeployment(cfnDeployment, asg));
+          });
+
+          originBuckets.forEach((bucket) => {
+            const staticFilesDeployment = uploadStaticFilesDeployment(this.allStageTags, bucket, cfnDeployment);
+            deployments.set(staticFilesDeployment.name, staticFilesDeployment.props);
           });
         });
       });

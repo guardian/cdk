@@ -13,6 +13,7 @@ Currently, it supports the following Riff-Raff deployment types:
 - `cloud-formation`
 - `aws-lambda` (for each `GuLambdaFunction` used)
 - `autoscaling` (for each `GuAutoScalingGroup` used)
+- `aws-s3` (for each `GuS3OriginBucket` used)
 
 ## Usage
 Usage should require minimal changes to a GuCDK project:
@@ -53,8 +54,12 @@ When the CDK stack is synthesized, a `riff-raff.yaml` file will be created in th
 ├── my-other-application
 │   └── my-other-application.jar
 │   └── my-other-application.service
-└── my-lambda
-    └── my-lambda.zip
+├── my-lambda
+│   └── my-lambda.zip
+└── my-static-site
+    ├── index.html
+    ├── main.js
+    └── index.css
 ```
 
 That is, all CloudFormation templates are in a `cdk.out` directory, and there is a directory per app.

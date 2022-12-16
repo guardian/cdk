@@ -5,6 +5,7 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { AccessScope } from "../../constants";
 import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
+import { GuS3OriginBucket } from "../../constructs/s3";
 import { GuEc2App, GuScheduledLambda } from "../../patterns";
 import { RiffRaffYamlFileExperimental } from "./index";
 
@@ -328,7 +329,156 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     `);
   });
 
-  it("Should add all deployment types in within a stack", () => {
+  it("Should add simple aws-s3 deployments", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuS3OriginBucket(this, "my-static-site", {
+          app: "my-app",
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "my-stack-CODE", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
+    new MyApplicationStack(app, "my-stack-PROD", { stack: "test", stage: "PROD", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+        - PROD
+      deployments:
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: my-stack-CODE.template.json
+              PROD: my-stack-PROD.template.json
+        upload-static-files-eu-west-1-test-my-app:
+          type: aws-s3
+          actions:
+            - uploadStaticFiles
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-app
+          contentDirectory: my-app
+          parameters:
+            bucketSsmKeyStageParam:
+              CODE: /CODE/test/my-app/my-app-origin-bucket
+              PROD: /PROD/test/my-app/my-app-origin-bucket
+            publicReadAcl: false
+            cacheControl: private
+      "
+    `);
+  });
+
+  it("Should add complex aws-s3 deployments", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuS3OriginBucket(this, "stage-aware-static-site", {
+          app: "bucket-per-stage",
+          cacheControl: {
+            "^js/lib/": Duration.days(365 * 10),
+          },
+          mimeTypes: {
+            xpi: "application/x-xpinstall",
+          },
+        });
+
+        new GuS3OriginBucket(this, "other-static-site", {
+          app: "shared-bucket",
+          withoutStageAwareness: true,
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "my-stack-CODE", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
+    new MyApplicationStack(app, "my-stack-PROD", { stack: "test", stage: "PROD", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+        - PROD
+      deployments:
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: my-stack-CODE.template.json
+              PROD: my-stack-PROD.template.json
+        upload-static-files-eu-west-1-test-bucket-per-stage:
+          type: aws-s3
+          actions:
+            - uploadStaticFiles
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: bucket-per-stage
+          contentDirectory: bucket-per-stage
+          parameters:
+            bucketSsmKeyStageParam:
+              CODE: /CODE/test/bucket-per-stage/bucket-per-stage-origin-bucket
+              PROD: /PROD/test/bucket-per-stage/bucket-per-stage-origin-bucket
+            publicReadAcl: false
+            cacheControl:
+              - pattern: ^js/lib/
+                value: public, max-age=315360000
+            mimeTypes:
+              xpi: application/x-xpinstall
+        upload-static-files-eu-west-1-test-shared-bucket:
+          type: aws-s3
+          actions:
+            - uploadStaticFiles
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: shared-bucket
+          contentDirectory: shared-bucket
+          parameters:
+            bucketSsmKeyStageParam:
+              CODE: /test/shared-bucket/shared-bucket-origin-bucket
+              PROD: /test/shared-bucket/shared-bucket-origin-bucket
+            publicReadAcl: false
+            cacheControl: private
+      "
+    `);
+  });
+
+  it("Should add all deployment types within a stack", () => {
     const app = new App({ outdir: "/tmp/cdk.out" });
 
     class MyApplicationStack extends GuStack {
@@ -365,6 +515,10 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           },
           applicationPort: 9000,
           imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+        });
+
+        new GuS3OriginBucket(this, "wordiply", {
+          app: "wordiply",
         });
       }
     }
@@ -459,6 +613,24 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           dependencies:
             - cfn-eu-west-1-test-my-application-stack
           contentDirectory: my-ec2-app
+        upload-static-files-eu-west-1-test-wordiply:
+          type: aws-s3
+          actions:
+            - uploadStaticFiles
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: wordiply
+          contentDirectory: wordiply
+          parameters:
+            bucketSsmKeyStageParam:
+              CODE: /CODE/test/wordiply/wordiply-origin-bucket
+              PROD: /PROD/test/wordiply/wordiply-origin-bucket
+            publicReadAcl: false
+            cacheControl: private
         lambda-upload-us-east-1-test-my-lambda-app:
           type: aws-lambda
           stacks:
@@ -537,6 +709,24 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           dependencies:
             - cfn-us-east-1-test-my-application-stack
           contentDirectory: my-ec2-app
+        upload-static-files-us-east-1-test-wordiply:
+          type: aws-s3
+          actions:
+            - uploadStaticFiles
+          dependencies:
+            - cfn-us-east-1-test-my-application-stack
+          stacks:
+            - test
+          regions:
+            - us-east-1
+          app: wordiply
+          contentDirectory: wordiply
+          parameters:
+            bucketSsmKeyStageParam:
+              CODE: /CODE/test/wordiply/wordiply-origin-bucket
+              PROD: /PROD/test/wordiply/wordiply-origin-bucket
+            publicReadAcl: false
+            cacheControl: private
       "
     `);
   });
