@@ -16,7 +16,7 @@
     "generate": "cdk synth --path-metadata false --version-reporting false"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "2.0.1",
+    "@guardian/eslint-config-typescript": "3.0.0",
     "@types/jest": "^29.1.2",
     "@types/node": "18.11.15",
     "aws-cdk": "2.54.0",
