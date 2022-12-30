@@ -35,7 +35,7 @@
     "@types/lodash.camelcase": "^4.3.7",
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/lodash.upperfirst": "^4.3.7",
-    "@types/node": "18.11.17",
+    "@types/node": "18.11.18",
     "@types/yargs": "^17.0.17",
     "aws-cdk": "2.54.0",
     "cz-conventional-changelog": "^3.3.0",
