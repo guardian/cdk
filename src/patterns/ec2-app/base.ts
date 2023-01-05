@@ -514,10 +514,8 @@ export class GuEc2App extends Construct {
     if (props.googleAuth?.enabled) {
       const configPrefix = `${scope.stage}/${scope.stack}/${app}`;
 
-      const {
-        clientIdPath = `/${configPrefix}/googleClientID`,
-        clientSecretPath = `${configPrefix}/clientSecret`,
-      } = props.googleAuth;
+      const { clientIdPath = `/${configPrefix}/googleClientID`, clientSecretPath = `${configPrefix}/clientSecret` } =
+        props.googleAuth;
 
       const clientId = StringParameter.fromStringParameterAttributes(this, "clientID", {
         parameterName: clientIdPath,

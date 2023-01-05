@@ -790,7 +790,7 @@ describe("the GuEC2App pattern", function () {
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       additionalTags: [
-        { Key: "App", Value: "App"},
+        { Key: "App", Value: "App" },
         { Key: MetadataKeys.CDK_FEATURE, Value: "google-auth" },
       ],
     });
