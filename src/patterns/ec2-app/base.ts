@@ -513,7 +513,11 @@ export class GuEc2App extends Construct {
 
     if (props.googleAuth?.enabled) {
       const configPrefix = `${scope.stage}/${scope.stack}/${app}`;
-      const clientIdPath = props.googleAuth.clientIdPath ?? `/${configPrefix}/googleClientID`;
+
+      const {
+        clientIdPath = `/${configPrefix}/googleClientID`,
+        clientSecretPath = `${configPrefix}/clientSecret`,
+      } = props.googleAuth;
 
       const clientId = StringParameter.fromStringParameterAttributes(this, "clientID", {
         parameterName: clientIdPath,
@@ -521,8 +525,7 @@ export class GuEc2App extends Construct {
 
       // Unfortunately, Cloudformation doesn't support directly using secret
       // Parameter Store values. But it is possible to use Secrets Manager.
-      const secretPath = props.googleAuth.clientSecretPath ?? `${configPrefix}/clientSecret`;
-      const clientSecret = SecretValue.secretsManager(secretPath);
+      const clientSecret = SecretValue.secretsManager(clientSecretPath);
 
       const authAction = ListenerAction.authenticateOidc({
         next: ListenerAction.forward([targetGroup]),
