@@ -788,10 +788,9 @@ describe("the GuEC2App pattern", function () {
       googleAuth: { enabled: true },
     });
 
-    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupApp" },
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: "App", Value: "App"},
         { Key: MetadataKeys.CDK_FEATURE, Value: "google-auth" },
       ],
     });
