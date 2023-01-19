@@ -12,7 +12,7 @@ describe("The GuInstanceRole construct", () => {
 
     expect(template.toJSON()).toMatchSnapshot();
     template.resourceCountIs("AWS::IAM::Role", 1);
-    template.resourceCountIs("AWS::IAM::Policy", 4);
+    template.resourceCountIs("AWS::IAM::Policy", 3);
   });
 
   it("should create an additional logging policy if logging stream is specified", () => {
@@ -23,7 +23,7 @@ describe("The GuInstanceRole construct", () => {
 
     expect(template.toJSON()).toMatchSnapshot();
     template.resourceCountIs("AWS::IAM::Role", 1);
-    template.resourceCountIs("AWS::IAM::Policy", 5);
+    template.resourceCountIs("AWS::IAM::Policy", 4);
   });
 
   it("should allow additional policies to be specified", () => {
@@ -39,7 +39,7 @@ describe("The GuInstanceRole construct", () => {
 
     expect(template.toJSON()).toMatchSnapshot();
     template.resourceCountIs("AWS::IAM::Role", 1);
-    template.resourceCountIs("AWS::IAM::Policy", 5);
+    template.resourceCountIs("AWS::IAM::Policy", 4);
   });
 
   it("should be possible to create multiple instance roles in a single stack", () => {
@@ -57,6 +57,6 @@ describe("The GuInstanceRole construct", () => {
 
     expect(template.toJSON()).toMatchSnapshot();
     template.resourceCountIs("AWS::IAM::Role", 2);
-    template.resourceCountIs("AWS::IAM::Policy", 7); // 3 shared policies + 2 policies per role (3 + (2*2))
+    template.resourceCountIs("AWS::IAM::Policy", 6); // 2 shared policies + 2 policies per role (2 + (2*2))
   });
 });

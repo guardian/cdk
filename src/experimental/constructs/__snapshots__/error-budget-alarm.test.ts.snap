@@ -629,7 +629,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
-      "GuSSMRunCommandPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -1550,6 +1549,20 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
         "Path": "/",
         "Tags": [
           {
@@ -1921,42 +1934,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleTestguec2appC325BE42",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "TargetGroupTestguec2app9F67D503": {
       "Properties": {
         "HealthCheckIntervalSeconds": 10,
@@ -2064,7 +2041,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
-      "GuSSMRunCommandPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -2817,6 +2793,20 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
         "Path": "/",
         "Tags": [
           {
@@ -3180,42 +3170,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleTestguec2appC325BE42",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMRunCommandPolicy244E1613": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
         "Roles": [
           {
             "Ref": "InstanceRoleTestguec2appC325BE42",
