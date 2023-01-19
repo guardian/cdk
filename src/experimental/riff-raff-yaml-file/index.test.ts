@@ -9,6 +9,77 @@ import { GuEc2App, GuScheduledLambda } from "../../patterns";
 import { RiffRaffYamlFileExperimental } from "./index";
 
 describe("The RiffRaffYamlFileExperimental class", () => {
+  it("Should support deploying different GuStacks to multiple AWS accounts (aka Riff-Raff stacks)", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class ServiceRunningInDeployTools extends GuStack {}
+    class AnotherServiceRunningInDeployTools extends GuStack {}
+    class ServiceRunningInSecurity extends GuStack {}
+    const region = {
+      env: {
+        region: "eu-west-1",
+      },
+    };
+
+    new ServiceRunningInDeployTools(app, "App-CODE-deploy", {
+      ...region,
+      stack: "deploy",
+      stage: "CODE",
+    });
+    new AnotherServiceRunningInDeployTools(app, "AnotherApp-CODE-deploy", {
+      ...region,
+      stack: "deploy",
+      stage: "CODE",
+    });
+    new ServiceRunningInSecurity(app, "App-CODE-security", {
+      ...region,
+      stack: "security",
+      stage: "CODE",
+    });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+      deployments:
+        cfn-eu-west-1-deploy-service-running-in-deploy-tools:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          app: service-running-in-deploy-tools
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: App-CODE-deploy.template.json
+        cfn-eu-west-1-deploy-another-service-running-in-deploy-tools:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          app: another-service-running-in-deploy-tools
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: AnotherApp-CODE-deploy.template.json
+        cfn-eu-west-1-security-service-running-in-security:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - security
+          app: service-running-in-security
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: App-CODE-security.template.json
+      "
+    `);
+  });
+
   it("Should throw when there are missing stack definitions", () => {
     const app = new App();
 
