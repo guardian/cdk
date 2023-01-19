@@ -2,7 +2,6 @@ import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
-import chalk from "chalk";
 import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
@@ -12,7 +11,6 @@ import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } 
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
-  ClassName,
   GroupedCdkStacks,
   Region,
   RiffRaffDeployment,
@@ -75,22 +73,10 @@ export class RiffRaffYamlFileExperimental {
   private readonly riffRaffYaml: RiffRaffYaml;
   private readonly outdir: string;
 
-  private isCdkStackPresent(
-    expectedClassName: ClassName,
-    expectedStack: StackTag,
-    expectedRegion: Region,
-    expectedStage: StageTag
-  ): boolean {
+  private isCdkStackPresent(expectedStack: StackTag, expectedRegion: Region, expectedStage: StageTag): boolean {
     const matches = this.allCdkStacks.find((cdkStack) => {
-      const {
-        constructor: { name },
-        stack,
-        stage,
-        region,
-      } = cdkStack;
-      return (
-        name === expectedClassName && stack === expectedStack && stage === expectedStage && region === expectedRegion
-      );
+      const { stack, stage, region } = cdkStack;
+      return stack === expectedStack && stage === expectedStage && region === expectedRegion;
     });
 
     return !!matches;
@@ -98,7 +84,7 @@ export class RiffRaffYamlFileExperimental {
 
   /**
    * Check there are the appropriate number of `GuStack`s.
-   * Expect to find an instance for each combination of `GuStack`, `stack`, `region`, and `stage`.
+   * Expect to find an instance for each combination of `stack`, `region`, and `stage`.
    *
    * If not valid, a message is logged describing what is missing to aid debugging.
    *
@@ -140,8 +126,6 @@ export class RiffRaffYamlFileExperimental {
    * ```log
    * Unable to produce a working riff-raff.yaml file; missing 1 definitions (details below)
    *
-   * For the class: MyApplicationStack
-   *
    * ┌───────────────┬────────────────────────────┐
    * │    (index)    │         eu-west-1          │
    * ├───────────────┼────────────────────────────┤
@@ -155,25 +139,20 @@ export class RiffRaffYamlFileExperimental {
   private validateStacksInApp(): void {
     type Found = "✅";
     type NotFound = "❌";
-    type AppValidation = Record<ClassName, Record<StackTag, Record<Region, Record<StageTag, Found | NotFound>>>>;
+    type AppValidation = Record<StackTag, Record<Region, Record<StageTag, Found | NotFound>>>;
 
-    const { allCdkStacks, allStackTags, allStageTags, allRegions } = this;
+    const { allStackTags, allStageTags, allRegions } = this;
 
-    const checks: AppValidation = allCdkStacks.reduce((accClassName, { constructor: { name } }) => {
+    const checks: AppValidation = allStackTags.reduce((accStackTag, stackTag) => {
       return {
-        ...accClassName,
-        [name]: allStackTags.reduce((accStackTag, stackTag) => {
+        ...accStackTag,
+        [stackTag]: allRegions.reduce((accRegion, region) => {
           return {
-            ...accStackTag,
-            [stackTag]: allRegions.reduce((accRegion, region) => {
+            ...accRegion,
+            [region]: allStageTags.reduce((accStageTag, stageTag) => {
               return {
-                ...accRegion,
-                [region]: allStageTags.reduce((accStageTag, stageTag) => {
-                  return {
-                    ...accStageTag,
-                    [stageTag]: this.isCdkStackPresent(name, stackTag, region, stageTag) ? "✅" : "❌",
-                  };
-                }, {}),
+                ...accStageTag,
+                [stageTag]: this.isCdkStackPresent(stackTag, region, stageTag) ? "✅" : "❌",
               };
             }, {}),
           };
@@ -181,11 +160,9 @@ export class RiffRaffYamlFileExperimental {
       };
     }, {});
 
-    const missingDefinitions = Object.values(checks).flatMap((groupedByStackTag) => {
-      return Object.values(groupedByStackTag).flatMap((groupedByRegion) => {
-        return Object.values(groupedByRegion).flatMap((groupedByStage) => {
-          return Object.values(groupedByStage).filter((_) => _ === "❌");
-        });
+    const missingDefinitions = Object.values(checks).flatMap((groupedByRegion) => {
+      return Object.values(groupedByRegion).flatMap((groupedByStage) => {
+        return Object.values(groupedByStage).filter((_) => _ === "❌");
       });
     });
 
@@ -193,10 +170,7 @@ export class RiffRaffYamlFileExperimental {
       const message = `Unable to produce a working riff-raff.yaml file; missing ${missingDefinitions.length} definitions`;
 
       console.log(`${message} (details below)`);
-      Object.entries(checks).forEach(([className, detail]) => {
-        console.log(`For the class: ${chalk.yellow(className)}`);
-        console.table(detail);
-      });
+      console.table(checks);
 
       throw new Error(message);
     }
@@ -235,42 +209,40 @@ export class RiffRaffYamlFileExperimental {
 
     const groupedStacks: GroupedCdkStacks = groupByClassNameStackRegionStage(this.allCdkStacks);
 
-    Object.values(groupedStacks).forEach((stackTagGroup) => {
-      Object.values(stackTagGroup).forEach((regionGroup) => {
-        Object.values(regionGroup).forEach((stageGroup) => {
-          const stacks: GuStack[] = Object.values(stageGroup).flat();
+    Object.values(groupedStacks).forEach((regionGroup) => {
+      Object.values(regionGroup).forEach((stageGroup) => {
+        const stacks: GuStack[] = Object.values(stageGroup).flat();
 
-          if (stacks.length === 0) {
-            throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
-          }
+        if (stacks.length === 0) {
+          throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
+        }
 
-          // The items in `stacks` only differ by stage, so we can just use the first item in the list.
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length of `stacks` is checked above
-          const stack = stacks[0]!;
+        // The items in `stacks` only differ by stage, so we can just use the first item in the list.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length of `stacks` is checked above
+        const stack = stacks[0]!;
 
-          const lambdas = this.getLambdas(stack);
-          const autoscalingGroups = this.getAutoScalingGroups(stack);
+        const lambdas = this.getLambdas(stack);
+        const autoscalingGroups = this.getAutoScalingGroups(stack);
 
-          const artifactUploads: RiffRaffDeployment[] = [
-            lambdas.map(uploadLambdaArtifact),
-            autoscalingGroups.map(uploadAutoscalingArtifact),
-          ].flat();
-          artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
+        const artifactUploads: RiffRaffDeployment[] = [
+          lambdas.map(uploadLambdaArtifact),
+          autoscalingGroups.map(uploadAutoscalingArtifact),
+        ].flat();
+        artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
 
-          const cfnDeployment = cloudFormationDeployment(stacks, artifactUploads, this.outdir);
-          deployments.set(cfnDeployment.name, cfnDeployment.props);
+        const cfnDeployment = cloudFormationDeployment(stacks, artifactUploads, this.outdir);
+        deployments.set(cfnDeployment.name, cfnDeployment.props);
 
-          lambdas.forEach((lambda) => {
-            const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
-            deployments.set(lambdaDeployment.name, lambdaDeployment.props);
-          });
+        lambdas.forEach((lambda) => {
+          const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
+          deployments.set(lambdaDeployment.name, lambdaDeployment.props);
+        });
 
-          autoscalingGroups.forEach((asg) => {
-            const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
-            deployments.set(asgDeployment.name, asgDeployment.props);
+        autoscalingGroups.forEach((asg) => {
+          const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
+          deployments.set(asgDeployment.name, asgDeployment.props);
 
-            deployments.set(cfnDeployment.name, addAmiParametersToCloudFormationDeployment(cfnDeployment, asg));
-          });
+          deployments.set(cfnDeployment.name, addAmiParametersToCloudFormationDeployment(cfnDeployment, asg));
         });
       });
     });
