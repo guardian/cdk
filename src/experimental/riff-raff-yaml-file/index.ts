@@ -2,7 +2,6 @@ import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
-import chalk from "chalk";
 import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
@@ -12,7 +11,6 @@ import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } 
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
-  ClassName,
   GroupedCdkStacks,
   Region,
   RiffRaffDeployment,
@@ -75,22 +73,10 @@ export class RiffRaffYamlFileExperimental {
   private readonly riffRaffYaml: RiffRaffYaml;
   private readonly outdir: string;
 
-  private isCdkStackPresent(
-    expectedClassName: ClassName,
-    expectedStack: StackTag,
-    expectedRegion: Region,
-    expectedStage: StageTag
-  ): boolean {
+  private isCdkStackPresent(expectedStack: StackTag, expectedRegion: Region, expectedStage: StageTag): boolean {
     const matches = this.allCdkStacks.find((cdkStack) => {
-      const {
-        constructor: { name },
-        stack,
-        stage,
-        region,
-      } = cdkStack;
-      return (
-        name === expectedClassName && stack === expectedStack && stage === expectedStage && region === expectedRegion
-      );
+      const { stack, stage, region } = cdkStack;
+      return stack === expectedStack && stage === expectedStage && region === expectedRegion;
     });
 
     return !!matches;
@@ -98,7 +84,7 @@ export class RiffRaffYamlFileExperimental {
 
   /**
    * Check there are the appropriate number of `GuStack`s.
-   * Expect to find an instance for each combination of `GuStack`, `stack`, `region`, and `stage`.
+   * Expect to find an instance for each combination of `stack`, `region`, and `stage`.
    *
    * If not valid, a message is logged describing what is missing to aid debugging.
    *
@@ -140,8 +126,6 @@ export class RiffRaffYamlFileExperimental {
    * ```log
    * Unable to produce a working riff-raff.yaml file; missing 1 definitions (details below)
    *
-   * For the class: MyApplicationStack
-   *
    * ┌───────────────┬────────────────────────────┐
    * │    (index)    │         eu-west-1          │
    * ├───────────────┼────────────────────────────┤
@@ -155,25 +139,20 @@ export class RiffRaffYamlFileExperimental {
   private validateStacksInApp(): void {
     type Found = "✅";
     type NotFound = "❌";
-    type AppValidation = Record<ClassName, Record<StackTag, Record<Region, Record<StageTag, Found | NotFound>>>>;
+    type AppValidation = Record<StackTag, Record<Region, Record<StageTag, Found | NotFound>>>;
 
-    const { allCdkStacks, allStackTags, allStageTags, allRegions } = this;
+    const { allStackTags, allStageTags, allRegions } = this;
 
-    const checks: AppValidation = allCdkStacks.reduce((accClassName, { constructor: { name } }) => {
+    const checks: AppValidation = allStackTags.reduce((accStackTag, stackTag) => {
       return {
-        ...accClassName,
-        [name]: allStackTags.reduce((accStackTag, stackTag) => {
+        ...accStackTag,
+        [stackTag]: allRegions.reduce((accRegion, region) => {
           return {
-            ...accStackTag,
-            [stackTag]: allRegions.reduce((accRegion, region) => {
+            ...accRegion,
+            [region]: allStageTags.reduce((accStageTag, stageTag) => {
               return {
-                ...accRegion,
-                [region]: allStageTags.reduce((accStageTag, stageTag) => {
-                  return {
-                    ...accStageTag,
-                    [stageTag]: this.isCdkStackPresent(name, stackTag, region, stageTag) ? "✅" : "❌",
-                  };
-                }, {}),
+                ...accStageTag,
+                [stageTag]: this.isCdkStackPresent(stackTag, region, stageTag) ? "✅" : "❌",
               };
             }, {}),
           };
@@ -193,10 +172,7 @@ export class RiffRaffYamlFileExperimental {
       const message = `Unable to produce a working riff-raff.yaml file; missing ${missingDefinitions.length} definitions`;
 
       console.log(`${message} (details below)`);
-      Object.entries(checks).forEach(([className, detail]) => {
-        console.log(`For the class: ${chalk.yellow(className)}`);
-        console.table(detail);
-      });
+      console.table(checks);
 
       throw new Error(message);
     }

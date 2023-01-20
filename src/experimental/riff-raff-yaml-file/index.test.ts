@@ -104,7 +104,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     expect(() => {
       new RiffRaffYamlFileExperimental(app);
-    }).toThrowError("Unable to produce a working riff-raff.yaml file; missing 4 definitions");
+    }).toThrowError("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
   });
 
   it("Should throw if there is an unresolved region", () => {
