@@ -73,10 +73,10 @@ export class RiffRaffYamlFileExperimental {
   private readonly riffRaffYaml: RiffRaffYaml;
   private readonly outdir: string;
 
-  private isCdkStackPresent(expectedStack: StackTag, expectedRegion: Region, expectedStage: StageTag): boolean {
+  private isCdkStackPresent(expectedStack: StackTag, expectedStage: StageTag): boolean {
     const matches = this.allCdkStacks.find((cdkStack) => {
-      const { stack, stage, region } = cdkStack;
-      return stack === expectedStack && stage === expectedStage && region === expectedRegion;
+      const { stack, stage } = cdkStack;
+      return stack === expectedStack && stage === expectedStage;
     });
 
     return !!matches;
@@ -84,7 +84,7 @@ export class RiffRaffYamlFileExperimental {
 
   /**
    * Check there are the appropriate number of `GuStack`s.
-   * Expect to find an instance for each combination of `stack`, `region`, and `stage`.
+   * Expect to find an instance for each combination of `stack`, and `stage`.
    *
    * If not valid, a message is logged describing what is missing to aid debugging.
    *
@@ -126,12 +126,12 @@ export class RiffRaffYamlFileExperimental {
    * ```log
    * Unable to produce a working riff-raff.yaml file; missing 1 definitions (details below)
    *
-   * ┌───────────────┬────────────────────────────┐
-   * │    (index)    │         eu-west-1          │
-   * ├───────────────┼────────────────────────────┤
-   * │    deploy     │ { CODE: '✅', PROD: '✅' } │
-   * │ media-service │ { CODE: '❌', PROD: '✅' } │
-   * └───────────────┴────────────────────────────┘
+   * ┌───────────────┬──────┬──────┐
+   * │    (index)    │ CODE │ PROD │
+   * ├───────────────┼──────┼──────┤
+   * │    deploy     │ '✅' │ '✅' │
+   * │ media-service │ '❌' │ '✅' │
+   * └───────────────┴──────┴──────┘
    * ```
    *
    * @private
@@ -139,33 +139,24 @@ export class RiffRaffYamlFileExperimental {
   private validateStacksInApp(): void {
     type Found = "✅";
     type NotFound = "❌";
-    type AppValidation = Record<StackTag, Record<Region, Record<StageTag, Found | NotFound>>>;
+    type AppValidation = Record<StackTag, Record<StageTag, Found | NotFound>>;
 
-    const { allStackTags, allStageTags, allRegions } = this;
+    const { allStackTags, allStageTags } = this;
 
     const checks: AppValidation = allStackTags.reduce((accStackTag, stackTag) => {
       return {
         ...accStackTag,
-        [stackTag]: allRegions.reduce((accRegion, region) => {
+        [stackTag]: allStageTags.reduce((accStageTag, stageTag) => {
           return {
-            ...accRegion,
-            [region]: allStageTags.reduce((accStageTag, stageTag) => {
-              return {
-                ...accStageTag,
-                [stageTag]: this.isCdkStackPresent(stackTag, region, stageTag) ? "✅" : "❌",
-              };
-            }, {}),
+            ...accStageTag,
+            [stageTag]: this.isCdkStackPresent(stackTag, stageTag) ? "✅" : "❌",
           };
         }, {}),
       };
     }, {});
 
-    const missingDefinitions = Object.values(checks).flatMap((groupedByStackTag) => {
-      return Object.values(groupedByStackTag).flatMap((groupedByRegion) => {
-        return Object.values(groupedByRegion).flatMap((groupedByStage) => {
-          return Object.values(groupedByStage).filter((_) => _ === "❌");
-        });
-      });
+    const missingDefinitions: Array<Found | NotFound> = Object.values(checks).flatMap((groupedByStackTag) => {
+      return Object.values(groupedByStackTag).filter((_) => _ === "❌");
     });
 
     if (missingDefinitions.length > 0) {
