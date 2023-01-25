@@ -49,24 +49,32 @@ export function cloudFormationDeployment(
 
 export function addAmiParametersToCloudFormationDeployment(
   cfnDeployment: RiffRaffDeployment,
-  asg: GuAutoScalingGroup
+  autoScalingGroups: GuAutoScalingGroup[]
 ): RiffRaffDeploymentProps {
-  const { imageRecipe, app, amiParameter } = asg;
+  const amiParametersToTags = autoScalingGroups.reduce((acc, asg) => {
+    const { imageRecipe, app, amiParameter } = asg;
 
-  if (!imageRecipe) {
-    throw new Error(`Unable to produce a working riff-raff.yaml file; imageRecipe missing from ASG ${app}`);
-  }
+    if (!imageRecipe) {
+      throw new Error(`Unable to produce a working riff-raff.yaml file; imageRecipe missing from ASG ${app}`);
+    }
+
+    return {
+      ...acc,
+      [amiParameter.node.id]: {
+        BuiltBy: "amigo",
+        Recipe: imageRecipe,
+        AmigoStage: "PROD",
+      },
+    };
+  }, {});
 
   return {
     ...cfnDeployment.props,
     parameters: {
       ...cfnDeployment.props.parameters,
-      amiParameter: amiParameter.node.id,
-      amiTags: {
-        BuiltBy: "amigo",
-        Recipe: imageRecipe,
-        AmigoStage: "PROD",
-      },
+
+      // only add the `amiParametersToTags` property if there are some
+      ...(autoScalingGroups.length > 0 && { amiParametersToTags }),
     },
   };
 }

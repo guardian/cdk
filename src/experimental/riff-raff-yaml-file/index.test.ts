@@ -445,11 +445,11 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           parameters:
             templateStagePaths:
               TEST: test-stack.template.json
-            amiParameter: AMIMyapp
-            amiTags:
-              BuiltBy: amigo
-              Recipe: arm64-bionic-java11-deploy-infrastructure
-              AmigoStage: PROD
+            amiParametersToTags:
+              AMIMyapp:
+                BuiltBy: amigo
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                AmigoStage: PROD
           dependencies:
             - asg-upload-eu-west-1-test-my-app
         asg-update-eu-west-1-test-my-app:
@@ -563,11 +563,11 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             templateStagePaths:
               CODE: test-stack-eu-CODE.template.json
               PROD: test-stack-eu-PROD.template.json
-            amiParameter: AMIMyec2app
-            amiTags:
-              BuiltBy: amigo
-              Recipe: arm64-bionic-java11-deploy-infrastructure
-              AmigoStage: PROD
+            amiParametersToTags:
+              AMIMyec2app:
+                BuiltBy: amigo
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                AmigoStage: PROD
           dependencies:
             - lambda-upload-eu-west-1-test-my-lambda-app
             - asg-upload-eu-west-1-test-my-ec2-app
@@ -641,11 +641,11 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             templateStagePaths:
               CODE: test-stack-us-CODE.template.json
               PROD: test-stack-us-PROD.template.json
-            amiParameter: AMIMyec2app
-            amiTags:
-              BuiltBy: amigo
-              Recipe: arm64-bionic-java11-deploy-infrastructure
-              AmigoStage: PROD
+            amiParametersToTags:
+              AMIMyec2app:
+                BuiltBy: amigo
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                AmigoStage: PROD
           dependencies:
             - lambda-upload-us-east-1-test-my-lambda-app
             - asg-upload-us-east-1-test-my-ec2-app
@@ -779,11 +779,15 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           parameters:
             templateStagePaths:
               CODE: test-stack.template.json
-            amiParameter: AMIMydatacollector
-            amiTags:
-              BuiltBy: amigo
-              Recipe: arm64-bionic-node18-deploy-infrastructure
-              AmigoStage: PROD
+            amiParametersToTags:
+              AMIMyapi:
+                BuiltBy: amigo
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                AmigoStage: PROD
+              AMIMydatacollector:
+                BuiltBy: amigo
+                Recipe: arm64-bionic-node18-deploy-infrastructure
+                AmigoStage: PROD
           dependencies:
             - asg-upload-eu-west-1-test-my-api
             - asg-upload-eu-west-1-test-my-data-collector
