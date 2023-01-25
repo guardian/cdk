@@ -5,7 +5,7 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { AccessScope } from "../../constants";
 import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
-import { GuEc2App, GuScheduledLambda } from "../../patterns";
+import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../../patterns";
 import { RiffRaffYamlFileExperimental } from "./index";
 
 describe("The RiffRaffYamlFileExperimental class", () => {
@@ -680,6 +680,143 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           dependencies:
             - cfn-us-east-1-test-my-application-stack
           contentDirectory: my-ec2-app
+      "
+    `);
+  });
+
+  it("Should support multiple ASGs using a variety of AMIs recipes", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuPlayApp(this, {
+          app: "my-api",
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `my-api.deb`,
+              executionStatement: `dpkg -i /my-api/my-api.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "api.devx.gutools.co.uk",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+        });
+
+        new GuNodeApp(this, {
+          app: "my-data-collector",
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `my-data-collector.deb`,
+              executionStatement: `dpkg -i /my-data-collector/my-data-collector.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "data-collector.devx.gutools.co.uk",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          imageRecipe: "arm64-bionic-node18-deploy-infrastructure",
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+      deployments:
+        asg-upload-eu-west-1-test-my-api:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-api
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-api
+        asg-upload-eu-west-1-test-my-data-collector:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-data-collector
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-data-collector
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: test-stack.template.json
+            amiParameter: AMIMydatacollector
+            amiTags:
+              BuiltBy: amigo
+              Recipe: arm64-bionic-node18-deploy-infrastructure
+              AmigoStage: PROD
+          dependencies:
+            - asg-upload-eu-west-1-test-my-api
+            - asg-upload-eu-west-1-test-my-data-collector
+        asg-update-eu-west-1-test-my-api:
+          type: autoscaling
+          actions:
+            - deploy
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-api
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          contentDirectory: my-api
+        asg-update-eu-west-1-test-my-data-collector:
+          type: autoscaling
+          actions:
+            - deploy
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-data-collector
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          contentDirectory: my-data-collector
       "
     `);
   });
