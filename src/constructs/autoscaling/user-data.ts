@@ -30,7 +30,7 @@ export class GuUserData {
   private downloadDistributable(scope: GuStack, app: AppIdentity, props: GuDistributableForEc2) {
     const bucketKey = GuDistributable.getObjectKey(scope, app, props);
 
-    const bucket = Bucket.fromBucketAttributes(scope, "DistributionBucket", {
+    const bucket = Bucket.fromBucketAttributes(scope, `DistributionBucket-${app.app}`, {
       bucketName: GuDistributionBucketParameter.getInstance(scope).valueAsString,
     });
 
