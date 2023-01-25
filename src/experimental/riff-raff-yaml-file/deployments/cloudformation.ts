@@ -52,7 +52,7 @@ export function addAmiParametersToCloudFormationDeployment(
   autoScalingGroups: GuAutoScalingGroup[]
 ): RiffRaffDeploymentProps {
   const amiParametersToTags = autoScalingGroups.reduce((acc, asg) => {
-    const { imageRecipe, app, amiParameter, imageRecipeEncrypted = true } = asg;
+    const { imageRecipe, app, amiParameter } = asg;
 
     if (!imageRecipe) {
       throw new Error(`Unable to produce a working riff-raff.yaml file; imageRecipe missing from ASG ${app}`);
@@ -64,7 +64,6 @@ export function addAmiParametersToCloudFormationDeployment(
         BuiltBy: "amigo",
         Recipe: imageRecipe,
         AmigoStage: "PROD",
-        Encrypted: imageRecipeEncrypted,
       },
     };
   }, {});

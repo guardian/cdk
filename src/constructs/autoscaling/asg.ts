@@ -30,19 +30,7 @@ export interface GuAutoScalingGroupProps
     AppIdentity,
     GuAsgCapacity {
   imageId?: GuAmiParameter;
-
-  /**
-   * The AMIgo recipe that bakes the AMI for this autoscaling group.
-   * Only applicable if auto-generating the `riff-raff.yaml`.
-   */
   imageRecipe?: string;
-
-  /**
-   * During deployment, should Riff-Raff lookup an encrypted AMI for this autoscaling group?
-   * Only applicable if auto-generating the `riff-raff.yaml`.
-   * @default true
-   */
-  imageRecipeEncrypted?: boolean;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
@@ -73,7 +61,6 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
   public readonly app: string;
   public readonly amiParameter: GuAmiParameter;
   public readonly imageRecipe?: string;
-  public readonly imageRecipeEncrypted?: boolean;
 
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const {
@@ -81,7 +68,6 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       additionalSecurityGroups = [],
       imageId = new GuAmiParameter(scope, { app }),
       imageRecipe,
-      imageRecipeEncrypted,
       minimumInstances,
       maximumInstances,
       role = new GuInstanceRole(scope, { app }),
@@ -125,7 +111,6 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     this.app = app;
     this.amiParameter = imageId;
     this.imageRecipe = imageRecipe;
-    this.imageRecipeEncrypted = imageRecipeEncrypted;
 
     targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 
