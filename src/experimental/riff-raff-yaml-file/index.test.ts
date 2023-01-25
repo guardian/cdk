@@ -450,6 +450,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Encrypted: true
           dependencies:
             - asg-upload-eu-west-1-test-my-app
         asg-update-eu-west-1-test-my-app:
@@ -568,6 +569,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Encrypted: true
           dependencies:
             - lambda-upload-eu-west-1-test-my-lambda-app
             - asg-upload-eu-west-1-test-my-ec2-app
@@ -646,6 +648,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Encrypted: true
           dependencies:
             - lambda-upload-us-east-1-test-my-lambda-app
             - asg-upload-us-east-1-test-my-ec2-app
@@ -710,6 +713,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             minimumInstances: 1,
           },
           imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+          imageRecipeEncrypted: false,
         });
 
         new GuNodeApp(this, {
@@ -784,10 +788,12 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Encrypted: false
               AMIMydatacollector:
                 BuiltBy: amigo
                 Recipe: arm64-bionic-node18-deploy-infrastructure
                 AmigoStage: PROD
+                Encrypted: true
           dependencies:
             - asg-upload-eu-west-1-test-my-api
             - asg-upload-eu-west-1-test-my-data-collector

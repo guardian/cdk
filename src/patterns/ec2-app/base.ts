@@ -142,7 +142,19 @@ export interface GuEc2AppProps extends AppIdentity {
   scaling: GuAsgCapacity;
   certificateProps: GuDomainName;
   withoutImdsv2?: boolean;
+
+  /**
+   * The AMIgo recipe that bakes the AMI for this autoscaling group.
+   * Only applicable if auto-generating the `riff-raff.yaml`.
+   */
   imageRecipe?: string;
+
+  /**
+   * During deployment, should Riff-Raff lookup an encrypted AMI for this autoscaling group?
+   * Only applicable if auto-generating the `riff-raff.yaml`.
+   * @default true
+   */
+  imageRecipeEncrypted?: boolean;
   vpc?: IVpc;
   privateSubnets?: ISubnet[];
   publicSubnets?: ISubnet[];
@@ -361,6 +373,7 @@ export class GuEc2App extends Construct {
       userData,
       withoutImdsv2,
       imageRecipe,
+      imageRecipeEncrypted,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
@@ -408,6 +421,7 @@ export class GuEc2App extends Construct {
       vpcSubnets: { subnets: privateSubnets },
       ...(blockDevices && { blockDevices }),
       imageRecipe,
+      imageRecipeEncrypted,
     });
 
     // This allows automatic shipping of instance Cloud Init logs when using the
