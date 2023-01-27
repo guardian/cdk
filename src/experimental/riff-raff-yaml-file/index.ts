@@ -235,9 +235,12 @@ export class RiffRaffYamlFileExperimental {
           autoscalingGroups.forEach((asg) => {
             const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
             deployments.set(asgDeployment.name, asgDeployment.props);
-
-            deployments.set(cfnDeployment.name, addAmiParametersToCloudFormationDeployment(cfnDeployment, asg));
           });
+
+          deployments.set(
+            cfnDeployment.name,
+            addAmiParametersToCloudFormationDeployment(cfnDeployment, autoscalingGroups)
+          );
         });
       });
     });
