@@ -58,12 +58,15 @@ export function addAmiParametersToCloudFormationDeployment(
       throw new Error(`Unable to produce a working riff-raff.yaml file; imageRecipe missing from ASG ${app}`);
     }
 
+    const Recipe = typeof imageRecipe === "string" ? imageRecipe : imageRecipe.Recipe;
+    const AmigoStage = typeof imageRecipe === "string" ? "PROD" : imageRecipe.AmigoStage ?? "PROD";
+
     return {
       ...acc,
       [amiParameter.node.id]: {
         BuiltBy: "amigo",
-        Recipe: imageRecipe,
-        AmigoStage: "PROD",
+        AmigoStage,
+        Recipe,
       },
     };
   }, {});

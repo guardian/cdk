@@ -5,6 +5,7 @@ import { OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
 import type { ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
 import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { GuAsgCapacity } from "../../types";
+import type { AmigoProps } from "../../types/amigo";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
 import type { AppIdentity, GuStack } from "../core";
@@ -30,7 +31,7 @@ export interface GuAutoScalingGroupProps
     AppIdentity,
     GuAsgCapacity {
   imageId?: GuAmiParameter;
-  imageRecipe?: string;
+  imageRecipe?: string | AmigoProps;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
@@ -60,7 +61,7 @@ export interface GuAutoScalingGroupProps
 export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
   public readonly app: string;
   public readonly amiParameter: GuAmiParameter;
-  public readonly imageRecipe?: string;
+  public readonly imageRecipe?: string | AmigoProps;
 
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const {

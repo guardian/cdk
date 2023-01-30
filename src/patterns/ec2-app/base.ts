@@ -24,6 +24,7 @@ import {
 } from "../../constructs/loadbalancing";
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
+import type { AmigoProps } from "../../types/amigo";
 
 export interface AccessLoggingProps {
   enabled: boolean;
@@ -142,7 +143,7 @@ export interface GuEc2AppProps extends AppIdentity {
   scaling: GuAsgCapacity;
   certificateProps: GuDomainName;
   withoutImdsv2?: boolean;
-  imageRecipe?: string;
+  imageRecipe?: string | AmigoProps;
   vpc?: IVpc;
   privateSubnets?: ISubnet[];
   publicSubnets?: ISubnet[];

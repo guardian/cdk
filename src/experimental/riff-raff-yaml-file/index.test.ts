@@ -448,8 +448,8 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             amiParametersToTags:
               AMIMyapp:
                 BuiltBy: amigo
-                Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
           dependencies:
             - asg-upload-eu-west-1-test-my-app
         asg-update-eu-west-1-test-my-app:
@@ -566,8 +566,8 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             amiParametersToTags:
               AMIMyec2app:
                 BuiltBy: amigo
-                Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
           dependencies:
             - lambda-upload-eu-west-1-test-my-lambda-app
             - asg-upload-eu-west-1-test-my-ec2-app
@@ -644,8 +644,8 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             amiParametersToTags:
               AMIMyec2app:
                 BuiltBy: amigo
-                Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
           dependencies:
             - lambda-upload-us-east-1-test-my-lambda-app
             - asg-upload-us-east-1-test-my-ec2-app
@@ -782,12 +782,12 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             amiParametersToTags:
               AMIMyapi:
                 BuiltBy: amigo
-                Recipe: arm64-bionic-java11-deploy-infrastructure
                 AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
               AMIMydatacollector:
                 BuiltBy: amigo
-                Recipe: arm64-bionic-node18-deploy-infrastructure
                 AmigoStage: PROD
+                Recipe: arm64-bionic-node18-deploy-infrastructure
           dependencies:
             - asg-upload-eu-west-1-test-my-api
             - asg-upload-eu-west-1-test-my-data-collector
@@ -821,6 +821,96 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           dependencies:
             - cfn-eu-west-1-test-my-application-stack
           contentDirectory: my-data-collector
+      "
+    `);
+  });
+  it("Should support overriding AmigoStage", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuPlayApp(this, {
+          app: "my-api",
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `my-api.deb`,
+              executionStatement: `dpkg -i /my-api/my-api.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "api.devx.gutools.co.uk",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          imageRecipe: {
+            Recipe: "arm64-bionic-java11-deploy-infrastructure",
+            AmigoStage: "CODE",
+          },
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+      deployments:
+        asg-upload-eu-west-1-test-my-api:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-api
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-api
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: test-stack.template.json
+            amiParametersToTags:
+              AMIMyapi:
+                BuiltBy: amigo
+                AmigoStage: CODE
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+          dependencies:
+            - asg-upload-eu-west-1-test-my-api
+        asg-update-eu-west-1-test-my-api:
+          type: autoscaling
+          actions:
+            - deploy
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-api
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+          contentDirectory: my-api
       "
     `);
   });
