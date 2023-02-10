@@ -89,4 +89,111 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
       /^ApiGatewayHigh5xxPercentageAlarm.+/
     );
   });
+
+  it("should should route requests to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+    const stack = simpleGuStackForTesting();
+    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_14_X,
+      app: "testing",
+      fileName: "my-app-1.zip",
+    });
+    new GuApiGatewayWithLambdaByPath(stack, {
+      app: "testing",
+      monitoringConfiguration: {
+        snsTopicName: "my-alarm-topic",
+        http5xxAlarm: {
+          tolerated5xxPercentage: 1,
+          numberOfMinutesAboveThresholdBeforeAlarm: 3,
+        },
+      },
+      targets: [
+        {
+          path: "/test",
+          httpMethod: "GET",
+          lambda: lambdaOne,
+        },
+      ],
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApiGateway::Method", {
+      Integration: {
+        IntegrationHttpMethod: "POST",
+        Type: "AWS_PROXY",
+        Uri: {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                Ref: "AWS::Partition",
+              },
+              ":apigateway:",
+              {
+                Ref: "AWS::Region",
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": ["lambdaoneA536F07A", "Arn"],
+              },
+              "/invocations",
+            ],
+          ],
+        },
+      },
+    });
+  });
+
+  it("should route requests to an alias if the enableVersioning prop is set to true", () => {
+    const stack = simpleGuStackForTesting();
+    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
+      enableVersioning: true,
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_14_X,
+      app: "testing",
+      fileName: "my-app-1.zip",
+    });
+    new GuApiGatewayWithLambdaByPath(stack, {
+      app: "testing",
+      monitoringConfiguration: {
+        snsTopicName: "my-alarm-topic",
+        http5xxAlarm: {
+          tolerated5xxPercentage: 1,
+          numberOfMinutesAboveThresholdBeforeAlarm: 3,
+        },
+      },
+      targets: [
+        {
+          path: "/test",
+          httpMethod: "GET",
+          lambda: lambdaOne,
+        },
+      ],
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApiGateway::Method", {
+      Integration: {
+        IntegrationHttpMethod: "POST",
+        Type: "AWS_PROXY",
+        Uri: {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                Ref: "AWS::Partition",
+              },
+              ":apigateway:",
+              {
+                Ref: "AWS::Region",
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                Ref: "lambdaoneAliasForLambda0CFB509B", // // This is the important difference when compared to the test above
+              },
+              "/invocations",
+            ],
+          ],
+        },
+      },
+    });
+  });
 });

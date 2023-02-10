@@ -1,16 +1,25 @@
 import { Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
+import { Alias, Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { GuDistributable } from "../../types";
-import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
 import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitoringProps } from "../cloudwatch";
+import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { AppIdentity, GuDistributionBucketParameter } from "../core";
 import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
+  /**
+   * Create a new Lambda version and alias. This is only necessary if you want to use features which rely
+   * on versioning (e.g. SnapStart or Provisioned Concurrency).
+   *
+   * If you enable versioning you must ensure that your Lambda function is updated whenever a new build is deployed via
+   * CloudFormation. The simplest way to do this is to include the build number in the `fileName` prop.
+   */
+  enableVersioning?: boolean;
+
   /**
    * Alarm if error percentage exceeds a threshold.
    */
@@ -63,6 +72,7 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 export class GuLambdaFunction extends Function {
   public readonly app: string;
   public readonly fileName: string;
+  public readonly alias?: Alias;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout } = props;
@@ -93,6 +103,13 @@ export class GuLambdaFunction extends Function {
 
     this.app = app;
     this.fileName = fileName;
+
+    if (props.enableVersioning) {
+      this.alias = new Alias(scope, `${id}-AliasForLambda`, {
+        aliasName: scope.stage,
+        version: this.currentVersion,
+      });
+    }
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {

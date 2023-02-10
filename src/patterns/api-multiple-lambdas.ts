@@ -138,7 +138,10 @@ export class GuApiGatewayWithLambdaByPath extends Construct {
     this.api = apiGateway;
     props.targets.map((target) => {
       const resource = apiGateway.root.resourceForPath(target.path);
-      resource.addMethod(target.httpMethod, new LambdaIntegration(target.lambda), {
+      // If we have an alias, use this to ensure that all requests are routed to a published Lambda version.
+      // Otherwise, use the latest unpublished version ($LATEST)
+      const lambdaTarget = target.lambda.alias ?? target.lambda;
+      resource.addMethod(target.httpMethod, new LambdaIntegration(lambdaTarget), {
         apiKeyRequired: target.apiKeyRequired,
       });
     });

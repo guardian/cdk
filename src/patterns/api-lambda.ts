@@ -66,8 +66,12 @@ export class GuApiLambda extends GuLambdaFunction {
       ...props,
     });
 
+    // If we have an alias, use this to ensure that all requests are routed to a published Lambda version.
+    // Otherwise, use the latest unpublished version ($LATEST)
+    const resourceToInvoke = this.alias ?? this;
+
     this.api = new LambdaRestApi(this, props.api.id, {
-      handler: this,
+      handler: resourceToInvoke,
 
       // Override to avoid clashes as default is just api ID, which is often shared across stages.
       restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,

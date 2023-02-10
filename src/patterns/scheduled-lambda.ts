@@ -72,10 +72,12 @@ export class GuScheduledLambda extends GuLambdaFunction {
     super(scope, id, lambdaProps);
 
     props.rules.forEach((rule, index) => {
-      const target = new LambdaFunction(this);
+      // If we have an alias, use this to ensure that all invocations are handled by a published Lambda version.
+      // Otherwise, use the latest unpublished version ($LATEST)
+      const resourceToInvoke = this.alias ?? this;
       new Rule(this, `${id}-${rule.schedule.expressionString}-${index}`, {
         schedule: rule.schedule,
-        targets: [target],
+        targets: [new LambdaFunction(resourceToInvoke)],
         ...(rule.description && { description: rule.description }),
         enabled: true,
       });
