@@ -76,4 +76,85 @@ describe("The GuApiLambda pattern", () => {
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
+
+  it("should route requests to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    new GuApiLambda(stack, "lambda", {
+      fileName: "my-app.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+      api: {
+        id: "api",
+        description: "this is a test",
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApiGateway::Method", {
+      Integration: {
+        Uri: {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                Ref: "AWS::Partition",
+              },
+              ":apigateway:",
+              {
+                Ref: "AWS::Region",
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": ["lambda8B5974B5", "Arn"],
+              },
+              "/invocations",
+            ],
+          ],
+        },
+      },
+    });
+  });
+
+  it("should route requests to an alias if the enableVersioning prop is set to true", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    new GuApiLambda(stack, "lambda", {
+      enableVersioning: true,
+      fileName: "my-app.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+      api: {
+        id: "api",
+        description: "this is a test",
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApiGateway::Method", {
+      Integration: {
+        Uri: {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                Ref: "AWS::Partition",
+              },
+              ":apigateway:",
+              {
+                Ref: "AWS::Region",
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                Ref: "lambdaAliasForLambda426FBB83", // This is the important difference when compared to the test above
+              },
+              "/invocations",
+            ],
+          ],
+        },
+      },
+    });
+  });
 });

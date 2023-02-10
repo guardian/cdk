@@ -71,4 +71,41 @@ describe("The GuSnsLambda pattern", () => {
     new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
+
+  it("should send messages to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
+    Template.fromStack(stack).hasResourceProperties("AWS::SNS::Subscription", {
+      Endpoint: {
+        "Fn::GetAtt": ["mylambdafunction8D341B54", "Arn"],
+      },
+    });
+  });
+
+  it("should send messages to an alias if the enableVersioning prop is set to true", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      enableVersioning: true,
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
+    Template.fromStack(stack).hasResourceProperties("AWS::SNS::Subscription", {
+      Endpoint: { Ref: "mylambdafunctionAliasForLambdaF2F98ED5" },
+    });
+  });
 });

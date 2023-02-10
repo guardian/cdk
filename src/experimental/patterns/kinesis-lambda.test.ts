@@ -274,4 +274,69 @@ describe("The GuKinesisLambda pattern", () => {
       MaximumRecordAgeInSeconds: 300,
     });
   });
+
+  it("should send events to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+    const stack = simpleGuStackForTesting();
+    const basicErrorHandling: StreamErrorHandlingProps = {
+      bisectBatchOnError: false,
+      retryBehaviour: StreamRetry.maxAttempts(1),
+    };
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      errorHandlingConfiguration: basicErrorHandling,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
+      FunctionName: { Ref: "mylambdafunction8D341B54" },
+    });
+  });
+
+  it("should send events to an alias if the enableVersioning prop is set to true", () => {
+    const stack = simpleGuStackForTesting();
+    const basicErrorHandling: StreamErrorHandlingProps = {
+      bisectBatchOnError: false,
+      retryBehaviour: StreamRetry.maxAttempts(1),
+    };
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      enableVersioning: true,
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      errorHandlingConfiguration: basicErrorHandling,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::EventSourceMapping", {
+      FunctionName: {
+        "Fn::Join": [
+          "",
+          [
+            {
+              "Fn::Select": [
+                6,
+                {
+                  "Fn::Split": [
+                    ":",
+                    {
+                      Ref: "mylambdafunctionAliasForLambdaF2F98ED5",
+                    },
+                  ],
+                },
+              ],
+            },
+            ":TEST",
+          ],
+        ],
+      },
+    });
+  });
 });
