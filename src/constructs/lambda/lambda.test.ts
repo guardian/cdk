@@ -172,4 +172,34 @@ describe("The GuLambdaFunction class", () => {
       Timeout: 30,
     });
   });
+
+  it("should not create an alias or version if the enableVersioning prop is unset", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+      app: "testing",
+    });
+
+    Template.fromStack(stack).resourceCountIs("AWS::Lambda::Version", 0);
+    Template.fromStack(stack).resourceCountIs("AWS::Lambda::Alias", 0);
+  });
+
+  it("should create a function version and alias if the enableVersioning prop is set to true", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      enableVersioning: true,
+      fileName: "build123.jar",
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+      app: "testing",
+    });
+
+    Template.fromStack(stack).resourceCountIs("AWS::Lambda::Version", 1);
+    Template.fromStack(stack).resourceCountIs("AWS::Lambda::Alias", 1);
+  });
+
 });
