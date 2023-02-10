@@ -227,7 +227,10 @@ export class RiffRaffYamlFileExperimental {
           const cfnDeployment = cloudFormationDeployment(stacks, artifactUploads, this.outdir);
           deployments.set(cfnDeployment.name, cfnDeployment.props);
 
-          lambdas.forEach((lambda) => {
+          const lambdasWithoutAnAlias = lambdas.filter((lambda) => lambda.alias === undefined)
+          // If the Lambda has an alias it is using versioning. When using versioning, there is no need for Riff-Raff
+          // to modify the unpublished version of the function
+          lambdasWithoutAnAlias.forEach((lambda) => {
             const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
             deployments.set(lambdaDeployment.name, lambdaDeployment.props);
           });
