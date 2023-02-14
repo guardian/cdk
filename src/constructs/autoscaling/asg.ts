@@ -15,6 +15,7 @@ import { GuInstanceRole } from "../iam";
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
+// TODO avoid prop nesting to improve discoverability. See https://github.com/aws/aws-cdk/blob/main/docs/DESIGN_GUIDELINES.md#flat.
 export interface GuAutoScalingGroupProps
   extends Omit<
       AutoScalingGroupProps,

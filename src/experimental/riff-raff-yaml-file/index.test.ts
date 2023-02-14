@@ -450,6 +450,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 AmigoStage: PROD
                 Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
           dependencies:
             - asg-upload-eu-west-1-test-my-app
         asg-update-eu-west-1-test-my-app:
@@ -568,6 +569,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 AmigoStage: PROD
                 Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
           dependencies:
             - lambda-upload-eu-west-1-test-my-lambda-app
             - asg-upload-eu-west-1-test-my-ec2-app
@@ -646,6 +648,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 AmigoStage: PROD
                 Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
           dependencies:
             - lambda-upload-us-east-1-test-my-lambda-app
             - asg-upload-us-east-1-test-my-ec2-app
@@ -709,7 +712,10 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           scaling: {
             minimumInstances: 1,
           },
-          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+          imageRecipe: {
+            Recipe: "arm64-bionic-java11-deploy-infrastructure",
+            Encrypted: false,
+          },
         });
 
         new GuNodeApp(this, {
@@ -729,7 +735,10 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           scaling: {
             minimumInstances: 1,
           },
-          imageRecipe: "arm64-bionic-node18-deploy-infrastructure",
+          imageRecipe: {
+            Recipe: "arm64-bionic-node18-deploy-infrastructure",
+            Encrypted: true,
+          },
         });
       }
     }
@@ -784,10 +793,12 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 AmigoStage: PROD
                 Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'false'
               AMIMydatacollector:
                 BuiltBy: amigo
                 AmigoStage: PROD
                 Recipe: arm64-bionic-node18-deploy-infrastructure
+                Encrypted: 'true'
           dependencies:
             - asg-upload-eu-west-1-test-my-api
             - asg-upload-eu-west-1-test-my-data-collector
@@ -852,6 +863,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           imageRecipe: {
             Recipe: "arm64-bionic-java11-deploy-infrastructure",
             AmigoStage: "CODE",
+            Encrypted: true,
           },
         });
       }
@@ -894,6 +906,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
                 BuiltBy: amigo
                 AmigoStage: CODE
                 Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
           dependencies:
             - asg-upload-eu-west-1-test-my-api
         asg-update-eu-west-1-test-my-api:
