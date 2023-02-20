@@ -36,16 +36,10 @@ describe("The GuAutoScalingGroup", () => {
     const template = GuTemplate.fromStack(stack);
 
     template.hasResourceWithLogicalId("AWS::AutoScaling::AutoScalingGroup", /MyAutoScalingGroupTesting[A-Z0-9]+/);
+
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "testing" },
       propagateAtLaunch: true,
-      additionalTags: [
-        {
-          Key: "Name",
-          PropagateAtLaunch: true,
-          Value: "Test/MyAutoScalingGroupTesting",
-        },
-      ],
     });
   });
 

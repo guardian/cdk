@@ -580,7 +580,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app: "PlayApp" },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupPlayApp" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
@@ -589,7 +588,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app: "NodeApp" },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupNodeApp" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
@@ -677,7 +675,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "test-gu-ec2-app.service" },
       ],
@@ -707,7 +704,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
       ],
@@ -765,7 +761,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupApp" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
