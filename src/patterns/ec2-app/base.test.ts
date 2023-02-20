@@ -481,16 +481,18 @@ describe("the GuEC2App pattern", function () {
       ],
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      BlockDeviceMappings: [
-        {
-          DeviceName: "/dev/sda1",
-          Ebs: {
-            VolumeSize: 8,
-            VolumeType: "gp2",
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        BlockDeviceMappings: [
+          {
+            DeviceName: "/dev/sda1",
+            Ebs: {
+              VolumeSize: 8,
+              VolumeType: "gp2",
+            },
           },
-        },
-      ],
+        ],
+      },
     });
   });
 
@@ -591,6 +593,7 @@ describe("the GuEC2App pattern", function () {
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
       ],
     });
+    
   });
 
   it("can be configured with access logging", function () {

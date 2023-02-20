@@ -62,9 +62,11 @@ describe("The GuAutoScalingGroup", () => {
       Type: "AWS::EC2::Image::Id",
     });
 
-    template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      ImageId: {
-        Ref: "AMITesting",
+    template.hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        ImageId: {
+          Ref: "AMITesting",
+        },
       },
     });
   });
@@ -74,8 +76,10 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", { ...defaultProps, instanceType: new InstanceType("t3.small") });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      InstanceType: "t3.small",
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        InstanceType: "t3.small",
+      },
     });
   });
 
@@ -84,9 +88,11 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", defaultProps);
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      UserData: {
-        "Fn::Base64": "#!/bin/bash\nservice some-dependency start\nservice my-app start",
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        UserData: {
+          "Fn::Base64": "#!/bin/bash\nservice some-dependency start\nservice my-app start",
+        },
       },
     });
   });
@@ -128,24 +134,26 @@ describe("The GuAutoScalingGroup", () => {
       additionalSecurityGroups: [securityGroup, securityGroup1, securityGroup2],
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      SecurityGroups: [
-        {
-          "Fn::GetAtt": [Match.stringLikeRegexp(`GuHttpsEgressSecurityGroup${app}[A-Z0-9]+`), "GroupId"],
-        },
-        {
-          "Fn::GetAtt": ["WazuhSecurityGroup", "GroupId"],
-        },
-        {
-          "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroupTesting[A-Z0-9]+"), "GroupId"],
-        },
-        {
-          "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroup1Testing[A-Z0-9]+"), "GroupId"],
-        },
-        {
-          "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroup2Testing[A-Z0-9]+"), "GroupId"],
-        },
-      ],
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        SecurityGroupIds: [
+          {
+            "Fn::GetAtt": [Match.stringLikeRegexp(`GuHttpsEgressSecurityGroup${app}[A-Z0-9]+`), "GroupId"],
+          },
+          {
+            "Fn::GetAtt": ["WazuhSecurityGroup", "GroupId"],
+          },
+          {
+            "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroupTesting[A-Z0-9]+"), "GroupId"],
+          },
+          {
+            "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroup1Testing[A-Z0-9]+"), "GroupId"],
+          },
+          {
+            "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroup2Testing[A-Z0-9]+"), "GroupId"],
+          },
+        ],
+      },
     });
   });
 
