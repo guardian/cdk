@@ -5,7 +5,7 @@ import type { GuCertificate } from "../../acm";
 import type { AppIdentity, GuStack } from "../../core";
 import type { GuApplicationTargetGroup } from "./application-target-group";
 
-export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity {}
+export interface GuApplicationListenerProps extends ApplicationListenerProps, AppIdentity { }
 
 /**
  * Construct which creates a Listener.
@@ -28,9 +28,9 @@ export class GuApplicationListener extends GuAppAwareConstruct(ApplicationListen
 
 export interface GuHttpsApplicationListenerProps
   extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">,
-    AppIdentity {
+  AppIdentity {
   targetGroup: GuApplicationTargetGroup;
-  certificate: GuCertificate;
+  certificate?: GuCertificate;
 }
 
 /**
@@ -45,10 +45,10 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
     const { certificate, targetGroup } = props;
 
     const mergedProps: GuApplicationListenerProps = {
-      port: 443,
+      port: typeof certificate === undefined ? 8080 : 443,
       protocol: ApplicationProtocol.HTTPS,
       ...props,
-      certificates: [
+      certificates: typeof certificate === "undefined" ? [] : [
         {
           certificateArn: certificate.certificateArn,
         },
