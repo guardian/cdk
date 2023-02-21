@@ -178,7 +178,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *   access: { scope: AccessScope.PUBLIC },
  *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
  *   certificateProps:{
- *     domainName: "prod-guardian.com",
+ *     domainName: "domain-name-for-your-application.example",
  *   },
  *   monitoringConfiguration: {
  *     snsTopicName: "alerts-topic-for-my-team",
@@ -207,7 +207,7 @@ function restrictedCidrRanges(ranges: IPeer[]) {
  *   },
  *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
  *   certificateProps:{
- *     domainName: "prod-guardian.com",
+ *     domainName: "domain-name-for-your-application.example",
  *   },
  *   monitoringConfiguration: {
  *     snsTopicName: "alerts-topic-for-my-team",
