@@ -468,7 +468,7 @@ export class GuEc2App extends Construct {
       certificate,
       targetGroup,
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
-      open: access.scope === AccessScope.PUBLIC && typeof certificate !== undefined,
+      open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own

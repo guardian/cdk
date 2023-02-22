@@ -45,8 +45,8 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
     const { certificate, targetGroup } = props;
 
     const mergedProps: GuApplicationListenerProps = {
-      port: typeof certificate === undefined ? 8080 : 443,
-      protocol: typeof certificate === undefined ? ApplicationProtocol.HTTP : ApplicationProtocol.HTTPS,
+      port: typeof certificate === "undefined" ? 8080 : 443,
+      protocol: typeof certificate === "undefined" ? ApplicationProtocol.HTTP : ApplicationProtocol.HTTPS,
       ...props,
       certificates: typeof certificate === "undefined" ? [] : [
         {

@@ -4,9 +4,9 @@ The plan is to sprinkle some framework specific tooling into them.
 For example, a Play app should come with the infrastructure for https://github.com/guardian/play-secret-rotation.
  */
 
-import type { GuStack } from "../../constructs/core";
 import { AccessScope } from '../../constants';
-import { GuDomainName } from "../../types";
+import type { GuStack } from "../../constructs/core";
+import type { GuDomainName } from "../../types";
 import type { GuEc2AppProps } from "./base";
 import { GuEc2App } from "./base";
 
