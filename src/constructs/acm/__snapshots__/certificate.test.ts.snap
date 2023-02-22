@@ -13,7 +13,7 @@ exports[`The GuCertificate class should create a new certificate (which requires
     "CertificateTesting28FCAC6D": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "code-guardian.com",
+        "DomainName": "domain-name-for-your-application.example",
         "Tags": [
           {
             "Key": "App",
@@ -62,10 +62,10 @@ exports[`The GuCertificate class should create a new certificate when hosted zon
     "CertificateTesting28FCAC6D": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "code-guardian.com",
+        "DomainName": "domain-name-for-your-application.example",
         "DomainValidationOptions": [
           {
-            "DomainName": "code-guardian.com",
+            "DomainName": "domain-name-for-your-application.example",
             "HostedZoneId": "id123",
           },
         ],

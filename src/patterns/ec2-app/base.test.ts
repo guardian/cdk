@@ -20,7 +20,7 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -39,7 +39,7 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -58,7 +58,7 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -81,7 +81,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -146,7 +146,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -173,7 +173,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -198,7 +198,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -222,7 +222,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -271,7 +271,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -304,7 +304,7 @@ describe("the GuEC2App pattern", function () {
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
           certificateProps: {
-            domainName: "code-guardian.com",
+            domainName: "domain-name-for-your-application.example",
           },
           scaling: {
             minimumInstances: 1,
@@ -328,7 +328,7 @@ describe("the GuEC2App pattern", function () {
           app: app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
           certificateProps: {
-            domainName: "code-guardian.com",
+            domainName: "domain-name-for-your-application.example",
           },
           scaling: {
             minimumInstances: 1,
@@ -350,7 +350,7 @@ describe("the GuEC2App pattern", function () {
       app: app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -437,7 +437,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -464,7 +464,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -503,7 +503,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -602,7 +602,7 @@ describe("the GuEC2App pattern", function () {
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -631,7 +631,7 @@ describe("the GuEC2App pattern", function () {
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -660,7 +660,7 @@ describe("the GuEC2App pattern", function () {
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -690,7 +690,7 @@ describe("the GuEC2App pattern", function () {
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -721,7 +721,7 @@ describe("the GuEC2App pattern", function () {
         app,
         instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
         certificateProps: {
-          domainName: "code-guardian.com",
+          domainName: "domain-name-for-your-application.example",
         },
         scaling: {
           minimumInstances: 1,
@@ -735,7 +735,7 @@ describe("the GuEC2App pattern", function () {
       });
     }).toThrowError(
       "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+      "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
     );
   });
 
@@ -748,7 +748,7 @@ describe("the GuEC2App pattern", function () {
       app,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,

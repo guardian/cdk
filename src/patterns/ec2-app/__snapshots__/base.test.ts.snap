@@ -178,7 +178,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
     "CertificateTestguec2app86EE2D42": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "code-guardian.com",
+        "DomainName": "domain-name-for-your-application.example",
         "Tags": [
           {
             "Key": "App",
@@ -968,7 +968,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
     "CertificateTestguec2app86EE2D42": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "code-guardian.com",
+        "DomainName": "domain-name-for-your-application.example",
         "Tags": [
           {
             "Key": "App",

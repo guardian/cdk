@@ -30,7 +30,7 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
@@ -62,7 +62,7 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
       },
       scaling: {
         minimumInstances: 1,
