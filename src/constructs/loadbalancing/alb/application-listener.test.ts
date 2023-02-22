@@ -162,4 +162,30 @@ describe("The GuHttpsApplicationListener class", () => {
       ],
     });
   });
+
+  test("sets the port to 8080 if a certificate is not supplied", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      loadBalancer: getLoadBalancer(stack),
+      targetGroup: getAppTargetGroup(stack),
+      ...app,
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+      Port: 8080,
+    });
+  });
+
+  test("sets the protocol to http if a certificate is not supplied", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuHttpsApplicationListener(stack, "ApplicationListener", {
+      loadBalancer: getLoadBalancer(stack),
+      targetGroup: getAppTargetGroup(stack),
+      ...app,
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+      Protocol: "HTTP",
+    });
+  });
 });
