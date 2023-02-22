@@ -66,11 +66,11 @@ describe("Framework level EC2 app patterns", () => {
     });
 
     Template.fromStack(stack).hasResource("AWS::EC2::SecurityGroup", {
-      "Properties": {
-        "GroupDescription": "Allow restricted ingress from CIDR ranges",
-        "SecurityGroupIngress": Match.absent(),
+      Properties: {
+        GroupDescription: "Allow restricted ingress from CIDR ranges",
+        SecurityGroupIngress: Match.absent(),
       },
-      "Type": "AWS::EC2::SecurityGroup"
+      Type: "AWS::EC2::SecurityGroup",
     });
   });
 });

@@ -374,17 +374,20 @@ export class GuEc2App extends Construct {
     if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
       throw new Error(
         "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
       );
     }
 
     AppAccess.validate(access);
 
-    const certificate = typeof certificateProps !== "undefined" ? new GuCertificate(scope, {
-      app,
-      domainName: certificateProps.domainName,
-      hostedZoneId: certificateProps.hostedZoneId,
-    }) : undefined;
+    const certificate =
+      typeof certificateProps !== "undefined"
+        ? new GuCertificate(scope, {
+            app,
+            domainName: certificateProps.domainName,
+            hostedZoneId: certificateProps.hostedZoneId,
+          })
+        : undefined;
 
     const maybePrivateConfigPolicy =
       typeof userData !== "string" && userData.configuration

@@ -4,7 +4,7 @@ The plan is to sprinkle some framework specific tooling into them.
 For example, a Play app should come with the infrastructure for https://github.com/guardian/play-secret-rotation.
  */
 
-import { AccessScope } from '../../constants';
+import { AccessScope } from "../../constants";
 import type { GuStack } from "../../constructs/core";
 import type { GuDomainName } from "../../types";
 import type { GuEc2AppProps } from "./base";
@@ -22,7 +22,11 @@ export class GuPlayWorkerApp extends GuEc2App {
   static readonly PORT: number = 9000;
 
   constructor(scope: GuStack, props: GuEc2WorkerProps) {
-    super(scope, { ...props, applicationPort: GuPlayApp.PORT, access: { scope: AccessScope.INTERNAL, cidrRanges: [] } });
+    super(scope, {
+      ...props,
+      applicationPort: GuPlayApp.PORT,
+      access: { scope: AccessScope.INTERNAL, cidrRanges: [] },
+    });
   }
 }
 
