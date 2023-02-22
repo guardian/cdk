@@ -1,8 +1,8 @@
-import { Template } from "aws-cdk-lib/assertions";
+import { Template, Match } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuNodeApp, GuPlayApp } from "./framework";
+import { GuNodeApp, GuPlayApp, GuPlayWorkerApp } from "./framework";
 
 describe("Framework level EC2 app patterns", () => {
   test("GuNodeApp exposes port 3000", function () {
@@ -46,6 +46,31 @@ describe("Framework level EC2 app patterns", () => {
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroupIngress", {
       FromPort: 9000,
+    });
+  });
+
+  it("GuPlayWorkerApp has no internal or external access", function () {
+    const stack = simpleGuStackForTesting();
+    new GuPlayWorkerApp(stack, {
+      app: "PlayApp",
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "code-guardian.com",
+        hostedZoneId: "id123",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+    });
+
+    Template.fromStack(stack).hasResource("AWS::EC2::SecurityGroup", {
+      "Properties": {
+        "GroupDescription": "Allow restricted ingress from CIDR ranges",
+        "SecurityGroupIngress": Match.absent(),
+      },
+      "Type": "AWS::EC2::SecurityGroup"
     });
   });
 });
