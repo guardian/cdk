@@ -735,7 +735,7 @@ describe("the GuEC2App pattern", function () {
       });
     }).toThrowError(
       "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-      "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
     );
   });
 
