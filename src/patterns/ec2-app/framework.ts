@@ -5,10 +5,11 @@ For example, a Play app should come with the infrastructure for https://github.c
  */
 
 import type { GuStack } from "../../constructs/core";
+import { GuDomainName } from "../../types";
 import type { GuEc2AppProps } from "./base";
 import { GuEc2App } from "./base";
 
-type GuEc2FrameworkAppProps = Omit<GuEc2AppProps, "applicationPort">;
+type GuEc2FrameworkAppProps = Omit<GuEc2AppProps, "applicationPort"> & { certificateProps: GuDomainName };
 
 /**
  * Creates an instance of [[`GuEc2App`]], with an application port of 9000.
