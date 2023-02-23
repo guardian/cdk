@@ -24,7 +24,7 @@ export class GuPlayWorkerApp extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2WorkerProps) {
     super(scope, {
       ...props,
-      applicationPort: GuPlayApp.PORT,
+      applicationPort: GuPlayWorkerApp.PORT,
       access: { scope: AccessScope.INTERNAL, cidrRanges: [] },
     });
   }
