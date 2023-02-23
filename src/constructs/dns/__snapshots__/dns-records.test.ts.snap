@@ -12,7 +12,7 @@ exports[`The GuCname construct should create the correct resources with minimal 
   "Resources": {
     "TestRecord": {
       "Properties": {
-        "Name": "xyz.code-guardian.com",
+        "Name": "xyz.domain-name-for-your-application.example",
         "RecordType": "CNAME",
         "ResourceRecords": [
           "apple.example.com",

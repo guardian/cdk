@@ -14,7 +14,7 @@ describe("Framework level EC2 app patterns", () => {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
         hostedZoneId: "id123",
       },
       scaling: {
@@ -36,7 +36,7 @@ describe("Framework level EC2 app patterns", () => {
       monitoringConfiguration: { noMonitoring: true },
       userData: "#!/bin/dev foobarbaz",
       certificateProps: {
-        domainName: "code-guardian.com",
+        domainName: "domain-name-for-your-application.example",
         hostedZoneId: "id123",
       },
       scaling: {

@@ -796,7 +796,7 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
     "CertificateTestguec2app86EE2D42": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "code-guardian.com",
+        "DomainName": "domain-name-for-your-application.example",
         "Tags": [
           {
             "Key": "App",
@@ -2208,7 +2208,7 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
     "CertificateTestguec2app86EE2D42": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "code-guardian.com",
+        "DomainName": "domain-name-for-your-application.example",
         "Tags": [
           {
             "Key": "App",

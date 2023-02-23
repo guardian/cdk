@@ -45,7 +45,7 @@ describe("The GuCname construct", () => {
   it("should create the correct resources with minimal config", () => {
     const stack = simpleGuStackForTesting();
     new GuCname(stack, "TestRecord", {
-      domainName: "xyz.code-guardian.com",
+      domainName: "xyz.domain-name-for-your-application.example",
       app: "my-test-app",
       resourceRecord: "apple.example.com",
       ttl: Duration.hours(1),
