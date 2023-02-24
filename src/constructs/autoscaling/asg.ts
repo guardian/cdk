@@ -98,7 +98,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
 
     // Generate an ID unique to this app
-    const launchTemplateId =`${scope.stack}-${scope.stage}-${app}`
+    const launchTemplateId = `${scope.stack}-${scope.stage}-${app}`;
     const launchTemplate = new LaunchTemplate(scope, launchTemplateId, {
       blockDevices,
       instanceType,

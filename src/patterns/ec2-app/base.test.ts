@@ -579,19 +579,14 @@ describe("the GuEC2App pattern", function () {
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "PlayApp" },
       propagateAtLaunch: true,
-      additionalTags: [
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-      ],
+      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
 
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "NodeApp" },
       propagateAtLaunch: true,
-      additionalTags: [
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-      ],
+      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
-    
   });
 
   it("can be configured with access logging", function () {
@@ -760,9 +755,7 @@ describe("the GuEC2App pattern", function () {
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app },
       propagateAtLaunch: true,
-      additionalTags: [
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-      ],
+      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
   });
 });
