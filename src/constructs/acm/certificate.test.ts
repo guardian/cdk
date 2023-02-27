@@ -7,7 +7,7 @@ describe("The GuCertificate class", () => {
     const stack = simpleGuStackForTesting();
     new GuCertificate(stack, {
       app: "testing",
-      domainName: "code-guardian.com",
+      domainName: "domain-name-for-your-application.example",
       hostedZoneId: "id123",
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
@@ -17,7 +17,7 @@ describe("The GuCertificate class", () => {
     const stack = simpleGuStackForTesting();
     new GuCertificate(stack, {
       app: "testing",
-      domainName: "code-guardian.com",
+      domainName: "domain-name-for-your-application.example",
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });

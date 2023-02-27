@@ -24,7 +24,7 @@ const getLoadBalancer = (stack: GuStack): GuApplicationLoadBalancer => {
 const getCertificate = (stack: GuStack): GuCertificate => {
   return new GuCertificate(stack, {
     ...app,
-    domainName: "code-guardian.com",
+    domainName: "domain-name-for-your-application.example",
   });
 };
 
