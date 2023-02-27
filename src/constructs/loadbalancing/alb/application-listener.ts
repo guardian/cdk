@@ -30,7 +30,7 @@ export interface GuHttpsApplicationListenerProps
   extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">,
     AppIdentity {
   targetGroup: GuApplicationTargetGroup;
-  certificate: GuCertificate;
+  certificate?: GuCertificate;
 }
 
 /**
@@ -45,14 +45,16 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
     const { certificate, targetGroup } = props;
 
     const mergedProps: GuApplicationListenerProps = {
-      port: 443,
-      protocol: ApplicationProtocol.HTTPS,
+      port: certificate ? 443 : 8080,
+      protocol: certificate ? ApplicationProtocol.HTTPS : ApplicationProtocol.HTTP,
       ...props,
-      certificates: [
-        {
-          certificateArn: certificate.certificateArn,
-        },
-      ],
+      certificates: certificate
+        ? [
+            {
+              certificateArn: certificate.certificateArn,
+            },
+          ]
+        : [],
       defaultAction: ListenerAction.forward([targetGroup]),
     };
 

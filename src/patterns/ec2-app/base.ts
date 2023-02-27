@@ -141,7 +141,7 @@ export interface GuEc2AppProps extends AppIdentity {
   accessLogging?: AccessLoggingProps;
   blockDevices?: BlockDevice[];
   scaling: GuAsgCapacity;
-  certificateProps: GuDomainName;
+  certificateProps?: GuDomainName;
   withoutImdsv2?: boolean;
   imageRecipe?: string | AmigoProps;
   vpc?: IVpc;
@@ -339,7 +339,7 @@ export class GuEc2App extends Construct {
    * in the short term.
    * */
   public readonly vpc: IVpc;
-  public readonly certificate: GuCertificate;
+  public readonly certificate?: GuCertificate;
   public readonly loadBalancer: GuApplicationLoadBalancer;
   public readonly autoScalingGroup: GuAutoScalingGroup;
   public readonly listener: GuHttpsApplicationListener;
@@ -354,7 +354,7 @@ export class GuEc2App extends Construct {
       applicationLogging = { enabled: false },
       applicationPort,
       blockDevices,
-      certificateProps: { domainName, hostedZoneId },
+      certificateProps,
       instanceType,
       monitoringConfiguration,
       roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
@@ -380,11 +380,14 @@ export class GuEc2App extends Construct {
 
     AppAccess.validate(access);
 
-    const certificate = new GuCertificate(scope, {
-      app,
-      domainName,
-      hostedZoneId,
-    });
+    const certificate =
+      typeof certificateProps !== "undefined"
+        ? new GuCertificate(scope, {
+            app,
+            domainName: certificateProps.domainName,
+            hostedZoneId: certificateProps.hostedZoneId,
+          })
+        : undefined;
 
     const maybePrivateConfigPolicy =
       typeof userData !== "string" && userData.configuration
@@ -468,7 +471,7 @@ export class GuEc2App extends Construct {
       certificate,
       targetGroup,
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
-      open: access.scope === AccessScope.PUBLIC,
+      open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
