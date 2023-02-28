@@ -69,23 +69,17 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     const {
       app,
       additionalSecurityGroups = [],
+      blockDevices,
       imageId = new GuAmiParameter(scope, { app }),
       imageRecipe,
+      instanceType,
       minimumInstances,
       maximumInstances,
+      role = new GuInstanceRole(scope, { app }),
       targetGroup,
+      userData: userDataLike,
       vpc,
       withoutImdsv2 = false,
-    } = props;
-
-    // Omit userData, instanceType, role  from AutoScalingGroupProps
-    // As this are specified within the LaunchTemplate
-    const {
-      blockDevices,
-      role = new GuInstanceRole(scope, { app }),
-      instanceType,
-      userData: userDataLike,
-      ...asgProps
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -126,14 +120,21 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       launchTemplate.connections.addSecurityGroup(sg)
     );
 
-    const mergedProps: AutoScalingGroupProps = {
-      ...asgProps,
-      minCapacity: minimumInstances,
-      maxCapacity: maximumInstances ?? minimumInstances * 2,
+    const asgProps = {
+      ...props,
       launchTemplate,
+      maxCapacity: maximumInstances ?? minimumInstances * 2,
+      minCapacity: minimumInstances,
+
+      // Omit userData, instanceType, blockDevices & role from asgProps
+      // As this are specified by the LaunchTemplate and must not be duplicated
+      blockDevices: undefined,
+      instanceType: undefined,
+      role: undefined,
+      userData: undefined,
     };
 
-    super(scope, id, mergedProps);
+    super(scope, id, asgProps);
 
     this.app = app;
     this.amiParameter = imageId;
