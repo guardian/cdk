@@ -481,16 +481,18 @@ describe("the GuEC2App pattern", function () {
       ],
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      BlockDeviceMappings: [
-        {
-          DeviceName: "/dev/sda1",
-          Ebs: {
-            VolumeSize: 8,
-            VolumeType: "gp2",
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        BlockDeviceMappings: [
+          {
+            DeviceName: "/dev/sda1",
+            Ebs: {
+              VolumeSize: 8,
+              VolumeType: "gp2",
+            },
           },
-        },
-      ],
+        ],
+      },
     });
   });
 
@@ -577,19 +579,13 @@ describe("the GuEC2App pattern", function () {
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "PlayApp" },
       propagateAtLaunch: true,
-      additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupPlayApp" },
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-      ],
+      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
 
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "NodeApp" },
       propagateAtLaunch: true,
-      additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupNodeApp" },
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-      ],
+      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
   });
 
@@ -674,7 +670,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "test-gu-ec2-app.service" },
       ],
@@ -704,7 +699,6 @@ describe("the GuEC2App pattern", function () {
       appIdentity: { app },
       propagateAtLaunch: true,
       additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupTestguec2app" },
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
       ],
@@ -761,10 +755,7 @@ describe("the GuEC2App pattern", function () {
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app },
       propagateAtLaunch: true,
-      additionalTags: [
-        { Key: "Name", Value: "Test/AutoScalingGroupApp" },
-        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
-      ],
+      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
   });
 });

@@ -637,8 +637,8 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
-      "GuAutoScalingGroup",
       "GuWazuhAccess",
+      "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -693,8 +693,16 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchConfigurationName": {
-          "Ref": "AutoScalingGroupTestguec2appLaunchConfigA7394577",
+        "LaunchTemplate": {
+          "LaunchTemplateId": {
+            "Ref": "teststackTESTtestguec2appAA7F41BE",
+          },
+          "Version": {
+            "Fn::GetAtt": [
+              "teststackTESTtestguec2appAA7F41BE",
+              "LatestVersionNumber",
+            ],
+          },
         },
         "MaxSize": "2",
         "MinSize": "1",
@@ -722,11 +730,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
             },
           },
           {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Test/AutoScalingGroupTestguec2app",
-          },
-          {
             "Key": "Stack",
             "PropagateAtLaunch": true,
             "Value": "test-stack",
@@ -747,51 +750,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
-    },
-    "AutoScalingGroupTestguec2appInstanceProfile69E61F9E": {
-      "Properties": {
-        "Roles": [
-          {
-            "Ref": "InstanceRoleTestguec2appC325BE42",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "AutoScalingGroupTestguec2appLaunchConfigA7394577": {
-      "DependsOn": [
-        "InstanceRoleTestguec2appC325BE42",
-      ],
-      "Properties": {
-        "IamInstanceProfile": {
-          "Ref": "AutoScalingGroupTestguec2appInstanceProfile69E61F9E",
-        },
-        "ImageId": {
-          "Ref": "AMITestguec2app",
-        },
-        "InstanceType": "t4g.medium",
-        "MetadataOptions": {
-          "HttpTokens": "required",
-        },
-        "SecurityGroups": [
-          {
-            "Fn::GetAtt": [
-              "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
-              "GroupId",
-            ],
-          },
-          {
-            "Fn::GetAtt": [
-              "WazuhSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": {
-          "Fn::Base64": "#!/bin/dev foobarbaz",
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
     "CertificateTestguec2app86EE2D42": {
       "DeletionPolicy": "Retain",
@@ -1721,6 +1679,27 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
+    "LoadBalancerTestguec2appSecurityGrouptoTestWazuhSecurityGroup8092AEDC3000E12CA15B": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
     "MapiFrontsAvailabilityFastBurnCompositeAlarmA8F736A8": {
       "Properties": {
         "AlarmActions": [
@@ -2026,6 +2005,155 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "WazuhSecurityGroupfromTestLoadBalancerTestguec2appSecurityGroup5F9E11C9300023EFEFE4": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "teststackTESTtestguec2appAA7F41BE": {
+      "Properties": {
+        "LaunchTemplateData": {
+          "IamInstanceProfile": {
+            "Arn": {
+              "Fn::GetAtt": [
+                "teststackTESTtestguec2appProfileC5759753",
+                "Arn",
+              ],
+            },
+          },
+          "ImageId": {
+            "Ref": "AMITestguec2app",
+          },
+          "InstanceType": "t4g.medium",
+          "MetadataOptions": {
+            "HttpTokens": "required",
+          },
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
+                "GroupId",
+              ],
+            },
+            {
+              "Fn::GetAtt": [
+                "WazuhSecurityGroup",
+                "GroupId",
+              ],
+            },
+          ],
+          "TagSpecifications": [
+            {
+              "ResourceType": "instance",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/cdk",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Test/test-stack-TEST-test-gu-ec2-app",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "test-stack",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "TEST",
+                },
+              ],
+            },
+            {
+              "ResourceType": "volume",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/cdk",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Test/test-stack-TEST-test-gu-ec2-app",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "test-stack",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "TEST",
+                },
+              ],
+            },
+          ],
+          "UserData": {
+            "Fn::Base64": "#!/bin/dev foobarbaz",
+          },
+        },
+        "TagSpecifications": [
+          {
+            "ResourceType": "launch-template",
+            "Tags": [
+              {
+                "Key": "gu:cdk:version",
+                "Value": "TEST",
+              },
+              {
+                "Key": "gu:repo",
+                "Value": "guardian/cdk",
+              },
+              {
+                "Key": "Name",
+                "Value": "Test/test-stack-TEST-test-gu-ec2-app",
+              },
+              {
+                "Key": "Stack",
+                "Value": "test-stack",
+              },
+              {
+                "Key": "Stage",
+                "Value": "TEST",
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::EC2::LaunchTemplate",
+    },
+    "teststackTESTtestguec2appProfileC5759753": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestguec2appC325BE42",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
   },
 }
 `;
@@ -2049,8 +2177,8 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
-      "GuAutoScalingGroup",
       "GuWazuhAccess",
+      "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -2105,8 +2233,16 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchConfigurationName": {
-          "Ref": "AutoScalingGroupTestguec2appLaunchConfigA7394577",
+        "LaunchTemplate": {
+          "LaunchTemplateId": {
+            "Ref": "teststackTESTtestguec2appAA7F41BE",
+          },
+          "Version": {
+            "Fn::GetAtt": [
+              "teststackTESTtestguec2appAA7F41BE",
+              "LatestVersionNumber",
+            ],
+          },
         },
         "MaxSize": "2",
         "MinSize": "1",
@@ -2134,11 +2270,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
             },
           },
           {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Test/AutoScalingGroupTestguec2app",
-          },
-          {
             "Key": "Stack",
             "PropagateAtLaunch": true,
             "Value": "test-stack",
@@ -2159,51 +2290,6 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
-    },
-    "AutoScalingGroupTestguec2appInstanceProfile69E61F9E": {
-      "Properties": {
-        "Roles": [
-          {
-            "Ref": "InstanceRoleTestguec2appC325BE42",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "AutoScalingGroupTestguec2appLaunchConfigA7394577": {
-      "DependsOn": [
-        "InstanceRoleTestguec2appC325BE42",
-      ],
-      "Properties": {
-        "IamInstanceProfile": {
-          "Ref": "AutoScalingGroupTestguec2appInstanceProfile69E61F9E",
-        },
-        "ImageId": {
-          "Ref": "AMITestguec2app",
-        },
-        "InstanceType": "t4g.medium",
-        "MetadataOptions": {
-          "HttpTokens": "required",
-        },
-        "SecurityGroups": [
-          {
-            "Fn::GetAtt": [
-              "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
-              "GroupId",
-            ],
-          },
-          {
-            "Fn::GetAtt": [
-              "WazuhSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": {
-          "Fn::Base64": "#!/bin/dev foobarbaz",
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
     "CertificateTestguec2app86EE2D42": {
       "DeletionPolicy": "Retain",
@@ -2965,6 +3051,27 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
+    "LoadBalancerTestguec2appSecurityGrouptoTestWazuhSecurityGroup8092AEDC3000E12CA15B": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
     "MapiFrontsLatencyFastBurnCompositeAlarmEBFA1AC4": {
       "Properties": {
         "AlarmActions": [
@@ -3269,6 +3376,155 @@ exports[`The ErrorBudgetAlarmExperimental construct should create the correct re
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "WazuhSecurityGroupfromTestLoadBalancerTestguec2appSecurityGroup5F9E11C9300023EFEFE4": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "teststackTESTtestguec2appAA7F41BE": {
+      "Properties": {
+        "LaunchTemplateData": {
+          "IamInstanceProfile": {
+            "Arn": {
+              "Fn::GetAtt": [
+                "teststackTESTtestguec2appProfileC5759753",
+                "Arn",
+              ],
+            },
+          },
+          "ImageId": {
+            "Ref": "AMITestguec2app",
+          },
+          "InstanceType": "t4g.medium",
+          "MetadataOptions": {
+            "HttpTokens": "required",
+          },
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
+                "GroupId",
+              ],
+            },
+            {
+              "Fn::GetAtt": [
+                "WazuhSecurityGroup",
+                "GroupId",
+              ],
+            },
+          ],
+          "TagSpecifications": [
+            {
+              "ResourceType": "instance",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/cdk",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Test/test-stack-TEST-test-gu-ec2-app",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "test-stack",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "TEST",
+                },
+              ],
+            },
+            {
+              "ResourceType": "volume",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/cdk",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Test/test-stack-TEST-test-gu-ec2-app",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "test-stack",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "TEST",
+                },
+              ],
+            },
+          ],
+          "UserData": {
+            "Fn::Base64": "#!/bin/dev foobarbaz",
+          },
+        },
+        "TagSpecifications": [
+          {
+            "ResourceType": "launch-template",
+            "Tags": [
+              {
+                "Key": "gu:cdk:version",
+                "Value": "TEST",
+              },
+              {
+                "Key": "gu:repo",
+                "Value": "guardian/cdk",
+              },
+              {
+                "Key": "Name",
+                "Value": "Test/test-stack-TEST-test-gu-ec2-app",
+              },
+              {
+                "Key": "Stack",
+                "Value": "test-stack",
+              },
+              {
+                "Key": "Stage",
+                "Value": "TEST",
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::EC2::LaunchTemplate",
+    },
+    "teststackTESTtestguec2appProfileC5759753": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestguec2appC325BE42",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
     },
   },
 }

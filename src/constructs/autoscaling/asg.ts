@@ -1,8 +1,8 @@
 import { Token } from "aws-cdk-lib";
 import { AutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
-import { OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
-import type { ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
+import { LaunchTemplate, OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
+import type { InstanceType, ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
 import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { GuAsgCapacity } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
@@ -33,6 +33,7 @@ export interface GuAutoScalingGroupProps
     GuAsgCapacity {
   imageId?: GuAmiParameter;
   imageRecipe?: string | AmigoProps;
+  instanceType: InstanceType;
   userData: UserData | string;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
@@ -68,8 +69,10 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     const {
       app,
       additionalSecurityGroups = [],
+      blockDevices,
       imageId = new GuAmiParameter(scope, { app }),
       imageRecipe,
+      instanceType,
       minimumInstances,
       maximumInstances,
       role = new GuInstanceRole(scope, { app }),
@@ -88,12 +91,11 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
 
     const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
 
-    const mergedProps: AutoScalingGroupProps = {
-      ...props,
-      minCapacity: minimumInstances,
-      maxCapacity: maximumInstances ?? minimumInstances * 2,
-      role,
-      requireImdsv2: !withoutImdsv2,
+    // Generate an ID unique to this app
+    const launchTemplateId = `${scope.stack}-${scope.stage}-${app}`;
+    const launchTemplate = new LaunchTemplate(scope, launchTemplateId, {
+      blockDevices,
+      instanceType,
       machineImage: {
         getImage: (): MachineImageConfig => {
           return {
@@ -103,22 +105,45 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
           };
         },
       },
-      userData,
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app, vpc }),
+      requireImdsv2: !withoutImdsv2,
+      userData,
+      role,
+    });
+
+    // Add Wazuh & additional consumer specified Security Groups
+    // Note: Launch templates via CDK allow specifying only one SG, so use connections
+    // https://github.com/aws/aws-cdk/issues/18712
+    [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) =>
+      launchTemplate.connections.addSecurityGroup(sg)
+    );
+
+    const asgProps = {
+      ...props,
+      launchTemplate,
+      maxCapacity: maximumInstances ?? minimumInstances * 2,
+      minCapacity: minimumInstances,
+
+      // Omit userData, instanceType, blockDevices & role from asgProps
+      // As this are specified by the LaunchTemplate and must not be duplicated
+      blockDevices: undefined,
+      instanceType: undefined,
+      role: undefined,
+      userData: undefined,
     };
 
-    super(scope, id, mergedProps);
+    super(scope, id, asgProps);
+
     this.app = app;
     this.amiParameter = imageId;
     this.imageRecipe = imageRecipe;
 
     targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 
-    [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) => this.addSecurityGroup(sg));
-
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
+
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group
     // leaves it to the default value, which is actually false.
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}

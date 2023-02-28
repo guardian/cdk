@@ -36,19 +36,21 @@ describe("GuUserData", () => {
       app: "testing",
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      UserData: {
-        "Fn::Base64": {
-          "Fn::Join": [
-            "",
-            [
-              "#!/bin/bash\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
-              {
-                Ref: "DistributionBucketName",
-              },
-              "/test-stack/TEST/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        UserData: {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
+                {
+                  Ref: "DistributionBucketName",
+                },
+                "/test-stack/TEST/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+              ],
             ],
-          ],
+          },
         },
       },
     });
@@ -80,27 +82,29 @@ describe("GuUserData", () => {
       app: "testing",
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-      UserData: {
-        "Fn::Base64": {
-          "Fn::Join": [
-            "",
-            [
-              "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://",
-              {
-                Ref: "PrivateConfigBucketName",
-              },
-              "/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://",
-              {
-                Ref: "PrivateConfigBucketName",
-              },
-              "/application.conf' '/etc/testing/application.conf'\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
-              {
-                Ref: "DistributionBucketName",
-              },
-              "/test-stack/TEST/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+    Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        UserData: {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\nmkdir -p $(dirname '/etc/testing/secrets.json')\naws s3 cp 's3://",
+                {
+                  Ref: "PrivateConfigBucketName",
+                },
+                "/secrets.json' '/etc/testing/secrets.json'\nmkdir -p $(dirname '/etc/testing/application.conf')\naws s3 cp 's3://",
+                {
+                  Ref: "PrivateConfigBucketName",
+                },
+                "/application.conf' '/etc/testing/application.conf'\nmkdir -p $(dirname '/testing/my-app.deb')\naws s3 cp 's3://",
+                {
+                  Ref: "DistributionBucketName",
+                },
+                "/test-stack/TEST/testing/my-app.deb' '/testing/my-app.deb'\ndpkg -i /testing/my-app.deb",
+              ],
             ],
-          ],
+          },
         },
       },
     });
