@@ -1,4 +1,5 @@
 import { AccountPrincipal } from "aws-cdk-lib/aws-iam";
+import { FASTLY_AWS_ACCOUNT_ID } from "../../constants/fastly-aws-account-id";
 import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core";
 import { GuPutS3ObjectsPolicy } from "./policies";
@@ -16,10 +17,6 @@ export interface GuFastlyLogsIamRoleProps {
    */
   path?: string;
 }
-
-// Fastly's AWS account ID is used as an external ID when creating the IAM role
-// See https://docs.fastly.com/en/guides/creating-an-aws-iam-role-for-fastly-logging
-const FASTLY_AWS_ACCOUNT_ID = "717331877981";
 
 /**
  * Construct which creates the required IAM resources to support Fastly logging to an S3 bucket.
