@@ -758,4 +758,43 @@ describe("the GuEC2App pattern", function () {
       additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
     });
   });
+
+  it("supports Google auth at the ALB", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "app";
+    const domain = "domain-name-for-your-application.example";
+
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: {
+        domainName: domain,
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      accessLogging: { enabled: false },
+      googleAuth: {
+        enabled: true,
+        domain,
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+      DefaultActions: [
+        {
+          Type: "authenticate-cognito",
+          Order: 1,
+        },
+        {
+          Type: "forward",
+          Order: 2,
+        },
+      ],
+    });
+  });
 });

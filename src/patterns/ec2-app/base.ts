@@ -1,10 +1,21 @@
-import { Duration, Tags } from "aws-cdk-lib";
+/* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
+import { Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
+import {
+  ProviderAttribute,
+  UserPool,
+  UserPoolClientIdentityProvider,
+  UserPoolIdentityProviderGoogle,
+} from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -17,6 +28,7 @@ import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "..
 import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
+import { GuLambdaFunction } from "../../constructs/lambda";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
@@ -182,6 +194,66 @@ export interface GuEc2AppProps extends AppIdentity {
    * discouraged) to limit to a subset of the available subnets.
    */
   publicSubnets?: ISubnet[];
+
+  /**
+   * Configure Google Auth.
+   */
+  googleAuth?: {
+    /**
+     * Enables Google Auth (via Cognito). **Additional MANUAL steps required -
+     * see below.**
+     *
+     * Limits access to members of the allowed Google groups.
+     *
+     * Note, this does not currently support simultaneous machine access, so
+     * only set to true if you only require staff access to your service, or are
+     * supporting machine access in some other way.
+     *
+     * MANUAL STEPS: to get this to work, we need a Google Project and
+     * associated credentials. Full instructions can be found here:
+     *
+     * https://docs.google.com/document/d/1_k1FSE52AZHXufWLTiKTI3xy5cGpziyHazSHTKrYfco/edit?usp=sharing
+     *
+     * DevX hope to automate this process in the near future.
+     */
+    enabled: true;
+    /**
+     * The domain users will access your service.
+     *
+     * Set this to the same as for certificateProps.
+     */
+    domain: string;
+    /**
+     * Groups used for membership checks.
+     *
+     * If specified, cannot be empty. Users must be a member of at least one
+     * group to gain access.
+     *
+     * @defaultValue [`engineering@theguardian.com`]
+     */
+    allowedGroups?: string[];
+    /**
+     * SSM (Parameter Store) path for the Client ID for your Google Project
+     * oauth2 client.
+     *
+     * @see `googleAuth.enabled` for how to generate.
+     *
+     * @defaultValue /:STAGE/:stack/:app/google-auth-client-id
+     */
+    clientIDSSMPath?: string;
+    /**
+     * Secrets Manager path for the Client Secret for your Google Project oauth2
+     * client.
+     *
+     * @see `googleAuth.enabled` for how to generate.
+     *
+     * Nb. we cannot use Parameter Store here unfortunately, as Cloudformation
+     * does not, with some exceptions, support lookup from secure parameters.
+     *
+     * @defaultValue /:STAGE/:stack/:app/google-auth-client-secret
+     */
+    clientSecretSecretsManagerPath?: string;
+  };
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -375,6 +447,115 @@ export class GuEc2App extends Construct {
           snsTopicName,
         });
       }
+    }
+
+    if (props.googleAuth?.enabled) {
+      const prefix = `/${scope.stage}/${scope.stack}/${app}`;
+
+      const {
+        allowedGroups = ["engineering@theguardian.com"],
+        clientIDSSMPath = `${prefix}/google-auth-client-id`,
+        clientSecretSecretsManagerPath = `${prefix}/google-auth-client-secret`,
+      } = props.googleAuth;
+
+      if (allowedGroups.length < 1) {
+        throw new Error("googleAuth.allowedGroups cannot be empty!");
+      }
+
+      // See https://github.com/guardian/cognito-gatekeeper for the source code
+      // here.
+      // ARN format is: arn:aws:lambda:aws-region:acct-id:function:helloworld.
+      const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path}:function:deploy-PROD-gatekeeper-lambda`;
+
+      // Note, handler and filename must match here:
+      // https://github.com/guardian/cognito-gatekeeper.
+      const authLambda = new GuLambdaFunction(scope, "auth-lambda", {
+        app: app,
+        memorySize: 128,
+        handler: "devx-cognito-lambda-amd64-v1",
+        runtime: Runtime.GO_1_X,
+        fileName: "devx-cognito-lambda-amd64-v1.zip",
+        bucketNamePath: NAMED_SSM_PARAMETER_PATHS.OrganisationDistributionBucket.path,
+        architecture: Architecture.X86_64,
+        environment: {
+          ALLOWED_GROUPS: allowedGroups.join(","),
+          GATEKEEPER_FUNCTION_ARN: gatekeeperFunctionArn,
+        },
+      });
+
+      authLambda.addToRolePolicy(
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ["lambda:InvokeFunction"],
+          resources: [gatekeeperFunctionArn],
+        })
+      );
+
+      // Cognito user pool. We require both lambdas: pre-sign-up runs the first
+      // time a user attempts to authenticate (before they exist in the User
+      // Pool); pre-auth runs in subsequent authentication flows.
+      const userPool = new UserPool(this, "user-pool", {
+        lambdaTriggers: {
+          preAuthentication: authLambda,
+          preSignUp: authLambda,
+        },
+      });
+
+      const userPoolDomain = userPool.addDomain("domain", {
+        cognitoDomain: {
+          // Must be unique (as global across AWS)
+          domainPrefix: `com-gu-${app.toLowerCase()}-${scope.stage.toLowerCase()}`,
+        },
+      });
+
+      const clientIDSSMParameter = StringParameter.fromStringParameterName(
+        scope,
+        "client-id-parameter",
+        clientIDSSMPath
+      );
+
+      const userPoolIdp = new UserPoolIdentityProviderGoogle(scope, "google-idp", {
+        userPool: userPool,
+        clientId: clientIDSSMParameter.stringValue,
+        clientSecret: SecretValue.secretsManager(clientSecretSecretsManagerPath).toString(),
+        attributeMapping: {
+          email: ProviderAttribute.GOOGLE_EMAIL,
+          givenName: ProviderAttribute.GOOGLE_GIVEN_NAME,
+          familyName: ProviderAttribute.GOOGLE_FAMILY_NAME,
+          profilePicture: ProviderAttribute.GOOGLE_PICTURE,
+          custom: {
+            name: ProviderAttribute.GOOGLE_NAME,
+          },
+        },
+        scopes: ["openid", "email", "profile"],
+      });
+
+      const userPoolClient = userPool.addClient("alb-client", {
+        supportedIdentityProviders: [UserPoolClientIdentityProvider.GOOGLE],
+        generateSecret: true,
+        oAuth: {
+          callbackUrls: [`https://${props.googleAuth.domain}/oauth2/idpresponse`],
+        },
+
+        // Note: id and access validity token validity cannot be less than one
+        // hour (this is the cognito cookie duration). To quickly invalidate
+        // credentials, disable the user in Cognito.
+        idTokenValidity: Duration.hours(1),
+        accessTokenValidity: Duration.hours(1),
+        refreshTokenValidity: Duration.days(7),
+      });
+
+      userPoolClient.node.addDependency(userPoolIdp);
+
+      listener.addAction("CognitoAuth", {
+        action: new AuthenticateCognitoAction({
+          userPool: userPool,
+          userPoolClient: userPoolClient,
+          userPoolDomain: userPoolDomain,
+          next: ListenerAction.forward([targetGroup]),
+          sessionTimeout: Duration.minutes(15),
+        }),
+      });
     }
 
     this.vpc = vpc;
