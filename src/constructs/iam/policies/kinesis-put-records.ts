@@ -1,6 +1,7 @@
-import { GuStack } from "../../core";
-import { GuKinesisStream } from "../../kinesis";
-import { GuAllowPolicy, GuNoStatementsPolicyProps } from "./base-policy";
+import type { GuStack } from "../../core";
+import type { GuKinesisStream } from "../../kinesis";
+import type { GuNoStatementsPolicyProps } from "./base-policy";
+import { GuAllowPolicy } from "./base-policy";
 
 export interface GuKinesisPutRecordsPolicyProps extends GuNoStatementsPolicyProps {
   stream: GuKinesisStream;

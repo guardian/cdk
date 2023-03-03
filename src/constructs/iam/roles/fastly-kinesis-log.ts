@@ -1,7 +1,8 @@
 import { AccountPrincipal } from "aws-cdk-lib/aws-iam";
 import { FASTLY_AWS_ACCOUNT_ID } from "../../../constants/fastly-aws-account-id";
-import { GuFastlyCustomerIdParameter, GuStack } from "../../core";
-import { GuKinesisStream } from "../../kinesis";
+import type { GuStack } from "../../core";
+import { GuFastlyCustomerIdParameter } from "../../core";
+import type { GuKinesisStream } from "../../kinesis";
 import { GuKinesisPutRecordsPolicy } from "../policies/kinesis-put-records";
 import { GuRole } from "./roles";
 
@@ -30,12 +31,12 @@ export class GuFastlyKinesisLogRole extends GuRole {
     const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
 
     super(scope, id, {
-      roleName: props?.roleName,
+      roleName: props.roleName,
       assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
       externalIds: [fastlyCustomerId],
     });
 
-    let policy = new GuKinesisPutRecordsPolicy(scope, "GuKinesisPutRecordsPolicy", {
+    const policy = new GuKinesisPutRecordsPolicy(scope, "GuKinesisPutRecordsPolicy", {
       stream: props.stream,
     });
 
