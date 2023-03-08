@@ -30,6 +30,25 @@ describe("The GuAlarm class", () => {
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
+  const snsActionsCFN = [
+    {
+      "Fn::Join": [
+        "",
+        [
+          "arn:aws:sns:",
+          {
+            Ref: "AWS::Region",
+          },
+          ":",
+          {
+            Ref: "AWS::AccountId",
+          },
+          ":alerts-topic",
+        ],
+      ],
+    },
+  ];
+
   it("should send alerts to the provided SNS Topic", () => {
     const stack = simpleGuStackForTesting();
     new GuAlarm(stack, "alarm", {
@@ -41,26 +60,36 @@ describe("The GuAlarm class", () => {
       threshold: 1,
       evaluationPeriods: 1,
       snsTopicName: "alerts-topic",
+      okAction: false,
+    });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::CloudWatch::Alarm", {
+      AlarmActions: snsActionsCFN,
+    });
+    template.resourcePropertiesCountIs(
+      "AWS::CloudWatch::Alarm",
+      {
+        OkActions: snsActionsCFN,
+      },
+      0
+    );
+  });
+
+  it("should send OK alerts to the provided SNS Topic, if `okAction: true`", () => {
+    const stack = simpleGuStackForTesting();
+    new GuAlarm(stack, "alarm", {
+      app: "testing",
+      alarmName: `Alarm in ${stack.stage}`,
+      alarmDescription: "It's broken",
+      metric: lambda(stack).metricErrors(),
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      threshold: 1,
+      evaluationPeriods: 1,
+      snsTopicName: "alerts-topic",
+      okAction: true,
     });
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
-      AlarmActions: [
-        {
-          "Fn::Join": [
-            "",
-            [
-              "arn:aws:sns:",
-              {
-                Ref: "AWS::Region",
-              },
-              ":",
-              {
-                Ref: "AWS::AccountId",
-              },
-              ":alerts-topic",
-            ],
-          ],
-        },
-      ],
+      OKActions: snsActionsCFN,
     });
   });
 });

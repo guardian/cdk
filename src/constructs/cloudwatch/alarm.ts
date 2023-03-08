@@ -7,6 +7,7 @@ import type { AppIdentity, GuStack } from "../core";
 
 export interface GuAlarmProps extends AlarmProps, AppIdentity {
   snsTopicName: string;
+  okAction?: boolean;
 }
 
 export interface Http5xxAlarmProps
@@ -37,12 +38,15 @@ export interface Http5xxAlarmProps
 export class GuAlarm extends Alarm {
   constructor(scope: GuStack, id: string, props: GuAlarmProps) {
     const { region, account } = scope;
-    const { snsTopicName, actionsEnabled = true } = props;
+    const { snsTopicName, actionsEnabled = true, okAction } = props;
 
     super(scope, id, { ...props, actionsEnabled });
 
     const topicArn: string = `arn:aws:sns:${region}:${account}:${snsTopicName}`;
     const snsTopic: ITopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, topicArn);
     this.addAlarmAction(new SnsAction(snsTopic));
+    if (okAction) {
+      this.addOkAction(new SnsAction(snsTopic));
+    }
   }
 }
