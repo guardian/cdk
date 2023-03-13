@@ -16,30 +16,6 @@
 <li><a href="../modules/patterns.html">patterns</a></li>
 <li><a href="patterns.GuEc2AppProps.html">GuEc2AppProps</a></li></ul>
 <h1>Interface GuEc2AppProps</h1></div>
-<section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Configuration options for the [[<code>GuEc2App</code>]] pattern.</p>
-<p>To grant EC2 instances additional IAM permissions, use the <code>roleConfiguration</code> prop. For example,
-to allow your app to write to DynamoDB:</p>
-<pre><code class="language-typescript"><span class="hl-6">// other props</span><br/><span class="hl-14">roleConfiguration</span><span class="hl-1">: {</span><br/><span class="hl-1">  </span><span class="hl-14">additionalPolicies</span><span class="hl-1">: [</span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuDynamoDBWritePolicy</span><span class="hl-1">(</span><span class="hl-0">stack</span><span class="hl-1">, </span><span class="hl-5">&quot;DynamoTable&quot;</span><span class="hl-1">, { </span><span class="hl-0">tableName:</span><span class="hl-1"> </span><span class="hl-5">&quot;my-dynamo-table&quot;</span><span class="hl-1"> })],</span><br/><span class="hl-1">}</span>
-</code></pre>
-<p>To create alarms (recommended), use:</p>
-<pre><code class="language-typescript"><span class="hl-6">// other props</span><br/><span class="hl-14">monitoringConfiguration</span><span class="hl-1">: {</span><br/><span class="hl-1">  </span><span class="hl-14">snsTopicName</span><span class="hl-1">: </span><span class="hl-5">&quot;alerts-topic-for-my-team&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-14">http5xxAlarm</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-14">tolerated5xxPercentage</span><span class="hl-1">: </span><span class="hl-10">1</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-14">unhealthyInstancesAlarm</span><span class="hl-1">: </span><span class="hl-2">true</span><span class="hl-1">,</span><br/><span class="hl-1">}</span>
-</code></pre>
-<p>To opt out of creating alarms, use:</p>
-<pre><code class="language-typescript"><span class="hl-6">// other props</span><br/><span class="hl-14">monitoringConfiguration</span><span class="hl-1">: { </span><span class="hl-14">noMonitoring</span><span class="hl-1">: </span><span class="hl-2">true</span><span class="hl-1"> }</span>
-</code></pre>
-<p>To automatically ship application logs from <code>stdout</code> to ELK, use:</p>
-<pre><code class="language-typescript"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-6">// other props</span><br/><span class="hl-1">  </span><span class="hl-14">applicationLogging</span><span class="hl-1">: { </span><span class="hl-14">enabled</span><span class="hl-1">: </span><span class="hl-2">true</span><span class="hl-1"> }</span><br/><span class="hl-1">}</span>
-</code></pre>
-<p>For more details on the requirements for application log shipping, see [[<code>ApplicationLoggingProps</code>]].</p>
-<p>To enable access logging for your load balancer, you can specify the prefix to write the logs to.
-The S3 bucket used to hold these access logs must be specified in SSM at <code>/account/services/access-logging/bucket</code>
-You must specify a region in your stack declaration if you are to use this prop, as specified here:
-<a href="https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix">https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix</a>
-For example:</p>
-<pre><code class="language-typescript"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-6">// other props</span><br/><span class="hl-1">  </span><span class="hl-14">accessLogging</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-14">enabled</span><span class="hl-1">: </span><span class="hl-2">true</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-14">prefix</span><span class="hl-1">: </span><span class="hl-5">&quot;my-application-logs&quot;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-0">If</span><span class="hl-1"> </span><span class="hl-0">you</span><span class="hl-1"> </span><span class="hl-0">would</span><span class="hl-1"> </span><span class="hl-0">like</span><span class="hl-1"> </span><span class="hl-0">to</span><span class="hl-1"> </span><span class="hl-0">enable</span><span class="hl-1"> </span><span class="hl-0">access</span><span class="hl-1"> </span><span class="hl-0">logging</span><span class="hl-1"> </span><span class="hl-0">at</span><span class="hl-1"> </span><span class="hl-0">the</span><span class="hl-1"> </span><span class="hl-0">root</span><span class="hl-1"> </span><span class="hl-2">of</span><span class="hl-1"> </span><span class="hl-0">the</span><span class="hl-1"> </span><span class="hl-3">S3</span><span class="hl-1"> </span><span class="hl-4">bucket</span><span class="hl-1"> (</span><span class="hl-0">ie</span><span class="hl-1"> </span><span class="hl-0">without</span><span class="hl-1"> </span><span class="hl-0">a</span><span class="hl-1"> </span><span class="hl-0">prefix</span><span class="hl-1">), </span><span class="hl-0">you</span><span class="hl-1"> </span><span class="hl-0">can</span><span class="hl-1"> </span><span class="hl-0">omit</span><span class="hl-1"> </span><span class="hl-0">the</span><span class="hl-1"> </span><span class="hl-0">prefix</span><br/><span class="hl-0">For</span><span class="hl-1"> </span><span class="hl-14">example</span><span class="hl-1">:</span><br/><span class="hl-5">```typescript</span><br/><span class="hl-5">{</span><br/><span class="hl-5">  // other props</span><br/><span class="hl-5">  accessLogging: {</span><br/><span class="hl-5">    enabled: true,</span><br/><span class="hl-5">  }</span><br/><span class="hl-5">}</span>
-</code></pre>
-</div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
@@ -47,7 +23,7 @@ For example:</p>
 <ul class="tsd-hierarchy">
 <li><span class="target">GuEc2AppProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L133">src/patterns/ec2-app/base.ts:133</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L109">src/patterns/ec2-app/base.ts:109</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -77,90 +53,132 @@ For example:</p>
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="access" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>access</span><a href="#access" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></h3>
-<div class="tsd-signature">access<span class="tsd-signature-symbol">:</span> <a href="../variables/types.AppAccess-1.html" class="tsd-signature-type" data-tsd-kind="Variable">AppAccess</a></div><aside class="tsd-sources">
+<div class="tsd-signature">access<span class="tsd-signature-symbol">:</span> <a href="../variables/types.AppAccess-1.html" class="tsd-signature-type" data-tsd-kind="Variable">AppAccess</a></div>
+<div class="tsd-comment tsd-typography"><p>Network access restrictions for your load balancer.</p>
+<p>Note, this merely provides defence in depth; you should, for example, limit
+access to the VPN and then treat that as sufficient. Instead, use Google
+Auth for human access, or a suitable machine auth mechanism.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L135">src/patterns/ec2-app/base.ts:135</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L121">src/patterns/ec2-app/base.ts:121</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="accessLogging" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>access<wbr/>Logging</span><a href="#accessLogging" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">access<wbr/>Logging<span class="tsd-signature-symbol">?:</span> <a href="patterns.AccessLoggingProps.html" class="tsd-signature-type" data-tsd-kind="Interface">AccessLoggingProps</a></div><aside class="tsd-sources">
+<div class="tsd-signature">access<wbr/>Logging<span class="tsd-signature-symbol">?:</span> <a href="patterns.AccessLoggingProps.html" class="tsd-signature-type" data-tsd-kind="Interface">AccessLoggingProps</a></div>
+<div class="tsd-comment tsd-typography"><p>Enable and configures access logs.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L141">src/patterns/ec2-app/base.ts:141</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L146">src/patterns/ec2-app/base.ts:146</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a id="app" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>app</span><a href="#app" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from AppIdentity.app</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="applicationLogging" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>application<wbr/>Logging</span><a href="#applicationLogging" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">application<wbr/>Logging<span class="tsd-signature-symbol">?:</span> <a href="patterns.ApplicationLoggingProps.html" class="tsd-signature-type" data-tsd-kind="Interface">ApplicationLoggingProps</a></div><aside class="tsd-sources">
+<div class="tsd-signature">application<wbr/>Logging<span class="tsd-signature-symbol">?:</span> <a href="patterns.ApplicationLoggingProps.html" class="tsd-signature-type" data-tsd-kind="Interface">ApplicationLoggingProps</a></div>
+<div class="tsd-comment tsd-typography"><p>Enable and configures application logs.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L140">src/patterns/ec2-app/base.ts:140</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L142">src/patterns/ec2-app/base.ts:142</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="applicationPort" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>application<wbr/>Port</span><a href="#applicationPort" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">application<wbr/>Port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div><aside class="tsd-sources">
+<div class="tsd-signature">application<wbr/>Port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>The port your application runs on.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L136">src/patterns/ec2-app/base.ts:136</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L125">src/patterns/ec2-app/base.ts:125</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="blockDevices" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>block<wbr/>Devices</span><a href="#blockDevices" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">block<wbr/>Devices<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">BlockDevice</span><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
+<div class="tsd-signature">block<wbr/>Devices<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">BlockDevice</span><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>Add block devices (additional storage).</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L142">src/patterns/ec2-app/base.ts:142</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L150">src/patterns/ec2-app/base.ts:150</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="certificateProps" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>certificate<wbr/>Props</span><a href="#certificateProps" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">certificate<wbr/>Props<span class="tsd-signature-symbol">?:</span> <a href="types.GuDomainName.html" class="tsd-signature-type" data-tsd-kind="Interface">GuDomainName</a></div><aside class="tsd-sources">
+<div class="tsd-signature">certificate<wbr/>Props<span class="tsd-signature-symbol">?:</span> <a href="types.GuDomainName.html" class="tsd-signature-type" data-tsd-kind="Interface">GuDomainName</a></div>
+<div class="tsd-comment tsd-typography"><p>Specify certificate for the load balancer.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L144">src/patterns/ec2-app/base.ts:144</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L158">src/patterns/ec2-app/base.ts:158</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="imageRecipe" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>image<wbr/>Recipe</span><a href="#imageRecipe" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">image<wbr/>Recipe<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AmigoProps</span></div><aside class="tsd-sources">
+<div class="tsd-signature">image<wbr/>Recipe<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AmigoProps</span></div>
+<div class="tsd-comment tsd-typography"><p>Configure Amigo image recipe.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L146">src/patterns/ec2-app/base.ts:146</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L168">src/patterns/ec2-app/base.ts:168</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="instanceType" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>instance<wbr/>Type</span><a href="#instanceType" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">instance<wbr/>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InstanceType</span></div><aside class="tsd-sources">
+<div class="tsd-signature">instance<wbr/>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InstanceType</span></div>
+<div class="tsd-comment tsd-typography"><p>EC2 instance type. Note, ensure your code is built for the same
+architecture family (arm64 - &#39;Graviton&#39; instances - or x64).</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L139">src/patterns/ec2-app/base.ts:139</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L138">src/patterns/ec2-app/base.ts:138</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="monitoringConfiguration" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>monitoring<wbr/>Configuration</span><a href="#monitoringConfiguration" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">monitoring<wbr/>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.NoMonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="patterns.Alarms.html" class="tsd-signature-type" data-tsd-kind="Interface">Alarms</a></div><aside class="tsd-sources">
+<div class="tsd-signature">monitoring<wbr/>Configuration<span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.NoMonitoring.html" class="tsd-signature-type" data-tsd-kind="Interface">NoMonitoring</a><span class="tsd-signature-symbol"> | </span><a href="patterns.Alarms.html" class="tsd-signature-type" data-tsd-kind="Interface">Alarms</a></div>
+<div class="tsd-comment tsd-typography"><p>Enable and configure alarms.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L138">src/patterns/ec2-app/base.ts:138</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L133">src/patterns/ec2-app/base.ts:133</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="privateSubnets" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>private<wbr/>Subnets</span><a href="#privateSubnets" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">private<wbr/>Subnets<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISubnet</span><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
+<div class="tsd-signature">private<wbr/>Subnets<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISubnet</span><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>Specify private subnets if using a non-default VPC or (generally
+discouraged) to limit to a subset of the available subnets.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L148">src/patterns/ec2-app/base.ts:148</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L179">src/patterns/ec2-app/base.ts:179</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="publicSubnets" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>public<wbr/>Subnets</span><a href="#publicSubnets" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">public<wbr/>Subnets<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISubnet</span><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
+<div class="tsd-signature">public<wbr/>Subnets<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISubnet</span><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>Specify private subnets if using a non-default VPC or (generally
+discouraged) to limit to a subset of the available subnets.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L149">src/patterns/ec2-app/base.ts:149</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L185">src/patterns/ec2-app/base.ts:185</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="roleConfiguration" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>role<wbr/>Configuration</span><a href="#roleConfiguration" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">role<wbr/>Configuration<span class="tsd-signature-symbol">?:</span> <a href="constructs_iam.GuInstanceRoleProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuInstanceRoleProps</a></div><aside class="tsd-sources">
+<div class="tsd-signature">role<wbr/>Configuration<span class="tsd-signature-symbol">?:</span> <a href="constructs_iam.GuInstanceRoleProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuInstanceRoleProps</a></div>
+<div class="tsd-comment tsd-typography"><p>Configure IAM roles for autoscaling group EC2 instances.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L137">src/patterns/ec2-app/base.ts:137</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L129">src/patterns/ec2-app/base.ts:129</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="scaling" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>scaling</span><a href="#scaling" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">scaling<span class="tsd-signature-symbol">:</span> <a href="types.GuAsgCapacity.html" class="tsd-signature-type" data-tsd-kind="Interface">GuAsgCapacity</a></div><aside class="tsd-sources">
+<div class="tsd-signature">scaling<span class="tsd-signature-symbol">:</span> <a href="types.GuAsgCapacity.html" class="tsd-signature-type" data-tsd-kind="Interface">GuAsgCapacity</a></div>
+<div class="tsd-comment tsd-typography"><p>Autoscaling group min and max sizes.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L143">src/patterns/ec2-app/base.ts:143</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L154">src/patterns/ec2-app/base.ts:154</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="userData" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>user<wbr/>Data</span><a href="#userData" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">user<wbr/>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="constructs_autoscaling.GuUserDataProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuUserDataProps</a></div><aside class="tsd-sources">
+<div class="tsd-signature">user<wbr/>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="constructs_autoscaling.GuUserDataProps.html" class="tsd-signature-type" data-tsd-kind="Interface">GuUserDataProps</a></div>
+<div class="tsd-comment tsd-typography"><p>User data for the autoscaling group.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L134">src/patterns/ec2-app/base.ts:134</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L113">src/patterns/ec2-app/base.ts:113</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="vpc" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>vpc</span><a href="#vpc" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">vpc<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IVpc</span></div><aside class="tsd-sources">
+<div class="tsd-signature">vpc<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IVpc</span></div>
+<div class="tsd-comment tsd-typography"><p>Specify the VPC to use.</p>
+
+<h3>See</h3><p><a href="https://github.com/guardian/aws-account-setup">https://github.com/guardian/aws-account-setup</a></p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L147">src/patterns/ec2-app/base.ts:147</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L174">src/patterns/ec2-app/base.ts:174</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="withoutImdsv2" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>without<wbr/>Imdsv2</span><a href="#withoutImdsv2" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">without<wbr/>Imdsv2<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
+<div class="tsd-signature">without<wbr/>Imdsv2<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Disable imdsv2. Most of the time you should not set this.</p>
+
+<h3>See</h3><p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html</a></p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/a6e5195/src/patterns/ec2-app/base.ts#L145">src/patterns/ec2-app/base.ts:145</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/f0dcb92/src/patterns/ec2-app/base.ts#L164">src/patterns/ec2-app/base.ts:164</a></li></ul></aside></section></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
