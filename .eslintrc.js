@@ -10,7 +10,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.eslint.json"],
   },
-  plugins: ["@typescript-eslint", "custom-rules"],
+  plugins: ["@typescript-eslint", "custom-rules", "@guardian/tsdoc-required"],
   rules: {
     "@typescript-eslint/no-inferrable-types": 0,
     "import/no-namespace": 2,
