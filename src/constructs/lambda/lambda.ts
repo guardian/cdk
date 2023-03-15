@@ -1,7 +1,7 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
 import { Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
+import { Code, Function, LayerVersion, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
@@ -35,6 +35,41 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    * @defaultValue  [[`GuDistributionBucketParameter`]]
    */
   bucketNamePath?: string;
+  /**
+   * Configures SSM configuration.
+   *
+   * WARNING: this uses a Lambda Layer behind the scenes with a custom [Wrapper
+   * Script](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-modify.html#runtime-wrapper).
+   * You cannot therefore set your own wrapper script when this is enabled.
+   */
+  config?: {
+    /**
+     * Toggles configuration via SSM. (This is the recommended approach to
+     * Lambda configuration.)
+     *
+     * When true, all SSM Parameter Store properties with a prefix matching
+     * `ssmPrefix` are passed to your lambda as environment variables.
+     *
+     * Note, some transformations apply:
+     *
+     * - / becomes _ (e.g. 'a/b' -\> 'a_b')
+     * - . becomes _ (e.g. 'a.b' -\> 'a_b')
+     * - the prefix is removed
+     *
+     * Use https://github.com/guardian/devx-config to manage config values.
+     *
+     * @defaultValue true
+     */
+    enabled: boolean;
+    /**
+     * Customise the SSM prefix.
+     *
+     * Normally you should not set this and just go with the default.
+     *
+     * @defaultValue `/$stage/$stack/$app/`
+     */
+    ssmPrefix?: string;
+  };
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -86,7 +121,7 @@ export class GuLambdaFunction extends Function {
   public readonly fileName: string;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout, bucketNamePath } = props;
+    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, config = { enabled: true } } = props;
 
     const bucketName = bucketNamePath
       ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
@@ -127,6 +162,21 @@ export class GuLambdaFunction extends Function {
         ...props.throttlingMonitoring,
         lambda: this,
       });
+    }
+
+    if (config.enabled) {
+      // For details, see https://github.com/guardian/ssm-to-env.
+
+      const configPrefix = config.ssmPrefix ?? `/${scope.stage}/${scope.stack}/${this.app}`;
+      const configLayer = LayerVersion.fromLayerVersionArn(
+        scope,
+        "config-layer",
+        "arn:aws:lambda:eu-west-1:ACCOUNT-INFO-TODO:layer:ssm-to-env-layer:6" // todo how to include account number here?
+      );
+
+      this.addLayers(configLayer);
+      this.addEnvironment("AWS_LAMBDA_EXEC_WRAPPER", "/opt/ssm-to-env.sh");
+      this.addEnvironment("SSM_PATH_PREFIX", configPrefix);
     }
 
     bucket.grantRead(this, objectKey);
