@@ -5,3 +5,4 @@ export * from "./regex-pattern";
 export * from "./ssm-parameter-paths";
 export * from "./metadata-keys";
 export * from "./tracking-tag";
+export * from "./fastly-aws-account-id";
