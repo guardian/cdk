@@ -28,7 +28,9 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
   /**
    * SSM parameter for the S3 bucket that contains your lambda file.
    *
-   * Typically you should not override this.
+   * Typically you should not override this but you may need to if, for example,
+   * you are referencing a file that is shared across many apps and/or AWS
+   * accounts.
    *
    * @defaultValue  [[`GuDistributionBucketParameter`]]
    */
