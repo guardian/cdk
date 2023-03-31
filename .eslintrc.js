@@ -10,7 +10,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.eslint.json"],
   },
-  plugins: ["@typescript-eslint", "custom-rules"],
+  plugins: ["@typescript-eslint", "custom-rules", "@guardian/tsdoc-required"],
   rules: {
     "@typescript-eslint/no-inferrable-types": 0,
     "import/no-namespace": 2,
@@ -34,5 +34,11 @@ module.exports = {
         "custom-rules/experimental-classes": 2,
       },
     },
+    {
+      files: ["src/patterns/**"], // Incremental rollout.
+      rules: {
+        "@guardian/tsdoc-required/tsdoc-required": 2,
+      }
+    }
   ],
 };

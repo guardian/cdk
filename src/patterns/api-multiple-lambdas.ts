@@ -6,9 +6,14 @@ import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gat
 import type { AppIdentity, GuStack } from "../constructs/core";
 import type { GuLambdaFunction } from "../constructs/lambda";
 
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+/**
+ * See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+ */
 export type HttpMethod = "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH";
 
+/**
+ * API target props.
+ */
 export interface ApiTarget {
   /**
    * The path for the request (e.g. /test).
@@ -29,22 +34,20 @@ export interface ApiTarget {
 }
 
 /**
- * Configuration for an alarm based on the percentage of 5XX responses served by the API Gateway instance.
- *
- * For example:
- *
- * ```typescript
- * monitoringConfiguration: {
- *   snsTopicName: "my-topic-for-cloudwatch-alerts",
- *   http5xxAlarm: {
- *     tolerated5xxPercentage: <sensible_error_percentage_threshold>,
- *   }
- * }
- * ```
+ * Alarm props.
  */
 export interface ApiGatewayAlarms {
+  /**
+   * (SNS) Topic name where alarm notifications will be sent.
+   */
   snsTopicName: string;
+  /**
+   * Configuration the 5xx alarm.
+   */
   http5xxAlarm: Http5xxAlarmProps;
+  /**
+   * Internal flag - users of this library should ignore this setting.
+   */
   noMonitoring?: false;
 }
 

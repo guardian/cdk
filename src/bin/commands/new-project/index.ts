@@ -1,6 +1,6 @@
 import { existsSync } from "fs";
 import { basename, dirname, join } from "path";
-import { CliUx } from "@oclif/core";
+import { ux } from "@oclif/core";
 import chalk from "chalk";
 import kebabCase from "lodash.kebabcase";
 import type { CliCommandResponse } from "../../../types/cli";
@@ -136,9 +136,9 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   const commands = getCommands(config.packageManager, config.cdkDir);
 
   if (config.init) {
-    CliUx.ux.action.start(chalk.yellow("Installing dependencies. This may take a while..."));
+    ux.action.start(chalk.yellow("Installing dependencies. This may take a while..."));
     await commands.installDependencies();
-    CliUx.ux.action.stop();
+    ux.action.stop();
   }
 
   // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter
@@ -150,17 +150,17 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     }
   );
 
-  CliUx.ux.action.start(chalk.yellow("Running lint check..."));
+  ux.action.start(chalk.yellow("Running lint check..."));
   await commands.lint();
-  CliUx.ux.action.stop();
+  ux.action.stop();
 
-  CliUx.ux.action.start(chalk.yellow("Running tests..."));
+  ux.action.start(chalk.yellow("Running tests..."));
   await commands.test();
-  CliUx.ux.action.stop();
+  ux.action.stop();
 
-  CliUx.ux.action.start(chalk.yellow("Running initial synthesis..."));
+  ux.action.start(chalk.yellow("Running initial synthesis..."));
   await commands.synth();
-  CliUx.ux.action.stop();
+  ux.action.stop();
 
   console.log(chalk.green("Success! Here's a summary of the created files:"));
   const tree = await execute("tree", ["-I 'node_modules|cdk.out'"], {
@@ -169,7 +169,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   console.log(tree);
 
   const docsUrl = "https://github.com/guardian/cdk/tree/main/docs";
-  CliUx.ux.url(chalk.green(`Please see the docs (${docsUrl}) for next steps.`), docsUrl);
+  ux.url(chalk.green(`Please see the docs (${docsUrl}) for next steps.`), docsUrl);
 
   return Promise.resolve(0);
 };

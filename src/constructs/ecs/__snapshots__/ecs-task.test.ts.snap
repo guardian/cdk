@@ -46,6 +46,9 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
       "eu-central-1": {
         "states": "states.eu-central-1.amazonaws.com",
       },
+      "eu-central-2": {
+        "states": "states.eu-central-2.amazonaws.com",
+      },
       "eu-north-1": {
         "states": "states.eu-north-1.amazonaws.com",
       },
@@ -219,6 +222,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
       "Type": "AWS::ECS::Cluster",
     },
     "testecstaskecstestStateMachineC0B6383F": {
+      "DeletionPolicy": "Delete",
       "DependsOn": [
         "testecstaskecstestStateMachineRoleDefaultPolicy81B8C5B5",
         "testecstaskecstestStateMachineRole93D08A02",
@@ -274,6 +278,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
         ],
       },
       "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
     },
     "testecstaskecstestStateMachineRole93D08A02": {
       "Properties": {

@@ -27,7 +27,19 @@ import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 
 export interface AccessLoggingProps {
+  /**
+   * Enable (load balancer) access logs.
+   *
+   * Note, you will need to specify a region in your stack declaration to use
+   * this.
+   * See`https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix`
+   */
   enabled: boolean;
+  /**
+   * S3 prefix for the logs.
+   *
+   * @defaultValue no prefix
+   */
   prefix?: string;
 }
 
@@ -44,108 +56,131 @@ export interface AccessLoggingProps {
  * to Kinesis will be configured automatically via the [[`GuEc2App`]] pattern.
  */
 export interface ApplicationLoggingProps {
+  /**
+   * Enables forwarding of application logs to the Guardian ELK stack.
+   *
+   * Note, to work, you will need to also do the following non-CDK things:
+   *
+   * 1. Include the `cdk-base` Amigo role in your AMI.
+   * 2. Log to `journald`. We recommend doing this by logging to `stdout` and
+   *    using `systemd` to start your app
+   * 3. Confirm that your [[`systemdUnitName`]] is configured properly.
+   *
+   * Unless you have explicitly opted-out, appropriate IAM permissions for
+   * logging to Kinesis will be configured automatically via the [[`GuEc2App`]]
+   * pattern.
+   *
+   * @see https://github.com/guardian/amigo/tree/main/roles/cdk-base
+   */
   enabled: boolean;
   /**
-   * Defaults to app name. That is, if your app runs as `<app>.service`
-   * (e.g. `janus.service`), this will 'just work'.
+   * This needs to match the name of your SystemD unit.
    *
-   * If it runs with a non-standard name, you will need to override the default
-   * behavour. I.e. if your app is running as `some-different-name.service`, then
-   * this prop should be set to `some-different-name`.
+   * If your systemd unit is not `<app>.service` set this value.
+   *
+   * @defaultValue `<app>.service`
    */
   systemdUnitName?: string;
 }
 
+/**
+ * @privateRemarks we should rename this to AlarmsProps.
+ */
 export interface Alarms {
+  /**
+   * Name of the target (SNS Topic) for alarm notifications.
+   */
   snsTopicName: string;
+  /**
+   * Enable the 5xx alarm with settings.
+   */
   http5xxAlarm: false | Http5xxAlarmProps;
+  /**
+   * Enable the unhealthy instances alarm.
+   */
   unhealthyInstancesAlarm: boolean;
+  /**
+   * Internal flag - users of this library should ignore this setting.
+   */
   noMonitoring?: false;
 }
 
-/**
- * Configuration options for the [[`GuEc2App`]] pattern.
- *
- * To grant EC2 instances additional IAM permissions, use the `roleConfiguration` prop. For example,
- * to allow your app to write to DynamoDB:
- *
- * ```typescript
- * // other props
- * roleConfiguration: {
- *   additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
- * }
- * ```
- *
- * To create alarms (recommended), use:
- * ```typescript
- * // other props
- * monitoringConfiguration: {
- *   snsTopicName: "alerts-topic-for-my-team",
- *   http5xxAlarm: {
- *     tolerated5xxPercentage: 1,
- *   },
- *   unhealthyInstancesAlarm: true,
- * }
- * ```
- *
- * To opt out of creating alarms, use:
- *```typescript
- * // other props
- * monitoringConfiguration: { noMonitoring: true }
- * ```
- *
- * To automatically ship application logs from `stdout` to ELK, use:
- *
- * ```typescript
- * {
- *   // other props
- *   applicationLogging: { enabled: true }
- * }
- * ```
- *
- * For more details on the requirements for application log shipping, see [[`ApplicationLoggingProps`]].
- *
- * To enable access logging for your load balancer, you can specify the prefix to write the logs to.
- * The S3 bucket used to hold these access logs must be specified in SSM at `/account/services/access-logging/bucket`
- * You must specify a region in your stack declaration if you are to use this prop, as specified here:
- * https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix
- * For example:
- * ```typescript
- * {
- *   // other props
- *   accessLogging: {
- *     enabled: true,
- *     prefix: "my-application-logs"
- *   }
- * }
- *
- * If you would like to enable access logging at the root of the S3 bucket (ie without a prefix), you can omit the prefix
- * For example:
- * ```typescript
- * {
- *   // other props
- *   accessLogging: {
- *     enabled: true,
- *   }
- * }
- * ```
- */
 export interface GuEc2AppProps extends AppIdentity {
+  /**
+   * User data for the autoscaling group.
+   */
   userData: GuUserDataProps | string;
+  /**
+   * Network access restrictions for your load balancer.
+   *
+   * Note, this merely provides defence in depth; you should, for example, limit
+   * access to the VPN and then treat that as sufficient. Instead, use Google
+   * Auth for human access, or a suitable machine auth mechanism.
+   */
   access: AppAccess;
+  /**
+   * The port your application runs on.
+   */
   applicationPort: number;
+  /**
+   * Configure IAM roles for autoscaling group EC2 instances.
+   */
   roleConfiguration?: GuInstanceRoleProps;
+  /**
+   * Enable and configure alarms.
+   */
   monitoringConfiguration: Alarms | NoMonitoring;
+  /**
+   * EC2 instance type. Note, ensure your code is built for the same
+   * architecture family (arm64 - 'Graviton' instances - or x64).
+   */
   instanceType: InstanceType;
+  /**
+   * Enable and configures application logs.
+   */
   applicationLogging?: ApplicationLoggingProps;
+  /**
+   * Enable and configures access logs.
+   */
   accessLogging?: AccessLoggingProps;
+  /**
+   * Add block devices (additional storage).
+   */
   blockDevices?: BlockDevice[];
+  /**
+   * Autoscaling group min and max sizes.
+   */
   scaling: GuAsgCapacity;
+  /**
+   * Specify certificate for the load balancer.
+   */
   certificateProps?: GuDomainName;
+  /**
+   * Disable imdsv2. Most of the time you should not set this.
+   *
+   * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
+   */
   withoutImdsv2?: boolean;
+  /**
+   * Configure Amigo image recipe.
+   */
   imageRecipe?: string | AmigoProps;
+  /**
+   * Specify the VPC to use.
+   *
+   * @see https://github.com/guardian/aws-account-setup
+   */
   vpc?: IVpc;
+  /**
+   * Specify private subnets if using a non-default VPC or (generally
+   * discouraged) to limit to a subset of the available subnets.
+   */
   privateSubnets?: ISubnet[];
+
+  /**
+   * Specify private subnets if using a non-default VPC or (generally
+   * discouraged) to limit to a subset of the available subnets.
+   */
   publicSubnets?: ISubnet[];
 }
 
@@ -158,176 +193,11 @@ function restrictedCidrRanges(ranges: IPeer[]) {
 }
 
 /**
- * Pattern which creates the resources needed to run an application on EC2 instances.
- * For convenience, you may wish to use [[`GuPlayApp`]] or [[`GuNodeApp`]], which extend this class.
+ * Pattern which creates the resources needed to run an application on EC2
+ * behind a load balancer. For convenience, you may wish to use [[`GuPlayApp`]]
+ * or [[`GuNodeApp`]], which extend this class.
  *
- * This pattern will grant your EC2 instances a number of commonly needed IAM permissions. For more information on
- * this, see [[`GuInstanceRole`]]. To add additional permissions to your EC2 instances, see [[`GuEc2AppProps`]].
- *
- * This pattern will automatically create security groups/rules which allow for:
- * 1. Incoming traffic over HTTPS (from the whole internet or from the specified CIDR ranges, depending on the
- * [[`AppAccess`]] specified).
- * 2. Communication between the load balancer and the EC2 instances over HTTP, via the specified application port.
- * 3. Outbound traffic from your EC2 instances over HTTPS (to enable communication with third-party APIs).
- *
- * Example usage for a public facing app (open to the internet):
- * ```typescript
- * new GuEc2App(stack, {
- *   applicationPort: 1234,
- *   app: "app-name",
- *   access: { scope: AccessScope.PUBLIC },
- *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
- *   certificateProps:{
- *     domainName: "domain-name-for-your-application.example",
- *   },
- *   monitoringConfiguration: {
- *     snsTopicName: "alerts-topic-for-my-team",
- *     http5xxAlarm: {
- *       tolerated5xxPercentage: 1,
- *     },
- *     unhealthyInstancesAlarm: true,
- *   },
- *   userData: {
- *     distributable: {
- *       fileName: "app-name.deb",
- *       executionStatement: `dpkg -i /app-name/app-name.deb`,
- *     }
- *   },
- * });
- * ```
- *
- * Example usage for an app which is restricted to specific CIDR ranges:
- * ```typescript
- * new GuEc2App(stack, {
- *   applicationPort: 1234,
- *   app: "app-name",
- *   access: {
- *     scope: AccessScope.RESTRICTED,
- *     cidrRanges: [Peer.ipv4("192.168.1.1/32"), Peer.ipv4("8.8.8.8/32")],
- *   },
- *   instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
- *   certificateProps:{
- *     domainName: "domain-name-for-your-application.example",
- *   },
- *   monitoringConfiguration: {
- *     snsTopicName: "alerts-topic-for-my-team",
- *     http5xxAlarm: {
- *       tolerated5xxPercentage: 1,
- *     },
- *     unhealthyInstancesAlarm: true,
- *   }
- *   userData: {
- *     distributable: {
- *       fileName: "app-name.deb",
- *       executionStatement: `dpkg -i /app-name/app-name.deb`,
- *     }
- *   },
- * });
- * ```
- *
- * ### Varying values by stage
- *
- * There are times when you want a resource's configuration to be stage aware,
- * for example the number of instances in an ASG.
- *
- * To do this, we can use a simple ternary:
- * ```typescript
- * new GuEc2App(this, {
- *   // other required properties
- *   scaling: this.stage === "PROD" ? { minimumInstances: 6 } : { minimumInstances: 1 }
- * });
- * ```
- *
- * If multiple properties need to be stage aware, consider encoding this into the `props` of the calling class:
- *
- * ```typescript
- * export interface MyAppProps extends GuStackProps {
- *   domainName: string;
- *   scaling: GuAsgCapacity;
- *   monitoringConfiguration: Alarms | NoMonitoring;
- * }
- *
- * export class MyApp extends GuStack {
- *   private static app = "cdk-playground";
- *
- *   constructor(scope: App, id: string, props: MyAppProps) {
- *     const { stage, domainName, scaling, monitoringConfiguration } = props;
- *
- *     super(scope, id, props);
- *
- *     new GuPlayApp(this, {
- *       app: "my-app",
- *       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
- *       access: { scope: AccessScope.PUBLIC },
- *       userData: {
- *         distributable: {
- *           fileName: `my-app.deb`,
- *           executionStatement: `dpkg -i /my-app/my-app.deb`,
- *         },
- *       },
- *       certificateProps: {
- *         domainName,
- *       },
- *       monitoringConfiguration,
- *       scaling,
- *     });
- *   }
- * }
- *
- * new MyApp(app, "MyApp-CODE", {
- *   stage: "CODE",
- *   domainName: "my-app.code.dev-gutools.co.uk",
- *   scaling: { minimumInstances: 1 },
- *   monitoringConfiguration: { noMonitoring: true },
- * });
- *
- * new MyApp(app, "MyApp-PROD", {
- *   stage: "PROD",
- *   domainName: "my-app.prod.gutools.co.uk",
- *   scaling: { minimumInstances: 6 },
- *   monitoringConfiguration: {
- *     // config to enable alarms in PROD
- *   },
- * });
- * ```
- *
- * If you _must_ support a non-standard VPC setup, it's possible to override the VPC and subnet selection into which
- * instances will be started. You need to set the three props below in order for this to work:
- *  vpc: this must be an IVpc instance indicating the VPC to deploy into (usually obtained from `Vpc.fromVpcAttributes`)
- *  privateSubnets: a list of ISubnet indicating the subnets for the autoscaling group to deploy instances into (usually
- *    obtained from `GuVpc.subnets`)
- *  publicSubnets: a list of ISubnet indicating the subnets for the loadbalancer to use, if the loadbalancer
- *    is intended for public access (usually obtained from `GuVpc.subnets`)
- *    On the other hand, if the access is private, then an "internal" loadbalancer is used in the `privateSubnets` list.
- * Please note that no checking is applied to the subnet lists to ensure that they correspond to the vpc given; as
- * an advanced feature it is assumed that the caller ensures this.  If the subnets are mismatched then the resulting
- * Cloudformation will fail to deploy.
- *
- * ### Customising the infrastructure generated by this pattern
- *
- * Although we allow users to customise many aspects of their infrastructure via [[`GuEc2AppProps`]], it's possible
- * that there are less common use-cases which are currently unsupported via the API. In these circumstances escape
- * hatches can be used to override specific resources in the stack.
- *
- * In order to do this:
- *
- * 1. Create desired resource using Guardian or AWS constructs, for example:
- * ```typescript
- * const sg = new GuSecurityGroup(
- *   // custom parameters
- * );
- * ```
- * 2. Access the CloudFormation version of the resource that you wish to customise, for example:
- * ```typescript
- * const pattern = new GuEc2App(
- *   // all parameters
- * )
- * const cfnLb = pattern.loadBalancer.node.defaultChild as CfnLoadBalancer;
- * ```
- * 3. Replace the resource generated by the pattern with your bespoke resource, for example:
- * ```typescript
- * cfnLb.securityGroups = [sg.securityGroupId];
- * ```
+ * See props for further details.
  */
 export class GuEc2App extends Construct {
   /*
