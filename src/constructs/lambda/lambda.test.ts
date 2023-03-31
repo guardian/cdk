@@ -172,4 +172,24 @@ describe("The GuLambdaFunction class", () => {
       Timeout: 30,
     });
   });
+
+  it("should support bucket override", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "my-app.jar",
+      bucketNamePath: "/example-parameter-path", // the override
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+      app: "testing",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
+      Code: {
+        S3Bucket: {
+          Ref: Match.not("DistributionBucketName"),
+        },
+      },
+    });
+  });
 });

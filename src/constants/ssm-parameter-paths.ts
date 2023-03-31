@@ -18,6 +18,7 @@ interface NamedSsmParameterPaths {
   PrimaryVpcPrivateSubnets: SsmParameterPath;
   PrimaryVpcPublicSubnets: SsmParameterPath;
   FastlyCustomerId: SsmParameterPath;
+  OrganisationDistributionBucket: SsmParameterPath;
 }
 
 export const VPC_SSM_PARAMETER_PREFIX = "/account/vpc";
@@ -57,6 +58,10 @@ export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
   PrimaryVpcPublicSubnets: {
     path: `${VPC_SSM_PARAMETER_PREFIX}/primary/subnets/public`,
     description: "A comma-separated list of public subnets",
+  },
+  OrganisationDistributionBucket: {
+    path: "/organisation/services/artifact.bucket",
+    description: "SSM parameter containing the S3 bucket name holding organisation-level DevX artifacts",
   },
   FastlyCustomerId: {
     path: "/account/external/fastly/customer.id",
