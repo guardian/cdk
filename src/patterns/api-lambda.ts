@@ -16,7 +16,6 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
    * [[`LambdaRestApiProps`]] to configure for the lambda.
    */
   api: ApiProps;
-
   /**
    * Alarm configuration for your API. For more details, see [[`ApiGatewayAlarms`]].
    *

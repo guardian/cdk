@@ -34,5 +34,11 @@ module.exports = {
         "custom-rules/experimental-classes": 2,
       },
     },
+    {
+      files: ["src/patterns/**"], // Incremental rollout.
+      rules: {
+        "@guardian/tsdoc-required/tsdoc-required": 2,
+      }
+    }
   ],
 };

@@ -6,34 +6,15 @@ import type { GuEcsTaskProps } from "../constructs/ecs";
 import { GuEcsTask } from "../constructs/ecs";
 import { GuAppAwareConstruct } from "../utils/mixin/app-aware-construct";
 
-/**
- * Configuration options for the [[`GuScheduledEcsTask`]] pattern.
- *
- * The `schedule` property determines when your task is invoked. For example, to invoke
- * the task every 5 minutes, use:
- * ```typescript
- * import { Schedule } from "aws-cdk-lib/aws-events";
- * import { Duration } from "aws-cdk-lib/core";
- *
- * const props = {
- *   // Other props here
- *   schedule: Schedule.rate(Duration.minutes(5)),
- * }
- * ```
- *
- * To invoke the task every weekday at 8am, use:
- * ```
- * import { Schedule } from "aws-cdk-lib/aws-events";
- *
- * const props = {
- *   // Other props here
- *   schedule: Schedule.expression("cron(0 8 ? * MON-FRI *)"),
- * }
- * ```
- * See [[`GuEcsTask`]] for details of other props
- *
- */
 export interface GuScheduledEcsTaskProps extends GuEcsTaskProps {
+  /**
+   * Schedule for the task.
+   *
+   * E.g.:
+   *
+   * - `Schedule.expression("cron(0 8 ? * MON-FRI *)")`
+   * - `Schedule.rate(Duration.minutes(5))`
+   */
   schedule: Schedule;
 }
 
