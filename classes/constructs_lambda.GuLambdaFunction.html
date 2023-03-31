@@ -18,18 +18,28 @@
 <h1>Class GuLambdaFunction</h1></div>
 <section class="tsd-panel tsd-comment">
 <div class="tsd-comment tsd-typography"><p>Construct which creates a Lambda function.</p>
-<p>This Lambda relies on the code artifact residing in a standard location in S3. For more details on the bucket used,
-see [[<code>GuDistributionBucketParameter</code>]]. By default, the path used will be <code>&lt;stack&gt;/&lt;stage&gt;/&lt;app&lt;/&lt;fileName&gt;</code>.</p>
-<p>The default memory size of this Lambda will vary depending on the runtime chosen.
-For Java runtimes (i.e. resource hungry Scala Lambdas!), 1024MB will be used. For all other runtimes,
-the memory size defaults to 512MB. This can be overridden via the <code>memorySize</code> prop.</p>
-<p>By default, the timeout for this Lambda is 30 seconds. This can be overridden via the <code>timeout</code> prop.</p>
-<p>By default the Lambda is granted permission to read from the SSM parameter store subtree specific to this Lambda
-(i.e. it can read all keys under <code>/&lt;stage&gt;/&lt;stack&gt;/&lt;app&gt;/</code>). If you need to add additional permissions, you can use
-<a href="https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-lambda.FunctionBase.html#addwbrtowbrrolewbrpolicystatement"><code>addToRolePolicy</code></a>.</p>
-<p>The Lambda has <code>STACK</code>, <code>STAGE</code> and <code>APP</code> environment variables which can be used to determine its identity.</p>
-<p>Note that this construct creates a Lambda without an event source. Depending on your use-case, you may wish to
-consider using a pattern which instantiates a Lambda with an event source e.g. [[<code>GuScheduledLambda</code>]].</p>
+<p>This Lambda relies on the code artifact residing in a standard location in
+S3. For more details on the bucket used, see
+[[<code>GuDistributionBucketParameter</code>]]. By default, the path used will be
+<code>&lt;stack&gt;/&lt;stage&gt;/&lt;app&lt;/&lt;fileName&gt;</code>. If required, e.g. if you are sharing
+lambda code across apps or accounts, override the source bucket using the
+<code>bucketNamePath</code> prop.</p>
+<p>The default memory size of this Lambda will vary depending on the runtime
+chosen. For Java runtimes (i.e. resource hungry Scala Lambdas!), 1024MB will
+be used. For all other runtimes, the memory size defaults to 512MB. This can
+be overridden via the <code>memorySize</code> prop.</p>
+<p>By default, the timeout for this Lambda is 30 seconds. This can be overridden
+via the <code>timeout</code> prop.</p>
+<p>By default the Lambda is granted permission to read from the SSM parameter
+store subtree specific to this Lambda (i.e. it can read all keys under
+<code>/&lt;stage&gt;/&lt;stack&gt;/&lt;app&gt;/</code>). If you need to add additional permissions, you
+can use
+<a href="%60https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-lambda.FunctionBase.html#addwbrtowbrrolewbrpolicystatement%60"><code>addToRolePolicy</code></a>.</p>
+<p>The Lambda has <code>STACK</code>, <code>STAGE</code> and <code>APP</code> environment variables which can be
+used to determine its identity.</p>
+<p>Note that this construct creates a Lambda without an event source. Depending
+on your use-case, you may wish to consider using a pattern which instantiates
+a Lambda with an event source e.g. [[<code>GuScheduledLambda</code>]].</p>
 </div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
@@ -43,7 +53,7 @@ consider using a pattern which instantiates a Lambda with an event source e.g. [
 <li><a href="experimental_patterns.GuKinesisLambdaExperimental.html" class="tsd-signature-type" data-tsd-kind="Class">GuKinesisLambdaExperimental</a></li>
 <li><a href="experimental_patterns.GuSnsLambdaExperimental.html" class="tsd-signature-type" data-tsd-kind="Class">GuSnsLambdaExperimental</a></li></ul></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L63">src/constructs/lambda/lambda.ts:63</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L84">src/constructs/lambda/lambda.ts:84</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -153,7 +163,7 @@ consider using a pattern which instantiates a Lambda with an event source e.g. [
 <h4 class="tsd-returns-title">Returns <a href="constructs_lambda.GuLambdaFunction.html" class="tsd-signature-type" data-tsd-kind="Class">GuLambdaFunction</a></h4><aside class="tsd-sources">
 <p>Overrides Function.constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L67">src/constructs/lambda/lambda.ts:67</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L88">src/constructs/lambda/lambda.ts:88</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-inherited tsd-is-external"><a id="_connections" class="tsd-anchor"></a>
@@ -210,7 +220,7 @@ on the imported lambda outside CDK.</p>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>app</span><a href="#app" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L64">src/constructs/lambda/lambda.ts:64</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L85">src/constructs/lambda/lambda.ts:85</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="architecture" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>architecture</span><a href="#architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">architecture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Architecture</span></div>
@@ -251,7 +261,7 @@ on the imported lambda outside CDK.</p>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>file<wbr/>Name</span><a href="#fileName" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">file<wbr/>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L65">src/constructs/lambda/lambda.ts:65</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L86">src/constructs/lambda/lambda.ts:86</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a id="functionArn" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>function<wbr/>Arn</span><a href="#functionArn" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">function<wbr/>Arn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>

@@ -25,7 +25,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuFunctionProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L13">src/constructs/lambda/lambda.ts:13</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L15">src/constructs/lambda/lambda.ts:15</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -38,6 +38,7 @@
 <a href="constructs_lambda.GuFunctionProps.html#allowPublicSubnet" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>allow<wbr/>Public<wbr/>Subnet?</span></a>
 <a href="constructs_lambda.GuFunctionProps.html#app" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>app</span></a>
 <a href="constructs_lambda.GuFunctionProps.html#architecture" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>architecture?</span></a>
+<a href="constructs_lambda.GuFunctionProps.html#bucketNamePath" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>bucket<wbr/>Name<wbr/>Path?</span></a>
 <a href="constructs_lambda.GuFunctionProps.html#codeSigningConfig" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>code<wbr/>Signing<wbr/>Config?</span></a>
 <a href="constructs_lambda.GuFunctionProps.html#currentVersionOptions" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>current<wbr/>Version<wbr/>Options?</span></a>
 <a href="constructs_lambda.GuFunctionProps.html#deadLetterQueue" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>dead<wbr/>Letter<wbr/>Queue?</span></a>
@@ -123,7 +124,7 @@ Use this property to acknowledge this limitation and still place the function in
 <div class="tsd-signature">app<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from AppIdentity.app</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a id="architecture" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>architecture</span><a href="#architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">architecture<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Architecture</span></div>
@@ -134,6 +135,18 @@ Use this property to acknowledge this limitation and still place the function in
 <p>Inherited from Omit.architecture</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:302</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="bucketNamePath" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>bucket<wbr/>Name<wbr/>Path</span><a href="#bucketNamePath" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
+<div class="tsd-signature">bucket<wbr/>Name<wbr/>Path<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>SSM parameter for the S3 bucket that contains your lambda file.</p>
+<p>Typically you should not override this but you may need to if, for example,
+you are referencing a file that is shared across many apps and/or AWS
+accounts.</p>
+
+<h3>Default Value</h3><p>[[<code>GuDistributionBucketParameter</code>]]</p>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L37">src/constructs/lambda/lambda.ts:37</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a id="codeSigningConfig" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>code<wbr/>Signing<wbr/>Config</span><a href="#codeSigningConfig" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">code<wbr/>Signing<wbr/>Config<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ICodeSigningConfig</span></div>
@@ -259,7 +272,7 @@ Lambda function source code.</p>
 <div class="tsd-comment tsd-typography"><p>Alarm if error percentage exceeds a threshold.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L17">src/constructs/lambda/lambda.ts:17</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L19">src/constructs/lambda/lambda.ts:19</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a id="events" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>events</span><a href="#events" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">events<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IEventSource</span><span class="tsd-signature-symbol">[]</span></div>
@@ -281,7 +294,7 @@ We&#39;ll look for <code>fileName</code> on the path &quot;bucket/stack/stage/ap
 </div><aside class="tsd-sources">
 <p>Inherited from GuDistributable.fileName</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/types/distributable.ts#L8">src/types/distributable.ts:8</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/types/distributable.ts#L8">src/types/distributable.ts:8</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a id="filesystem" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>filesystem</span><a href="#filesystem" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">filesystem<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">FileSystem</span></div>
@@ -578,7 +591,7 @@ concerned about throttling.</p>
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html</a></p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8328a58/src/constructs/lambda/lambda.ts#L26">src/constructs/lambda/lambda.ts:26</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/50e7a05/src/constructs/lambda/lambda.ts#L27">src/constructs/lambda/lambda.ts:27</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a id="timeout" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>timeout</span><a href="#timeout" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">timeout<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Duration</span></div>
@@ -686,6 +699,7 @@ public subnets is not allowed (unless <code>allowPublicSubnet</code> is set to <
 <li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.GuFunctionProps.html#allowPublicSubnet" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>allow<wbr/>Public<wbr/>Subnet?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="constructs_lambda.GuFunctionProps.html#app" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>app</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.GuFunctionProps.html#architecture" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>architecture?</a></li>
+<li class="tsd-kind-property tsd-parent-kind-interface"><a href="constructs_lambda.GuFunctionProps.html#bucketNamePath" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>bucket<wbr/>Name<wbr/>Path?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.GuFunctionProps.html#codeSigningConfig" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>code<wbr/>Signing<wbr/>Config?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.GuFunctionProps.html#currentVersionOptions" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>current<wbr/>Version<wbr/>Options?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="constructs_lambda.GuFunctionProps.html#deadLetterQueue" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>dead<wbr/>Letter<wbr/>Queue?</a></li>
