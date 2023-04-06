@@ -177,6 +177,8 @@ export class GuLambdaFunction extends Function {
       );
 
       const configPrefix = config.ssmPrefix ?? `/${scope.stage}/${scope.stack}/${this.app}`;
+
+      // TODO - guessing this needs to be parameterised by arch?
       const configLayer = LayerVersion.fromLayerVersionArn(
         scope,
         "config-layer",
