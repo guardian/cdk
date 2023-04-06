@@ -55,7 +55,7 @@
   "dependencies": {
     "@oclif/core": "2.7.1",
     "aws-cdk-lib": "2.68.0",
-    "aws-sdk": "^2.1346.0",
+    "aws-sdk": "^2.1351.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.80.0",
     "constructs": "10.1.273",
