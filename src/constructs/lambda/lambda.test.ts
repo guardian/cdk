@@ -192,4 +192,28 @@ describe("The GuLambdaFunction class", () => {
       },
     });
   });
+
+  it("should read config from SSM when enabled", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "my-app.zip",
+      bucketNamePath: "/example-parameter-path", // the override
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_8,
+      app: "testing",
+      config: {
+        enabled: true,
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
+      Environment: {
+        Variables: {
+          AWS_LAMBDA_EXEC_WRAPPER: "/opt/ssm-to-env.sh",
+          SSM_PATH_PREFIX: "/TEST/test-stack/testing",
+        },
+      },
+    });
+  });
 });
