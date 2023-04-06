@@ -19,6 +19,7 @@ interface NamedSsmParameterPaths {
   PrimaryVpcPublicSubnets: SsmParameterPath;
   FastlyCustomerId: SsmParameterPath;
   OrganisationDistributionBucket: SsmParameterPath;
+  DeployToolsAccountId: SsmParameterPath;
 }
 
 export const VPC_SSM_PARAMETER_PREFIX = "/account/vpc";
@@ -68,6 +69,10 @@ export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
     description:
       "SSM parameter containing the Fastly Customer ID. Can be obtained from https://manage.fastly.com/account/company by an admin",
     optional: true,
+  },
+  DeployToolsAccountId: {
+    path: "/organisation/accounts/deployTools",
+    description: "Account ID of the Deploy Tools account. Useful as some shared resources live here.",
   },
 };
 
