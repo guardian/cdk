@@ -4,7 +4,7 @@ import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Code, Function, LayerVersion, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
-import { CfnParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuDistributable } from "../../types";
 import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
