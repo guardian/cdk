@@ -4,7 +4,8 @@ import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Code, Function, LayerVersion, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { CfnParameter, StringParameter } from "aws-cdk-lib/aws-ssm";
+import { NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuDistributable } from "../../types";
 import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
 import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitoringProps } from "../cloudwatch";
@@ -58,7 +59,7 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
      *
      * Use https://github.com/guardian/devx-config to manage config values.
      *
-     * @defaultValue true
+     * @defaultValue false
      */
     enabled: boolean;
     /**
@@ -121,7 +122,7 @@ export class GuLambdaFunction extends Function {
   public readonly fileName: string;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, config = { enabled: true } } = props;
+    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, config = { enabled: false } } = props;
 
     const bucketName = bucketNamePath
       ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
@@ -165,13 +166,21 @@ export class GuLambdaFunction extends Function {
     }
 
     if (config.enabled) {
-      // For details, see https://github.com/guardian/ssm-to-env.
+      // For details, see https://github.com/guardian/ssm-to-env. Ultimately, it
+      // would be great to combine this with
+      // https://github.com/guardian/devx-config.
+
+      const deployToolsAccountId = StringParameter.fromStringParameterName(
+        this,
+        "deploy-tools-account-id-param",
+        NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path
+      );
 
       const configPrefix = config.ssmPrefix ?? `/${scope.stage}/${scope.stack}/${this.app}`;
       const configLayer = LayerVersion.fromLayerVersionArn(
         scope,
         "config-layer",
-        "arn:aws:lambda:eu-west-1:ACCOUNT-INFO-TODO:layer:ssm-to-env-layer:6" // todo how to include account number here?
+        `arn:aws:lambda:eu-west-1:${deployToolsAccountId.stringValue}:layer:ssm-to-env-layer:6`
       );
 
       this.addLayers(configLayer);
