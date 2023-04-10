@@ -13,7 +13,7 @@ import {
 } from "aws-cdk-lib/aws-ecs";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
-import { IntegrationPattern, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
+import { IntegrationPattern, JsonPath, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
 import type { TaskEnvironmentVariable } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { EcsFargateLaunchTarget, EcsRunTask } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { Construct } from "constructs";
@@ -205,7 +205,7 @@ export class GuEcsTask extends Construct {
       }),
       taskDefinition,
       integrationPattern: IntegrationPattern.RUN_JOB,
-      resultPath: "DISCARD",
+      resultPath: JsonPath.DISCARD,
       timeout: Duration.minutes(taskTimeoutInMinutes),
       securityGroups,
       containerOverrides: [
