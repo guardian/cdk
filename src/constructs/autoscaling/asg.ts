@@ -64,7 +64,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
   public readonly app: string;
   public readonly amiParameter: GuAmiParameter;
   public readonly imageRecipe?: string | AmigoProps;
-  public readonly launchTemplate: LaunchTemplate
+  public readonly getLaunchTemplate: () => LaunchTemplate
 
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const {
@@ -140,7 +140,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     this.app = app;
     this.amiParameter = imageId;
     this.imageRecipe = imageRecipe;
-    this.launchTemplate = launchTemplate;
+    this.getLaunchTemplate = () => launchTemplate;
 
     targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 
