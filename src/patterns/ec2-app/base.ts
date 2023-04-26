@@ -235,27 +235,27 @@ export interface GuEc2AppProps extends AppIdentity {
      * @defaultValue [`engineering@guardian.co.uk`]
      */
     allowedGroups?: string[];
+
     /**
-     * SSM (Parameter Store) path for the Client ID for your Google Project
-     * oauth2 client.
+     * Secrets Manager path containing Google OAuth2 Client credentials.
+     *
+     * NOTE: you do not need to set this value, but you DO need to generate and
+     * store the associated credentials in Secrets Manager.
+     *
+     * Credentials should be stored in Secrets Manager as JSON:
+     *
+     * ```json
+     * {
+     *   "clientId": "my-client-id",
+     *   "clientSecret": "my-client-secret"
+     * }
+     * ```
      *
      * @see `googleAuth.enabled` for how to generate.
      *
-     * @defaultValue /:STAGE/:stack/:app/google-auth-client-id
+     * @defaultValue /:STAGE/:stack/:app/google-auth-credentials
      */
-    clientIDSSMPath?: string;
-    /**
-     * Secrets Manager path for the Client Secret for your Google Project oauth2
-     * client.
-     *
-     * @see `googleAuth.enabled` for how to generate.
-     *
-     * Nb. we cannot use Parameter Store here unfortunately, as Cloudformation
-     * does not, with some exceptions, support lookup from secure parameters.
-     *
-     * @defaultValue /:STAGE/:stack/:app/google-auth-client-secret
-     */
-    clientSecretSecretsManagerPath?: string;
+    credentialsSecretsManagerPath?: string;
   };
 }
 
@@ -457,8 +457,7 @@ export class GuEc2App extends Construct {
 
       const {
         allowedGroups = ["engineering@guardian.co.uk"],
-        clientIDSSMPath = `${prefix}/google-auth-client-id`,
-        clientSecretSecretsManagerPath = `${prefix}/google-auth-client-secret`,
+        credentialsSecretsManagerPath = `${prefix}/google-auth-credentials`,
       } = props.googleAuth;
 
       if (allowedGroups.length < 1) {
@@ -521,16 +520,13 @@ export class GuEc2App extends Construct {
         },
       });
 
-      const clientIDSSMParameter = StringParameter.fromStringParameterName(
-        scope,
-        "client-id-parameter",
-        clientIDSSMPath
-      );
+      const clientId = SecretValue.secretsManager(credentialsSecretsManagerPath, { jsonField: "clientId" });
+      const clientSecret = SecretValue.secretsManager(credentialsSecretsManagerPath, { jsonField: "clientSecret" });
 
       const userPoolIdp = new UserPoolIdentityProviderGoogle(scope, "google-idp", {
         userPool: userPool,
-        clientId: clientIDSSMParameter.stringValue,
-        clientSecret: SecretValue.secretsManager(clientSecretSecretsManagerPath).toString(),
+        clientId: clientId.toString(),
+        clientSecret: clientSecret.toString(),
         attributeMapping: {
           email: ProviderAttribute.GOOGLE_EMAIL,
           givenName: ProviderAttribute.GOOGLE_GIVEN_NAME,
