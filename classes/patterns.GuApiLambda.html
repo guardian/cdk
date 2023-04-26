@@ -27,7 +27,7 @@ Lambdas, use the [[<code>GuApiGatewayWithLambdaByPath</code>]] pattern instead.<
 <p>For all configuration options, see [[<code>GuApiLambdaProps</code>]].</p>
 <p>Example usage:</p>
 <pre><code class="language-typescript"><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuApiLambda</span><span class="hl-1">(</span><span class="hl-0">stack</span><span class="hl-1">, </span><span class="hl-7">&quot;my-lambda&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">fileName:</span><span class="hl-1"> </span><span class="hl-7">&quot;my-app.zip&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">handler:</span><span class="hl-1"> </span><span class="hl-7">&quot;handler.ts&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">runtime:</span><span class="hl-1"> </span><span class="hl-0">Runtime</span><span class="hl-1">.</span><span class="hl-3">NODEJS_14_X</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">monitoringConfiguration:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">http5xxAlarm:</span><span class="hl-1"> { </span><span class="hl-0">tolerated5xxPercentage:</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> },</span><br/><span class="hl-1">    </span><span class="hl-0">snsTopicName:</span><span class="hl-1"> </span><span class="hl-7">&quot;alerts-topic&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-0">app:</span><span class="hl-1"> </span><span class="hl-7">&quot;my-app&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">api:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">id:</span><span class="hl-1"> </span><span class="hl-7">&quot;my-api&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">description:</span><span class="hl-1"> </span><span class="hl-7">&quot;...&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">});</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
@@ -36,7 +36,7 @@ Lambdas, use the [[<code>GuApiGatewayWithLambdaByPath</code>]] pattern instead.<
 <ul class="tsd-hierarchy">
 <li><span class="target">GuApiLambda</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/patterns/api-lambda.ts#L60">src/patterns/api-lambda.ts:60</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/patterns/api-lambda.ts#L60">src/patterns/api-lambda.ts:60</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -147,7 +147,7 @@ Lambdas, use the [[<code>GuApiGatewayWithLambdaByPath</code>]] pattern instead.<
 <h4 class="tsd-returns-title">Returns <a href="patterns.GuApiLambda.html" class="tsd-signature-type tsd-kind-class">GuApiLambda</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="constructs_lambda.GuLambdaFunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.GuLambdaFunction.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/patterns/api-lambda.ts#L63">src/patterns/api-lambda.ts:63</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/patterns/api-lambda.ts#L63">src/patterns/api-lambda.ts:63</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="_connections" class="tsd-anchor"></a>
@@ -204,13 +204,13 @@ on the imported lambda outside CDK.</p>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>api</span><a href="#api" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">api</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">LambdaRestApi</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/patterns/api-lambda.ts#L61">src/patterns/api-lambda.ts:61</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/patterns/api-lambda.ts#L61">src/patterns/api-lambda.ts:61</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="app" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>app</span><a href="#app" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">app</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuLambdaFunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.GuLambdaFunction.html#app">app</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/lambda/lambda.ts#L85">src/constructs/lambda/lambda.ts:85</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/lambda/lambda.ts#L85">src/constructs/lambda/lambda.ts:85</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="architecture" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>architecture</span><a href="#architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">architecture</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Architecture</span></div>
@@ -252,7 +252,7 @@ on the imported lambda outside CDK.</p>
 <div class="tsd-signature"><span class="tsd-kind-property">file<wbr/>Name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuLambdaFunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.GuLambdaFunction.html#fileName">fileName</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/lambda/lambda.ts#L86">src/constructs/lambda/lambda.ts:86</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/lambda/lambda.ts#L86">src/constructs/lambda/lambda.ts:86</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="functionArn" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>function<wbr/>Arn</span><a href="#functionArn" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">function<wbr/>Arn</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -470,10 +470,9 @@ For use internally for constructs, when the tree is set up in non-standard ways.
 <p>  arn:aws:lambda:region:account-id:function:function-name</p>
 <p>..which means that in order to extract the <code>account-id</code> component from the ARN, we can
 split the ARN using &quot;:&quot; and select the component in index 4.</p>
-
-<h3>Returns</h3><p>true if account id of function matches the account specified on the stack, false otherwise.</p>
 </div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><p>true if account id of function matches the account specified on the stack, false otherwise.</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuLambdaFunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.GuLambdaFunction.html#_isStackAccount">_isStackAccount</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function-base.d.ts:317</li></ul></aside></li></ul></section>
@@ -486,7 +485,7 @@ split the ARN using &quot;:&quot; and select the component in index 4.</p>
 <p>The alias will automatically be updated to point to the latest version of
 the function as it is being updated during a deployment.</p>
 <pre><code class="language-ts"><span class="hl-2">declare</span><span class="hl-1"> </span><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">fn</span><span class="hl-1">: </span><span class="hl-9">lambda</span><span class="hl-1">.</span><span class="hl-9">Function</span><span class="hl-1">;</span><br/><br/><span class="hl-0">fn</span><span class="hl-1">.</span><span class="hl-4">addAlias</span><span class="hl-1">(</span><span class="hl-7">&#39;Live&#39;</span><span class="hl-1">);</span><br/><br/><span class="hl-8">// Is equivalent to</span><br/><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-0">lambda</span><span class="hl-1">.</span><span class="hl-4">Alias</span><span class="hl-1">(</span><span class="hl-2">this</span><span class="hl-1">, </span><span class="hl-7">&#39;AliasLive&#39;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">aliasName:</span><span class="hl-1"> </span><span class="hl-7">&#39;Live&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-0">version:</span><span class="hl-1"> </span><span class="hl-0">fn</span><span class="hl-1">.</span><span class="hl-0">currentVersion</span><span class="hl-1">,</span><br/><span class="hl-1">});</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1021,7 +1020,7 @@ within this stack.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -1036,8 +1035,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1046,7 +1043,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuLambdaFunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.GuLambdaFunction.html#isConstruct">isConstruct</a></p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
@@ -1069,7 +1067,7 @@ this type-testing method instead.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -1078,7 +1076,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuLambdaFunction.html">GuLambdaFunction</a>.<a href="constructs_lambda.GuLambdaFunction.html#isResource">isResource</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section>
@@ -1108,7 +1106,7 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Metric for the number of concurrent executions across all Lambdas</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">max</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1127,7 +1125,7 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Metric for the Duration executing all Lambdas</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">average</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1146,7 +1144,7 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Metric for the number of Errors executing all Lambdas</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1165,7 +1163,7 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Metric for the number of invocations of all Lambdas</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1184,7 +1182,7 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Metric for the number of throttled invocations of all Lambdas</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1203,7 +1201,7 @@ this type-testing method instead.</p>
 <div class="tsd-comment tsd-typography"><p>Metric for the number of unreserved concurrent executions across all Lambdas</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">max</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>

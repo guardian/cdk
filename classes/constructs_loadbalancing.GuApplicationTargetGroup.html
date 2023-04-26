@@ -25,7 +25,7 @@ to route traffic to your application. For more details on these three components
 traffic port (as specified via the <code>port</code> prop). All healthcheck defaults can be overridden via the <code>healthcheck</code> prop.</p>
 <p>For example, to use <code>/test</code> for the healthcheck path use:</p>
 <pre><code class="language-typescript"><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuApplicationTargetGroup</span><span class="hl-1">(</span><span class="hl-0">stack</span><span class="hl-1">, </span><span class="hl-7">&quot;TargetGroup&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-8">// other props</span><br/><span class="hl-1">    </span><span class="hl-0">healthCheck:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">path:</span><span class="hl-1"> </span><span class="hl-7">&quot;/test&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">  });</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>This resource is stateful.</p>
 
 <h3>See</h3><p><a href="https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md">https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md</a></p>
@@ -37,7 +37,7 @@ traffic port (as specified via the <code>port</code> prop). All healthcheck defa
 <ul class="tsd-hierarchy">
 <li><span class="target">GuApplicationTargetGroup</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-target-group.ts#L33">src/constructs/loadbalancing/alb/application-target-group.ts:33</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-target-group.ts#L33">src/constructs/loadbalancing/alb/application-target-group.ts:33</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -113,7 +113,7 @@ traffic port (as specified via the <code>port</code> prop). All healthcheck defa
 <h4 class="tsd-returns-title">Returns <a href="constructs_loadbalancing.GuApplicationTargetGroup.html" class="tsd-signature-type tsd-kind-class">GuApplicationTargetGroup</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(ApplicationTargetGroup).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-target-group.ts#L46">src/constructs/loadbalancing/alb/application-target-group.ts:46</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-target-group.ts#L46">src/constructs/loadbalancing/alb/application-target-group.ts:46</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="defaultPort" class="tsd-anchor"></a>
@@ -138,7 +138,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationTargetGroup).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="loadBalancerArns" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>load<wbr/>Balancer<wbr/>Arns</span><a href="#loadBalancerArns" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">load<wbr/>Balancer<wbr/>Arns</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -207,17 +207,17 @@ This should be used in place of <code>id</code> when trying to reference the con
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>Default<wbr/>Health<wbr/>Check</span><a href="#DefaultHealthCheck" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">Default<wbr/>Health<wbr/>Check</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">HealthCheck</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-target-group.ts#L37">src/constructs/loadbalancing/alb/application-target-group.ts:37</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-target-group.ts#L37">src/constructs/loadbalancing/alb/application-target-group.ts:37</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="defaultHealthcheckInterval" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagPrivate">Private</code> <span>default<wbr/>Healthcheck<wbr/>Interval</span><a href="#defaultHealthcheckInterval" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">default<wbr/>Healthcheck<wbr/>Interval</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Duration</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-target-group.ts#L34">src/constructs/loadbalancing/alb/application-target-group.ts:34</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-target-group.ts#L34">src/constructs/loadbalancing/alb/application-target-group.ts:34</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="defaultHealthcheckTimeout" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagPrivate">Private</code> <span>default<wbr/>Healthcheck<wbr/>Timeout</span><a href="#defaultHealthcheckTimeout" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">default<wbr/>Healthcheck<wbr/>Timeout</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Duration</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-target-group.ts#L35">src/constructs/loadbalancing/alb/application-target-group.ts:35</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-target-group.ts#L35">src/constructs/loadbalancing/alb/application-target-group.ts:35</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Accessors</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="firstLoadBalancerFullName" class="tsd-anchor"></a>
@@ -335,7 +335,7 @@ sending traffic to the same target group, you will have to override the dimensio
 on this metric.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Average</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -356,7 +356,7 @@ on this metric.</p>
 <div class="tsd-comment tsd-typography"><p>The number of healthy hosts in the target group</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Average</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.healthyHostCount</code> instead</p>
 </div>
@@ -378,7 +378,7 @@ on this metric.</p>
 <p>This does not include any response codes generated by the load balancer.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.httpCodeTarget</code> instead</p>
 </div>
@@ -401,7 +401,7 @@ on this metric.</p>
 <div class="tsd-comment tsd-typography"><p>The number of IPv6 requests received by the target group</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.ipv6RequestCount</code> instead</p>
 </div>
@@ -423,7 +423,7 @@ on this metric.</p>
 <p>This count includes only the requests with a response generated by a target of the load balancer.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.requestCount</code> instead</p>
 </div>
@@ -445,7 +445,7 @@ on this metric.</p>
 <p>The only valid statistic is Sum. Note that this represents the average not the sum.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.ipv6RequestCount</code> instead</p>
 </div>
@@ -466,7 +466,7 @@ on this metric.</p>
 <div class="tsd-comment tsd-typography"><p>The number of connections that were not successfully established between the load balancer and target.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.targetConnectionErrorCount</code> instead</p>
 </div>
@@ -487,7 +487,7 @@ on this metric.</p>
 <div class="tsd-comment tsd-typography"><p>The time elapsed, in seconds, after the request leaves the load balancer until a response from the target is received.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Average</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.targetResponseTime</code> instead</p>
 </div>
@@ -509,7 +509,7 @@ on this metric.</p>
 <p>Possible causes include a mismatch of ciphers or protocols.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Sum</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.tlsNegotiationErrorCount</code> instead</p>
 </div>
@@ -530,7 +530,7 @@ on this metric.</p>
 <div class="tsd-comment tsd-typography"><p>The number of unhealthy hosts in the target group</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">Average</span><span class="hl-1"> </span><span class="hl-0">over</span><span class="hl-1"> </span><span class="hl-5">5</span><span class="hl-1"> </span><span class="hl-0">minutes</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Deprecated</h3><p>Use <code>ApplicationTargetGroup.metrics.unhealthyHostCount</code> instead</p>
 </div>
@@ -644,7 +644,7 @@ on this metric.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -659,8 +659,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -669,7 +667,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationTargetGroup).isConstruct</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section></section></div>

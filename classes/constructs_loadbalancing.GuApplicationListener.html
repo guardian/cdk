@@ -34,7 +34,7 @@ to reduce the amount of boilerplate needed when configuring your Listener.</p>
 <ul class="tsd-hierarchy">
 <li><span class="target">GuApplicationListener</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-listener.ts#L23">src/constructs/loadbalancing/alb/application-listener.ts:23</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-listener.ts#L23">src/constructs/loadbalancing/alb/application-listener.ts:23</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -96,7 +96,7 @@ to reduce the amount of boilerplate needed when configuring your Listener.</p>
 <h4 class="tsd-returns-title">Returns <a href="constructs_loadbalancing.GuApplicationListener.html" class="tsd-signature-type tsd-kind-class">GuApplicationListener</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(ApplicationListener).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/alb/application-listener.ts#L24">src/constructs/loadbalancing/alb/application-listener.ts:24</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/alb/application-listener.ts#L24">src/constructs/loadbalancing/alb/application-listener.ts:24</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="connections" class="tsd-anchor"></a>
@@ -121,7 +121,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationListener).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="listenerArn" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>listener<wbr/>Arn</span><a href="#listenerArn" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">listener<wbr/>Arn</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -280,8 +280,6 @@ involved, and a &#39;forward&#39; action to route traffic to the given TargetGro
 and use <code>addAction</code> yourself.</p>
 <p>It&#39;s possible to add conditions to the targets added in this way. At least
 one set of targets must be added without conditions.</p>
-
-<h3>Returns</h3><p>The newly created target group</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -290,7 +288,8 @@ one set of targets must be added without conditions.</p>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5></li>
 <li>
 <h5><span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">AddApplicationTargetsProps</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">ApplicationTargetGroup</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">ApplicationTargetGroup</span></h4><p>The newly created target group</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationListener).addTargets</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancingv2/lib/alb/application-listener.d.ts:181</li></ul></aside></li></ul></section>
@@ -482,7 +481,7 @@ listener info.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -497,8 +496,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -507,7 +504,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationListener).isConstruct</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
@@ -530,7 +528,7 @@ this type-testing method instead.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -539,7 +537,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(ApplicationListener).isResource</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section></section></div>

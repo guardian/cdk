@@ -23,7 +23,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuStackProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L14">src/constructs/core/stack.ts:14</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L14">src/constructs/core/stack.ts:14</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -65,7 +65,7 @@
 <div class="tsd-comment tsd-typography"><p>Optional name of the app. If defined, all resources will have an App tag.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L26">src/constructs/core/stack.ts:26</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L26">src/constructs/core/stack.ts:26</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="cloudFormationStackName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>cloud<wbr/>Formation<wbr/>Stack<wbr/>Name</span><a href="#cloudFormationStackName" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cloud<wbr/>Formation<wbr/>Stack<wbr/>Name</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -74,7 +74,7 @@
 <h3>Default Value</h3><p>the <code>GU_CFN_STACK_NAME</code> environment variable</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L32">src/constructs/core/stack.ts:32</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L32">src/constructs/core/stack.ts:32</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="crossRegionReferences" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>cross<wbr/>Region<wbr/>References</span><a href="#crossRegionReferences" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cross<wbr/>Region<wbr/>References</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -84,7 +84,7 @@ in both the producing stack and consuming stack in order to perform the export/i
 <p>This feature is currently experimental</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.crossRegionReferences</p>
 <ul>
@@ -95,7 +95,7 @@ in both the producing stack and consuming stack in order to perform the export/i
 <div class="tsd-comment tsd-typography"><p>A description of the stack.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">description</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.description</p>
 <ul>
@@ -122,7 +122,7 @@ automatically translate Service Principals to the right format based on the
 environment&#39;s AWS partition, and other such enhancements.</p>
 
 <h3>Example</h3><pre><code class="language-ts"><span class="hl-8">// Use a concrete account and region to deploy this stack to:</span><br/><span class="hl-8">// `.account` and `.region` will simply return these values.</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Stack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&#39;Stack1&#39;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">env:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">account:</span><span class="hl-1"> </span><span class="hl-7">&#39;123456789012&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">region:</span><span class="hl-1"> </span><span class="hl-7">&#39;us-east-1&#39;</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-8">// Use the CLI&#39;s current credentials to determine the target environment:</span><br/><span class="hl-8">// `.account` and `.region` will reflect the account+region the CLI</span><br/><span class="hl-8">// is configured to use (based on the user CLI credentials)</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Stack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&#39;Stack2&#39;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">env:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">account:</span><span class="hl-1"> </span><span class="hl-0">process</span><span class="hl-1">.</span><span class="hl-0">env</span><span class="hl-1">.</span><span class="hl-3">CDK_DEFAULT_ACCOUNT</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">region:</span><span class="hl-1"> </span><span class="hl-0">process</span><span class="hl-1">.</span><span class="hl-0">env</span><span class="hl-1">.</span><span class="hl-3">CDK_DEFAULT_REGION</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-8">// Define multiple stacks stage associated with an environment</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">myStage</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">Stage</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&#39;MyStage&#39;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">env:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">account:</span><span class="hl-1"> </span><span class="hl-7">&#39;123456789012&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">region:</span><span class="hl-1"> </span><span class="hl-7">&#39;us-east-1&#39;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-8">// both of these stacks will use the stage&#39;s account/region:</span><br/><span class="hl-8">// `.account` and `.region` will resolve to the concrete values as above</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">MyStack</span><span class="hl-1">(</span><span class="hl-0">myStage</span><span class="hl-1">, </span><span class="hl-7">&#39;Stack1&#39;</span><span class="hl-1">);</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">YourStack</span><span class="hl-1">(</span><span class="hl-0">myStage</span><span class="hl-1">, </span><span class="hl-7">&#39;Stack2&#39;</span><span class="hl-1">);</span><br/><br/><span class="hl-8">// Define an environment-agnostic stack:</span><br/><span class="hl-8">// `.account` and `.region` will resolve to `{ &quot;Ref&quot;: &quot;AWS::AccountId&quot; }` and `{ &quot;Ref&quot;: &quot;AWS::Region&quot; }` respectively.</span><br/><span class="hl-8">// which will only resolve to actual values by CloudFormation during deployment.</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">MyStack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&#39;Stack1&#39;</span><span class="hl-1">);</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>Default</h3><ul>
 <li>The environment of the containing <code>Stage</code> if available,
@@ -139,7 +139,7 @@ otherwise create the stack will be environment-agnostic.</li>
 and Users created within this Stage</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">no</span><span class="hl-1"> </span><span class="hl-0">permissions</span><span class="hl-1"> </span><span class="hl-0">boundary</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-0">applied</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.permissionsBoundary</p>
 <ul>
@@ -151,12 +151,12 @@ and Users created within this Stage</p>
 This will be applied as a tag to all of your resources.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L19">src/constructs/core/stack.ts:19</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L19">src/constructs/core/stack.ts:19</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="stage" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>stage</span><a href="#stage" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">stage</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L21">src/constructs/core/stack.ts:21</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L21">src/constructs/core/stack.ts:21</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="synthesizer" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>synthesizer</span><a href="#synthesizer" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">synthesizer</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">IStackSynthesizer</span></div>
@@ -183,7 +183,7 @@ other synthesizer is specified.</p>
 <div class="tsd-comment tsd-typography"><p>Stack tags that will be applied to all the taggable resources and the stack itself.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">{}</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-type-declaration">
 <h4>Type declaration</h4>
@@ -199,7 +199,7 @@ other synthesizer is specified.</p>
 <div class="tsd-comment tsd-typography"><p>Whether to enable termination protection for this stack.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.terminationProtection</p>
 <ul>
@@ -212,7 +212,7 @@ snapshot tests). We rely on tracking data to prioritise future work so
 please do not override this.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L44">src/constructs/core/stack.ts:44</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L44">src/constructs/core/stack.ts:44</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="withoutTags" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>without<wbr/>Tags</span><a href="#withoutTags" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">without<wbr/>Tags</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -220,7 +220,7 @@ please do not override this.</p>
 This should only be turned on as part of an initial migration from CloudFormation.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/stack.ts#L37">src/constructs/core/stack.ts:37</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/stack.ts#L37">src/constructs/core/stack.ts:37</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

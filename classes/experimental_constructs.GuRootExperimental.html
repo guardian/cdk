@@ -21,10 +21,10 @@
 <code>GuRootExperimental</code> will synthesise a <code>riff-raff.yaml</code> file for a CDK application.</p>
 <p>Usage is a case of updating <code>/&lt;repo-root&gt;/cdk/bin/cdk.ts</code> from:</p>
 <pre><code class="language-ts"><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-0">App</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-7">&quot;aws-cdk-lib&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">app</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">App</span><span class="hl-1">();</span><br/><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">MyStack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&quot;my-stack-CODE&quot;</span><span class="hl-1">, {});</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">MyStack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&quot;my-stack-PROD&quot;</span><span class="hl-1">, {});</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>To:</p>
 <pre><code class="language-ts"><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-0">GuRootExperimental</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-7">&quot;@guardian/cdk/lib/experimental/constructs/root&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">app</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuRootExperimental</span><span class="hl-1">();</span><br/><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">MyStack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&quot;my-stack-CODE&quot;</span><span class="hl-1">, {});</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">MyStack</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, </span><span class="hl-7">&quot;my-stack-PROD&quot;</span><span class="hl-1">, {});</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
@@ -33,7 +33,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuRootExperimental</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/experimental/constructs/root.ts#L31">src/experimental/constructs/root.ts:31</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/experimental/constructs/root.ts#L31">src/experimental/constructs/root.ts:31</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -139,7 +139,7 @@
 synthesis will be interrupted and the report displayed to the user.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">no</span><span class="hl-1"> </span><span class="hl-0">validation</span><span class="hl-1"> </span><span class="hl-0">plugins</span><span class="hl-1"> </span><span class="hl-0">are</span><span class="hl-1"> </span><span class="hl-0">used</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from App.policyValidationBeta1</p>
 <ul>
@@ -213,7 +213,7 @@ will return an empty string.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">CloudAssembly</span></h4><aside class="tsd-sources">
 <p>Overrides App.synth</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/experimental/constructs/root.ts#L32">src/experimental/constructs/root.ts:32</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/experimental/constructs/root.ts#L32">src/experimental/constructs/root.ts:32</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="toString" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>to<wbr/>String</span><a href="#toString" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -228,11 +228,9 @@ will return an empty string.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isApp" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>App</span><a href="#isApp" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isApp.isApp-1"><span class="tsd-kind-call-signature">is<wbr/>App</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">obj</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">obj</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">App</span><a href="#isApp.isApp-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isApp.isApp-1"><span class="tsd-kind-call-signature">is<wbr/>App</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">obj</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">obj</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">App</span><a href="#isApp.isApp-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if an object is an instance of the <code>App</code> class.</p>
-
-<h3>Returns</h3><p><code>true</code> if <code>obj</code> is an <code>App</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -241,14 +239,15 @@ will return an empty string.</p>
 <h5><span class="tsd-kind-parameter">obj</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>The object to evaluate</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">obj</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">App</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">obj</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">App</span></h4><p><code>true</code> if <code>obj</code> is an <code>App</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from App.isApp</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/app.d.ts:133</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -263,8 +262,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -273,14 +270,15 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from App.isConstruct</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isStage" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Stage</span><a href="#isStage" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isStage.isStage-1"><span class="tsd-kind-call-signature">is<wbr/>Stage</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Stage</span><a href="#isStage.isStage-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isStage.isStage-1"><span class="tsd-kind-call-signature">is<wbr/>Stage</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Stage</span><a href="#isStage.isStage-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Test whether the given construct is a stage.</p>
 </div>
@@ -289,7 +287,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Stage</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Stage</span></h4><aside class="tsd-sources">
 <p>Inherited from App.isStage</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/stage.d.ts:96</li></ul></aside></li></ul></section>

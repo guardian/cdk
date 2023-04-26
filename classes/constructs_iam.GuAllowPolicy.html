@@ -29,7 +29,7 @@
 <li><a href="constructs_iam.GuPutS3ObjectsPolicy.html" class="tsd-signature-type tsd-kind-class">GuPutS3ObjectsPolicy</a></li>
 <li><a href="constructs_iam.GuSESSenderPolicy.html" class="tsd-signature-type tsd-kind-class">GuSESSenderPolicy</a></li></ul></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/iam/policies/base-policy.ts#L21">src/constructs/iam/policies/base-policy.ts:21</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/iam/policies/base-policy.ts#L21">src/constructs/iam/policies/base-policy.ts:21</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -89,7 +89,7 @@
 <h4 class="tsd-returns-title">Returns <a href="constructs_iam.GuAllowPolicy.html" class="tsd-signature-type tsd-kind-class">GuAllowPolicy</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/iam/policies/base-policy.ts#L22">src/constructs/iam/policies/base-policy.ts:22</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/iam/policies/base-policy.ts#L22">src/constructs/iam/policies/base-policy.ts:22</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="document" class="tsd-anchor"></a>
@@ -366,7 +366,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -381,8 +381,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -391,7 +389,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#isConstruct">isConstruct</a></p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
@@ -414,7 +413,7 @@ this type-testing method instead.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -423,7 +422,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#isResource">isResource</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section></section></div>

@@ -23,13 +23,13 @@ If there are multiple apps in the stack, they will re-use this resource.</p>
 <p>The logicalId will always be &quot;WazuhSecurityGroup&quot;.</p>
 <p>Will create a resource like this:</p>
 <pre><code class="language-yaml"><span class="hl-10">WazuhSecurityGroup</span><span class="hl-1">:</span><br/><span class="hl-1">  </span><span class="hl-10">Type</span><span class="hl-1">: </span><span class="hl-11">AWS::EC2::SecurityGroup</span><br/><span class="hl-1">  </span><span class="hl-10">Properties</span><span class="hl-1">:</span><br/><span class="hl-1">    </span><span class="hl-10">GroupDescription</span><span class="hl-1">: </span><span class="hl-11">Allow outbound traffic from wazuh agent to manager</span><br/><span class="hl-1">    </span><span class="hl-10">VpcId</span><span class="hl-1">:</span><br/><span class="hl-1">      </span><span class="hl-10">Ref</span><span class="hl-1">: </span><span class="hl-11">VpcId</span><br/><span class="hl-1">    </span><span class="hl-10">SecurityGroupEgress</span><span class="hl-1">:</span><br/><span class="hl-1">    - </span><span class="hl-10">Description</span><span class="hl-1">: </span><span class="hl-11">Wazuh event logging</span><br/><span class="hl-1">      </span><span class="hl-10">IpProtocol</span><span class="hl-1">: </span><span class="hl-11">tcp</span><br/><span class="hl-1">      </span><span class="hl-10">FromPort</span><span class="hl-1">: </span><span class="hl-5">1514</span><br/><span class="hl-1">      </span><span class="hl-10">ToPort</span><span class="hl-1">: </span><span class="hl-5">1514</span><br/><span class="hl-1">      </span><span class="hl-10">CidrIp</span><span class="hl-1">: </span><span class="hl-11">0.0.0.0/0</span><br/><span class="hl-1">    - </span><span class="hl-10">Description</span><span class="hl-1">: </span><span class="hl-11">Wazuh agent registration</span><br/><span class="hl-1">      </span><span class="hl-10">IpProtocol</span><span class="hl-1">: </span><span class="hl-11">tcp</span><br/><span class="hl-1">      </span><span class="hl-10">FromPort</span><span class="hl-1">: </span><span class="hl-5">1515</span><br/><span class="hl-1">      </span><span class="hl-10">ToPort</span><span class="hl-1">: </span><span class="hl-5">1515</span><br/><span class="hl-1">      </span><span class="hl-10">CidrIp</span><span class="hl-1">: </span><span class="hl-11">0.0.0.0/0</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>Which will then get used like this:</p>
 <pre><code class="language-yaml"><span class="hl-10">InstanceRoleForAppA</span><span class="hl-1">:</span><br/><span class="hl-1">  </span><span class="hl-10">Type</span><span class="hl-1">: </span><span class="hl-11">AWS::IAM::Role</span><br/><span class="hl-1">  </span><span class="hl-10">Properties</span><span class="hl-1">:</span><br/><span class="hl-1">    </span><span class="hl-10">SecurityGroups</span><span class="hl-1">:</span><br/><span class="hl-1">    - </span><span class="hl-10">Ref</span><span class="hl-1">: </span><span class="hl-11">WazuhSecurityGroup</span><br/><br/><span class="hl-10">InstanceRoleForAppB</span><span class="hl-1">:</span><br/><span class="hl-1">  </span><span class="hl-10">Type</span><span class="hl-1">: </span><span class="hl-11">AWS::IAM::Role</span><br/><span class="hl-1">  </span><span class="hl-10">Properties</span><span class="hl-1">:</span><br/><span class="hl-1">    </span><span class="hl-10">SecurityGroups</span><span class="hl-1">:</span><br/><span class="hl-1">    - </span><span class="hl-10">Ref</span><span class="hl-1">: </span><span class="hl-11">WazuhSecurityGroup</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>Usage within a stack:</p>
 <pre><code class="language-typescript"><span class="hl-0">GuWazuhAccess</span><span class="hl-1">.</span><span class="hl-4">getInstance</span><span class="hl-1">(</span><span class="hl-2">this</span><span class="hl-1">, </span><span class="hl-0">vpc</span><span class="hl-1">);</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>See</h3><p><a href="https://github.com/guardian/security-hq/blob/main/hq/markdown/wazuh.md">https://github.com/guardian/security-hq/blob/main/hq/markdown/wazuh.md</a></p>
 </div></section>
@@ -40,7 +40,7 @@ If there are multiple apps in the stack, they will re-use this resource.</p>
 <ul class="tsd-hierarchy">
 <li><span class="target">GuWazuhAccess</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/ec2/security-groups/wazuh.ts#L59">src/constructs/ec2/security-groups/wazuh.ts:59</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/ec2/security-groups/wazuh.ts#L59">src/constructs/ec2/security-groups/wazuh.ts:59</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -108,7 +108,7 @@ If there are multiple apps in the stack, they will re-use this resource.</p>
 <h4 class="tsd-returns-title">Returns <a href="constructs_ec2.GuWazuhAccess.html" class="tsd-signature-type tsd-kind-class">GuWazuhAccess</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="constructs_ec2.GuBaseSecurityGroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.GuBaseSecurityGroup.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/ec2/security-groups/wazuh.ts#L62">src/constructs/ec2/security-groups/wazuh.ts:62</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/ec2/security-groups/wazuh.ts#L62">src/constructs/ec2/security-groups/wazuh.ts:62</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="allowAllIpv6Outbound" class="tsd-anchor"></a>
@@ -203,7 +203,7 @@ cross-environment scenarios.</li>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagPrivate">Private</code> <span>instance</span><a href="#instance" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">instance</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="constructs_ec2.GuWazuhAccess.html" class="tsd-signature-type tsd-kind-class">GuWazuhAccess</a></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/ec2/security-groups/wazuh.ts#L60">src/constructs/ec2/security-groups/wazuh.ts:60</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/ec2/security-groups/wazuh.ts#L60">src/constructs/ec2/security-groups/wazuh.ts:60</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Accessors</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="uniqueId" class="tsd-anchor"></a>
@@ -524,7 +524,7 @@ Group (only ingress rules).</p>
 If there are multiple apps in the stack, they will re-use this resource.</p>
 <p>Usage:</p>
 <pre><code class="language-typescript"><span class="hl-0">GuWazuhAccess</span><span class="hl-1">.</span><span class="hl-4">getInstance</span><span class="hl-1">(</span><span class="hl-2">this</span><span class="hl-1">, </span><span class="hl-0">vpc</span><span class="hl-1">);</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -539,11 +539,11 @@ If there are multiple apps in the stack, they will re-use this resource.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="constructs_ec2.GuWazuhAccess.html" class="tsd-signature-type tsd-kind-class">GuWazuhAccess</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/ec2/security-groups/wazuh.ts#L105">src/constructs/ec2/security-groups/wazuh.ts:105</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/ec2/security-groups/wazuh.ts#L105">src/constructs/ec2/security-groups/wazuh.ts:105</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -558,8 +558,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -568,7 +566,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="constructs_ec2.GuBaseSecurityGroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.GuBaseSecurityGroup.html#isConstruct">isConstruct</a></p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
@@ -591,7 +590,7 @@ this type-testing method instead.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -600,14 +599,14 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_ec2.GuBaseSecurityGroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.GuBaseSecurityGroup.html#isResource">isResource</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isSecurityGroup" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Security<wbr/>Group</span><a href="#isSecurityGroup" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isSecurityGroup.isSecurityGroup-1"><span class="tsd-kind-call-signature">is<wbr/>Security<wbr/>Group</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">SecurityGroupBase</span><a href="#isSecurityGroup.isSecurityGroup-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isSecurityGroup.isSecurityGroup-1"><span class="tsd-kind-call-signature">is<wbr/>Security<wbr/>Group</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">SecurityGroupBase</span><a href="#isSecurityGroup.isSecurityGroup-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Return whether the indicated object is a security group</p>
 </div>
@@ -616,7 +615,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">SecurityGroupBase</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">SecurityGroupBase</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_ec2.GuBaseSecurityGroup.html">GuBaseSecurityGroup</a>.<a href="constructs_ec2.GuBaseSecurityGroup.html#isSecurityGroup">isSecurityGroup</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-ec2/lib/security-group.d.ts:48</li></ul></aside></li></ul></section></section></div>

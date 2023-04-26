@@ -22,10 +22,10 @@
 It&#39;s assumed stack sets are only provisioned for infrastructure, therefore the <code>STAGE</code> value will always be <code>INFRA</code>.</p>
 <p>Usage:</p>
 <pre><code class="language-typescript"><span class="hl-8">// the infrastructure to create in target accounts</span><br/><span class="hl-2">class</span><span class="hl-1"> </span><span class="hl-9">AccountAlertTopic</span><span class="hl-1"> </span><span class="hl-2">extends</span><span class="hl-1"> </span><span class="hl-9">GuStackForStackSetInstance</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">constructor</span><span class="hl-1">(</span><span class="hl-0">id</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">, </span><span class="hl-0">props</span><span class="hl-1">: </span><span class="hl-9">GuStackProps</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-2">super</span><span class="hl-1">(</span><span class="hl-0">id</span><span class="hl-1">, </span><span class="hl-0">props</span><span class="hl-1">);</span><br/><br/><span class="hl-1">    </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuSnsTopic</span><span class="hl-1">(</span><span class="hl-2">this</span><span class="hl-1">, </span><span class="hl-7">&quot;topic-for-alerts&quot;</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-2">class</span><span class="hl-1"> </span><span class="hl-9">ParentStack</span><span class="hl-1"> </span><span class="hl-2">extends</span><span class="hl-1"> </span><span class="hl-9">GuStackForInfrastructure</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">constructor</span><span class="hl-1">(</span><span class="hl-0">scope</span><span class="hl-1">: </span><span class="hl-9">App</span><span class="hl-1">, </span><span class="hl-0">id</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">, </span><span class="hl-0">props</span><span class="hl-1">: </span><span class="hl-9">GuStackProps</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-2">super</span><span class="hl-1">(</span><span class="hl-0">scope</span><span class="hl-1">, </span><span class="hl-0">id</span><span class="hl-1">, </span><span class="hl-0">props</span><span class="hl-1">);</span><br/><br/><span class="hl-1">    </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuStackSet</span><span class="hl-1">(</span><span class="hl-2">this</span><span class="hl-1">, </span><span class="hl-7">`</span><span class="hl-2">${</span><span class="hl-0">id</span><span class="hl-2">}</span><span class="hl-7">StackSet`</span><span class="hl-1">, {</span><br/><span class="hl-1">      </span><span class="hl-0">stackSetInstance:</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">AccountAlertTopic</span><span class="hl-1">(</span><span class="hl-7">&quot;Alerts&quot;</span><span class="hl-1">, { </span><span class="hl-0">stack:</span><span class="hl-1"> </span><span class="hl-0">props</span><span class="hl-1">.</span><span class="hl-0">stack</span><span class="hl-1"> }),</span><br/><span class="hl-1">      </span><span class="hl-0">name:</span><span class="hl-1"> </span><span class="hl-7">&quot;centralised-alarms&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">description:</span><span class="hl-1"> </span><span class="hl-7">&quot;Provisioning of standard account alerting resources&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">organisationUnitTargets:</span><span class="hl-1"> [ </span><span class="hl-7">&quot;o-abcde12345&quot;</span><span class="hl-1"> ]</span><br/><span class="hl-1">    });</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-8">// contents of `bin/cdk.ts`</span><br/><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">ParentStack</span><span class="hl-1">(</span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">App</span><span class="hl-1">(), </span><span class="hl-7">&quot;AccountAlarmResources&quot;</span><span class="hl-1">, { </span><span class="hl-0">stack:</span><span class="hl-1"> </span><span class="hl-7">&quot;alarms&quot;</span><span class="hl-1"> })</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>This will produce a CloudFormation template like this:</p>
 <pre><code class="language-yaml"><span class="hl-10">Resources</span><span class="hl-1">:</span><br/><span class="hl-1">  </span><span class="hl-10">AccountAlarmResourcesStackSet</span><span class="hl-1">:</span><br/><span class="hl-1">    </span><span class="hl-10">Type</span><span class="hl-1">: </span><span class="hl-11">AWS::CloudFormation::StackSet</span><br/><span class="hl-1">    </span><span class="hl-10">Properties</span><span class="hl-1">:</span><br/><span class="hl-1">      </span><span class="hl-10">PermissionModel</span><span class="hl-1">: </span><span class="hl-11">SERVICE_MANAGED</span><br/><span class="hl-1">      </span><span class="hl-10">StackSetName</span><span class="hl-1">: </span><span class="hl-11">centralised-alarms</span><br/><span class="hl-1">      </span><span class="hl-10">AutoDeployment</span><span class="hl-1">:</span><br/><span class="hl-1">        </span><span class="hl-10">Enabled</span><span class="hl-1">: </span><span class="hl-2">true</span><br/><span class="hl-1">        </span><span class="hl-10">RetainStacksOnAccountRemoval</span><span class="hl-1">: </span><span class="hl-2">false</span><br/><span class="hl-1">      </span><span class="hl-10">Description</span><span class="hl-1">: </span><span class="hl-11">Provisioning of standard account alerting resources</span><br/><span class="hl-1">      </span><span class="hl-10">Parameters</span><span class="hl-1">: []</span><br/><span class="hl-1">      </span><span class="hl-10">StackInstancesGroup</span><span class="hl-1">:</span><br/><span class="hl-1">        - </span><span class="hl-10">DeploymentTargets</span><span class="hl-1">:</span><br/><span class="hl-1">            </span><span class="hl-10">OrganizationalUnitIds</span><span class="hl-1">:</span><br/><span class="hl-1">              - </span><span class="hl-11">o-abcde12345</span><br/><span class="hl-1">          </span><span class="hl-10">Regions</span><span class="hl-1">:</span><br/><span class="hl-1">            - </span><span class="hl-10">Ref</span><span class="hl-1">: </span><span class="hl-11">AWS::Region</span><br/><span class="hl-1">      </span><span class="hl-10">Tags</span><span class="hl-1">:</span><br/><span class="hl-1">        - </span><span class="hl-10">Key</span><span class="hl-1">: </span><span class="hl-11">gu:cdk:version</span><br/><span class="hl-1">          </span><span class="hl-10">Value</span><span class="hl-1">: </span><span class="hl-11">TEST</span><br/><span class="hl-1">        - </span><span class="hl-10">Key</span><span class="hl-1">: </span><span class="hl-11">gu:repo</span><br/><span class="hl-1">          </span><span class="hl-10">Value</span><span class="hl-1">: </span><span class="hl-11">guardian/cdk</span><br/><span class="hl-1">        - </span><span class="hl-10">Key</span><span class="hl-1">: </span><span class="hl-11">Stack</span><br/><span class="hl-1">          </span><span class="hl-10">Value</span><span class="hl-1">: </span><span class="hl-11">alarms</span><br/><span class="hl-1">        - </span><span class="hl-10">Key</span><span class="hl-1">: </span><span class="hl-11">Stage</span><br/><span class="hl-1">          </span><span class="hl-10">Value</span><span class="hl-1">: </span><span class="hl-11">INFRA</span><br/><span class="hl-1">      </span><span class="hl-10">TemplateBody</span><span class="hl-1">: </span><span class="hl-6">|</span><span class="hl-2">-</span><br/><span class="hl-11">        {</span><br/><span class="hl-11">          &quot;Resources&quot;: {</span><br/><span class="hl-11">            &quot;topicforalerts57330FBE&quot;: {</span><br/><span class="hl-11">              &quot;Type&quot;: &quot;AWS::SNS::Topic&quot;,</span><br/><span class="hl-11">              &quot;Properties&quot;: {</span><br/><span class="hl-11">                &quot;Tags&quot;: [</span><br/><span class="hl-11">                  {</span><br/><span class="hl-11">                    &quot;Key&quot;: &quot;gu:cdk:version&quot;,</span><br/><span class="hl-11">                    &quot;Value&quot;: &quot;TEST&quot;</span><br/><span class="hl-11">                  },</span><br/><span class="hl-11">                  {</span><br/><span class="hl-11">                    &quot;Key&quot;: &quot;gu:repo&quot;,</span><br/><span class="hl-11">                    &quot;Value&quot;: &quot;guardian/cdk&quot;</span><br/><span class="hl-11">                  },</span><br/><span class="hl-11">                  {</span><br/><span class="hl-11">                    &quot;Key&quot;: &quot;Stack&quot;,</span><br/><span class="hl-11">                    &quot;Value&quot;: &quot;alarms&quot;</span><br/><span class="hl-11">                  },</span><br/><span class="hl-11">                  {</span><br/><span class="hl-11">                    &quot;Key&quot;: &quot;Stage&quot;,</span><br/><span class="hl-11">                    &quot;Value&quot;: &quot;INFRA&quot;</span><br/><span class="hl-11">                  }</span><br/><span class="hl-11">                ]</span><br/><span class="hl-11">              }</span><br/><span class="hl-11">            }</span><br/><span class="hl-11">          }</span><br/><span class="hl-11">        }</span>
-</code></pre>
+</code><button>Copy</button></pre>
 
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html</a></p>
 </div></section>
@@ -36,7 +36,7 @@ It&#39;s assumed stack sets are only provisioned for infrastructure, therefore t
 <ul class="tsd-hierarchy">
 <li><span class="target">GuStackSet</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/stack-set/stack-set.ts#L140">src/constructs/stack-set/stack-set.ts:140</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/stack-set/stack-set.ts#L140">src/constructs/stack-set/stack-set.ts:140</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -130,7 +130,7 @@ It&#39;s assumed stack sets are only provisioned for infrastructure, therefore t
 <h4 class="tsd-returns-title">Returns <a href="constructs_stack_set.GuStackSet.html" class="tsd-signature-type tsd-kind-class">GuStackSet</a></h4><aside class="tsd-sources">
 <p>Overrides CfnStackSet.constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/stack-set/stack-set.ts#L141">src/constructs/stack-set/stack-set.ts:141</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/stack-set/stack-set.ts#L141">src/constructs/stack-set/stack-set.ts:141</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="_cfnProperties" class="tsd-anchor"></a>
@@ -411,12 +411,11 @@ resolved during synthesis.</p>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
 <li class="tsd-signature" id="creationStack.creationStack-1"><span class="tsd-signature-symbol">get</span> creationStack<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography">
-<h3>Returns</h3><p>the stack trace of the point where this Resource was created from, sourced
+<div class="tsd-comment tsd-typography"></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4><p>the stack trace of the point where this Resource was created from, sourced
      from the +metadata+ entry typed +aws:cdk:logicalId+, and with the bottom-most
      node +internal+ entries filtered.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4><aside class="tsd-sources">
+<aside class="tsd-sources">
 <p>Inherited from CfnStackSet.creationStack</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/cfn-element.d.ts:80</li></ul></aside></li></ul></section>
@@ -635,10 +634,10 @@ programming languages you will need to write this as <code>&quot;\\.&quot;</code
 `` itself will need to be escaped.</p>
 <p>For example,</p>
 <pre><code class="language-typescript"><span class="hl-0">cfnResource</span><span class="hl-1">.</span><span class="hl-4">addOverride</span><span class="hl-1">(</span><span class="hl-7">&#39;Properties.GlobalSecondaryIndexes.0.Projection.NonKeyAttributes&#39;</span><span class="hl-1">, [</span><span class="hl-7">&#39;myattribute&#39;</span><span class="hl-1">]);</span><br/><span class="hl-0">cfnResource</span><span class="hl-1">.</span><span class="hl-4">addOverride</span><span class="hl-1">(</span><span class="hl-7">&#39;Properties.GlobalSecondaryIndexes.1.ProjectionType&#39;</span><span class="hl-1">, </span><span class="hl-7">&#39;INCLUDE&#39;</span><span class="hl-1">);</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>would add the overrides</p>
 <pre><code class="language-json"><span class="hl-7">&quot;Properties&quot;</span><span class="hl-1">: {</span><br/><span class="hl-1">  </span><span class="hl-14">&quot;GlobalSecondaryIndexes&quot;</span><span class="hl-1">: [</span><br/><span class="hl-1">    {</span><br/><span class="hl-1">      </span><span class="hl-14">&quot;Projection&quot;</span><span class="hl-1">: {</span><br/><span class="hl-1">        </span><span class="hl-14">&quot;NonKeyAttributes&quot;</span><span class="hl-1">: [ </span><span class="hl-7">&quot;myattribute&quot;</span><span class="hl-1"> ]</span><br/><span class="hl-1">        </span><span class="hl-12">...</span><br/><span class="hl-1">      }</span><br/><span class="hl-1">      </span><span class="hl-12">...</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">    {</span><br/><span class="hl-1">      </span><span class="hl-14">&quot;ProjectionType&quot;</span><span class="hl-1">: </span><span class="hl-7">&quot;INCLUDE&quot;</span><br/><span class="hl-1">      </span><span class="hl-12">...</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">  ]</span><br/><span class="hl-1">  </span><span class="hl-12">...</span><br/><span class="hl-1">}</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>The <code>value</code> argument to <code>addOverride</code> will not be processed or translated
 in any way. Pass raw JSON values in here with the correct capitalization
 for CloudFormation. If you pass CDK classes or structs, they will be
@@ -903,11 +902,10 @@ and the dependency will automatically be removed from the relevant scope.</p>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Can be overridden by subclasses to determine if this resource will be rendered
 into the cloudformation template.</p>
-
-<h3>Returns</h3><p><code>true</code> if the resource should be included or <code>false</code> is the resource
-should be omitted.</p>
 </div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><p><code>true</code> if the resource should be included or <code>false</code> is the resource
+should be omitted.</p>
+<aside class="tsd-sources">
 <p>Inherited from CfnStackSet.shouldSynthesize</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/cfn-resource.d.ts:274</li></ul></aside></li></ul></section>
@@ -916,10 +914,9 @@ should be omitted.</p>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
 <li class="tsd-signature tsd-anchor-link" id="toString.toString-1"><span class="tsd-kind-call-signature">to<wbr/>String</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#toString.toString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography">
-<h3>Returns</h3><p>a string representation of this resource</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>a string representation of this resource</p>
+<aside class="tsd-sources">
 <p>Inherited from CfnStackSet.toString</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/cfn-resource.d.ts:208</li></ul></aside></li></ul></section>
@@ -964,28 +961,27 @@ Used in the @aws-cdk/cloudformation-include module.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isCfnElement" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Cfn<wbr/>Element</span><a href="#isCfnElement" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isCfnElement.isCfnElement-1"><span class="tsd-kind-call-signature">is<wbr/>Cfn<wbr/>Element</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnElement</span><a href="#isCfnElement.isCfnElement-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isCfnElement.isCfnElement-1"><span class="tsd-kind-call-signature">is<wbr/>Cfn<wbr/>Element</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnElement</span><a href="#isCfnElement.isCfnElement-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns <code>true</code> if a construct is a stack element (i.e. part of the
 synthesized cloudformation template).</p>
 <p>Uses duck-typing instead of <code>instanceof</code> to allow stack elements from different
 versions of this library to be included in the same stack.</p>
-
-<h3>Returns</h3><p>The construct as a stack element or undefined if it is not a stack element.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnElement</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnElement</span></h4><p>The construct as a stack element or undefined if it is not a stack element.</p>
+<aside class="tsd-sources">
 <p>Inherited from CfnStackSet.isCfnElement</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/cfn-element.d.ts:15</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isCfnResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Cfn<wbr/>Resource</span><a href="#isCfnResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isCfnResource.isCfnResource-1"><span class="tsd-kind-call-signature">is<wbr/>Cfn<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnResource</span><a href="#isCfnResource.isCfnResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isCfnResource.isCfnResource-1"><span class="tsd-kind-call-signature">is<wbr/>Cfn<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnResource</span><a href="#isCfnResource.isCfnResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a CfnResource</p>
 </div>
@@ -994,14 +990,14 @@ versions of this library to be included in the same stack.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnResource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">CfnResource</span></h4><aside class="tsd-sources">
 <p>Inherited from CfnStackSet.isCfnResource</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/cfn-resource.d.ts:29</li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -1016,8 +1012,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1026,7 +1020,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from CfnStackSet.isConstruct</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section></section></div>

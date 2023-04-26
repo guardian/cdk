@@ -22,10 +22,10 @@ Please use [[<code>GuHttpsApplicationListener</code>]] instead of [[<code>GuHttp
 <p>This construct creates a classic load balancer which accepts HTTPS traffic. It communicates with EC2 instances over port 9000
 by default. This default can be overridden via the listener prop, for example:</p>
 <pre><code class="language-typescript"><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuHttpsClassicLoadBalancer</span><span class="hl-1">(</span><span class="hl-0">stack</span><span class="hl-1">, </span><span class="hl-7">&quot;HttpsClassicLoadBalancer&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-8">// other props</span><br/><span class="hl-1">    </span><span class="hl-0">listener:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">internalPort:</span><span class="hl-1"> </span><span class="hl-5">3000</span><span class="hl-1">,</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">  });</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>You can pass a certificate id to this construct via the listener interface, for example:</p>
 <pre><code class="language-typescript"><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-4">GuHttpsClassicLoadBalancer</span><span class="hl-1">(</span><span class="hl-0">stack</span><span class="hl-1">, </span><span class="hl-7">&quot;HttpsClassicLoadBalancer&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-8">// other props</span><br/><span class="hl-1">    </span><span class="hl-0">listener:</span><span class="hl-1"> {</span><br/><span class="hl-1">      </span><span class="hl-0">sslCertificateId:</span><span class="hl-1"> </span><span class="hl-7">&quot;certificateId&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">  });</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>If certificate id is omitted the library will create a Parameter which allows you to pass in a certificate ARN.</p>
 <p>For more details on migrating an existing load balancer and general load balancer defaults, see [[<code>GuClassicLoadBalancer</code>]].</p>
 </div></section>
@@ -36,7 +36,7 @@ by default. This default can be overridden via the listener prop, for example:</
 <ul class="tsd-hierarchy">
 <li><span class="target">GuHttpsClassicLoadBalancer</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/elb.ts#L109">src/constructs/loadbalancing/elb.ts:109</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/elb.ts#L109">src/constructs/loadbalancing/elb.ts:109</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -101,7 +101,7 @@ by default. This default can be overridden via the listener prop, for example:</
 <h4 class="tsd-returns-title">Returns <a href="constructs_loadbalancing.GuHttpsClassicLoadBalancer.html" class="tsd-signature-type tsd-kind-class">GuHttpsClassicLoadBalancer</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="constructs_loadbalancing.GuClassicLoadBalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.GuClassicLoadBalancer.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/elb.ts#L117">src/constructs/loadbalancing/elb.ts:117</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/elb.ts#L117">src/constructs/loadbalancing/elb.ts:117</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="connections" class="tsd-anchor"></a>
@@ -126,7 +126,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_loadbalancing.GuClassicLoadBalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.GuClassicLoadBalancer.html#idWithApp">idWithApp</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="listenerPorts" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>listener<wbr/>Ports</span><a href="#listenerPorts" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">listener<wbr/>Ports</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">ListenerPort</span><span class="tsd-signature-symbol">[]</span></div>
@@ -187,12 +187,12 @@ cross-environment scenarios.</li>
 <h5><span class="tsd-kind-property">unhealthy<wbr/>Threshold</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li></ul></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_loadbalancing.GuClassicLoadBalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.GuClassicLoadBalancer.html#DefaultHealthCheck">DefaultHealthCheck</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/elb.ts#L48">src/constructs/loadbalancing/elb.ts:48</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/elb.ts#L48">src/constructs/loadbalancing/elb.ts:48</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="DefaultListener" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>Default<wbr/>Listener</span><a href="#DefaultListener" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">Default<wbr/>Listener</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">LoadBalancerListener</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/loadbalancing/elb.ts#L110">src/constructs/loadbalancing/elb.ts:110</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/loadbalancing/elb.ts#L110">src/constructs/loadbalancing/elb.ts:110</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Accessors</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="loadBalancerCanonicalHostedZoneName" class="tsd-anchor"></a>
@@ -299,15 +299,14 @@ through its absolute name/arn.</p>
 <li class="tsd-signature tsd-anchor-link" id="addListener.addListener-1"><span class="tsd-kind-call-signature">add<wbr/>Listener</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">listener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">ListenerPort</span><a href="#addListener.addListener-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Add a backend to the load balancer</p>
-
-<h3>Returns</h3><p>A ListenerPort object that controls connections to the listener port</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">listener</span>: <span class="tsd-signature-type ">LoadBalancerListener</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">ListenerPort</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">ListenerPort</span></h4><p>A ListenerPort object that controls connections to the listener port</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="constructs_loadbalancing.GuClassicLoadBalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.GuClassicLoadBalancer.html#addListener">addListener</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-elasticloadbalancing/lib/load-balancer.d.ts:223</li></ul></aside></li></ul></section>
@@ -424,7 +423,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -439,8 +438,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -449,7 +446,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from <a href="constructs_loadbalancing.GuClassicLoadBalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.GuClassicLoadBalancer.html#isConstruct">isConstruct</a></p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
@@ -472,7 +470,7 @@ this type-testing method instead.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -481,7 +479,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_loadbalancing.GuClassicLoadBalancer.html">GuClassicLoadBalancer</a>.<a href="constructs_loadbalancing.GuClassicLoadBalancer.html#isResource">isResource</a></p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section></section></div>

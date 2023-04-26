@@ -26,7 +26,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuS3Bucket</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/s3/index.ts#L12">src/constructs/s3/index.ts:12</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/s3/index.ts#L12">src/constructs/s3/index.ts:12</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -122,7 +122,7 @@
 <h4 class="tsd-returns-title">Returns <a href="constructs_s3.GuS3Bucket.html" class="tsd-signature-type tsd-kind-class">GuS3Bucket</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(Bucket).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/s3/index.ts#L13">src/constructs/s3/index.ts:13</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/s3/index.ts#L13">src/constructs/s3/index.ts:13</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="autoCreatePolicy" class="tsd-anchor"></a>
@@ -199,7 +199,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isWebsite" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>is<wbr/>Website</span><a href="#isWebsite" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">is<wbr/>Website</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
@@ -315,7 +315,7 @@ through its absolute name/arn.</p>
 </ul>
 
 <h3>Example</h3><pre><code class="language-ts"><span class="hl-2">declare</span><span class="hl-1"> </span><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">myLambda</span><span class="hl-1">: </span><span class="hl-9">lambda</span><span class="hl-1">.</span><span class="hl-9">Function</span><span class="hl-1">;</span><br/><span class="hl-1">   </span><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">bucket</span><span class="hl-1"> = </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-0">s3</span><span class="hl-1">.</span><span class="hl-4">Bucket</span><span class="hl-1">(</span><span class="hl-2">this</span><span class="hl-1">, </span><span class="hl-7">&#39;MyBucket&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">   </span><span class="hl-0">bucket</span><span class="hl-1">.</span><span class="hl-4">addEventNotification</span><span class="hl-1">(</span><span class="hl-0">s3</span><span class="hl-1">.</span><span class="hl-0">EventType</span><span class="hl-1">.</span><span class="hl-3">OBJECT_CREATED</span><span class="hl-1">, </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-0">s3n</span><span class="hl-1">.</span><span class="hl-4">LambdaDestination</span><span class="hl-1">(</span><span class="hl-0">myLambda</span><span class="hl-1">), {</span><span class="hl-0">prefix:</span><span class="hl-1"> </span><span class="hl-7">&#39;home/myusername/*&#39;</span><span class="hl-1">});</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -455,12 +455,6 @@ For example, when an <code>IBucket</code> is created from an existing bucket,
 it&#39;s not possible to tell whether the bucket already has a policy
 attached, let alone to re-use that policy to add more statements to it.
 So it&#39;s safest to do nothing in these cases.</p>
-
-<h3>Returns</h3><p>metadata about the execution of this method. If the policy
-was not added, the value of <code>statementAdded</code> will be <code>false</code>. You
-should always check this value to make sure that the operation was
-actually carried out. Otherwise, synthesis and deploy will terminate
-silently, which may be confusing.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -470,7 +464,12 @@ silently, which may be confusing.</p>
 <div class="tsd-comment tsd-typography"><p>the policy statement to be added to the bucket&#39;s
 policy.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">AddToResourcePolicyResult</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">AddToResourcePolicyResult</span></h4><p>metadata about the execution of this method. If the policy
+was not added, the value of <code>statementAdded</code> will be <code>false</code>. You
+should always check this value to make sure that the operation was
+actually carried out. Otherwise, synthesis and deploy will terminate
+silently, which may be confusing.</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addToResourcePolicy</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:525</li></ul></aside></li></ul></section>
@@ -640,7 +639,7 @@ all objects (&quot;*&quot;) in the bucket.</p>
 as needed. For example, you can add a condition that will restrict access only
 to an IPv4 range like this:</p>
 <pre><code><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">grant</span><span class="hl-1"> = </span><span class="hl-0">bucket</span><span class="hl-1">.</span><span class="hl-4">grantPublicAccess</span><span class="hl-1">();</span><br/><span class="hl-0">grant</span><span class="hl-1">.</span><span class="hl-0">resourceStatement</span><span class="hl-1">!.</span><span class="hl-4">addCondition</span><span class="hl-1">(‘</span><span class="hl-0">IpAddress</span><span class="hl-1">’, { “</span><span class="hl-0">aws:SourceIp</span><span class="hl-1">”: “</span><span class="hl-5">54.240</span><span class="hl-1">.</span><span class="hl-5">143.0</span><span class="hl-1">/</span><span class="hl-5">24</span><span class="hl-1">” });</span>
-</code></pre>
+</code><button>Copy</button></pre>
 <p>Note that if this <code>IBucket</code> refers to an existing bucket, possibly not
 managed by CloudFormation, this method will have no effect, since it&#39;s
 impossible to modify the policy of an existing bucket.</p>
@@ -850,8 +849,6 @@ that captures the event. This method will not create the Trail.</p>
 <li><code>s3://onlybucket</code></li>
 <li><code>s3://bucket/key</code></li>
 </ul>
-
-<h3>Returns</h3><p>an ObjectS3Url token</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -861,7 +858,8 @@ that captures the event. This method will not create the Trail.</p>
 <div class="tsd-comment tsd-typography"><p>The S3 key of the object. If not specified, the S3 URL of the
      bucket is returned.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an ObjectS3Url token</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).s3UrlForObject</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:577</li></ul></aside></li></ul></section>
@@ -887,8 +885,6 @@ for dual-stack endpoint (connect to the bucket over IPv6). For example:</p>
 <li><code>https://bucket.s3-accelerate.amazonaws.com</code></li>
 <li><code>https://bucket.s3-accelerate.amazonaws.com/key</code></li>
 </ul>
-
-<h3>Returns</h3><p>an TransferAccelerationUrl token</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -902,7 +898,8 @@ for dual-stack endpoint (connect to the bucket over IPv6). For example:</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">TransferAccelerationUrlOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for generating URL.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an TransferAccelerationUrl token</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).transferAccelerationUrlForObject</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:551</li></ul></aside></li></ul></section>
@@ -918,8 +915,6 @@ for non-regional URLs. For example:</p>
 <li><code>https://s3.us-west-1.amazonaws.com/bucket/key</code></li>
 <li><code>https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey</code></li>
 </ul>
-
-<h3>Returns</h3><p>an ObjectS3Url token</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -929,7 +924,8 @@ for non-regional URLs. For example:</p>
 <div class="tsd-comment tsd-typography"><p>The S3 key of the object. If not specified, the URL of the
      bucket is returned.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an ObjectS3Url token</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).urlForObject</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:538</li></ul></aside></li></ul></section>
@@ -946,8 +942,6 @@ the options for non-regional URL. For example:</p>
 <li><code>https://bucket.s3.amazonaws.com/key</code></li>
 <li><code>https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey</code></li>
 </ul>
-
-<h3>Returns</h3><p>an ObjectS3Url token</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -961,7 +955,8 @@ the options for non-regional URL. For example:</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">VirtualHostedStyleUrlOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for generating URL.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an ObjectS3Url token</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).virtualHostedUrlForObject</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:566</li></ul></aside></li></ul></section>
@@ -1047,7 +1042,7 @@ the options for non-regional URL. For example:</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isConstruct" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Construct</span><a href="#isConstruct" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isConstruct.isConstruct-1"><span class="tsd-kind-call-signature">is<wbr/>Construct</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span><a href="#isConstruct.isConstruct-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Checks if <code>x</code> is a construct.</p>
 <p>Use this method instead of <code>instanceof</code> to properly detect <code>Construct</code>
@@ -1062,8 +1057,6 @@ use a monorepo tool: in those cases, multiple copies of the <code>constructs</co
 library can be accidentally installed, and <code>instanceof</code> will behave
 unpredictably. It is safest to avoid using <code>instanceof</code>, and using
 this type-testing method instead.</p>
-
-<h3>Returns</h3><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -1072,7 +1065,8 @@ this type-testing method instead.</p>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
+<aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).isConstruct</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:243</li></ul></aside></li></ul></section>
@@ -1095,7 +1089,7 @@ this type-testing method instead.</p>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isResource" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Resource</span><a href="#isResource" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="isResource.isResource-1"><span class="tsd-kind-call-signature">is<wbr/>Resource</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span><a href="#isResource.isResource-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Check whether the given construct is a Resource</p>
 </div>
@@ -1104,7 +1098,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type ">IConstruct</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).isResource</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></li></ul></section>

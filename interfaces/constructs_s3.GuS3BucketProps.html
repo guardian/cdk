@@ -24,7 +24,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuS3BucketProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/s3/index.ts#L7">src/constructs/s3/index.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/s3/index.ts#L7">src/constructs/s3/index.ts:7</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -69,7 +69,7 @@
 <div class="tsd-comment tsd-typography"><p>Specifies a canned ACL that grants predefined permissions to the bucket.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">BucketAccessControl</span><span class="hl-1">.</span><span class="hl-3">PRIVATE</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.accessControl</p>
 <ul>
@@ -79,7 +79,7 @@
 <div class="tsd-signature"><span class="tsd-kind-property">app</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from AppIdentity.app</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/0110e97/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/5fedb89/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="autoDeleteObjects" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>auto<wbr/>Delete<wbr/>Objects</span><a href="#autoDeleteObjects" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">auto<wbr/>Delete<wbr/>Objects</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -92,7 +92,7 @@ all objects in the bucket being deleted. Be sure to update your bucket resources
 by deploying with CDK version <code>1.126.0</code> or later <strong>before</strong> switching this value to <code>false</code>.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.autoDeleteObjects</p>
 <ul>
@@ -105,7 +105,7 @@ by deploying with CDK version <code>1.126.0</code> or later <strong>before</stro
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">CloudFormation</span><span class="hl-1"> </span><span class="hl-0">defaults</span><span class="hl-1"> </span><span class="hl-0">will</span><span class="hl-1"> </span><span class="hl-0">apply</span><span class="hl-1">. </span><span class="hl-0">New</span><span class="hl-1"> </span><span class="hl-0">buckets</span><span class="hl-1"> </span><span class="hl-0">and</span><span class="hl-1"> </span><span class="hl-0">objects</span><span class="hl-1"> </span><span class="hl-0">don</span><span class="hl-7">&#39;t allow public access, but users can modify bucket policies or object permissions to allow public acces</span><span class="hl-12">s</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.blockPublicAccess</p>
 <ul>
@@ -123,7 +123,7 @@ attendant cost implications of that).</li>
 <p>Only relevant, when Encryption is set to <code>BucketEncryption.KMS</code> or <code>BucketEncryption.KMS_MANAGED</code>.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.bucketKeyEnabled</p>
 <ul>
@@ -134,7 +134,7 @@ attendant cost implications of that).</li>
 <div class="tsd-comment tsd-typography"><p>Physical name of this bucket.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">Assigned</span><span class="hl-1"> </span><span class="hl-0">by</span><span class="hl-1"> </span><span class="hl-4">CloudFormation</span><span class="hl-1"> (</span><span class="hl-0">recommended</span><span class="hl-1">).</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.bucketName</p>
 <ul>
@@ -147,7 +147,7 @@ attendant cost implications of that).</li>
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-cors.html">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-cors.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-3">CORS</span><span class="hl-1"> </span><span class="hl-0">configuration</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.cors</p>
 <ul>
@@ -175,7 +175,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 &quot;Managed&quot;.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">If</span><span class="hl-1"> </span><span class="hl-0">encryption</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-0">set</span><span class="hl-1"> </span><span class="hl-0">to</span><span class="hl-1"> </span><span class="hl-7">&quot;Kms&quot;</span><span class="hl-1"> </span><span class="hl-0">and</span><span class="hl-1"> </span><span class="hl-2">this</span><span class="hl-1"> </span><span class="hl-0">property</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-2">undefined</span><span class="hl-1">,</span><br/><span class="hl-0">a</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-3">KMS</span><span class="hl-1"> </span><span class="hl-0">key</span><span class="hl-1"> </span><span class="hl-0">will</span><span class="hl-1"> </span><span class="hl-0">be</span><span class="hl-1"> </span><span class="hl-0">created</span><span class="hl-1"> </span><span class="hl-0">and</span><span class="hl-1"> </span><span class="hl-0">associated</span><span class="hl-1"> </span><span class="hl-0">with</span><span class="hl-1"> </span><span class="hl-2">this</span><span class="hl-1"> </span><span class="hl-0">bucket</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.encryptionKey</p>
 <ul>
@@ -188,7 +188,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-ssl-requests-only.html">https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-ssl-requests-only.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.enforceSSL</p>
 <ul>
@@ -199,7 +199,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <div class="tsd-comment tsd-typography"><p>Whether this bucket should send notifications to Amazon EventBridge or not.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.eventBridgeEnabled</p>
 <ul>
@@ -212,7 +212,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html">https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">Intelligent</span><span class="hl-1"> </span><span class="hl-0">Tiiering</span><span class="hl-1"> </span><span class="hl-0">Configurations</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.intelligentTieringConfigurations</p>
 <ul>
@@ -225,7 +225,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">inventory</span><span class="hl-1"> </span><span class="hl-0">configuration</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.inventories</p>
 <ul>
@@ -236,7 +236,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <div class="tsd-comment tsd-typography"><p>Rules that define how Amazon S3 manages objects during their lifetime.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">lifecycle</span><span class="hl-1"> </span><span class="hl-0">rules</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.lifecycleRules</p>
 <ul>
@@ -249,7 +249,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-metricsconfiguration.html">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-metricsconfiguration.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">metrics</span><span class="hl-1"> </span><span class="hl-0">configuration</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.metrics</p>
 <ul>
@@ -260,7 +260,7 @@ An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
 <div class="tsd-comment tsd-typography"><p>The role to be used by the notifications handler</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">a</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-0">role</span><span class="hl-1"> </span><span class="hl-0">will</span><span class="hl-1"> </span><span class="hl-0">be</span><span class="hl-1"> </span><span class="hl-0">created</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.notificationsHandlerRole</p>
 <ul>
@@ -275,7 +275,7 @@ has object lock enabled. Enabling object lock for existing buckets is not suppor
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-overview.html#object-lock-bucket-config-enable">https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-overview.html#object-lock-bucket-config-enable</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-0">no</span><span class="hl-1"> </span><span class="hl-6">default</span><span class="hl-1"> </span><span class="hl-0">retention</span><span class="hl-1"> </span><span class="hl-0">period</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.objectLockDefaultRetention</p>
 <ul>
@@ -290,7 +290,7 @@ enabled when the bucket is created.</p>
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-overview.html#object-lock-bucket-config-enable">https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-overview.html#object-lock-bucket-config-enable</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span><span class="hl-1">, </span><span class="hl-0">unless</span><span class="hl-1"> </span><span class="hl-0">objectLockDefaultRetention</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-4">set</span><span class="hl-1"> (</span><span class="hl-0">then</span><span class="hl-1">, </span><span class="hl-2">true</span><span class="hl-1">)</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.objectLockEnabled</p>
 <ul>
@@ -303,7 +303,7 @@ enabled when the bucket is created.</p>
 <h3>See</h3><p><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/about-object-ownership.html">https://docs.aws.amazon.com/AmazonS3/latest/dev/about-object-ownership.html</a></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">ObjectOwnership</span><span class="hl-1"> </span><span class="hl-0">configuration</span><span class="hl-1">, </span><span class="hl-0">uploading</span><span class="hl-1"> </span><span class="hl-0">account</span><span class="hl-1"> </span><span class="hl-0">will</span><span class="hl-1"> </span><span class="hl-0">own</span><span class="hl-1"> </span><span class="hl-0">the</span><span class="hl-1"> </span><span class="hl-0">object</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.objectOwnership</p>
 <ul>
@@ -315,7 +315,7 @@ enabled when the bucket is created.</p>
 Similar to calling <code>bucket.grantPublicAccess()</code></p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.publicReadAccess</p>
 <ul>
@@ -326,7 +326,7 @@ Similar to calling <code>bucket.grantPublicAccess()</code></p>
 <div class="tsd-comment tsd-typography"><p>Destination bucket for the server access logs.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">If</span><span class="hl-1"> </span><span class="hl-7">&quot;serverAccessLogsPrefix&quot;</span><span class="hl-1"> </span><span class="hl-2">undefined</span><span class="hl-1"> - </span><span class="hl-0">access</span><span class="hl-1"> </span><span class="hl-0">logs</span><span class="hl-1"> </span><span class="hl-0">disabled</span><span class="hl-1">, </span><span class="hl-0">otherwise</span><span class="hl-1"> - </span><span class="hl-0">log</span><span class="hl-1"> </span><span class="hl-0">to</span><span class="hl-1"> </span><span class="hl-0">current</span><span class="hl-1"> </span><span class="hl-0">bucket</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.serverAccessLogsBucket</p>
 <ul>
@@ -338,7 +338,7 @@ Similar to calling <code>bucket.grantPublicAccess()</code></p>
 If defined without &quot;serverAccessLogsBucket&quot;, enables access logs to current bucket with this prefix.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">log</span><span class="hl-1"> </span><span class="hl-0">file</span><span class="hl-1"> </span><span class="hl-0">prefix</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.serverAccessLogsPrefix</p>
 <ul>
@@ -349,7 +349,7 @@ If defined without &quot;serverAccessLogsBucket&quot;, enables access logs to cu
 <div class="tsd-comment tsd-typography"><p>Whether this bucket should have transfer acceleration turned on or not.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.transferAcceleration</p>
 <ul>
@@ -360,7 +360,7 @@ If defined without &quot;serverAccessLogsBucket&quot;, enables access logs to cu
 <div class="tsd-comment tsd-typography"><p>Whether this bucket should have versioning turned on or not.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-2">false</span><span class="hl-1"> (</span><span class="hl-0">unless</span><span class="hl-1"> </span><span class="hl-0">object</span><span class="hl-1"> </span><span class="hl-0">lock</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-0">enabled</span><span class="hl-1">, </span><span class="hl-0">then</span><span class="hl-1"> </span><span class="hl-2">true</span><span class="hl-1">)</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.versioned</p>
 <ul>
@@ -372,7 +372,7 @@ If defined without &quot;serverAccessLogsBucket&quot;, enables access logs to cu
 <code>websiteIndexDocument</code> must also be set if this is set.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">error</span><span class="hl-1"> </span><span class="hl-0">document</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.websiteErrorDocument</p>
 <ul>
@@ -384,7 +384,7 @@ If defined without &quot;serverAccessLogsBucket&quot;, enables access logs to cu
 hosting for this bucket.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">index</span><span class="hl-1"> </span><span class="hl-0">document</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.websiteIndexDocument</p>
 <ul>
@@ -396,7 +396,7 @@ hosting for this bucket.</p>
 <p>If you specify this property, you can&#39;t specify &quot;websiteIndexDocument&quot;, &quot;websiteErrorDocument&quot; nor , &quot;websiteRoutingRules&quot;.</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">redirection</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.websiteRedirect</p>
 <ul>
@@ -407,7 +407,7 @@ hosting for this bucket.</p>
 <div class="tsd-comment tsd-typography"><p>Rules that define when a redirect is applied and the redirect behavior</p>
 
 <h3>Default</h3><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">No</span><span class="hl-1"> </span><span class="hl-0">redirection</span><span class="hl-1"> </span><span class="hl-0">rules</span><span class="hl-1">.</span>
-</code></pre>
+</code><button>Copy</button></pre>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.websiteRoutingRules</p>
 <ul>
