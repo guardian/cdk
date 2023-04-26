@@ -229,7 +229,10 @@ export interface GuEc2AppProps extends AppIdentity {
      * If specified, cannot be empty. Users must be a member of at least one
      * group to gain access.
      *
-     * @defaultValue [`engineering@theguardian.com`]
+     * WARNING: groups must be specified with the `guardian.co.uk` domain, even
+     * if that is the non-idiomatic choice for daily use.
+     *
+     * @defaultValue [`engineering@guardian.co.uk`]
      */
     allowedGroups?: string[];
     /**
@@ -453,7 +456,7 @@ export class GuEc2App extends Construct {
       const prefix = `/${scope.stage}/${scope.stack}/${app}`;
 
       const {
-        allowedGroups = ["engineering@theguardian.com"],
+        allowedGroups = ["engineering@guardian.co.uk"],
         clientIDSSMPath = `${prefix}/google-auth-client-id`,
         clientSecretSecretsManagerPath = `${prefix}/google-auth-client-secret`,
       } = props.googleAuth;
@@ -462,10 +465,20 @@ export class GuEc2App extends Construct {
         throw new Error("googleAuth.allowedGroups cannot be empty!");
       }
 
+      if (allowedGroups.find((group) => !group.endsWith("@guardian.co.uk"))) {
+        throw new Error("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
+      }
+
+      const deployToolsAccountId = StringParameter.fromStringParameterName(
+        scope,
+        "deploy-tools-account-id-parameter",
+        NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path
+      );
+
       // See https://github.com/guardian/cognito-gatekeeper for the source code
       // here.
       // ARN format is: arn:aws:lambda:aws-region:acct-id:function:helloworld.
-      const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path}:function:deploy-PROD-gatekeeper-lambda`;
+      const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${deployToolsAccountId.stringValue}:function:deploy-PROD-gatekeeper-lambda`;
 
       // Note, handler and filename must match here:
       // https://github.com/guardian/cognito-gatekeeper.

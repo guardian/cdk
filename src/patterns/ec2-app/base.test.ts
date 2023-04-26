@@ -797,4 +797,64 @@ describe("the GuEC2App pattern", function () {
       ],
     });
   });
+
+  it("throws when googleAuth.allowedGroups is empty", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "app";
+    const domain = "domain-name-for-your-application.example";
+
+    expect(
+      () =>
+        new GuEc2App(stack, {
+          applicationPort: 3000,
+          access: { scope: AccessScope.PUBLIC },
+          app,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          certificateProps: {
+            domainName: domain,
+          },
+          scaling: {
+            minimumInstances: 1,
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          userData: "",
+          accessLogging: { enabled: false },
+          googleAuth: {
+            enabled: true,
+            domain,
+            allowedGroups: [],
+          },
+        })
+    ).toThrowError("googleAuth.allowedGroups cannot be empty!");
+  });
+
+  it("throws when googleAuth.allowedGroups contains groups using non-standard domains", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "app";
+    const domain = "domain-name-for-your-application.example";
+
+    expect(
+      () =>
+        new GuEc2App(stack, {
+          applicationPort: 3000,
+          access: { scope: AccessScope.PUBLIC },
+          app,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          certificateProps: {
+            domainName: domain,
+          },
+          scaling: {
+            minimumInstances: 1,
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          userData: "",
+          accessLogging: { enabled: false },
+          googleAuth: {
+            enabled: true,
+            domain,
+            allowedGroups: ["apple@guardian.co.uk", "engineering@theguardian.com"],
+          },
+        })
+    ).toThrowError("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
+  });
 });
