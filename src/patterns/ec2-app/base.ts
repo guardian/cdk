@@ -516,7 +516,7 @@ export class GuEc2App extends Construct {
       const userPoolDomain = userPool.addDomain("domain", {
         cognitoDomain: {
           // Must be unique (as global across AWS)
-          domainPrefix: `com-gu-${app.toLowerCase()}-${scope.stage.toLowerCase()}`,
+          domainPrefix: `com-gu-${app.toLowerCase()}-${scope.stage.toLowerCase()}-${new Date().valueOf().toString()}`,
         },
       });
 
