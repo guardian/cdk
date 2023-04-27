@@ -527,7 +527,7 @@ export class GuEc2App extends Construct {
 
       const clientId = SecretValue.secretsManager(credentialsSecretsManagerPath, { jsonField: "clientId" });
       const clientSecret = SecretValue.secretsManager(credentialsSecretsManagerPath, { jsonField: "clientSecret" });
-      // FBASDLKJ
+      // FBASDLKJs fsdlkjf
       const userPoolIdp = new UserPoolIdentityProviderGoogle(scope, "google-idp", {
         userPool: userPool,
         clientId: clientId.toString(),
