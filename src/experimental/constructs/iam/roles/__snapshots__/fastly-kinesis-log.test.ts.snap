@@ -141,9 +141,6 @@ exports[`The GuFastlyKinesisLogRole construct correctly wires up the policy 1`] 
             },
           ],
         },
-        "StreamModeDetails": {
-          "StreamMode": "PROVISIONED",
-        },
         "Tags": [
           {
             "Key": "gu:cdk:version",
