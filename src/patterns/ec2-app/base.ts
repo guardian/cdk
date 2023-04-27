@@ -474,13 +474,13 @@ export class GuEc2App extends Construct {
         NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path
       );
 
-      // See https://github.com/guardian/cognito-gatekeeper for the source code
-      // here.
-      // ARN format is: arn:aws:lambda:aws-region:acct-id:function:helloworld.
+      // See https://github.com/guardian/cognito-auth-lambdas for the source
+      // code here. ARN format is:
+      // arn:aws:lambda:aws-region:acct-id:function:helloworld.
       const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${deployToolsAccountId.stringValue}:function:deploy-PROD-gatekeeper-lambda`;
 
       // Note, handler and filename must match here:
-      // https://github.com/guardian/cognito-gatekeeper.
+      // https://github.com/guardian/cognito-auth-lambdas.
       const authLambda = new GuLambdaFunction(scope, "auth-lambda", {
         app: app,
         memorySize: 128,
@@ -548,7 +548,9 @@ export class GuEc2App extends Construct {
 
         // Note: id and access validity token validity cannot be less than one
         // hour (this is the cognito cookie duration). To quickly invalidate
-        // credentials, disable the user in Cognito.
+        // credentials, disable the user in Cognito. It might be that we want to
+        // parameterise these going forward, but that would require Infosec
+        // discussion.
         idTokenValidity: Duration.hours(1),
         accessTokenValidity: Duration.hours(1),
         refreshTokenValidity: Duration.days(7),
