@@ -35,6 +35,14 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    * @defaultValue  [[`GuDistributionBucketParameter`]]
    */
   bucketNamePath?: string;
+  /**
+   * Set to `true` to use the filename *without* the stage/stack/app prefix.
+   *
+   * Typically you should not override this but you may need to if, for example,
+   * you are referencing a file that is shared across many apps and/or AWS
+   * accounts.
+   */
+  withoutFilePrefix?: boolean;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -86,7 +94,7 @@ export class GuLambdaFunction extends Function {
   public readonly fileName: string;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout, bucketNamePath } = props;
+    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, withoutFilePrefix } = props;
 
     const bucketName = bucketNamePath
       ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
@@ -99,7 +107,7 @@ export class GuLambdaFunction extends Function {
     };
 
     const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, bucketName);
-    const objectKey = GuDistributable.getObjectKey(scope, { app }, { fileName });
+    const objectKey = withoutFilePrefix ? fileName : GuDistributable.getObjectKey(scope, { app }, { fileName });
     const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
