@@ -24,9 +24,9 @@ export class GuAlb5xxPercentageAlarm extends GuAlarm {
     const mathExpression = new MathExpression({
       expression: "100*(m1+m2)/m3",
       usingMetrics: {
-        m1: props.loadBalancer.metricHttpCodeElb(HttpCodeElb.ELB_5XX_COUNT),
-        m2: props.loadBalancer.metricHttpCodeTarget(HttpCodeTarget.TARGET_5XX_COUNT),
-        m3: props.loadBalancer.metricRequestCount(),
+        m1: props.loadBalancer.metrics.httpCodeElb(HttpCodeElb.ELB_5XX_COUNT),
+        m2: props.loadBalancer.metrics.httpCodeTarget(HttpCodeTarget.TARGET_5XX_COUNT),
+        m3: props.loadBalancer.metrics.requestCount(),
       },
       label: `% of 5XX responses served for ${props.app} (load balancer and instances combined)`,
       period: Duration.minutes(1),
@@ -67,7 +67,7 @@ export class GuUnhealthyInstancesAlarm extends GuAlarm {
       ...props,
       alarmName: alarmName,
       alarmDescription: alarmDescription,
-      metric: props.targetGroup.metricUnhealthyHostCount().with({ period, statistic: Statistic.MAXIMUM }),
+      metric: props.targetGroup.metrics.unhealthyHostCount().with({ period, statistic: Statistic.MAXIMUM }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,

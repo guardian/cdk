@@ -78,9 +78,6 @@ exports[`The GuStackSet construct should correctly provision a stack with a stac
             }
           ]
         },
-        "StreamModeDetails": {
-          "StreamMode": "PROVISIONED"
-        },
         "Tags": [
           {
             "Key": "gu:cdk:version",

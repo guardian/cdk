@@ -27,9 +27,6 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
           "EncryptionType": "KMS",
           "KeyId": "alias/aws/kinesis",
         },
-        "StreamModeDetails": {
-          "StreamMode": "PROVISIONED",
-        },
         "Tags": [
           {
             "Key": "App",
