@@ -25,7 +25,7 @@ import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatc
 import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
-import { GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
+import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
 import { GuLambdaFunction } from "../../constructs/lambda";
@@ -567,6 +567,14 @@ export class GuEc2App extends Construct {
           sessionTimeout: Duration.minutes(15),
         }),
       });
+
+      // Need to give the ALB outbound access on 443 for the IdP endpoints.
+      const idpEgressSecurityGroup = new GuHttpsEgressSecurityGroup(scope, "ldp-access", {
+        app,
+        vpc,
+      });
+
+      loadBalancer.addSecurityGroup(idpEgressSecurityGroup);
     }
 
     this.vpc = vpc;
