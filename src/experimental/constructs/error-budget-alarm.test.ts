@@ -42,11 +42,11 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
       badEvents: new MathExpression({
         expression: "loadBalancer5xxErrors + instance5xxErrors",
         usingMetrics: {
-          loadBalancer5xxErrors: ec2App.loadBalancer.metricHttpCodeTarget(HttpCodeTarget.TARGET_5XX_COUNT),
-          instance5xxErrors: ec2App.loadBalancer.metricHttpCodeElb(HttpCodeElb.ELB_5XX_COUNT),
+          loadBalancer5xxErrors: ec2App.loadBalancer.metrics.httpCodeTarget(HttpCodeTarget.TARGET_5XX_COUNT),
+          instance5xxErrors: ec2App.loadBalancer.metrics.httpCodeElb(HttpCodeElb.ELB_5XX_COUNT),
         },
       }),
-      validEvents: ec2App.loadBalancer.metricRequestCount(),
+      validEvents: ec2App.loadBalancer.metrics.requestCount(),
       snsTopicNameForAlerts: "test-sns-topic",
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
@@ -71,10 +71,10 @@ describe("The ErrorBudgetAlarmExperimental construct", () => {
     new GuErrorBudgetAlarmExperimental(stack, {
       sloName: "MapiFrontsLatency",
       sloTarget: 0.999,
-      badEvents: ec2App.loadBalancer.metricTargetResponseTime({
+      badEvents: ec2App.loadBalancer.metrics.targetResponseTime({
         statistic: "TC(0.5:)", // This gets a count of slow requests i.e. the number of requests that completed in 0.5 seconds or more
       }),
-      validEvents: ec2App.loadBalancer.metricRequestCount(),
+      validEvents: ec2App.loadBalancer.metrics.requestCount(),
       snsTopicNameForAlerts: "test-sns-topic",
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
