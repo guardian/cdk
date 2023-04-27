@@ -4,6 +4,9 @@ on:
     # At 10:00 on day-of-month 10.
     # See https://crontab.guru/#0_10_10_*_*
     - cron: '0 10 10 * *'
+
+  # Allows one to update the version of AWS CDK by simply starting the workflow, as opposed to manually running the update-aws-cdk script.
+  workflow_dispatch:
 jobs:
   update-aws-cdk:
     runs-on: ubuntu-latest
