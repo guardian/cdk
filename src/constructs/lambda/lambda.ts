@@ -46,7 +46,7 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
   /**
    * TODO
    */
-  managedDeployment?: boolean
+  managedDeployment?: boolean;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -98,6 +98,7 @@ export class GuLambdaFunction extends Function {
   public readonly fileName: string;
   public readonly bucketNamePath: string | undefined;
   public readonly managedDeployment: boolean;
+  public readonly withoutFilePrefix: boolean;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName, runtime, memorySize, timeout, bucketNamePath, withoutFilePrefix, managedDeployment } = props;
@@ -130,6 +131,7 @@ export class GuLambdaFunction extends Function {
     this.fileName = fileName;
     this.bucketNamePath = bucketNamePath;
     this.managedDeployment = managedDeployment ?? false;
+    this.withoutFilePrefix = withoutFilePrefix ?? false;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {

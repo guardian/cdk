@@ -343,6 +343,9 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-artifact.zip
           actions:
@@ -370,6 +373,9 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-artifact.zip
           actions:
@@ -535,6 +541,9 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
@@ -583,6 +592,9 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
@@ -614,6 +626,9 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
@@ -662,6 +677,9 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
