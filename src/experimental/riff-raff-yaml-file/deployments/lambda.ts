@@ -6,6 +6,18 @@ export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployme
   const { app, fileName } = lambda;
   const { stack, region } = lambda.stack as GuStack;
 
+  const bucketProps: {
+    bucketSsmLookup?: boolean,
+    bucketSsmKey?: string
+  } =
+    lambda.bucketNamePath === undefined
+      ? {
+          bucketSsmLookup: true,
+        }
+      : {
+          bucketSsmKey: lambda.bucketNamePath,
+        };
+
   return {
     name: ["lambda-upload", region, stack, app].join("-"),
     props: {
@@ -15,7 +27,7 @@ export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployme
       app,
       contentDirectory: app,
       parameters: {
-        bucketSsmLookup: true,
+        ...bucketProps,
         lookupByTags: true,
         fileName,
       },
