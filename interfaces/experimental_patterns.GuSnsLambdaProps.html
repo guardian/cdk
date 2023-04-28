@@ -39,7 +39,7 @@ For a full list of optional properties, see [[<code>GuLambdaErrorPercentageMonit
 <ul class="tsd-hierarchy">
 <li><span class="target">GuSnsLambdaProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/experimental/patterns/sns-lambda.ts#L47">src/experimental/patterns/sns-lambda.ts:47</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/experimental/patterns/sns-lambda.ts#L47">src/experimental/patterns/sns-lambda.ts:47</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -92,6 +92,7 @@ For a full list of optional properties, see [[<code>GuLambdaErrorPercentageMonit
 <a href="experimental_patterns.GuSnsLambdaProps.html#tracing" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>tracing?</span></a>
 <a href="experimental_patterns.GuSnsLambdaProps.html#vpc" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>vpc?</span></a>
 <a href="experimental_patterns.GuSnsLambdaProps.html#vpcSubnets" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>vpc<wbr/>Subnets?</span></a>
+<a href="experimental_patterns.GuSnsLambdaProps.html#withoutFilePrefix" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>without<wbr/>File<wbr/>Prefix?</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -140,7 +141,7 @@ Use this property to acknowledge this limitation and still place the function in
 <div class="tsd-signature"><span class="tsd-kind-property">app</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from Omit.app</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="architecture" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>architecture</span><a href="#architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">architecture</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">Architecture</span></div>
@@ -164,7 +165,7 @@ accounts.</p>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.bucketNamePath</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/constructs/lambda/lambda.ts#L37">src/constructs/lambda/lambda.ts:37</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/constructs/lambda/lambda.ts#L37">src/constructs/lambda/lambda.ts:37</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="codeSigningConfig" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>code<wbr/>Signing<wbr/>Config</span><a href="#codeSigningConfig" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">code<wbr/>Signing<wbr/>Config</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">ICodeSigningConfig</span></div>
@@ -296,7 +297,7 @@ Lambda function source code.</p>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>existing<wbr/>Sns<wbr/>Topic</span><a href="#existingSnsTopic" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">existing<wbr/>Sns<wbr/>Topic</span><span class="tsd-signature-symbol">?:</span> <a href="experimental_patterns.ExistingSnsTopic.html" class="tsd-signature-type tsd-kind-interface">ExistingSnsTopic</a></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/experimental/patterns/sns-lambda.ts#L49">src/experimental/patterns/sns-lambda.ts:49</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/experimental/patterns/sns-lambda.ts#L49">src/experimental/patterns/sns-lambda.ts:49</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="fileName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>file<wbr/>Name</span><a href="#fileName" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">file<wbr/>Name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -305,7 +306,7 @@ We&#39;ll look for <code>fileName</code> on the path &quot;bucket/stack/stage/ap
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.fileName</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/types/distributable.ts#L8">src/types/distributable.ts:8</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/types/distributable.ts#L8">src/types/distributable.ts:8</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="filesystem" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>filesystem</span><a href="#filesystem" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">filesystem</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">FileSystem</span></div>
@@ -457,7 +458,7 @@ Developer Guide.</p>
 <h3 class="tsd-anchor-link"><span>monitoring<wbr/>Configuration</span><a href="#monitoringConfiguration" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">monitoring<wbr/>Configuration</span><span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.GuLambdaErrorPercentageMonitoringProps.html" class="tsd-signature-type tsd-kind-interface">GuLambdaErrorPercentageMonitoringProps</a><span class="tsd-signature-symbol"> | </span><a href="constructs_cloudwatch.NoMonitoring.html" class="tsd-signature-type tsd-kind-interface">NoMonitoring</a></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/experimental/patterns/sns-lambda.ts#L48">src/experimental/patterns/sns-lambda.ts:48</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/experimental/patterns/sns-lambda.ts#L48">src/experimental/patterns/sns-lambda.ts:48</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="onFailure" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>on<wbr/>Failure</span><a href="#onFailure" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">on<wbr/>Failure</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">IDestination</span></div>
@@ -598,7 +599,7 @@ concerned about throttling.</p>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.throttlingMonitoring</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/7e1fe1d/src/constructs/lambda/lambda.ts#L27">src/constructs/lambda/lambda.ts:27</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/constructs/lambda/lambda.ts#L27">src/constructs/lambda/lambda.ts:27</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="timeout" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>timeout</span><a href="#timeout" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">timeout</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">Duration</span></div>
@@ -650,7 +651,18 @@ public subnets is not allowed (unless <code>allowPublicSubnet</code> is set to <
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.vpcSubnets</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:141</li></ul></aside></section></section></div>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:141</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited"><a id="withoutFilePrefix" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>without<wbr/>File<wbr/>Prefix</span><a href="#withoutFilePrefix" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">without<wbr/>File<wbr/>Prefix</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Set to <code>true</code> to use the filename <em>without</em> the stage/stack/app prefix.</p>
+<p>Typically you should not override this but you may need to if, for example,
+you are referencing a file that is shared across many apps and/or AWS
+accounts.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from Omit.withoutFilePrefix</p>
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/34fc8bf/src/constructs/lambda/lambda.ts#L45">src/constructs/lambda/lambda.ts:45</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -714,7 +726,8 @@ public subnets is not allowed (unless <code>allowPublicSubnet</code> is set to <
 <li><a href="#timeout" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>timeout</span></a></li>
 <li><a href="#tracing" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>tracing</span></a></li>
 <li><a href="#vpc" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>vpc</span></a></li>
-<li><a href="#vpcSubnets" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>vpc<wbr/>Subnets</span></a></li></ul></div></details></div>
+<li><a href="#vpcSubnets" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>vpc<wbr/>Subnets</span></a></li>
+<li><a href="#withoutFilePrefix" class="tsd-is-inherited"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>without<wbr/>File<wbr/>Prefix</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../index.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-namespace)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-4-path"></rect><path d="M9.33 16V7.24H10.77L13.446 14.74C13.43 14.54 13.41 14.296 13.386 14.008C13.37 13.712 13.354 13.404 13.338 13.084C13.33 12.756 13.326 12.448 13.326 12.16V7.24H14.37V16H12.93L10.266 8.5C10.282 8.692 10.298 8.936 10.314 9.232C10.33 9.52 10.342 9.828 10.35 10.156C10.366 10.476 10.374 10.784 10.374 11.08V16H9.33Z" fill="var(--color-text)" id="icon-4-text"></path></svg><span>@guardian/cdk -<wbr/> v50.3.1</span></a>
 <ul class="tsd-small-nested-navigation">
