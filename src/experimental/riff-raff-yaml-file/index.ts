@@ -219,7 +219,7 @@ export class RiffRaffYamlFileExperimental {
           const autoscalingGroups = this.getAutoScalingGroups(stack);
 
           const artifactUploads: RiffRaffDeployment[] = [
-            lambdas.map(uploadLambdaArtifact),
+            lambdas.filter((_) => !_.managedDeployment).map(uploadLambdaArtifact),
             autoscalingGroups.map(uploadAutoscalingArtifact),
           ].flat();
           artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
