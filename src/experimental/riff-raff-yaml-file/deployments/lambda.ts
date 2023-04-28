@@ -17,6 +17,9 @@ export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployme
       parameters: {
         bucketSsmLookup: true,
         lookupByTags: true,
+        prefixStackToKey: !lambda.withoutFilePrefix,
+        prefixAppToKey: !lambda.withoutFilePrefix,
+        prefixStageToKey: !lambda.withoutFilePrefix,
         fileName,
       },
       actions: ["uploadLambda"],

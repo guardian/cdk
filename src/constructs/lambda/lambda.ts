@@ -92,9 +92,11 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 export class GuLambdaFunction extends Function {
   public readonly app: string;
   public readonly fileName: string;
+  public readonly bucketOverride: boolean;
+  public readonly withoutFilePrefix: boolean;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, withoutFilePrefix } = props;
+    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, withoutFilePrefix = false } = props;
 
     const bucketName = bucketNamePath
       ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
@@ -122,6 +124,8 @@ export class GuLambdaFunction extends Function {
 
     this.app = app;
     this.fileName = fileName;
+    this.bucketOverride = bucketNamePath !== undefined;
+    this.withoutFilePrefix = withoutFilePrefix;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
