@@ -2,15 +2,15 @@ import type { GuStack } from "../../../constructs/core";
 import type { GuLambdaFunction } from "../../../constructs/lambda";
 import type { RiffRaffDeployment } from "../types";
 
-const locationProps = (
-  lambda: GuLambdaFunction
-): {
+interface S3LocationProps {
   bucketSsmLookup?: boolean;
   bucketSsmKey?: string;
   prefixStackToKey?: boolean;
   prefixAppToKey?: boolean;
   prefixStageToKey?: boolean;
-} => {
+}
+
+const locationProps = (lambda: GuLambdaFunction): S3LocationProps => {
   const bucketProp =
     lambda.bucketNamePath === undefined
       ? {
