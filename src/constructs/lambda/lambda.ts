@@ -101,7 +101,16 @@ export class GuLambdaFunction extends Function {
   public readonly withoutFilePrefix: boolean;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, withoutFilePrefix, managedDeployment } = props;
+    const {
+      app,
+      fileName,
+      runtime,
+      memorySize,
+      timeout,
+      bucketNamePath,
+      withoutFilePrefix = false,
+      managedDeployment = false,
+    } = props;
 
     const bucketName = bucketNamePath
       ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
@@ -130,8 +139,8 @@ export class GuLambdaFunction extends Function {
     this.app = app;
     this.fileName = fileName;
     this.bucketNamePath = bucketNamePath;
-    this.managedDeployment = managedDeployment ?? false;
-    this.withoutFilePrefix = withoutFilePrefix ?? false;
+    this.managedDeployment = managedDeployment;
+    this.withoutFilePrefix = withoutFilePrefix;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
