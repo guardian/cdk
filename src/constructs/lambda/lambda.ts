@@ -44,7 +44,11 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    */
   withoutFilePrefix?: boolean;
   /**
-   * TODO
+   * Set to `true` this informs consumers of this function that upload is
+   * managed elsewhere by DevX.
+   *
+   * This is used by RiffRaffYamlFileExperimental to skip generating
+   * an uploadLambda step.
    */
   managedDeployment?: boolean;
 }
