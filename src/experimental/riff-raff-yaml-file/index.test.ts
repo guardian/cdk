@@ -5,6 +5,7 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { AccessScope } from "../../constants";
 import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
+import { GuLambdaFunction } from "../../constructs/lambda";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../../patterns";
 import { RiffRaffYamlFileExperimental } from "./index";
 
@@ -363,6 +364,67 @@ describe("The RiffRaffYamlFileExperimental class", () => {
               TEST: test-stack.template.json
           dependencies:
             - lambda-upload-eu-west-1-test-my-lambda
+        lambda-update-eu-west-1-test-my-lambda:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda
+          contentDirectory: my-lambda
+          parameters:
+            bucketSsmLookup: true
+            prefixStackToKey: true
+            prefixAppToKey: true
+            prefixStageToKey: true
+            lookupByTags: true
+            fileName: my-lambda-artifact.zip
+          actions:
+            - updateLambda
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+      "
+    `);
+  });
+
+  it("Should not create an uploadLambda step when managedDeployment is true", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuLambdaFunction(this, "test", {
+          app: "my-lambda",
+          managedDeployment: true,
+          runtime: Runtime.NODEJS_16_X,
+          fileName: "my-lambda-artifact.zip",
+          handler: "handler.main",
+          timeout: Duration.minutes(1),
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - TEST
+      deployments:
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              TEST: test-stack.template.json
         lambda-update-eu-west-1-test-my-lambda:
           type: aws-lambda
           stacks:
