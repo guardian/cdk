@@ -387,7 +387,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     `);
   });
 
-  it("Should not create an uploadLambda step when managedDeployment is true", () => {
+  it("Should not create an uploadLambda step when withoutArtifactUpload is true", () => {
     const app = new App({ outdir: "/tmp/cdk.out" });
 
     class MyApplicationStack extends GuStack {
@@ -397,7 +397,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
         new GuLambdaFunction(this, "test", {
           app: "my-lambda",
-          managedDeployment: true,
+          withoutArtifactUpload: true,
           runtime: Runtime.NODEJS_16_X,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",

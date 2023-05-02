@@ -489,7 +489,7 @@ export class GuEc2App extends Construct {
         runtime: Runtime.GO_1_X,
         fileName: "deploy/INFRA/cognito-lambda/devx-cognito-lambda-amd64-v1.zip",
         withoutFilePrefix: true,
-        managedDeployment: true,
+        withoutArtifactUpload: true,
         bucketNamePath: NAMED_SSM_PARAMETER_PATHS.OrganisationDistributionBucket.path,
         architecture: Architecture.X86_64,
         environment: {

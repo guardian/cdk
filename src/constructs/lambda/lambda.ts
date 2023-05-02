@@ -50,7 +50,7 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    * This is used by RiffRaffYamlFileExperimental to skip generating
    * an uploadLambda step.
    */
-  managedDeployment?: boolean;
+  withoutArtifactUpload?: boolean;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -101,7 +101,7 @@ export class GuLambdaFunction extends Function {
   public readonly app: string;
   public readonly fileName: string;
   public readonly bucketNamePath: string | undefined;
-  public readonly managedDeployment: boolean;
+  public readonly withoutArtifactUpload: boolean;
   public readonly withoutFilePrefix: boolean;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
@@ -113,7 +113,7 @@ export class GuLambdaFunction extends Function {
       timeout,
       bucketNamePath,
       withoutFilePrefix = false,
-      managedDeployment = false,
+      withoutArtifactUpload: withoutArtifactUpload = false,
     } = props;
 
     const bucketName = bucketNamePath
@@ -143,7 +143,7 @@ export class GuLambdaFunction extends Function {
     this.app = app;
     this.fileName = fileName;
     this.bucketNamePath = bucketNamePath;
-    this.managedDeployment = managedDeployment;
+    this.withoutArtifactUpload = withoutArtifactUpload;
     this.withoutFilePrefix = withoutFilePrefix;
 
     if (props.errorPercentageMonitoring) {
