@@ -2,6 +2,32 @@ import type { GuStack } from "../../../constructs/core";
 import type { GuLambdaFunction } from "../../../constructs/lambda";
 import type { RiffRaffDeployment } from "../types";
 
+interface S3LocationProps {
+  bucketSsmLookup?: boolean;
+  bucketSsmKey?: string;
+  prefixStackToKey?: boolean;
+  prefixAppToKey?: boolean;
+  prefixStageToKey?: boolean;
+}
+
+const locationProps = (lambda: GuLambdaFunction): S3LocationProps => {
+  const bucketProp =
+    lambda.bucketNamePath === undefined
+      ? {
+          bucketSsmLookup: true,
+        }
+      : {
+          bucketSsmKey: lambda.bucketNamePath,
+        };
+
+  return {
+    ...bucketProp,
+    prefixStackToKey: !lambda.withoutFilePrefix,
+    prefixAppToKey: !lambda.withoutFilePrefix,
+    prefixStageToKey: !lambda.withoutFilePrefix,
+  };
+};
+
 export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployment {
   const { app, fileName } = lambda;
   const { stack, region } = lambda.stack as GuStack;
@@ -15,7 +41,7 @@ export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployme
       app,
       contentDirectory: app,
       parameters: {
-        bucketSsmLookup: true,
+        ...locationProps(lambda),
         lookupByTags: true,
         fileName,
       },
@@ -40,7 +66,7 @@ export function updateLambdaDeployment(
       app,
       contentDirectory: app,
       parameters: {
-        bucketSsmLookup: true,
+        ...locationProps(lambda),
         lookupByTags: true,
         fileName,
       },

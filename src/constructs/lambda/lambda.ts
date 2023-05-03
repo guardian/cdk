@@ -43,6 +43,14 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    * accounts.
    */
   withoutFilePrefix?: boolean;
+  /**
+   * Set to `true` this informs consumers of this function that upload is
+   * managed elsewhere by DevX.
+   *
+   * This is used by RiffRaffYamlFileExperimental to skip generating
+   * an uploadLambda step.
+   */
+  withoutArtifactUpload?: boolean;
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
@@ -92,9 +100,21 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
 export class GuLambdaFunction extends Function {
   public readonly app: string;
   public readonly fileName: string;
+  public readonly bucketNamePath: string | undefined;
+  public readonly withoutArtifactUpload: boolean;
+  public readonly withoutFilePrefix: boolean;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout, bucketNamePath, withoutFilePrefix } = props;
+    const {
+      app,
+      fileName,
+      runtime,
+      memorySize,
+      timeout,
+      bucketNamePath,
+      withoutFilePrefix = false,
+      withoutArtifactUpload = false,
+    } = props;
 
     const bucketName = bucketNamePath
       ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
@@ -122,6 +142,9 @@ export class GuLambdaFunction extends Function {
 
     this.app = app;
     this.fileName = fileName;
+    this.bucketNamePath = bucketNamePath;
+    this.withoutArtifactUpload = withoutArtifactUpload;
+    this.withoutFilePrefix = withoutFilePrefix;
 
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
