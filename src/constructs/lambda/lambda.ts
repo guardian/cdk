@@ -113,7 +113,7 @@ export class GuLambdaFunction extends Function {
       timeout,
       bucketNamePath,
       withoutFilePrefix = false,
-      withoutArtifactUpload: withoutArtifactUpload = false,
+      withoutArtifactUpload = false,
     } = props;
 
     const bucketName = bucketNamePath
