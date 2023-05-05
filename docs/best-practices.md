@@ -16,7 +16,8 @@ Here are some recommendations for using the Guardian CDK library:
 
 ### Snapshot testing
 [Snapshot testing with Jest](https://jestjs.io/docs/snapshot-testing) makes it easy to review any stack changes when
-developing locally and in PRs. This enables us to catch things early, creating a shorter feedback loop. See the
+developing locally and in PRs. This enables us to catch things early, creating a shorter feedback loop. 
+`npm run test-update` will update the snapshots. See the
 [AWS docs](https://docs.aws.amazon.com/cdk/v2/guide/testing.html#testing_snapshot) on snapshot testing.
 
 #### Mocking `gu:cdk:version`
