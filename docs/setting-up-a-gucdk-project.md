@@ -25,7 +25,8 @@ npx @guardian/cdk@latest new \
   --app riff-raff \
   --stack deploy \
   --stage CODE \
-  --stage PROD
+  --stage PROD \
+  --package-manager npm
 ```
 
 > Tip: Run `npx @guardian/cdk@latest new --help` to find out more about the available flags,
