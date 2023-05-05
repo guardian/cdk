@@ -66,7 +66,7 @@ const parseCommandLineArguments = () => {
               description:
                 "The Node package manager to use. Match this to the repository (package-lock.json = npm, yarn.lock = yarn). If the repository has neither file, and there is no strong convention in your team, we recommend npm.",
               choices: ["npm", "yarn"],
-              demandOption: true,
+              default: "npm",
             })
       )
       .version(

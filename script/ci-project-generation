@@ -31,6 +31,5 @@ npm pack --pack-destination $TMP_DIR
     --app integration-test \
     --stack cdk \
     --stage CODE \
-    --stage PROD \
-    --package-manager npm
+    --stage PROD
 )

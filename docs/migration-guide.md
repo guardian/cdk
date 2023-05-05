@@ -23,12 +23,12 @@ Generally speaking, we've found this to be a good process to follow when migrati
 1. Create a new project specifying the `--yaml-template-location` flag.
 
    ```shell
-   npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] --package-manager [npm|yarn] --yaml-template-location
+   npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] [--package-manager [npm|yarn]] --yaml-template-location
    ```
 
    For example for the app trigr we do
    ```shell
-   npx @guardian/cdk@latest new --app trigr --stack ophan --stage PROD  --package-manager npm --yaml-template-location cloudformation/trigr.cfn.yaml
+   npx @guardian/cdk@latest new --app trigr --stack ophan --stage PROD  --yaml-template-location cloudformation/trigr.cfn.yaml
    ```
 
    See the [new project](setting-up-a-gucdk-project.md) guide for further reading

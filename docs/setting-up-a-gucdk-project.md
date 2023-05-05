@@ -15,7 +15,7 @@ It will place files within a `cdk` directory at the root of the repository.
 To initialise a new project run the following within your repository:
 
 ```sh
-npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] --package-manager [npm|yarn]
+npx @guardian/cdk@latest new --app [app] --stack [stack] --stage [stage] [--package-manager [npm|yarn]]
 ```
 
 For example, for the app `riff-raff` we'd do:
