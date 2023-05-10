@@ -11,6 +11,7 @@ import {
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
+import type { HealthCheck as ELBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -258,6 +259,11 @@ export interface GuEc2AppProps extends AppIdentity {
      */
     credentialsSecretsManagerPath?: string;
   };
+
+  /**
+   * Specify custom healthcheck
+   */
+  healthcheck?: ELBHealthCheck;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -409,6 +415,7 @@ export class GuEc2App extends Construct {
       protocol: ApplicationProtocol.HTTP,
       targets: [autoScalingGroup],
       port: applicationPort,
+      healthCheck: props.healthcheck,
     });
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
