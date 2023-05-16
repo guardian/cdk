@@ -11,7 +11,7 @@ import {
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
-import type { HealthCheck as ELBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -263,7 +263,7 @@ export interface GuEc2AppProps extends AppIdentity {
   /**
    * Specify custom healthcheck
    */
-  healthcheck?: ELBHealthCheck;
+  healthcheck?: ALBHealthCheck;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
