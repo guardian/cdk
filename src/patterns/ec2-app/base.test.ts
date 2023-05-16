@@ -858,3 +858,56 @@ describe("the GuEC2App pattern", function () {
     ).toThrowError("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
   });
 });
+
+it("should provides a default healthcheck", function () {
+  const stack = simpleGuStackForTesting();
+  new GuEc2App(stack, {
+    applicationPort: 3000,
+    app: "test-gu-ec2-app",
+    access: { scope: AccessScope.PUBLIC },
+    instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+    monitoringConfiguration: { noMonitoring: true },
+    userData: "#!/bin/dev foobarbaz",
+    certificateProps: {
+      domainName: "domain-name-for-your-application.example",
+    },
+    scaling: {
+      minimumInstances: 1,
+    },
+  });
+  Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    HealthCheckIntervalSeconds: 10,
+    HealthCheckPath: "/healthcheck",
+    HealthCheckProtocol: "HTTP",
+    HealthCheckTimeoutSeconds: 5,
+    HealthyThresholdCount: 5,
+  });
+});
+
+it("allows a custom healthcheck", function () {
+  const stack = simpleGuStackForTesting();
+  new GuEc2App(stack, {
+    applicationPort: 3000,
+    app: "test-gu-ec2-app",
+    access: { scope: AccessScope.PUBLIC },
+    instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+    monitoringConfiguration: { noMonitoring: true },
+    userData: "#!/bin/dev foobarbaz",
+    certificateProps: {
+      domainName: "domain-name-for-your-application.example",
+    },
+    scaling: {
+      minimumInstances: 1,
+    },
+    healthcheck: {
+      path: "/custom-healthcheck",
+    },
+  });
+  Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+    HealthCheckIntervalSeconds: 10,
+    HealthCheckPath: "/custom-healthcheck",
+    HealthCheckProtocol: "HTTP",
+    HealthCheckTimeoutSeconds: 5,
+    HealthyThresholdCount: 5,
+  });
+});
