@@ -1,5 +1,5 @@
-import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { CfnElement, StackProps } from "aws-cdk-lib";
+import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
@@ -75,6 +75,7 @@ export class GuStack extends Stack implements StackStageIdentity {
   private readonly _stack: string;
   private readonly _stage: string;
   private readonly _app?: string;
+  private readonly _repositoryName?: string;
 
   get stage(): string {
     return this._stage;
@@ -86,6 +87,14 @@ export class GuStack extends Stack implements StackStageIdentity {
 
   get app(): string | undefined {
     return this._app;
+  }
+
+  /**
+   * The repository name, if it can be determined from the context or the git remote origin url.
+   * If it cannot be determined from either of these sources, it will be `undefined`.
+   */
+  get repositoryName(): string | undefined {
+    return this._repositoryName;
   }
 
   /**
@@ -131,6 +140,7 @@ export class GuStack extends Stack implements StackStageIdentity {
 
     this._stack = stack;
     this._stage = stage.toUpperCase();
+    this._repositoryName = this.tryGetRepositoryTag();
 
     if (!withoutTags) {
       this.addTag(TrackingTag.Key, TrackingTag.Value);
@@ -141,7 +151,9 @@ export class GuStack extends Stack implements StackStageIdentity {
         this.addTag("App", this.app);
       }
 
-      this.tryAddRepositoryTag();
+      if (this.repositoryName) {
+        this.addTag(MetadataKeys.REPOSITORY_NAME, this.repositoryName);
+      }
     }
 
     if (!props.withoutMetadata) {
@@ -153,23 +165,23 @@ export class GuStack extends Stack implements StackStageIdentity {
   }
 
   /**
-   * Adds a tag to resources in the stack for the repository name.
+   * Returns the repository name.
    * The value is retrieved in the following order:
    *   1. From the context
    *   2. From git config
    *
    * @private
    */
-  private tryAddRepositoryTag(): void {
+  private tryGetRepositoryTag(): string | undefined {
     try {
       const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
       const repositoryUrl: string = urlFromContext ?? gitRemoteOriginUrl();
-      const repositoryName = gitUrlParse(repositoryUrl).full_name;
-      this.addTag(MetadataKeys.REPOSITORY_NAME, repositoryName);
+      return gitUrlParse(repositoryUrl).full_name;
     } catch {
       console.info(
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
       );
+      return undefined;
     }
   }
 
