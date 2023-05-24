@@ -54,6 +54,19 @@ describe("The GuStack construct", () => {
     });
   });
 
+  it("should expose the repository information as a property", () => {
+    const stack = new GuStack(
+      new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repository" } }),
+      "Test",
+      {
+        stack: "test",
+        stage: "TEST",
+      }
+    );
+
+    expect(stack.repositoryName).toEqual("guardian/my-repository");
+  });
+
   it("can persist the logicalId for any resource (consumer's POV)", () => {
     class MigratingStack extends GuStack {
       // eslint-disable-next-line custom-rules/valid-constructors -- for testing purposes
