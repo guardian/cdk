@@ -237,7 +237,17 @@ export interface GuEc2AppProps extends AppIdentity {
      * @defaultValue [`engineering@guardian.co.uk`]
      */
     allowedGroups?: string[];
-
+    /**
+     * The number of minutes before the session expires.
+     *
+     * Set this value to a safe period of time that revoked users
+     * sessions will continue to function.
+     *
+     * NOTE: This value cannot be larger than 60 minutes.
+     *
+     * @defaultValue 15
+     */
+    sessionTimeoutInMinutes?: number;
     /**
      * Secrets Manager path containing Google OAuth2 Client credentials.
      *
@@ -465,8 +475,13 @@ export class GuEc2App extends Construct {
 
       const {
         allowedGroups = ["engineering@guardian.co.uk"],
+        sessionTimeoutInMinutes = 15,
         credentialsSecretsManagerPath = `${prefix}/google-auth-credentials`,
       } = props.googleAuth;
+
+      if (sessionTimeoutInMinutes > 60) {
+        throw new Error("googleAuth.sessionTimeoutInMinutes must be smaller than 60!");
+      }
 
       if (allowedGroups.length < 1) {
         throw new Error("googleAuth.allowedGroups cannot be empty!");
@@ -578,7 +593,7 @@ export class GuEc2App extends Construct {
           userPoolClient: userPoolClient,
           userPoolDomain: userPoolDomain,
           next: ListenerAction.forward([targetGroup]),
-          sessionTimeout: Duration.minutes(15),
+          sessionTimeout: Duration.minutes(sessionTimeoutInMinutes),
         }),
       });
 
