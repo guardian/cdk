@@ -480,7 +480,7 @@ export class GuEc2App extends Construct {
       } = props.googleAuth;
 
       if (sessionTimeoutInMinutes > 60) {
-        throw new Error("googleAuth.sessionTimeoutInMinutes must be smaller than 60!");
+        throw new Error("googleAuth.sessionTimeoutInMinutes must be <= 60!");
       }
 
       if (allowedGroups.length < 1) {

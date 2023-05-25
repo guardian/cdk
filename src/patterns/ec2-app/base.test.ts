@@ -855,7 +855,7 @@ describe("the GuEC2App pattern", function () {
             sessionTimeoutInMinutes: 61,
           },
         })
-    ).toThrowError("googleAuth.sessionTimeoutInMinutes must be smaller than 60!");
+    ).toThrowError("googleAuth.sessionTimeoutInMinutes must be <= 60!");
   });
 
   it("throws when googleAuth.allowedGroups contains groups using non-standard domains", () => {
