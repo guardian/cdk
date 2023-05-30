@@ -23,6 +23,5 @@ module.exports = {
     ...getEntryPointsFromSubdirectories(utilsDir),
   ],
   out: "target",
-  includeVersion: true,
   readme: "README.md",
 };
