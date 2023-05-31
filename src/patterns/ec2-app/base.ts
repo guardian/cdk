@@ -12,7 +12,7 @@ import {
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port } from "aws-cdk-lib/aws-ec2";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction, UnauthenticatedAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -268,6 +268,16 @@ export interface GuEc2AppProps extends AppIdentity {
      * @defaultValue /:STAGE/:stack/:app/google-auth-credentials
      */
     credentialsSecretsManagerPath?: string;
+
+    /**
+     * Action to perform when a user is not authenticated.
+     *
+     * - "deny" returns a 403
+     * - "authenticate" redirects to the Cognito login page
+     *
+     * @defaultValue "authenticate"
+     */
+    onUnauthenticatedRequest?: "deny" | "authenticate";
   };
 
   /**
@@ -477,6 +487,7 @@ export class GuEc2App extends Construct {
         allowedGroups = ["engineering@guardian.co.uk"],
         sessionTimeoutInMinutes = 15,
         credentialsSecretsManagerPath = `${prefix}/google-auth-credentials`,
+        onUnauthenticatedRequest: actionOnUnauthenticatedRequest = "authenticate",
       } = props.googleAuth;
 
       if (sessionTimeoutInMinutes > 60) {
@@ -594,6 +605,10 @@ export class GuEc2App extends Construct {
           userPoolDomain: userPoolDomain,
           next: ListenerAction.forward([targetGroup]),
           sessionTimeout: Duration.minutes(sessionTimeoutInMinutes),
+          onUnauthenticatedRequest:
+            actionOnUnauthenticatedRequest === "authenticate"
+              ? UnauthenticatedAction.AUTHENTICATE
+              : UnauthenticatedAction.DENY,
         }),
       });
 
