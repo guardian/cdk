@@ -10,6 +10,7 @@ export interface SsmParameterPath {
 
 interface NamedSsmParameterPaths {
   Anghammarad: SsmParameterPath;
+  LoggingStreamArn: SsmParameterPath;
   LoggingStreamName: SsmParameterPath;
   DistributionBucket: SsmParameterPath;
   AccessLoggingBucket: SsmParameterPath;
@@ -29,6 +30,10 @@ export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
     path: "/account/services/anghammarad.topic.arn",
     description: "SSM parameter containing the ARN of the Anghammarad SNS topic",
     optional: true,
+  },
+    LoggingStreamArn: {
+    path: "/account/services/logging.stream",
+    description: "SSM parameter containing the ARN on the kinesis stream",
   },
   LoggingStreamName: {
     path: "/account/services/logging.stream.name",
