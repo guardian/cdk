@@ -12,9 +12,13 @@ export interface GuFastlyKinesisLogRoleProps {
    */
   stream: GuKinesisStream;
   /**
-   * Name of the IAM role
+   * The name of the IAM role
    */
   roleName?: string;
+  /**
+   * The name of the policy attached to this role which allows writing to the Kinesis stream
+   */
+  policyName?: string;
 }
 
 /**
@@ -29,7 +33,7 @@ export interface GuFastlyKinesisLogRoleProps {
 export class GuFastlyKinesisLogRoleExperimental extends GuRole {
   constructor(scope: GuStack, id: string, props: GuFastlyKinesisLogRoleProps) {
     const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
-    const { roleName, stream } = props;
+    const { policyName, roleName, stream } = props;
 
     super(scope, id, {
       roleName,
@@ -37,9 +41,13 @@ export class GuFastlyKinesisLogRoleExperimental extends GuRole {
       externalIds: [fastlyCustomerId],
     });
 
-    const policy = new GuKinesisPutRecordsPolicyExperimental(scope, "GuKinesisPutRecordsPolicy", {
-      stream,
-    });
+    const policy = new GuKinesisPutRecordsPolicyExperimental(
+      scope,
+      policyName ?? "GuKinesisPutRecordsPolicyExperimental",
+      {
+        stream,
+      }
+    );
 
     policy.attachToRole(this);
   }

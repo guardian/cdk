@@ -42,7 +42,7 @@ exports[`The GuFastlyKinesisLogRole construct correctly wires up the policy 1`] 
     },
   },
   "Resources": {
-    "GuKinesisPutRecordsPolicy28D5CD2D": {
+    "GuKinesisPutRecordsPolicyExperimentalBFA06A36": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -62,7 +62,7 @@ exports[`The GuFastlyKinesisLogRole construct correctly wires up the policy 1`] 
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GuKinesisPutRecordsPolicy28D5CD2D",
+        "PolicyName": "GuKinesisPutRecordsPolicyExperimentalBFA06A36",
         "Roles": [
           {
             "Ref": "testKinesisLogRole5E3B33EE",
