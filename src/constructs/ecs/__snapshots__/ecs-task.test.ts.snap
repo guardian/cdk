@@ -3,6 +3,107 @@
 exports[`The GuEcsTask pattern should create the correct resources with lots of config 1`] = `
 {
   "Mappings": {
+    "DefaultCrNodeVersionMap": {
+      "af-south-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-east-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-3": {
+        "value": "nodejs16.x",
+      },
+      "ap-south-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-south-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-3": {
+        "value": "nodejs16.x",
+      },
+      "ca-central-1": {
+        "value": "nodejs16.x",
+      },
+      "cn-north-1": {
+        "value": "nodejs16.x",
+      },
+      "cn-northwest-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-central-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-central-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-north-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-south-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-south-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-3": {
+        "value": "nodejs16.x",
+      },
+      "me-central-1": {
+        "value": "nodejs16.x",
+      },
+      "me-south-1": {
+        "value": "nodejs16.x",
+      },
+      "sa-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-east-2": {
+        "value": "nodejs16.x",
+      },
+      "us-gov-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-gov-west-1": {
+        "value": "nodejs16.x",
+      },
+      "us-iso-east-1": {
+        "value": "nodejs14.x",
+      },
+      "us-iso-west-1": {
+        "value": "nodejs14.x",
+      },
+      "us-isob-east-1": {
+        "value": "nodejs14.x",
+      },
+      "us-west-1": {
+        "value": "nodejs16.x",
+      },
+      "us-west-2": {
+        "value": "nodejs16.x",
+      },
+    },
     "ServiceprincipalMap": {
       "af-south-1": {
         "states": "states.af-south-1.amazonaws.com",
@@ -108,6 +209,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
+      "GuSubnetListParameter",
       "GuEcsTask",
       "GuDistributionBucketParameter",
     ],
@@ -121,13 +223,124 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
     },
   },
   "Parameters": {
+    "AssetParameters28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0ArtifactHashAF1370F8": {
+      "Description": "Artifact hash for asset "28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0"",
+      "Type": "String",
+    },
+    "AssetParameters28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0S3BucketCD1790E7": {
+      "Description": "S3 bucket for asset "28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0"",
+      "Type": "String",
+    },
+    "AssetParameters28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0S3VersionKeyCE63AE8F": {
+      "Description": "S3 key for asset version "28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0"",
+      "Type": "String",
+    },
     "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
+    "ecstestPrivateSubnets": {
+      "Default": "/account/vpc/primary/subnets/private",
+      "Description": "A list of private subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+    },
   },
   "Resources": {
+    "AWSCDKCfnUtilsProviderCustomResourceProviderHandlerCF82AA57": {
+      "DependsOn": [
+        "AWSCDKCfnUtilsProviderCustomResourceProviderRoleFE0EE867",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0S3BucketCD1790E7",
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0S3VersionKeyCE63AE8F",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters28739348edff6f1084f6a50d8d934e2d3fc2a3bb77442d8a9a1361d51ccd03c0S3VersionKeyCE63AE8F",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "AWSCDKCfnUtilsProviderCustomResourceProviderRoleFE0EE867",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWSCDKCfnUtilsProviderCustomResourceProviderRoleFE0EE867": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkJsonStringify1": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWSCDKCfnUtilsProviderCustomResourceProviderHandlerCF82AA57",
+            "Arn",
+          ],
+        },
+        "Value": {
+          "Ref": "ecstestPrivateSubnets",
+        },
+      },
+      "Type": "Custom::AWSCDKCfnJsonStringify",
+      "UpdateReplacePolicy": "Delete",
+    },
     "ecstestexecutionfailedC93F511B": {
       "Properties": {
         "ActionsEnabled": true,
@@ -243,7 +456,14 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
                   "Arn",
                 ],
               },
-              "","TaskDefinition":"test-stack-TEST-ecs-test","NetworkConfiguration":{"AwsvpcConfiguration":{"Subnets":["abc-123"],"SecurityGroups":["id-123"]}},"Overrides":{"ContainerOverrides":[{"Name":"test-ecs-task-ecs-test-TaskContainer"}]},"LaunchType":"FARGATE","PlatformVersion":"LATEST"}}}}",
+              "","TaskDefinition":"test-stack-TEST-ecs-test","NetworkConfiguration":{"AwsvpcConfiguration":{"Subnets":",
+              {
+                "Fn::GetAtt": [
+                  "CdkJsonStringify1",
+                  "Value",
+                ],
+              },
+              ","SecurityGroups":["id-123"]}},"Overrides":{"ContainerOverrides":[{"Name":"test-ecs-task-ecs-test-TaskContainer"}]},"LaunchType":"FARGATE","PlatformVersion":"LATEST"}}}}",
             ],
           ],
         },

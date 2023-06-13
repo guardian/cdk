@@ -1,7 +1,7 @@
 import { CfnOutput, Duration } from "aws-cdk-lib";
 import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
-import type { ISecurityGroup, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
 import {
   Cluster,
@@ -112,6 +112,7 @@ export interface GuEcsTaskProps extends AppIdentity {
   customTaskPolicies?: PolicyStatement[];
   environmentOverrides?: TaskEnvironmentVariable[];
   storage?: number;
+  subnets?: ISubnet[];
 }
 
 /**
@@ -154,6 +155,7 @@ export class GuEcsTask extends Construct {
       taskTimeoutInMinutes = 15,
       customTaskPolicies,
       vpc,
+      subnets,
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,
@@ -200,6 +202,7 @@ export class GuEcsTask extends Construct {
 
     const task = new EcsRunTask(scope, `${id}-task`, {
       cluster,
+      subnets: { subnets },
       launchTarget: new EcsFargateLaunchTarget({
         platformVersion: FargatePlatformVersion.LATEST,
       }),

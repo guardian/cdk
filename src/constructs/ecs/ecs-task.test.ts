@@ -4,6 +4,7 @@ import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
+import { GuVpc, SubnetType } from "../ec2/vpc";
 import { GuEcsTask } from "./ecs-task";
 
 const makeVpc = (stack: GuStack) =>
@@ -21,6 +22,8 @@ const testPolicy = new PolicyStatement({
   actions: ["s3:GetObject"],
   resources: ["databaseSecretArn"],
 });
+
+const subnets = (stack: GuStack, type: SubnetType, app?: string) => GuVpc.subnetsFromParameter(stack, { type, app });
 
 describe("The GuEcsTask pattern", () => {
   it("should use the specified container", () => {
@@ -43,6 +46,7 @@ describe("The GuEcsTask pattern", () => {
       containerConfiguration: { id: "node:10", type: "registry" },
       vpc,
       app: app,
+      subnets: subnets(stack, SubnetType.PRIVATE, app),
       taskTimeoutInMinutes: 60,
       cpu: 1024,
       memory: 1024,
