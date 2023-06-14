@@ -141,5 +141,5 @@ To release a new version:
 1. Wait for the robots to:
    - Use your structured commit to automatically determine the next version
      number (following [semantic versioning](https://semver.org/)).
-   - Release a new version to npm and update `package.json`.
+   - Release a new version to npm.
 1. Enjoy a comment on your PR to inform you that your change has been released.
