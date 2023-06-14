@@ -20,6 +20,7 @@ import { Construct } from "constructs";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
+import { GuVpc, SubnetType } from "../ec2";
 import { GuGetDistributablePolicyStatement } from "../iam";
 
 /**
@@ -136,6 +137,8 @@ const getContainer = (config: ContainerConfiguration) => {
  *
  * Note that if your task reliably completes in less than 15 minutes then you should probably use a [[`GuLambda`]] instead. This
  * pattern was mainly created to work around the 15 minute lambda timeout.
+ *
+ * If the `subnets` prop is not defined, the task will run in a private subnet by default.
  */
 export class GuEcsTask extends Construct {
   stateMachine: StateMachine;
@@ -155,7 +158,7 @@ export class GuEcsTask extends Construct {
       taskTimeoutInMinutes = 15,
       customTaskPolicies,
       vpc,
-      subnets,
+      subnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,

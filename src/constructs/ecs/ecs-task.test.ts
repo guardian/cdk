@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import type { IVpc } from "aws-cdk-lib/aws-ec2";
+import type { ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
@@ -23,8 +23,6 @@ const testPolicy = new PolicyStatement({
   resources: ["databaseSecretArn"],
 });
 
-const subnets = (stack: GuStack, type: SubnetType, app?: string) => GuVpc.subnetsFromParameter(stack, { type, app });
-
 describe("The GuEcsTask pattern", () => {
   it("should use the specified container", () => {
     const stack = simpleGuStackForTesting();
@@ -41,12 +39,12 @@ describe("The GuEcsTask pattern", () => {
     });
   });
 
-  const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc) => {
+  const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc, subnets?: ISubnet[]) => {
     new GuEcsTask(stack, `test-ecs-task-${app}`, {
       containerConfiguration: { id: "node:10", type: "registry" },
       vpc,
+      subnets,
       app: app,
-      subnets: subnets(stack, SubnetType.PRIVATE, app),
       taskTimeoutInMinutes: 60,
       cpu: 1024,
       memory: 1024,
@@ -78,5 +76,34 @@ describe("The GuEcsTask pattern", () => {
 
     template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test" } });
     template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test2" } });
+  });
+
+  it("should default to private subnets when no subnet prop is specified", () => {
+    const stack = simpleGuStackForTesting();
+
+    generateComplexStack(stack, "ecs-private-subnet-test", makeVpc(stack));
+
+    const template = Template.fromStack(stack);
+
+    template.hasParameter("ecsprivatesubnettestPrivateSubnets", {
+      Default: "/account/vpc/primary/subnets/private",
+    });
+  });
+
+  it("should override private subnets when the `subnets` prop is specified", () => {
+    const stack = simpleGuStackForTesting();
+    const app = "ecs-public-subnet-test";
+
+    generateComplexStack(
+      stack,
+      app,
+      makeVpc(stack),
+      GuVpc.subnetsFromParameter(stack, { type: SubnetType.PUBLIC, app })
+    );
+
+    const template = Template.fromStack(stack);
+    template.hasParameter("ecspublicsubnettestPublicSubnets", {
+      Default: "/account/vpc/primary/subnets/public",
+    });
   });
 });

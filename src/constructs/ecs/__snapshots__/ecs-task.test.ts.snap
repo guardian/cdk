@@ -209,8 +209,8 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuSubnetListParameter",
       "GuEcsTask",
+      "GuSubnetListParameter",
       "GuDistributionBucketParameter",
     ],
     "gu:cdk:version": "TEST",
@@ -325,7 +325,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkJsonStringify1": {
+    "CdkJsonStringify2": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "ServiceToken": {
@@ -459,7 +459,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
               "","TaskDefinition":"test-stack-TEST-ecs-test","NetworkConfiguration":{"AwsvpcConfiguration":{"Subnets":",
               {
                 "Fn::GetAtt": [
-                  "CdkJsonStringify1",
+                  "CdkJsonStringify2",
                   "Value",
                 ],
               },
