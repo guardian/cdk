@@ -22,6 +22,7 @@
 <p>For all configuration options, see [[<code>GuScheduledEcsTaskProps</code>]].</p>
 <p>Note that if your task reliably completes in less than 15 minutes then you should probably use a [[<code>GuScheduledLambda</code>]] instead. This
 pattern was mainly created to work around the 15 minute lambda timeout.</p>
+<p>If the <code>subnets</code> prop is not defined, the task will run in a private subnet by default.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
@@ -31,7 +32,7 @@ pattern was mainly created to work around the 15 minute lambda timeout.</p>
 <ul class="tsd-hierarchy">
 <li><span class="target">GuScheduledEcsTask</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/2da2d71/src/patterns/scheduled-ecs-task.ts#L31">src/patterns/scheduled-ecs-task.ts:31</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/582b17f/src/patterns/scheduled-ecs-task.ts#L33">src/patterns/scheduled-ecs-task.ts:33</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -71,7 +72,7 @@ pattern was mainly created to work around the 15 minute lambda timeout.</p>
 <h4 class="tsd-returns-title">Returns <a href="patterns.GuScheduledEcsTask.html" class="tsd-signature-type tsd-kind-class">GuScheduledEcsTask</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(GuEcsTask).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/2da2d71/src/patterns/scheduled-ecs-task.ts#L32">src/patterns/scheduled-ecs-task.ts:32</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/582b17f/src/patterns/scheduled-ecs-task.ts#L34">src/patterns/scheduled-ecs-task.ts:34</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="idWithApp" class="tsd-anchor"></a>
@@ -83,7 +84,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuEcsTask).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/2da2d71/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/582b17f/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="node" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>node</span><a href="#node" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">node</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Node</span></div>
@@ -98,7 +99,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 <div class="tsd-signature"><span class="tsd-kind-property">state<wbr/>Machine</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">StateMachine</span></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuEcsTask).stateMachine</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/2da2d71/src/constructs/ecs/ecs-task.ts#L140">src/constructs/ecs/ecs-task.ts:140</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/582b17f/src/constructs/ecs/ecs-task.ts#L144">src/constructs/ecs/ecs-task.ts:144</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="toString" class="tsd-anchor"></a>
