@@ -22,7 +22,6 @@ describe("The GuFastlyKinesisLogRole construct", () => {
       stream: testStream,
       roleName: "writeToKinesisRoleTest",
     });
-
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Role", {
       AssumeRolePolicyDocument: {
         Version: "2012-10-17",
@@ -54,6 +53,69 @@ describe("The GuFastlyKinesisLogRole construct", () => {
           },
         ],
       },
+    });
+  });
+
+  it("allows more than one role in the stack", () => {
+    const stack = simpleGuStackForTesting();
+    const testStreamOne = new GuKinesisStream(stack, "testStreamOne");
+    const testStreamTwo = new GuKinesisStream(stack, "testStreamTwo");
+
+    new GuFastlyKinesisLogRoleExperimental(stack, "testKinesisLogRoleOne", {
+      stream: testStreamOne,
+      policyName: "writeToTestStreamPolicyOne",
+      roleName: "writeToKinesisRoleTestOne",
+    });
+
+    new GuFastlyKinesisLogRoleExperimental(stack, "testKinesisLogRoleTwo", {
+      stream: testStreamTwo,
+      policyName: "writeToTestStreamPolicyTwo",
+      roleName: "writeToKinesisRoleTestTwo",
+    });
+
+    // Assert that two separate roles exist in the stack with policies that allow writing to Kinesis
+    Template.fromStack(stack).resourceCountIs("AWS::IAM::Role", 2);
+
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Statement: [
+          {
+            Action: ["kinesis:PutRecords", "kinesis:ListShards"],
+            Effect: "Allow",
+            Resource: {
+              "Fn::GetAtt": ["testStreamOneE597ADBB", "Arn"],
+            },
+          },
+        ],
+        Version: "2012-10-17",
+      },
+      PolicyName: "writeToTestStreamPolicyOneDD9816F1",
+      Roles: [
+        {
+          Ref: "testKinesisLogRoleOne47025733",
+        },
+      ],
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Statement: [
+          {
+            Action: ["kinesis:PutRecords", "kinesis:ListShards"],
+            Effect: "Allow",
+            Resource: {
+              "Fn::GetAtt": ["testStreamTwoBFC0E912", "Arn"],
+            },
+          },
+        ],
+        Version: "2012-10-17",
+      },
+      PolicyName: "writeToTestStreamPolicyTwo61962E93",
+      Roles: [
+        {
+          Ref: "testKinesisLogRoleTwoC08DB6A6",
+        },
+      ],
     });
   });
 });
