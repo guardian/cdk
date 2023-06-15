@@ -3,9 +3,9 @@ import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/
 import { GuSESSenderPolicy } from "./ses";
 
 describe("GuSESSenderPolicy", () => {
-  it("should have a policy that reads from a parameter", () => {
+  it("should have a policy that is tightly scoped", () => {
     const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack));
+    attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack, { sendingAddress: "no-reply@theguardian.com" }));
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyDocument: {
@@ -26,10 +26,7 @@ describe("GuSESSenderPolicy", () => {
                   {
                     Ref: "AWS::AccountId",
                   },
-                  ":identity/",
-                  {
-                    Ref: "EmailSenderAddress",
-                  },
+                  ":identity/no-reply@theguardian.com",
                 ],
               ],
             },
@@ -37,11 +34,5 @@ describe("GuSESSenderPolicy", () => {
         ],
       },
     });
-  });
-
-  it("should add a parameter to the stack for the sending email address", () => {
-    const stack = simpleGuStackForTesting();
-    attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack));
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
