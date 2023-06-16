@@ -3,6 +3,7 @@ import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
 import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
+import type { RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   Compatibility,
@@ -54,6 +55,7 @@ export type RepositoryContainer = {
 
 export type RegistryContainer = {
   id?: string;
+  imageProps?: RepositoryImageProps;
   type: "registry";
 };
 
@@ -124,7 +126,7 @@ const getContainer = (config: ContainerConfiguration) => {
   if (config.type == "repository") {
     return ContainerImage.fromEcrRepository(config.repository, config.version);
   } else {
-    return ContainerImage.fromRegistry(config.id ?? "ubuntu:focal");
+    return ContainerImage.fromRegistry(config.id ?? "ubuntu:jammy", config.imageProps);
   }
 };
 
