@@ -1,7 +1,7 @@
 import { CfnOutput, Duration } from "aws-cdk-lib";
 import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
-import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { ISecurityGroup, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
 import type { RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
 import {
@@ -21,7 +21,6 @@ import { Construct } from "constructs";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
-import { GuVpc, SubnetType } from "../ec2";
 import { GuGetDistributablePolicyStatement } from "../iam";
 
 /**
@@ -115,7 +114,6 @@ export interface GuEcsTaskProps extends AppIdentity {
   customTaskPolicies?: PolicyStatement[];
   environmentOverrides?: TaskEnvironmentVariable[];
   storage?: number;
-  subnets?: ISubnet[];
 }
 
 /**
@@ -140,7 +138,6 @@ const getContainer = (config: ContainerConfiguration) => {
  * Note that if your task reliably completes in less than 15 minutes then you should probably use a [[`GuLambda`]] instead. This
  * pattern was mainly created to work around the 15 minute lambda timeout.
  *
- * If the `subnets` prop is not defined, the task will run in a private subnet by default.
  */
 export class GuEcsTask extends Construct {
   stateMachine: StateMachine;
@@ -160,7 +157,6 @@ export class GuEcsTask extends Construct {
       taskTimeoutInMinutes = 15,
       customTaskPolicies,
       vpc,
-      subnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,
@@ -207,7 +203,6 @@ export class GuEcsTask extends Construct {
 
     const task = new EcsRunTask(scope, `${id}-task`, {
       cluster,
-      subnets: { subnets },
       launchTarget: new EcsFargateLaunchTarget({
         platformVersion: FargatePlatformVersion.LATEST,
       }),
