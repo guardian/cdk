@@ -28,7 +28,6 @@ export interface GuScheduledEcsTaskProps extends GuEcsTaskProps {
  * Note that if your task reliably completes in less than 15 minutes then you should probably use a [[`GuScheduledLambda`]] instead. This
  * pattern was mainly created to work around the 15 minute lambda timeout.
  *
- * If the `subnets` prop is not defined, the task will run in a private subnet by default.
  */
 export class GuScheduledEcsTask extends GuAppAwareConstruct(GuEcsTask) {
   constructor(scope: GuStack, id: string, props: GuScheduledEcsTaskProps) {
