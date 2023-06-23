@@ -11,7 +11,8 @@ export interface GuLambdaErrorPercentageMonitoringProps
     "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
   > {
   toleratedErrorPercentage: number;
-  numberOfMinutesAboveThresholdBeforeAlarm?: number;
+  lengthOfEvaluationPeriod?: Duration;
+  numberOfEvaluationPeriodsAboveThresholdBeforeAlarm?: number;
   noMonitoring?: false;
 }
 
@@ -28,7 +29,7 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
       expression: "100*m1/m2",
       usingMetrics: { m1: props.lambda.metricErrors(), m2: props.lambda.metricInvocations() },
       label: `Error % of ${props.lambda.functionName}`,
-      period: Duration.minutes(1),
+      period: props.lengthOfEvaluationPeriod ?? Duration.minutes(1),
     });
     const defaultAlarmName = `High error % from ${props.lambda.functionName} lambda in ${scope.stage}`;
     const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
@@ -39,7 +40,7 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
       treatMissingData: TreatMissingData.NOT_BREACHING,
       threshold: props.toleratedErrorPercentage,
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
-      evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
+      evaluationPeriods: props.numberOfEvaluationPeriodsAboveThresholdBeforeAlarm ?? 1,
       alarmName: props.alarmName ?? defaultAlarmName,
       alarmDescription: props.alarmDescription ?? defaultDescription,
     };
