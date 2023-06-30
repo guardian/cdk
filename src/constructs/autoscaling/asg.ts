@@ -38,6 +38,7 @@ export interface GuAutoScalingGroupProps
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   withoutImdsv2?: boolean;
+  httpPutResponseHopLimit?: number;
 }
 
 /**
@@ -80,6 +81,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       userData: userDataLike,
       vpc,
       withoutImdsv2 = false,
+      httpPutResponseHopLimit,
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -111,6 +113,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       requireImdsv2: !withoutImdsv2,
       userData,
       role,
+      httpPutResponseHopLimit,
     });
 
     // Add Wazuh & additional consumer specified Security Groups

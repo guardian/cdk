@@ -274,6 +274,13 @@ export interface GuEc2AppProps extends AppIdentity {
    * Specify custom healthcheck
    */
   healthcheck?: ALBHealthCheck;
+
+  /**
+   * Set http put response hop limit for the launch template.
+   * It can be necessary to raise this value from the default of 1
+   * for example when sharing the instance profile with a docker container running on the instance.
+   */
+  instanceMetadataHopLimit?: number;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -327,6 +334,7 @@ export class GuEc2App extends Construct {
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
+      instanceMetadataHopLimit,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -374,6 +382,7 @@ export class GuEc2App extends Construct {
       vpcSubnets: { subnets: privateSubnets },
       ...(blockDevices && { blockDevices }),
       imageRecipe,
+      httpPutResponseHopLimit: instanceMetadataHopLimit,
     });
 
     // This allows automatic shipping of instance Cloud Init logs when using the
