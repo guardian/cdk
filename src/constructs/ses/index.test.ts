@@ -16,8 +16,17 @@ describe("The GuEmailIdentity construct", () => {
     });
   });
 
-  it("only creates this construct for domains ending gutools.co.uk", () => {
+  it("only creates this construct for valid domains", () => {
     const stack = simpleGuStackForTesting();
+
+    GuEmailIdentity.validDomains.forEach((validDomain, index) => {
+      expect(() => {
+        new GuEmailIdentity(stack, `MyEmailIdentity-${validDomain}`, {
+          domainName: validDomain,
+          app: `test-${index}`,
+        });
+      }).not.toThrowError();
+    });
 
     expect(() => {
       new GuEmailIdentity(stack, "MyEmailIdentity", {
@@ -25,7 +34,7 @@ describe("The GuEmailIdentity construct", () => {
         app: "test",
       });
     }).toThrowError(
-      "Auto verification is only supported for gutools.co.uk domains. my-service.theguardian.com is not a gutools.co.uk domain."
+      "Auto verification is only supported for certain domains. my-service.theguardian.com is not supported."
     );
   });
 
