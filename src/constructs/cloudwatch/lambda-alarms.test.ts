@@ -1,3 +1,4 @@
+import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
@@ -37,6 +38,34 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
+  it("should adjust the length of evaluation periods if a custom value is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const lambda = new GuLambdaFunction(stack, "lambda", {
+      fileName: "lambda.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_12_X,
+      app: "testing",
+    });
+    const props = {
+      toleratedErrorPercentage: 65,
+      lengthOfEvaluationPeriod: Duration.minutes(5),
+      snsTopicName: "alerts-topic",
+      lambda: lambda,
+    };
+    new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
+      Metrics: [
+        {},
+        {},
+        {
+          MetricStat: {
+            Period: 300,
+          },
+        },
+      ],
+    });
+  });
+
   it("should adjust the number of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
@@ -47,7 +76,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
     const props = {
       toleratedErrorPercentage: 65,
-      numberOfMinutesAboveThresholdBeforeAlarm: 12,
+      numberOfEvaluationPeriodsAboveThresholdBeforeAlarm: 12,
       snsTopicName: "alerts-topic",
       lambda: lambda,
     };
