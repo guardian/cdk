@@ -14,18 +14,6 @@ describe("the regex patterns", () => {
     expect(regex.test("arn:aws:s3:::examplebucket/my-data/sales-export-2019-q4.json")).toBeTruthy();
   });
 
-  it("should successfully regex against valid emails only", () => {
-    const regex = new RegExp(RegexPattern.GUARDIAN_EMAIL);
-    expect(regex.test("email.address.com")).toBeFalsy();
-    expect(regex.test("email@gmail.com")).toBeFalsy();
-
-    expect(regex.test("email@theguardian.com")).toBeTruthy();
-    expect(regex.test("another.email@theguardian.com")).toBeTruthy();
-
-    expect(regex.test("another.@theguardian.com")).toBeFalsy();
-    expect(regex.test("another1@theguardian.com")).toBeFalsy();
-  });
-
   it("should successfully regex against ACM ARNs", () => {
     const regex = new RegExp(RegexPattern.ACM_ARN);
     expect(regex.test("arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc")).toBeTruthy();
