@@ -8,9 +8,15 @@ const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN = "token.actions.githubusercontent.
 
 /*
 Thumbprint of `GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN`.
-See: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+
+See:
+  - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+  - https://github.blog/changelog/2023-06-27-github-actions-update-on-oidc-integration-with-aws/
 */
-const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINT = "6938fd4d98bab03faadb97b34396831e3780aea1";
+const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINTS = [
+  "6938fd4d98bab03faadb97b34396831e3780aea1",
+  "1c58a3a8518e8759bf075b76b750d4f2df264fcd",
+];
 
 export interface GuGithubActionsRepositoryCondition {
   /**
@@ -64,7 +70,7 @@ class GitHubOidcProvider extends CfnResource {
       properties: {
         Url: `https://${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}`,
         ClientIdList: ["sts.amazonaws.com"],
-        ThumbprintList: [GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINT],
+        ThumbprintList: GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINTS,
       },
     });
   }
