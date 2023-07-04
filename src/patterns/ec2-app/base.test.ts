@@ -941,3 +941,30 @@ it("allows a custom healthcheck", function () {
     HealthyThresholdCount: 5,
   });
 });
+
+it("can specify instance metadata hop limit", function () {
+  const stack = simpleGuStackForTesting();
+  new GuEc2App(stack, {
+    applicationPort: 3000,
+    app: "test-gu-ec2-app",
+    access: { scope: AccessScope.PUBLIC },
+    instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+    monitoringConfiguration: { noMonitoring: true },
+    userData: "#!/bin/dev foobarbaz",
+    certificateProps: {
+      domainName: "domain-name-for-your-application.example",
+    },
+    scaling: {
+      minimumInstances: 1,
+    },
+    instanceMetadataHopLimit: 2,
+  });
+  Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
+    LaunchTemplateData: {
+      MetadataOptions: {
+        HttpPutResponseHopLimit: 2,
+        HttpTokens: "required",
+      },
+    },
+  });
+});
