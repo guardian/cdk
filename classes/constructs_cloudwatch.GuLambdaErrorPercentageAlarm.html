@@ -27,7 +27,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuLambdaErrorPercentageAlarm</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7aed35/src/constructs/cloudwatch/lambda-alarms.ts#L26">src/constructs/cloudwatch/lambda-alarms.ts:26</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8d07d8c/src/constructs/cloudwatch/lambda-alarms.ts#L26">src/constructs/cloudwatch/lambda-alarms.ts:26</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -88,7 +88,7 @@
 <h4 class="tsd-returns-title">Returns <a href="constructs_cloudwatch.GuLambdaErrorPercentageAlarm.html" class="tsd-signature-type tsd-kind-class">GuLambdaErrorPercentageAlarm</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7aed35/src/constructs/cloudwatch/lambda-alarms.ts#L27">src/constructs/cloudwatch/lambda-alarms.ts:27</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8d07d8c/src/constructs/cloudwatch/lambda-alarms.ts#L27">src/constructs/cloudwatch/lambda-alarms.ts:27</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="alarmActionArns" class="tsd-anchor"></a>
@@ -199,7 +199,7 @@ through its absolute name/arn.</p>
 <li class="tsd-signature tsd-anchor-link" id="addAlarmAction.addAlarmAction-1"><span class="tsd-kind-call-signature">add<wbr/>Alarm<wbr/>Action</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#addAlarmAction.addAlarmAction-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Trigger this action if the alarm fires</p>
-<p>Typically the ARN of an SNS topic or ARN of an AutoScaling policy.</p>
+<p>Typically SnsAcion or AutoScalingAction.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -217,7 +217,7 @@ through its absolute name/arn.</p>
 <li class="tsd-signature tsd-anchor-link" id="addInsufficientDataAction.addInsufficientDataAction-1"><span class="tsd-kind-call-signature">add<wbr/>Insufficient<wbr/>Data<wbr/>Action</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#addInsufficientDataAction.addInsufficientDataAction-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Trigger this action if there is insufficient data to evaluate the alarm</p>
-<p>Typically the ARN of an SNS topic or ARN of an AutoScaling policy.</p>
+<p>Typically SnsAcion or AutoScalingAction.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -235,7 +235,7 @@ through its absolute name/arn.</p>
 <li class="tsd-signature tsd-anchor-link" id="addOkAction.addOkAction-1"><span class="tsd-kind-call-signature">add<wbr/>Ok<wbr/>Action</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#addOkAction.addOkAction-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Trigger this action if the alarm returns from breaching state into ok state</p>
-<p>Typically the ARN of an SNS topic or ARN of an AutoScaling policy.</p>
+<p>Typically SnsAcion or AutoScalingAction.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>

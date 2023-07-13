@@ -24,7 +24,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuS3BucketProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7aed35/src/constructs/s3/index.ts#L7">src/constructs/s3/index.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8d07d8c/src/constructs/s3/index.ts#L7">src/constructs/s3/index.ts:7</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -80,7 +80,7 @@
 <div class="tsd-signature"><span class="tsd-kind-property">app</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from AppIdentity.app</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/f7aed35/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8d07d8c/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="autoDeleteObjects" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>auto<wbr/>Delete<wbr/>Objects</span><a href="#autoDeleteObjects" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">auto<wbr/>Delete<wbr/>Objects</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -167,23 +167,25 @@ encryption key is not specified, a key will automatically be created.</p>
 </div>
 <div class="tsd-comment tsd-typography">
 <h4>Default</h4><ul>
-<li><code>Kms</code> if <code>encryptionKey</code> is specified, or <code>Managed</code> otherwise.</li>
+<li><code>KMS</code> if <code>encryptionKey</code> is specified, or <code>UNENCRYPTED</code> otherwise.
+But if <code>UNENCRYPTED</code> is specified, the bucket will be encrypted as <code>S3_MANAGED</code> automatically.</li>
 </ul>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.encryption</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:1033</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-s3/lib/bucket.d.ts:1034</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="encryptionKey" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>encryption<wbr/>Key</span><a href="#encryptionKey" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">encryption<wbr/>Key</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type ">IKey</span></div>
 <div class="tsd-comment tsd-typography"><p>External KMS key to use for bucket encryption.</p>
-<p>The &#39;encryption&#39; property must be either not specified or set to &quot;Kms&quot;.
-An error will be emitted if encryption is set to &quot;Unencrypted&quot; or
-&quot;Managed&quot;.</p>
+<p>The <code>encryption</code> property must be either not specified or set to <code>KMS</code> or <code>DSSE</code>.
+An error will be emitted if <code>encryption</code> is set to <code>UNENCRYPTED</code> or <code>S3_MANAGED</code>.</p>
 </div>
 <div class="tsd-comment tsd-typography">
-<h4>Default</h4><pre><code class="language-ts"><span class="hl-1">- </span><span class="hl-0">If</span><span class="hl-1"> </span><span class="hl-0">encryption</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-0">set</span><span class="hl-1"> </span><span class="hl-0">to</span><span class="hl-1"> </span><span class="hl-7">&quot;Kms&quot;</span><span class="hl-1"> </span><span class="hl-0">and</span><span class="hl-1"> </span><span class="hl-2">this</span><span class="hl-1"> </span><span class="hl-0">property</span><span class="hl-1"> </span><span class="hl-0">is</span><span class="hl-1"> </span><span class="hl-2">undefined</span><span class="hl-1">,</span><br/><span class="hl-0">a</span><span class="hl-1"> </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-3">KMS</span><span class="hl-1"> </span><span class="hl-0">key</span><span class="hl-1"> </span><span class="hl-0">will</span><span class="hl-1"> </span><span class="hl-0">be</span><span class="hl-1"> </span><span class="hl-0">created</span><span class="hl-1"> </span><span class="hl-0">and</span><span class="hl-1"> </span><span class="hl-0">associated</span><span class="hl-1"> </span><span class="hl-0">with</span><span class="hl-1"> </span><span class="hl-2">this</span><span class="hl-1"> </span><span class="hl-0">bucket</span><span class="hl-1">.</span>
-</code><button>Copy</button></pre>
+<h4>Default</h4><ul>
+<li>If <code>encryption</code> is set to <code>KMS</code> and this property is undefined,
+a new KMS key will be created and associated with this bucket.</li>
+</ul>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.encryptionKey</p>
 <ul>
