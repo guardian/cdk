@@ -9,6 +9,11 @@ on:
   workflow_dispatch:
 jobs:
   update-aws-cdk:
+    # See https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write # Allow pushing of a branch
+      pull-requests: write # Allow raising of a PR
+
     runs-on: ubuntu-latest
     name: Bump CDK versions
     steps:
