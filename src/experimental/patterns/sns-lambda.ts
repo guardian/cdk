@@ -82,7 +82,10 @@ export class GuSnsLambdaExperimental extends GuLambdaFunction {
         )
       : AppIdentity.taggedConstruct(props, new Topic(scope, "SnsIncomingEventsTopic"));
 
-    this.addEventSource(new SnsEventSource(this.snsTopic));
+    // If we have an alias, use this to ensure that all events are sent to a published Lambda version.
+    // Otherwise, send all events to the latest unpublished version ($LATEST)
+    const eventSourceTarget = this.alias ?? this;
+    eventSourceTarget.addEventSource(new SnsEventSource(this.snsTopic));
     new CfnOutput(this, "TopicName", { value: this.snsTopic.topicName });
   }
 }

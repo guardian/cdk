@@ -108,6 +108,10 @@ export class GuKinesisLambdaExperimental extends GuLambdaFunction {
       ...props.processingProps,
       ...errorHandlingPropsToAwsProps,
     };
-    this.addEventSource(new KinesisEventSource(this.kinesisStream, eventSourceProps));
+
+    // If we have an alias, use this to ensure that all events are sent to a published Lambda version.
+    // Otherwise, send all events to the latest unpublished version ($LATEST)
+    const eventSourceTarget = this.alias ?? this;
+    eventSourceTarget.addEventSource(new KinesisEventSource(this.kinesisStream, eventSourceProps));
   }
 }
