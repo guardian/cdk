@@ -344,9 +344,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-artifact.zip
           actions:
@@ -374,9 +371,88 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
+            lookupByTags: true
+            fileName: my-lambda-artifact.zip
+          actions:
+            - updateLambda
+          dependencies:
+            - cfn-eu-west-1-test-my-application-stack
+      "
+    `);
+  });
+
+  it("Should omit default prefix values in lambda deployments if `withoutFilePrefix` is `true`", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        new GuScheduledLambda(this, "test", {
+          app: "my-lambda",
+          runtime: Runtime.NODEJS_16_X,
+          fileName: "my-lambda-artifact.zip",
+          handler: "handler.main",
+          rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
+          monitoringConfiguration: { noMonitoring: true },
+          timeout: Duration.minutes(1),
+          withoutFilePrefix: true,
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - TEST
+      deployments:
+        lambda-upload-eu-west-1-test-my-lambda:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda
+          contentDirectory: my-lambda
+          parameters:
+            bucketSsmLookup: true
+            prefixStackToKey: false
+            prefixAppToKey: false
+            prefixStageToKey: false
+            lookupByTags: true
+            fileName: my-lambda-artifact.zip
+          actions:
+            - uploadLambda
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              TEST: test-stack.template.json
+          dependencies:
+            - lambda-upload-eu-west-1-test-my-lambda
+        lambda-update-eu-west-1-test-my-lambda:
+          type: aws-lambda
+          stacks:
+            - test
+          regions:
+            - eu-west-1
+          app: my-lambda
+          contentDirectory: my-lambda
+          parameters:
+            bucketSsmLookup: true
+            prefixStackToKey: false
+            prefixAppToKey: false
+            prefixStageToKey: false
             lookupByTags: true
             fileName: my-lambda-artifact.zip
           actions:
@@ -435,9 +511,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-artifact.zip
           actions:
@@ -487,9 +560,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-artifact.zip
           actions:
@@ -666,9 +736,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
@@ -717,9 +784,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
@@ -751,9 +815,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:
@@ -802,9 +863,6 @@ describe("The RiffRaffYamlFileExperimental class", () => {
           contentDirectory: my-lambda-app
           parameters:
             bucketSsmLookup: true
-            prefixStackToKey: true
-            prefixAppToKey: true
-            prefixStageToKey: true
             lookupByTags: true
             fileName: my-lambda-app.zip
           actions:

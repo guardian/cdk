@@ -20,11 +20,22 @@ const locationProps = (lambda: GuLambdaFunction): S3LocationProps => {
           bucketSsmKey: lambda.bucketNamePath,
         };
 
+  /**
+   * If the lambda has a file prefix, we don't want to prefix the key with the stack, app or stage.
+   * The default value for these properties is `true`, so we don't need to set them explicitly if
+   * we *do* want to add the prefixes (and RiffRaff will complain if we add them).
+   */
+  const prefixProps = lambda.withoutFilePrefix
+    ? {
+        prefixStackToKey: false,
+        prefixAppToKey: false,
+        prefixStageToKey: false,
+      }
+    : {};
+
   return {
     ...bucketProp,
-    prefixStackToKey: !lambda.withoutFilePrefix,
-    prefixAppToKey: !lambda.withoutFilePrefix,
-    prefixStageToKey: !lambda.withoutFilePrefix,
+    ...prefixProps,
   };
 };
 
