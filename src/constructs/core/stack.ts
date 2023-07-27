@@ -179,7 +179,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       return gitUrlParse(repositoryUrl).full_name;
     } catch {
       console.info(
-        `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`
+        `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`,
       );
       return undefined;
     }

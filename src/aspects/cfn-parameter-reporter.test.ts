@@ -19,7 +19,7 @@ describe("CfnParameterReporter aspect", () => {
     app.synth();
 
     expect(info).toHaveBeenCalledWith(
-      "Stack reads the SSM Parameter '/TEST/test/my-app/database-password'. Ensure it exists prior to deployment."
+      "Stack reads the SSM Parameter '/TEST/test/my-app/database-password'. Ensure it exists prior to deployment.",
     );
   });
 });

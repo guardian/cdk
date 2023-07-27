@@ -87,7 +87,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
     if (Token.isUnresolved(minimumInstances) && !Token.isUnresolved(maximumInstances)) {
       throw new Error(
-        "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too."
+        "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too.",
       );
     }
 
@@ -120,7 +120,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // Note: Launch templates via CDK allow specifying only one SG, so use connections
     // https://github.com/aws/aws-cdk/issues/18712
     [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) =>
-      launchTemplate.connections.addSecurityGroup(sg)
+      launchTemplate.connections.addSecurityGroup(sg),
     );
 
     const asgProps = {

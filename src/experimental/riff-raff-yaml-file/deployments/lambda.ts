@@ -63,7 +63,7 @@ export function uploadLambdaArtifact(lambda: GuLambdaFunction): RiffRaffDeployme
 
 export function updateLambdaDeployment(
   lambda: GuLambdaFunction,
-  { name: cfnDeployName }: RiffRaffDeployment
+  { name: cfnDeployName }: RiffRaffDeployment,
 ): RiffRaffDeployment {
   const { app, fileName } = lambda;
   const { stack, region } = lambda.stack as GuStack;

@@ -42,7 +42,7 @@ export class GuVpc {
      * TODO: Understand VPCs and Subnets better and develop a better solution to this problem
      */
     return subnets.map((subnetId) =>
-      Subnet.fromSubnetAttributes(scope, `subnet-${subnetId}`, { subnetId, routeTableId: " " })
+      Subnet.fromSubnetAttributes(scope, `subnet-${subnetId}`, { subnetId, routeTableId: " " }),
     );
   }
 

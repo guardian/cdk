@@ -48,7 +48,7 @@ export class TestBuilder {
 
     this.code.line("const app = new App();");
     this.code.line(
-      `const stack = new ${appName.pascal}(app, "${appName.pascal}", { stack: "${stackName.kebab}", stage: "TEST" });`
+      `const stack = new ${appName.pascal}(app, "${appName.pascal}", { stack: "${stackName.kebab}", stage: "TEST" });`,
     );
 
     this.code.line(`const template = Template.fromStack(stack);`);

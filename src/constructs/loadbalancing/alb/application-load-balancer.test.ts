@@ -22,7 +22,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::LoadBalancer",
-      /^ApplicationLoadBalancerTesting.+/
+      /^ApplicationLoadBalancerTesting.+/,
     );
   });
 

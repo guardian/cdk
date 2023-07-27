@@ -57,7 +57,7 @@ export class GuVpc extends Vpc {
   private static setAvailabilityZoneContext({ account, node }: GuStack) {
     if (Token.isUnresolved(account)) {
       throw new Error(
-        `Account ID not set - the resulting VPC might not be shaped how you'd expect. See https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.StackProps.html#env`
+        `Account ID not set - the resulting VPC might not be shaped how you'd expect. See https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.StackProps.html#env`,
       );
     }
 

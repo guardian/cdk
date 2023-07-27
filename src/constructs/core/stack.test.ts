@@ -37,7 +37,7 @@ describe("The GuStack construct", () => {
       {
         stack: "test",
         stage: "TEST",
-      }
+      },
     );
 
     new Role(stack, "MyRole", {
@@ -61,7 +61,7 @@ describe("The GuStack construct", () => {
       {
         stack: "test",
         stage: "TEST",
-      }
+      },
     );
 
     expect(stack.repositoryName).toEqual("guardian/my-repository");
