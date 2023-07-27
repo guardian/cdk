@@ -46,7 +46,7 @@ export class GuFastlyKinesisLogRoleExperimental extends GuRole {
       policyName ?? "GuKinesisPutRecordsPolicyExperimental",
       {
         stream,
-      }
+      },
     );
 
     policy.attachToRole(this);

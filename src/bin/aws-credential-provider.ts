@@ -2,7 +2,7 @@ import type { CredentialProviderChain } from "aws-sdk";
 import AWS from "aws-sdk";
 
 export const awsCredentialProviderChain: (profile: string | undefined) => CredentialProviderChain = (
-  profile: string | undefined
+  profile: string | undefined,
 ) => {
   const envCredentials = () => new AWS.EnvironmentCredentials("AWS");
 

@@ -30,12 +30,12 @@ export function groupByClassNameStackRegionStage(cdkStacks: GuStack[]): GroupedC
               ...accRegion,
               [region]: groupByStageTag(stacksGroupedByRegion),
             }),
-            {}
+            {},
           ),
         }),
-        {}
+        {},
       ),
     }),
-    {}
+    {},
   );
 }

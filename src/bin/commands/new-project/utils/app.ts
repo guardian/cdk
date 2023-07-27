@@ -40,7 +40,7 @@ export class AppBuilder {
 
     stages.forEach((stage) => {
       this.code.line(
-        `new ${appName.pascal}(app, "${appName.pascal}-${stage}", { stack: "${stack.kebab}", stage: "${stage}" });`
+        `new ${appName.pascal}(app, "${appName.pascal}-${stage}", { stack: "${stack.kebab}", stage: "${stage}" });`,
       );
     });
 

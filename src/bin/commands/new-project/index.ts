@@ -147,7 +147,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     ["lib/** bin/**", "--ext .ts", "--no-error-on-unmatched-pattern", "--fix"],
     {
       cwd: config.cdkDir,
-    }
+    },
   );
 
   ux.action.start(chalk.yellow("Running lint check..."));

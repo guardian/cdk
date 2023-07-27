@@ -34,7 +34,7 @@ describe("The GuEmailIdentity construct", () => {
         app: "test",
       });
     }).toThrowError(
-      "Auto verification is only supported for certain domains. my-service.theguardian.com is not supported."
+      "Auto verification is only supported for certain domains. my-service.theguardian.com is not supported.",
     );
   });
 

@@ -29,7 +29,7 @@ const parseCommandLineArguments = () => {
       .command(Commands.AccountReadiness, "Perform checks on an AWS account to see if it is GuCDK ready", (yargs) =>
         yargs
           .option("profile", { type: "string", description: "AWS profile" })
-          .option("region", { type: "string", description: "AWS region", default: "eu-west-1" })
+          .option("region", { type: "string", description: "AWS region", default: "eu-west-1" }),
       )
       .command(
         Commands.New,
@@ -67,14 +67,14 @@ const parseCommandLineArguments = () => {
                 "The Node package manager to use. Match this to the repository (package-lock.json = npm, yarn.lock = yarn). If the repository has neither file, and there is no strong convention in your team, we recommend npm.",
               choices: ["npm", "yarn"],
               demandOption: true,
-            })
+            }),
       )
       .version(
-        `${LibraryInfo.VERSION} (using aws-cdk-lib ${LibraryInfo.AWS_CDK_VERSION}, constructs ${LibraryInfo.CONSTRUCTS_VERSION})`
+        `${LibraryInfo.VERSION} (using aws-cdk-lib ${LibraryInfo.AWS_CDK_VERSION}, constructs ${LibraryInfo.CONSTRUCTS_VERSION})`,
       )
       .demandCommand(1, "") // just print help
       .help()
-      .alias("h", "help").argv
+      .alias("h", "help").argv,
   );
 };
 

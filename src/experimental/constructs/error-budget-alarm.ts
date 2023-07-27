@@ -101,7 +101,7 @@ export class GuErrorBudgetAlarmExperimental extends Construct {
     const highestTargetAllowed = 0.9995;
     if (!(props.sloTarget >= lowestTargetAllowed && props.sloTarget <= highestTargetAllowed)) {
       throw new Error(
-        `ErrorBudgetAlarm only works with SLO targets between ${lowestTargetAllowed} and ${highestTargetAllowed}`
+        `ErrorBudgetAlarm only works with SLO targets between ${lowestTargetAllowed} and ${highestTargetAllowed}`,
       );
     }
 
@@ -112,7 +112,7 @@ export class GuErrorBudgetAlarmExperimental extends Construct {
     const snsTopic: ITopic = Topic.fromTopicArn(
       scope,
       `SnsSloAlarmsFor${props.sloName}`,
-      `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicNameForAlerts}`
+      `arn:aws:sns:${scope.region}:${scope.account}:${props.snsTopicNameForAlerts}`,
     );
 
     const fastBurnRate: BurnRateMonitoring = {
@@ -210,7 +210,7 @@ class CompositeBurnRateAlarm extends CompositeAlarm {
             alarmName: `ChildAlarmLongPeriod${alarmName}`,
             period: props.burnRateMonitoring.longPeriod,
           }),
-          AlarmState.ALARM
+          AlarmState.ALARM,
         ),
         AlarmRule.fromAlarm(
           new MonitorBurnRateForPeriod(scope, {
@@ -218,8 +218,8 @@ class CompositeBurnRateAlarm extends CompositeAlarm {
             alarmName: `ChildAlarmShortPeriod${alarmName}`,
             period: props.burnRateMonitoring.shortPeriod,
           }),
-          AlarmState.ALARM
-        )
+          AlarmState.ALARM,
+        ),
       ),
     });
     this.addAlarmAction(new SnsAction(props.snsTopic));

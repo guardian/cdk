@@ -49,7 +49,7 @@ describe("The GuApplicationListener class", () => {
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::Listener",
-      /ApplicationListenerTesting.+/
+      /ApplicationListenerTesting.+/,
     );
   });
 
@@ -115,7 +115,7 @@ describe("The GuHttpsApplicationListener class", () => {
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::Listener",
-      /^HttpsApplicationListenerTesting.+/
+      /^HttpsApplicationListenerTesting.+/,
     );
   });
 

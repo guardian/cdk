@@ -77,5 +77,5 @@ export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
 };
 
 export const ALL_SSM_PARAMETER_PATHS: SsmParameterPath[] = Object.values(
-  NAMED_SSM_PARAMETER_PATHS
+  NAMED_SSM_PARAMETER_PATHS,
 ) as SsmParameterPath[];

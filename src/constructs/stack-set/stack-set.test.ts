@@ -30,7 +30,7 @@ describe("The GuStackSet construct", () => {
       theStackSetInstance,
       "central-topic",
       new GuStringParameter(theStackSetInstance, "CentralSnsTopicArn", { allowedPattern: RegexPattern.ARN })
-        .valueAsString
+        .valueAsString,
     );
 
     const awsOrgId = "o-12345abcde";

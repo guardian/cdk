@@ -14,7 +14,7 @@ export class CfnParameterReporter implements IAspect {
 
       if (isSsmParameter && hasDefault) {
         Annotations.of(node.stack).addInfo(
-          `Stack reads the SSM Parameter '${defaultValue}'. Ensure it exists prior to deployment.`
+          `Stack reads the SSM Parameter '${defaultValue}'. Ensure it exists prior to deployment.`,
         );
       }
     }

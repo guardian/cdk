@@ -27,7 +27,7 @@ export class GuAllowPolicy extends GuPolicy {
         effect: Effect.ALLOW,
         resources: props.resources,
         actions: props.actions,
-      })
+      }),
     );
   }
 }
@@ -41,7 +41,7 @@ export class GuDenyPolicy extends GuPolicy {
         effect: Effect.DENY,
         resources: props.resources,
         actions: props.actions,
-      })
+      }),
     );
   }
 }

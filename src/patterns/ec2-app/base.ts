@@ -344,7 +344,7 @@ export class GuEc2App extends Construct {
     if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
       throw new Error(
         "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
       );
     }
 
@@ -389,7 +389,7 @@ export class GuEc2App extends Construct {
     // `cdk-base` Amigo role on your AMI.
     Tags.of(autoScalingGroup).add(
       MetadataKeys.LOG_KINESIS_STREAM_NAME,
-      GuLoggingStreamNameParameter.getInstance(scope).valueAsString
+      GuLoggingStreamNameParameter.getInstance(scope).valueAsString,
     );
 
     if (applicationLogging.enabled) {
@@ -397,7 +397,7 @@ export class GuEc2App extends Construct {
       // `cdk-base` Amigo role on your AMI.
       Tags.of(autoScalingGroup).add(
         MetadataKeys.SYSTEMD_UNIT,
-        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`
+        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`,
       );
     }
 
@@ -422,9 +422,9 @@ export class GuEc2App extends Construct {
         Bucket.fromBucketName(
           scope,
           AppIdentity.suffixText(props, "AccessLoggingBucket"),
-          accessLoggingBucket.valueAsString
+          accessLoggingBucket.valueAsString,
         ),
-        accessLogging.prefix
+        accessLogging.prefix,
       );
     }
 
@@ -455,7 +455,7 @@ export class GuEc2App extends Construct {
           description: "Allow restricted ingress from CIDR ranges",
           allowAllOutbound: false,
           ingresses: restrictedCidrRanges(access.cidrRanges),
-        })
+        }),
       );
     }
 
@@ -503,7 +503,7 @@ export class GuEc2App extends Construct {
       const deployToolsAccountId = StringParameter.fromStringParameterName(
         scope,
         "deploy-tools-account-id-parameter",
-        NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path
+        NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path,
       );
 
       // See https://github.com/guardian/cognito-auth-lambdas for the source
@@ -534,7 +534,7 @@ export class GuEc2App extends Construct {
           effect: Effect.ALLOW,
           actions: ["lambda:InvokeFunction"],
           resources: [gatekeeperFunctionArn],
-        })
+        }),
       );
 
       // Cognito user pool. We require both lambdas: pre-sign-up runs the first

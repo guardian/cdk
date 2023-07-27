@@ -10,7 +10,7 @@ describe("GuAllowPolicy", () => {
       new GuAllowPolicy(stack, "AllowS3GetObject", {
         actions: ["s3:GetObject"],
         resources: ["*"],
-      })
+      }),
     );
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
@@ -34,7 +34,7 @@ describe("GuAllowPolicy", () => {
       new GuAllowPolicy(stack, "AllowS3GetObject", {
         actions: ["s3:GetObject", "s3:ListBucket"],
         resources: ["*"],
-      })
+      }),
     );
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
@@ -60,7 +60,7 @@ describe("GuDenyPolicy", () => {
       new GuDenyPolicy(stack, "DenyS3GetObject", {
         actions: ["s3:GetObject"],
         resources: ["*"],
-      })
+      }),
     );
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
@@ -84,7 +84,7 @@ describe("GuDenyPolicy", () => {
       new GuDenyPolicy(stack, "DenyS3GetObject", {
         actions: ["s3:GetObject", "s3:ListBucket"],
         resources: ["*"],
-      })
+      }),
     );
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {

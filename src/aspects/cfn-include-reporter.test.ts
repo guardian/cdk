@@ -22,7 +22,7 @@ describe("CfnIncludeReporter aspect", () => {
     app.synth();
 
     expect(warning).toHaveBeenCalledWith(
-      `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! See https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md.`
+      `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! See https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md.`,
     );
   });
 

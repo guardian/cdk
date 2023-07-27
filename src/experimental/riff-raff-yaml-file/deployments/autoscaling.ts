@@ -25,7 +25,7 @@ export function uploadAutoscalingArtifact(asg: GuAutoScalingGroup): RiffRaffDepl
 
 export function autoscalingDeployment(
   asg: GuAutoScalingGroup,
-  { name: cfnDeployName }: RiffRaffDeployment
+  { name: cfnDeployName }: RiffRaffDeployment,
 ): RiffRaffDeployment {
   const { app } = asg;
   const { stack, region } = asg.stack as GuStack;

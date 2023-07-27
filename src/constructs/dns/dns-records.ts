@@ -49,7 +49,7 @@ export class GuDnsRecordSet extends Construct {
        */
       if (resourceRecords.length !== 1) {
         throw new Error(
-          "According to RFC, a CNAME record should not return multiple answers. Doing so may cause problems during resolution."
+          "According to RFC, a CNAME record should not return multiple answers. Doing so may cause problems during resolution.",
         );
       }
     }

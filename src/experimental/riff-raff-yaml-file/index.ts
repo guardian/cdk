@@ -242,7 +242,7 @@ export class RiffRaffYamlFileExperimental {
 
           deployments.set(
             cfnDeployment.name,
-            addAmiParametersToCloudFormationDeployment(cfnDeployment, autoscalingGroups)
+            addAmiParametersToCloudFormationDeployment(cfnDeployment, autoscalingGroups),
           );
         });
       });
