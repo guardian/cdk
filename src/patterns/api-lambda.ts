@@ -6,9 +6,30 @@ import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import type { ApiGatewayAlarms } from "./api-multiple-lambdas";
+import {Lambda} from "aws-sdk";
+import {LambdaFunction} from "aws-cdk-lib/aws-events-targets";
+import {
+  GuApplicationLoadBalancer,
+  GuApplicationTargetGroup,
+  GuHttpsApplicationListener
+} from "../constructs/loadbalancing";
+import {AccessScope, NAMED_SSM_PARAMETER_PATHS} from "../constants";
+import {AppIdentity, GuStringParameter} from "../constructs/core";
+import {Bucket} from "aws-cdk-lib/aws-s3";
+import {ApplicationProtocol} from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import {GuVpc, SubnetType} from "../constructs/ec2";
+import {AccessLoggingProps} from "./ec2-app";
+import {LambdaTarget} from "aws-cdk-lib/aws-elasticloadbalancingv2-targets";
+import {GuCertificate} from "../constructs/acm";
+import {GuDomainName} from "../../lib/types";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
   id: string;
+}
+
+enum HTTPInterface {
+  API_GATEWAY = "ApiGateway",
+  ALB = "ALB"
 }
 
 export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
@@ -25,6 +46,12 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
    * ```
    */
   monitoringConfiguration: NoMonitoring | ApiGatewayAlarms;
+
+  httpInterface: HTTPInterface
+
+  accessLogging?: AccessLoggingProps;
+
+  certificateProps?: GuDomainName;
 }
 
 /**
@@ -69,14 +96,73 @@ export class GuApiLambda extends GuLambdaFunction {
     // Otherwise, use the latest unpublished version ($LATEST)
     const resourceToInvoke = this.alias ?? this;
 
-    this.api = new LambdaRestApi(this, props.api.id, {
-      handler: resourceToInvoke,
+    // this.api = new LambdaRestApi(this, props.api.id, {
+    //   handler: resourceToInvoke,
+    //
+    //   // Override to avoid clashes as default is just api ID, which is often shared across stages.
+    //   restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
+    //
+    //   ...props.api,
+    // });
 
-      // Override to avoid clashes as default is just api ID, which is often shared across stages.
-      restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
+    if(props.httpInterface == HTTPInterface.ALB) {
+      if(!props.vpc) {
+        throw new Error("VPC must be defined for ALB lambdas")
+      }
+      const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
+        app: props.app,
+        vpc: props.vpc,
+        internetFacing: true,
+        vpcSubnets: {
+          subnets: GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app: props.app }),
+        },
+      });
 
-      ...props.api,
-    });
+      if (props.accessLogging?.enabled) {
+        const accessLoggingBucket = new GuStringParameter(scope, "AccessLoggingBucket", {
+          description: NAMED_SSM_PARAMETER_PATHS.AccessLoggingBucket.description,
+          default: NAMED_SSM_PARAMETER_PATHS.AccessLoggingBucket.path,
+          fromSSM: true,
+        });
+
+        loadBalancer.logAccessLogs(
+          Bucket.fromBucketName(
+            scope,
+            AppIdentity.suffixText(props, "AccessLoggingBucket"),
+            accessLoggingBucket.valueAsString
+          ),
+          props.accessLogging.prefix
+        );
+      }
+
+      const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+        app: props.app,
+        vpc: props.vpc,
+        protocol: ApplicationProtocol.HTTP,
+        targets: [new LambdaTarget(this)],
+        healthCheck: {
+          enabled: true
+        }
+      });
+
+      const certificate =
+        typeof props.certificateProps !== "undefined"
+          ? new GuCertificate(scope, {
+            app: props.app,
+            domainName: props.certificateProps.domainName,
+            hostedZoneId: props.certificateProps.hostedZoneId,
+          })
+          : undefined;
+
+      const listener = new GuHttpsApplicationListener(scope, "Listener", {
+        app: props.app,
+        loadBalancer,
+        certificate,
+        targetGroup,
+        // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
+        open: true,
+      });
+    }
 
     if (!props.monitoringConfiguration.noMonitoring) {
       new GuApiGateway5xxPercentageAlarm(scope, {
