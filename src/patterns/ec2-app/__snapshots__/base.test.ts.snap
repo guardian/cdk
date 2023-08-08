@@ -830,6 +830,9 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
     "teststackTESTtestguec2appAA7F41BE": {
+      "DependsOn": [
+        "InstanceRoleTestguec2appC325BE42",
+      ],
       "Properties": {
         "LaunchTemplateData": {
           "IamInstanceProfile": {
@@ -1669,6 +1672,9 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
     "teststackTESTtestguec2appAA7F41BE": {
+      "DependsOn": [
+        "InstanceRoleTestguec2appC325BE42",
+      ],
       "Properties": {
         "LaunchTemplateData": {
           "IamInstanceProfile": {
