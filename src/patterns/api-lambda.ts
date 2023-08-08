@@ -6,14 +6,12 @@ import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
 import type { ApiGatewayAlarms } from "./api-multiple-lambdas";
-import {Lambda} from "aws-sdk";
-import {LambdaFunction} from "aws-cdk-lib/aws-events-targets";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener
 } from "../constructs/loadbalancing";
-import {AccessScope, NAMED_SSM_PARAMETER_PATHS} from "../constants";
+import {NAMED_SSM_PARAMETER_PATHS} from "../constants";
 import {AppIdentity, GuStringParameter} from "../constructs/core";
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {ApplicationProtocol} from "aws-cdk-lib/aws-elasticloadbalancingv2";
@@ -47,7 +45,7 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
    */
   monitoringConfiguration: NoMonitoring | ApiGatewayAlarms;
 
-  httpInterface: HTTPInterface
+  httpInterface?: HTTPInterface
 
   accessLogging?: AccessLoggingProps;
 
@@ -96,16 +94,7 @@ export class GuApiLambda extends GuLambdaFunction {
     // Otherwise, use the latest unpublished version ($LATEST)
     const resourceToInvoke = this.alias ?? this;
 
-    // this.api = new LambdaRestApi(this, props.api.id, {
-    //   handler: resourceToInvoke,
-    //
-    //   // Override to avoid clashes as default is just api ID, which is often shared across stages.
-    //   restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
-    //
-    //   ...props.api,
-    // });
-
-    if(props.httpInterface == HTTPInterface.ALB) {
+    if(props.httpInterface === HTTPInterface.ALB) {
       if(!props.vpc) {
         throw new Error("VPC must be defined for ALB lambdas")
       }
@@ -162,6 +151,15 @@ export class GuApiLambda extends GuLambdaFunction {
         // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
         open: true,
       });
+    } else {
+        this.api = new LambdaRestApi(this, props.api.id, {
+          handler: resourceToInvoke,
+
+          // Override to avoid clashes as default is just api ID, which is often shared across stages.
+          restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
+
+          ...props.api,
+        });
     }
 
     if (!props.monitoringConfiguration.noMonitoring) {
