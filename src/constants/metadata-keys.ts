@@ -4,4 +4,5 @@ export const MetadataKeys = {
   REPOSITORY_NAME: "gu:repo",
   LOG_KINESIS_STREAM_NAME: "LogKinesisStreamName",
   SYSTEMD_UNIT: "SystemdUnit",
+  DISABLE_CLOUD_INIT_LOGS: "DisableCloudInitLogs",
 };

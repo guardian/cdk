@@ -95,6 +95,18 @@ export interface ApplicationLoggingProps {
    * @defaultValue `<app>.service`
    */
   systemdUnitName?: string;
+  /**
+   * Setting this value to `true` disables the shipping of cloud-init logs to central ELK.
+   * It is normally useful to have cloud-init logs enabled, as they can be helpful
+   * when debugging instances that fail to start without having to ssh into them.
+   * However, when security is a concern and there is a risk of accidentally leaking secrets (e.g.
+   * logging secrets in the userData script which runs on boot), this value can be set to `true`.
+   * This will mark the instance with a special tag that `devx-logs` will pick up, making it so
+   * only application logs are shipped to ELK.
+   *
+   * @defaultValue false
+   */
+  disableCloudInitLogs?: boolean;
 }
 
 /**
@@ -320,7 +332,7 @@ export class GuEc2App extends Construct {
       accessLogging = { enabled: false },
       app,
       // We should update this default once a significant number of apps have migrated to devx-logs
-      applicationLogging = { enabled: false },
+      applicationLogging = { enabled: false, disableCloudInitLogs: false },
       applicationPort,
       blockDevices,
       certificateProps,
@@ -399,6 +411,10 @@ export class GuEc2App extends Construct {
         MetadataKeys.SYSTEMD_UNIT,
         applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`,
       );
+
+      if (applicationLogging.disableCloudInitLogs) {
+        Tags.of(autoScalingGroup).add(MetadataKeys.DISABLE_CLOUD_INIT_LOGS, "true");
+      }
     }
 
     const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {

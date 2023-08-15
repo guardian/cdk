@@ -311,9 +311,9 @@ describe("the GuEC2App pattern", function () {
           },
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
-        }),
+        })
     ).toThrowError(
-      "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public.",
+      "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public."
     );
   });
 
@@ -335,9 +335,9 @@ describe("the GuEC2App pattern", function () {
           },
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
-        }),
+        })
     ).toThrowError(
-      "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted.",
+      "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted."
     );
   });
 
@@ -729,7 +729,7 @@ describe("the GuEC2App pattern", function () {
       });
     }).toThrowError(
       "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
+        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
     );
   });
 
@@ -798,6 +798,36 @@ describe("the GuEC2App pattern", function () {
     });
   });
 
+  it("can be configured to ship application logs exclusively, without cloud-init logs", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "",
+      applicationLogging: { enabled: true, systemdUnitName: "not-my-app-name", disableCloudInitLogs: true },
+    });
+
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
+      appIdentity: { app },
+      propagateAtLaunch: true,
+      additionalTags: [
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        { Key: MetadataKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
+        { Key: MetadataKeys.DISABLE_CLOUD_INIT_LOGS, Value: "true" },
+      ],
+    });
+  });
+
   it("throws when googleAuth.allowedGroups is empty", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "app";
@@ -824,7 +854,7 @@ describe("the GuEC2App pattern", function () {
             domain,
             allowedGroups: [],
           },
-        }),
+        })
     ).toThrowError("googleAuth.allowedGroups cannot be empty!");
   });
 
@@ -854,7 +884,7 @@ describe("the GuEC2App pattern", function () {
             domain,
             sessionTimeoutInMinutes: 61,
           },
-        }),
+        })
     ).toThrowError("googleAuth.sessionTimeoutInMinutes must be <= 60!");
   });
 
@@ -884,7 +914,7 @@ describe("the GuEC2App pattern", function () {
             domain,
             allowedGroups: ["apple@guardian.co.uk", "engineering@theguardian.com"],
           },
-        }),
+        })
     ).toThrowError("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
   });
 });
