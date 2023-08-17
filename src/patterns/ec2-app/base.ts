@@ -1,45 +1,28 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
-import crypto from "crypto";
-import { Duration, SecretValue, Tags } from "aws-cdk-lib";
-import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
-import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
-import {
-  ProviderAttribute,
-  UserPool,
-  UserPoolClientIdentityProvider,
-  UserPoolIdentityProviderGoogle,
-} from "aws-cdk-lib/aws-cognito";
-import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { Port } from "aws-cdk-lib/aws-ec2";
-import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
-import { Bucket } from "aws-cdk-lib/aws-s3";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import { Construct } from "constructs";
-import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
-import { GuCertificate } from "../../constructs/acm";
-import type { GuUserDataProps } from "../../constructs/autoscaling";
-import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
-import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
-import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
-import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
-import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
-import type { GuInstanceRoleProps } from "../../constructs/iam";
-import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
-import { GuLambdaFunction } from "../../constructs/lambda";
+import {Duration, Tags} from "aws-cdk-lib";
+import type {BlockDevice} from "aws-cdk-lib/aws-autoscaling";
+import {HealthCheck} from "aws-cdk-lib/aws-autoscaling";
+import type {InstanceType, IVpc} from "aws-cdk-lib/aws-ec2";
+import {Construct} from "constructs";
+import {MetadataKeys} from "../../constants";
+import {GuCertificate} from "../../constructs/acm";
+import type {GuUserDataProps} from "../../constructs/autoscaling";
+import {GuAutoScalingGroup, GuUserData} from "../../constructs/autoscaling";
+import type {Http5xxAlarmProps} from "../../constructs/cloudwatch";
+import type {GuStack} from "../../constructs/core";
+import {AppIdentity, GuLoggingStreamNameParameter} from "../../constructs/core";
+import {GuVpc, SubnetType} from "../../constructs/ec2";
+import type {GuInstanceRoleProps} from "../../constructs/iam";
+import {GuGetPrivateConfigPolicy, GuInstanceRole} from "../../constructs/iam";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
-import { AppAccess } from "../../types";
-import type { GuAsgCapacity, GuDomainName } from "../../types";
-import type { AmigoProps } from "../../types/amigo";
-import {GuLoadBalancingComponentsProps} from "../load-balancer/load-balancer";
+import type {GuAsgCapacity} from "../../types";
+import {AppAccess} from "../../types";
+import type {AmigoProps} from "../../types/amigo";
+import {GuLoadBalancingComponents, GuLoadBalancingComponentsProps} from "../load-balancer/load-balancer";
 
 export interface AccessLoggingProps {
   /**
@@ -193,17 +176,16 @@ export class GuEc2App extends Construct {
       access,
       app,
       // We should update this default once a significant number of apps have migrated to devx-logs
-      applicationLogging = { enabled: false },
+      applicationLogging = {enabled: false},
       blockDevices,
-      certificateProps,
       instanceType,
-      roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
-      scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
+      roleConfiguration = {withoutLogShipping: false, additionalPolicies: []},
+      scaling: {minimumInstances, maximumInstances = minimumInstances * 2},
       userData,
       withoutImdsv2,
       imageRecipe,
-      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
-      privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
+      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({app}, "VPC")),
+      privateSubnets = GuVpc.subnetsFromParameter(scope, {type: SubnetType.PRIVATE, app}),
       instanceMetadataHopLimit,
     } = props;
 
@@ -214,20 +196,11 @@ export class GuEc2App extends Construct {
     if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
       throw new Error(
         "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
       );
     }
 
     AppAccess.validate(access);
-
-    const certificate =
-      typeof certificateProps !== "undefined"
-        ? new GuCertificate(scope, {
-            app,
-            domainName: certificateProps.domainName,
-            hostedZoneId: certificateProps.hostedZoneId,
-          })
-        : undefined;
 
     const maybePrivateConfigPolicy =
       typeof userData !== "string" && userData.configuration
@@ -246,11 +219,11 @@ export class GuEc2App extends Construct {
       minimumInstances,
       maximumInstances,
       withoutImdsv2,
-      role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
-      healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
-      userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
-      vpcSubnets: { subnets: privateSubnets },
-      ...(blockDevices && { blockDevices }),
+      role: new GuInstanceRole(scope, {app, ...mergedRoleConfiguration}),
+      healthCheck: HealthCheck.elb({grace: Duration.minutes(2)}), // should this be defaulted at pattern or construct level?
+      userData: typeof userData !== "string" ? new GuUserData(scope, {app, ...userData}).userData : userData,
+      vpcSubnets: {subnets: privateSubnets},
+      ...(blockDevices && {blockDevices}),
       imageRecipe,
       httpPutResponseHopLimit: instanceMetadataHopLimit,
     });
@@ -271,11 +244,13 @@ export class GuEc2App extends Construct {
       );
     }
 
+    const loadBalancer = new GuLoadBalancingComponents(scope, {...props, target: autoScalingGroup})
+
     this.vpc = vpc;
-    this.certificate = certificate;
-    this.loadBalancer = loadBalancer;
+    this.certificate = loadBalancer.certificate;
+    this.loadBalancer = loadBalancer.loadBalancer;
     this.autoScalingGroup = autoScalingGroup;
-    this.listener = listener;
-    this.targetGroup = targetGroup;
+    this.listener = loadBalancer.listener;
+    this.targetGroup = loadBalancer.targetGroup;
   }
 }

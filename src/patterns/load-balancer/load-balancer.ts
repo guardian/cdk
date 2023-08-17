@@ -26,29 +26,11 @@ import {
 import crypto from "crypto";
 import {Duration, SecretValue} from "aws-cdk-lib";
 import {AuthenticateCognitoAction} from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import {InstanceType, IPeer, ISubnet, IVpc, Port} from "aws-cdk-lib/aws-ec2";
-import {GuAutoScalingGroup, GuUserDataProps} from "../../constructs/autoscaling";
-import {AppAccess, GuAsgCapacity, GuDomainName} from "../../types";
-import {GuInstanceRoleProps} from "../../constructs/iam";
-import {BlockDevice} from "aws-cdk-lib/aws-autoscaling";
-import {AmigoProps} from "../../types/amigo";
+import {IPeer, ISubnet, IVpc, Port} from "aws-cdk-lib/aws-ec2";
+import {AppAccess, GuDomainName} from "../../types";
 import {HealthCheck as ALBHealthCheck} from "aws-cdk-lib/aws-elasticloadbalancingv2/lib/shared/base-target-group";
-import {AccessLoggingProps, Alarms, ApplicationLoggingProps} from "../ec2-app";
-import {Construct} from "constructs";
+import {AccessLoggingProps, Alarms} from "../ec2-app";
 import {GuCertificate} from "../../constructs/acm";
-
-//scope
-
-//access
-//accesslogging
-//private and public subnets
-//app
-//targets
-//target type (application port)
-//healthcheck
-//certificate
-//monitoringConfiguration
-//googleAuth
 
 function restrictedCidrRanges(ranges: IPeer[]) {
   return ranges.map((range) => ({
@@ -70,7 +52,7 @@ export interface GuLoadBalancingComponentsProps extends AppIdentity {
   /**
    * The port your application runs on.
    */
-  applicationPort: number;
+  applicationPort?: number;
   /**
    * Enable and configure alarms.
    */
@@ -178,7 +160,9 @@ export interface GuLoadBalancingComponentsProps extends AppIdentity {
    * Specify custom healthcheck
    */
   healthcheck?: ALBHealthCheck;
+}
 
+interface GuLoadBalancingComponentPropsTarget extends GuLoadBalancingComponentsProps {
   target: IApplicationLoadBalancerTarget;
 }
 
@@ -188,7 +172,7 @@ export class GuLoadBalancingComponents {
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroup: GuApplicationTargetGroup;
 
-  constructor(scope: GuStack, props: GuLoadBalancingComponentsProps) {
+  constructor(scope: GuStack, props: GuLoadBalancingComponentPropsTarget) {
     const {
       access,
       accessLogging = { enabled: false },
@@ -424,5 +408,8 @@ export class GuLoadBalancingComponents {
 
       loadBalancer.addSecurityGroup(idpEgressSecurityGroup);
     }
+    this.loadBalancer = loadBalancer;
+    this.listener = listener;
+    this.targetGroup = targetGroup;
   }
 }
