@@ -38,7 +38,7 @@ for specific details.</li>
 <ul class="tsd-hierarchy">
 <li><span class="target">GuInstanceRole</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/iam/roles/instance-role.ts#L42">src/constructs/iam/roles/instance-role.ts:42</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/iam/roles/instance-role.ts#L42">src/constructs/iam/roles/instance-role.ts:42</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -109,7 +109,7 @@ for specific details.</li>
 <h4 class="tsd-returns-title">Returns <a href="constructs_iam.GuInstanceRole.html" class="tsd-signature-type tsd-kind-class">GuInstanceRole</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(GuRole).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/iam/roles/instance-role.ts#L43">src/constructs/iam/roles/instance-role.ts:43</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/iam/roles/instance-role.ts#L43">src/constructs/iam/roles/instance-role.ts:43</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="assumeRoleAction" class="tsd-anchor"></a>
@@ -148,7 +148,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="node" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>node</span><a href="#node" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">node</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Node</span></div>
@@ -269,8 +269,7 @@ through its absolute name/arn.</p>
 <li>
 <h5><span class="tsd-kind-parameter">policy</span>: <span class="tsd-signature-type ">IManagedPolicy</span></h5>
 <div class="tsd-comment tsd-typography"><p>The the managed policy to attach.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).addManagedPolicy</p>
@@ -304,8 +303,7 @@ If there is no default policy attached to this role, it will be created.</p>
 <li>
 <h5><span class="tsd-kind-parameter">statement</span>: <span class="tsd-signature-type ">PolicyStatement</span></h5>
 <div class="tsd-comment tsd-typography"><p>The permission statement to add to the policy document</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">AddToPrincipalPolicyResult</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).addToPrincipalPolicy</p>
@@ -347,8 +345,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <li>
 <h5><span class="tsd-kind-parameter">policy</span>: <span class="tsd-signature-type ">Policy</span></h5>
 <div class="tsd-comment tsd-typography"><p>The policy to attach</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).attachInlinePolicy</p>
@@ -383,15 +380,13 @@ a concrete ARN with the resource&#39;s physical name. Make sure to reference
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the ARN of the resource.
 Commonly it will be called &quot;Arn&quot; (e.g. <code>resource.attrArn</code>), but sometimes
 it&#39;s the CFN resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">arnComponents</span>: <span class="tsd-signature-type ">ArnComponents</span></h5>
 <div class="tsd-comment tsd-typography"><p>The format of the ARN of this resource. You must
 reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).getResourceArnAttribute</p>
@@ -415,8 +410,7 @@ which will be a concrete name.</p>
 <h5><span class="tsd-kind-parameter">nameAttr</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the resource&#39;s name.
 Commonly this is the resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).getResourceNameAttribute</p>
@@ -435,7 +429,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5><span class="tsd-kind-parameter">grantee</span>: <span class="tsd-signature-type ">IPrincipal</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).grant</p>
@@ -502,7 +496,7 @@ Role&#39;s policies yourself.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">WithoutPolicyUpdatesOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">WithoutPolicyUpdatesOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IRole</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).withoutPolicyUpdates</p>
@@ -531,13 +525,11 @@ in <code>usePrecreatedRoles</code>.</p>
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>construct scope to customize role creation</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">CustomizeRolesOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>options for configuring role creation</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>Example</h4><pre><code class="language-ts"><span class="hl-2">declare</span><span class="hl-1"> </span><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-3">app</span><span class="hl-1">: </span><span class="hl-9">App</span><span class="hl-1">;</span><br/><span class="hl-0">iam</span><span class="hl-1">.</span><span class="hl-0">Role</span><span class="hl-1">.</span><span class="hl-4">customizeRoles</span><span class="hl-1">(</span><span class="hl-0">app</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-0">usePrecreatedRoles:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-7">&#39;ConstructPath/To/Role&#39;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-7">&#39;my-precreated-role-name&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">});</span>
@@ -567,23 +559,19 @@ expression. In this scenario the Role ARN should be supplied without the
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>construct scope</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>construct id</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">roleArn</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>the ARN of the role to import</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">FromRoleArnOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>allow customizing the behavior of the returned role</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IRole</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).fromRoleArn</p>
@@ -604,23 +592,19 @@ the scope&#39;s containing Stack is being deployed to.</p>
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>construct scope</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>construct id</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">roleName</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>the name of the role to import</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">FromRoleNameOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>allow customizing the behavior of the returned role</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IRole</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(GuRole).fromRoleName</p>
@@ -651,8 +635,7 @@ this type-testing method instead.</p>
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -812,11 +795,11 @@ this type-testing method instead.</p>
 <li><a href="../interfaces/constructs_iam.GuGithubActionsRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Gu<wbr/>Github<wbr/>Actions<wbr/>Role<wbr/>Props</span></a></li>
 <li><a href="../interfaces/constructs_iam.GuInstanceRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Gu<wbr/>Instance<wbr/>Role<wbr/>Props</span></a></li>
 <li><a href="../interfaces/constructs_iam.GuPutS3ObjectPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Gu<wbr/>Put<wbr/>S3<wbr/>Object<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuDenyPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Deny<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>Instance<wbr/>Role<wbr/>Props<wbr/>With<wbr/>App</span></a></li>
-<li><a href="../types/constructs_iam.GuNoStatementsPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>No<wbr/>Statements<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>Role<wbr/>Props</span></a></li></ul></div></details></li>
+<li><a href="../types/constructs_iam.GuDenyPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-2097152"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Deny<wbr/>Policy<wbr/>Props</span></a></li>
+<li><a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>Instance<wbr/>Role<wbr/>Props<wbr/>With<wbr/>App</span></a></li>
+<li><a href="../types/constructs_iam.GuNoStatementsPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>No<wbr/>Statements<wbr/>Policy<wbr/>Props</span></a></li>
+<li><a href="../types/constructs_iam.GuPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>Policy<wbr/>Props</span></a></li>
+<li><a href="../types/constructs_iam.GuRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>Role<wbr/>Props</span></a></li></ul></div></details></li>
 <li><a href="../modules/constructs_kinesis.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/kinesis</span></a></li>
 <li><a href="../modules/constructs_lambda.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/lambda</span></a></li>
 <li><a href="../modules/constructs_loadbalancing.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/loadbalancing</span></a></li>
@@ -835,5 +818,5 @@ this type-testing method instead.</p>
 <li><a href="../modules/utils_security_groups.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/security-<wbr/>groups</span></a></li>
 <li><a href="../modules/utils_test.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/test</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
-<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>

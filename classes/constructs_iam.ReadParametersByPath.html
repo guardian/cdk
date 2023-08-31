@@ -28,7 +28,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">ReadParametersByPath</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/iam/policies/parameter-store-read.ts#L10">src/constructs/iam/policies/parameter-store-read.ts:10</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/iam/policies/parameter-store-read.ts#L10">src/constructs/iam/policies/parameter-store-read.ts:10</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -102,7 +102,7 @@
 <h4 class="tsd-returns-title">Returns <a href="constructs_iam.ReadParametersByPath.html" class="tsd-signature-type tsd-kind-class">ReadParametersByPath</a></h4><aside class="tsd-sources">
 <p>Overrides PolicyStatement.constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/iam/policies/parameter-store-read.ts#L11">src/constructs/iam/policies/parameter-store-read.ts:11</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/iam/policies/parameter-store-read.ts#L11">src/constructs/iam/policies/parameter-store-read.ts:11</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Accessors</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="actions" class="tsd-anchor"></a>
@@ -344,8 +344,7 @@ so we won&#39;t have nasty surprises.</p>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>actions that will be allowed.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_action.html">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_action.html</a></p>
@@ -391,8 +390,7 @@ You cannot specify IAM groups and instance profiles as principals.</p>
 <li>
 <h5><span class="tsd-kind-parameter">arn</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>ARN identifier of AWS account, IAM user, or IAM role (i.e. arn:aws:iam::123456789012:user/user-name)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from PolicyStatement.addArnPrincipal</p>
@@ -428,8 +426,7 @@ You cannot specify IAM groups and instance profiles as principals.</p>
 <li>
 <h5><span class="tsd-kind-parameter">canonicalUserId</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>unique identifier assigned by AWS for every account</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from PolicyStatement.addCanonicalUserPrincipal</p>
@@ -494,14 +491,12 @@ this:</p>
 <li>
 <h5><span class="tsd-kind-parameter">federated</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>federated identity provider (i.e. &#39;cognito-identity.amazonaws.com&#39;)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">conditions</span>: <span class="tsd-signature-type ">Conditions</span></h5>
 <div class="tsd-comment tsd-typography"><p>The conditions under which the policy is in effect.
   See <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html">the IAM documentation</a>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from PolicyStatement.addFederatedPrincipal</p>
@@ -521,8 +516,7 @@ of the policy document.</p>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">notActions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>actions that will be denied. All other actions will be permitted.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notaction.html">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notaction.html</a></p>
@@ -544,8 +538,7 @@ a policy statement.</p>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">notPrincipals</span>: <span class="tsd-signature-type ">IPrincipal</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>IAM principals that will be denied access</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notprincipal.html">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notprincipal.html</a></p>
@@ -567,8 +560,7 @@ of this policy statement. All resources except the specified list will be matche
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">arns</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>Amazon Resource Names (ARNs) of the resources that this policy statement does not apply to</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notresource.html">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notresource.html</a></p>
@@ -589,8 +581,7 @@ of this policy statement. All resources except the specified list will be matche
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">principals</span>: <span class="tsd-signature-type ">IPrincipal</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>IAM principals that will be added</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html</a></p>
@@ -612,8 +603,7 @@ this policy statement.</p>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">arns</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>Amazon Resource Names (ARNs) of the resources that this policy statement applies to</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html">https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html</a></p>
@@ -634,13 +624,11 @@ this policy statement.</p>
 <li>
 <h5><span class="tsd-kind-parameter">service</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>the service name for which a service principal is requested (e.g: <code>s3.amazonaws.com</code>).</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">opts</span>: <span class="tsd-signature-type ">ServicePrincipalOpts</span></h5>
 <div class="tsd-comment tsd-typography"><p>options for adding the service principal (such as specifying a principal in a different region)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from PolicyStatement.addServicePrincipal</p>
@@ -698,7 +686,7 @@ as this one, except for the overrides</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">overrides</span>: <span class="tsd-signature-type ">PolicyStatementProps</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">overrides</span>: <span class="tsd-signature-type ">PolicyStatementProps</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">PolicyStatement</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from PolicyStatement.copy</p>
@@ -811,8 +799,7 @@ This will accept an object created from the <code>.toJSON()</code> call</p>
 <li>
 <h5><span class="tsd-kind-parameter">obj</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>the PolicyStatement in object form.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">PolicyStatement</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from PolicyStatement.fromJson</p>
@@ -926,11 +913,11 @@ This will accept an object created from the <code>.toJSON()</code> call</p>
 <li><a href="../interfaces/constructs_iam.GuGithubActionsRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Gu<wbr/>Github<wbr/>Actions<wbr/>Role<wbr/>Props</span></a></li>
 <li><a href="../interfaces/constructs_iam.GuInstanceRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Gu<wbr/>Instance<wbr/>Role<wbr/>Props</span></a></li>
 <li><a href="../interfaces/constructs_iam.GuPutS3ObjectPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Gu<wbr/>Put<wbr/>S3<wbr/>Object<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuDenyPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Deny<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>Instance<wbr/>Role<wbr/>Props<wbr/>With<wbr/>App</span></a></li>
-<li><a href="../types/constructs_iam.GuNoStatementsPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>No<wbr/>Statements<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>Policy<wbr/>Props</span></a></li>
-<li><a href="../types/constructs_iam.GuRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Gu<wbr/>Role<wbr/>Props</span></a></li></ul></div></details></li>
+<li><a href="../types/constructs_iam.GuDenyPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-2097152"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Deny<wbr/>Policy<wbr/>Props</span></a></li>
+<li><a href="../types/constructs_iam.GuInstanceRolePropsWithApp.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>Instance<wbr/>Role<wbr/>Props<wbr/>With<wbr/>App</span></a></li>
+<li><a href="../types/constructs_iam.GuNoStatementsPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>No<wbr/>Statements<wbr/>Policy<wbr/>Props</span></a></li>
+<li><a href="../types/constructs_iam.GuPolicyProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>Policy<wbr/>Props</span></a></li>
+<li><a href="../types/constructs_iam.GuRoleProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Gu<wbr/>Role<wbr/>Props</span></a></li></ul></div></details></li>
 <li><a href="../modules/constructs_kinesis.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/kinesis</span></a></li>
 <li><a href="../modules/constructs_lambda.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/lambda</span></a></li>
 <li><a href="../modules/constructs_loadbalancing.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/loadbalancing</span></a></li>
@@ -949,5 +936,5 @@ This will accept an object created from the <code>.toJSON()</code> call</p>
 <li><a href="../modules/utils_security_groups.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/security-<wbr/>groups</span></a></li>
 <li><a href="../modules/utils_test.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/test</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
-<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>

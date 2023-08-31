@@ -28,7 +28,7 @@ the specified threshold.</p>
 <ul class="tsd-hierarchy">
 <li><span class="target">GuAlb5xxPercentageAlarm</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/cloudwatch/ec2-alarms.ts#L22">src/constructs/cloudwatch/ec2-alarms.ts:22</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/cloudwatch/ec2-alarms.ts#L22">src/constructs/cloudwatch/ec2-alarms.ts:22</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -87,7 +87,7 @@ the specified threshold.</p>
 <h4 class="tsd-returns-title">Returns <a href="constructs_cloudwatch.GuAlb5xxPercentageAlarm.html" class="tsd-signature-type tsd-kind-class">GuAlb5xxPercentageAlarm</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/cloudwatch/ec2-alarms.ts#L23">src/constructs/cloudwatch/ec2-alarms.ts:23</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/cloudwatch/ec2-alarms.ts#L23">src/constructs/cloudwatch/ec2-alarms.ts:23</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="alarmActionArns" class="tsd-anchor"></a>
@@ -204,7 +204,7 @@ through its absolute name/arn.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type ">IAlarmAction</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type ">IAlarmAction</span><span class="tsd-signature-symbol">[]</span></h5><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#addAlarmAction">addAlarmAction</a></p>
@@ -222,7 +222,7 @@ through its absolute name/arn.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type ">IAlarmAction</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type ">IAlarmAction</span><span class="tsd-signature-symbol">[]</span></h5><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#addInsufficientDataAction">addInsufficientDataAction</a></p>
@@ -240,7 +240,7 @@ through its absolute name/arn.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type ">IAlarmAction</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type ">IAlarmAction</span><span class="tsd-signature-symbol">[]</span></h5><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#addOkAction">addOkAction</a></p>
@@ -298,15 +298,13 @@ a concrete ARN with the resource&#39;s physical name. Make sure to reference
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the ARN of the resource.
 Commonly it will be called &quot;Arn&quot; (e.g. <code>resource.attrArn</code>), but sometimes
 it&#39;s the CFN resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">arnComponents</span>: <span class="tsd-signature-type ">ArnComponents</span></h5>
 <div class="tsd-comment tsd-typography"><p>The format of the ARN of this resource. You must
 reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#getResourceArnAttribute">getResourceArnAttribute</a></p>
@@ -330,8 +328,7 @@ which will be a concrete name.</p>
 <h5><span class="tsd-kind-parameter">nameAttr</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the resource&#39;s name.
 Commonly this is the resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#getResourceNameAttribute">getResourceNameAttribute</a></p>
@@ -399,18 +396,15 @@ you have both a &quot;small margin/long period&quot; alarm as well as a
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>The parent creating construct (usually <code>this</code>).</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The construct&#39;s name</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">alarmArn</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>Alarm ARN (i.e. arn:aws:cloudwatch:<region>:<account-id>:alarm:Foo)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IAlarm</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#fromAlarmArn">fromAlarmArn</a></p>
@@ -429,18 +423,15 @@ you have both a &quot;small margin/long period&quot; alarm as well as a
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>The parent creating construct (usually <code>this</code>)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The construct&#39;s name</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">alarmName</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>Alarm Name</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IAlarm</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_cloudwatch.GuAlarm.html">GuAlarm</a>.<a href="constructs_cloudwatch.GuAlarm.html#fromAlarmName">fromAlarmName</a></p>
@@ -471,8 +462,7 @@ this type-testing method instead.</p>
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -602,5 +592,5 @@ this type-testing method instead.</p>
 <li><a href="../modules/utils_security_groups.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/security-<wbr/>groups</span></a></li>
 <li><a href="../modules/utils_test.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/test</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
-<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>

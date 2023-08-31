@@ -23,7 +23,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuDatabaseInstance</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/rds/instance.ts#L12">src/constructs/rds/instance.ts:12</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/rds/instance.ts#L12">src/constructs/rds/instance.ts:12</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -105,7 +105,7 @@
 <h4 class="tsd-returns-title">Returns <a href="constructs_rds.GuDatabaseInstance.html" class="tsd-signature-type tsd-kind-class">GuDatabaseInstance</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(DatabaseInstance).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/rds/instance.ts#L13">src/constructs/rds/instance.ts:13</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/rds/instance.ts#L13">src/constructs/rds/instance.ts:13</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="connections" class="tsd-anchor"></a>
@@ -153,7 +153,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="instanceEndpoint" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>instance<wbr/>Endpoint</span><a href="#instanceEndpoint" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">instance<wbr/>Endpoint</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Endpoint</span></div><aside class="tsd-sources">
@@ -326,8 +326,7 @@ through its absolute name/arn.</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">RotationSingleUserOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>the options for the rotation,
                if you want to override the defaults</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">SecretRotation</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).addRotationSingleUser</p>
@@ -397,15 +396,13 @@ a concrete ARN with the resource&#39;s physical name. Make sure to reference
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the ARN of the resource.
 Commonly it will be called &quot;Arn&quot; (e.g. <code>resource.attrArn</code>), but sometimes
 it&#39;s the CFN resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">arnComponents</span>: <span class="tsd-signature-type ">ArnComponents</span></h5>
 <div class="tsd-comment tsd-typography"><p>The format of the ARN of this resource. You must
 reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).getResourceArnAttribute</p>
@@ -429,8 +426,7 @@ which will be a concrete name.</p>
 <h5><span class="tsd-kind-parameter">nameAttr</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the resource&#39;s name.
 Commonly this is the resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).getResourceNameAttribute</p>
@@ -449,13 +445,11 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5><span class="tsd-kind-parameter">grantee</span>: <span class="tsd-signature-type ">IGrantable</span></h5>
 <div class="tsd-comment tsd-typography"><p>the Principal to grant the permissions to</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">dbUser</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>the name of the database user to allow connecting as to the db instance</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>Default</h4><pre><code class="language-ts"><span class="hl-0">the</span><span class="hl-1"> </span><span class="hl-6">default</span><span class="hl-1"> </span><span class="hl-0">user</span><span class="hl-1">, </span><span class="hl-0">obtained</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-0">the</span><span class="hl-1"> </span><span class="hl-0">Secret</span>
@@ -477,7 +471,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5><span class="tsd-kind-parameter">metricName</span>: <span class="tsd-signature-type">string</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metric</p>
@@ -495,7 +489,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metricCPUUtilization</p>
@@ -513,7 +507,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metricDatabaseConnections</p>
@@ -531,7 +525,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metricFreeStorageSpace</p>
@@ -549,7 +543,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metricFreeableMemory</p>
@@ -567,7 +561,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metricReadIOPS</p>
@@ -585,7 +579,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).metricWriteIOPS</p>
@@ -605,7 +599,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">OnEventOptions</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">OnEventOptions</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Rule</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).onEvent</p>
@@ -678,8 +672,7 @@ this type-testing method instead.</p>
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -819,5 +812,5 @@ this type-testing method instead.</p>
 <li><a href="../modules/utils_security_groups.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/security-<wbr/>groups</span></a></li>
 <li><a href="../modules/utils_test.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/test</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
-<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>

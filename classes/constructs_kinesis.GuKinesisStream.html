@@ -30,7 +30,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuKinesisStream</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/kinesis/kinesis-stream.ts#L13">src/constructs/kinesis/kinesis-stream.ts:13</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/kinesis/kinesis-stream.ts#L13">src/constructs/kinesis/kinesis-stream.ts:13</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -103,11 +103,11 @@
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">StreamProps</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">StreamProps</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="constructs_kinesis.GuKinesisStream.html" class="tsd-signature-type tsd-kind-class">GuKinesisStream</a></h4><aside class="tsd-sources">
 <p>Overrides Stream.constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/kinesis/kinesis-stream.ts#L14">src/constructs/kinesis/kinesis-stream.ts:14</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/kinesis/kinesis-stream.ts#L14">src/constructs/kinesis/kinesis-stream.ts:14</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="encryptionKey" class="tsd-anchor"></a>
@@ -235,15 +235,13 @@ a concrete ARN with the resource&#39;s physical name. Make sure to reference
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the ARN of the resource.
 Commonly it will be called &quot;Arn&quot; (e.g. <code>resource.attrArn</code>), but sometimes
 it&#39;s the CFN resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">arnComponents</span>: <span class="tsd-signature-type ">ArnComponents</span></h5>
 <div class="tsd-comment tsd-typography"><p>The format of the ARN of this resource. You must
 reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.getResourceArnAttribute</p>
@@ -267,8 +265,7 @@ which will be a concrete name.</p>
 <h5><span class="tsd-kind-parameter">nameAttr</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the resource&#39;s name.
 Commonly this is the resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.getResourceNameAttribute</p>
@@ -287,7 +284,7 @@ Commonly this is the resource&#39;s <code>ref</code>.</p>
 <li>
 <h5><span class="tsd-kind-parameter">grantee</span>: <span class="tsd-signature-type ">IGrantable</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">actions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.grant</p>
@@ -366,13 +363,11 @@ contents of the stream will also be granted.</p>
 <li>
 <h5><span class="tsd-kind-parameter">metricName</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>name of the stream metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metric</p>
@@ -395,8 +390,7 @@ The metric defaults to average over 5 minutes, it can be changed by passing <cod
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricGetRecords</p>
@@ -418,8 +412,7 @@ period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricGetRecordsBytes</p>
@@ -442,8 +435,7 @@ applications. A value of zero indicates that the records being read are complete
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricGetRecordsIteratorAgeMilliseconds</p>
@@ -463,8 +455,7 @@ applications. A value of zero indicates that the records being read are complete
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricGetRecordsLatency</p>
@@ -484,8 +475,7 @@ applications. A value of zero indicates that the records being read are complete
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricGetRecordsSuccess</p>
@@ -507,8 +497,7 @@ single put operation for the stream in the specified time period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricIncomingBytes</p>
@@ -530,8 +519,7 @@ records in a single put operation for the stream in the specified time period.</
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricIncomingRecords</p>
@@ -551,8 +539,7 @@ records in a single put operation for the stream in the specified time period.</
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordBytes</p>
@@ -572,8 +559,7 @@ records in a single put operation for the stream in the specified time period.</
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordLatency</p>
@@ -594,8 +580,7 @@ reflects the percentage of successful writes to a stream.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordSuccess</p>
@@ -615,8 +600,7 @@ reflects the percentage of successful writes to a stream.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsBytes</p>
@@ -637,8 +621,7 @@ measured over the specified time period. Occasional internal failures are to be 
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsFailedRecords</p>
@@ -658,8 +641,7 @@ measured over the specified time period. Occasional internal failures are to be 
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsLatency</p>
@@ -680,8 +662,7 @@ measured over the specified time period. Occasional internal failures are to be 
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsSuccess</p>
@@ -702,8 +683,7 @@ time period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsSuccessfulRecords</p>
@@ -724,8 +704,7 @@ the specified time period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsThrottledRecords</p>
@@ -746,8 +725,7 @@ time period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricPutRecordsTotalRecords</p>
@@ -772,8 +750,7 @@ time period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricReadProvisionedThroughputExceeded</p>
@@ -798,8 +775,7 @@ specified time period.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">props</span>: <span class="tsd-signature-type ">MetricOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>properties of the metric</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Metric</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.metricWriteProvisionedThroughputExceeded</p>
@@ -830,18 +806,15 @@ specified time period.</p>
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>The parent creating construct (usually <code>this</code>).</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The construct&#39;s name</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">streamArn</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>Stream ARN (i.e. arn:aws:kinesis:<region>:<account-id>:stream/Foo)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IStream</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.fromStreamArn</p>
@@ -860,18 +833,15 @@ specified time period.</p>
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>The parent creating construct (usually <code>this</code>).</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The construct&#39;s name.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">attrs</span>: <span class="tsd-signature-type ">StreamAttributes</span></h5>
 <div class="tsd-comment tsd-typography"><p>Stream import properties</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IStream</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from Stream.fromStreamAttributes</p>
@@ -902,8 +872,7 @@ this type-testing method instead.</p>
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -1023,7 +992,7 @@ this type-testing method instead.</p>
 <div class="tsd-accordion-details">
 <ul class="tsd-nested-navigation">
 <li><a href="constructs_kinesis.GuKinesisStream.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-128"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-class)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.898 16.1201C11.098 16.1201 10.466 15.8961 10.002 15.4481C9.53803 15.0001 9.30603 14.3841 9.30603 13.6001V9.64012C9.30603 8.85612 9.53803 8.24012 10.002 7.79212C10.466 7.34412 11.098 7.12012 11.898 7.12012C12.682 7.12012 13.306 7.34812 13.77 7.80412C14.234 8.25212 14.466 8.86412 14.466 9.64012H13.386C13.386 9.14412 13.254 8.76412 12.99 8.50012C12.734 8.22812 12.37 8.09212 11.898 8.09212C11.426 8.09212 11.054 8.22412 10.782 8.48812C10.518 8.75212 10.386 9.13212 10.386 9.62812V13.6001C10.386 14.0961 10.518 14.4801 10.782 14.7521C11.054 15.0161 11.426 15.1481 11.898 15.1481C12.37 15.1481 12.734 15.0161 12.99 14.7521C13.254 14.4801 13.386 14.0961 13.386 13.6001H14.466C14.466 14.3761 14.234 14.9921 13.77 15.4481C13.306 15.8961 12.682 16.1201 11.898 16.1201Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Kinesis<wbr/>Stream</span></a></li>
-<li><a href="../types/constructs_kinesis.GuKinesisStreamProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Kinesis<wbr/>Stream<wbr/>Props</span></a></li></ul></div></details></li>
+<li><a href="../types/constructs_kinesis.GuKinesisStreamProps.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-2097152"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Gu<wbr/>Kinesis<wbr/>Stream<wbr/>Props</span></a></li></ul></div></details></li>
 <li><a href="../modules/constructs_lambda.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/lambda</span></a></li>
 <li><a href="../modules/constructs_loadbalancing.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/loadbalancing</span></a></li>
 <li><a href="../modules/constructs_rds.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>constructs/rds</span></a></li>
@@ -1041,5 +1010,5 @@ this type-testing method instead.</p>
 <li><a href="../modules/utils_security_groups.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/security-<wbr/>groups</span></a></li>
 <li><a href="../modules/utils_test.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/test</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
-<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>

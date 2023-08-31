@@ -27,7 +27,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">GuS3Bucket</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/s3/index.ts#L12">src/constructs/s3/index.ts:12</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/s3/index.ts#L12">src/constructs/s3/index.ts:12</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -124,7 +124,7 @@
 <h4 class="tsd-returns-title">Returns <a href="constructs_s3.GuS3Bucket.html" class="tsd-signature-type tsd-kind-class">GuS3Bucket</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(Bucket).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/constructs/s3/index.ts#L13">src/constructs/s3/index.ts:13</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/constructs/s3/index.ts#L13">src/constructs/s3/index.ts:13</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external"><a id="autoCreatePolicy" class="tsd-anchor"></a>
@@ -202,7 +202,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/512536bd/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/51be26d4/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external"><a id="isWebsite" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>is<wbr/>Website</span><a href="#isWebsite" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">is<wbr/>Website</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
@@ -309,8 +309,7 @@ through its absolute name/arn.</p>
 <li>
 <h5><span class="tsd-kind-parameter">rule</span>: <span class="tsd-signature-type ">CorsRule</span></h5>
 <div class="tsd-comment tsd-typography"><p>The CORS configuration rule to add</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addCorsRule</p>
@@ -329,21 +328,18 @@ through its absolute name/arn.</p>
 <li>
 <h5><span class="tsd-kind-parameter">event</span>: <span class="tsd-signature-type ">EventType</span></h5>
 <div class="tsd-comment tsd-typography"><p>The event to trigger the notification</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">dest</span>: <span class="tsd-signature-type ">IBucketNotificationDestination</span></h5>
 <div class="tsd-comment tsd-typography"><p>The notification destination (Lambda, SNS Topic or SQS Queue)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">filters</span>: <span class="tsd-signature-type ">NotificationKeyFilter</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>S3 object key filter rules to determine which objects
 trigger this event. Each filter must include a <code>prefix</code> and/or <code>suffix</code>
 that will be matched against the s3 object key. Refer to the S3 Developer Guide
 for details about allowed filter rules.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography">
 <h4>See</h4><ul>
@@ -370,8 +366,7 @@ for details about allowed filter rules.</p>
 <li>
 <h5><span class="tsd-kind-parameter">inventory</span>: <span class="tsd-signature-type ">Inventory</span></h5>
 <div class="tsd-comment tsd-typography"><p>configuration to add</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addInventory</p>
@@ -390,8 +385,7 @@ for details about allowed filter rules.</p>
 <li>
 <h5><span class="tsd-kind-parameter">rule</span>: <span class="tsd-signature-type ">LifecycleRule</span></h5>
 <div class="tsd-comment tsd-typography"><p>The rule to add</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addLifecycleRule</p>
@@ -410,8 +404,7 @@ for details about allowed filter rules.</p>
 <li>
 <h5><span class="tsd-kind-parameter">metric</span>: <span class="tsd-signature-type ">BucketMetrics</span></h5>
 <div class="tsd-comment tsd-typography"><p>The metric configuration to add</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addMetric</p>
@@ -432,13 +425,11 @@ created in the bucket. This is identical to calling
 <li>
 <h5><span class="tsd-kind-parameter">dest</span>: <span class="tsd-signature-type ">IBucketNotificationDestination</span></h5>
 <div class="tsd-comment tsd-typography"><p>The notification destination (see onEvent)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">filters</span>: <span class="tsd-signature-type ">NotificationKeyFilter</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>Filters (see onEvent)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addObjectCreatedNotification</p>
@@ -459,13 +450,11 @@ removed from the bucket. This is identical to calling
 <li>
 <h5><span class="tsd-kind-parameter">dest</span>: <span class="tsd-signature-type ">IBucketNotificationDestination</span></h5>
 <div class="tsd-comment tsd-typography"><p>The notification destination (see onEvent)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">filters</span>: <span class="tsd-signature-type ">NotificationKeyFilter</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>Filters (see onEvent)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).addObjectRemovedNotification</p>
@@ -493,8 +482,7 @@ So it&#39;s safest to do nothing in these cases.</p>
 <h5><span class="tsd-kind-parameter">permission</span>: <span class="tsd-signature-type ">PolicyStatement</span></h5>
 <div class="tsd-comment tsd-typography"><p>the policy statement to be added to the bucket&#39;s
 policy.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">AddToResourcePolicyResult</span></h4><p>metadata about the execution of this method. If the policy
 was not added, the value of <code>statementAdded</code> will be <code>false</code>. You
 should always check this value to make sure that the operation was
@@ -601,15 +589,13 @@ a concrete ARN with the resource&#39;s physical name. Make sure to reference
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the ARN of the resource.
 Commonly it will be called &quot;Arn&quot; (e.g. <code>resource.attrArn</code>), but sometimes
 it&#39;s the CFN resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">arnComponents</span>: <span class="tsd-signature-type ">ArnComponents</span></h5>
 <div class="tsd-comment tsd-typography"><p>The format of the ARN of this resource. You must
 reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).getResourceArnAttribute</p>
@@ -633,8 +619,7 @@ which will be a concrete name.</p>
 <h5><span class="tsd-kind-parameter">nameAttr</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The CFN attribute which resolves to the resource&#39;s name.
 Commonly this is the resource&#39;s <code>ref</code>.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).getResourceNameAttribute</p>
@@ -654,13 +639,11 @@ in this bucket.</p>
 <li>
 <h5><span class="tsd-kind-parameter">identity</span>: <span class="tsd-signature-type ">IGrantable</span></h5>
 <div class="tsd-comment tsd-typography"><p>The principal</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Restrict the permission to a certain key pattern (default &#39;*&#39;)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantDelete</p>
@@ -693,13 +676,11 @@ impossible to modify the policy of an existing bucket.</p>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">keyPrefix</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>the prefix of S3 object keys (e.g. <code>home/*</code>). Default is &quot;*&quot;.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li>
 <li>
 <h5><code class="tsd-tag ts-flagRest">Rest</code> <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">allowedActions</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 <div class="tsd-comment tsd-typography"><p>the set of S3 actions to allow. Default is &quot;s3:GetObject&quot;.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagRest">Rest</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantPublicAccess</p>
@@ -720,13 +701,11 @@ of written files will also be granted to the same principal.</p>
 <li>
 <h5><span class="tsd-kind-parameter">identity</span>: <span class="tsd-signature-type ">IGrantable</span></h5>
 <div class="tsd-comment tsd-typography"><p>The principal</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Restrict the permission to a certain key pattern (default &#39;*&#39;)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantPut</p>
@@ -743,7 +722,7 @@ of written files will also be granted to the same principal.</p>
 <li>
 <h5><span class="tsd-kind-parameter">identity</span>: <span class="tsd-signature-type ">IGrantable</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">string</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantPutAcl</p>
 <ul>
@@ -764,13 +743,11 @@ of the bucket will also be granted to the same principal.</p>
 <li>
 <h5><span class="tsd-kind-parameter">identity</span>: <span class="tsd-signature-type ">IGrantable</span></h5>
 <div class="tsd-comment tsd-typography"><p>The principal</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Restrict the permission to a certain key pattern (default &#39;*&#39;)</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantRead</p>
@@ -787,7 +764,7 @@ of the bucket will also be granted to the same principal.</p>
 <li>
 <h5><span class="tsd-kind-parameter">identity</span>: <span class="tsd-signature-type ">IGrantable</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantReadWrite</p>
 <ul>
@@ -803,9 +780,9 @@ of the bucket will also be granted to the same principal.</p>
 <li>
 <h5><span class="tsd-kind-parameter">identity</span>: <span class="tsd-signature-type ">IGrantable</span></h5></li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5></li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">objectsKeyPattern</span>: <span class="tsd-signature-type">any</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li>
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">allowedActionPatterns</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">allowedActionPatterns</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Grant</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).grantWrite</p>
 <ul>
@@ -825,13 +802,11 @@ that captures the event. This method will not create the Trail.</p>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The id of the rule</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">OnCloudTrailBucketEventOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for adding the rule</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Rule</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).onCloudTrailEvent</p>
@@ -856,13 +831,11 @@ that captures the event. This method will not create the Trail.</p>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The id of the rule</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">OnCloudTrailBucketEventOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for adding the rule</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Rule</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).onCloudTrailPutObject</p>
@@ -888,13 +861,11 @@ that captures the event. This method will not create the Trail.</p>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The id of the rule</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">OnCloudTrailBucketEventOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for adding the rule</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Rule</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).onCloudTrailWriteObject</p>
@@ -918,8 +889,7 @@ that captures the event. This method will not create the Trail.</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">key</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The S3 key of the object. If not specified, the S3 URL of the
      bucket is returned.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an ObjectS3Url token</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -957,13 +927,11 @@ for dual-stack endpoint (connect to the bucket over IPv6). For example:</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">key</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The S3 key of the object. If not specified, the URL of the
      bucket is returned.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">TransferAccelerationUrlOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for generating URL.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an TransferAccelerationUrl token</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -990,8 +958,7 @@ for non-regional URLs. For example:</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">key</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The S3 key of the object. If not specified, the URL of the
      bucket is returned.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an ObjectS3Url token</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -1019,13 +986,11 @@ the options for non-regional URL. For example:</p>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">key</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The S3 key of the object. If not specified, the URL of the
      bucket is returned.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type ">VirtualHostedStyleUrlOptions</span></h5>
 <div class="tsd-comment tsd-typography"><p>Options for generating URL.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div><code class="tsd-tag ts-flagOptional">Optional</code> </li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>an ObjectS3Url token</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -1063,19 +1028,16 @@ the options for non-regional URL. For example:</p>
 <li>
 <h5><span class="tsd-kind-parameter">scope</span>: <span class="tsd-signature-type ">Construct</span></h5>
 <div class="tsd-comment tsd-typography"><p>The parent creating construct (usually <code>this</code>).</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>The construct&#39;s name.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li>
+</div></li>
 <li>
 <h5><span class="tsd-kind-parameter">attrs</span>: <span class="tsd-signature-type ">BucketAttributes</span></h5>
 <div class="tsd-comment tsd-typography"><p>A <code>BucketAttributes</code> object. Can be obtained from a call to
 <code>bucket.export()</code> or manually created.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">IBucket</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).fromBucketAttributes</p>
@@ -1141,8 +1103,7 @@ this type-testing method instead.</p>
 <li>
 <h5><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">any</span></h5>
 <div class="tsd-comment tsd-typography"><p>Any object</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type ">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
@@ -1196,8 +1157,7 @@ this type-testing method instead.</p>
 <li>
 <h5><span class="tsd-kind-parameter">physicalName</span>: <span class="tsd-signature-type">string</span></h5>
 <div class="tsd-comment tsd-typography"><p>name of the bucket.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(Bucket).validateBucketName</p>
@@ -1317,5 +1277,5 @@ this type-testing method instead.</p>
 <li><a href="../modules/utils_security_groups.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/security-<wbr/>groups</span></a></li>
 <li><a href="../modules/utils_test.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>utils/test</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
-<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>
