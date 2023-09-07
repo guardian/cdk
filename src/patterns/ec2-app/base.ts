@@ -516,7 +516,7 @@ export class GuEc2App extends Construct {
       const authLambda = new GuLambdaFunction(scope, "auth-lambda", {
         app: app,
         memorySize: 128,
-        handler: "devx-cognito-lambda-amd64-v2",
+        handler: "bootstrap",
         runtime: Runtime.GO_1_X,
         fileName: "deploy/INFRA/cognito-lambda/devx-cognito-lambda-amd64-v2.zip",
         withoutFilePrefix: true,
