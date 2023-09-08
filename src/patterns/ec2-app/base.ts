@@ -176,7 +176,7 @@ export interface GuEc2AppProps extends AppIdentity {
    */
   withoutImdsv2?: boolean;
   /**
-   * Configure Amigo image recipe.
+   * Configure AMIgo image recipe. This is only necessary if you are using GuCDK to generate your riff-raff.yaml file.
    */
   imageRecipe?: string | AmigoProps;
   /**
