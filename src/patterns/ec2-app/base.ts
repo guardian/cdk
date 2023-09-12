@@ -517,7 +517,7 @@ export class GuEc2App extends Construct {
         app: app,
         memorySize: 128,
         handler: "bootstrap",
-        runtime: Runtime.GO_1_X,
+        runtime: Runtime.PROVIDED_AL2,
         fileName: "deploy/INFRA/cognito-lambda/devx-cognito-lambda-amd64-v2.zip",
         withoutFilePrefix: true,
         withoutArtifactUpload: true,
