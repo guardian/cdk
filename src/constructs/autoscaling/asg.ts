@@ -31,7 +31,18 @@ export interface GuAutoScalingGroupProps
     >,
     AppIdentity,
     GuAsgCapacity {
+  /**
+   * @deprecated
+   * It shouldn't be necessary to specify a value here.
+   * GuCDK will create an AMI parameter by default. Riff-Raff can use this parameter to inject the latest AMI ID for
+   * your AMIgo recipe.
+   */
   imageId?: GuAmiParameter;
+  /**
+   * If you are using GuCDK to generate your riff-raff.yaml file, specify AMIgo props here.
+   * If you are using a hardcoded riff-raff.yaml file (usually found in project root) then providing a value here has no
+   * effect.
+   */
   imageRecipe?: string | AmigoProps;
   instanceType: InstanceType;
   userData: UserData | string;
