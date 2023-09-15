@@ -34,9 +34,6 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
       "ap-southeast-3": {
         "states": "states.ap-southeast-3.amazonaws.com",
       },
-      "ap-southeast-4": {
-        "states": "states.ap-southeast-4.amazonaws.com",
-      },
       "ca-central-1": {
         "states": "states.ca-central-1.amazonaws.com",
       },
@@ -69,9 +66,6 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
       },
       "eu-west-3": {
         "states": "states.eu-west-3.amazonaws.com",
-      },
-      "il-central-1": {
-        "states": "states.il-central-1.amazonaws.com",
       },
       "me-central-1": {
         "states": "states.me-central-1.amazonaws.com",
