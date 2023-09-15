@@ -311,9 +311,9 @@ describe("the GuEC2App pattern", function () {
           },
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
-        })
+        }),
     ).toThrowError(
-      "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public."
+      "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public.",
     );
   });
 
@@ -335,9 +335,9 @@ describe("the GuEC2App pattern", function () {
           },
           monitoringConfiguration: { noMonitoring: true },
           userData: "",
-        })
+        }),
     ).toThrowError(
-      "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted."
+      "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted.",
     );
   });
 
@@ -747,7 +747,7 @@ describe("the GuEC2App pattern", function () {
       });
     }).toThrowError(
       "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
     );
   });
 
@@ -842,7 +842,7 @@ describe("the GuEC2App pattern", function () {
             domain,
             allowedGroups: [],
           },
-        })
+        }),
     ).toThrowError("googleAuth.allowedGroups cannot be empty!");
   });
 
@@ -872,7 +872,7 @@ describe("the GuEC2App pattern", function () {
             domain,
             sessionTimeoutInMinutes: 61,
           },
-        })
+        }),
     ).toThrowError("googleAuth.sessionTimeoutInMinutes must be <= 60!");
   });
 
@@ -902,7 +902,7 @@ describe("the GuEC2App pattern", function () {
             domain,
             allowedGroups: ["apple@guardian.co.uk", "engineering@theguardian.com"],
           },
-        })
+        }),
     ).toThrowError("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
   });
 });
