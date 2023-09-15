@@ -15,7 +15,10 @@ abstract class GuDynamoDBPolicy extends GuAllowPolicy {
     super(scope, id, {
       ...props,
       actions: props.actions.map((action) => `dynamodb:${action}`),
-      resources: [`arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}`],
+      resources: [
+        `arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}`,
+        `arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}/index/*`,
+      ],
     });
   }
 }
