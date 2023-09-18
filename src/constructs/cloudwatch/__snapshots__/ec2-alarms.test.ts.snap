@@ -128,7 +128,7 @@ exports[`The GuAlb5xxPercentageAlarm construct should create the correct alarm r
           },
         ],
         "AlarmDescription": "testing exceeded 1% error rate",
-        "AlarmName": "High 5XX error % from testing in TEST",
+        "AlarmName": "High 5XX error percentage from testing in TEST",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [

@@ -28,7 +28,7 @@ export class GuApiGateway5xxPercentageAlarm extends GuAlarm {
       label: `% of 5XX responses served for ${props.app}`,
       period: Duration.minutes(1),
     });
-    const defaultAlarmName = `High 5XX error % from ${props.app} (ApiGateway) in ${scope.stage}`;
+    const defaultAlarmName = `High 5XX error percentage from ${props.app} (ApiGateway) in ${scope.stage}`;
     const defaultDescription = `${props.app} exceeded ${props.tolerated5xxPercentage}% error rate`;
     const alarmProps = {
       ...props,

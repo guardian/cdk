@@ -60,7 +60,7 @@ exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct 
           },
         ],
         "AlarmDescription": "testing exceeded 1% error rate",
-        "AlarmName": "High 5XX error % from testing (ApiGateway) in TEST",
+        "AlarmName": "High 5XX error percentage from testing (ApiGateway) in TEST",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
