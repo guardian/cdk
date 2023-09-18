@@ -545,7 +545,7 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
           "Fn::Join": [
             "",
             [
-              "High error % from ",
+              "High error percentage from ",
               {
                 "Ref": "lambda8B5974B5",
               },

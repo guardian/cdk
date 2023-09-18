@@ -31,7 +31,7 @@ export class GuAlb5xxPercentageAlarm extends GuAlarm {
       label: `% of 5XX responses served for ${props.app} (load balancer and instances combined)`,
       period: Duration.minutes(1),
     });
-    const defaultAlarmName = `High 5XX error % from ${props.app} in ${scope.stage}`;
+    const defaultAlarmName = `High 5XX error percentage from ${props.app} in ${scope.stage}`;
     const defaultDescription = `${props.app} exceeded ${props.tolerated5xxPercentage}% error rate`;
     const alarmProps = {
       ...props,
