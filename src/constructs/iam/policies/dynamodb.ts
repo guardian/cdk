@@ -15,6 +15,9 @@ abstract class GuDynamoDBPolicy extends GuAllowPolicy {
     super(scope, id, {
       ...props,
       actions: props.actions.map((action) => `dynamodb:${action}`),
+      // Note: although the index resource is not supported for all attached actions
+      // (e.g. BatchWriteItem), it will not cause issues to include it here as it is ignored.
+      // See: https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html
       resources: [
         `arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}`,
         `arn:aws:dynamodb:${scope.region}:${scope.account}:table/${props.tableName}/index/*`,
