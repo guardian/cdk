@@ -21,22 +21,40 @@ describe("The GuDynamoDBReadPolicy construct", () => {
               "dynamodb:GetRecords",
             ],
             Effect: "Allow",
-            Resource: {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
-                  {
-                    Ref: "AWS::AccountId",
-                  },
-                  ":table/MyTable",
+            Resource: [
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    ":",
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    ":table/MyTable",
+                  ],
                 ],
-              ],
-            },
+              },
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    ":",
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    ":table/MyTable/index/*",
+                  ],
+                ],
+              },
+            ],
           },
         ],
       },
@@ -57,22 +75,40 @@ describe("The GuDynamoDBWritePolicy construct", () => {
           {
             Action: ["dynamodb:BatchWriteItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"],
             Effect: "Allow",
-            Resource: {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
-                  {
-                    Ref: "AWS::AccountId",
-                  },
-                  ":table/MyTable",
+            Resource: [
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    ":",
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    ":table/MyTable",
+                  ],
                 ],
-              ],
-            },
+              },
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    ":",
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    ":table/MyTable/index/*",
+                  ],
+                ],
+              },
+            ],
           },
         ],
       },

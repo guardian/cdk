@@ -406,22 +406,40 @@ describe("the GuEC2App pattern", function () {
           {
             Action: ["dynamodb:BatchWriteItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"],
             Effect: "Allow",
-            Resource: {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
-                  {
-                    Ref: "AWS::AccountId",
-                  },
-                  ":table/my-dynamo-table",
+            Resource: [
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    ":",
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    ":table/my-dynamo-table",
+                  ],
                 ],
-              ],
-            },
+              },
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:dynamodb:",
+                    {
+                      Ref: "AWS::Region",
+                    },
+                    ":",
+                    {
+                      Ref: "AWS::AccountId",
+                    },
+                    ":table/my-dynamo-table/index/*",
+                  ],
+                ],
+              },
+            ],
           },
         ],
       },
