@@ -76,7 +76,7 @@ export const AppAccess = {
 
         if (ranges.includes(Peer.anyIpv4().uniqueId) || ranges.includes(Peer.anyIpv6().uniqueId)) {
           throw new Error(
-            `${AccessScope.RESTRICTED} apps cannot be globally accessible. Adjust CIDR ranges (${rangesString}) or use ${AccessScope.PUBLIC}.`
+            `${AccessScope.RESTRICTED} apps cannot be globally accessible. Adjust CIDR ranges (${rangesString}) or use ${AccessScope.PUBLIC}.`,
           );
         }
         break;
@@ -88,7 +88,7 @@ export const AppAccess = {
 
         if (ranges.some((range) => !range.startsWith("10."))) {
           throw new Error(
-            `${AccessScope.INTERNAL} apps should only be accessible on 10. ranges. Adjust CIDR ranges (${rangesString}) or use ${AccessScope.RESTRICTED}.`
+            `${AccessScope.INTERNAL} apps should only be accessible on 10. ranges. Adjust CIDR ranges (${rangesString}) or use ${AccessScope.RESTRICTED}.`,
           );
         }
         break;

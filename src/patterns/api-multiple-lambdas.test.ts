@@ -86,7 +86,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     //The shape of this alarm is tested at construct level
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::CloudWatch::Alarm",
-      /^ApiGatewayHigh5xxPercentageAlarm.+/
+      /^ApiGatewayHigh5xxPercentageAlarm.+/,
     );
   });
 

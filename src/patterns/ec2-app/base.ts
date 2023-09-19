@@ -23,6 +23,7 @@ import type {GuAsgCapacity} from "../../types";
 import {AppAccess} from "../../types";
 import type {AmigoProps} from "../../types/amigo";
 import {GuLoadBalancingComponents, GuLoadBalancingComponentsProps} from "../load-balancer/load-balancer";
+import {ApplicationProtocol} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 export interface AccessLoggingProps {
   /**
@@ -136,7 +137,7 @@ export interface GuEc2AppProps extends GuLoadBalancingComponentsProps {
    */
   withoutImdsv2?: boolean;
   /**
-   * Configure Amigo image recipe.
+   * Configure AMIgo image recipe. This is only necessary if you are using GuCDK to generate your riff-raff.yaml file.
    */
   imageRecipe?: string | AmigoProps;
 
@@ -196,7 +197,7 @@ export class GuEc2App extends Construct {
     if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
       throw new Error(
         "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`"
+          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
       );
     }
 
@@ -232,7 +233,7 @@ export class GuEc2App extends Construct {
     // `cdk-base` Amigo role on your AMI.
     Tags.of(autoScalingGroup).add(
       MetadataKeys.LOG_KINESIS_STREAM_NAME,
-      GuLoggingStreamNameParameter.getInstance(scope).valueAsString
+      GuLoggingStreamNameParameter.getInstance(scope).valueAsString,
     );
 
     if (applicationLogging.enabled) {
@@ -240,11 +241,11 @@ export class GuEc2App extends Construct {
       // `cdk-base` Amigo role on your AMI.
       Tags.of(autoScalingGroup).add(
         MetadataKeys.SYSTEMD_UNIT,
-        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`
+        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`,
       );
     }
 
-    const loadBalancer = new GuLoadBalancingComponents(scope, {...props, target: autoScalingGroup})
+    const loadBalancer = new GuLoadBalancingComponents(scope, {...props, target: autoScalingGroup, protocol: ApplicationProtocol.HTTP})
 
     this.vpc = vpc;
     this.certificate = loadBalancer.certificate;

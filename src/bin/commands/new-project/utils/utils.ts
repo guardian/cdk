@@ -18,7 +18,7 @@ async function runTask(packageManager: PackageManager, cwd: string, task: string
 
 export function getCommands(
   packageManager: PackageManager,
-  cwd: string
+  cwd: string,
 ): {
   installDependencies: () => Promise<string>;
   lint: () => Promise<string>;

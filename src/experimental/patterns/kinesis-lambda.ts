@@ -94,11 +94,11 @@ export class GuKinesisLambdaExperimental extends GuLambdaFunction {
       ? Stream.fromStreamArn(
           scope,
           existingKinesisStream.externalKinesisStreamName,
-          `arn:aws:kinesis:${region}:${account}:stream/${existingKinesisStream.externalKinesisStreamName}`
+          `arn:aws:kinesis:${region}:${account}:stream/${existingKinesisStream.externalKinesisStreamName}`,
         )
       : AppIdentity.taggedConstruct(
           props,
-          new GuKinesisStream(scope, "KinesisStream", { encryption: StreamEncryption.MANAGED, ...kinesisStreamProps })
+          new GuKinesisStream(scope, "KinesisStream", { encryption: StreamEncryption.MANAGED, ...kinesisStreamProps }),
         );
 
     const errorHandlingPropsToAwsProps = toAwsErrorHandlingProps(props.errorHandlingConfiguration);

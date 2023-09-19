@@ -31,7 +31,7 @@ jobs:
           fallback: ${{ secrets.GITHUB_TOKEN }} # fall back to the default token if the app token is not available
 
       - name: combine-prs
-        uses: github/combine-prs@v3.1.1
+        uses: github/combine-prs@v4.0.0
         with:
           pr_title: 'fix(deps): Dependency updates' # A `fix` prefix will create a patch release when merged
           labels: 'dependencies'

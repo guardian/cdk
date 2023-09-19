@@ -99,7 +99,7 @@ function createPackageJson(outputDirectory: string): void {
 
   const customDeps = {
     "source-map-support": "^0.5.20",
-    "@guardian/prettier": "1.0.0",
+    "@guardian/prettier": "5.0.0",
   };
 
   const allDeps: Record<string, string> = { ...coreDeps, ...cdkDeps, ...customDeps };

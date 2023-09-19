@@ -68,7 +68,7 @@ export interface GuApiGatewayWithLambdaByPathProps extends RestApiProps, AppIden
 }
 
 function isNoMonitoring(
-  monitoringConfiguration: NoMonitoring | ApiGatewayAlarms
+  monitoringConfiguration: NoMonitoring | ApiGatewayAlarms,
 ): monitoringConfiguration is NoMonitoring {
   return (<NoMonitoring>monitoringConfiguration).noMonitoring;
 }

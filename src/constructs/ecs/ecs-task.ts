@@ -164,7 +164,7 @@ export class GuEcsTask extends Construct {
 
     if (storage && storage < 21) {
       throw new Error(
-        "Storage must be at least 21. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-ephemeralstorage.html"
+        "Storage must be at least 21. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-ephemeralstorage.html",
       );
     }
 
@@ -228,7 +228,7 @@ export class GuEcsTask extends Construct {
       const alarmTopic = Topic.fromTopicArn(
         scope,
         AppIdentity.suffixText(props, "AlarmTopic"),
-        monitoringConfiguration.snsTopicArn
+        monitoringConfiguration.snsTopicArn,
       );
       const alarms = [
         {

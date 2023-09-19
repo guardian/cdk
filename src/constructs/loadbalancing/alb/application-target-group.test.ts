@@ -23,7 +23,7 @@ describe("The GuApplicationTargetGroup class", () => {
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
       "AWS::ElasticLoadBalancingV2::TargetGroup",
-      /^ApplicationTargetGroupTesting.+/
+      /^ApplicationTargetGroupTesting.+/,
     );
   });
 

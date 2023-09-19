@@ -42,7 +42,7 @@ const ssmParamReadiness = async ({ credentialProvider, region }: AwsConfig): Pro
     });
 
   const ssmParametersMatchingDefaultVpc = ssmParamsFromAccount.filter(
-    ({ Value }) => Value && defaultVpcs.includes(Value)
+    ({ Value }) => Value && defaultVpcs.includes(Value),
   );
 
   const defaultVPCReferencePaths = ssmParametersMatchingDefaultVpc
@@ -77,8 +77,8 @@ export const report = async (props: AwsConfig): Promise<Report> => {
     errs.set(
       "Default VPC referenced in VPC parameters",
       `you should use a custom VPC instead. Default VPC is referenced in paths: ${output.defaultVPCReferences.join(
-        ", "
-      )}.`
+        ", ",
+      )}.`,
     );
   }
 

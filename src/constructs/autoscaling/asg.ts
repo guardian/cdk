@@ -31,7 +31,18 @@ export interface GuAutoScalingGroupProps
     >,
     AppIdentity,
     GuAsgCapacity {
+  /**
+   * @deprecated
+   * It shouldn't be necessary to specify a value here.
+   * GuCDK will create an AMI parameter by default. Riff-Raff can use this parameter to inject the latest AMI ID for
+   * your AMIgo recipe.
+   */
   imageId?: GuAmiParameter;
+  /**
+   * If you are using GuCDK to generate your riff-raff.yaml file, specify AMIgo props here.
+   * If you are using a hardcoded riff-raff.yaml file (usually found in project root) then providing a value here has no
+   * effect.
+   */
   imageRecipe?: string | AmigoProps;
   instanceType: InstanceType;
   userData: UserData | string;
@@ -87,7 +98,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
     if (Token.isUnresolved(minimumInstances) && !Token.isUnresolved(maximumInstances)) {
       throw new Error(
-        "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too."
+        "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too.",
       );
     }
 
@@ -120,7 +131,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // Note: Launch templates via CDK allow specifying only one SG, so use connections
     // https://github.com/aws/aws-cdk/issues/18712
     [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) =>
-      launchTemplate.connections.addSecurityGroup(sg)
+      launchTemplate.connections.addSecurityGroup(sg),
     );
 
     const asgProps = {

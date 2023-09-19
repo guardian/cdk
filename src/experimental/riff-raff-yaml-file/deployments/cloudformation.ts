@@ -4,7 +4,7 @@ import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploym
 export function cloudFormationDeployment(
   cdkStacks: CdkStacksDifferingOnlyByStage,
   dependencies: RiffRaffDeployment[],
-  contentDirectory: string
+  contentDirectory: string,
 ): RiffRaffDeployment {
   if (cdkStacks.length === 0) {
     throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
@@ -27,7 +27,7 @@ export function cloudFormationDeployment(
       ...acc,
       [stage]: templateFile,
     }),
-    {}
+    {},
   );
 
   return {
@@ -49,7 +49,7 @@ export function cloudFormationDeployment(
 
 export function addAmiParametersToCloudFormationDeployment(
   cfnDeployment: RiffRaffDeployment,
-  autoScalingGroups: GuAutoScalingGroup[]
+  autoScalingGroups: GuAutoScalingGroup[],
 ): RiffRaffDeploymentProps {
   const amiParametersToTags = autoScalingGroups.reduce((acc, asg) => {
     const { imageRecipe, app, amiParameter } = asg;

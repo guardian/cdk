@@ -4,7 +4,7 @@ import type { SecurityGroupAccessRule } from "../../constructs/ec2";
 
 export const transformToSecurityGroupAccessRule = (
   cidrBlocks: Array<[string, string]>,
-  port: Port | number
+  port: Port | number,
 ): SecurityGroupAccessRule[] => {
   return cidrBlocks.map(([key, value]) => {
     return {

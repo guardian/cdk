@@ -93,11 +93,11 @@ export class GuGithubActionsRole extends GuRole {
         {
           StringLike: {
             [`${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}:sub`]: GuGithubActionsRepositoryCondition.toString(
-              props.condition ?? ALL_GUARDIAN_REPOSITORIES
+              props.condition ?? ALL_GUARDIAN_REPOSITORIES,
             ),
           },
         },
-        "sts:AssumeRoleWithWebIdentity"
+        "sts:AssumeRoleWithWebIdentity",
       ),
     });
 

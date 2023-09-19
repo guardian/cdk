@@ -13,7 +13,6 @@ import {LambdaTarget} from "aws-cdk-lib/aws-elasticloadbalancingv2-targets";
 import {GuCertificate} from "../constructs/acm";
 import {GuDomainName} from "../../lib/types";
 import {GuLoadBalancingComponents} from "./load-balancer/load-balancer";
-import {IApplicationLoadBalancerTarget} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 export interface GuAlbLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   /**
@@ -32,7 +31,7 @@ export interface GuAlbLambdaProps extends Omit<GuFunctionProps, "errorPercentage
 }
 
 interface GuAlbLambdaPropsTarget extends GuAlbLambdaProps {
-  target: IApplicationLoadBalancerTarget;
+  // target: IApplicationLoadBalancerTarget;
 
 }
 

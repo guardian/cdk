@@ -36,7 +36,7 @@ describe("The GuDnsRecordSet construct", () => {
         ttl: Duration.hours(1),
       });
     }).toThrowError(
-      "According to RFC, a CNAME record should not return multiple answers. Doing so may cause problems during resolution."
+      "According to RFC, a CNAME record should not return multiple answers. Doing so may cause problems during resolution.",
     );
   });
 });

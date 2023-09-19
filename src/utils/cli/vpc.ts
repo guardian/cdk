@@ -6,7 +6,7 @@ import type { VpcInDetail } from "../../types/cli";
 import { sum } from "../math";
 
 export const primaryVpcSsmParameterPaths: string[] = ALL_SSM_PARAMETER_PATHS.map((_) => _.path).filter((_) =>
-  _.startsWith(VPC_SSM_PARAMETER_PREFIX)
+  _.startsWith(VPC_SSM_PARAMETER_PREFIX),
 );
 
 export const vpcSsmParameterPaths: RegExp[] = primaryVpcSsmParameterPaths.map((primaryPath) => {
@@ -92,6 +92,6 @@ export const getVpcsInDetail = async (ec2Client: AWS.EC2): Promise<VpcInDetail[]
         subnets,
         isUsed,
       };
-    })
+    }),
   );
 };

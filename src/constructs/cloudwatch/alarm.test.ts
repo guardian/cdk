@@ -71,7 +71,7 @@ describe("The GuAlarm class", () => {
       {
         OkActions: snsActionsCFN,
       },
-      0
+      0,
     );
   });
 
