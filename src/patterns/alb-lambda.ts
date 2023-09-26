@@ -11,7 +11,7 @@ import {AccessScope} from "../constants";
 import {AccessLoggingProps, Alarms} from "./ec2-app";
 import {LambdaTarget} from "aws-cdk-lib/aws-elasticloadbalancingv2-targets";
 import {GuCertificate} from "../constructs/acm";
-import {GuDomainName} from "../../lib/types";
+import type {GuDomainName} from "../../lib/types";
 import {GuLoadBalancingComponents} from "./load-balancer/load-balancer";
 
 export interface GuAlbLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
