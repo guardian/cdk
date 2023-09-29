@@ -14,16 +14,18 @@ export class Imports {
     this.imports = imports;
   }
 
-  public static newStackImports(): Imports {
+  public static newStackImports(addCfnIncludeImports: boolean): Imports {
     return new Imports({
-      path: {
-        types: [],
-        components: ["join"],
-      },
-      "aws-cdk-lib/cloudformation-include": {
-        types: [],
-        components: ["CfnInclude"],
-      },
+      ...(addCfnIncludeImports && {
+        path: {
+          types: [],
+          components: ["join"],
+        },
+        "aws-cdk-lib/cloudformation-include": {
+          types: [],
+          components: ["CfnInclude"],
+        },
+      }),
       "aws-cdk-lib": {
         types: ["App"],
         components: [],
