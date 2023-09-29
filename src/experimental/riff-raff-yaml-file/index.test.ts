@@ -1128,4 +1128,66 @@ describe("The RiffRaffYamlFileExperimental class", () => {
       "
     `);
   });
+
+  it("Should support user-added Riff-Raff deployments", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+    class MyApplicationStack extends GuStack {}
+    const { stack, region } = new MyApplicationStack(app, "App-PROD-deploy", {
+      stack: "deploy",
+      stage: "PROD",
+      env: { region: "eu-west-1" },
+    });
+
+    const riffraff = new RiffRaffYamlFileExperimental(app);
+
+    riffraff.riffRaffYaml.deployments.set("upload-my-static-files", {
+      actions: ["uploadStaticFiles"],
+      app: "my-static-site",
+      contentDirectory: "my-static-site",
+      dependencies: [],
+      parameters: {
+        bucketSsmKey: `/${stack}/my-static-site-origin`,
+        publicReadAcl: false,
+        cacheControl: "public, max-age=315360000, immutable",
+      },
+      regions: new Set([region]),
+      stacks: new Set([stack]),
+      type: "aws-s3",
+    });
+
+    const actual = riffraff.toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - PROD
+      deployments:
+        cfn-eu-west-1-deploy-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              PROD: App-PROD-deploy.template.json
+        upload-my-static-files:
+          actions:
+            - uploadStaticFiles
+          app: my-static-site
+          contentDirectory: my-static-site
+          dependencies: []
+          parameters:
+            bucketSsmKey: /deploy/my-static-site-origin
+            publicReadAcl: false
+            cacheControl: public, max-age=315360000, immutable
+          regions:
+            - eu-west-1
+          stacks:
+            - deploy
+          type: aws-s3
+      "
+    `);
+  });
 });
