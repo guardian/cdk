@@ -1141,10 +1141,8 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     const riffraff = new RiffRaffYamlFileExperimental(app);
 
     riffraff.riffRaffYaml.deployments.set("upload-my-static-files", {
-      actions: ["uploadStaticFiles"],
       app: "my-static-site",
       contentDirectory: "my-static-site",
-      dependencies: [],
       parameters: {
         bucketSsmKey: `/${stack}/my-static-site-origin`,
         publicReadAcl: false,
@@ -1173,11 +1171,8 @@ describe("The RiffRaffYamlFileExperimental class", () => {
             templateStagePaths:
               PROD: App-PROD-deploy.template.json
         upload-my-static-files:
-          actions:
-            - uploadStaticFiles
           app: my-static-site
           contentDirectory: my-static-site
-          dependencies: []
           parameters:
             bucketSsmKey: /deploy/my-static-site-origin
             publicReadAcl: false
