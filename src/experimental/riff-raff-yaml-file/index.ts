@@ -69,9 +69,20 @@ export class RiffRaffYamlFileExperimental {
   private readonly allStackTags: StackTag[];
   private readonly allStageTags: StageTag[];
   private readonly allRegions: Region[];
-
-  private readonly riffRaffYaml: RiffRaffYaml;
   private readonly outdir: string;
+
+  /**
+   * The `riff-raff.yaml` file as an object.
+   *
+   * It is useful for specifying additional deployment types that GuCDK does not support.
+   * Consider raising an issue or pull request if you think it should be supported.
+   *
+   * In most cases, you shouldn't need to access this.
+   * No validation is performed on the parameters you provide, so you might get deployment errors.
+   *
+   * @see https://riffraff.gutools.co.uk/docs/magenta-lib/types
+   */
+  public readonly riffRaffYaml: RiffRaffYaml;
 
   private isCdkStackPresent(expectedStack: StackTag, expectedStage: StageTag): boolean {
     const matches = this.allCdkStacks.find((cdkStack) => {
