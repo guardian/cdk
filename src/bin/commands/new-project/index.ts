@@ -117,7 +117,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
 
   // lib directory
   await constructStack({
-    imports: Imports.newStackImports(),
+    imports: Imports.newStackImports(!!config.yamlTemplateLocation),
     appName: config.appName,
     outputFile: basename(config.stackPath),
     outputDir: dirname(config.stackPath),

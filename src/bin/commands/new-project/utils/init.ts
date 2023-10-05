@@ -72,6 +72,7 @@ function createPackageJson(outputDirectory: string): void {
 
   const coreDeps: Record<string, string> = [
     "@guardian/eslint-config-typescript",
+    "@guardian/tsconfig",
     "@types/jest",
     "@types/node",
     "eslint",
