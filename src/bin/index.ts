@@ -86,12 +86,21 @@ parseCommandLineArguments()
         return awsCdkVersionCommand();
       }
       case Commands.AccountReadiness: {
-        const { profile, region } = argv;
-        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region });
+        // TODO remove casting as yargs should be able to infer the type of the options
+        const profile = argv.profile as string;
+        const region = argv.region as string;
+        return accountReadinessCommand({ credentialProvider: awsCredentialProviderChain(profile), region: region });
       }
       case Commands.New: {
-        const { init, app, stack, yamlTemplateLocation, stage, packageManager } = argv;
-        const stages = stage.map((_) => (_ as string).toUpperCase());
+        // TODO remove casting as yargs should be able to infer the type of the options
+        const init = argv.init as boolean;
+        const app = argv.app as string;
+        const stack = argv.stack as string;
+        const yamlTemplateLocation = argv["yaml-template-location"] as string | undefined;
+        const stage = argv.stage as string[];
+        const packageManager = argv["package-manager"] as string;
+
+        const stages = stage.map((_) => _.toUpperCase());
         return newCdkProject({
           init,
           app,
