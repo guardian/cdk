@@ -5,8 +5,11 @@ import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
 import type { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
 import { GuAlarm } from "./alarm";
-import type { GuAlarmProps, Http5xxAlarmProps } from "./alarm";
+import type { GuAlarmProps, Http4xxAlarmProps, Http5xxAlarmProps } from "./alarm";
 
+interface GuAlb4xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http4xxAlarmProps, AppIdentity {
+  loadBalancer: GuApplicationLoadBalancer;
+}
 interface GuAlb5xxPercentageAlarmProps extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps, AppIdentity {
   loadBalancer: GuApplicationLoadBalancer;
 }
@@ -44,6 +47,38 @@ export class GuAlb5xxPercentageAlarm extends GuAlarm {
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
     super(scope, AppIdentity.suffixText(props, "High5xxPercentageAlarm"), alarmProps);
+  }
+}
+
+/**
+ * Creates an alarm which is triggered whenever the percentage of requests with a 4xx response code exceeds
+ * the specified threshold.
+ */
+export class GuAlb4xxPercentageAlarm extends GuAlarm {
+  constructor(scope: GuStack, props: GuAlb4xxPercentageAlarmProps) {
+    const mathExpression = new MathExpression({
+      expression: "100*(m1+m2)/m3",
+      usingMetrics: {
+        m1: props.loadBalancer.metrics.httpCodeElb(HttpCodeElb.ELB_4XX_COUNT),
+        m2: props.loadBalancer.metrics.httpCodeTarget(HttpCodeTarget.TARGET_4XX_COUNT),
+        m3: props.loadBalancer.metrics.requestCount(),
+      },
+      label: `% of 4XX responses served for ${props.app} (load balancer and instances combined)`,
+      period: Duration.minutes(1),
+    });
+    const defaultAlarmName = `High 4XX error percentage from ${props.app} in ${scope.stage}`;
+    const defaultDescription = `${props.app} exceeded ${props.tolerated4xxPercentage}% error rate`;
+    const alarmProps = {
+      ...props,
+      metric: mathExpression,
+      treatMissingData: TreatMissingData.NOT_BREACHING,
+      threshold: props.tolerated4xxPercentage,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
+      alarmName: props.alarmName ?? defaultAlarmName,
+      alarmDescription: props.alarmDescription ?? defaultDescription,
+      evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
+    };
+    super(scope, AppIdentity.suffixText(props, "High4xxPercentageAlarm"), alarmProps);
   }
 }
 

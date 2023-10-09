@@ -23,8 +23,12 @@ import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../cons
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
 import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
-import type { Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
-import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "../../constructs/cloudwatch";
+import type { Http4xxAlarmProps, Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
+import {
+  GuAlb4xxPercentageAlarm,
+  GuAlb5xxPercentageAlarm,
+  GuUnhealthyInstancesAlarm,
+} from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
@@ -109,6 +113,10 @@ export interface Alarms {
    * Enable the 5xx alarm with settings.
    */
   http5xxAlarm: false | Http5xxAlarmProps;
+  /**
+   * Enable the 4xx alarm with settings.
+   */
+  http4xxAlarm?: false | Http4xxAlarmProps;
   /**
    * Enable the unhealthy instances alarm.
    */
@@ -460,8 +468,16 @@ export class GuEc2App extends Construct {
     }
 
     if (!monitoringConfiguration.noMonitoring) {
-      const { http5xxAlarm, snsTopicName, unhealthyInstancesAlarm } = monitoringConfiguration;
+      const { http5xxAlarm, http4xxAlarm, snsTopicName, unhealthyInstancesAlarm } = monitoringConfiguration;
 
+      if (http4xxAlarm) {
+        new GuAlb4xxPercentageAlarm(scope, {
+          app,
+          loadBalancer,
+          snsTopicName,
+          ...http4xxAlarm,
+        });
+      }
       if (http5xxAlarm) {
         new GuAlb5xxPercentageAlarm(scope, {
           app,
