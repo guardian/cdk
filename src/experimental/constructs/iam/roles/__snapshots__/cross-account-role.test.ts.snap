@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuCrossAccountRoleExperimental construct can create a cross account role 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuCrossAccountRoleExperimental",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "testCrossAccountRole975BA7C0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::1234:role/nameOfRoleInOtherAccountWhichCanAssumeThis-STAGE",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "RoleName": "crossAccountRole",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
