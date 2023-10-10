@@ -7,6 +7,7 @@ interface AppBuilderProps {
   appName: Name;
   stack: Name;
   stages: string[];
+  regions: string[];
   outputFile: string;
   outputDir: string;
   comment?: string;
@@ -26,7 +27,7 @@ export class AppBuilder {
   }
 
   async constructCdkFile(): Promise<void> {
-    const { comment, outputFile, imports, appName, stack, outputDir, stages } = this.config;
+    const { comment, outputFile, imports, appName, stack, outputDir, stages, regions } = this.config;
 
     this.code.openFile(outputFile);
     if (comment) {
@@ -39,9 +40,12 @@ export class AppBuilder {
     this.code.line("const app = new App();");
 
     stages.forEach((stage) => {
-      this.code.line(
-        `new ${appName.pascal}(app, "${appName.pascal}-${stage}", { stack: "${stack.kebab}", stage: "${stage}" });`,
-      );
+      regions.forEach((region) => {
+        const regionNoHyphen = region.replace("-", "");
+        this.code.line(
+          `new ${appName.pascal}(app, "${appName.pascal}-${regionNoHyphen}-${stage}", { stack: "${stack.kebab}", stage: "${stage}", env: { region: "${region}" } });`,
+        );
+      });
     });
 
     this.code.closeFile(outputFile);
