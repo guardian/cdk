@@ -1,5 +1,5 @@
-import type { GuStack } from "../../../constructs/core";
-import type { GuLambdaFunction } from "../../../constructs/lambda";
+import type { GuStack } from "../../constructs/core";
+import type { GuLambdaFunction } from "../../constructs/lambda";
 import type { RiffRaffDeployment } from "../types";
 
 interface S3LocationProps {

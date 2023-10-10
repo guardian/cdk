@@ -1,5 +1,5 @@
-import type { GuAutoScalingGroup } from "../../../constructs/autoscaling";
-import type { GuStack } from "../../../constructs/core";
+import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import type { GuStack } from "../../constructs/core";
 import type { RiffRaffDeployment } from "../types";
 
 export function uploadAutoscalingArtifact(asg: GuAutoScalingGroup): RiffRaffDeployment {

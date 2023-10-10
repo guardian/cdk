@@ -1,5 +1,5 @@
-import type { GuStack } from "../../constructs/core";
-import { groupBy } from "../../utils/array";
+import type { GuStack } from "../constructs/core";
+import { groupBy } from "../utils/array";
 import type { ClassName, GroupedCdkStacks, Region, StackTag, StageTag } from "./types";
 
 function groupByClassName(cdkStacks: GuStack[]): Record<ClassName, GuStack[]> {

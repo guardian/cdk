@@ -1,5 +1,5 @@
 // type aliases to, hopefully, improve readability
-import type { GuStack } from "../../constructs/core";
+import type { GuStack } from "../constructs/core";
 
 export type ClassName = string;
 export type StackTag = string;
