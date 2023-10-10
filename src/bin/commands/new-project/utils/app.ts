@@ -37,7 +37,7 @@ export class AppBuilder {
 
     imports.render(this.code);
 
-    this.code.line("const app = new App();");
+    this.code.line("const app = new GuRoot();");
 
     stages.forEach((stage) => {
       regions.forEach((region) => {
