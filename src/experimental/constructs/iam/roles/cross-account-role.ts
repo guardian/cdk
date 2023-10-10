@@ -1,7 +1,7 @@
 import { ArnPrincipal } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../../../constructs/core";
-import type { GuRoleProps} from "../../../../constructs/iam";
-import {GuRole} from "../../../../constructs/iam";
+import type { GuRoleProps } from "../../../../constructs/iam";
+import { GuRole } from "../../../../constructs/iam";
 
 export interface GuCrossAccountRoleExperimentalProps extends Omit<GuRoleProps, "assumedBy"> {
   /**
@@ -36,7 +36,7 @@ export class GuCrossAccountRoleExperimental extends GuRole {
 
     super(scope, id, {
       assumedBy: new ArnPrincipal(`arn:aws:iam::${accountId}:role/${nameOfRoleWhichCanAssumeThisRole}`),
-      ...props
+      ...props,
     });
   }
 }
