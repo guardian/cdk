@@ -21,6 +21,7 @@ interface NewProjectProps {
   app: string;
   stack: string;
   stages: string[];
+  regions: string[];
   yamlTemplateLocation?: string;
   packageManager: PackageManager;
 }
@@ -59,7 +60,7 @@ function validateConfig(config: NewProjectConfig): void {
 }
 
 function getConfig(props: NewProjectProps): NewProjectConfig {
-  const { init, app, stack, stages, yamlTemplateLocation, packageManager } = props;
+  const { init, app, stack, stages, regions, yamlTemplateLocation, packageManager } = props;
 
   const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
@@ -73,6 +74,7 @@ function getConfig(props: NewProjectProps): NewProjectConfig {
     init,
     yamlTemplateLocation,
     stages,
+    regions,
     cdkDir,
     appName: {
       kebab: kebabAppName,
@@ -113,6 +115,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     stack: config.stackName,
     imports: Imports.newAppImports(config.appName),
     stages: config.stages,
+    regions: config.regions,
   });
 
   // lib directory

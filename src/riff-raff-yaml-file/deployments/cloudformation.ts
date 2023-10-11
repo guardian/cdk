@@ -1,4 +1,4 @@
-import type { GuAutoScalingGroup } from "../../../constructs/autoscaling";
+import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentProps } from "../types";
 
 export function cloudFormationDeployment(

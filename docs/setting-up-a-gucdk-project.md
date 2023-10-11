@@ -11,6 +11,7 @@ Requirements:
 ## Creating a new project
 GuCDK provides a CLI tool to create a new project.
 It will place files within a `cdk` directory at the root of the repository.
+It will also generate a `riff-raff.yaml` file.
 
 To initialise a new project run the following within your repository:
 
@@ -78,7 +79,7 @@ This ensures you have a short feedback loop.
 We recommend performing the following steps in CI:
   - `lint` to ensure a common code format
   - `test` to run the snapshot tests to make sure there are no unexpected changes to the generated CFN (see [here](best-practices.md) for more detail)
-  - `synth` to generate your template as JSON to `cdk/cdk.out`
+  - `synth` to generate your template as JSON, and a `riff-raff.yaml` file to `cdk/cdk.out`
 
 These steps are described in the `package.json` file.
 

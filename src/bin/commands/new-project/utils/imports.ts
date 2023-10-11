@@ -39,14 +39,14 @@ export class Imports {
 
   public static newAppImports({ kebab, pascal }: Name): Imports {
     return new Imports({
-      "aws-cdk-lib": {
-        types: [],
-        components: ["App"],
-      },
       "source-map-support/register": {
         basic: true,
         types: [],
         components: [],
+      },
+      "@guardian/cdk/lib/constructs/root": {
+        types: [],
+        components: ["GuRoot"],
       },
       [`../lib/${kebab}`]: {
         types: [],

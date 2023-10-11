@@ -1,11 +1,11 @@
 import type { StageSynthesisOptions } from "aws-cdk-lib";
 import { App } from "aws-cdk-lib";
 import type { CloudAssembly } from "aws-cdk-lib/cx-api";
-import { RiffRaffYamlFileExperimental } from "../riff-raff-yaml-file";
+import { RiffRaffYamlFile } from "../riff-raff-yaml-file";
 
 /**
  * A replacement for `App`, sitting at the root of a CDK application.
- * `GuRootExperimental` will synthesise a `riff-raff.yaml` file for a CDK application.
+ * `GuRoot` will synthesise a `riff-raff.yaml` file for a CDK application.
  *
  * Usage is a case of updating `/<repo-root>/cdk/bin/cdk.ts` from:
  *
@@ -20,17 +20,17 @@ import { RiffRaffYamlFileExperimental } from "../riff-raff-yaml-file";
  * To:
  *
  * ```ts
- * import { GuRootExperimental } from "@guardian/cdk/lib/experimental/constructs/root";
+ * import { GuRoot } from "@guardian/cdk/lib/constructs/root";
  *
- * const app = new GuRootExperimental();
+ * const app = new GuRoot();
  *
  * new MyStack(app, "my-stack-CODE", {});
  * new MyStack(app, "my-stack-PROD", {});
  * ```
  */
-export class GuRootExperimental extends App {
+export class GuRoot extends App {
   override synth(options?: StageSynthesisOptions): CloudAssembly {
-    new RiffRaffYamlFileExperimental(this).synth();
+    new RiffRaffYamlFile(this).synth();
     return super.synth(options);
   }
 }
