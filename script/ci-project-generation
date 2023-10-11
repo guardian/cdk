@@ -32,5 +32,7 @@ npm pack --pack-destination $TMP_DIR
     --stack cdk \
     --stage CODE \
     --stage PROD \
+    --region eu-west-1 \
+    --region us-east-1 \
     --package-manager npm
 )

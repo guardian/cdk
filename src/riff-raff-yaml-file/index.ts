@@ -3,9 +3,9 @@ import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import { dump } from "js-yaml";
-import { GuAutoScalingGroup } from "../../constructs/autoscaling";
-import { GuStack } from "../../constructs/core";
-import { GuLambdaFunction } from "../../constructs/lambda";
+import { GuAutoScalingGroup } from "../constructs/autoscaling";
+import { GuStack } from "../constructs/core";
+import { GuLambdaFunction } from "../constructs/lambda";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
 import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
@@ -64,7 +64,7 @@ import type {
  * @see https://riffraff.gutools.co.uk/docs/reference/riff-raff.yaml.md
  * @see https://riffraff.gutools.co.uk/docs/magenta-lib/types
  */
-export class RiffRaffYamlFileExperimental {
+export class RiffRaffYamlFile {
   private readonly allCdkStacks: GuStack[];
   private readonly allStackTags: StackTag[];
   private readonly allStageTags: StageTag[];

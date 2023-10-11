@@ -2,14 +2,14 @@ import { App, Duration } from "aws-cdk-lib";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { AccessScope } from "../../constants";
-import type { GuStackProps } from "../../constructs/core";
-import { GuStack } from "../../constructs/core";
-import { GuLambdaFunction } from "../../constructs/lambda";
-import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../../patterns";
-import { RiffRaffYamlFileExperimental } from "./index";
+import { AccessScope } from "../constants";
+import type { GuStackProps } from "../constructs/core";
+import { GuStack } from "../constructs/core";
+import { GuLambdaFunction } from "../constructs/lambda";
+import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
+import { RiffRaffYamlFile } from "./index";
 
-describe("The RiffRaffYamlFileExperimental class", () => {
+describe("The RiffRaffYamlFile class", () => {
   it("Should support deploying different GuStacks to multiple AWS accounts (aka Riff-Raff stacks), and regions", () => {
     const app = new App({ outdir: "/tmp/cdk.out" });
 
@@ -39,7 +39,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
       stage: "CODE",
     });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -110,7 +110,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
       stage: "CODE",
     });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -176,7 +176,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     new MyDatabaseStack(app, "Database-CODE-deploy", { ...region, stack: "deploy", stage: "PROD" });
 
     expect(() => {
-      new RiffRaffYamlFileExperimental(app);
+      new RiffRaffYamlFile(app);
     }).toThrowError("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
   });
 
@@ -186,7 +186,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
 
     expect(() => {
-      new RiffRaffYamlFileExperimental(app);
+      new RiffRaffYamlFile(app);
     }).toThrowError("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
   });
 
@@ -195,7 +195,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     class MyApplicationStack extends GuStack {}
     new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     // Not sure why we have the extra `"` characters...they don't appear in the resulting file on disk...
     expect(actual).toMatchInlineSnapshot(`
@@ -223,7 +223,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD", env: { region: "eu-west-1" } });
     new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -271,7 +271,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
       env: { region: "us-east-1" },
     });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -328,7 +328,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -404,7 +404,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -484,7 +484,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -544,7 +544,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -616,7 +616,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -719,7 +719,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
     new MyApplicationStack(app, "test-stack-eu-PROD", { stack: "test", stage: "PROD", env: { region: "eu-west-1" } });
     new MyApplicationStack(app, "test-stack-us-PROD", { stack: "test", stage: "PROD", env: { region: "us-east-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -946,7 +946,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -1072,7 +1072,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFileExperimental(app).toYAML();
+    const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -1138,7 +1138,7 @@ describe("The RiffRaffYamlFileExperimental class", () => {
       env: { region: "eu-west-1" },
     });
 
-    const riffraff = new RiffRaffYamlFileExperimental(app);
+    const riffraff = new RiffRaffYamlFile(app);
 
     riffraff.riffRaffYaml.deployments.set("upload-my-static-files", {
       app: "my-static-site",

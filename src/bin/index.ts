@@ -62,6 +62,12 @@ const parseCommandLineArguments = () => {
               type: "array",
               demandOption: true,
             })
+            .option("region", {
+              description:
+                "The region(s) for your stack. Can be specified multiple times, e.g. --region eu-west-1 --region us-east-1",
+              type: "array",
+              default: ["eu-west-1"],
+            })
             .option("package-manager", {
               description:
                 "The Node package manager to use. Match this to the repository (package-lock.json = npm, yarn.lock = yarn). If the repository has neither file, and there is no strong convention in your team, we recommend npm.",
@@ -98,15 +104,18 @@ parseCommandLineArguments()
         const stack = argv.stack as string;
         const yamlTemplateLocation = argv["yaml-template-location"] as string | undefined;
         const stage = argv.stage as string[];
+        const regions = argv.region as string[];
         const packageManager = argv["package-manager"] as string;
 
         const stages = stage.map((_) => _.toUpperCase());
+
         return newCdkProject({
           init,
           app,
           stack,
           yamlTemplateLocation,
           stages,
+          regions,
           packageManager: packageManager as PackageManager,
         });
       }

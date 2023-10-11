@@ -1,9 +1,5 @@
-> **Note**
-> The `RiffRaffYamlFile` class is currently experimental.
-> The API is subject to change.
-
 # `riff-raff.yaml` generator
-The `RiffRaffYamlFileExperimental` class can be used to synthesise a `riff-raff.yaml`, so you don't have too!
+The `RiffRaffYamlFile` class can be used to synthesise a `riff-raff.yaml`, so you don't have too!
 
 The aim is to produce a `riff-raff.yaml` file that:
   - Supports provisioning of new services using Riff-Raff, removing the need for manual intervention
@@ -33,9 +29,9 @@ new MyStack(app, "my-stack-PROD", {});
 To:
 
 ```ts
-import { GuRootExperimental } from "@guardian/cdk/lib/experimental/constructs/root";
+import { GuRoot } from "@guardian/cdk/lib/constructs/root";
 
-const app = new GuRootExperimental();
+const app = new GuRoot();
 
 new MyStack(app, "my-stack-CODE", {});
 new MyStack(app, "my-stack-PROD", {});
@@ -44,11 +40,11 @@ new MyStack(app, "my-stack-PROD", {});
 ### Advanced usage
 As noted above, only specific deployment types are currently supported.
 
-If you want to add additional deployment types, you can do so by instantiating `RiffRaffYamlFileExperimental` directly:
+If you want to add additional deployment types, you can do so by instantiating `RiffRaffYamlFile` directly:
 
 ```ts
 import { App } from "aws-cdk-lib";
-import { RiffRaffYamlFileExperimental } from "@guardian/cdk/lib/experimental/riff-raff-yaml-file";
+import { RiffRaffYamlFile } from "@guardian/cdk/lib/riff-raff-yaml-file";
 
 const app = new App();
 
@@ -58,7 +54,7 @@ const { stack, region } = new MyStack(app, "my-stack", {
   env: { region: "eu-west-1" },
 });
 
-const riffRaff = new RiffRaffYamlFileExperimental(app);
+const riffRaff = new RiffRaffYamlFile(app);
 const { riffRaffYaml: { deployments } } = riffRaff;
 
 deployments.set("upload-my-static-files", {
