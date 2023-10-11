@@ -38,7 +38,7 @@
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/node": "20.8.2",
-    "@types/yargs": "^17.0.26",
+    "@types/yargs": "^17.0.28",
     "aws-cdk": "2.100.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.50.0",
