@@ -153,6 +153,7 @@ describe("the GuEC2App pattern", function () {
       },
       monitoringConfiguration: {
         snsTopicName: "test-topic",
+        // Note: http4xxAlarm is not a required parameter
         http5xxAlarm: {
           tolerated5xxPercentage: 5,
         },
@@ -162,6 +163,34 @@ describe("the GuEC2App pattern", function () {
     });
     //The shape of this alarm is tested at construct level
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
+  });
+
+  it("creates a High4xxPercentageAlarm if the relevant monitoringConfiguration is provided", function () {
+    const stack = simpleGuStackForTesting();
+    const app = "test-gu-ec2-app";
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app,
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      monitoringConfiguration: {
+        snsTopicName: "test-topic",
+        http5xxAlarm: false,
+        http4xxAlarm: {
+          tolerated4xxPercentage: 5,
+        },
+        unhealthyInstancesAlarm: false,
+      },
+      userData: "",
+    });
+    //The shape of this alarm is tested at construct level
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^High4xxPercentageAlarm.+/);
   });
 
   it("creates an UnhealthyInstancesAlarm if the user enables it", function () {

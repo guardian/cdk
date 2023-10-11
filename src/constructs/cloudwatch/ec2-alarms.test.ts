@@ -5,7 +5,7 @@ import { ApplicationListener, ApplicationProtocol } from "aws-cdk-lib/aws-elasti
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { AppIdentity } from "../core";
 import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbalancing";
-import { GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
+import { GuAlb4xxPercentageAlarm, GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",
@@ -66,6 +66,61 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new GuAlb5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
+      EvaluationPeriods: 3,
+    });
+  });
+});
+
+describe("The GuAlb4xxPercentageAlarm construct", () => {
+  it("should create the correct alarm resource with minimal config", () => {
+    const stack = simpleGuStackForTesting();
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const props = {
+      tolerated4xxPercentage: 1,
+      snsTopicName: "test-topic",
+    };
+    new GuAlb4xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should use a custom description if one is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const props = {
+      alarmDescription: "test-custom-alarm-description",
+      tolerated4xxPercentage: 1,
+      snsTopicName: "test-topic",
+    };
+    new GuAlb4xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
+      AlarmDescription: "test-custom-alarm-description",
+    });
+  });
+
+  it("should use a custom alarm name if one is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const props = {
+      alarmName: "test-custom-alarm-name",
+      tolerated4xxPercentage: 1,
+      snsTopicName: "test-topic",
+    };
+    new GuAlb4xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
+    Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
+      AlarmName: "test-custom-alarm-name",
+    });
+  });
+
+  it("should adjust the number of evaluation periods if a custom value is provided", () => {
+    const stack = simpleGuStackForTesting();
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const props = {
+      tolerated4xxPercentage: 1,
+      numberOfMinutesAboveThresholdBeforeAlarm: 3,
+      snsTopicName: "test-topic",
+    };
+    new GuAlb4xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       EvaluationPeriods: 3,
     });
