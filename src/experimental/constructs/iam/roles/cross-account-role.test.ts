@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { GuRole } from "../../../../constructs/iam";
 import { simpleGuStackForTesting } from "../../../../utils/test";
 import { GuCrossAccountRoleExperimental } from "./cross-account-role";
@@ -16,44 +16,58 @@ describe("The GuCrossAccountRoleExperimental construct", () => {
   });
 
   it("can create a cross account role that can be assumed by a service in another account", () => {
-    const stackThatCreatesTheRole = simpleGuStackForTesting();
-    new GuCrossAccountRoleExperimental(stackThatCreatesTheRole, "testCrossAccountRole", {
-      nameOfRoleWhichCanAssumeThisRole: "nameOfRoleInOtherAccountWhichCanAssumeThisNewlyCreatedOne-CODE",
-      roleName: "crossAccountRole",
-      accountId: "1234",
+    const stackInAccountB = simpleGuStackForTesting();
+    const crossAccountRole = new GuCrossAccountRoleExperimental(stackInAccountB, "testCrossAccountRole", {
+      nameOfRoleWhichCanAssumeThisRole: "roleInAccountA-CODE",
+      roleName: "roleInAccountB-CODE",
+      accountId: "idForAccountA",
     });
 
-    Template.fromStack(stackThatCreatesTheRole).hasResourceProperties("AWS::IAM::Role", {
-      RoleName: "crossAccountRole",
+    // This is just an example: after creating the cross account role we can add policies which allow the role in
+    // the other account to perform the given actions in this account.
+    crossAccountRole.addToPolicy(
+      new PolicyStatement({
+        actions: ["sqs:SendMessage"],
+        resources: ["queue.queueArn"],
+      }),
+    );
+
+    Template.fromStack(stackInAccountB).hasResourceProperties("AWS::IAM::Role", {
+      RoleName: "roleInAccountB-CODE",
       AssumeRolePolicyDocument: {
         Statement: [
           {
             Action: "sts:AssumeRole",
             Effect: "Allow",
             Principal: {
-              AWS: "arn:aws:iam::1234:role/nameOfRoleInOtherAccountWhichCanAssumeThisNewlyCreatedOne-CODE",
+              AWS: "arn:aws:iam::idForAccountA:role/roleInAccountA-CODE",
             },
           },
         ],
       },
     });
 
-    const stackThatAssumesTheRole = simpleGuStackForTesting();
-    new GuRole(stackThatAssumesTheRole, "idForRole", {
+    const stackInAccountA = simpleGuStackForTesting();
+    const role = new GuRole(stackInAccountA, "idForRole", {
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
-      roleName: "nameOfRoleInOtherAccountWhichCanAssumeThisNewlyCreatedOne-CODE",
+      roleName: "roleInAccountA-CODE",
     });
 
-    Template.fromStack(stackThatAssumesTheRole).hasResourceProperties("AWS::IAM::Role", {
-      RoleName: "nameOfRoleInOtherAccountWhichCanAssumeThisNewlyCreatedOne-CODE",
-      AssumeRolePolicyDocument: {
+    role.addToPolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["sts:AssumeRole"],
+        resources: ["arn:aws:iam::idForAccountB:role/roleInAccountB-CODE"],
+      }),
+    );
+
+    Template.fromStack(stackInAccountA).hasResourceProperties("AWS::IAM::Policy", {
+      PolicyDocument: {
         Statement: [
           {
             Action: "sts:AssumeRole",
             Effect: "Allow",
-            Principal: {
-              Service: "ec2.amazonaws.com",
-            },
+            Resource: "arn:aws:iam::idForAccountB:role/roleInAccountB-CODE",
           },
         ],
       },
