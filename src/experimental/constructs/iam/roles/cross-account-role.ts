@@ -26,7 +26,7 @@ export interface GuCrossAccountRoleExperimentalProps extends Omit<GuRoleProps, "
  * In order to use this construct the name of the role that will assume this cross account role must be provided, along
  * with the corresponding AWS account ID of the assuming role.
  *
- * The resulting role can only be assumed by the specified role in the given AWS account. When this role has been
+ * In order to follow the principle of least privilege, the resulting role can only be assumed by the specified role in the given AWS account. When this role has been
  * created it can be extended to grant permissions for specific actions, allowing a resource in one AWS account to
  * perform actions in another.
  */
