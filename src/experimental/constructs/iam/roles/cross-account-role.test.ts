@@ -49,6 +49,8 @@ describe("The GuCrossAccountRoleExperimental construct", () => {
 
     const stackInAccountA = simpleGuStackForTesting();
     const role = new GuRole(stackInAccountA, "idForRole", {
+      // This corresponds to the AWS service that our app will be running in, ec2 is just an example, it could be
+      // any service (e.g. lambda.amazonaws.com).
       assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
       roleName: "roleInAccountA-CODE",
     });
