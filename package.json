@@ -33,7 +33,7 @@
     "@guardian/tsconfig": "^0.2.0",
     "@types/git-url-parse": "^9.0.1",
     "@types/jest": "^29.5.6",
-    "@types/js-yaml": "^4.0.7",
+    "@types/js-yaml": "^4.0.8",
     "@types/lodash.camelcase": "^4.3.8",
     "@types/lodash.kebabcase": "^4.1.8",
     "@types/lodash.upperfirst": "^4.3.8",
