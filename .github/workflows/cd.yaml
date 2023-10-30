@@ -49,5 +49,5 @@ jobs:
       - name: Release docs
         if: (github.ref == 'refs/heads/main')
         run: |
-          git remote set-url origin https://git:${{secrets.GITHUB_TOKEN}}@github.com/${{vars.GITHUB_REPOSITORY}}.git
+          git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           npm run release:docs
