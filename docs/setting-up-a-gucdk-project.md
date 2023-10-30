@@ -6,7 +6,7 @@ Requirements:
     Match this to the repository. A `package-lock.json` file means `npm` is used, a `yarn.lock` file means `yarn` is used.
     If the repository has neither file, and there is no strong convention in your team, we recommend npm.
   - Familiarity with the repository's CI process.
-  - Use of a recent version of Node. We recommend the [latest LTS version](https://nodejs.org/en/about/releases/).
+  - Use of a recent version of Node. We recommend the [latest LTS version](https://nodejs.org/en/about/previous-releases).
 
 ## Creating a new project
 GuCDK provides a CLI tool to create a new project.
