@@ -80,11 +80,17 @@ export class GuAlbLambda extends GuLambdaFunction {
       throw new Error("VPC must be defined for ALB lambdas")
     }
 
+    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+      app: props.app,
+      vpc: props.vpc,
+      targets: [new LambdaTarget(this)]
+    })
+
 
     const loadBalancer = new GuLoadBalancingComponents(scope, {
       ...props,
       access: { scope: AccessScope.PUBLIC },
-      target: new LambdaTarget(this)
+      targetGroup: targetGroup
     })
 
     this.certificate = loadBalancer.certificate;

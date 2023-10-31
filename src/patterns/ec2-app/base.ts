@@ -245,7 +245,16 @@ export class GuEc2App extends Construct {
       );
     }
 
-    const loadBalancer = new GuLoadBalancingComponents(scope, {...props, target: autoScalingGroup, protocol: ApplicationProtocol.HTTP})
+    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+      app,
+      vpc,
+      protocol: ApplicationProtocol.HTTP,
+      targets: [autoScalingGroup],
+      port: props.applicationPort,
+      healthCheck: props.healthcheck,
+    });
+
+    const loadBalancer = new GuLoadBalancingComponents(scope, {...props, targetGroup, protocol: ApplicationProtocol.HTTP})
 
     this.vpc = vpc;
     this.certificate = loadBalancer.certificate;

@@ -8,7 +8,6 @@ import {AppIdentity, GuStack, GuStringParameter} from "../../constructs/core";
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {
   ApplicationProtocol,
-  IApplicationLoadBalancerTarget,
   ListenerAction
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import {GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType} from "../../constructs/ec2";
@@ -165,7 +164,7 @@ export interface GuLoadBalancingComponentsProps extends AppIdentity {
 }
 
 interface GuLoadBalancingComponentPropsTarget extends GuLoadBalancingComponentsProps {
-  target: IApplicationLoadBalancerTarget;
+  targetGroup: GuApplicationTargetGroup;
 }
 
 export class GuLoadBalancingComponents {
@@ -179,10 +178,9 @@ export class GuLoadBalancingComponents {
       access,
       accessLogging = { enabled: false },
       app,
-      applicationPort,
       certificateProps,
       monitoringConfiguration,
-      target,
+      targetGroup,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
@@ -224,14 +222,14 @@ export class GuLoadBalancingComponents {
       );
     }
 
-    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
-      app,
-      vpc,
-      protocol: props.protocol,
-      targets: [target],
-      port: applicationPort,
-      healthCheck: props.healthcheck,
-    });
+    // const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+    //   app,
+    //   vpc,
+    //   protocol: props.protocol,
+    //   targets: [targetGroup],
+    //   port: applicationPort,
+    //   healthCheck: props.healthcheck,
+    // });
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
