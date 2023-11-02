@@ -34,7 +34,7 @@ export interface PublicAccess extends Access {
  */
 export interface RestrictedAccess extends Access {
   scope: AccessScope.RESTRICTED;
-  cidrRanges: IPeer[];
+  cidrRanges: [IPeer, ...IPeer[]];
 }
 
 /**
@@ -53,7 +53,7 @@ export interface RestrictedAccess extends Access {
  */
 export interface InternalAccess extends Access {
   scope: AccessScope.INTERNAL;
-  cidrRanges: IPeer[];
+  cidrRanges: [IPeer, ...IPeer[]];
 }
 
 export type AppAccess = PublicAccess | RestrictedAccess | InternalAccess;
