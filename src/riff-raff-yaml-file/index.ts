@@ -196,6 +196,10 @@ export class RiffRaffYamlFile {
     return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
   }
 
+  private getGuStackDependencies(cdkStack: GuStack): GuStack[] {
+    return cdkStack.dependencies.filter((_) => _ instanceof GuStack) as GuStack[];
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
@@ -235,7 +239,11 @@ export class RiffRaffYamlFile {
           ].flat();
           artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
 
-          const cfnDeployment = cloudFormationDeployment(stacks, artifactUploads, this.outdir);
+          const parentStacks: RiffRaffDeployment[] = this.getGuStackDependencies(stack).map((x) =>
+            cloudFormationDeployment([x], [], this.outdir),
+          );
+
+          const cfnDeployment = cloudFormationDeployment(stacks, [...artifactUploads, ...parentStacks], this.outdir);
           deployments.set(cfnDeployment.name, cfnDeployment.props);
 
           const lambdasWithoutAnAlias = lambdas.filter((lambda) => lambda.alias === undefined);
