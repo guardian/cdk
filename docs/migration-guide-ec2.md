@@ -145,7 +145,7 @@ _The instructions here assume that your DNS record is managed via NS1. To check 
     - _Delete the Guardian::DNS::RecordSet resource in the same PR that the
       GuCname is added_
 
-2.  Drop the TTL for your DNS record, to enable faster rollback if something goes wrong.
+2.  Reduce the TTL for your DNS record to a few minutes, to enable faster rollback if something goes wrong.
 
     Wait for the TTL to expire before proceeding. ([Example
     PR](https://github.com/guardian/security-hq/pull/338/files)).
