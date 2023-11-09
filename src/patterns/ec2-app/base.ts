@@ -246,6 +246,7 @@ export class GuEc2App extends Construct {
     }
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+      targetGroupType: "asg",
       app,
       vpc,
       protocol: ApplicationProtocol.HTTP,

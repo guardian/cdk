@@ -4,7 +4,9 @@ import type { ApplicationTargetGroupProps, HealthCheck } from "aws-cdk-lib/aws-e
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuStack } from "../../core";
 
-export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity {}
+export interface GuApplicationTargetGroupProps extends ApplicationTargetGroupProps, AppIdentity {
+  targetGroupType: "lambda" | "asg"
+}
 
 /**
  * Construct which creates a Target Group.
@@ -44,7 +46,7 @@ export class GuApplicationTargetGroup extends GuAppAwareConstruct(ApplicationTar
   };
 
   constructor(scope: GuStack, id: string, props: GuApplicationTargetGroupProps) {
-    const mergedProps: ApplicationTargetGroupProps = {
+    const mergedProps: ApplicationTargetGroupProps = props.targetGroupType === "lambda" ? props : {
       protocol: ApplicationProtocol.HTTP, // We terminate HTTPS at the load balancer level, so load balancer to ASG/EC2 traffic can be over HTTP
       deregistrationDelay: Duration.seconds(30),
       ...props,

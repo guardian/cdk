@@ -81,6 +81,7 @@ export class GuAlbLambda extends GuLambdaFunction {
     }
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
+      targetGroupType: "lambda",
       app: props.app,
       vpc: props.vpc,
       targets: [new LambdaTarget(this)]
