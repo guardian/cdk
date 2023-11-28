@@ -114,6 +114,13 @@ export interface GuEcsTaskProps extends AppIdentity {
   customTaskPolicies?: PolicyStatement[];
   environmentOverrides?: TaskEnvironmentVariable[];
   storage?: number;
+  /**
+   * Whether to give the task IAM role access to the account's dist bucket.
+   * This is enabled by default to avoid breaking changes, but consumers of this pattern
+   * that pull a container image that doesn't need extra dependencies from S3
+   * shoud set this value to `false`.
+   */
+  enableDistributablePolicy?: boolean;
 }
 
 /**
@@ -160,6 +167,7 @@ export class GuEcsTask extends Construct {
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,
+      enableDistributablePolicy = true,
     } = props;
 
     if (storage && storage < 21) {
@@ -196,9 +204,11 @@ export class GuEcsTask extends Construct {
       }),
     });
 
-    const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });
+    if (enableDistributablePolicy) {
+      const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });
+      taskDefinition.addToTaskRolePolicy(distPolicy);
+    }
 
-    taskDefinition.addToTaskRolePolicy(distPolicy);
     (customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
     const task = new EcsRunTask(scope, `${id}-task`, {
