@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 52.3.0
+
+### Minor Changes
+
+- 8c40db382: Adds the optional `enableDistributablePolicy` prop to `GuEcsTask` so that consumers of this pattern can decide whether the task IAM role has access to the account's distributable bucket in S3.
+
 ## 52.2.1
 
 ### Patch Changes
