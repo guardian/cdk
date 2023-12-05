@@ -30,11 +30,6 @@ export interface GuAlbLambdaProps extends Omit<GuFunctionProps, "errorPercentage
   certificateProps?: GuDomainName;
 }
 
-interface GuAlbLambdaPropsTarget extends GuAlbLambdaProps {
-  // target: IApplicationLoadBalancerTarget;
-
-}
-
 /**
  * A pattern to create a Lambda triggered by API Gateway
  * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-lambda-integration.html
@@ -71,7 +66,7 @@ export class GuAlbLambda extends GuLambdaFunction {
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroup: GuApplicationTargetGroup;
 
-  constructor(scope: GuStack, id: string, props: GuAlbLambdaPropsTarget) {
+  constructor(scope: GuStack, id: string, props: GuAlbLambdaProps) {
     super(scope, id, {
       ...props,
     });
