@@ -1,22 +1,23 @@
-import type {NoMonitoring} from "../constructs/cloudwatch";
-import type {GuStack} from "../constructs/core";
-import type {GuFunctionProps} from "../constructs/lambda";
-import {GuLambdaFunction} from "../constructs/lambda";
+import type {NoMonitoring} from "../../constructs/cloudwatch";
+import type {GuStack} from "../../constructs/core";
+import type {GuFunctionProps} from "../../constructs/lambda";
+import {GuLambdaFunction} from "../../constructs/lambda";
 import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener
-} from "../constructs/loadbalancing";
-import {AccessScope} from "../constants";
-import {AccessLoggingProps, Alarms} from "./ec2-app";
+} from "../../constructs/loadbalancing";
+import {AccessScope} from "../../constants";
+import {AccessLoggingProps, Alarms} from "../../patterns/ec2-app";
 import {LambdaTarget} from "aws-cdk-lib/aws-elasticloadbalancingv2-targets";
-import {GuCertificate} from "../constructs/acm";
-import type {GuDomainName} from "../types";
-import {GuLoadBalancingComponents} from "./load-balancer/load-balancer";
+import {GuCertificate} from "../../constructs/acm";
+import type {GuDomainName} from "../../types";
+import {GuLoadBalancingComponents} from "../../patterns/load-balancer/load-balancer";
 
 export interface GuAlbLambdaProps extends Omit<GuFunctionProps, "errorPercentageMonitoring"> {
   /**
-   * Alarm configuration for your API. For more details, see [[`ApiGatewayAlarms`]].
+   *
+   * Enable and configure alarms.
    *
    * If your team do not use CloudWatch, it's possible to opt-out with the following configuration:
    * ```typescript
@@ -31,33 +32,28 @@ export interface GuAlbLambdaProps extends Omit<GuFunctionProps, "errorPercentage
 }
 
 /**
- * A pattern to create a Lambda triggered by API Gateway
- * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-lambda-integration.html
+ * A pattern to create a Lambda triggered by a load balancer
+ * @see ttps://docs.aws.amazon.com/lambda/latest/dg/services-alb.html
  *
  * This pattern should be used if you intend to serve all traffic via a single Lambda
  * (for example, if your Lambda uses an application framework, like https://github.com/vendia/serverless-express).
- * If you need to configure path-based routing to serve different requests with different
- * Lambdas, use the [[`GuApiGatewayWithLambdaByPath`]] pattern instead.
  *
- * For all configuration options, see [[`GuApiLambdaProps`]].
+ * For all configuration options, see [[`GuAlbLambdaProps`]].
  *
  * Example usage:
  *
  * ```typescript
- * new GuApiLambda(stack, "my-lambda", {
- *   fileName: "my-app.zip",
- *   handler: "handler.ts",
- *   runtime: Runtime.NODEJS_14_X,
- *   monitoringConfiguration: {
- *     http5xxAlarm: { tolerated5xxPercentage: 5 },
- *     snsTopicName: "alerts-topic",
- *   },
- *   app: "my-app",
- *   api: {
- *     id: "my-api",
- *     description: "...",
- *   },
- * });
+ * new GuAlbLambda(stack, "lambda", {
+ *       fileName: "my-app.zip",
+ *       handler: "handler.ts",
+ *       runtime: Runtime.NODEJS_12_X,
+ *       monitoringConfiguration: noMonitoring,
+ *       app: "testing",
+ *       vpc: vpc,
+ *       vpcSubnets: {
+ *         subnets: vpc.privateSubnets
+ *       }
+ *     });
  * ```
  */
 export class GuAlbLambda extends GuLambdaFunction {

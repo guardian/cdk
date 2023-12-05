@@ -222,15 +222,6 @@ export class GuLoadBalancingComponents {
       );
     }
 
-    // const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
-    //   app,
-    //   vpc,
-    //   protocol: props.protocol,
-    //   targets: [targetGroup],
-    //   port: applicationPort,
-    //   healthCheck: props.healthcheck,
-    // });
-
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
       loadBalancer,
