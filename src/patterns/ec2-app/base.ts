@@ -135,9 +135,11 @@ export interface GuEc2AppProps extends AppIdentity {
   /**
    * Network access restrictions for your load balancer.
    *
-   * Note, this merely provides defence in depth; you should, for example, limit
-   * access to the VPN and then treat that as sufficient. Instead, use Google
-   * Auth for human access, or a suitable machine auth mechanism.
+   * **Note:** this merely provides defence in depth.
+   *
+   * You should, for example, use Google Auth for human access,
+   * or a suitable machine auth mechanism, rather treating an
+   * access limited to the VPN as sufficient.
    */
   access: AppAccess;
   /**
