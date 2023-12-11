@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 52.3.1
+
+### Patch Changes
+
+- a473265: fix(deps): Update AWS CDK libraries to 2.114.1, and constructs to 10.3.0
+
 ## 52.3.0
 
 ### Minor Changes
