@@ -34,7 +34,7 @@
     "@types/git-url-parse": "^9.0.3",
     "@types/jest": "^29.5.11",
     "@types/js-yaml": "^4.0.9",
-    "@types/lodash.camelcase": "^4.3.8",
+    "@types/lodash.camelcase": "^4.3.9",
     "@types/lodash.kebabcase": "^4.1.9",
     "@types/lodash.upperfirst": "^4.3.8",
     "@types/node": "20.10.1",
