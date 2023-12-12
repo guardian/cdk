@@ -222,13 +222,12 @@ export class RiffRaffYamlFile {
         Object.values(regionGroup).forEach((stageGroup) => {
           const stacks: GuStack[] = Object.values(stageGroup).flat();
 
-          if (stacks.length === 0) {
+          // The items in `stacks` only differ by stage, so we can just use the first item in the list.
+          const [stack] = stacks;
+
+          if (!stack) {
             throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
           }
-
-          // The items in `stacks` only differ by stage, so we can just use the first item in the list.
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length of `stacks` is checked above
-          const stack = stacks[0]!;
 
           const lambdas = this.getLambdas(stack);
           const autoscalingGroups = this.getAutoScalingGroups(stack);
