@@ -65,7 +65,7 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
     "lodash.upperfirst": "^4.3.1",
-    "read-pkg-up": "7.0.1",
+    "read-pkg-up": "11.0.0",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
