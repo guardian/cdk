@@ -1,6 +1,5 @@
-import type { CfnElement, StackProps } from "aws-cdk-lib";
-import { Annotations, App, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
-import { Template } from "aws-cdk-lib/assertions";
+import type { App, CfnElement, StackProps } from "aws-cdk-lib";
+import { Annotations, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
 import { AwsBackupTag } from "../../aspects/aws-backup";
@@ -266,21 +265,5 @@ export class GuStack extends Stack implements StackStageIdentity {
 
     (defaultChild as CfnElement).overrideLogicalId(logicalId);
     Annotations.of(construct).addInfo(`Setting logical ID for ${id} to ${logicalId}. Reason: ${reason}`);
-  }
-}
-
-/**
- * A GuStack but designed for Stack Set instances.
- *
- * In a stack set application, `GuStackForStackSetInstance` is used to represent the infrastructure to provision in target AWS accounts.
- */
-export class GuStackForStackSetInstance extends GuStack {
-  // eslint-disable-next-line custom-rules/valid-constructors -- GuStackForStackSet should have a unique `App`
-  constructor(id: string, props: GuStackProps) {
-    super(new App(), id, props);
-  }
-
-  get cfnJson(): string {
-    return JSON.stringify(Template.fromStack(this).toJSON(), null, 2);
   }
 }
