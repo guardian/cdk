@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1",
-    "@oclif/core": "2.15.0",
+    "@oclif/core": "3.14.1",
     "aws-cdk-lib": "2.114.1",
     "aws-sdk": "^2.1497.0",
     "chalk": "^4.1.2",
