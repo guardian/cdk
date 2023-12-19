@@ -6,13 +6,13 @@ export function cloudFormationDeployment(
   dependencies: RiffRaffDeployment[],
   contentDirectory: string,
 ): RiffRaffDeployment {
-  if (cdkStacks.length === 0) {
+  // The stacks in `cdkStacks` only differ by stage, so we can just use the first item in the list for key information.
+  const [cdkStack] = cdkStacks;
+
+  if (!cdkStack) {
     throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
   }
 
-  // The stacks in `cdkStacks` only differ by stage, so we can just use the first item in the list for key information.
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length of `cdkStacks` is checked above
-  const cdkStack = cdkStacks[0]!;
   const {
     region,
     stack,

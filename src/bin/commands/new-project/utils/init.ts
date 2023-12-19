@@ -81,7 +81,6 @@ function createPackageJson(outputDirectory: string): void {
     "ts-jest",
     "ts-node",
     "typescript",
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- deps come from `package.json`, so shouldn't be `undefined`
   ].reduce((acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }), {});
 
   const cdkDeps: Record<string, string> = {

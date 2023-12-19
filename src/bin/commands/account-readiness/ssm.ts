@@ -37,7 +37,7 @@ const ssmParamReadiness = async ({ credentialProvider, region }: AwsConfig): Pro
   const defaultVpcs: string[] = vpcs
     .filter((vpc) => vpc.IsDefault)
     .map((vpc) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- a VPC always has an ID, the type in CDK is odd!
+      // Non-null-assertion, A VPC always has an ID, the type in CDK is odd!
       return vpc.VpcId!;
     });
 
