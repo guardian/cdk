@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 53.0.1
+
+### Patch Changes
+
+- 2fd963b: Make dependency `@changeset/cli` development only
+
 ## 53.0.0
 
 ### Major Changes
