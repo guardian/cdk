@@ -38,7 +38,7 @@
     "@types/lodash.camelcase": "^4.3.9",
     "@types/lodash.kebabcase": "^4.1.9",
     "@types/lodash.upperfirst": "^4.3.9",
-    "@types/node": "20.10.5",
+    "@types/node": "20.10.8",
     "@types/yargs": "^17.0.32",
     "aws-cdk": "2.114.1",
     "cz-conventional-changelog": "^3.3.0",
