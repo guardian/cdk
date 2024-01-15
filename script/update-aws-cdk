@@ -32,6 +32,20 @@ checkForLocalChanges() {
   fi
 }
 
+addChangeset() {
+  AWSCDK_VERSION=$1
+  MESSAGE=$2
+
+  filename=".changeset/aws-cdk-update-v${AWSCDK_VERSION}.md"
+  touch $filename
+  echo "---" >> $filename
+  echo '"@guardian/cdk": patch' >> $filename
+  echo "---" >> $filename
+  echo "" >> $filename
+  echo "$MESSAGE" >> $filename
+  echo "" >> $filename
+}
+
 raisePR() {
   AWSCDK_VERSION=$(jq -r '.peerDependencies."aws-cdk"' < "$ROOT_DIR/package.json")
   AWSCDKLIB_VERSION=$(jq -r '.peerDependencies."aws-cdk-lib"' < "$ROOT_DIR/package.json")
@@ -41,12 +55,14 @@ raisePR() {
   COMMIT_SUBJECT="fix(deps): Update AWS CDK libraries to $AWSCDK_VERSION, and constructs to $CONSTRUCT_VERSION"
   COMMIT_BODY="Update aws-cdk to $AWSCDK_VERSION, aws-cdk-lib to $AWSCDKLIB_VERSION, constructs to $CONSTRUCT_VERSION"
 
+  addChangeset "$AWSCDK_VERSION" "$COMMIT_BODY"
+
   git config user.name guardian-ci
   git config user.email guardian-ci@@users.noreply.github.com
 
   git checkout -b "$BRANCH_NAME"
 
-  for file in package.json package-lock.json tools/integration-test/package.json; do
+  for file in package.json package-lock.json tools/integration-test/package.json .changeset/aws-cdk-update-v*.md; do
     git add $file
   done
 

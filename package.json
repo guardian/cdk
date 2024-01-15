@@ -40,7 +40,7 @@
     "@types/lodash.upperfirst": "^4.3.9",
     "@types/node": "20.11.2",
     "@types/yargs": "^17.0.32",
-    "aws-cdk": "2.114.1",
+    "aws-cdk": "2.121.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.56.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@oclif/core": "2.15.0",
-    "aws-cdk-lib": "2.114.1",
+    "aws-cdk-lib": "2.121.1",
     "aws-sdk": "^2.1536.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.93.0",
@@ -69,8 +69,8 @@
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
-    "aws-cdk": "2.114.1",
-    "aws-cdk-lib": "2.114.1",
+    "aws-cdk": "2.121.1",
+    "aws-cdk-lib": "2.121.1",
     "constructs": "10.3.0"
   },
   "config": {
