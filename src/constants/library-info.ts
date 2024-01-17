@@ -32,11 +32,11 @@ export const LibraryInfo = {
    * The version of the `aws-cdk-lib` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_VERSION: valueOrUnknown(getDependency("aws-cdk-lib")),
+  AWS_CDK_VERSION: valueOrUnknown(getDevDependency("aws-cdk-lib")),
 
   /**
    * The version of the `constructs` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  CONSTRUCTS_VERSION: valueOrUnknown(getDependency("constructs")),
+  CONSTRUCTS_VERSION: valueOrUnknown(getDevDependency("constructs")),
 };
