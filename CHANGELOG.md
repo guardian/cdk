@@ -1,5 +1,16 @@
 # @guardian/cdk
 
+## 53.0.3
+
+### Patch Changes
+
+- 8ead267: Remove direct dependencies that should be peer ones:
+
+  - `aws-cdk-lib`
+  - `constructs`
+
+  No change for consumers that provide compatible packages
+
 ## 53.0.2
 
 ### Patch Changes
