@@ -190,7 +190,10 @@ in your original CFN template._
 
 6. Update your riff-raff.yaml to use the correct `amiParameter` (this will be `AMI<Appname>`)
 
-7. Preview the CloudFormation update (via ./script/diff)
+7. Preview the CloudFormation update. A change set can be generated via the
+   `Change sets` tab in the CloudFormation console, and will also be generated
+   as part of manually deploying a new template via the AWS console, and can be
+   reviewed before confirming the update.
 
    It should largely comprise of resource removals. It should also modify the
    new ASG (due to the tag removal)
