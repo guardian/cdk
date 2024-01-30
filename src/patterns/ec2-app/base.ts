@@ -30,7 +30,7 @@ import {
   GuUnhealthyInstancesAlarm,
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuLoggingStreamNameParameter, GuStringParameter } from "../../constructs/core";
+import { AppIdentity, GuAccessLoggingBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
@@ -420,11 +420,7 @@ export class GuEc2App extends Construct {
     });
 
     if (accessLogging.enabled) {
-      const accessLoggingBucket = new GuStringParameter(scope, "AccessLoggingBucket", {
-        description: NAMED_SSM_PARAMETER_PATHS.AccessLoggingBucket.description,
-        default: NAMED_SSM_PARAMETER_PATHS.AccessLoggingBucket.path,
-        fromSSM: true,
-      });
+      const accessLoggingBucket = GuAccessLoggingBucketParameter.getInstance(scope);
 
       loadBalancer.logAccessLogs(
         Bucket.fromBucketName(
