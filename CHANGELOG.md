@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 53.1.0
+
+### Minor Changes
+
+- ac7354f: Support multiple EC2 apps with load balancer access logs enabled
+
 ## 53.0.3
 
 ### Patch Changes
