@@ -4,6 +4,15 @@ import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuStack } from "../../core";
 
+/**
+ * Adds the following headers to each request before forwarding it to the target:
+ *  - `x-amzn-tls-version`, which has information about the TLS protocol version negotiated with the client
+ *  - `x-amzn-tls-cipher-suite`, which has information about the cipher suite negotiated with the client
+ *
+ * Both headers are in OpenSSL format.
+ */
+export const TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED = "routing.http.x_amzn_tls_version_and_cipher_suite.enabled";
+
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity {
   /**
    * If your CloudFormation does not define the Type of your Load Balancer, you must set this boolean to true to avoid
@@ -26,6 +35,8 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
 export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLoadBalancer) {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
     super(scope, id, { deletionProtection: true, ...props });
+
+    this.setAttribute(TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED, "true");
 
     if (props.removeType) {
       const cfnLb = this.node.defaultChild as CfnLoadBalancer;
