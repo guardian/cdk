@@ -13,6 +13,11 @@ import type { AppIdentity, GuStack } from "../../core";
  */
 export const TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED = "routing.http.x_amzn_tls_version_and_cipher_suite.enabled";
 
+/**
+ * Indicates whether HTTP headers with invalid header fields are removed by the load balancer.
+ */
+export const DROP_INVALID_HEADER_FIELDS_ENABLED = "routing.http.drop_invalid_header_fields.enabled";
+
 interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, AppIdentity {
   /**
    * If your CloudFormation does not define the Type of your Load Balancer, you must set this boolean to true to avoid
@@ -37,6 +42,7 @@ export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLo
     super(scope, id, { deletionProtection: true, ...props });
 
     this.setAttribute(TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED, "true");
+    this.setAttribute(DROP_INVALID_HEADER_FIELDS_ENABLED, "true");
 
     if (props.removeType) {
       const cfnLb = this.node.defaultChild as CfnLoadBalancer;
