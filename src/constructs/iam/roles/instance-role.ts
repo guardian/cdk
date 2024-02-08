@@ -1,4 +1,4 @@
-import { ManagedPolicy, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuStack } from "../../core";
 import {
@@ -8,6 +8,7 @@ import {
   GuParameterStoreReadPolicy,
 } from "../policies";
 import type { GuPolicy } from "../policies";
+import { GuSsmSshPolicy } from "../policies/ssm-ssh";
 import { GuRole } from "./roles";
 
 export interface GuInstanceRoleProps {
@@ -48,6 +49,7 @@ export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
     });
 
     const sharedPolicies = [
+      GuSsmSshPolicy.getInstance(scope),
       GuDescribeEC2Policy.getInstance(scope),
       ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope)]),
     ];
@@ -59,9 +61,6 @@ export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
       ...(props.additionalPolicies ? props.additionalPolicies : []),
     ];
 
-    const managedPolicies = [ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")];
-
     policies.forEach((p) => p.attachToRole(this));
-    managedPolicies.forEach((p) => this.addManagedPolicy(p));
   }
 }
