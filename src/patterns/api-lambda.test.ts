@@ -1,5 +1,5 @@
 import { Duration } from "aws-cdk-lib";
-import { Template } from "aws-cdk-lib/assertions";
+import { Annotations, Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuCertificate } from "../constructs/acm";
 import type { NoMonitoring } from "../constructs/cloudwatch";
@@ -8,6 +8,38 @@ import { simpleGuStackForTesting } from "../utils/test";
 import { GuApiLambda } from "./api-lambda";
 
 describe("The GuApiLambda pattern", () => {
+  it("should meet AWS Foundational Security Best Practices", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    new GuApiLambda(stack, "lambda", {
+      fileName: "my-app.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_20_X,
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+      api: {
+        id: "api",
+        description: "this is a test",
+      },
+    });
+
+    const warnings = Annotations.fromStack(stack).findWarning("*", Match.stringLikeRegexp("AwsSolutions-.*"));
+
+    // try to provide helpful messages for debugging
+    if (warnings.length > 0) {
+      console.log(JSON.stringify(warnings, null, 2));
+    }
+    expect(warnings).toHaveLength(0);
+
+    const errors = Annotations.fromStack(stack).findError("*", Match.stringLikeRegexp("AwsSolutions-.*"));
+
+    // try to provide helpful messages for debugging
+    if (errors.length > 0) {
+      console.log(JSON.stringify(errors, null, 2));
+    }
+    expect(errors).toHaveLength(0);
+  });
+
   it("should create the correct resources with minimal config", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };

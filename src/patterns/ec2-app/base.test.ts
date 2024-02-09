@@ -1,4 +1,4 @@
-import { Match, Template } from "aws-cdk-lib/assertions";
+import { Annotations, Match, Template } from "aws-cdk-lib/assertions";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
@@ -10,6 +10,40 @@ import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuEc2App } from "./base";
 
 describe("the GuEC2App pattern", function () {
+  it("should meet AWS Foundational Security Best Practices", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+    });
+
+    const warnings = Annotations.fromStack(stack).findWarning("*", Match.stringLikeRegexp("AwsSolutions-.*"));
+
+    // try to provide helpful messages for debugging
+    if (warnings.length > 0) {
+      console.log(JSON.stringify(warnings, null, 2));
+    }
+    expect(warnings).toHaveLength(0);
+
+    const errors = Annotations.fromStack(stack).findError("*", Match.stringLikeRegexp("AwsSolutions-.*"));
+
+    // try to provide helpful messages for debugging
+    if (errors.length > 0) {
+      console.log(JSON.stringify(errors, null, 2));
+    }
+    expect(errors).toHaveLength(0);
+  });
+
   it("should produce a functional EC2 app with minimal arguments", function () {
     const stack = simpleGuStackForTesting();
     new GuEc2App(stack, {
