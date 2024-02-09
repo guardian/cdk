@@ -1,5 +1,6 @@
 import type { App, CfnElement, StackProps } from "aws-cdk-lib";
 import { Annotations, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
+import { AwsSolutionsChecks } from "cdk-nag";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
 import { AwsBackupTag } from "../../aspects/aws-backup";
@@ -181,6 +182,8 @@ export class GuStack extends Stack implements StackStageIdentity {
     if (withBackup) {
       Aspects.of(this).add(new AwsBackupTag());
     }
+
+    Aspects.of(this).add(new AwsSolutionsChecks({ verbose: true }));
   }
 
   /**
