@@ -1,8 +1,10 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
 import { Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Alias, Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
+import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { GuDistributable } from "../../types";
@@ -115,6 +117,7 @@ export class GuLambdaFunction extends Function {
   public readonly alias?: Alias;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
+    const { stack, stage } = scope;
     const {
       app,
       fileName,
@@ -131,14 +134,26 @@ export class GuLambdaFunction extends Function {
       : GuDistributionBucketParameter.getInstance(scope).valueAsString;
 
     const defaultEnvironmentVariables = {
-      STACK: scope.stack,
-      STAGE: scope.stage,
+      STACK: stack,
+      STAGE: stage,
       APP: app,
     };
 
     const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, bucketName);
     const objectKey = withoutFilePrefix ? fileName : GuDistributable.getObjectKey(scope, { app }, { fileName });
     const code = Code.fromBucket(bucket, objectKey);
+
+    const role = new Role(scope, `${id}-Role`, {
+      assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
+    });
+
+    const logGroup = new LogGroup(scope, `${id}-LogGroup`, {
+      logGroupName: `/aws/lambda/${stack}/${stage}/${app}`,
+      retention: RetentionDays.TWO_WEEKS,
+    });
+
+    logGroup.grantWrite(role);
+
     super(scope, id, {
       ...props,
       environment: {
@@ -148,6 +163,8 @@ export class GuLambdaFunction extends Function {
       memorySize: defaultMemorySize(runtime, memorySize),
       timeout: timeout ?? Duration.seconds(30),
       code,
+      logGroup,
+      role,
     });
 
     this.app = app;

@@ -14,7 +14,7 @@ describe("The GuScheduledLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_20_X,
       rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
       monitoringConfiguration: noMonitoring,
       app: "testing",
