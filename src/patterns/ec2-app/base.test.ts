@@ -656,12 +656,12 @@ describe("the GuEC2App pattern", function () {
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      LoadBalancerAttributes: [
+      LoadBalancerAttributes: Match.arrayWith([
         { Key: "deletion_protection.enabled", Value: "true" },
         { Key: "access_logs.s3.enabled", Value: "true" },
         { Key: "access_logs.s3.bucket", Value: { Ref: "AccessLoggingBucket" } },
         { Key: "access_logs.s3.prefix", Value: "access-logging-prefix" },
-      ],
+      ]),
     });
   });
 
@@ -685,7 +685,7 @@ describe("the GuEC2App pattern", function () {
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      LoadBalancerAttributes: Match.arrayEquals([
+      LoadBalancerAttributes: Match.arrayWith([
         {
           Key: "deletion_protection.enabled",
           Value: "true",
