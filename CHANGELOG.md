@@ -1,5 +1,14 @@
 # @guardian/cdk
 
+## 54.1.0
+
+### Minor Changes
+
+- edf5c7a: - Add `readonlyRootFilesystem` prop to specify whether the container is given read-only access to its root file system
+
+  - Add `containerInsights` prop to enable CloudWatch insights
+  - Replace deprecated state machine definition
+
 ## 54.0.0
 
 ### Major Changes
