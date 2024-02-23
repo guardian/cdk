@@ -202,6 +202,12 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
     "testecstaskecstestClusterCBD4036C": {
       "Properties": {
         "ClusterName": "ecs-test-cluster-TEST",
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "disabled",
+          },
+        ],
         "Tags": [
           {
             "Key": "App",
@@ -546,6 +552,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
             },
             "Memory": 1024,
             "Name": "test-ecs-task-ecs-test-TaskContainer",
+            "ReadonlyRootFilesystem": false,
           },
         ],
         "Cpu": "1024",

@@ -14,7 +14,7 @@ import {
 } from "aws-cdk-lib/aws-ecs";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
-import { IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
+import { DefinitionBody, IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
 import type { TaskEnvironmentVariable } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { EcsFargateLaunchTarget, EcsRunTask } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { Construct } from "constructs";
@@ -121,6 +121,16 @@ export interface GuEcsTaskProps extends AppIdentity {
    * shoud set this value to `false`.
    */
   enableDistributablePolicy?: boolean;
+  /**
+   * When this parameter is true, the container is given read-only access to its root file system.
+   * @default false
+   */
+  readonlyRootFilesystem?: boolean;
+  /**
+   * If `true`, CloudWatch Container Insights will be enabled for the cluster
+   * @default false
+   */
+  containerInsights?: boolean;
 }
 
 /**
@@ -168,6 +178,8 @@ export class GuEcsTask extends Construct {
       securityGroups = [],
       environmentOverrides,
       enableDistributablePolicy = true,
+      readonlyRootFilesystem = false,
+      containerInsights = false,
     } = props;
 
     if (storage && storage < 21) {
@@ -182,6 +194,7 @@ export class GuEcsTask extends Construct {
       clusterName: `${app}-cluster-${stage}`,
       enableFargateCapacityProviders: true,
       vpc,
+      containerInsights,
     });
 
     const taskDefinition = new TaskDefinition(scope, `${id}-TaskDefinition`, {
@@ -202,6 +215,7 @@ export class GuEcsTask extends Construct {
         streamPrefix: app,
         logRetention: 14,
       }),
+      readonlyRootFilesystem,
     });
 
     if (enableDistributablePolicy) {
@@ -230,7 +244,7 @@ export class GuEcsTask extends Construct {
     });
 
     this.stateMachine = new StateMachine(scope, `${id}-StateMachine`, {
-      definition: task,
+      definitionBody: DefinitionBody.fromChainable(task),
       stateMachineName: `${app}-${stage}`,
     });
 
