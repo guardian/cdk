@@ -552,7 +552,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
             },
             "Memory": 1024,
             "Name": "test-ecs-task-ecs-test-TaskContainer",
-            "ReadonlyRootFilesystem": true,
+            "ReadonlyRootFilesystem": false,
           },
         ],
         "Cpu": "1024",
