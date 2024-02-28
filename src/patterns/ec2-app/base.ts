@@ -284,7 +284,7 @@ export interface GuEc2AppProps extends AppIdentity {
      *
      * @defaultValue PROD
      */
-    cognitoAuthStage?: "PROD" | "CODE";
+    cognitoAuthStage?: string;
   };
 
   /**
