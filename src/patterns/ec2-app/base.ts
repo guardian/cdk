@@ -276,6 +276,15 @@ export interface GuEc2AppProps extends AppIdentity {
      * @defaultValue /:STAGE/:stack/:app/google-auth-credentials
      */
     credentialsSecretsManagerPath?: string;
+
+    /**
+     * When using Auth in the ALB, which stage of cognito-lambda to use.
+     *
+     * For most applications this should always be PROD, even in the CODE environments.
+     *
+     * @defaultValue PROD
+     */
+    cognitoAuthStage?: string;
   };
 
   /**
@@ -518,10 +527,12 @@ export class GuEc2App extends Construct {
         NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path,
       );
 
+      const cognitoAuthStage = props.googleAuth.cognitoAuthStage ?? "PROD";
+
       // See https://github.com/guardian/cognito-auth-lambdas for the source
       // code here. ARN format is:
       // arn:aws:lambda:aws-region:acct-id:function:helloworld.
-      const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${deployToolsAccountId.stringValue}:function:deploy-PROD-gatekeeper-lambda`;
+      const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${deployToolsAccountId.stringValue}:function:deploy-${cognitoAuthStage}-gatekeeper-lambda`;
 
       // Note, handler and filename must match here:
       // https://github.com/guardian/cognito-auth-lambdas.
@@ -530,7 +541,7 @@ export class GuEc2App extends Construct {
         memorySize: 128,
         handler: "bootstrap",
         runtime: Runtime.PROVIDED_AL2,
-        fileName: "deploy/INFRA/cognito-lambda/devx-cognito-lambda-amd64-v2.zip",
+        fileName: `deploy/${cognitoAuthStage}/cognito-lambda/devx-cognito-lambda-amd64-v2.zip`,
         withoutFilePrefix: true,
         withoutArtifactUpload: true,
         bucketNamePath: NAMED_SSM_PARAMETER_PATHS.OrganisationDistributionBucket.path,
