@@ -15,6 +15,7 @@ export const TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED = "routing.http.x_amzn
 
 /**
  * Indicates whether HTTP headers with invalid header fields are removed by the load balancer.
+ * Invalid headers are described as HTTP header names that do not conform to the regular expression [-A-Za-z0-9]+
  */
 export const DROP_INVALID_HEADER_FIELDS_ENABLED = "routing.http.drop_invalid_header_fields.enabled";
 
