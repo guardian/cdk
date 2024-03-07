@@ -3,7 +3,11 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import type { AppIdentity } from "../../core";
-import { GuApplicationLoadBalancer } from "./application-load-balancer";
+import {
+  DROP_INVALID_HEADER_FIELDS_ENABLED,
+  GuApplicationLoadBalancer,
+  TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED,
+} from "./application-load-balancer";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "test",
@@ -54,12 +58,12 @@ describe("The GuApplicationLoadBalancer class", () => {
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      LoadBalancerAttributes: [
+      LoadBalancerAttributes: Match.arrayWith([
         {
           Key: "deletion_protection.enabled",
           Value: "true",
         },
-      ],
+      ]),
     });
   });
 
@@ -69,5 +73,35 @@ describe("The GuApplicationLoadBalancer class", () => {
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     Template.fromStack(stack).hasOutput("ApplicationLoadBalancerTestingDnsName", {});
+  });
+
+  it("adds headers that include the TLS version and the cipher suite used during negotiation", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: Match.arrayWith([
+        {
+          Key: TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED,
+          Value: "true",
+        },
+      ]),
+    });
+  });
+
+  it("drops invalid headers before forwarding requests to the target", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: Match.arrayWith([
+        {
+          Key: DROP_INVALID_HEADER_FIELDS_ENABLED,
+          Value: "true",
+        },
+      ]),
+    });
   });
 });
