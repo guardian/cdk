@@ -140,6 +140,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       cloudFormationStackName = process.env.GU_CFN_STACK_NAME,
       stack,
       stage,
+      app,
       withoutTags,
       withBackup = false,
     } = props;
@@ -155,6 +156,7 @@ export class GuStack extends Stack implements StackStageIdentity {
 
     this._stack = stack;
     this._stage = stage.toUpperCase();
+    this._app = app;
     this._repositoryName = this.tryGetRepositoryTag();
 
     if (!withoutTags) {
