@@ -18,6 +18,10 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
    */
   stack: string;
 
+  /**
+   * The stage being used (as defined in your riff-raff.yaml).
+   * This will be applied as a tag to all of your resources.
+   */
   stage: string;
 
   /**
