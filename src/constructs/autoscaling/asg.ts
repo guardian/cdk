@@ -1,4 +1,4 @@
-import { Token } from "aws-cdk-lib";
+import { Tags, Token } from "aws-cdk-lib";
 import { AutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { LaunchTemplate, OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
@@ -162,5 +162,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // leaves it to the default value, which is actually false.
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     cfnAsg.addDeletionOverride("UpdatePolicy");
+
+    Tags.of(launchTemplate).add("App", app);
   }
 }
