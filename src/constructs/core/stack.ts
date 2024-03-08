@@ -81,30 +81,15 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
  * ```
  */
 export class GuStack extends Stack implements StackStageIdentity {
-  private readonly _stack: string;
-  private readonly _stage: string;
-  private readonly _app?: string;
-  private readonly _repositoryName?: string;
-
-  get stage(): string {
-    return this._stage;
-  }
-
-  get stack(): string {
-    return this._stack;
-  }
-
-  get app(): string | undefined {
-    return this._app;
-  }
+  public readonly stack: string;
+  public readonly stage: string;
+  public readonly app: string | undefined;
 
   /**
    * The repository name, if it can be determined from the context or the git remote origin url.
    * If it cannot be determined from either of these sources, it will be `undefined`.
    */
-  get repositoryName(): string | undefined {
-    return this._repositoryName;
-  }
+  public readonly repositoryName: string | undefined;
 
   /**
    * A helper function to add a tag to all resources in a stack.
@@ -154,10 +139,10 @@ export class GuStack extends Stack implements StackStageIdentity {
       synthesizer: new LegacyStackSynthesizer(),
     });
 
-    this._stack = stack;
-    this._stage = stage.toUpperCase();
-    this._app = app;
-    this._repositoryName = this.tryGetRepositoryTag();
+    this.stack = stack;
+    this.stage = stage.toUpperCase();
+    this.app = app;
+    this.repositoryName = this.tryGetRepositoryTag();
 
     if (!withoutTags) {
       this.addTag(TrackingTag.Key, TrackingTag.Value);
