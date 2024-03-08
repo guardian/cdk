@@ -900,6 +900,10 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
               "ResourceType": "instance",
               "Tags": [
                 {
+                  "Key": "App",
+                  "Value": "test-gu-ec2-app",
+                },
+                {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
                 },
@@ -924,6 +928,10 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             {
               "ResourceType": "volume",
               "Tags": [
+                {
+                  "Key": "App",
+                  "Value": "test-gu-ec2-app",
+                },
                 {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
@@ -955,6 +963,10 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           {
             "ResourceType": "launch-template",
             "Tags": [
+              {
+                "Key": "App",
+                "Value": "test-gu-ec2-app",
+              },
               {
                 "Key": "gu:cdk:version",
                 "Value": "TEST",
@@ -1773,6 +1785,10 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
               "ResourceType": "instance",
               "Tags": [
                 {
+                  "Key": "App",
+                  "Value": "test-gu-ec2-app",
+                },
+                {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
                 },
@@ -1797,6 +1813,10 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
             {
               "ResourceType": "volume",
               "Tags": [
+                {
+                  "Key": "App",
+                  "Value": "test-gu-ec2-app",
+                },
                 {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
@@ -1828,6 +1848,10 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           {
             "ResourceType": "launch-template",
             "Tags": [
+              {
+                "Key": "App",
+                "Value": "test-gu-ec2-app",
+              },
               {
                 "Key": "gu:cdk:version",
                 "Value": "TEST",
