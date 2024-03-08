@@ -1,5 +1,20 @@
 # @guardian/cdk
 
+## 56.0.0
+
+### Major Changes
+
+- 5fead41: - Load balancers now add headers with information about the TLS version and cipher suite used during negotiation
+  - Load balancers now drop invalid headers before forwarding requests to the target. Invalid headers are described as HTTP header names that do not conform to the regular expression [-A-Za-z0-9]+
+
+### Patch Changes
+
+- a551119: Apply the `App` tag to the launch template created in the EC2 App pattern.
+- de7c472: Update dependencies
+- e1f3751: Fixes a bug where `this.app` on a `GuStack` is always `undefined`, as it is never set.
+
+  See https://github.com/guardian/cdk/pull/1497#issuecomment-1480997050.
+
 ## 55.0.0
 
 ### Major Changes
