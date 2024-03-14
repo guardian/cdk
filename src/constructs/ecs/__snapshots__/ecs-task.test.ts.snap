@@ -346,117 +346,231 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
             {
               "Action": "ecs:RunTask",
               "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Fn::Select": [
-                        1,
-                        {
-                          "Fn::Split": [
-                            ":",
-                            {
-                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                    ":",
-                    {
-                      "Fn::Select": [
-                        2,
-                        {
-                          "Fn::Split": [
-                            ":",
-                            {
-                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                    ":",
-                    {
-                      "Fn::Select": [
-                        3,
-                        {
-                          "Fn::Split": [
-                            ":",
-                            {
-                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                    ":",
-                    {
-                      "Fn::Select": [
-                        4,
-                        {
-                          "Fn::Split": [
-                            ":",
-                            {
-                              "Ref": "testecstaskecstestTaskDefinition4BF687D5",
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                    ":",
-                    {
-                      "Fn::Select": [
-                        0,
-                        {
-                          "Fn::Split": [
-                            "/",
-                            {
-                              "Fn::Select": [
-                                5,
-                                {
-                                  "Fn::Split": [
-                                    ":",
-                                    {
-                                      "Ref": "testecstaskecstestTaskDefinition4BF687D5",
-                                    },
-                                  ],
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                    "/",
-                    {
-                      "Fn::Select": [
-                        1,
-                        {
-                          "Fn::Split": [
-                            "/",
-                            {
-                              "Fn::Select": [
-                                5,
-                                {
-                                  "Fn::Split": [
-                                    ":",
-                                    {
-                                      "Ref": "testecstaskecstestTaskDefinition4BF687D5",
-                                    },
-                                  ],
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                      ],
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Fn::Select": [
+                          1,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          2,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          3,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          4,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          0,
+                          {
+                            "Fn::Split": [
+                              "/",
+                              {
+                                "Fn::Select": [
+                                  5,
+                                  {
+                                    "Fn::Split": [
+                                      ":",
+                                      {
+                                        "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      "/",
+                      {
+                        "Fn::Select": [
+                          1,
+                          {
+                            "Fn::Split": [
+                              "/",
+                              {
+                                "Fn::Select": [
+                                  5,
+                                  {
+                                    "Fn::Split": [
+                                      ":",
+                                      {
+                                        "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Fn::Select": [
+                          1,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          2,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          3,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          4,
+                          {
+                            "Fn::Split": [
+                              ":",
+                              {
+                                "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":",
+                      {
+                        "Fn::Select": [
+                          0,
+                          {
+                            "Fn::Split": [
+                              "/",
+                              {
+                                "Fn::Select": [
+                                  5,
+                                  {
+                                    "Fn::Split": [
+                                      ":",
+                                      {
+                                        "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      "/",
+                      {
+                        "Fn::Select": [
+                          1,
+                          {
+                            "Fn::Split": [
+                              "/",
+                              {
+                                "Fn::Select": [
+                                  5,
+                                  {
+                                    "Fn::Split": [
+                                      ":",
+                                      {
+                                        "Ref": "testecstaskecstestTaskDefinition4BF687D5",
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
             },
             {
               "Action": [
