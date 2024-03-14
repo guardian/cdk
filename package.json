@@ -38,7 +38,7 @@
     "@types/lodash.camelcase": "^4.3.9",
     "@types/lodash.kebabcase": "^4.1.9",
     "@types/lodash.upperfirst": "^4.3.9",
-    "@types/node": "20.11.24",
+    "@types/node": "20.11.26",
     "@types/yargs": "^17.0.32",
     "aws-cdk": "2.127.0",
     "aws-cdk-lib": "2.127.0",
@@ -52,12 +52,12 @@
     "serve": "^14.2.1",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.25.11",
+    "typedoc": "^0.25.12",
     "typescript": "5.1.6"
   },
   "dependencies": {
     "@oclif/core": "3.23.0",
-    "aws-sdk": "^2.1571.0",
+    "aws-sdk": "^2.1576.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.95.0",
     "git-url-parse": "^14.0.0",
