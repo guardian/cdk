@@ -1,5 +1,5 @@
 import { Tags, Token } from "aws-cdk-lib";
-import { AutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
+import { AutoScalingGroup, GroupMetric, GroupMetrics } from "aws-cdk-lib/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { LaunchTemplate, OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
 import type { InstanceType, ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
@@ -85,6 +85,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       imageId = new GuAmiParameter(scope, { app }),
       imageRecipe,
       instanceType,
+      groupMetrics = [new GroupMetrics(GroupMetric.TOTAL_INSTANCES, GroupMetric.IN_SERVICE_INSTANCES)],
       minimumInstances,
       maximumInstances,
       role = new GuInstanceRole(scope, { app }),
@@ -139,6 +140,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       launchTemplate,
       maxCapacity: maximumInstances ?? minimumInstances * 2,
       minCapacity: minimumInstances,
+      groupMetrics: groupMetrics,
 
       // Omit userData, instanceType, blockDevices & role from asgProps
       // As this are specified by the LaunchTemplate and must not be duplicated
