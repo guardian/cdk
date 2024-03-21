@@ -73,6 +73,9 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
         },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
