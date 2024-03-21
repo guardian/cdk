@@ -76,6 +76,9 @@ exports[`The GuSnsLambda pattern should create the correct resources for a new s
         },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [

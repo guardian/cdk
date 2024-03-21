@@ -126,6 +126,9 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
           },
         },
         "Handler": "handler.ts",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
@@ -838,6 +841,9 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
           },
         },
         "Handler": "handler.ts",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
