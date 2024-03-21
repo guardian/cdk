@@ -39,6 +39,9 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
           },
         },
         "Handler": "handler.ts",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
@@ -322,6 +325,9 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
           },
         },
         "Handler": "handler.ts",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
