@@ -59,7 +59,7 @@
     "@oclif/core": "3.26.0",
     "aws-sdk": "^2.1586.0",
     "chalk": "^4.1.2",
-    "codemaker": "^1.95.0",
+    "codemaker": "^1.96.0",
     "git-url-parse": "^14.0.0",
     "js-yaml": "^4.1.0",
     "lodash.camelcase": "^4.3.0",
