@@ -12,7 +12,7 @@ import type { GuStack } from "../core";
 import { AppIdentity, GuDistributionBucketParameter } from "../core";
 import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
-export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code" | "logFormat">, AppIdentity {
+export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   /**
    * Create a new Lambda version and alias. This is only necessary if you want to use features which rely
    * on versioning (e.g. SnapStart or Provisioned Concurrency).
@@ -60,12 +60,6 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    * an uploadLambda step.
    */
   withoutArtifactUpload?: boolean;
-
-  /**
-   * The format of the Lambda function's logs.
-   * Can be either "JSON" or "Text".
-   */
-  logFormat?: "JSON" | "Text";
 }
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
