@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 56.0.3
+
+### Patch Changes
+
+- 89a22f1: Update aws-cdk to 2.136.1, aws-cdk-lib to 2.136.1, constructs to 10.3.0
+
 ## 56.0.2
 
 ### Patch Changes
