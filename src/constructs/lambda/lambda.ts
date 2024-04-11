@@ -2,7 +2,7 @@
 import { Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
-import { Alias, Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
+import { Alias, Code, Function, LoggingFormat, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { GuDistributable } from "../../types";
@@ -124,7 +124,7 @@ export class GuLambdaFunction extends Function {
       bucketNamePath,
       withoutFilePrefix = false,
       withoutArtifactUpload = false,
-      logFormat,
+      logFormat = LoggingFormat.JSON,
     } = props;
 
     const bucketName = bucketNamePath
@@ -142,7 +142,7 @@ export class GuLambdaFunction extends Function {
     const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
-      logFormat: !logFormat ? "JSON" : logFormat,
+      logFormat,
       environment: {
         ...props.environment,
         ...defaultEnvironmentVariables,
