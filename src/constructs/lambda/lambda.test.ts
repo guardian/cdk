@@ -1,7 +1,8 @@
 import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
+import type { GuStack } from "../core";
 import { GuLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {
@@ -191,6 +192,54 @@ describe("The GuLambdaFunction class", () => {
         },
       },
     });
+  });
+
+  function hasLoggingFormat(stack: GuStack, logFormat: LoggingFormat) {
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
+      LoggingConfig: {
+        LogFormat: logFormat,
+      },
+    });
+  }
+
+  it("should use JSON log formatting by default", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_17,
+      app: "testing",
+    });
+
+    hasLoggingFormat(stack, LoggingFormat.JSON);
+  });
+
+  it("should use JSON log formatting when JSON is specified", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_17,
+      app: "testing",
+      logFormat: "JSON",
+    });
+
+    hasLoggingFormat(stack, LoggingFormat.JSON);
+  });
+  it("should use Text log formatting when it is defined", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaFunction(stack, "lambda", {
+      fileName: "my-app.jar",
+      handler: "handler.ts",
+      runtime: Runtime.JAVA_17,
+      app: "testing",
+      logFormat: "Text",
+    });
+
+    hasLoggingFormat(stack, LoggingFormat.TEXT);
   });
 
   it("should not create an alias or version if the enableVersioning prop is unset", () => {

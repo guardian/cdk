@@ -39,6 +39,9 @@ exports[`The GuScheduledLambda pattern should create the correct resources with 
         },
         "FunctionName": "my-lambda-function",
         "Handler": "my-lambda/handler",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
