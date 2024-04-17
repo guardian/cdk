@@ -124,6 +124,6 @@ It's wise to rebase it with `main` before working on it.
 
 ## Releasing
 
-We use [changesets](https://github.com/changesets/changesets) to automate releases.
+We use [changesets](https://github.com/changesets/changesets) to automate NPM releases.
 
 You will be prompted to add a changeset (if necessary) after raising your PR.
