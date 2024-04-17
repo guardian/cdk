@@ -124,22 +124,6 @@ It's wise to rebase it with `main` before working on it.
 
 ## Releasing
 
-✨ TL;DR We release new versions of the library to NPM automagically ✨
+We use [changesets](https://github.com/changesets/changesets) to automate releases.
 
-We use [semantic-release](https://github.com/semantic-release/semantic-release)
-and
-[guardian/actions-merge-release-changes-to-protected-branch](https://github.com/guardian/actions-merge-release-changes-to-protected-branch)
-to automate releases.
-
-To release a new version:
-
-1. Raise a PR. The PR title must follow the
-   [Angular](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)
-   / [Karma](http://karma-runner.github.io/6.1/dev/git-commit-msg.html) format.
-   Don't worry, CI checks this!
-1. Once reviewed and approved, merge your PR.
-1. Wait for the robots to:
-   - Use your structured commit to automatically determine the next version
-     number (following [semantic versioning](https://semver.org/)).
-   - Release a new version to npm.
-1. Enjoy a comment on your PR to inform you that your change has been released.
+You will be prompted to add a changeset (if necessary) after raising your PR.
