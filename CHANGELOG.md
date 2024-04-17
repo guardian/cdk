@@ -1,5 +1,18 @@
 # @guardian/cdk
 
+## 57.0.0
+
+### Major Changes
+
+- 7cc8591: BREAKING CHANGE:
+
+  Users of the GuDatabaseInstance class now need to explicitly opt-in/out of
+  DevX Backups via the devXBackups prop.
+
+### Minor Changes
+
+- 197228b: GuLambdaFunction uses JSON logging by default, for compatibility with ApplicationLogLevel
+
 ## 56.0.3
 
 ### Patch Changes
