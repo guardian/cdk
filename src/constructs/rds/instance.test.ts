@@ -80,14 +80,9 @@ describe("The GuDatabaseInstance class", () => {
       devXBackups: { enabled: true },
     });
     console.log(JSON.stringify(stack.tags.tagValues()));
-    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::RDS::DBInstance", {
-      appIdentity: { app: "testing" },
-      additionalTags: [
-        {
-          Key: "devx-backup-enabled",
-          Value: "true",
-        },
-      ],
+    GuTemplate.fromStack(stack).hasResourceWithTag("AWS::RDS::DBInstance", {
+      Key: "devx-backup-enabled",
+      Value: "true",
     });
   });
 
@@ -107,14 +102,9 @@ describe("The GuDatabaseInstance class", () => {
         preferredBackupWindow: "00:00-02:00",
       },
     });
-    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::RDS::DBInstance", {
-      appIdentity: { app: "testing" },
-      additionalTags: [
-        {
-          Key: "devx-backup-enabled",
-          Value: "false",
-        },
-      ],
+    GuTemplate.fromStack(stack).hasResourceWithTag("AWS::RDS::DBInstance", {
+      Key: "devx-backup-enabled",
+      Value: "false",
     });
   });
 

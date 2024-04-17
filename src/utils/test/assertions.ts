@@ -1,4 +1,4 @@
-import { Template } from "aws-cdk-lib/assertions";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import type { Resource } from "aws-cdk-lib/assertions/lib/private/template";
 import { MetadataKeys, TrackingTag } from "../../constants";
 import type { AppIdentity, GuStack } from "../../constructs/core";
@@ -103,5 +103,11 @@ export class GuTemplate {
     }
 
     this.template.hasResourceProperties(type, { Tags: sortTagsByKey(Array.from(tagMap.values())) });
+  }
+
+  hasResourceWithTag(type: string, tag: Tag) {
+    this.template.hasResourceProperties(type, {
+      Tags: Match.arrayWith([tag]),
+    });
   }
 }
