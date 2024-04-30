@@ -2,7 +2,6 @@ import type { App, CfnElement, StackProps } from "aws-cdk-lib";
 import { Annotations, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
-import { AwsBackupTag } from "../../aspects/aws-backup";
 import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
 import { CfnParameterReporter } from "../../aspects/cfn-parameter-reporter";
 import { Metadata } from "../../aspects/metadata";
@@ -46,15 +45,6 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
    * please do not override this.
    */
   withoutMetadata?: boolean;
-
-  /**
-   * Set to enable all resources in the stack for backup provided by https://github.com/guardian/aws-backup.
-   *
-   * @default false - backups are not enabled
-   *
-   * @see https://github.com/guardian/aws-backup
-   */
-  withBackup?: boolean;
 }
 
 /**
@@ -125,14 +115,7 @@ export class GuStack extends Stack implements StackStageIdentity {
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(scope: App, id: string, props: GuStackProps) {
-    const {
-      cloudFormationStackName = process.env.GU_CFN_STACK_NAME,
-      stack,
-      stage,
-      app,
-      withoutTags,
-      withBackup = false,
-    } = props;
+    const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, app, withoutTags } = props;
 
     super(scope, id, {
       ...props,
@@ -168,10 +151,6 @@ export class GuStack extends Stack implements StackStageIdentity {
 
     Aspects.of(this).add(new CfnIncludeReporter());
     Aspects.of(this).add(new CfnParameterReporter());
-
-    if (withBackup) {
-      Aspects.of(this).add(new AwsBackupTag());
-    }
   }
 
   /**
