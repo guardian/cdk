@@ -25,15 +25,13 @@ export interface GuDynamoTableProps extends TableProps {
   devXBackups: OptIn | OptOut;
 }
 
-/*
- * D
- */
-export class GuDynamoTable extends Table {
   /**
    * DeletionProtection is enabled by default for this Table.
    * We recommend enabling this enabled for all active DynamoDB tables.
    * The default can be overridden in the GuDynamoTable instantiation if needed eg: for table deletion.
    */
+  export class GuDynamoTable extends Table {
+
   constructor(scope: GuStack, id: string, props: GuDynamoTableProps) {
     super(scope, id, { deletionProtection: true, ...props });
     Tags.of(this).add("devx-backup-enabled", String(props.devXBackups.enabled));
