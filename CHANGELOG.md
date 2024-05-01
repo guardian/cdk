@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 57.1.0
+
+### Minor Changes
+
+- 8bde0ca: Add Dynamodb construct with default deletion protection and mandatory opt-in/opt-out setting for DevX-backup.
+
 ## 57.0.0
 
 ### Major Changes
