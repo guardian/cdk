@@ -56,7 +56,7 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
-    "@oclif/core": "3.26.5",
+    "@oclif/core": "3.26.6",
     "aws-sdk": "^2.1611.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.98.0",
