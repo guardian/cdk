@@ -1,4 +1,9 @@
-import { ApplicationListener, ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import {
+  ApplicationListener,
+  ApplicationProtocol,
+  ListenerAction,
+  SslPolicy,
+} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationListenerProps } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuCertificate } from "../../acm";
@@ -47,6 +52,7 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
     const mergedProps: GuApplicationListenerProps = {
       port: certificate ? 443 : 8080,
       protocol: certificate ? ApplicationProtocol.HTTPS : ApplicationProtocol.HTTP,
+      sslPolicy: SslPolicy.RECOMMENDED_TLS,
       ...props,
       certificates: certificate
         ? [

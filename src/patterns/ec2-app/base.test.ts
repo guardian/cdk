@@ -1,7 +1,7 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
-import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { type CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, MetadataKeys } from "../../constants";
 import { GuPrivateConfigBucketParameter } from "../../constructs/core";
 import { GuSecurityGroup } from "../../constructs/ec2";
@@ -1070,6 +1070,29 @@ describe("the GuEC2App pattern", function () {
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-2" })]),
       LoadBalancerAttributes: Match.arrayWith([Match.objectLike({ Key: "access_logs.s3.prefix", Value: "test-2" })]),
+    });
+  });
+
+  it("uses the latest security policy", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      instanceMetadataHopLimit: 2,
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+      SslPolicy: "ELBSecurityPolicy-TLS13-1-2-2021-06",
     });
   });
 });
