@@ -277,6 +277,24 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
         "Namespace": "AWS/Lambda",
         "Period": 60,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 0,
         "TreatMissingData": "notBreaching",
       },
@@ -616,6 +634,24 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
               "Stat": "Sum",
             },
             "ReturnData": false,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
           },
         ],
         "Threshold": 80,

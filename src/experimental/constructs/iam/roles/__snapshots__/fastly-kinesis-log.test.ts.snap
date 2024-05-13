@@ -126,6 +126,7 @@ exports[`The GuFastlyKinesisLogRole construct correctly wires up the policy 1`] 
       "Type": "AWS::IAM::Role",
     },
     "testStream8BCA7523": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RetentionPeriodHours": 24,
         "ShardCount": 1,
@@ -161,6 +162,7 @@ exports[`The GuFastlyKinesisLogRole construct correctly wires up the policy 1`] 
         ],
       },
       "Type": "AWS::Kinesis::Stream",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }
