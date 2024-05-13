@@ -20,6 +20,7 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
   },
   "Resources": {
     "KinesisStream46752A3E": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RetentionPeriodHours": 24,
         "ShardCount": 1,
@@ -51,6 +52,7 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
         ],
       },
       "Type": "AWS::Kinesis::Stream",
+      "UpdateReplacePolicy": "Retain",
     },
     "mylambdafunction8D341B54": {
       "DependsOn": [

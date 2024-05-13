@@ -155,6 +155,28 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
         "Namespace": "AWS/States",
         "Period": 3600,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
@@ -181,6 +203,28 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
         "Namespace": "AWS/States",
         "Period": 3600,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
