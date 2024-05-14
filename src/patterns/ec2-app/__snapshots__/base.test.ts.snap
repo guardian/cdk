@@ -88,6 +88,15 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           },
         },
         "MaxSize": "2",
+        "MetricsCollection": [
+          {
+            "Granularity": "1Minute",
+            "Metrics": [
+              "GroupTotalInstances",
+              "GroupInServiceInstances",
+            ],
+          },
+        ],
         "MinSize": "1",
         "Tags": [
           {
@@ -1095,6 +1104,15 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           },
         },
         "MaxSize": "2",
+        "MetricsCollection": [
+          {
+            "Granularity": "1Minute",
+            "Metrics": [
+              "GroupTotalInstances",
+              "GroupInServiceInstances",
+            ],
+          },
+        ],
         "MinSize": "1",
         "Tags": [
           {
