@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 58.1.1
+
+### Patch Changes
+
+- 1da0da9: Update aws-cdk to 2.141.0, aws-cdk-lib to 2.141.0, constructs to 10.3.0
+- c8400c9: Add useful ASG group metrics (TOTAL_INSTANCES, etc) by default
+
 ## 58.1.0
 
 ### Minor Changes
