@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@oclif/core": "3.26.6",
-    "aws-sdk": "^2.1629.0",
+    "aws-sdk": "^2.1634.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.98.0",
     "git-url-parse": "^14.0.0",
