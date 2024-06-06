@@ -127,19 +127,21 @@ export class GuLambdaFunction extends Function {
       logFormat = LoggingFormat.JSON,
     } = props;
 
-    const bucketName = bucketNamePath
-      ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
-      : GuDistributionBucketParameter.getInstance(scope).valueAsString;
+    const { stack, stage } = scope;
 
     const defaultEnvironmentVariables = {
-      STACK: scope.stack,
-      STAGE: scope.stage,
+      STACK: stack,
+      STAGE: stage,
       APP: app,
     };
 
+    const bucketName = bucketNamePath
+      ? StringParameter.fromStringParameterName(scope, "bucketoverride", bucketNamePath).stringValue
+      : GuDistributionBucketParameter.getInstance(scope).valueAsString;
     const bucket = Bucket.fromBucketName(scope, `${id}-bucket`, bucketName);
     const objectKey = withoutFilePrefix ? fileName : GuDistributable.getObjectKey(scope, { app }, { fileName });
     const code = Code.fromBucket(bucket, objectKey);
+
     super(scope, id, {
       ...props,
       logFormat,
