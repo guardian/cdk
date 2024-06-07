@@ -3,6 +3,7 @@ import { Duration } from "aws-cdk-lib";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Alias, Code, Function, LoggingFormat, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
+import { LogGroup } from "aws-cdk-lib/aws-logs";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { GuDistributable } from "../../types";
@@ -115,6 +116,7 @@ export class GuLambdaFunction extends Function {
   public readonly alias?: Alias;
 
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
+    const { stack, stage } = scope;
     const {
       app,
       fileName,
@@ -125,9 +127,16 @@ export class GuLambdaFunction extends Function {
       withoutFilePrefix = false,
       withoutArtifactUpload = false,
       logFormat = LoggingFormat.JSON,
-    } = props;
 
-    const { stack, stage } = scope;
+      /*
+      This default has a consequence that, within a single CFN stack,
+      each lambda function must have a unique Stage/Stack/App triple.
+      Else we'll create the same lambda twice, which is not possible.
+      This error will also be first seen at runtime, not at CDK synth time,
+      i.e. it has a long feedback loop.
+       */
+      functionName = [stage, stack, app].join("-"),
+    } = props;
 
     const defaultEnvironmentVariables = {
       STACK: stack,
@@ -142,8 +151,31 @@ export class GuLambdaFunction extends Function {
     const objectKey = withoutFilePrefix ? fileName : GuDistributable.getObjectKey(scope, { app }, { fileName });
     const code = Code.fromBucket(bucket, objectKey);
 
+    const logGroup = new LogGroup(scope, `${id}-log-group`, {
+      /*
+      Tooling such as https://github.com/guardian/cloudwatch-logs-management requires a /aws/lambda prefix.
+
+      Mimic the naming scheme used by AWS when creating an implicit log group: /aws/lambda/<function name>.
+      See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-loggingconfig.html#cfn-lambda-function-loggingconfig-loggroup.
+       */
+      logGroupName: `/aws/lambda/${functionName}`,
+      retention: 14,
+    });
+
     super(scope, id, {
       ...props,
+      functionName,
+
+      /*
+      TODO remove the managed policies that are added by default as they're not needed when an explicit log group is provided.
+
+      See:
+        - https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.Function.html#role
+        - https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AWSLambdaBasicExecutionRole.html
+        - https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AWSLambdaVPCAccessExecutionRole.html
+       */
+      logGroup,
+
       logFormat,
       environment: {
         ...props.environment,
@@ -182,6 +214,7 @@ export class GuLambdaFunction extends Function {
     }
 
     bucket.grantRead(this, objectKey);
+    logGroup.grantWrite(this);
 
     const ssmParamReadPolicies: PolicyStatement[] = [
       new ReadParametersByPath(scope, props),
@@ -191,5 +224,6 @@ export class GuLambdaFunction extends Function {
     ssmParamReadPolicies.map((policy) => this.addToRolePolicy(policy));
 
     AppIdentity.taggedConstruct(props, this);
+    AppIdentity.taggedConstruct(props, logGroup);
   }
 }
