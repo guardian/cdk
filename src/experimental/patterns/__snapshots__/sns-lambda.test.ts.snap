@@ -78,6 +78,9 @@ exports[`The GuSnsLambda pattern should create the correct resources for a new s
         "Handler": "my-lambda/handler",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "mylambdafunctionloggroup37C4E2CC",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -173,6 +176,19 @@ exports[`The GuSnsLambda pattern should create the correct resources for a new s
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "mylambdafunctionloggroup37C4E2CC",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -296,6 +312,37 @@ exports[`The GuSnsLambda pattern should create the correct resources for a new s
         },
       },
       "Type": "AWS::SNS::Subscription",
+    },
+    "mylambdafunctionloggroup37C4E2CC": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/my-lambda-function",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }

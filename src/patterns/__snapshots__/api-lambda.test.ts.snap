@@ -125,9 +125,13 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-testing",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdaloggroup1D59E0A8",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -260,6 +264,19 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdaloggroup1D59E0A8",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -537,7 +554,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": {
+    "lambdaapiDeployment8E95B5856bce64b56bb783d190c0255c57e8f7da": {
       "DependsOn": [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -557,7 +574,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
+          "Ref": "lambdaapiDeployment8E95B5856bce64b56bb783d190c0255c57e8f7da",
         },
         "RestApiId": {
           "Ref": "lambdaapiC1812993",
@@ -771,6 +788,37 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
       },
       "Type": "AWS::ApiGateway::Resource",
     },
+    "lambdaloggroup1D59E0A8": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-testing",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
   },
 }
 `;
@@ -840,9 +888,13 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-testing",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdaloggroup1D59E0A8",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -975,6 +1027,19 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdaloggroup1D59E0A8",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -1252,7 +1317,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": {
+    "lambdaapiDeployment8E95B5856bce64b56bb783d190c0255c57e8f7da": {
       "DependsOn": [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -1272,7 +1337,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
+          "Ref": "lambdaapiDeployment8E95B5856bce64b56bb783d190c0255c57e8f7da",
         },
         "RestApiId": {
           "Ref": "lambdaapiC1812993",
@@ -1435,6 +1500,37 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
         },
       },
       "Type": "AWS::ApiGateway::Resource",
+    },
+    "lambdaloggroup1D59E0A8": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-testing",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }
