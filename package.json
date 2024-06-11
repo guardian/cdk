@@ -43,7 +43,6 @@
     "aws-cdk": "2.141.0",
     "aws-cdk-lib": "2.141.0",
     "constructs": "10.3.0",
-    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
     "gh-pages": "^6.1.1",
@@ -72,10 +71,5 @@
     "aws-cdk": "2.141.0",
     "aws-cdk-lib": "2.141.0",
     "constructs": "10.3.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
