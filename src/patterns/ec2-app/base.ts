@@ -43,6 +43,7 @@ import {
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
+import {getUserPoolDomainPrefix} from "../../utils/cognito/cognito";
 
 export interface AccessLoggingProps {
   /**
@@ -573,11 +574,10 @@ export class GuEc2App extends Construct {
       // These help ensure domain is deterministic but also unique. Key
       // assumption is that app/stack/stage combo are unique within Guardian.
       const domainPrefix = `com-gu-${app.toLowerCase()}-${scope.stage.toLowerCase()}`;
-      const suffix = crypto.createHash("md5").update(domainPrefix).digest("hex");
 
       const userPoolDomain = userPool.addDomain("domain", {
         cognitoDomain: {
-          domainPrefix: `${domainPrefix}-${suffix}`,
+          domainPrefix: getUserPoolDomainPrefix(domainPrefix),
         },
       });
 
