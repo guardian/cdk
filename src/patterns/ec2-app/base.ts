@@ -42,7 +42,7 @@ import {
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
-import {getUserPoolDomainPrefix} from "../../utils/cognito/cognito";
+import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 
 export interface AccessLoggingProps {
   /**
