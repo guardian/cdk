@@ -14,8 +14,7 @@ export interface RiffRaffYaml {
 
 export type RiffRaffDeploymentName = string;
 
-export interface RiffRaffDeploymentProps {
-  type: string;
+interface BaseRiffRaffDeploymentProps {
   regions: Set<Region>;
   stacks: Set<StackTag>;
   app: string;
@@ -25,9 +24,30 @@ export interface RiffRaffDeploymentProps {
   actions?: string[];
 }
 
+export interface CloudformationRiffRaffDeploymentProps extends BaseRiffRaffDeploymentProps {
+  type: "cloud-formation";
+  contentDirectory: string;
+}
+
+export interface AmiRiffRaffDeploymentProps extends BaseRiffRaffDeploymentProps {
+  type: "ami-cloudformation-parameter";
+  parameters: {
+    amiTags: Record<string, string>;
+    amiEncrypted: boolean;
+    cloudFormationStackName: string;
+  };
+}
+
+export type RiffRaffDeploymentProps = CloudformationRiffRaffDeploymentProps | AmiRiffRaffDeploymentProps;
+
 export interface RiffRaffDeployment {
   name: RiffRaffDeploymentName;
   props: RiffRaffDeploymentProps;
+}
+
+export interface CloudformationRiffRaffDeployment {
+  name: RiffRaffDeploymentName;
+  props: CloudformationRiffRaffDeploymentProps;
 }
 
 /*
