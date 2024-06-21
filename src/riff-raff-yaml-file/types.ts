@@ -19,7 +19,7 @@ interface BaseRiffRaffDeploymentProps {
   stacks: Set<StackTag>;
   app: string;
   contentDirectory: string;
-  parameters: Record<string, string | boolean | Record<string, string>>;
+  parameters: Record<string, string | boolean | number | Record<string, string>>;
   dependencies?: RiffRaffDeploymentName[];
   actions?: string[];
 }
@@ -32,13 +32,40 @@ export interface CloudformationRiffRaffDeploymentProps extends BaseRiffRaffDeplo
 export interface AmiRiffRaffDeploymentProps extends BaseRiffRaffDeploymentProps {
   type: "ami-cloudformation-parameter";
   parameters: {
-    amiTags: Record<string, string>;
-    amiEncrypted: boolean;
-    cloudFormationStackName: string;
+    amiTags?: Record<string, string>;
+    amiEncrypted?: boolean;
+    cloudFormationStackName?: string;
+    amiParametersToTags?: Record<string, string>;
+    amiParameter?: string;
+    appendStageToCloudFormationStackName?: boolean;
+    cloudFormationStackByTags?: boolean;
+    prependStackToCloudFormationStackName?: boolean;
   };
 }
 
-export type RiffRaffDeploymentProps = CloudformationRiffRaffDeploymentProps | AmiRiffRaffDeploymentProps;
+export interface AutoScalingRiffRaffDeploymentProps extends BaseRiffRaffDeploymentProps {
+  type: "autoscaling";
+  parameters: {
+    bucket: string;
+    asgMigrationInProgress?: boolean;
+    bucketSsmKey?: string;
+    bucketSsmKeyStageParam?: Record<string, string>;
+    healthcheckGrace?: number;
+    prefixApp?: boolean;
+    prefixPackage?: boolean;
+    prefixStack?: boolean;
+    prefixStage?: boolean;
+    publicReadAcl?: boolean;
+    secondsToWait?: number;
+    terminationGrace?: number;
+    warmupGrace?: number;
+  };
+}
+
+export type RiffRaffDeploymentProps =
+  | AutoScalingRiffRaffDeploymentProps
+  | CloudformationRiffRaffDeploymentProps
+  | AmiRiffRaffDeploymentProps;
 
 export interface RiffRaffDeployment {
   name: RiffRaffDeploymentName;
