@@ -7,26 +7,30 @@ import { GuApiGatewayWithLambdaByPath } from "./api-multiple-lambdas";
 describe("The GuApiGatewayWithLambdaByPath pattern", () => {
   it("should create the correct resources with minimal config", () => {
     const stack = simpleGuStackForTesting();
-    const defaultProps = {
+
+    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       handler: "handler.ts",
       runtime: Runtime.NODEJS_14_X,
-      app: "testing",
-    };
-    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
-      ...defaultProps,
-      fileName: "my-app-1.zip",
+      app: "lambda-one",
+      fileName: "lambda-one.zip",
     });
     const lambdaTwo = new GuLambdaFunction(stack, "lambda-two", {
-      ...defaultProps,
-      fileName: "my-app-2.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_14_X,
+      app: "lambda-two",
+      fileName: "lambda-two.zip",
     });
     const lambdaThree = new GuLambdaFunction(stack, "lambda-three", {
-      ...defaultProps,
-      fileName: "my-app-3.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_14_X,
+      app: "lambda-three",
+      fileName: "lambda-three.zip",
     });
     const lambdaFour = new GuLambdaFunction(stack, "lambda-four", {
-      ...defaultProps,
-      fileName: "my-app-4.zip",
+      handler: "handler.ts",
+      runtime: Runtime.NODEJS_14_X,
+      app: "lambda-four",
+      fileName: "lambda-four.zip",
     });
     new GuApiGatewayWithLambdaByPath(stack, {
       app: "testing",

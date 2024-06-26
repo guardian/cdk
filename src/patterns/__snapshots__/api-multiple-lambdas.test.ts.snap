@@ -141,7 +141,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b": {
+    "RestApiDeployment180EC5035e9da980ef87cc0d093fe63b083a88c0": {
       "DependsOn": [
         "RestApitestalongpathGET4832AA08",
         "RestApitestalongpath289D7A7A",
@@ -167,7 +167,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b",
+          "Ref": "RestApiDeployment180EC5035e9da980ef87cc0d093fe63b083a88c0",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -740,18 +740,22 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-4.zip",
+          "S3Key": "test-stack/TEST/lambda-four/lambda-four.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "lambda-four",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-lambda-four",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdafourloggroup481C2C40",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -764,7 +768,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-four",
           },
           {
             "Key": "gu:cdk:version",
@@ -818,7 +822,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-four",
           },
           {
             "Key": "gu:cdk:version",
@@ -879,11 +883,24 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-4.zip",
+                      "/test-stack/TEST/lambda-four/lambda-four.zip",
                     ],
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdafourloggroup481C2C40",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -900,7 +917,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/lambda-four",
                   ],
                 ],
               },
@@ -923,7 +940,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/lambda-four/*",
                   ],
                 ],
               },
@@ -940,6 +957,37 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       },
       "Type": "AWS::IAM::Policy",
     },
+    "lambdafourloggroup481C2C40": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-lambda-four",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "lambda-four",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "lambdaoneA536F07A": {
       "DependsOn": [
         "lambdaoneServiceRoleDefaultPolicy8CBB4D33",
@@ -950,18 +998,22 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-1.zip",
+          "S3Key": "test-stack/TEST/lambda-one/lambda-one.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "lambda-one",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-lambda-one",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdaoneloggroup970643E1",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -974,7 +1026,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-one",
           },
           {
             "Key": "gu:cdk:version",
@@ -1036,11 +1088,24 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-1.zip",
+                      "/test-stack/TEST/lambda-one/lambda-one.zip",
                     ],
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdaoneloggroup970643E1",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -1057,7 +1122,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/lambda-one",
                   ],
                 ],
               },
@@ -1080,7 +1145,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/lambda-one/*",
                   ],
                 ],
               },
@@ -1128,7 +1193,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-one",
           },
           {
             "Key": "gu:cdk:version",
@@ -1150,6 +1215,37 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       },
       "Type": "AWS::IAM::Role",
     },
+    "lambdaoneloggroup970643E1": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-lambda-one",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "lambda-one",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "lambdathreeD95CE916": {
       "DependsOn": [
         "lambdathreeServiceRoleDefaultPolicy6BB3377A",
@@ -1160,18 +1256,22 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-3.zip",
+          "S3Key": "test-stack/TEST/lambda-three/lambda-three.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "lambda-three",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-lambda-three",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdathreeloggroup2C79ECD3",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -1184,7 +1284,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-three",
           },
           {
             "Key": "gu:cdk:version",
@@ -1238,7 +1338,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-three",
           },
           {
             "Key": "gu:cdk:version",
@@ -1299,11 +1399,24 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-3.zip",
+                      "/test-stack/TEST/lambda-three/lambda-three.zip",
                     ],
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdathreeloggroup2C79ECD3",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -1320,7 +1433,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/lambda-three",
                   ],
                 ],
               },
@@ -1343,7 +1456,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/lambda-three/*",
                   ],
                 ],
               },
@@ -1360,6 +1473,37 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       },
       "Type": "AWS::IAM::Policy",
     },
+    "lambdathreeloggroup2C79ECD3": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-lambda-three",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "lambda-three",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "lambdatwoAFC8CEF1": {
       "DependsOn": [
         "lambdatwoServiceRoleDefaultPolicy36A183D7",
@@ -1370,18 +1514,22 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-2.zip",
+          "S3Key": "test-stack/TEST/lambda-two/lambda-two.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "lambda-two",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-lambda-two",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdatwologgroupBC9FBF92",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -1394,7 +1542,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-two",
           },
           {
             "Key": "gu:cdk:version",
@@ -1448,7 +1596,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "lambda-two",
           },
           {
             "Key": "gu:cdk:version",
@@ -1509,11 +1657,24 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-2.zip",
+                      "/test-stack/TEST/lambda-two/lambda-two.zip",
                     ],
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdatwologgroupBC9FBF92",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -1530,7 +1691,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/lambda-two",
                   ],
                 ],
               },
@@ -1553,7 +1714,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/lambda-two/*",
                   ],
                 ],
               },
@@ -1569,6 +1730,37 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "lambdatwologgroupBC9FBF92": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-lambda-two",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "lambda-two",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }

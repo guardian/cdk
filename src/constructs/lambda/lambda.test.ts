@@ -1,7 +1,7 @@
 import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuLambdaFunction } from "./lambda";
 
@@ -269,5 +269,40 @@ describe("The GuLambdaFunction class", () => {
 
     Template.fromStack(stack).resourceCountIs("AWS::Lambda::Version", 1);
     Template.fromStack(stack).resourceCountIs("AWS::Lambda::Alias", 1);
+  });
+
+  it("should ship logs to a known log group", () => {
+    const stack = simpleGuStackForTesting();
+
+    const app = "my-lambda";
+
+    new GuLambdaFunction(stack, "my-lambda", {
+      fileName: `${app}.zip`,
+      handler: "handler.main",
+      runtime: Runtime.NODEJS_20_X,
+      app,
+    });
+
+    const template = Template.fromStack(stack);
+
+    // There is one log group...
+    template.resourceCountIs("AWS::Logs::LogGroup", 1);
+
+    // ...that is tagged correctly
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::Logs::LogGroup", {
+      appIdentity: { app },
+    });
+
+    const [logGroupLogicalId] = Object.keys(template.findResources("AWS::Logs::LogGroup"));
+
+    // ...and is connected to the lambda
+    template.resourceCountIs("AWS::Lambda::Function", 1);
+    template.hasResourceProperties("AWS::Lambda::Function", {
+      LoggingConfig: {
+        LogGroup: {
+          Ref: logGroupLogicalId,
+        },
+      },
+    });
   });
 });

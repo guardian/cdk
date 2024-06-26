@@ -38,9 +38,13 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-testing",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdaloggroup1D59E0A8",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -173,6 +177,19 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdaloggroup1D59E0A8",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "ssm:GetParametersByPath",
@@ -300,6 +317,37 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
+    "lambdaloggroup1D59E0A8": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-testing",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
   },
 }
 `;
@@ -342,9 +390,13 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
             "STAGE": "TEST",
           },
         },
+        "FunctionName": "TEST-test-stack-testing",
         "Handler": "handler.ts",
         "LoggingConfig": {
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "lambdaloggroup1D59E0A8",
+          },
         },
         "MemorySize": 512,
         "Role": {
@@ -479,6 +531,19 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
               ],
             },
             {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "lambdaloggroup1D59E0A8",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
               "Resource": {
@@ -532,6 +597,37 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "lambdaloggroup1D59E0A8": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/TEST-test-stack-testing",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "mylambdafunction8D341B54": {
       "Properties": {
