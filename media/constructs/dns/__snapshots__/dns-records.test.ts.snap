@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuCname construct should create the correct resources with minimal config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuCname",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "TestRecord": {
+      "Properties": {
+        "Name": "xyz.domain-name-for-your-application.example",
+        "RecordType": "CNAME",
+        "ResourceRecords": [
+          "apple.example.com",
+        ],
+        "Stage": "TEST",
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`The GuDnsRecordSet construct should create the correct resources with minimal config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuDnsRecordSet",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "TestRecord": {
+      "Properties": {
+        "Name": "banana.example.com",
+        "RecordType": "CNAME",
+        "ResourceRecords": [
+          "apple.example.com",
+        ],
+        "Stage": "TEST",
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
+    },
+  },
+}
+`;

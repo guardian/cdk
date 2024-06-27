@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuCertificate class should create a new certificate (which requires manual DNS changes) if hosted zone ids are not provided 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuCertificate",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "CertificateTesting28FCAC6D": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "DomainName": "domain-name-for-your-application.example",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/CertificateTesting",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
+
+exports[`The GuCertificate class should create a new certificate when hosted zone ids are provided 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuCertificate",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "CertificateTesting28FCAC6D": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "DomainName": "domain-name-for-your-application.example",
+        "DomainValidationOptions": [
+          {
+            "DomainName": "domain-name-for-your-application.example",
+            "HostedZoneId": "id123",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/CertificateTesting",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
