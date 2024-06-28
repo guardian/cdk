@@ -74,7 +74,10 @@ export class GuImageRecipe extends CfnImageRecipe {
       parentImage: props.parentImage ?? "arn:aws:imagebuilder:eu-west-1:aws:image/ubuntu-server-22-lts-arm64/x.x.x",
       name,
       version: props.version ?? "1.0.0",
-      components,
+      components: components.map(({ componentArn, parameters }) => ({
+        componentArn,
+        parameters,
+      })),
     });
   }
 }
