@@ -22,6 +22,7 @@ export class GuDistributionConfiguration extends CfnDistributionConfiguration {
       distributions: props.distributions ?? [
         {
           region: scope.region,
+          amiDistributionConfiguration: {},
         },
       ],
     });
