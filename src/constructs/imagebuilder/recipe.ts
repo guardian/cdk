@@ -71,7 +71,7 @@ export class GuImageRecipe extends CfnImageRecipe {
 
     super(scope, id, {
       ...props,
-      parentImage: props.parentImage ?? "arn:aws:imagebuilder:eu-west-1:aws:image/amazon-linux-2023-arm64/2024.6.7",
+      parentImage: props.parentImage ?? "arn:aws:imagebuilder:eu-west-1:aws:image/ubuntu-server-22-lts-arm64/x.x.x",
       name,
       version: props.version ?? "1.0.0",
       components,
