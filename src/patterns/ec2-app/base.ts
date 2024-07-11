@@ -586,7 +586,7 @@ export class GuEc2App extends Construct {
       const userPoolIdp = new UserPoolIdentityProviderGoogle(scope, "google-idp", {
         userPool: userPool,
         clientId: clientId.toString(),
-        clientSecret: clientSecret.toString(),
+        clientSecretValue: clientSecret,
         attributeMapping: {
           email: ProviderAttribute.GOOGLE_EMAIL,
           givenName: ProviderAttribute.GOOGLE_GIVEN_NAME,
