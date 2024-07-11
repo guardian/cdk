@@ -1,5 +1,13 @@
 # @guardian/cdk
 
+## 58.1.4
+
+### Patch Changes
+
+- c015419: Update aws-cdk to 2.148.0, aws-cdk-lib to 2.148.0, constructs to 10.3.0
+- 7051a7c: fix(ec2-app): Use `clientSecretValue` prop over deprecated `clientSecret`
+- 9cfabc6: fix(lambda): Use `loggingFormat` prop over deprecated `logFormat`
+
 ## 58.1.3
 
 ### Patch Changes
