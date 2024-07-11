@@ -124,7 +124,7 @@ export class GuLambdaFunction extends Function {
       bucketNamePath,
       withoutFilePrefix = false,
       withoutArtifactUpload = false,
-      logFormat = LoggingFormat.JSON,
+      loggingFormat = LoggingFormat.JSON,
     } = props;
 
     const bucketName = bucketNamePath
@@ -142,7 +142,7 @@ export class GuLambdaFunction extends Function {
     const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
-      logFormat,
+      loggingFormat,
       environment: {
         ...props.environment,
         ...defaultEnvironmentVariables,

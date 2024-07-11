@@ -79,7 +79,7 @@ describe("The GuDatabaseInstance class", () => {
       app: "testing",
       devXBackups: { enabled: true },
     });
-    console.log(JSON.stringify(stack.tags.tagValues()));
+
     GuTemplate.fromStack(stack).hasResourceWithTag("AWS::RDS::DBInstance", {
       Key: "devx-backup-enabled",
       Value: "true",
