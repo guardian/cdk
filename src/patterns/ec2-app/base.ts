@@ -300,7 +300,12 @@ export interface GuEc2AppProps extends AppIdentity {
   instanceMetadataHopLimit?: number;
 
   /**
-   * TODO
+   * Specify an update policy for the ASG created by this pattern.
+   *
+   * @see https://docs.aws.amazon.com/cdk/api/latest/docs/aws-autoscaling-readme.html#update-policy
+   *
+   * @defaultValue UpdatePolicy.none() - Cloudformation does not attempt to rotate instances in the ASG
+   * and must rely on riffraff to do so.
    */
   updatePolicy?: UpdatePolicy;
 }
