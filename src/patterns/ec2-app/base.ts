@@ -1,6 +1,6 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
 import { Duration, SecretValue, Tags } from "aws-cdk-lib";
-import type { BlockDevice } from "aws-cdk-lib/aws-autoscaling";
+import type { BlockDevice, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
 import {
   ProviderAttribute,
@@ -298,6 +298,11 @@ export interface GuEc2AppProps extends AppIdentity {
    * for example when sharing the instance profile with a docker container running on the instance.
    */
   instanceMetadataHopLimit?: number;
+
+  /**
+   * TODO
+   */
+  updatePolicy?: UpdatePolicy;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -352,6 +357,7 @@ export class GuEc2App extends Construct {
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       instanceMetadataHopLimit,
+      updatePolicy,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -400,6 +406,7 @@ export class GuEc2App extends Construct {
       ...(blockDevices && { blockDevices }),
       imageRecipe,
       httpPutResponseHopLimit: instanceMetadataHopLimit,
+      updatePolicy,
     });
 
     // This allows automatic shipping of instance Cloud Init logs when using the
