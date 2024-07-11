@@ -223,7 +223,7 @@ describe("The GuLambdaFunction class", () => {
       handler: "handler.ts",
       runtime: Runtime.JAVA_17,
       app: "testing",
-      logFormat: "JSON",
+      loggingFormat: LoggingFormat.JSON,
     });
 
     hasLoggingFormat(stack, LoggingFormat.JSON);
@@ -236,7 +236,7 @@ describe("The GuLambdaFunction class", () => {
       handler: "handler.ts",
       runtime: Runtime.JAVA_17,
       app: "testing",
-      logFormat: "Text",
+      loggingFormat: LoggingFormat.TEXT,
     });
 
     hasLoggingFormat(stack, LoggingFormat.TEXT);
