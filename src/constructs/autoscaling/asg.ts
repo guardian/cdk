@@ -94,6 +94,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       vpc,
       withoutImdsv2 = false,
       httpPutResponseHopLimit,
+      updatePolicy,
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -163,7 +164,9 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // A CDK AutoScalingGroup comes with this update policy, whereas the CFN autscaling group
     // leaves it to the default value, which is actually false.
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
-    cfnAsg.addDeletionOverride("UpdatePolicy");
+    if (!updatePolicy) {
+      cfnAsg.addDeletionOverride("UpdatePolicy");
+    }
 
     Tags.of(launchTemplate).add("App", app);
   }

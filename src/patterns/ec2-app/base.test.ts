@@ -1,5 +1,5 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
-import { BlockDeviceVolume, EbsDeviceVolumeType } from "aws-cdk-lib/aws-autoscaling";
+import { BlockDeviceVolume, EbsDeviceVolumeType, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
 import { type CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, MetadataKeys } from "../../constants";
@@ -1093,6 +1093,34 @@ describe("the GuEC2App pattern", function () {
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
       SslPolicy: "ELBSecurityPolicy-TLS13-1-2-2021-06",
+    });
+  });
+
+  it("has a defined UpdatePolicy when provided with one", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: "#!/bin/dev foobarbaz",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      instanceMetadataHopLimit: 2,
+      updatePolicy: UpdatePolicy.replacingUpdate(),
+    });
+
+    Template.fromStack(stack).hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      UpdatePolicy: {
+        AutoScalingReplacingUpdate: {
+          WillReplace: true,
+        },
+      },
     });
   });
 });
