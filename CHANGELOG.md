@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 58.2.0
+
+### Minor Changes
+
+- 59ffa9d: feat(asg): Allow setting the UpdatePolicy on ASGs provisioned by our EC2 patterns
+- 689b59a: Bump @guardian/tsconfig to 1.0.0 and specifically set moduleResolution to "node"
+
 ## 58.1.4
 
 ### Patch Changes
