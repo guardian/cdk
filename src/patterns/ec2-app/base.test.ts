@@ -1153,5 +1153,7 @@ UserData from accessed construct`);
         },
       },
     });
+
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

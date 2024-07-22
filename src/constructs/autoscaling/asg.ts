@@ -175,8 +175,8 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
   }
 
   signalOnHealthyTargetGroup(targetGroup: ApplicationTargetGroup): void {
-    const port = (targetGroup as unknown as CfnTargetGroup).port;
-    const logicalId = (this as unknown as CfnAutoScalingGroup).logicalId;
+    const port = (targetGroup.node.defaultChild as unknown as CfnTargetGroup).port;
+    const logicalId = (this.node.defaultChild as unknown as CfnAutoScalingGroup).logicalId;
 
     // Poll the ALB and wait for the instance to appear as healthy
     this.userData.addCommands(`
