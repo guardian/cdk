@@ -115,6 +115,11 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             "Value": "guardian/cdk",
           },
           {
+            "Key": "gu:rotated-by",
+            "PropagateAtLaunch": true,
+            "Value": "riff-raff",
+          },
+          {
             "Key": "LogKinesisStreamName",
             "PropagateAtLaunch": true,
             "Value": {
@@ -1129,6 +1134,11 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
             "Key": "gu:repo",
             "PropagateAtLaunch": true,
             "Value": "guardian/cdk",
+          },
+          {
+            "Key": "gu:rotated-by",
+            "PropagateAtLaunch": true,
+            "Value": "riff-raff",
           },
           {
             "Key": "LogKinesisStreamName",

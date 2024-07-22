@@ -203,7 +203,11 @@ export class RiffRaffYamlFile {
 
   private isAutoscalingDeployStack(asg: GuAutoScalingGroup): boolean {
     const cfnAsg = asg.node.defaultChild as unknown as CfnAutoScalingGroup;
-    return cfnAsg.cfnOptions.updatePolicy === undefined;
+    return (
+      cfnAsg.cfnOptions.updatePolicy !== undefined &&
+      (cfnAsg.cfnOptions.updatePolicy.autoScalingReplacingUpdate !== undefined ||
+        cfnAsg.cfnOptions.updatePolicy.autoScalingRollingUpdate !== undefined)
+    );
   }
 
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
@@ -260,7 +264,7 @@ export class RiffRaffYamlFile {
           });
 
           autoscalingGroups
-            .filter((_) => this.isAutoscalingDeployStack(_)) // Riffraff ASG Deployments aren't required for ASGs with an UpdatePolicy
+            .filter((_) => !this.isAutoscalingDeployStack(_)) // Riffraff ASG Deployments aren't required for ASGs with an UpdatePolicy
             .forEach((asg) => {
               const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
               deployments.set(asgDeployment.name, asgDeployment.props);

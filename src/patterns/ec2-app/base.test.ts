@@ -625,13 +625,27 @@ UserData from accessed construct`);
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "PlayApp" },
       propagateAtLaunch: true,
-      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
+      additionalTags: [
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        {
+          Key: "gu:rotated-by",
+          Value: "riff-raff",
+          PropagateAtLaunch: true,
+        },
+      ],
     });
 
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "NodeApp" },
       propagateAtLaunch: true,
-      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
+      additionalTags: [
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        {
+          Key: "gu:rotated-by",
+          Value: "riff-raff",
+          PropagateAtLaunch: true,
+        },
+      ],
     });
   });
 
@@ -718,6 +732,11 @@ UserData from accessed construct`);
       additionalTags: [
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "test-gu-ec2-app.service" },
+        {
+          Key: "gu:rotated-by",
+          Value: "riff-raff",
+          PropagateAtLaunch: true,
+        },
       ],
     });
   });
@@ -747,6 +766,11 @@ UserData from accessed construct`);
       additionalTags: [
         { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
+        {
+          Key: "gu:rotated-by",
+          Value: "riff-raff",
+          PropagateAtLaunch: true,
+        },
       ],
     });
   });
@@ -801,7 +825,14 @@ UserData from accessed construct`);
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app },
       propagateAtLaunch: true,
-      additionalTags: [{ Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } }],
+      additionalTags: [
+        { Key: MetadataKeys.LOG_KINESIS_STREAM_NAME, Value: { Ref: "LoggingStreamName" } },
+        {
+          Key: "gu:rotated-by",
+          Value: "riff-raff",
+          PropagateAtLaunch: true,
+        },
+      ],
     });
   });
 

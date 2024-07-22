@@ -40,6 +40,13 @@ describe("The GuAutoScalingGroup", () => {
     template.hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
       appIdentity: { app: "testing" },
       propagateAtLaunch: true,
+      additionalTags: [
+        {
+          Key: "gu:rotated-by",
+          Value: "riff-raff",
+          PropagateAtLaunch: true,
+        },
+      ],
     });
   });
 
