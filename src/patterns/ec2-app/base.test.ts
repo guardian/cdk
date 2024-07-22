@@ -1123,4 +1123,32 @@ UserData from accessed construct`);
       },
     });
   });
+
+  it("set detailed monitoring on the ASG launch template when set", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: UserData.forLinux(),
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      enabledDetailedInstanceMonitoring: true,
+    });
+    Template.fromStack(stack).hasResource("AWS::EC2::LaunchTemplate", {
+      Properties: {
+        LaunchTemplateData: {
+          Monitoring: {
+            Enabled: true,
+          },
+        },
+      },
+    });
+  });
 });
