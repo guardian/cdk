@@ -167,7 +167,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
-      userData: "SomeUserData",
+      userData: UserData.forLinux(),
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       minimumInstances: 1,
@@ -194,7 +194,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
-      userData: "UserData",
+      userData: UserData.forLinux(),
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       role: new GuInstanceRole(stack, {
@@ -243,7 +243,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
-      userData: "SomeUserData",
+      userData: UserData.forLinux(),
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       minimumInstances: 3,
@@ -260,7 +260,7 @@ describe("The GuAutoScalingGroup", () => {
 
     new GuAutoScalingGroup(stack, "AutoscalingGroup", {
       app: "TestApp",
-      userData: "SomeUserData",
+      userData: UserData.forLinux(),
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       minimumInstances: 2,

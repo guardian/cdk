@@ -1,8 +1,8 @@
 import { Tags, Token } from "aws-cdk-lib";
 import { AutoScalingGroup, GroupMetric, GroupMetrics } from "aws-cdk-lib/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
-import { LaunchTemplate, OperatingSystemType, UserData } from "aws-cdk-lib/aws-ec2";
-import type { InstanceType, ISecurityGroup, MachineImageConfig } from "aws-cdk-lib/aws-ec2";
+import { LaunchTemplate, OperatingSystemType } from "aws-cdk-lib/aws-ec2";
+import type { InstanceType, ISecurityGroup, MachineImageConfig, UserData } from "aws-cdk-lib/aws-ec2";
 import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { GuAsgCapacity } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
@@ -45,7 +45,7 @@ export interface GuAutoScalingGroupProps
    */
   imageRecipe?: string | AmigoProps;
   instanceType: InstanceType;
-  userData: UserData | string;
+  userData: UserData;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   withoutImdsv2?: boolean;
@@ -90,7 +90,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       maximumInstances,
       role = new GuInstanceRole(scope, { app }),
       targetGroup,
-      userData: userDataLike,
+      userData,
       vpc,
       withoutImdsv2 = false,
       httpPutResponseHopLimit,
@@ -103,8 +103,6 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
         "minimumInstances is defined via a Mapping, but maximumInstances is not. Create maximumInstances via a Mapping too.",
       );
     }
-
-    const userData = userDataLike instanceof UserData ? userDataLike : UserData.custom(userDataLike);
 
     // Generate an ID unique to this app
     const launchTemplateId = `${scope.stack}-${scope.stage}-${app}`;

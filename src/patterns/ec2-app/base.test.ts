@@ -1,6 +1,6 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { BlockDeviceVolume, EbsDeviceVolumeType, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
-import { InstanceClass, InstanceSize, InstanceType, Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, Peer, Port, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
 import { type CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, MetadataKeys } from "../../constants";
 import { GuPrivateConfigBucketParameter } from "../../constructs/core";
@@ -18,7 +18,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -37,7 +37,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("1.2.3.4/5")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -56,7 +56,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("10.0.0.0/8")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -159,7 +159,7 @@ describe("the GuEC2App pattern", function () {
         },
         unhealthyInstancesAlarm: false,
       },
-      userData: "",
+      userData: UserData.forLinux(),
     });
     //The shape of this alarm is tested at construct level
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^High5xxPercentageAlarm.+/);
@@ -187,7 +187,7 @@ describe("the GuEC2App pattern", function () {
         },
         unhealthyInstancesAlarm: false,
       },
-      userData: "",
+      userData: UserData.forLinux(),
     });
     //The shape of this alarm is tested at construct level
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^High4xxPercentageAlarm.+/);
@@ -212,7 +212,7 @@ describe("the GuEC2App pattern", function () {
         http5xxAlarm: false,
         unhealthyInstancesAlarm: true,
       },
-      userData: "",
+      userData: UserData.forLinux(),
     });
     //The shape of this alarm is tested at construct level
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^UnhealthyInstancesAlarm.+/);
@@ -237,7 +237,7 @@ describe("the GuEC2App pattern", function () {
         http5xxAlarm: false,
         unhealthyInstancesAlarm: false,
       },
-      userData: "",
+      userData: UserData.forLinux(),
     });
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 0);
   });
@@ -257,7 +257,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
     });
 
     const template = Template.fromStack(stack);
@@ -306,7 +306,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::SecurityGroup", {
@@ -339,7 +339,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
-          userData: "",
+          userData: UserData.forLinux(),
         }),
     ).toThrowError(
       "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public.",
@@ -363,7 +363,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
-          userData: "",
+          userData: UserData.forLinux(),
         }),
     ).toThrowError(
       "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted.",
@@ -385,7 +385,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       roleConfiguration: {
         withoutLogShipping: true,
         additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
@@ -490,16 +490,15 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "UserData from pattern declaration",
+      userData: UserData.forLinux({ shebang: "#!/user/data/from/pattern" }),
     });
 
-    expect(pattern.autoScalingGroup.userData).toEqual({ lines: ["UserData from pattern declaration"] });
+    expect(pattern.autoScalingGroup.userData.render()).toEqual(`#!/user/data/from/pattern`);
 
     pattern.autoScalingGroup.addUserData("UserData from accessed construct");
 
-    expect(pattern.autoScalingGroup.userData).toEqual({
-      lines: ["UserData from pattern declaration", "UserData from accessed construct"],
-    });
+    expect(pattern.autoScalingGroup.userData.render()).toEqual(`#!/user/data/from/pattern
+UserData from accessed construct`);
   });
 
   it("users can optionally configure block devices", function () {
@@ -517,7 +516,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "UserData from pattern declaration",
+      userData: UserData.forLinux(),
       blockDevices: [
         {
           deviceName: "/dev/sda1",
@@ -558,7 +557,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "UserData from pattern declaration",
+      userData: UserData.forLinux(),
     });
 
     const cfnLb = pattern.loadBalancer.node.defaultChild as CfnLoadBalancer;
@@ -597,7 +596,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "node-app.code.example.com",
       },
@@ -612,7 +611,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "play-app.code.example.com",
       },
@@ -651,7 +650,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
 
@@ -680,7 +679,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       accessLogging: { enabled: false },
     });
 
@@ -709,7 +708,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       applicationLogging: { enabled: true },
     });
 
@@ -738,7 +737,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       applicationLogging: { enabled: true, systemdUnitName: "not-my-app-name" },
     });
 
@@ -768,7 +767,7 @@ describe("the GuEC2App pattern", function () {
           minimumInstances: 1,
         },
         monitoringConfiguration: { noMonitoring: true },
-        userData: "",
+        userData: UserData.forLinux(),
         applicationLogging: { enabled: true },
         roleConfiguration: {
           withoutLogShipping: true,
@@ -795,7 +794,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       accessLogging: { enabled: false },
     });
 
@@ -823,7 +822,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
-      userData: "",
+      userData: UserData.forLinux(),
       accessLogging: { enabled: false },
       googleAuth: {
         enabled: true,
@@ -864,7 +863,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
-          userData: "",
+          userData: UserData.forLinux(),
           accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
@@ -894,7 +893,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
-          userData: "",
+          userData: UserData.forLinux(),
           accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
@@ -924,7 +923,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
-          userData: "",
+          userData: UserData.forLinux(),
           accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
@@ -943,7 +942,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -968,7 +967,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -996,7 +995,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -1028,7 +1027,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -1048,7 +1047,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -1081,7 +1080,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
@@ -1098,13 +1097,14 @@ describe("the GuEC2App pattern", function () {
 
   it("has a defined UpdatePolicy when provided with one", function () {
     const stack = simpleGuStackForTesting();
+
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
