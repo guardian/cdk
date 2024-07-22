@@ -9,7 +9,7 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { Port } from "aws-cdk-lib/aws-ec2";
+import { Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
@@ -131,7 +131,7 @@ export interface GuEc2AppProps extends AppIdentity {
   /**
    * User data for the autoscaling group.
    */
-  userData: GuUserDataProps | string;
+  userData: GuUserDataProps | UserData;
   /**
    * Network access restrictions for your load balancer.
    *
@@ -355,7 +355,7 @@ export class GuEc2App extends Construct {
       monitoringConfiguration,
       roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
-      userData,
+      userData: userDataLike,
       withoutImdsv2,
       imageRecipe,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
@@ -376,6 +376,8 @@ export class GuEc2App extends Construct {
       );
     }
 
+    const userData = userDataLike instanceof UserData ? userDataLike : new GuUserData(scope, { ...userDataLike, app });
+
     AppAccess.validate(access);
 
     const certificate =
@@ -388,7 +390,7 @@ export class GuEc2App extends Construct {
         : undefined;
 
     const maybePrivateConfigPolicy =
-      typeof userData !== "string" && userData.configuration
+      userData instanceof GuUserData && userData.configuration
         ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
         : [];
 
@@ -406,7 +408,7 @@ export class GuEc2App extends Construct {
       withoutImdsv2,
       role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
-      userData: typeof userData !== "string" ? new GuUserData(scope, { app, ...userData }).userData : userData,
+      userData: userData instanceof GuUserData ? userData.userData : userData,
       vpcSubnets: { subnets: privateSubnets },
       ...(blockDevices && { blockDevices }),
       imageRecipe,

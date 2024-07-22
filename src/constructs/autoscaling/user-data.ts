@@ -22,6 +22,7 @@ export interface GuUserDataProps {
  */
 export class GuUserData {
   private readonly _userData: UserData;
+  readonly configuration?: GuPrivateS3ConfigurationProps;
 
   get userData(): UserData {
     return this._userData;
@@ -64,6 +65,7 @@ export class GuUserData {
 
   constructor(scope: GuStack, props: GuUserDataPropsWithApp) {
     this._userData = UserData.forLinux();
+    this.configuration = props.configuration;
 
     if (props.configuration) {
       this.downloadConfiguration(scope, props.app, props.configuration);

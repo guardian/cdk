@@ -1,5 +1,5 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
-import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuNodeApp, GuPlayApp, GuPlayWorkerApp } from "./framework";
@@ -12,7 +12,7 @@ describe("Framework level EC2 app patterns", () => {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
         hostedZoneId: "id123",
@@ -34,7 +34,7 @@ describe("Framework level EC2 app patterns", () => {
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
         hostedZoneId: "id123",
@@ -55,7 +55,7 @@ describe("Framework level EC2 app patterns", () => {
       app: "PlayApp",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
-      userData: "#!/bin/dev foobarbaz",
+      userData: UserData.forLinux(),
       certificateProps: {
         domainName: "code-guardian.com",
         hostedZoneId: "id123",

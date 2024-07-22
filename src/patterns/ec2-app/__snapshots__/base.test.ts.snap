@@ -966,7 +966,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             },
           ],
           "UserData": {
-            "Fn::Base64": "#!/bin/dev foobarbaz",
+            "Fn::Base64": "#!/bin/bash",
           },
         },
         "TagSpecifications": [
@@ -1861,7 +1861,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
             },
           ],
           "UserData": {
-            "Fn::Base64": "#!/bin/dev foobarbaz",
+            "Fn::Base64": "#!/bin/bash",
           },
         },
         "TagSpecifications": [
