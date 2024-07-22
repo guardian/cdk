@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
+import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
@@ -200,6 +201,11 @@ export class RiffRaffYamlFile {
     return cdkStack.dependencies.filter((_) => _ instanceof GuStack) as GuStack[];
   }
 
+  private isAutoscalingDeployStack(asg: GuAutoScalingGroup): boolean {
+    const cfnAsg = asg.node.defaultChild as unknown as CfnAutoScalingGroup;
+    return cfnAsg.cfnOptions.updatePolicy === undefined;
+  }
+
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
     this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
@@ -253,10 +259,12 @@ export class RiffRaffYamlFile {
             deployments.set(lambdaDeployment.name, lambdaDeployment.props);
           });
 
-          autoscalingGroups.forEach((asg) => {
-            const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
-            deployments.set(asgDeployment.name, asgDeployment.props);
-          });
+          autoscalingGroups
+            .filter((_) => this.isAutoscalingDeployStack(_)) // Riffraff ASG Deployments aren't required for ASGs with an UpdatePolicy
+            .forEach((asg) => {
+              const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
+              deployments.set(asgDeployment.name, asgDeployment.props);
+            });
 
           deployments.set(
             cfnDeployment.name,
