@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
+import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
@@ -193,7 +194,12 @@ export class RiffRaffYamlFile {
   }
 
   private getAutoScalingGroups(cdkStack: GuStack): GuAutoScalingGroup[] {
-    return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
+    const asgs = cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
+
+    return asgs.filter((asg) => {
+      const cfnAsg = asg.node.defaultChild as CfnAutoScalingGroup;
+      return cfnAsg.cfnOptions.updatePolicy === undefined;
+    });
   }
 
   private getGuStackDependencies(cdkStack: GuStack): GuStack[] {
