@@ -50,6 +50,7 @@ export interface GuAutoScalingGroupProps
   targetGroup?: ApplicationTargetGroup;
   withoutImdsv2?: boolean;
   httpPutResponseHopLimit?: number;
+  enabledDetailedInstanceMonitoring?: boolean;
 }
 
 /**
@@ -95,6 +96,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       withoutImdsv2 = false,
       httpPutResponseHopLimit,
       updatePolicy,
+      enabledDetailedInstanceMonitoring,
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -108,6 +110,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     const launchTemplateId = `${scope.stack}-${scope.stage}-${app}`;
     const launchTemplate = new LaunchTemplate(scope, launchTemplateId, {
       blockDevices,
+      detailedMonitoring: enabledDetailedInstanceMonitoring,
       instanceType,
       machineImage: {
         getImage: (): MachineImageConfig => {
