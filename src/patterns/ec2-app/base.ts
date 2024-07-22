@@ -486,6 +486,8 @@ export class GuEc2App extends Construct {
       );
     }
 
+    // When an update policy is provided, we want to configure our instances
+    // to send a signal to Cloudformation when they are considered healthy by the target group.
     if (updatePolicy) {
       autoScalingGroup.signalOnHealthyTargetGroup(targetGroup);
     }

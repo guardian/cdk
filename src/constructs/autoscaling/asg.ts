@@ -141,6 +141,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       maxCapacity: maximumInstances ?? minimumInstances * 2,
       minCapacity: minimumInstances,
       groupMetrics: groupMetrics,
+      signals: updatePolicy ? Signals.waitForAll() : undefined,
 
       // Omit userData, instanceType, blockDevices & role from asgProps
       // As this are specified by the LaunchTemplate and must not be duplicated
@@ -148,7 +149,6 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       instanceType: undefined,
       role: undefined,
       userData: undefined,
-      signals: updatePolicy ? Signals.waitForAll() : undefined,
     };
 
     super(scope, id, asgProps);
@@ -180,16 +180,13 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
 
     // Poll the ALB and wait for the instance to appear as healthy
     this.userData.addCommands(`
-        TOKEN=$(curl -X PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 1800")
-        INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id -H "X-aws-ec2-metadata-token: $TOKEN")
-
         until [ "$state" == "\\"healthy\\"" ]; do
           echo "Instance not yet healthy within target group. Sleeping for 10 seconds."
           sleep 10
           state=$(aws elbv2 describe-target-health \
                       --target-group-arn ${targetGroup.targetGroupArn} \
                       --region ${this.stack.region} \
-                      --targets Id=$INSTANCE_ID,Port=${port} \
+                      --targets Id=$(ec2metadata --instance-id),Port=${port} \
                       --query "TargetHealthDescriptions[0].TargetHealth.State")
           echo "Current state $state."
         done
