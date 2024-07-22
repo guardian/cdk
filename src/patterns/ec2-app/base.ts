@@ -1,6 +1,6 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
 import { Duration, SecretValue, Tags } from "aws-cdk-lib";
-import type { BlockDevice, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
 import {
   ProviderAttribute,
@@ -13,7 +13,7 @@ import { Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
@@ -39,8 +39,8 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
-import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
+import { AppAccess } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 
@@ -365,6 +365,8 @@ export class GuEc2App extends Construct {
       updatePolicy,
     } = props;
 
+    const { region, stackId } = scope;
+
     super(scope, app); // The assumption is `app` is unique
 
     // We should really prevent users from doing this via the type system,
@@ -472,6 +474,73 @@ export class GuEc2App extends Construct {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
+
+    if (updatePolicy) {
+      const { userData, role } = autoScalingGroup;
+      const cfnAsg = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+
+      const policy = new Policy(scope, "SignalResourcePolicy", {
+        statements: [
+          new PolicyStatement({
+            actions: ["cloudformation:SignalResource"],
+            effect: Effect.ALLOW,
+            resources: [stackId],
+          }),
+          new PolicyStatement({
+            actions: ["elasticloadbalancing:DescribeTargetHealth"],
+            effect: Effect.ALLOW,
+            resources: [loadBalancer.loadBalancerArn],
+          }),
+        ],
+      });
+      policy.attachToRole(role);
+
+      userData.addCommands(
+        `
+      INSTANCE_ID=$(ec2metadata --instance-id)
+
+      STATE=$(
+        aws elbv2 describe-target-health \
+          --target-group-arn ${targetGroup.targetGroupArn} \
+          --region ${region} \
+          --targets Id=$INSTANCE_ID,Port=${applicationPort} \
+          --query "TargetHealthDescriptions[0].TargetHealth.State")
+      )
+
+      until [ "$STATE" == "\\"healthy\\"" ]; do
+        echo "Instance not yet healthy within target group. Current state $state. Sleeping..."
+        sleep 5;
+
+        STATE=$(
+          aws elbv2 describe-target-health \
+            --target-group-arn ${targetGroup.targetGroupArn} \
+            --region ${region} \
+            --targets Id=$INSTANCE_ID,Port=${applicationPort} \
+            --query "TargetHealthDescriptions[0].TargetHealth.State")
+        )
+      done
+      `,
+      );
+
+      userData.addOnExitCommands(
+        `
+        cfn-signal --stack ${stackId} \
+          --resource ${cfnAsg.logicalId} \
+          --region ${region} \
+          --exit-code $exitCode || echo 'Failed to send Cloudformation Signal
+        `,
+      );
+
+      cfnAsg.cfnOptions.creationPolicy = {
+        autoScalingCreationPolicy: {
+          minSuccessfulInstancesPercent: 100,
+        },
+        resourceSignal: {
+          count: 2,
+          timeout: Duration.minutes(15).toIsoString(),
+        },
+      };
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
