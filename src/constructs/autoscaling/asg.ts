@@ -1,9 +1,10 @@
 import { Tags, Token } from "aws-cdk-lib";
-import { AutoScalingGroup, GroupMetric, GroupMetrics } from "aws-cdk-lib/aws-autoscaling";
+import { AutoScalingGroup, GroupMetric, GroupMetrics, Signals } from "aws-cdk-lib/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { LaunchTemplate, OperatingSystemType } from "aws-cdk-lib/aws-ec2";
 import type { InstanceType, ISecurityGroup, MachineImageConfig, UserData } from "aws-cdk-lib/aws-ec2";
-import type { ApplicationTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { ApplicationTargetGroup, CfnTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { GuAsgCapacity } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
@@ -147,6 +148,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       instanceType: undefined,
       role: undefined,
       userData: undefined,
+      signals: updatePolicy ? Signals.waitForAll() : undefined,
     };
 
     super(scope, id, asgProps);
@@ -164,8 +166,59 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     // { UpdatePolicy: { autoScalingScheduledAction: { IgnoreUnmodifiedGroupSizeProperties: true }}
     if (!updatePolicy) {
       cfnAsg.addDeletionOverride("UpdatePolicy");
+      Tags.of(this).add("gu:rotated-by", "riff-raff");
+    } else {
+      Tags.of(this).add("gu:rotated-by", "cloudformation");
     }
 
     Tags.of(launchTemplate).add("App", app);
+  }
+
+  signalOnHealthyTargetGroup(targetGroup: ApplicationTargetGroup): void {
+    const port = (targetGroup as unknown as CfnTargetGroup).port;
+    const logicalId = (this as unknown as CfnAutoScalingGroup).logicalId;
+
+    // Poll the ALB and wait for the instance to appear as healthy
+    this.userData.addCommands(`
+        TOKEN=$(curl -X PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 1800")
+        INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id -H "X-aws-ec2-metadata-token: $TOKEN")
+
+        until [ "$state" == "\\"healthy\\"" ]; do
+          echo "Instance not yet healthy within target group. Sleeping for 10 seconds."
+          sleep 10
+          state=$(aws elbv2 describe-target-health \
+                      --target-group-arn ${targetGroup.targetGroupArn} \
+                      --region ${this.stack.region} \
+                      --targets Id=$INSTANCE_ID,Port=${port} \
+                      --query "TargetHealthDescriptions[0].TargetHealth.State")
+          echo "Current state $state."
+        done
+      `);
+
+    // Add an exit trap that signals the Cloudformation stack once the instance is healthy (or unhealthy in the case of an error)
+    this.userData.addOnExitCommands(
+      `
+        cfn-signal --stack ${this.stack.stackId} \
+          --resource ${logicalId} \
+          --region ${this.stack.region} \
+          --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
+        `,
+    );
+
+    this.addToRolePolicy(
+      new PolicyStatement({
+        actions: ["cloudformation:SignalResource"],
+        resources: [this.stack.stackId],
+        effect: Effect.ALLOW,
+      }),
+    );
+
+    this.addToRolePolicy(
+      new PolicyStatement({
+        actions: ["elasticloadbalancing:DescribeTargetHealth"],
+        resources: [targetGroup.targetGroupArn],
+        effect: Effect.ALLOW,
+      }),
+    );
   }
 }
