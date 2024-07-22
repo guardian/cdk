@@ -1,6 +1,6 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
 import { Duration, SecretValue, Tags } from "aws-cdk-lib";
-import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import type { BlockDevice, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
 import {
   ProviderAttribute,
