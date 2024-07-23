@@ -1,3 +1,4 @@
+import type { Duration } from "aws-cdk-lib";
 import { Tags, Token } from "aws-cdk-lib";
 import { AutoScalingGroup, GroupMetric, GroupMetrics } from "aws-cdk-lib/aws-autoscaling";
 import type { AutoScalingGroupProps, CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
@@ -51,6 +52,7 @@ export interface GuAutoScalingGroupProps
   withoutImdsv2?: boolean;
   httpPutResponseHopLimit?: number;
   enabledDetailedInstanceMonitoring?: boolean;
+  defaultInstanceWarmup?: Duration;
 }
 
 /**
@@ -97,6 +99,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       httpPutResponseHopLimit,
       updatePolicy,
       enabledDetailedInstanceMonitoring,
+      defaultInstanceWarmup,
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -137,7 +140,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       launchTemplate.connections.addSecurityGroup(sg),
     );
 
-    const asgProps = {
+    const asgProps: AutoScalingGroupProps = {
       ...props,
       launchTemplate,
       maxCapacity: maximumInstances ?? minimumInstances * 2,
@@ -150,6 +153,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       instanceType: undefined,
       role: undefined,
       userData: undefined,
+      defaultInstanceWarmup,
     };
 
     super(scope, id, asgProps);
