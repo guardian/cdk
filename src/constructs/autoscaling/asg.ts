@@ -141,7 +141,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       maxCapacity: maximumInstances ?? minimumInstances * 2,
       minCapacity: minimumInstances,
       groupMetrics: groupMetrics,
-      signals: updatePolicy ? Signals.waitForAll() : undefined,
+      signals: updatePolicy ? signals ?? Signals.waitForAll() : undefined,
 
       // Omit userData, instanceType, blockDevices & role from asgProps
       // As this are specified by the LaunchTemplate and must not be duplicated
