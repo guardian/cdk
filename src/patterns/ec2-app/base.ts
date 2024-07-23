@@ -308,6 +308,13 @@ export interface GuEc2AppProps extends AppIdentity {
    * and must rely on riffraff to do so.
    */
   updatePolicy?: UpdatePolicy;
+
+  /**
+   * This setting configures the launch template to enable or disable detailed monitoring on instances.
+   *
+   * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-monitoring.html
+   */
+  enabledDetailedInstanceMonitoring?: boolean;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -363,6 +370,7 @@ export class GuEc2App extends Construct {
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       instanceMetadataHopLimit,
       updatePolicy,
+      enabledDetailedInstanceMonitoring,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -414,6 +422,7 @@ export class GuEc2App extends Construct {
       imageRecipe,
       httpPutResponseHopLimit: instanceMetadataHopLimit,
       updatePolicy,
+      enabledDetailedInstanceMonitoring,
     });
 
     // This allows automatic shipping of instance Cloud Init logs when using the
