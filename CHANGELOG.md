@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 59.1.0
+
+### Minor Changes
+
+- 0a0bce1: : feat(asg): Allow setting the detailedMonitoring option on launch templates provisioned by our EC2 patterns
+
 ## 59.0.0
 
 ### Major Changes
