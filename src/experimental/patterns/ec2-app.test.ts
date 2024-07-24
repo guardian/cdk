@@ -1,6 +1,6 @@
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
 import type { GuStack } from "../../constructs/core";
@@ -101,5 +101,29 @@ describe("The GuEc2AppExperimental pattern", () => {
         },
       },
     });
+  });
+
+  it("should add to the end of the user data", () => {
+    const stack = simpleGuStackForTesting();
+
+    const userDataCommand = `echo "Hello there"`;
+    const userData = UserData.forLinux();
+    userData.addCommands(userDataCommand);
+
+    const { autoScalingGroup } = new GuEc2AppExperimental(stack, { ...initialProps(stack), userData });
+
+    const renderedUserData = autoScalingGroup.userData.render();
+    const splitUserData = renderedUserData.split("\n");
+    const totalLines = splitUserData.length;
+
+    const appCommandPosition = splitUserData.indexOf(userDataCommand);
+    const startMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental UserData Start");
+    const endMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental UserData End");
+
+    // Application user data should be before the target group healthcheck polling.
+    expect(appCommandPosition).toBeLessThan(startMarkerPosition);
+
+    // The target group healthcheck polling should be the last thing in the user data.
+    expect(endMarkerPosition).toEqual(totalLines - 1);
   });
 });

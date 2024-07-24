@@ -917,6 +917,7 @@ aws s3 cp 's3://",
                   },
                   "/test-stack/TEST/test-gu-ec2-app/test-gu-ec2-app-123.deb' '/test-gu-ec2-app/test-gu-ec2-app-123.deb'
 dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
+# GuEc2AppExperimental UserData Start
 
       INSTANCE_ID=$(ec2metadata --instance-id)
 
@@ -945,7 +946,8 @@ dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
       done
 
       echo "Instance is healthy in target group."
-      ",
+      
+# GuEc2AppExperimental UserData End",
                 ],
               ],
             },
