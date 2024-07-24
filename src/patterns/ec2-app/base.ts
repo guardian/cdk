@@ -315,6 +315,15 @@ export interface GuEc2AppProps extends AppIdentity {
    * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-monitoring.html
    */
   enabledDetailedInstanceMonitoring?: boolean;
+  /**
+   * You can specify how long after an instance reaches the InService state it waits before contributing
+   * usage data to the aggregated metrics. This specified time is called the default instance warmup.
+   * This keeps dynamic scaling from being affected by metrics for individual instances that aren't yet
+   * handling application traffic and that might be experiencing temporarily high usage of compute resources.
+   *
+   * @see https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html
+   */
+  defaultInstanceWarmup?: Duration;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -371,6 +380,7 @@ export class GuEc2App extends Construct {
       instanceMetadataHopLimit,
       updatePolicy,
       enabledDetailedInstanceMonitoring,
+      defaultInstanceWarmup,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -423,6 +433,7 @@ export class GuEc2App extends Construct {
       httpPutResponseHopLimit: instanceMetadataHopLimit,
       updatePolicy,
       enabledDetailedInstanceMonitoring,
+      defaultInstanceWarmup,
     });
 
     // This allows automatic shipping of instance Cloud Init logs when using the

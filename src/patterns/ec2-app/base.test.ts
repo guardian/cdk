@@ -1,3 +1,4 @@
+import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { BlockDeviceVolume, EbsDeviceVolumeType, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
@@ -1148,6 +1149,31 @@ UserData from accessed construct`);
             Enabled: true,
           },
         },
+      },
+    });
+  });
+
+  it("set defaultInstanceWarmup on the ASG when set", function () {
+    const stack = simpleGuStackForTesting();
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      userData: UserData.forLinux(),
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      enabledDetailedInstanceMonitoring: true,
+      defaultInstanceWarmup: Duration.minutes(2),
+    });
+    Template.fromStack(stack).hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Properties: {
+        DefaultInstanceWarmup: 120,
       },
     });
   });
