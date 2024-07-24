@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 59.2.0
+
+### Minor Changes
+
+- 8700b29: feat(asg): Allow setting the defaultInstanceWarmup option on auto scaling groups provisioned by our EC2 pattern
+
 ## 59.1.0
 
 ### Minor Changes
