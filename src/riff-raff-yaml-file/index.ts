@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
+import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
@@ -253,7 +254,15 @@ export class RiffRaffYamlFile {
             deployments.set(lambdaDeployment.name, lambdaDeployment.props);
           });
 
-          autoscalingGroups.forEach((asg) => {
+          // ASGs without an UpdatePolicy can be deployed via Riff-Raff's (legacy) `autoscaling` deployment type.
+          // ASGs with an UpdatePolicy are updated via Riff-Raff's `cloud-formation` deployment type.
+          const legacyAutoscalingGroups = autoscalingGroups.filter((asg) => {
+            const { cfnOptions } = asg.node.defaultChild as CfnAutoScalingGroup;
+            const { updatePolicy } = cfnOptions;
+            return updatePolicy?.autoScalingReplacingUpdate === undefined;
+          });
+
+          legacyAutoscalingGroups.forEach((asg) => {
             const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
             deployments.set(asgDeployment.name, asgDeployment.props);
           });

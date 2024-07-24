@@ -1,4 +1,5 @@
 import { App, Duration } from "aws-cdk-lib";
+import { UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
@@ -1253,6 +1254,84 @@ describe("The RiffRaffYamlFile class", () => {
         dependencies:
           - cfn-eu-west-1-deploy-shared-resource-stack
     "
+    `);
+  });
+
+  it("Should only upload artifacts for an ASG with an update policy", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        const appName = "my-app";
+
+        new GuEc2App(this, {
+          app: appName,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `${appName}.deb`,
+              executionStatement: `dpkg -i /${appName}/${appName}.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "rip.gu.com",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          applicationPort: 9000,
+          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+          updatePolicy: UpdatePolicy.replacingUpdate(),
+        });
+      }
+    }
+
+    new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
+
+    const actual = new RiffRaffYamlFile(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - TEST
+      deployments:
+        asg-upload-eu-west-1-test-my-app:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-app
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              TEST: test-stack.template.json
+            amiParametersToTags:
+              AMIMyapp:
+                BuiltBy: amigo
+                AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
+          dependencies:
+            - asg-upload-eu-west-1-test-my-app
+      "
     `);
   });
 });
