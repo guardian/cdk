@@ -49,6 +49,7 @@ export class GuEc2AppExperimental extends GuEc2App {
     See https://github.com/guardian/amigo/tree/main/roles/aws-tools.
      */
     userData.addCommands(
+      `# ${GuEc2AppExperimental.name} UserData Start`,
       `
       INSTANCE_ID=$(ec2metadata --instance-id)
 
@@ -68,6 +69,7 @@ export class GuEc2AppExperimental extends GuEc2App {
           --query "TargetHealthDescriptions[0].TargetHealth.State")
       done
       `,
+      `# ${GuEc2AppExperimental.name} UserData End`,
     );
 
     userData.addOnExitCommands(
