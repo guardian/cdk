@@ -59,10 +59,10 @@ export function addAmiParametersToCloudFormationDeployment(
     }
 
     const Recipe = typeof imageRecipe === "string" ? imageRecipe : imageRecipe.Recipe;
-    const AmigoStage = typeof imageRecipe === "string" ? "PROD" : imageRecipe.AmigoStage ?? "PROD";
+    const AmigoStage = typeof imageRecipe === "string" ? "PROD" : (imageRecipe.AmigoStage ?? "PROD");
 
     // In YAML `true` is a Boolean. Riff-Raff expects a String here, so call `toString` to make it `'true'`.
-    const Encrypted = (typeof imageRecipe === "string" ? true : imageRecipe.Encrypted ?? true).toString();
+    const Encrypted = (typeof imageRecipe === "string" ? true : (imageRecipe.Encrypted ?? true)).toString();
 
     return {
       ...acc,
