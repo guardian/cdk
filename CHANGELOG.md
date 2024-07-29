@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 59.2.1
+
+### Patch Changes
+
+- 7ed3595: Update `aws-sdk` from 2.1649.0 to 2.1664.0.
+- 006e3a4: Update `git-url-parse` from 14.0.0 to 14.1.0.
+
 ## 59.2.0
 
 ### Minor Changes
