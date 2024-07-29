@@ -8,6 +8,35 @@ import { GuEc2App } from "../../patterns";
 
 export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePolicy"> {}
 
+/**
+ * An experimental pattern to instantiate an EC2 application that is updated entirely via CloudFormation.
+ *
+ * NOTE: The "autoscaling" deployment type in Riff-Raff is not valid with this pattern.
+ * Please remove it from any manually created `riff-raff.yaml` file.
+ *
+ * This pattern sets the update policy of the `AWS::AutoScaling::AutoScalingGroup` to `AutoScalingRollingUpdate`.
+ * When a CloudFormation update is applied, the current instances in the ASG will be replaced.
+ *
+ * This pattern also updates the User Data, running some commands AFTER yours.
+ * These changes are wrapped in start and end marking comments.
+ *
+ * This pattern should improve the reliability of scaling events triggered during a deployment.
+ * Unlike in Riff-Raff's "autoscaling" deployment, scaling alarms are never suspended.
+ * TODO test scaling alarm behaviour.
+ *
+ * To update the application's code, a CloudFormation update must be triggered.
+ * The best way to do this is to include the build number in the application artifact.
+ * TODO test User Data includes a build number.
+ *
+ * NOTE: This pattern:
+ *  - Is NOT compatible with the "autoscaling" Riff-Raff deployment type.
+ *  - Your application should include a build number in its filename.
+ *    This value will change across builds, and therefore create a CloudFormation template difference to be deployed.
+ *  - Requires the AWS CLI and `cfn-signal` binaries to be available on the instance, and on the `PATH`.
+ *    AMIgo adds these via the `aws-tools` role.
+ *
+ * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-rollingupdate
+ */
 export class GuEc2AppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppExperimentalProps) {
     const { minimumInstances, maximumInstances = minimumInstances * 2 } = props.scaling;
