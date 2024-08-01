@@ -52,7 +52,7 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
     const mergedProps: GuApplicationListenerProps = {
       port: certificate ? 443 : 8080,
       protocol: certificate ? ApplicationProtocol.HTTPS : ApplicationProtocol.HTTP,
-      sslPolicy: SslPolicy.RECOMMENDED_TLS,
+      sslPolicy: certificate ? SslPolicy.RECOMMENDED_TLS : undefined,
       ...props,
       certificates: certificate
         ? [
