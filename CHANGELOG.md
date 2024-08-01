@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 59.2.2
+
+### Patch Changes
+
+- c7426d3: Only set an SSL policy on HTTPS application listeners
+- 754c919: Update `aws-sdk` from 2.1664.0 to 2.1665.0
+
 ## 59.2.1
 
 ### Patch Changes
