@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 59.2.3
+
+### Patch Changes
+
+- 3b90072: Update `codemaker` from 1.101.0 to 1.102.0
+- 82016de: Update `aws-sdk` from 2.1665.0 to 2.1670.0
+
 ## 59.2.2
 
 ### Patch Changes
