@@ -110,6 +110,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
         },
       },
       "Properties": {
+        "DesiredCapacity": "1",
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
         "LaunchTemplate": {

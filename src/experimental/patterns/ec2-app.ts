@@ -58,6 +58,8 @@ export class GuEc2AppExperimental extends GuEc2App {
     const { userData, role } = autoScalingGroup;
     const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
 
+    cfnAutoScalingGroup.desiredCapacity = minimumInstances.toString();
+
     new Policy(scope, "AsgReplacingUpdatePolicy", {
       statements: [
         // Allow usage of command `cfn-signal`.

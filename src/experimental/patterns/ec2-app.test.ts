@@ -44,6 +44,20 @@ describe("The GuEc2AppExperimental pattern", () => {
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
+  it("should create an ASG with min, max, and desired capacity set", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuEc2AppExperimental(stack, { ...initialProps(stack), scaling: { minimumInstances: 5 } });
+
+    Template.fromStack(stack).hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Properties: {
+        MinSize: "5",
+        MaxSize: "10",
+        DesiredCapacity: "5",
+      },
+    });
+  });
+
   it("should create an ASG with a resource signal count that matches the min instances", () => {
     const stack = simpleGuStackForTesting();
 
