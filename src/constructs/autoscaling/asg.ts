@@ -128,6 +128,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       // Favour HTTPS only egress rules by default.
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app, vpc }),
       requireImdsv2: !withoutImdsv2,
+      instanceMetadataTags: true,
       userData,
       role,
       httpPutResponseHopLimit,

@@ -890,6 +890,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           "InstanceType": "t4g.medium",
           "MetadataOptions": {
             "HttpTokens": "required",
+            "InstanceMetadataTags": "enabled",
           },
           "SecurityGroupIds": [
             {
@@ -1785,6 +1786,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           "InstanceType": "t4g.medium",
           "MetadataOptions": {
             "HttpTokens": "required",
+            "InstanceMetadataTags": "enabled",
           },
           "SecurityGroupIds": [
             {
