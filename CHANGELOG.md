@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 59.3.0
+
+### Minor Changes
+
+- 18daa5d: enable InstanceMetadataTags on EC2 patterns
+
 ## 59.2.4
 
 ### Patch Changes
