@@ -1,5 +1,13 @@
 # @guardian/cdk
 
+## 59.3.1
+
+### Patch Changes
+
+- 89dee99: Update aws-cdk to 2.155.0, aws-cdk-lib to 2.155.0, constructs to 10.3.0
+- 9412236: Update `aws-sdk` from 2.1674.0 to 2.1687.0
+- 481e40d: Update `codemaker` from 1.102.0 to 1.103.1
+
 ## 59.3.0
 
 ### Minor Changes
