@@ -11,4 +11,13 @@ describe("The GuVpc construct", () => {
     new GuVpc(stack, "MyVpc");
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
+
+  it("should be possible to create two vpcs in the same stack", () => {
+    const stack = simpleGuStackForTesting({
+      stack: "test-stack",
+      env: { region: "eu-west-1", account: "000000000000" },
+    });
+    new GuVpc(stack, "MyVpc");
+    new GuVpc(stack, "MyOtherVpc");
+  });
 });
