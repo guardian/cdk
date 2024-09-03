@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 59.3.2
+
+### Patch Changes
+
+- 8e8a20f: Fix bug preventing creation of multiple VPCs in single stack
+
 ## 59.3.1
 
 ### Patch Changes
