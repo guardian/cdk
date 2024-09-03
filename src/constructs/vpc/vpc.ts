@@ -61,11 +61,11 @@ export class GuVpc extends Vpc {
       );
     }
 
-    node.setContext(`availability-zones:account=${account}:region=eu-west-1`, [
-      "eu-west-1a",
-      "eu-west-1b",
-      "eu-west-1c",
-    ]);
+    const contextKey = `availability-zones:account=${account}:region=eu-west-1`;
+
+    if (node.tryGetContext(contextKey) === undefined) {
+      node.setContext(contextKey, ["eu-west-1a", "eu-west-1b", "eu-west-1c"]);
+    }
   }
 
   constructor(scope: GuStack, id: string, props?: GuVpcProps) {
