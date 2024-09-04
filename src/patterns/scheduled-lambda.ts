@@ -1,5 +1,5 @@
 import { Rule } from "aws-cdk-lib/aws-events";
-import type { Schedule } from "aws-cdk-lib/aws-events";
+import type { RuleTargetInput, Schedule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 import type { GuLambdaErrorPercentageMonitoringProps, NoMonitoring } from "../constructs/cloudwatch";
 import type { GuStack } from "../constructs/core";
@@ -22,6 +22,10 @@ export interface GuScheduledLambdaProps extends Omit<GuFunctionProps, "errorPerc
      * Optional description.
      */
     description?: string;
+    /**
+     * Optional input
+     */
+    input?: RuleTargetInput;
   }>;
   /**
    * Monitoring configuration for the lambda.
@@ -50,7 +54,7 @@ export class GuScheduledLambda extends GuLambdaFunction {
       const resourceToInvoke = this.alias ?? this;
       new Rule(this, `${id}-${rule.schedule.expressionString}-${index}`, {
         schedule: rule.schedule,
-        targets: [new LambdaFunction(resourceToInvoke)],
+        targets: [new LambdaFunction(resourceToInvoke, { event: rule.input })],
         ...(rule.description && { description: rule.description }),
         enabled: true,
       });
