@@ -1,6 +1,6 @@
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { Schedule } from "aws-cdk-lib/aws-events";
+import { RuleTargetInput, Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
@@ -15,7 +15,7 @@ describe("The GuScheduledLambda pattern", () => {
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
       runtime: Runtime.NODEJS_12_X,
-      rules: [{ schedule: Schedule.rate(Duration.minutes(1)) }],
+      rules: [{ schedule: Schedule.rate(Duration.minutes(1)), input: RuleTargetInput.fromText("Testing") }],
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
