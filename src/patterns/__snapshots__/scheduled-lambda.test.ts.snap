@@ -242,6 +242,7 @@ exports[`The GuScheduledLambda pattern should create the correct resources with 
               ],
             },
             "Id": "Target0",
+            "Input": ""Testing"",
           },
         ],
       },
