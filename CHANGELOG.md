@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 59.3.3
+
+### Patch Changes
+
+- c57b024: Allow inputs in GuScheduledLambda
+
 ## 59.3.2
 
 ### Patch Changes
