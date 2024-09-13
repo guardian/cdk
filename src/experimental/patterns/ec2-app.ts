@@ -1,4 +1,4 @@
-import type { IAspect } from "aws-cdk-lib";
+import type { IAspect, Stack } from "aws-cdk-lib";
 import { Aspects, CfnParameter, Duration } from "aws-cdk-lib";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -8,8 +8,24 @@ import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
 import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
+import { isSingletonPresentInStack } from "../../utils/singleton";
 
 class HorizontallyScalingDeploymentProperties implements IAspect {
+  public readonly stack: Stack;
+  private static instance: HorizontallyScalingDeploymentProperties | undefined;
+
+  private constructor(scope: GuStack) {
+    this.stack = scope;
+  }
+
+  public static getInstance(stack: GuStack): HorizontallyScalingDeploymentProperties {
+    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
+      this.instance = new HorizontallyScalingDeploymentProperties(stack);
+    }
+
+    return this.instance;
+  }
+
   public visit(construct: IConstruct) {
     if (construct instanceof CfnScalingPolicy) {
       const { node } = construct;
@@ -57,6 +73,44 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
         };
       }
     }
+  }
+}
+
+class AsgRollingUpdatePolicy extends Policy {
+  private static instance: AsgRollingUpdatePolicy | undefined;
+
+  private constructor(scope: GuStack) {
+    const { stackId } = scope;
+
+    super(scope, "AsgRollingUpdatePolicy", {
+      statements: [
+        // Allow usage of command `cfn-signal`.
+        new PolicyStatement({
+          actions: ["cloudformation:SignalResource"],
+          effect: Effect.ALLOW,
+          resources: [stackId],
+        }),
+
+        /*
+        Allow usage of command `aws elbv2 describe-target-health`.
+        AWS Elastic Load Balancing does not support resource based policies, so the resource has to be `*` (any) here.
+        See https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html
+         */
+        new PolicyStatement({
+          actions: ["elasticloadbalancing:DescribeTargetHealth"],
+          effect: Effect.ALLOW,
+          resources: ["*"],
+        }),
+      ],
+    });
+  }
+
+  public static getInstance(stack: GuStack): AsgRollingUpdatePolicy {
+    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
+      this.instance = new AsgRollingUpdatePolicy(stack);
+    }
+
+    return this.instance;
   }
 }
 
@@ -147,27 +201,7 @@ export class GuEc2AppExperimental extends GuEc2App {
       },
     };
 
-    new Policy(scope, "AsgReplacingUpdatePolicy", {
-      statements: [
-        // Allow usage of command `cfn-signal`.
-        new PolicyStatement({
-          actions: ["cloudformation:SignalResource"],
-          effect: Effect.ALLOW,
-          resources: [stackId],
-        }),
-
-        /*
-        Allow usage of command `aws elbv2 describe-target-health`.
-        AWS Elastic Load Balancing does not support resource based policies, so the resource has to be `*` (any) here.
-        See https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html
-         */
-        new PolicyStatement({
-          actions: ["elasticloadbalancing:DescribeTargetHealth"],
-          effect: Effect.ALLOW,
-          resources: ["*"],
-        }),
-      ],
-    }).attachToRole(role);
+    AsgRollingUpdatePolicy.getInstance(scope).attachToRole(role);
 
     /*
     `ec2metadata` is available via `cloud-utils` installed on all Canonical Ubuntu AMIs.
@@ -211,6 +245,6 @@ export class GuEc2AppExperimental extends GuEc2App {
         `,
     );
 
-    Aspects.of(scope).add(new HorizontallyScalingDeploymentProperties());
+    Aspects.of(scope).add(HorizontallyScalingDeploymentProperties.getInstance(scope));
   }
 }
