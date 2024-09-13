@@ -10,6 +10,26 @@ import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
 import { isSingletonPresentInStack } from "../../utils/singleton";
 
+/**
+ * An `Aspect` that adjusts the properties of an AutoScaling Group using an `AutoScalingRollingUpdate` update policy.
+ *
+ * It'll unset the `DesiredCapacity` of the ASG as a rolling update sets `Desired` back to the template version,
+ * undoing any changes that a scale-out event may have done.
+ * Having `DesiredCapacity` unset ensures the service remains at-capacity at all times.
+ *
+ * It'll also make the `MinInstancesInService` property dynamic via a CFN Parameter that Riff-Raff will set.
+ * The value depends on the current capacity of the ASG:
+ *  - If the service is running normally, it'll be set to the `MinSize` capacity
+ *  - If the service is partially scaled, it'll be set to the current `DesiredCapacity`
+ *  - If the service is fully scaled, it'll be set to (at least) `MaxSize` - 1
+ *
+ * @privateRemarks
+ * - Temporarily implemented as a singleton to ensure only one instance is added to a stack,
+ *   else multiple attempts to add the same CFN Parameter will be made and fail.
+ * - Once out of experimental, instantiate this `Aspect` directly in {@link GuStack}.
+ *
+ * @see https://github.com/guardian/testing-asg-rolling-update
+ */
 class HorizontallyScalingDeploymentProperties implements IAspect {
   public readonly stack: Stack;
   private static instance: HorizontallyScalingDeploymentProperties | undefined;
@@ -49,16 +69,6 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
          */
         cfnAutoScalingGroup.desiredCapacity = undefined;
 
-        /*
-        An autoscaling group that horizontally scales should expose a CloudFormation Parameter linked to the
-        `MinInstancesInService` property of the rolling update policy.
-
-        Riff-Raff will set this parameter during deployment.
-        The value depends on the current capacity of the ASG:
-          - If the service is running normally, it'll be set to the `Minimum` capacity
-          - If the service is partially scaled, it'll be set to the current `Desired` capacity
-          - If the service is fully scaled, it'll be set to (at least) `Maximum` - 1
-         */
         const minInstancesInService = new CfnParameter(guStack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
           type: "Number",
           default: parseInt(cfnAutoScalingGroup.minSize),
@@ -76,6 +86,12 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
   }
 }
 
+/**
+ * An IAM Policy allowing the sending of a CloudFormation signal.
+ *
+ * @privateRemarks
+ * Implemented as a singleton as the resources can only be tightened at most to the CloudFormation stack.
+ */
 class AsgRollingUpdatePolicy extends Policy {
   private static instance: AsgRollingUpdatePolicy | undefined;
 
@@ -118,32 +134,37 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
 
 /**
  * An experimental pattern to instantiate an EC2 application that is updated entirely via CloudFormation.
- *
- * NOTE: The "autoscaling" deployment type in Riff-Raff is not valid with this pattern.
- * Please remove it from any manually created `riff-raff.yaml` file.
- *
- * This pattern sets the update policy of the `AWS::AutoScaling::AutoScalingGroup` to `AutoScalingRollingUpdate`.
+ * It sets the update policy of the `AWS::AutoScaling::AutoScalingGroup` to `AutoScalingRollingUpdate`.
  * When a CloudFormation update is applied, the current instances in the ASG will be replaced.
  *
  * This pattern also updates the User Data, running some commands AFTER yours.
  * These changes are wrapped in start and end marking comments.
  *
- * This pattern should improve the reliability of scaling events triggered during a deployment.
- * Unlike in Riff-Raff's "autoscaling" deployment, scaling alarms are never suspended.
- * TODO test scaling alarm behaviour.
+ * This pattern does not enable for scaling events to trigger _during_ a deployment
+ * as during testing it was found that scale-in events during deployment led to unpredictable service availability.
+ *
+ * If a deployment fails, for example when the healthcheck fails, CloudFormation will automatically rollback the changes.
+ * This improves on the behaviour of Riff-Raff's `autoscaling` deployment which requires manual intervention on deployment failure.
  *
  * To update the application's code, a CloudFormation update must be triggered.
  * The best way to do this is to include the build number in the application artifact.
  * TODO test User Data includes a build number.
  *
- * NOTE: This pattern:
- *  - Is NOT compatible with the "autoscaling" Riff-Raff deployment type.
- *  - Your application should include a build number in its filename.
- *    This value will change across builds, and therefore create a CloudFormation template difference to be deployed.
- *  - Requires the AWS CLI and `cfn-signal` binaries to be available on the instance, and on the `PATH`.
- *    AMIgo adds these via the `aws-tools` role.
+ * @remarks
+ * - The rate at which instances are replaced are conditional based on how scaled up the service is.
+ *   The more an application is scaled, the longer it'll take to deploy.
+ * - It is not necessary to use the `autoscaling` Riff-Raff deployment type in conjunction with this.
+ *   Doing so won't break anything, however it'll lengthen the deployment time as instances will be rotated twice.
+ *   Please remove it from any manually created `riff-raff.yaml` file.
+ * - Your application should include a build number in its filename.
+ *   This value will change across builds, and therefore create a CloudFormation template difference to be deployed.
+ * - Requires the AWS CLI and `cfn-signal` binaries to be available on the instance, and on the `PATH`.
+ *   AMIgo adds these via the `aws-tools` role.
  *
  * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-rollingupdate
+ * @see https://github.com/guardian/testing-asg-rolling-update
+ *
+ * @experimental
  */
 export class GuEc2AppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppExperimentalProps) {
@@ -245,6 +266,7 @@ export class GuEc2AppExperimental extends GuEc2App {
         `,
     );
 
+    // TODO Once out of experimental, instantiate this `Aspect` directly in `GuStack`.
     Aspects.of(scope).add(HorizontallyScalingDeploymentProperties.getInstance(scope));
   }
 }
