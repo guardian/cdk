@@ -1,11 +1,11 @@
-import type { IAspect, Stack } from "aws-cdk-lib";
+import type { IAspect } from "aws-cdk-lib";
 import { Aspects, CfnParameter, Duration } from "aws-cdk-lib";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
-import { GuStack } from "../../constructs/core";
+import type { GuStack } from "../../constructs/core";
 import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
 import { isSingletonPresentInStack } from "../../utils/singleton";
@@ -31,7 +31,7 @@ import { isSingletonPresentInStack } from "../../utils/singleton";
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
 class HorizontallyScalingDeploymentProperties implements IAspect {
-  public readonly stack: Stack;
+  public readonly stack: GuStack;
   private readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: HorizontallyScalingDeploymentProperties | undefined;
 
@@ -52,7 +52,6 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
     if (construct instanceof CfnScalingPolicy) {
       const { node } = construct;
       const { scopes, path } = node;
-      const guStack = GuStack.of(construct);
 
       /*
       Requiring a `CfnScalingPolicy` to be created in the scope of a `GuAutoScalingGroup`
@@ -92,7 +91,7 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
         if (!this.asgToParamMap.has(asgNodeId)) {
           this.asgToParamMap.set(
             asgNodeId,
-            new CfnParameter(guStack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
+            new CfnParameter(this.stack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
               type: "Number",
               default: parseInt(cfnAutoScalingGroup.minSize),
               maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
