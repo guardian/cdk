@@ -32,10 +32,12 @@ import { isSingletonPresentInStack } from "../../utils/singleton";
  */
 class HorizontallyScalingDeploymentProperties implements IAspect {
   public readonly stack: Stack;
+  private readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: HorizontallyScalingDeploymentProperties | undefined;
 
   private constructor(scope: GuStack) {
     this.stack = scope;
+    this.asgToParamMap = new Map();
   }
 
   public static getInstance(stack: GuStack): HorizontallyScalingDeploymentProperties {
@@ -69,11 +71,20 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
          */
         cfnAutoScalingGroup.desiredCapacity = undefined;
 
-        const minInstancesInService = new CfnParameter(guStack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
-          type: "Number",
-          default: parseInt(cfnAutoScalingGroup.minSize),
-          maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
-        });
+        const asgNodeId = autoScalingGroup.node.id;
+
+        if (!this.asgToParamMap.has(asgNodeId)) {
+          this.asgToParamMap.set(
+            asgNodeId,
+            new CfnParameter(guStack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
+              type: "Number",
+              default: parseInt(cfnAutoScalingGroup.minSize),
+              maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
+            }),
+          );
+        }
+
+        const minInstancesInService = this.asgToParamMap.get(asgNodeId)!;
 
         cfnAutoScalingGroup.cfnOptions.updatePolicy = {
           autoScalingRollingUpdate: {
