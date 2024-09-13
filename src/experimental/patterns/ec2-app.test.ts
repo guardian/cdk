@@ -376,4 +376,32 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     template.resourceCountIs("AWS::AutoScaling::ScalingPolicy", 3);
   });
+
+  it("should throw an error when a scaling policy is not created with aa GuAutoScalingGroup scope", () => {
+    const cdkApp = new App();
+    const stack = new GuStack(cdkApp, "test", {
+      stack: "test-stack",
+      stage: "TEST",
+    });
+
+    const { autoScalingGroup } = new GuEc2AppExperimental(stack, initialProps(stack));
+
+    /*
+    Should be created like this to avoid the error:
+
+      new CfnScalingPolicy(autoScalingGroup, "ScaleOut", { ... });
+     */
+    new CfnScalingPolicy(stack, "ScaleOut", {
+      autoScalingGroupName: autoScalingGroup.autoScalingGroupName,
+      policyType: "SimpleScaling",
+      adjustmentType: "ChangeInCapacity",
+      scalingAdjustment: 1,
+    });
+
+    expect(() => {
+      cdkApp.synth();
+    }).toThrowError(
+      "Failed to detect the autoscaling group relating to the scaling policy on path test/ScaleOut. Was it created in the scope of a GuAutoScalingGroup?",
+    );
+  });
 });

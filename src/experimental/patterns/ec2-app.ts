@@ -54,10 +54,26 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
       const { scopes, path } = node;
       const guStack = GuStack.of(construct);
 
+      /*
+      Requiring a `CfnScalingPolicy` to be created in the scope of a `GuAutoScalingGroup`
+      is the most reliable way to associate the two together.
+
+      Though the `autoScalingGroupName` property is passed to a `CfnScalingPolicy` when instantiating,
+      this does not create a concrete link as AWS CDK sets the value to be the ASG's `Ref`.
+      That is, it is a `Token` until it is synthesised.
+      This is even if the ASG has an explicit name set.
+
+      See also:
+        - https://docs.aws.amazon.com/cdk/v2/guide/tokens.html
+        - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#aws-resource-autoscaling-autoscalinggroup-return-values
+        - https://github.com/aws/aws-cdk/blob/f6b649d47f8bc30ca741fbb7a4852d51e8275002/packages/aws-cdk-lib/aws-autoscaling/lib/auto-scaling-group.ts#L1560
+       */
       const autoScalingGroup = scopes.find((_): _ is GuAutoScalingGroup => _ instanceof GuAutoScalingGroup);
 
       if (!autoScalingGroup) {
-        throw new Error(`Failed to detect the autoscaling group relating to the scaling policy on path ${path}`);
+        throw new Error(
+          `Failed to detect the autoscaling group relating to the scaling policy on path ${path}. Was it created in the scope of a GuAutoScalingGroup?`,
+        );
       }
 
       const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
