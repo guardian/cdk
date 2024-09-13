@@ -1,17 +1,17 @@
-import { Duration } from "aws-cdk-lib";
-import { Template } from "aws-cdk-lib/assertions";
+import { App, Duration } from "aws-cdk-lib";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
+import { CloudFormationStackArtifact } from "aws-cdk-lib/cx-api";
 import { AccessScope } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
-import type { GuStack } from "../../constructs/core";
+import { GuStack } from "../../constructs/core";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
 import { GuEc2AppExperimental } from "./ec2-app";
 
 // TODO test User Data includes a build number
 describe("The GuEc2AppExperimental pattern", () => {
-  function initialProps(scope: GuStack): GuEc2AppExperimentalProps {
-    const app = "test-gu-ec2-app";
+  function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2AppExperimentalProps {
     const buildNumber = 123;
 
     const { userData } = new GuUserData(scope, {
@@ -139,5 +139,68 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     // The target group healthcheck polling should be the last thing in the user data.
     expect(endMarkerPosition).toEqual(totalLines - 1);
+  });
+
+  it("should adjust properties of a horizontally scaling service", () => {
+    const cdkApp = new App();
+    const stack = new GuStack(cdkApp, "test", {
+      stack: "test-stack",
+      stage: "TEST",
+    });
+
+    const scalingApp = "my-scaling-app";
+    const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
+      ...initialProps(stack, scalingApp),
+      scaling: {
+        minimumInstances: 5,
+      },
+    });
+    autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+      targetRequestsPerMinute: 100,
+    });
+
+    /*
+    We're ultimately testing an `Aspect`, which appear to run only at synth time.
+    As a work-around, synth the `App`, then perform assertions on the resulting template.
+
+    See also: https://github.com/aws/aws-cdk/issues/29047.
+     */
+    const { artifacts } = cdkApp.synth();
+    const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
+
+    if (!cfnStack) {
+      throw new Error("Unable to locate a CloudFormationStackArtifact");
+    }
+
+    const template = Template.fromJSON(cfnStack.template as Record<string, unknown>);
+
+    const parameterName = `MinInstancesInServiceFor${scalingApp.replaceAll("-", "")}`;
+
+    template.hasParameter(parameterName, {
+      Type: "Number",
+      Default: 5,
+      MaxValue: 9, // (min * 2) - 1
+    });
+
+    template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Properties: {
+        MinSize: "5",
+        MaxSize: "10",
+        DesiredCapacity: Match.absent(),
+        Tags: Match.arrayWith([{ Key: "App", Value: scalingApp, PropagateAtLaunch: true }]),
+      },
+      UpdatePolicy: {
+        AutoScalingRollingUpdate: {
+          MaxBatchSize: 10,
+          SuspendProcesses: ["AlarmNotification"],
+          MinSuccessfulInstancesPercent: 100,
+          WaitOnResourceSignals: true,
+          PauseTime: "PT5M",
+          MinInstancesInService: {
+            Ref: parameterName,
+          },
+        },
+      },
+    });
   });
 });

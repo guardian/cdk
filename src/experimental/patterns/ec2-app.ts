@@ -1,10 +1,64 @@
-import { Duration } from "aws-cdk-lib";
+import type { IAspect } from "aws-cdk-lib";
+import { Aspects, CfnParameter, Duration } from "aws-cdk-lib";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
-import { UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import { CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import type { GuStack } from "../../constructs/core";
+import type { IConstruct } from "constructs";
+import { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import { GuStack } from "../../constructs/core";
 import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
+
+class HorizontallyScalingDeploymentProperties implements IAspect {
+  public visit(construct: IConstruct) {
+    if (construct instanceof CfnScalingPolicy) {
+      const { node } = construct;
+      const { scopes, path } = node;
+      const guStack = GuStack.of(construct);
+
+      const autoScalingGroup = scopes.find((_): _ is GuAutoScalingGroup => _ instanceof GuAutoScalingGroup);
+
+      if (!autoScalingGroup) {
+        throw new Error(`Failed to detect the autoscaling group relating to the scaling policy on path ${path}`);
+      }
+
+      const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+      const currentRollingUpdate = cfnAutoScalingGroup.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
+
+      if (currentRollingUpdate) {
+        /*
+        An autoscaling group that horizontally scales should not explicitly set `Desired`,
+        as a rolling update will set the current `Desired` back to the template version,
+        undoing any changes that a scale-out event may have done.
+         */
+        cfnAutoScalingGroup.desiredCapacity = undefined;
+
+        /*
+        An autoscaling group that horizontally scales should expose a CloudFormation Parameter linked to the
+        `MinInstancesInService` property of the rolling update policy.
+
+        Riff-Raff will set this parameter during deployment.
+        The value depends on the current capacity of the ASG:
+          - If the service is running normally, it'll be set to the `Minimum` capacity
+          - If the service is partially scaled, it'll be set to the current `Desired` capacity
+          - If the service is fully scaled, it'll be set to (at least) `Maximum` - 1
+         */
+        const minInstancesInService = new CfnParameter(guStack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
+          type: "Number",
+          default: parseInt(cfnAutoScalingGroup.minSize),
+          maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
+        });
+
+        cfnAutoScalingGroup.cfnOptions.updatePolicy = {
+          autoScalingRollingUpdate: {
+            ...currentRollingUpdate,
+            minInstancesInService: minInstancesInService.valueAsNumber,
+          },
+        };
+      }
+    }
+  }
+}
 
 export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePolicy"> {}
 
@@ -156,5 +210,7 @@ export class GuEc2AppExperimental extends GuEc2App {
           --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
         `,
     );
+
+    Aspects.of(scope).add(new HorizontallyScalingDeploymentProperties());
   }
 }
