@@ -181,7 +181,9 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           "MinInstancesInService": 1,
           "MinSuccessfulInstancesPercent": 100,
           "PauseTime": "PT5M",
-          "SuspendProcesses": [],
+          "SuspendProcesses": [
+            "AlarmNotification",
+          ],
           "WaitOnResourceSignals": true,
         },
       },

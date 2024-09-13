@@ -50,7 +50,14 @@ export class GuEc2AppExperimental extends GuEc2App {
         minInstancesInService: minimumInstances,
         minSuccessPercentage: 100,
         waitOnResourceSignals: true,
-        suspendProcesses: [],
+
+        /*
+        If a scale-in event fires during an `AutoScalingRollingUpdate` operation, the update could fail and rollback.
+        For this reason, we suspend the `AlarmNotification` process, else availability of a service cannot be guaranteed.
+        Consequently, services cannot scale-out during deployments.
+        If AWS ever supports suspending scale-out and scale-in independently, we should allow scale-out.
+         */
+        suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
       }),
     });
 
