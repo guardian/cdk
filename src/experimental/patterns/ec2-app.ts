@@ -60,6 +60,32 @@ export class GuEc2AppExperimental extends GuEc2App {
 
     cfnAutoScalingGroup.desiredCapacity = minimumInstances.toString();
 
+    // TODO are these sensible values?
+    const signalTimeoutSeconds = Math.max(
+      targetGroup.healthCheck.timeout?.toSeconds() ?? 0,
+      cfnAutoScalingGroup.healthCheckGracePeriod ?? 0,
+      Duration.minutes(5).toSeconds(),
+    );
+
+    const currentRollingUpdate = cfnAutoScalingGroup.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
+
+    cfnAutoScalingGroup.cfnOptions.updatePolicy = {
+      autoScalingRollingUpdate: {
+        ...currentRollingUpdate,
+        pauseTime: Duration.seconds(signalTimeoutSeconds).toIsoString(),
+      },
+    };
+
+    cfnAutoScalingGroup.cfnOptions.creationPolicy = {
+      autoScalingCreationPolicy: {
+        minSuccessfulInstancesPercent: 100,
+      },
+      resourceSignal: {
+        count: minimumInstances,
+        timeout: Duration.seconds(signalTimeoutSeconds).toIsoString(),
+      },
+    };
+
     new Policy(scope, "AsgReplacingUpdatePolicy", {
       statements: [
         // Allow usage of command `cfn-signal`.
@@ -123,22 +149,5 @@ export class GuEc2AppExperimental extends GuEc2App {
           --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
         `,
     );
-
-    // TODO are these sensible values?
-    const signalTimeoutSeconds = Math.max(
-      targetGroup.healthCheck.timeout?.toSeconds() ?? 0,
-      cfnAutoScalingGroup.healthCheckGracePeriod ?? 0,
-      Duration.minutes(5).toSeconds(),
-    );
-
-    cfnAutoScalingGroup.cfnOptions.creationPolicy = {
-      autoScalingCreationPolicy: {
-        minSuccessfulInstancesPercent: 100,
-      },
-      resourceSignal: {
-        count: minimumInstances,
-        timeout: Duration.seconds(signalTimeoutSeconds).toIsoString(),
-      },
-    };
   }
 }
