@@ -251,16 +251,14 @@ export class GuEc2AppExperimental extends GuEc2App {
     AsgRollingUpdatePolicy.getInstance(scope).attachToRole(role);
 
     /*
-    `ec2metadata` is available via `cloud-utils` installed on all Canonical Ubuntu AMIs.
-    See https://github.com/canonical/cloud-utils.
-
     `aws` is available via AMIgo baked AMIs.
     See https://github.com/guardian/amigo/tree/main/roles/aws-tools.
      */
     userData.addCommands(
       `# ${GuEc2AppExperimental.name} UserData Start`,
       `
-      INSTANCE_ID=$(ec2metadata --instance-id)
+      TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+      INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/instance-id")
 
       STATE=$(aws elbv2 describe-target-health \
         --target-group-arn ${targetGroup.targetGroupArn} \
