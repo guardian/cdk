@@ -1,7 +1,6 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Aspects, CfnParameter, Duration } from "aws-cdk-lib";
-import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
-import { CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import { CfnAutoScalingGroup, CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
@@ -9,6 +8,68 @@ import type { GuStack } from "../../constructs/core";
 import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
 import { isSingletonPresentInStack } from "../../utils/singleton";
+
+/**
+ * Ensures the `AutoScalingRollingUpdate` of an AutoScaling Group has a `PauseTime` matching the healthcheck grace period.
+ * It also ensures the `CreationPolicy` resource signal `Timeout` matches the healthcheck grace period.
+ *
+ * @privateRemarks
+ * The ASG healthcheck grace period is hard-coded by {@link GuEc2App}.
+ * Customisation of this value is performed via an escape hatch.
+ * An `Aspect` is the only way to observe any customisation.
+ *
+ * TODO Expose the healthcheck grace period as a property on {@link GuEc2App} and remove this `Aspect`.
+ */
+class AutoScalingRollingUpdateTimeout implements IAspect {
+  public readonly stack: GuStack;
+  private static instance: AutoScalingRollingUpdateTimeout | undefined;
+
+  private constructor(scope: GuStack) {
+    this.stack = scope;
+  }
+
+  public static getInstance(stack: GuStack): AutoScalingRollingUpdateTimeout {
+    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
+      this.instance = new AutoScalingRollingUpdateTimeout(stack);
+    }
+    return this.instance;
+  }
+
+  public visit(construct: IConstruct) {
+    if (construct instanceof CfnAutoScalingGroup) {
+      const currentRollingUpdate = construct.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
+      const currentCreationPolicy = construct.cfnOptions.creationPolicy;
+
+      /**
+       * The type of `healthCheckGracePeriod` is `number | undefined`.
+       * In reality, it will always be set as we set it in {@link GuEc2App}.
+       * The right-hand side to appease the compiler; 5 minutes is the default value used by AWS.
+       *
+       * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-rollingupdate-pausetime
+       */
+      const signalTimeoutSeconds = construct.healthCheckGracePeriod ?? Duration.minutes(5).toSeconds();
+
+      if (currentRollingUpdate) {
+        construct.cfnOptions.updatePolicy = {
+          autoScalingRollingUpdate: {
+            ...currentRollingUpdate,
+            pauseTime: Duration.seconds(signalTimeoutSeconds).toIsoString(),
+          },
+        };
+      }
+
+      if (currentCreationPolicy) {
+        construct.cfnOptions.creationPolicy = {
+          ...currentCreationPolicy,
+          resourceSignal: {
+            ...currentCreationPolicy.resourceSignal,
+            timeout: Duration.seconds(signalTimeoutSeconds).toIsoString(),
+          },
+        };
+      }
+    }
+  }
+}
 
 /**
  * An `Aspect` that adjusts the properties of an AutoScaling Group using an `AutoScalingRollingUpdate` update policy.
@@ -222,29 +283,12 @@ export class GuEc2AppExperimental extends GuEc2App {
 
     cfnAutoScalingGroup.desiredCapacity = minimumInstances.toString();
 
-    // TODO are these sensible values?
-    const signalTimeoutSeconds = Math.max(
-      targetGroup.healthCheck.timeout?.toSeconds() ?? 0,
-      cfnAutoScalingGroup.healthCheckGracePeriod ?? 0,
-      Duration.minutes(5).toSeconds(),
-    );
-
-    const currentRollingUpdate = cfnAutoScalingGroup.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
-
-    cfnAutoScalingGroup.cfnOptions.updatePolicy = {
-      autoScalingRollingUpdate: {
-        ...currentRollingUpdate,
-        pauseTime: Duration.seconds(signalTimeoutSeconds).toIsoString(),
-      },
-    };
-
     cfnAutoScalingGroup.cfnOptions.creationPolicy = {
       autoScalingCreationPolicy: {
         minSuccessfulInstancesPercent: 100,
       },
       resourceSignal: {
         count: minimumInstances,
-        timeout: Duration.seconds(signalTimeoutSeconds).toIsoString(),
       },
     };
 
@@ -290,7 +334,8 @@ export class GuEc2AppExperimental extends GuEc2App {
         `,
     );
 
-    // TODO Once out of experimental, instantiate this `Aspect` directly in `GuStack`.
+    // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
+    Aspects.of(scope).add(AutoScalingRollingUpdateTimeout.getInstance(scope));
     Aspects.of(scope).add(HorizontallyScalingDeploymentProperties.getInstance(scope));
   }
 }

@@ -1,5 +1,6 @@
 import { App, Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
+import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { CfnScalingPolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
 import { CloudFormationStackArtifact } from "aws-cdk-lib/cx-api";
@@ -101,39 +102,29 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should create an ASG with the maximum resource signal timeout", () => {
+  it("should have a PauseTime equal to the ASG healthcheck grace period", () => {
     const stack = simpleGuStackForTesting();
+    const { autoScalingGroup } = new GuEc2AppExperimental(stack, initialProps(stack));
 
-    const targetGroupHealthcheckTimeout = Duration.minutes(7);
+    const tenMinutes = Duration.minutes(10);
 
-    new GuEc2AppExperimental(stack, {
-      ...initialProps(stack),
-      healthcheck: {
-        timeout: targetGroupHealthcheckTimeout,
-        interval: Duration.seconds(targetGroupHealthcheckTimeout.toSeconds() + 60),
-      },
-    });
+    const cfnAsg = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+    cfnAsg.healthCheckGracePeriod = tenMinutes.toSeconds();
 
-    const template = Template.fromStack(stack);
+    const template = getTemplateAfterAspectInvocation(stack);
 
-    // The Target Group times out in 7 minutes.
-    template.hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckTimeoutSeconds: targetGroupHealthcheckTimeout.toSeconds(),
-    });
-
-    // The ASG grace period is 2 minutes, which is less than the Target Group.
-    // Therefore, the resource signal timeout should be 7 minutes.
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
-        HealthCheckGracePeriod: 120,
+        HealthCheckGracePeriod: tenMinutes.toSeconds(),
       },
       CreationPolicy: {
-        AutoScalingCreationPolicy: {
-          MinSuccessfulInstancesPercent: 100,
-        },
         ResourceSignal: {
-          Count: 1,
-          Timeout: targetGroupHealthcheckTimeout.toIsoString(),
+          Timeout: tenMinutes.toIsoString(),
+        },
+      },
+      UpdatePolicy: {
+        AutoScalingRollingUpdate: {
+          PauseTime: tenMinutes.toIsoString(),
         },
       },
     });

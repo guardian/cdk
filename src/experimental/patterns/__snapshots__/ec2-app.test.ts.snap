@@ -106,7 +106,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
         },
         "ResourceSignal": {
           "Count": 1,
-          "Timeout": "PT5M",
+          "Timeout": "PT2M",
         },
       },
       "Properties": {
@@ -180,7 +180,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           "MaxBatchSize": 2,
           "MinInstancesInService": 1,
           "MinSuccessfulInstancesPercent": 100,
-          "PauseTime": "PT5M",
+          "PauseTime": "PT2M",
           "SuspendProcesses": [
             "AlarmNotification",
           ],
