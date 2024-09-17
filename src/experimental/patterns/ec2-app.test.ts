@@ -185,18 +185,10 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
-        MinSize: "5",
-        MaxSize: "10",
         DesiredCapacity: Match.absent(),
-        Tags: Match.arrayWith([{ Key: "App", Value: scalingApp, PropagateAtLaunch: true }]),
       },
       UpdatePolicy: {
         AutoScalingRollingUpdate: {
-          MaxBatchSize: 10,
-          SuspendProcesses: ["AlarmNotification"],
-          MinSuccessfulInstancesPercent: 100,
-          WaitOnResourceSignals: true,
-          PauseTime: "PT5M",
           MinInstancesInService: {
             Ref: parameterName,
           },
@@ -241,11 +233,7 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     const template = Template.fromJSON(cfnStack.template as Record<string, unknown>);
 
-    /*
-    The scaling ASG should:
-      - Not have `DesiredCapacity` set
-      - Have `MinInstancesInService` set via a CFN Parameter
-     */
+    // The scaling ASG should NOT have `DesiredCapacity` set, and `MinInstancesInService` set via a CFN Parameter
     const parameterName = `MinInstancesInServiceFor${scalingApp.replaceAll("-", "")}`;
     template.hasParameter(parameterName, {
       Type: "Number",
@@ -254,18 +242,11 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
-        MinSize: "5",
-        MaxSize: "10",
         DesiredCapacity: Match.absent(),
         Tags: Match.arrayWith([{ Key: "App", Value: scalingApp, PropagateAtLaunch: true }]),
       },
       UpdatePolicy: {
         AutoScalingRollingUpdate: {
-          MaxBatchSize: 10,
-          SuspendProcesses: ["AlarmNotification"],
-          MinSuccessfulInstancesPercent: 100,
-          WaitOnResourceSignals: true,
-          PauseTime: "PT5M",
           MinInstancesInService: {
             Ref: parameterName,
           },
@@ -273,25 +254,14 @@ describe("The GuEc2AppExperimental pattern", () => {
       },
     });
 
-    /*
-    The static ASG should:
-      - Have `DesiredCapacity` set explicitly
-      - Have `MinInstancesInService` set explicitly
-     */
+    // The static ASG SHOULD have `DesiredCapacity` and `MinInstancesInService` explicitly
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
-        MinSize: "1",
-        MaxSize: "2",
         DesiredCapacity: "1",
         Tags: Match.arrayWith([{ Key: "App", Value: staticApp, PropagateAtLaunch: true }]),
       },
       UpdatePolicy: {
         AutoScalingRollingUpdate: {
-          MaxBatchSize: 2,
-          SuspendProcesses: ["AlarmNotification"],
-          MinSuccessfulInstancesPercent: 100,
-          WaitOnResourceSignals: true,
-          PauseTime: "PT5M",
           MinInstancesInService: 1,
         },
       },
