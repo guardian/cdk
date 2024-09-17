@@ -142,61 +142,6 @@ describe("The GuEc2AppExperimental pattern", () => {
     expect(endMarkerPosition).toEqual(totalLines - 1);
   });
 
-  it("should adjust properties of a horizontally scaling service", () => {
-    const cdkApp = new App();
-    const stack = new GuStack(cdkApp, "test", {
-      stack: "test-stack",
-      stage: "TEST",
-    });
-
-    const scalingApp = "my-scaling-app";
-    const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
-      ...initialProps(stack, scalingApp),
-      scaling: {
-        minimumInstances: 5,
-      },
-    });
-    autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
-      targetRequestsPerMinute: 100,
-    });
-
-    /*
-    We're ultimately testing an `Aspect`, which appear to run only at synth time.
-    As a work-around, synth the `App`, then perform assertions on the resulting template.
-
-    See also: https://github.com/aws/aws-cdk/issues/29047.
-     */
-    const { artifacts } = cdkApp.synth();
-    const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
-
-    if (!cfnStack) {
-      throw new Error("Unable to locate a CloudFormationStackArtifact");
-    }
-
-    const template = Template.fromJSON(cfnStack.template as Record<string, unknown>);
-
-    const parameterName = `MinInstancesInServiceFor${scalingApp.replaceAll("-", "")}`;
-
-    template.hasParameter(parameterName, {
-      Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
-    });
-
-    template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
-      Properties: {
-        DesiredCapacity: Match.absent(),
-      },
-      UpdatePolicy: {
-        AutoScalingRollingUpdate: {
-          MinInstancesInService: {
-            Ref: parameterName,
-          },
-        },
-      },
-    });
-  });
-
   it("should only adjust properties of a horizontally scaling service", () => {
     const cdkApp = new App();
     const stack = new GuStack(cdkApp, "test", {
