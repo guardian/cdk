@@ -10,6 +10,31 @@ import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
 import { GuEc2AppExperimental } from "./ec2-app";
 
+/**
+ * `Aspects` appear to run only at synth time.
+ * This means we must synth the stack to see the results of the `Aspect`.
+ *
+ * @see https://github.com/aws/aws-cdk/issues/29047
+ *
+ * @param stack the stack to synthesise
+ */
+function getTemplateAfterAspectInvocation(stack: GuStack): Template {
+  const app = App.of(stack);
+
+  if (!app) {
+    throw new Error(`Unable to locate the enclosing App from GuStack ${stack.node.id}`);
+  }
+
+  const { artifacts } = app.synth();
+  const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
+
+  if (!cfnStack) {
+    throw new Error("Unable to locate a CloudFormationStackArtifact");
+  }
+
+  return Template.fromJSON(cfnStack.template as Record<string, unknown>);
+}
+
 // TODO test User Data includes a build number
 describe("The GuEc2AppExperimental pattern", () => {
   function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2AppExperimentalProps {
@@ -143,11 +168,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should only adjust properties of a horizontally scaling service", () => {
-    const cdkApp = new App();
-    const stack = new GuStack(cdkApp, "test", {
-      stack: "test-stack",
-      stage: "TEST",
-    });
+    const stack = simpleGuStackForTesting();
 
     const scalingApp = "my-scaling-app";
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
@@ -163,20 +184,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     const staticApp = "my-static-app";
     new GuEc2AppExperimental(stack, initialProps(stack, staticApp));
 
-    /*
-    We're ultimately testing an `Aspect`, which appear to run only at synth time.
-    As a work-around, synth the `App`, then perform assertions on the resulting template.
-
-    See also: https://github.com/aws/aws-cdk/issues/29047.
-     */
-    const { artifacts } = cdkApp.synth();
-    const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
-
-    if (!cfnStack) {
-      throw new Error("Unable to locate a CloudFormationStackArtifact");
-    }
-
-    const template = Template.fromJSON(cfnStack.template as Record<string, unknown>);
+    const template = getTemplateAfterAspectInvocation(stack);
 
     // The scaling ASG should NOT have `DesiredCapacity` set, and `MinInstancesInService` set via a CFN Parameter
     const parameterName = `MinInstancesInServiceFor${scalingApp.replaceAll("-", "")}`;
@@ -214,11 +222,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should add a single CFN Parameter per ASG regardless of how many scaling policies are attached to it", () => {
-    const cdkApp = new App();
-    const stack = new GuStack(cdkApp, "test", {
-      stack: "test-stack",
-      stage: "TEST",
-    });
+    const stack = simpleGuStackForTesting();
 
     const scalingApp = "my-scaling-app";
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
@@ -245,20 +249,7 @@ describe("The GuEc2AppExperimental pattern", () => {
       scalingAdjustment: -1,
     });
 
-    /*
-    We're ultimately testing an `Aspect`, which appear to run only at synth time.
-    As a work-around, synth the `App`, then perform assertions on the resulting template.
-
-    See also: https://github.com/aws/aws-cdk/issues/29047.
-     */
-    const { artifacts } = cdkApp.synth();
-    const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
-
-    if (!cfnStack) {
-      throw new Error("Unable to locate a CloudFormationStackArtifact");
-    }
-
-    const template = Template.fromJSON(cfnStack.template as Record<string, unknown>);
+    const template = getTemplateAfterAspectInvocation(stack);
 
     const parameterName = `MinInstancesInServiceFor${scalingApp.replaceAll("-", "")}`;
 
