@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
+import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
@@ -253,7 +254,17 @@ export class RiffRaffYamlFile {
             deployments.set(lambdaDeployment.name, lambdaDeployment.props);
           });
 
-          autoscalingGroups.forEach((asg) => {
+          /*
+          Instances in an ASG with an `AutoScalingRollingUpdate` update policy are rotated via CloudFormation.
+          Therefore, they do not need to also perform an `autoscaling` deployment via Riff-Raff.
+           */
+          const legacyAutoscalingGroups = autoscalingGroups.filter((asg) => {
+            const { cfnOptions } = asg.node.defaultChild as CfnAutoScalingGroup;
+            const { updatePolicy } = cfnOptions;
+            return updatePolicy?.autoScalingRollingUpdate === undefined;
+          });
+
+          legacyAutoscalingGroups.forEach((asg) => {
             const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
             deployments.set(asgDeployment.name, asgDeployment.props);
           });
