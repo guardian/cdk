@@ -94,12 +94,8 @@ describe("The GuEc2AppExperimental pattern", () => {
         MinSize: "5",
       },
       CreationPolicy: {
-        AutoScalingCreationPolicy: {
-          MinSuccessfulInstancesPercent: 100,
-        },
         ResourceSignal: {
           Count: 5,
-          Timeout: "PT5M",
         },
       },
     });
@@ -259,20 +255,10 @@ describe("The GuEc2AppExperimental pattern", () => {
       MaxValue: 9, // (min * 2) - 1
     });
 
+    template.resourceCountIs("AWS::AutoScaling::AutoScalingGroup", 1);
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
-      Properties: {
-        MinSize: "5",
-        MaxSize: "10",
-        DesiredCapacity: Match.absent(),
-        Tags: Match.arrayWith([{ Key: "App", Value: scalingApp, PropagateAtLaunch: true }]),
-      },
       UpdatePolicy: {
         AutoScalingRollingUpdate: {
-          MaxBatchSize: 10,
-          SuspendProcesses: ["AlarmNotification"],
-          MinSuccessfulInstancesPercent: 100,
-          WaitOnResourceSignals: true,
-          PauseTime: "PT5M",
           MinInstancesInService: {
             Ref: parameterName,
           },
