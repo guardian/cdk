@@ -254,15 +254,14 @@ export class RiffRaffYamlFile {
             deployments.set(lambdaDeployment.name, lambdaDeployment.props);
           });
 
-          // ASGs without an UpdatePolicy can be deployed via Riff-Raff's (legacy) `autoscaling` deployment type.
-          // ASGs with an UpdatePolicy are updated via Riff-Raff's `cloud-formation` deployment type.
+          /*
+          Instances in an ASG with an `AutoScalingRollingUpdate` update policy are rotated via CloudFormation.
+          Therefore, they do not need to also perform an `autoscaling` deployment via Riff-Raff.
+           */
           const legacyAutoscalingGroups = autoscalingGroups.filter((asg) => {
             const { cfnOptions } = asg.node.defaultChild as CfnAutoScalingGroup;
             const { updatePolicy } = cfnOptions;
-            return (
-              updatePolicy?.autoScalingReplacingUpdate === undefined &&
-              updatePolicy?.autoScalingRollingUpdate === undefined
-            );
+            return updatePolicy?.autoScalingRollingUpdate === undefined;
           });
 
           legacyAutoscalingGroups.forEach((asg) => {
