@@ -9,9 +9,28 @@ import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
 import { isSingletonPresentInStack } from "../../utils/singleton";
 
+interface AutoScalingRollingUpdateDurations {
+  /**
+   * The time between each check of an instance's health within the target group.
+   */
+  sleep: Duration;
+
+  /**
+   * Additional time to cover the time spent polling an instance's health within the target group before sending the CloudFormation signal.
+   */
+  buffer: Duration;
+}
+
+export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
+  sleep: Duration.seconds(5),
+  buffer: Duration.minutes(1),
+};
+
 /**
  * Ensures the `AutoScalingRollingUpdate` of an AutoScaling Group has a `PauseTime` matching the healthcheck grace period.
  * It also ensures the `CreationPolicy` resource signal `Timeout` matches the healthcheck grace period.
+ *
+ * @internal
  *
  * @privateRemarks
  * The ASG healthcheck grace period is hard-coded by {@link GuEc2App}.
@@ -40,14 +59,11 @@ class AutoScalingRollingUpdateTimeout implements IAspect {
       const currentRollingUpdate = construct.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
       const currentCreationPolicy = construct.cfnOptions.creationPolicy;
 
-      /**
-       * The type of `healthCheckGracePeriod` is `number | undefined`.
-       * In reality, it will always be set as we set it in {@link GuEc2App}.
-       * The right-hand side to appease the compiler; 5 minutes is the default value used by AWS.
-       *
-       * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-rollingupdate-pausetime
-       */
-      const signalTimeoutSeconds = construct.healthCheckGracePeriod ?? Duration.minutes(5).toSeconds();
+      if (!construct.healthCheckGracePeriod) {
+        throw new Error(`The healthcheck grace period not set for autoscaling group ${construct.node.id}.`);
+      }
+
+      const signalTimeoutSeconds = construct.healthCheckGracePeriod + RollingUpdateDurations.buffer.toSeconds();
 
       if (currentRollingUpdate) {
         construct.cfnOptions.updatePolicy = {
@@ -312,7 +328,7 @@ export class GuEc2AppExperimental extends GuEc2App {
 
       until [ "$STATE" == "\\"healthy\\"" ]; do
         echo "Instance not yet healthy within target group. Current state $STATE. Sleeping..."
-        sleep 5
+        sleep ${RollingUpdateDurations.sleep.toSeconds()}
         STATE=$(aws elbv2 describe-target-health \
           --target-group-arn ${targetGroup.targetGroupArn} \
           --region ${region} \
