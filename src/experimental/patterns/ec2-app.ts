@@ -1,9 +1,10 @@
 import type { IAspect } from "aws-cdk-lib";
-import { Aspects, CfnParameter, Duration } from "aws-cdk-lib";
+import { Aspects, CfnParameter, Duration, Tags } from "aws-cdk-lib";
 import { CfnAutoScalingGroup, CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import type { CfnPolicy } from "aws-cdk-lib/aws-iam";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
+import { MetadataKeys } from "../../constants";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import type { GuStack } from "../../constructs/core";
 import type { GuEc2AppProps } from "../../patterns";
@@ -234,7 +235,16 @@ class AsgRollingUpdatePolicy extends Policy {
   }
 }
 
-export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePolicy"> {}
+export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePolicy"> {
+  /**
+   * Which application build to run.
+   * This will typically match the build number provided by CI.
+   *
+   * @example
+   * process.env.GITHUB_RUN_NUMBER
+   */
+  buildIdentifier: string;
+}
 
 /**
  * An experimental pattern to instantiate an EC2 application that is updated entirely via CloudFormation.
@@ -273,7 +283,7 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
 export class GuEc2AppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppExperimentalProps) {
     const { minimumInstances, maximumInstances = minimumInstances * 2 } = props.scaling;
-    const { applicationPort } = props;
+    const { applicationPort, buildIdentifier } = props;
     const { region, stackId } = scope;
 
     super(scope, {
@@ -334,7 +344,7 @@ export class GuEc2AppExperimental extends GuEc2App {
         --query "TargetHealthDescriptions[0].TargetHealth.State")
 
       until [ "$STATE" == "\\"healthy\\"" ]; do
-        echo "Instance not yet healthy within target group. Current state $STATE. Sleeping..."
+        echo "Instance running build ${buildIdentifier} not yet healthy within target group. Current state $STATE. Sleeping..."
         sleep ${RollingUpdateDurations.sleep.toSeconds()}
         STATE=$(aws elbv2 describe-target-health \
           --target-group-arn ${targetGroup.targetGroupArn} \
@@ -343,7 +353,7 @@ export class GuEc2AppExperimental extends GuEc2App {
           --query "TargetHealthDescriptions[0].TargetHealth.State")
       done
 
-      echo "Instance is healthy in target group."
+      echo "Instance running build ${buildIdentifier} is healthy in target group."
       `,
       `# ${GuEc2AppExperimental.name} UserData End`,
     );
@@ -356,6 +366,11 @@ export class GuEc2AppExperimental extends GuEc2App {
           --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
         `,
     );
+
+    // If https://github.com/guardian/devx-logs is used, this tag will be added as a marker to logs in Central ELK.
+    Tags.of(autoScalingGroup.instanceLaunchTemplate).add(MetadataKeys.BUILD_IDENTIFIER, buildIdentifier, {
+      applyToLaunchedInstances: true,
+    });
 
     // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
     Aspects.of(scope).add(AutoScalingRollingUpdateTimeout.getInstance(scope));

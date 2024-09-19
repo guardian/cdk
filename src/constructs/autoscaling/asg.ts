@@ -80,6 +80,9 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
   public readonly amiParameter: GuAmiParameter;
   public readonly imageRecipe?: string | AmigoProps;
 
+  // Sadly this cannot be named `launchTemplate` as it would clash with a private property on the `AutoScalingGroup` class
+  public readonly instanceLaunchTemplate: LaunchTemplate;
+
   constructor(scope: GuStack, id: string, props: GuAutoScalingGroupProps) {
     const {
       app,
@@ -162,6 +165,7 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     this.app = app;
     this.amiParameter = imageId;
     this.imageRecipe = imageRecipe;
+    this.instanceLaunchTemplate = launchTemplate;
 
     targetGroup && this.attachToApplicationTargetGroup(targetGroup);
 

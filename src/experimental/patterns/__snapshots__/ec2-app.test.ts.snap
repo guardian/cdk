@@ -842,6 +842,10 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
                   "Value": "test-gu-ec2-app",
                 },
                 {
+                  "Key": "gu:build-identifier",
+                  "Value": "TEST",
+                },
+                {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
                 },
@@ -869,6 +873,10 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
                 {
                   "Key": "App",
                   "Value": "test-gu-ec2-app",
+                },
+                {
+                  "Key": "gu:build-identifier",
+                  "Value": "TEST",
                 },
                 {
                   "Key": "gu:cdk:version",
@@ -937,7 +945,7 @@ dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
                   "         --targets Id=$INSTANCE_ID,Port=9000         --query "TargetHealthDescriptions[0].TargetHealth.State")
 
       until [ "$STATE" == "\\"healthy\\"" ]; do
-        echo "Instance not yet healthy within target group. Current state $STATE. Sleeping..."
+        echo "Instance running build TEST not yet healthy within target group. Current state $STATE. Sleeping..."
         sleep 5
         STATE=$(aws elbv2 describe-target-health           --target-group-arn ",
                   {
@@ -950,7 +958,7 @@ dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
                   "           --targets Id=$INSTANCE_ID,Port=9000           --query "TargetHealthDescriptions[0].TargetHealth.State")
       done
 
-      echo "Instance is healthy in target group."
+      echo "Instance running build TEST is healthy in target group."
       
 # GuEc2AppExperimental UserData End",
                 ],
@@ -965,6 +973,10 @@ dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
               {
                 "Key": "App",
                 "Value": "test-gu-ec2-app",
+              },
+              {
+                "Key": "gu:build-identifier",
+                "Value": "TEST",
               },
               {
                 "Key": "gu:cdk:version",
