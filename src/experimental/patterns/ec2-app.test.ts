@@ -9,7 +9,7 @@ import { GuUserData } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
-import { GuEc2AppExperimental } from "./ec2-app";
+import { GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
 
 /**
  * `Aspects` appear to run only at synth time.
@@ -102,11 +102,12 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should have a PauseTime equal to the ASG healthcheck grace period", () => {
+  it("should have a PauseTime higher than the ASG healthcheck grace period", () => {
     const stack = simpleGuStackForTesting();
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, initialProps(stack));
 
     const tenMinutes = Duration.minutes(10);
+    const tenMinutesPlusBuffer = tenMinutes.plus(RollingUpdateDurations.buffer);
 
     const cfnAsg = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
     cfnAsg.healthCheckGracePeriod = tenMinutes.toSeconds();
@@ -119,12 +120,12 @@ describe("The GuEc2AppExperimental pattern", () => {
       },
       CreationPolicy: {
         ResourceSignal: {
-          Timeout: tenMinutes.toIsoString(),
+          Timeout: tenMinutesPlusBuffer.toIsoString(),
         },
       },
       UpdatePolicy: {
         AutoScalingRollingUpdate: {
-          PauseTime: tenMinutes.toIsoString(),
+          PauseTime: tenMinutesPlusBuffer.toIsoString(),
         },
       },
     });
