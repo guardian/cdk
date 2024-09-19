@@ -1,6 +1,7 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Aspects, CfnParameter, Duration } from "aws-cdk-lib";
 import { CfnAutoScalingGroup, CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import type { CfnPolicy } from "aws-cdk-lib/aws-iam";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
@@ -308,7 +309,13 @@ export class GuEc2AppExperimental extends GuEc2App {
       },
     };
 
-    AsgRollingUpdatePolicy.getInstance(scope).attachToRole(role);
+    const policy = AsgRollingUpdatePolicy.getInstance(scope);
+    policy.attachToRole(role);
+
+    // Create the Policy with necessary permissions first.
+    // Then create the ASG that requires the permissions.
+    const cfnPolicy = policy.node.defaultChild as CfnPolicy;
+    cfnAutoScalingGroup.addDependency(cfnPolicy);
 
     /*
     `aws` is available via AMIgo baked AMIs.
