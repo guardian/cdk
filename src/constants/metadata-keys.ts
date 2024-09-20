@@ -4,4 +4,5 @@ export const MetadataKeys = {
   REPOSITORY_NAME: "gu:repo",
   LOG_KINESIS_STREAM_NAME: "LogKinesisStreamName",
   SYSTEMD_UNIT: "SystemdUnit",
+  BUILD_IDENTIFIER: "gu:build-identifier",
 };

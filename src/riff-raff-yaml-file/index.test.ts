@@ -1365,6 +1365,7 @@ describe("The RiffRaffYamlFile class", () => {
           },
           applicationPort: 9000,
           imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+          buildIdentifier: "TEST",
         });
       }
     }

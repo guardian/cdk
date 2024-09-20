@@ -62,6 +62,7 @@ describe("The GuEc2AppExperimental pattern", () => {
       scaling: {
         minimumInstances: 1,
       },
+      buildIdentifier: "TEST",
     };
   }
 
