@@ -109,6 +109,9 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           "Timeout": "PT3M",
         },
       },
+      "DependsOn": [
+        "AsgRollingUpdatePolicy2A1DDC6F",
+      ],
       "Properties": {
         "DesiredCapacity": "1",
         "HealthCheckGracePeriod": 120,
