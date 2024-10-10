@@ -3,7 +3,7 @@ import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
 import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
-import type { RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
+import {OperatingSystemFamily, RepositoryImageProps} from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   Compatibility,
@@ -12,6 +12,7 @@ import {
   LogDrivers,
   TaskDefinition,
 } from "aws-cdk-lib/aws-ecs";
+import {CpuArchitecture} from "aws-cdk-lib/aws-ecs/lib/runtime-platform";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { DefinitionBody, IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
@@ -138,6 +139,11 @@ export interface GuEcsTaskProps extends AppIdentity {
    * @default false
    */
   containerInsights?: boolean;
+  /**
+   * Set architecture
+   * @default ARM64
+   */
+  cpuArchitecture?: CpuArchitecture;
 }
 
 /**
@@ -189,6 +195,7 @@ export class GuEcsTask extends Construct {
       enableDistributablePolicy = true,
       readonlyRootFilesystem = false,
       containerInsights = false,
+      cpuArchitecture = CpuArchitecture.ARM64,
     } = props;
 
     if (storage && storage < 21) {
@@ -218,6 +225,10 @@ export class GuEcsTask extends Construct {
       memoryMiB: memory.toString(),
       family: `${stack}-${stage}-${app}`,
       ephemeralStorageGiB: storage,
+      runtimePlatform: {
+        cpuArchitecture: cpuArchitecture,
+        operatingSystemFamily: OperatingSystemFamily.of("LINUX"),
+      }
     });
 
     const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
