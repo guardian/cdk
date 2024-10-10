@@ -17,7 +17,7 @@
     "prettier:check": "prettier --check \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "watch": "tsc -w",
-    "test": "jest --detectOpenHandles --runInBand",
+    "test": "jest --detectOpenHandles --runInBand -u",
     "test:custom-lint-rule": "eslint tools/eslint/rules/*.test.ts",
     "test:dev": "jest --detectOpenHandles --runInBand --watch",
     "prepare": "tsc",
