@@ -8,12 +8,12 @@ import {
   Cluster,
   Compatibility,
   ContainerImage,
+  CpuArchitecture,
   FargatePlatformVersion,
   LogDrivers,
   OperatingSystemFamily,
-  TaskDefinition,
+  TaskDefinition
 } from "aws-cdk-lib/aws-ecs";
-import { CpuArchitecture } from "aws-cdk-lib/aws-ecs/lib/runtime-platform";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { DefinitionBody, IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
