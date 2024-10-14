@@ -14,13 +14,15 @@ export interface RiffRaffYaml {
 
 export type RiffRaffDeploymentName = string;
 
+export type RiffRaffDeploymentParameters = Record<string, string | boolean | Record<string, unknown>>;
+
 export interface RiffRaffDeploymentProps {
   type: string;
   regions: Set<Region>;
   stacks: Set<StackTag>;
   app: string;
   contentDirectory: string;
-  parameters: Record<string, string | boolean | Record<string, string>>;
+  parameters: RiffRaffDeploymentParameters;
   dependencies?: RiffRaffDeploymentName[];
   actions?: string[];
 }
