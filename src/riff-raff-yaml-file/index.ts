@@ -8,7 +8,7 @@ import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
-import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } from "./deployments/cloudformation";
+import { cloudFormationDeployment, getAmiParameters } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
@@ -269,10 +269,17 @@ export class RiffRaffYamlFile {
             deployments.set(asgDeployment.name, asgDeployment.props);
           });
 
-          deployments.set(
-            cfnDeployment.name,
-            addAmiParametersToCloudFormationDeployment(cfnDeployment, autoscalingGroups),
-          );
+          const amiParametersToTags = getAmiParameters(autoscalingGroups);
+
+          deployments.set(cfnDeployment.name, {
+            ...cfnDeployment.props,
+            parameters: {
+              ...cfnDeployment.props.parameters,
+
+              // only add the `amiParametersToTags` property if there are some
+              ...(autoscalingGroups.length > 0 && { amiParametersToTags }),
+            },
+          });
         });
       });
     });

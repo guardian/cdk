@@ -1,5 +1,5 @@
 import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
-import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentProps } from "../types";
+import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentParameters } from "../types";
 
 export function cloudFormationDeployment(
   cdkStacks: CdkStacksDifferingOnlyByStage,
@@ -47,11 +47,8 @@ export function cloudFormationDeployment(
   };
 }
 
-export function addAmiParametersToCloudFormationDeployment(
-  cfnDeployment: RiffRaffDeployment,
-  autoScalingGroups: GuAutoScalingGroup[],
-): RiffRaffDeploymentProps {
-  const amiParametersToTags = autoScalingGroups.reduce((acc, asg) => {
+export function getAmiParameters(autoScalingGroups: GuAutoScalingGroup[]): RiffRaffDeploymentParameters {
+  return autoScalingGroups.reduce<RiffRaffDeploymentParameters>((acc, asg) => {
     const { imageRecipe, app, amiParameter } = asg;
 
     if (!imageRecipe) {
@@ -74,14 +71,4 @@ export function addAmiParametersToCloudFormationDeployment(
       },
     };
   }, {});
-
-  return {
-    ...cfnDeployment.props,
-    parameters: {
-      ...cfnDeployment.props.parameters,
-
-      // only add the `amiParametersToTags` property if there are some
-      ...(autoScalingGroups.length > 0 && { amiParametersToTags }),
-    },
-  };
 }
