@@ -3,38 +3,12 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { CfnScalingPolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
-import { CloudFormationStackArtifact } from "aws-cdk-lib/cx-api";
 import { AccessScope } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
-import { simpleGuStackForTesting } from "../../utils/test";
+import { getTemplateAfterAspectInvocation, simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
 import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
-
-/**
- * `Aspects` appear to run only at synth time.
- * This means we must synth the stack to see the results of the `Aspect`.
- *
- * @see https://github.com/aws/aws-cdk/issues/29047
- *
- * @param stack the stack to synthesise
- */
-function getTemplateAfterAspectInvocation(stack: GuStack): Template {
-  const app = App.of(stack);
-
-  if (!app) {
-    throw new Error(`Unable to locate the enclosing App from GuStack ${stack.node.id}`);
-  }
-
-  const { artifacts } = app.synth();
-  const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
-
-  if (!cfnStack) {
-    throw new Error("Unable to locate a CloudFormationStackArtifact");
-  }
-
-  return Template.fromJSON(cfnStack.template as Record<string, unknown>);
-}
 
 // TODO test User Data includes a build number
 describe("The GuEc2AppExperimental pattern", () => {
