@@ -109,9 +109,10 @@ class AutoScalingRollingUpdateTimeout implements IAspect {
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
-class HorizontallyScalingDeploymentProperties implements IAspect {
+// eslint-disable-next-line custom-rules/experimental-classes -- this class is not indented for public use
+export class HorizontallyScalingDeploymentProperties implements IAspect {
   public readonly stack: GuStack;
-  private readonly asgToParamMap: Map<string, CfnParameter>;
+  public readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: HorizontallyScalingDeploymentProperties | undefined;
 
   private constructor(scope: GuStack) {

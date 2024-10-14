@@ -1,4 +1,5 @@
 import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import { getAsgRollingUpdateCfnParameterName } from "../../experimental/patterns/ec2-app";
 import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentParameters } from "../types";
 
 export function cloudFormationDeployment(
@@ -68,6 +69,21 @@ export function getAmiParameters(autoScalingGroups: GuAutoScalingGroup[]): RiffR
         AmigoStage,
         Recipe,
         Encrypted,
+      },
+    };
+  }, {});
+}
+
+export function getMinInstancesInServiceParameters(
+  autoScalingGroups: GuAutoScalingGroup[],
+): RiffRaffDeploymentParameters {
+  return autoScalingGroups.reduce<RiffRaffDeploymentParameters>((acc, asg) => {
+    const { app } = asg;
+    const cfnParameter = getAsgRollingUpdateCfnParameterName(asg);
+    return {
+      ...acc,
+      [cfnParameter]: {
+        App: app,
       },
     };
   }, {});
