@@ -168,9 +168,10 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
         const asgNodeId = autoScalingGroup.node.id;
 
         if (!this.asgToParamMap.has(asgNodeId)) {
+          const cfnParameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
           this.asgToParamMap.set(
             asgNodeId,
-            new CfnParameter(this.stack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
+            new CfnParameter(this.stack, cfnParameterName, {
               type: "Number",
               default: parseInt(cfnAutoScalingGroup.minSize),
               maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
@@ -189,6 +190,11 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
       }
     }
   }
+}
+
+export function getAsgRollingUpdateCfnParameterName(autoScalingGroup: GuAutoScalingGroup) {
+  const { app } = autoScalingGroup;
+  return `MinInstancesInServiceFor${app.replaceAll("-", "")}`;
 }
 
 /**

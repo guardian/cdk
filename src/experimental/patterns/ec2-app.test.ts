@@ -9,7 +9,7 @@ import { GuUserData } from "../../constructs/autoscaling";
 import { GuStack } from "../../constructs/core";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
-import { GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
+import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
 
 /**
  * `Aspects` appear to run only at synth time.
@@ -176,7 +176,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     const template = getTemplateAfterAspectInvocation(stack);
 
     // The scaling ASG should NOT have `DesiredCapacity` set, and `MinInstancesInService` set via a CFN Parameter
-    const parameterName = `MinInstancesInServiceFor${scalingApp.replaceAll("-", "")}`;
+    const parameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
     template.hasParameter(parameterName, {
       Type: "Number",
       Default: 5,
