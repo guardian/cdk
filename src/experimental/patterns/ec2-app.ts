@@ -111,7 +111,7 @@ class AutoScalingRollingUpdateTimeout implements IAspect {
  */
 export class HorizontallyScalingDeploymentPropertiesExperimental implements IAspect {
   public readonly stack: GuStack;
-  private readonly asgToParamMap: Map<string, CfnParameter>;
+  public readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: HorizontallyScalingDeploymentPropertiesExperimental | undefined;
 
   private constructor(scope: GuStack) {
