@@ -6,6 +6,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
     "gu:cdk:constructs": [
       "GuStack",
       "GuEcsTask",
+      "GuSubnetListParameter",
       "GuDistributionBucketParameter",
     ],
     "gu:cdk:version": "TEST",
@@ -22,6 +23,11 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "ecstestPrivateSubnets": {
+      "Default": "/account/vpc/primary/subnets/private",
+      "Description": "A list of private subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
   "Resources": {
@@ -190,7 +196,34 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
                   "Arn",
                 ],
               },
-              "","TaskDefinition":"test-stack-TEST-ecs-test","NetworkConfiguration":{"AwsvpcConfiguration":{"Subnets":["abc-123"],"SecurityGroups":["id-123"]}},"Overrides":{"ContainerOverrides":[{"Name":"test-ecs-task-ecs-test-TaskContainer"}]},"LaunchType":"FARGATE","PlatformVersion":"LATEST"}}}}",
+              "","TaskDefinition":"test-stack-TEST-ecs-test","NetworkConfiguration":{"AwsvpcConfiguration":{"Subnets":["",
+              {
+                "Fn::Select": [
+                  0,
+                  {
+                    "Ref": "ecstestPrivateSubnets",
+                  },
+                ],
+              },
+              "","",
+              {
+                "Fn::Select": [
+                  1,
+                  {
+                    "Ref": "ecstestPrivateSubnets",
+                  },
+                ],
+              },
+              "","",
+              {
+                "Fn::Select": [
+                  2,
+                  {
+                    "Ref": "ecstestPrivateSubnets",
+                  },
+                ],
+              },
+              ""],"SecurityGroups":["id-123"]}},"Overrides":{"ContainerOverrides":[{"Name":"test-ecs-task-ecs-test-TaskContainer"}]},"LaunchType":"FARGATE","PlatformVersion":"LATEST"}}}}",
             ],
           ],
         },
