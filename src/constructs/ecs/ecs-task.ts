@@ -200,8 +200,8 @@ export class GuEcsTask extends Construct {
     const taskSubnets = subnets
       ? subnets
       : assignPublicIp
-        ? GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app })
-        : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app });
+        ? GuVpc.subnetsFromParameterFixedNumber(scope, { type: SubnetType.PUBLIC, app }, 3)
+        : GuVpc.subnetsFromParameterFixedNumber(scope, { type: SubnetType.PRIVATE, app }, 3);
 
     const { stack, stage } = scope;
 
