@@ -17,13 +17,14 @@ const makeVpc = (stack: GuStack) =>
 describe("The GuScheduledEcsTask pattern", () => {
   it("should use the specified schedule", () => {
     const stack = simpleGuStackForTesting();
-
+    const vpc = makeVpc(stack);
     new GuScheduledEcsTask(stack, "test", {
       schedule: Schedule.rate(Duration.minutes(1)),
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
-      vpc: makeVpc(stack),
+      vpc,
       app: "ecs-test",
+      subnets: vpc.privateSubnets,
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
