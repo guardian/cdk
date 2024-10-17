@@ -21,7 +21,6 @@ import { Construct } from "constructs";
 import type { NoMonitoring } from "../cloudwatch";
 import type { GuStack } from "../core";
 import { AppIdentity } from "../core";
-import { GuVpc, SubnetType } from "../ec2";
 import { GuGetDistributablePolicyStatement } from "../iam";
 
 /**
@@ -66,9 +65,8 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
 /**
  * Configuration options for the [[`GuEcsTask`]] pattern.
  *
- * Note that 'subnets' will default to the private subnets in your vpc where assignPublicIp is set to false, the public
- * subnets otherwise. This relies on the relevant SSM parameters being set in your account (should be true for most
- * guardian accounts)
+ * Note it is recommended to use GuVpc.subnetsFromParameterFixedNumber for the subnets prop rather than
+ * GuVpc.subnetsFromParameter, as using the latter can result a custom resource being required
  *
  * See [[`ContainerConfiguration`]] for details of how to configure the container used to run the task.
  *
@@ -109,7 +107,7 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
  */
 export interface GuEcsTaskProps extends AppIdentity {
   vpc: IVpc;
-  subnets?: ISubnet[];
+  subnets: ISubnet[];
   assignPublicIp?: boolean;
   containerConfiguration: ContainerConfiguration;
   taskTimeoutInMinutes?: number;
@@ -182,7 +180,6 @@ export class GuEcsTask extends Construct {
       customTaskPolicies,
       vpc,
       subnets,
-      assignPublicIp = false,
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,
@@ -196,12 +193,6 @@ export class GuEcsTask extends Construct {
         "Storage must be at least 21. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-ephemeralstorage.html",
       );
     }
-
-    const taskSubnets = subnets
-      ? subnets
-      : assignPublicIp
-        ? GuVpc.subnetsFromParameterFixedNumber(scope, { type: SubnetType.PUBLIC, app }, 3)
-        : GuVpc.subnetsFromParameterFixedNumber(scope, { type: SubnetType.PRIVATE, app }, 3);
 
     const { stack, stage } = scope;
 
@@ -246,8 +237,8 @@ export class GuEcsTask extends Construct {
         platformVersion: FargatePlatformVersion.LATEST,
       }),
       taskDefinition,
-      subnets: { subnets: taskSubnets },
-      assignPublicIp,
+      subnets: { subnets },
+      assignPublicIp: false,
       integrationPattern: IntegrationPattern.RUN_JOB,
       resultPath: JsonPath.DISCARD,
       taskTimeout: Timeout.duration(Duration.minutes(taskTimeoutInMinutes)),

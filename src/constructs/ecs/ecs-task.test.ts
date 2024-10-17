@@ -25,11 +25,12 @@ const testPolicy = new PolicyStatement({
 describe("The GuEcsTask pattern", () => {
   it("should use the specified container", () => {
     const stack = simpleGuStackForTesting();
-
+    const vpc = makeVpc(stack)
     new GuEcsTask(stack, "test-ecs-task", {
       containerConfiguration: { id: "node:10", type: "registry" },
       monitoringConfiguration: { noMonitoring: true },
-      vpc: makeVpc(stack),
+      vpc,
+      subnets: vpc.privateSubnets,
       app: "ecs-test",
     });
 
@@ -42,6 +43,7 @@ describe("The GuEcsTask pattern", () => {
     new GuEcsTask(stack, `test-ecs-task-${app}`, {
       containerConfiguration: { id: "node:10", type: "registry" },
       vpc,
+      subnets: vpc.privateSubnets,
       app: app,
       taskTimeoutInMinutes: 60,
       cpu: 1024,
