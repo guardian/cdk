@@ -1,0 +1,17 @@
+export * as acm from "./acm";
+export * as autoscaling from "./autoscaling";
+export * as cloudwatch from "./cloudwatch";
+export * as core from "./core";
+export * as dns from "./dns";
+export * as dynamodb from "./dynamodb";
+export * as ec2 from "./ec2";
+export * as ecs from "./ecs";
+export * as iam from "./iam";
+export * as kinesis from "./kinesis";
+export * as lambda from "./lambda";
+export * as loadbalancing from "./loadbalancing";
+export * as rds from "./rds";
+export * as s3 from "./s3";
+export * as ses from "./ses";
+export * as vpc from "./vpc";
+export * as root from "./root";
