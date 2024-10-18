@@ -68,7 +68,7 @@ In the near-future we are likely to adopt a stricter approach in this area.
 ## Testing larger changes
 
 Depending on the nature of your change, you may want to test things on a 'real'
-stack, or even publish a beta version of the library to NPM.
+stack.
 
 This section describes a few ad-hoc testing methods, posed as questions.
 
@@ -99,28 +99,6 @@ You can use the [CDK Playground](https://github.com/guardian/cdk-playground)
 stack to test your changes against a real AWS stack.
 
 This stack isn't user facing. Accidentally causing destruction there is ok - better there than on theguardian.com!
-
-### Would your change update the layout of the NPM package?
-
-It can sometimes be necessary to update the layout of the NPM package.
-
-These changes can be quite difficult to simulate locally using `npm link` or similar.
-
-For this reason, it can be helpful to publish a beta version to NPM. To do so:
-
-1. Update the `beta` branch
-1. Wait for the robots (GitHub Actions) to run and release a beta version
-
-You can now install and test your changes with:
-
-```
-npm install @guardian/cdk@beta
-```
-
-Once you're happy with your changes, raise a PR into `main` as normal.
-
-NOTE: The `beta` branch is just like any other branch - it may not be up to date with `main`.
-It's wise to rebase it with `main` before working on it.
 
 ## Releasing
 
