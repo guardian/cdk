@@ -1,5 +1,9 @@
 # @guardian/cdk
 
+## 59.5.3
+
+**DO NOT USE**: Published by mistake.
+
 ## 59.5.2
 
 ### Patch Changes
