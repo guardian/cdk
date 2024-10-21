@@ -109,22 +109,26 @@ class AutoScalingRollingUpdateTimeout implements IAspect {
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
-class HorizontallyScalingDeploymentProperties implements IAspect {
+export class HorizontallyScalingDeploymentPropertiesExperimental implements IAspect {
   public readonly stack: GuStack;
-  private readonly asgToParamMap: Map<string, CfnParameter>;
-  private static instance: HorizontallyScalingDeploymentProperties | undefined;
+  public readonly asgToParamMap: Map<string, CfnParameter>;
+  private static instance: HorizontallyScalingDeploymentPropertiesExperimental | undefined;
 
   private constructor(scope: GuStack) {
     this.stack = scope;
     this.asgToParamMap = new Map();
   }
 
-  public static getInstance(stack: GuStack): HorizontallyScalingDeploymentProperties {
+  public static getInstance(stack: GuStack): HorizontallyScalingDeploymentPropertiesExperimental {
     if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new HorizontallyScalingDeploymentProperties(stack);
+      this.instance = new HorizontallyScalingDeploymentPropertiesExperimental(stack);
     }
 
     return this.instance;
+  }
+
+  public static getCfnParameterName(asg: GuAutoScalingGroup): string {
+    return `MinInstancesInServiceFor${asg.app.replaceAll("-", "")}`;
   }
 
   public visit(construct: IConstruct) {
@@ -170,11 +174,15 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
         if (!this.asgToParamMap.has(asgNodeId)) {
           this.asgToParamMap.set(
             asgNodeId,
-            new CfnParameter(this.stack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
-              type: "Number",
-              default: parseInt(cfnAutoScalingGroup.minSize),
-              maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
-            }),
+            new CfnParameter(
+              this.stack,
+              HorizontallyScalingDeploymentPropertiesExperimental.getCfnParameterName(autoScalingGroup),
+              {
+                type: "Number",
+                default: parseInt(cfnAutoScalingGroup.minSize),
+                maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
+              },
+            ),
           );
         }
 
@@ -374,6 +382,6 @@ export class GuEc2AppExperimental extends GuEc2App {
 
     // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
     Aspects.of(scope).add(AutoScalingRollingUpdateTimeout.getInstance(scope));
-    Aspects.of(scope).add(HorizontallyScalingDeploymentProperties.getInstance(scope));
+    Aspects.of(scope).add(HorizontallyScalingDeploymentPropertiesExperimental.getInstance(scope));
   }
 }
