@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 59.5.4
+
+### Patch Changes
+
+- 08e6833: Revert mistakenly published version v59.5.3
+
 ## 59.5.3
 
 **DO NOT USE**: Published by mistake.
