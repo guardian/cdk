@@ -43,9 +43,14 @@ export class GuVpc {
      *
      * TODO: Understand VPCs and Subnets better and develop a better solution to this problem
      */
-    return subnets.map((subnetId) =>
-      Subnet.fromSubnetAttributes(scope, `subnet-${subnetId}`, { subnetId, routeTableId: " " }),
-    );
+    // return subnets.map((subnetId) =>
+    //   Subnet.fromSubnetAttributes(scope, `subnet-${subnetId}`, { subnetId, routeTableId: " " }),
+    // );
+    const subnetIds: string[] = [];
+    for (let i = 0; i < 3; i++) {
+      subnetIds.push(Fn.select(i, subnets));
+    }
+    return subnetIds.map((subnetId) => Subnet.fromSubnetId(scope, `subnet-${subnetId}`, subnetId));
   }
 
   static subnetsFromParameter(scope: GuStack, props?: GuSubnetProps): ISubnet[] {
