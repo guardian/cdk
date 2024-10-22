@@ -8,8 +8,10 @@ import {
   Cluster,
   Compatibility,
   ContainerImage,
+  CpuArchitecture,
   FargatePlatformVersion,
   LogDrivers,
+  OperatingSystemFamily,
   TaskDefinition,
 } from "aws-cdk-lib/aws-ecs";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -131,6 +133,11 @@ export interface GuEcsTaskProps extends AppIdentity {
    * @default false
    */
   containerInsights?: boolean;
+  /**
+   * Set architecture
+   * @default ARM64
+   */
+  cpuArchitecture?: CpuArchitecture;
 }
 
 /**
@@ -180,6 +187,7 @@ export class GuEcsTask extends Construct {
       enableDistributablePolicy = true,
       readonlyRootFilesystem = false,
       containerInsights = false,
+      cpuArchitecture = CpuArchitecture.ARM64,
     } = props;
 
     if (storage && storage < 21) {
@@ -203,6 +211,10 @@ export class GuEcsTask extends Construct {
       memoryMiB: memory.toString(),
       family: `${stack}-${stage}-${app}`,
       ephemeralStorageGiB: storage,
+      runtimePlatform: {
+        cpuArchitecture: cpuArchitecture,
+        operatingSystemFamily: OperatingSystemFamily.of("LINUX"),
+      },
     });
 
     const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
