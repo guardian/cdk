@@ -14,7 +14,7 @@ import { constructStack } from "./utils/stack";
 import type { Name } from "./utils/utils";
 import { getCommands, pascalCase } from "./utils/utils";
 
-export type PackageManager = "npm" | "yarn";
+export type PackageManager = "npm" | "yarn" | "deno";
 
 interface NewProjectProps {
   init: boolean;
@@ -80,7 +80,7 @@ function getConfig(props: NewProjectProps): NewProjectConfig {
       kebab: kebabAppName,
       pascal: appName,
     },
-    appPath: `${cdkDir}/bin/${kebabAppName}.ts`,
+    appPath: packageManager === "deno" ? `${cdkDir}/main.ts` : `${cdkDir}/bin/${kebabAppName}.ts`,
     stackName: {
       kebab: kebabStackName,
       pascal: stackName,
@@ -101,7 +101,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   const config = getConfig(props);
 
   if (config.init) {
-    buildDirectory({ outputDir: config.cdkDir });
+    buildDirectory({ outputDir: config.cdkDir, packageManager: config.packageManager });
   }
 
   console.log(`New app ${config.appName.pascal} will be written to ${config.appPath}`);
@@ -110,10 +110,10 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   // bin directory
   await constructApp({
     appName: config.appName,
-    outputFile: "cdk.ts",
+    outputFile: config.packageManager === "deno" ? "main.ts" : "cdk.ts",
     outputDir: dirname(config.appPath),
     stack: config.stackName,
-    imports: Imports.newAppImports(config.appName),
+    imports: Imports.newAppImports({ name: config.appName, packageManager: config.packageManager }),
     stages: config.stages,
     regions: config.regions,
   });
@@ -129,11 +129,12 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
 
   // lib directory
   await constructTest({
-    imports: Imports.newTestImports(config.appName),
+    imports: Imports.newTestImports({ name: config.appName, packageManager: config.packageManager }),
     stackName: config.stackName,
     appName: config.appName,
     outputFile: basename(config.testPath),
     outputDir: dirname(config.stackPath),
+    packageManager: config.packageManager,
   });
 
   const commands = getCommands(config.packageManager, config.cdkDir);
@@ -145,13 +146,19 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   }
 
   // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter
-  await execute(
-    "./node_modules/.bin/eslint",
-    ["lib/** bin/**", "--ext .ts", "--no-error-on-unmatched-pattern", "--fix"],
-    {
+  if (config.packageManager === "deno") {
+    await execute("deno lint", ["--fix"], {
       cwd: config.cdkDir,
-    },
-  );
+    });
+  } else {
+    await execute(
+      "./node_modules/.bin/eslint",
+      ["lib/** bin/**", "--ext .ts", "--no-error-on-unmatched-pattern", "--fix"],
+      {
+        cwd: config.cdkDir,
+      },
+    );
+  }
 
   ux.action.start(chalk.yellow("Running lint check..."));
   await commands.lint();

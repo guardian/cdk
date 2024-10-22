@@ -25,10 +25,12 @@ export function getCommands(
   synth: () => Promise<string>;
   test: () => Promise<string>;
 } {
+  const isDeno = packageManager === "deno";
+
   return {
     installDependencies: () => runTask(packageManager, cwd, "install"),
-    lint: () => runTask(packageManager, cwd, "run lint"),
-    test: () => runTask(packageManager, cwd, "test -- -u"),
+    lint: () => runTask(packageManager, cwd, isDeno ? "lint" : "run lint"),
+    test: () => runTask(packageManager, cwd, isDeno ? "run test -- -u" : "test -- -u"),
     synth: () => runTask(packageManager, cwd, "run synth"),
   };
 }
