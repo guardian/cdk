@@ -1,4 +1,5 @@
 import type { CodeMaker } from "codemaker";
+import type { PackageManager } from "..";
 import type { Name } from "./utils";
 
 interface Import {
@@ -37,7 +38,16 @@ export class Imports {
     });
   }
 
-  public static newAppImports({ kebab, pascal }: Name): Imports {
+  public static newAppImports({
+    name: { kebab, pascal },
+    packageManager,
+  }: {
+    name: Name;
+    packageManager: PackageManager;
+  }): Imports {
+    // Deno requires local imports to specify file extensions
+    // https://docs.deno.com/runtime/fundamentals/modules
+    const fileExtension = packageManager === "deno" ? ".ts" : "";
     return new Imports({
       "source-map-support/register": {
         basic: true,
@@ -48,14 +58,23 @@ export class Imports {
         types: [],
         components: ["GuRoot"],
       },
-      [`../lib/${kebab}`]: {
+      [`../lib/${kebab}${fileExtension}`]: {
         types: [],
         components: [pascal],
       },
     });
   }
 
-  public static newTestImports({ kebab, pascal }: Name): Imports {
+  public static newTestImports({
+    name: { kebab, pascal },
+    packageManager,
+  }: {
+    name: Name;
+    packageManager: PackageManager;
+  }): Imports {
+    // Deno requires local imports to specify file extensions
+    // https://docs.deno.com/runtime/fundamentals/modules
+    const fileExtension = packageManager === "deno" ? ".ts" : "";
     return new Imports({
       "aws-cdk-lib": {
         types: [],
@@ -65,10 +84,18 @@ export class Imports {
         types: [],
         components: ["Template"],
       },
-      [`./${kebab}`]: {
+      [`./${kebab}${fileExtension}`]: {
         types: [],
         components: [pascal],
       },
+      ...(packageManager === "deno"
+        ? {
+            "@std/testing/snapshot": {
+              types: [],
+              components: ["assertSnapshot"],
+            },
+          }
+        : {}),
     });
   }
 

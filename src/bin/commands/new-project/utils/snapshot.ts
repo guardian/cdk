@@ -1,3 +1,4 @@
+import type { PackageManager } from "aws-sdk/clients/ecr";
 import { CodeMaker } from "codemaker";
 import type { Imports } from "./imports";
 import type { Name } from "./utils";
@@ -9,6 +10,7 @@ export interface TestBuilderProps {
   outputFile: string;
   outputDir: string;
   comment?: string;
+  packageManager: PackageManager;
 }
 
 export class TestBuilder {
@@ -34,7 +36,7 @@ export class TestBuilder {
 
     this.config.imports.render(this.code);
 
-    this.addTest();
+    this.config.packageManager === "deno" ? this.addTestDeno() : this.addTest();
 
     this.code.closeFile(this.config.outputFile);
     await this.code.save(this.config.outputDir);
@@ -55,6 +57,22 @@ export class TestBuilder {
     this.code.line(`expect(template.toJSON()).toMatchSnapshot();`);
 
     this.code.closeBlock("});");
+    this.code.closeBlock("});");
+  }
+
+  addTestDeno(): void {
+    const { appName, stackName } = this.config;
+
+    this.code.openBlock(`Deno.test("The ${appName.pascal} stack matches the screenshot", async (ctx) =>`);
+
+    this.code.line("const app = new App();");
+    this.code.line(
+      `const stack = new ${appName.pascal}(app, "${appName.pascal}", { stack: "${stackName.kebab}", stage: "TEST" });`,
+    );
+
+    this.code.line(`const template = Template.fromStack(stack);`);
+    this.code.line(`await assertSnapshot(ctx, template.toJSON());`);
+
     this.code.closeBlock("});");
   }
 }
