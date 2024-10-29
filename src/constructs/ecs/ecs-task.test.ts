@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import type {ISubnet, IVpc} from "aws-cdk-lib/aws-ec2";
+import type { ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
