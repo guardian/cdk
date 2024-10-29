@@ -1,5 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
-import type { IVpc } from "aws-cdk-lib/aws-ec2";
+import type {ISubnet, IVpc} from "aws-cdk-lib/aws-ec2";
 import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
@@ -39,11 +39,11 @@ describe("The GuEcsTask pattern", () => {
     });
   });
 
-  const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc) => {
+  const generateComplexStack = (stack: GuStack, app: string, vpc: IVpc, subnets?: ISubnet[]) => {
     new GuEcsTask(stack, `test-ecs-task-${app}`, {
       containerConfiguration: { id: "node:10", type: "registry" },
       vpc,
-      subnets: vpc.privateSubnets,
+      subnets: subnets ?? vpc.privateSubnets,
       app: app,
       taskTimeoutInMinutes: 60,
       cpu: 1024,
@@ -76,5 +76,19 @@ describe("The GuEcsTask pattern", () => {
 
     template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test" } });
     template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test2" } });
+  });
+
+  it("should support overriding the subnets used by the task", () => {
+    const stack = simpleGuStackForTesting();
+
+    const vpc2 = Vpc.fromVpcAttributes(stack, "VPC2", {
+      vpcId: "test",
+      availabilityZones: [""],
+      publicSubnetIds: [""],
+      privateSubnetIds: ["abc-123", "def-456"],
+    });
+    generateComplexStack(stack, "ecs-test", makeVpc(stack), vpc2.privateSubnets);
+
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
