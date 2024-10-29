@@ -2,4 +2,4 @@
 "@guardian/cdk": major
 ---
 
-Add cpuArchitecture property to guecstask, default it to ARM64
+Set CPU architecture of ECS tasks to ARM64
