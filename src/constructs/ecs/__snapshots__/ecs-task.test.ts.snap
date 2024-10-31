@@ -1211,6 +1211,10 @@ exports[`The GuEcsTask pattern should support overriding the subnets used by the
         "RequiresCompatibilities": [
           "FARGATE",
         ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
         "Tags": [
           {
             "Key": "App",
