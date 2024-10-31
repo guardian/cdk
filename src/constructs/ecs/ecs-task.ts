@@ -8,8 +8,10 @@ import {
   Cluster,
   Compatibility,
   ContainerImage,
+  CpuArchitecture,
   FargatePlatformVersion,
   LogDrivers,
+  OperatingSystemFamily,
   TaskDefinition,
 } from "aws-cdk-lib/aws-ecs";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -203,6 +205,10 @@ export class GuEcsTask extends Construct {
       memoryMiB: memory.toString(),
       family: `${stack}-${stage}-${app}`,
       ephemeralStorageGiB: storage,
+      runtimePlatform: {
+        cpuArchitecture: CpuArchitecture.ARM64,
+        operatingSystemFamily: OperatingSystemFamily.of("LINUX"),
+      },
     });
 
     const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {

@@ -499,6 +499,10 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
         "RequiresCompatibilities": [
           "FARGATE",
         ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
         "Tags": [
           {
             "Key": "App",
