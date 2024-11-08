@@ -1,5 +1,28 @@
 # @guardian/cdk
 
+## 59.5.6
+
+### Patch Changes
+
+- 55c7c09: Update aws-cdk to 2.162.1, aws-cdk-lib to 2.162.1, constructs to 10.4.2
+
+## 59.5.5
+
+### Patch Changes
+
+- c6fed4d: Update aws-cdk to 2.161.1, aws-cdk-lib to 2.161.1, constructs to 10.3.0
+- 81e6c5a: chore(deps): bump `codemaker` from 1.103.1 to 1.104.0
+
+## 59.5.4
+
+### Patch Changes
+
+- 08e6833: Revert mistakenly published version v59.5.3
+
+## 59.5.3
+
+**DO NOT USE**: Published by mistake.
+
 ## 59.5.2
 
 ### Patch Changes
