@@ -1,5 +1,7 @@
+import { Fn } from "aws-cdk-lib";
 import { Subnet, Vpc } from "aws-cdk-lib/aws-ec2";
 import type { ISubnet, IVpc, VpcAttributes } from "aws-cdk-lib/aws-ec2";
+import { NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuSubnetListParameter, GuVpcParameter } from "../core";
 import type { GuStack } from "../core";
 
@@ -48,16 +50,38 @@ export class GuVpc {
 
   static subnetsFromParameter(scope: GuStack, props?: GuSubnetProps): ISubnet[] {
     const type = props?.type ?? SubnetType.PRIVATE;
+    const parameterDefault =
+      type === SubnetType.PRIVATE
+        ? NAMED_SSM_PARAMETER_PATHS.PrimaryVpcPrivateSubnets
+        : NAMED_SSM_PARAMETER_PATHS.PrimaryVpcPublicSubnets;
 
     const subnets = new GuSubnetListParameter(scope, `${maybeApp(props)}${type}Subnets`, {
       description: `A list of ${type.toLowerCase()} subnets`,
-
-      // TODO use `NAMED_SSM_PARAMETER_PATHS.PrimaryVpcPrivateSubnets` or `NAMED_SSM_PARAMETER_PATHS.PrimaryVpcPublicSubnets`
-      default: `/account/vpc/primary/subnets/${type.toLowerCase()}`,
+      default: parameterDefault.path,
       fromSSM: true,
     });
 
     return GuVpc.subnets(scope, subnets.valueAsList);
+  }
+
+  static subnetsFromParameterFixedNumber(scope: GuStack, props?: GuSubnetProps, numSubnets: number = 3): ISubnet[] {
+    const type = props?.type ?? SubnetType.PRIVATE;
+    const parameterDefault =
+      type === SubnetType.PRIVATE
+        ? NAMED_SSM_PARAMETER_PATHS.PrimaryVpcPrivateSubnets
+        : NAMED_SSM_PARAMETER_PATHS.PrimaryVpcPublicSubnets;
+
+    const subnets = new GuSubnetListParameter(scope, `${maybeApp(props)}${type}Subnets`, {
+      description: `A list of ${type.toLowerCase()} subnets`,
+      default: parameterDefault.path,
+      fromSSM: true,
+    });
+
+    const subnetIds: string[] = [];
+    for (let i = 0; i < numSubnets; i++) {
+      subnetIds.push(Fn.select(i, subnets.valueAsList));
+    }
+    return subnetIds.map((subnetId) => Subnet.fromSubnetId(scope, `subnet-${subnetId}`, subnetId));
   }
 
   static fromId(scope: GuStack, id: string, props: VpcFromIdProps): IVpc {

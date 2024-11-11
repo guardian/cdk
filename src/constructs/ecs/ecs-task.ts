@@ -1,7 +1,7 @@
 import { CfnOutput, Duration } from "aws-cdk-lib";
 import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
-import type { ISecurityGroup, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
 import type { RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
 import {
@@ -67,6 +67,9 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
 /**
  * Configuration options for the [[`GuEcsTask`]] pattern.
  *
+ * Note it is recommended to use GuVpc.subnetsFromParameterFixedNumber for the subnets prop rather than
+ * GuVpc.subnetsFromParameter, as using the latter can result a custom resource being required
+ *
  * See [[`ContainerConfiguration`]] for details of how to configure the container used to run the task.
  *
  * `taskTimeoutInMinutes` does what is says on the tin. The default timeout is 15 minutes.
@@ -106,6 +109,8 @@ export type GuEcsTaskMonitoringProps = { snsTopicArn: string; noMonitoring: fals
  */
 export interface GuEcsTaskProps extends AppIdentity {
   vpc: IVpc;
+  subnets: ISubnet[];
+  assignPublicIp?: boolean;
   containerConfiguration: ContainerConfiguration;
   taskTimeoutInMinutes?: number;
   cpu?: number;
@@ -176,6 +181,7 @@ export class GuEcsTask extends Construct {
       taskTimeoutInMinutes = 15,
       customTaskPolicies,
       vpc,
+      subnets,
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,
@@ -237,6 +243,8 @@ export class GuEcsTask extends Construct {
         platformVersion: FargatePlatformVersion.LATEST,
       }),
       taskDefinition,
+      subnets: { subnets },
+      assignPublicIp: false,
       integrationPattern: IntegrationPattern.RUN_JOB,
       resultPath: JsonPath.DISCARD,
       taskTimeout: Timeout.duration(Duration.minutes(taskTimeoutInMinutes)),
