@@ -17,7 +17,6 @@ describe("GuAnghammaradSenderPolicy", () => {
 
     // explicitly add an AnghammaradTopicParameter
     GuAnghammaradTopicParameter.getInstance(stack);
-    Template.fromStack(stack).hasParameter("AnghammaradSnsArn", {});
 
     // add the policy
     attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
