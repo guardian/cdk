@@ -1,5 +1,20 @@
 # @guardian/cdk
 
+## 60.0.0
+
+### Major Changes
+
+- 1105831: Set CPU architecture of ECS tasks to ARM64
+- 8e1c15f: ECS task now uses GuVpc.subnetsFromParameter rather than defaulting to CDK context
+
+  Note that this is a breaking change, because the previous behaviour was [this](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions_tasks.EcsRunTask.html#subnets)
+
+  - which relied on a CDK context file with details of the different subnets.
+
+### Patch Changes
+
+- 3d26489: Update aws-cdk to 2.166.0, aws-cdk-lib to 2.166.0, constructs to 10.4.2
+
 ## 59.5.6
 
 ### Patch Changes
