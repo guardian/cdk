@@ -7,8 +7,13 @@ import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
+import { HorizontallyScalingDeploymentProperties } from "../experimental/patterns/ec2-app";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
-import { addAmiParametersToCloudFormationDeployment, cloudFormationDeployment } from "./deployments/cloudformation";
+import {
+  cloudFormationDeployment,
+  getAmiParameters,
+  getMinInstancesInServiceParameters,
+} from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
@@ -269,10 +274,24 @@ export class RiffRaffYamlFile {
             deployments.set(asgDeployment.name, asgDeployment.props);
           });
 
-          deployments.set(
-            cfnDeployment.name,
-            addAmiParametersToCloudFormationDeployment(cfnDeployment, autoscalingGroups),
-          );
+          const amiParametersToTags = getAmiParameters(autoscalingGroups);
+
+          const minInServiceParamMap = HorizontallyScalingDeploymentProperties.getInstance(stack).asgToParamMap;
+          const minInServiceAsgs = autoscalingGroups.filter((asg) => minInServiceParamMap.has(asg.node.id));
+          const minInstancesInServiceParameters = getMinInstancesInServiceParameters(minInServiceAsgs);
+
+          deployments.set(cfnDeployment.name, {
+            ...cfnDeployment.props,
+            parameters: {
+              ...cfnDeployment.props.parameters,
+
+              // only add the `amiParametersToTags` property if there are some
+              ...(autoscalingGroups.length > 0 && { amiParametersToTags }),
+
+              // only add the `minInstancesInServiceParameters` property if there are some
+              ...(minInServiceAsgs.length > 0 && { minInstancesInServiceParameters }),
+            },
+          });
         });
       });
     });

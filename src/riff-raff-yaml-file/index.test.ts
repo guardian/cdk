@@ -1,14 +1,16 @@
 import { App, Duration } from "aws-cdk-lib";
-import { UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import { CfnScalingPolicy, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { AccessScope } from "../constants";
+import type { GuAutoScalingGroup } from "../constructs/autoscaling";
 import type { GuStackProps } from "../constructs/core";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
+import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
+import { getTemplateAfterAspectInvocation } from "../utils/test";
 import { RiffRaffYamlFile } from "./index";
 
 describe("The RiffRaffYamlFile class", () => {
@@ -1408,6 +1410,108 @@ describe("The RiffRaffYamlFile class", () => {
                 AmigoStage: PROD
                 Recipe: arm64-bionic-java11-deploy-infrastructure
                 Encrypted: 'true'
+          dependencies:
+            - asg-upload-eu-west-1-test-my-app
+      "
+    `);
+  });
+
+  it("Should include minInstancesInServiceParameters when GuEc2AppExperimental has a scaling policy", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      public readonly asg: GuAutoScalingGroup;
+
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        const appName = "my-app";
+
+        const { autoScalingGroup } = new GuEc2AppExperimental(this, {
+          app: appName,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `${appName}.deb`,
+              executionStatement: `dpkg -i /${appName}/${appName}.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "rip.gu.com",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          scaling: {
+            minimumInstances: 1,
+          },
+          applicationPort: 9000,
+          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+          buildIdentifier: "TEST",
+        });
+
+        new CfnScalingPolicy(autoScalingGroup, "ScaleOut", {
+          autoScalingGroupName: autoScalingGroup.autoScalingGroupName,
+          policyType: "SimpleScaling",
+          adjustmentType: "ChangeInCapacity",
+          scalingAdjustment: 1,
+        });
+
+        this.asg = autoScalingGroup;
+      }
+    }
+
+    const guStack = new MyApplicationStack(app, "test-stack", {
+      stack: "test",
+      stage: "TEST",
+      env: { region: "eu-west-1" },
+    });
+
+    // Ensure the Aspects are invoked...
+    getTemplateAfterAspectInvocation(guStack);
+
+    // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+    const actual = new RiffRaffYamlFile(app).toYAML();
+
+    const cfnParameterName = getAsgRollingUpdateCfnParameterName(guStack.asg);
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - TEST
+      deployments:
+        asg-upload-eu-west-1-test-my-app:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-app
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              TEST: test-stack.template.json
+            amiParametersToTags:
+              AMIMyapp:
+                BuiltBy: amigo
+                AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
+            minInstancesInServiceParameters:
+              ${cfnParameterName}:
+                App: my-app
           dependencies:
             - asg-upload-eu-west-1-test-my-app
       "

@@ -109,9 +109,10 @@ class AutoScalingRollingUpdateTimeout implements IAspect {
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
-class HorizontallyScalingDeploymentProperties implements IAspect {
+// eslint-disable-next-line custom-rules/experimental-classes -- this class is not indented for public use
+export class HorizontallyScalingDeploymentProperties implements IAspect {
   public readonly stack: GuStack;
-  private readonly asgToParamMap: Map<string, CfnParameter>;
+  public readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: HorizontallyScalingDeploymentProperties | undefined;
 
   private constructor(scope: GuStack) {
@@ -168,9 +169,10 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
         const asgNodeId = autoScalingGroup.node.id;
 
         if (!this.asgToParamMap.has(asgNodeId)) {
+          const cfnParameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
           this.asgToParamMap.set(
             asgNodeId,
-            new CfnParameter(this.stack, `MinInstancesInServiceFor${autoScalingGroup.app}`, {
+            new CfnParameter(this.stack, cfnParameterName, {
               type: "Number",
               default: parseInt(cfnAutoScalingGroup.minSize),
               maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
@@ -189,6 +191,11 @@ class HorizontallyScalingDeploymentProperties implements IAspect {
       }
     }
   }
+}
+
+export function getAsgRollingUpdateCfnParameterName(autoScalingGroup: GuAutoScalingGroup) {
+  const { app } = autoScalingGroup;
+  return `MinInstancesInServiceFor${app.replaceAll("-", "")}`;
 }
 
 /**
