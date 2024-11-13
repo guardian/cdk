@@ -1,5 +1,14 @@
 # @guardian/cdk
 
+## 60.1.0
+
+### Minor Changes
+
+- 6e67597: feat(riff-raff.yaml): Add `minInstancesInServiceParameters` when applicable
+
+  To complement the changes in https://github.com/guardian/riff-raff/pull/1383,
+  add the `minInstancesInServiceParameters` property to the `riff-raff.yaml` file when applicable.
+
 ## 60.0.0
 
 ### Major Changes
