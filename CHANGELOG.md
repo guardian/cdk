@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 60.1.1
+
+### Patch Changes
+
+- d00fa34: Update `aws-sdk` from 2.1691.0 to 2.1692.0
+
 ## 60.1.0
 
 ### Minor Changes
