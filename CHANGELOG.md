@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 60.1.2
+
+### Patch Changes
+
+- b8f4bbe: Update `codemaker` from 1.104.0 to 1.105.0
+- 0d7dd47: Update `git-url-parse` from 15.0.0 to 16.0.0
+
 ## 60.1.1
 
 ### Patch Changes
