@@ -1,7 +1,7 @@
 import { Duration, Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
-import { DatabaseInstanceEngine, PostgresEngineVersion } from "aws-cdk-lib/aws-rds";
+import { DatabaseInstanceEngine, PostgresEngineVersion, StorageType } from "aws-cdk-lib/aws-rds";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 
@@ -145,6 +145,43 @@ describe("The GuDatabaseInstance class", () => {
     Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
       BackupRetentionPeriod: 30,
       PreferredBackupWindow: "00:00-02:00",
+    });
+  });
+
+  test("defaults to GP3 storage type", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDatabaseInstance(stack, "DatabaseInstance", {
+      vpc,
+      instanceType: "t3.small",
+      engine: DatabaseInstanceEngine.postgres({
+        version: PostgresEngineVersion.VER_16,
+      }),
+      app: "testing",
+      devXBackups: {
+        enabled: true,
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
+      StorageType: "gp3",
+    });
+  });
+
+  test("uses the specified storage type when the default is overridden", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDatabaseInstance(stack, "DatabaseInstance", {
+      vpc,
+      instanceType: "t3.small",
+      engine: DatabaseInstanceEngine.postgres({
+        version: PostgresEngineVersion.VER_16,
+      }),
+      app: "testing",
+      devXBackups: {
+        enabled: true,
+      },
+      storageType: StorageType.GP2, // ← Overriding default storage type here
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::RDS::DBInstance", {
+      StorageType: "gp2",
     });
   });
 });

@@ -1,6 +1,6 @@
 import { Fn, Tags } from "aws-cdk-lib";
 import { InstanceType } from "aws-cdk-lib/aws-ec2";
-import { DatabaseInstance } from "aws-cdk-lib/aws-rds";
+import { DatabaseInstance, StorageType } from "aws-cdk-lib/aws-rds";
 import type { DatabaseInstanceProps } from "aws-cdk-lib/aws-rds";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuStack } from "../core";
@@ -39,6 +39,7 @@ export class GuDatabaseInstance extends GuAppAwareConstruct(DatabaseInstance) {
     const instanceType = new InstanceType(Fn.join("", Fn.split("db.", props.instanceType)));
 
     super(scope, id, {
+      storageType: StorageType.GP3,
       deletionProtection: true,
       deleteAutomatedBackups: false,
       backupRetention: props.devXBackups.enabled ? undefined : props.devXBackups.backupRetention,
