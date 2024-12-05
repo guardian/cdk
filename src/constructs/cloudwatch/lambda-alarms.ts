@@ -1,7 +1,7 @@
 import { Duration } from "aws-cdk-lib";
 import { ComparisonOperator, MathExpression, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import type { GuStack } from "../core";
-import type { GuLambdaFunction } from "../lambda";
+import type { GuLambdaDockerFunction, GuLambdaFunction } from "../lambda";
 import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
 
@@ -16,7 +16,7 @@ export interface GuLambdaErrorPercentageMonitoringProps
 }
 
 interface GuLambdaAlarmProps extends GuLambdaErrorPercentageMonitoringProps {
-  lambda: GuLambdaFunction;
+  lambda: GuLambdaFunction | GuLambdaDockerFunction;
 }
 
 /**
@@ -70,7 +70,7 @@ export interface GuLambdaThrottlingMonitoringProps
 }
 
 interface GuLambdaThrottlingAlarmProps extends GuLambdaThrottlingMonitoringProps {
-  lambda: GuLambdaFunction;
+  lambda: GuLambdaFunction | GuLambdaDockerFunction;
 }
 
 export class GuLambdaThrottlingAlarm extends GuAlarm {

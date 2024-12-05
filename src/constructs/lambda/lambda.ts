@@ -1,7 +1,8 @@
 import { Duration } from "aws-cdk-lib";
+import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Code, Function, RuntimeFamily } from "aws-cdk-lib/aws-lambda";
-import type { FunctionProps, Runtime } from "aws-cdk-lib/aws-lambda";
+import { Code, Function, Handler, Runtime , RuntimeFamily } from "aws-cdk-lib/aws-lambda";
+import type { FunctionOptions, FunctionProps } from "aws-cdk-lib/aws-lambda";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { GuDistributable } from "../../types";
 import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
@@ -10,7 +11,7 @@ import type { GuStack } from "../core";
 import { AppIdentity, GuDistributionBucketParameter } from "../core";
 import { ReadParametersByName, ReadParametersByPath } from "../iam";
 
-export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
+interface AlarmProps {
   /**
    * Alarm if error percentage exceeds a threshold.
    */
@@ -25,6 +26,16 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
    */
   throttlingMonitoring?: GuLambdaThrottlingMonitoringProps;
 }
+
+interface RepositoryProps {
+  repositoryArn: string;
+  repositoryName: string;
+  tagOrDigest?: string;
+}
+
+export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity, AlarmProps {}
+
+export interface GuFunctionDockerProps extends FunctionOptions, AppIdentity, AlarmProps, RepositoryProps {}
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
   if (memorySize) {
@@ -110,6 +121,61 @@ export class GuLambdaFunction extends Function {
 
     bucket.grantRead(this, objectKey);
 
+    const ssmParamReadPolicies: PolicyStatement[] = [
+      new ReadParametersByPath(scope, props),
+      new ReadParametersByName(scope, props),
+    ];
+
+    ssmParamReadPolicies.map((policy) => this.addToRolePolicy(policy));
+
+    AppIdentity.taggedConstruct(props, this);
+  }
+}
+
+export class GuLambdaDockerFunction extends Function {
+  public readonly app: string;
+  constructor(scope: GuStack, id: string, props: GuFunctionDockerProps) {
+    const defaultEnvironmentVariables = {
+      STACK: scope.stack,
+      STAGE: scope.stage,
+      APP: props.app,
+    };
+
+    const repository = Repository.fromRepositoryAttributes(scope, `${id}-ecr-repo`, {
+      repositoryArn: props.repositoryArn,
+      repositoryName: props.repositoryName,
+    });
+
+    super(scope, id, {
+      ...props,
+      code: Code.fromEcrImage(repository, {
+        tagOrDigest: props.tagOrDigest,
+      }),
+      environment: {
+        ...props.environment,
+        ...defaultEnvironmentVariables,
+      },
+      runtime: Runtime.FROM_IMAGE,
+      handler: Handler.FROM_IMAGE,
+      memorySize: props.memorySize ?? 512,
+      timeout: props.timeout ?? Duration.seconds(30),
+    });
+
+    this.app = props.app;
+
+    if (props.errorPercentageMonitoring) {
+      new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
+        ...props.errorPercentageMonitoring,
+        lambda: this,
+      });
+    }
+
+    if (props.throttlingMonitoring) {
+      new GuLambdaThrottlingAlarm(scope, `${id}-ThrottlingAlarmForLambda`, {
+        ...props.throttlingMonitoring,
+        lambda: this,
+      });
+    }
     const ssmParamReadPolicies: PolicyStatement[] = [
       new ReadParametersByPath(scope, props),
       new ReadParametersByName(scope, props),
