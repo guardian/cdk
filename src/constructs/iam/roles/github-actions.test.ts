@@ -1,7 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { simpleGuStackForTesting } from "../../../utils/test";
+import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuGetS3ObjectsPolicy } from "../policies";
-import { GuGithubActionsRole } from "./github-actions";
+import { GitHubOidcProvider, GuGithubActionsRole } from "./github-actions";
 
 describe("The GitHubActionsRole construct", () => {
   it("should create the correct resources with minimal config", () => {
@@ -45,5 +45,14 @@ describe("The GitHubActionsRole construct", () => {
         ],
       },
     });
+  });
+});
+
+describe("The GitHubOidcProvider construct", () => {
+  it("should be tagged correctly", () => {
+    const stack = simpleGuStackForTesting();
+    new GitHubOidcProvider(stack);
+
+    GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::OIDCProvider");
   });
 });
