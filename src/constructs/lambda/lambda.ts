@@ -37,6 +37,8 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
 
 export interface GuFunctionDockerProps extends FunctionOptions, AppIdentity, AlarmProps, RepositoryProps {}
 
+interface LambaProps extends FunctionProps, AppIdentity, AlarmProps {}
+
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
   if (memorySize) {
     return memorySize;
@@ -71,12 +73,11 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  * Note that this construct creates a Lambda without an event source. Depending on your use-case, you may wish to
  * consider using a pattern which instantiates a Lambda with an event source e.g. [[`GuScheduledLambda`]].
  */
-export class GuLambdaFunction extends Function {
-  public readonly app: string;
-  public readonly fileName: string;
 
-  constructor(scope: GuStack, id: string, props: GuFunctionProps) {
-    const { app, fileName, runtime, memorySize, timeout } = props;
+abstract class LambdaFunction extends Function {
+  public readonly app: string;
+  constructor(scope: GuStack, id: string, props: LambaProps) {
+    const { app, runtime, memorySize, timeout, code } = props;
 
     const defaultEnvironmentVariables = {
       STACK: scope.stack,
@@ -84,13 +85,6 @@ export class GuLambdaFunction extends Function {
       APP: app,
     };
 
-    const bucket = Bucket.fromBucketName(
-      scope,
-      `${id}-bucket`,
-      GuDistributionBucketParameter.getInstance(scope).valueAsString
-    );
-    const objectKey = GuDistributable.getObjectKey(scope, { app }, { fileName });
-    const code = Code.fromBucket(bucket, objectKey);
     super(scope, id, {
       ...props,
       environment: {
@@ -103,8 +97,6 @@ export class GuLambdaFunction extends Function {
     });
 
     this.app = app;
-    this.fileName = fileName;
-
     if (props.errorPercentageMonitoring) {
       new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
         ...props.errorPercentageMonitoring,
@@ -118,9 +110,6 @@ export class GuLambdaFunction extends Function {
         lambda: this,
       });
     }
-
-    bucket.grantRead(this, objectKey);
-
     const ssmParamReadPolicies: PolicyStatement[] = [
       new ReadParametersByPath(scope, props),
       new ReadParametersByName(scope, props),
@@ -131,15 +120,31 @@ export class GuLambdaFunction extends Function {
     AppIdentity.taggedConstruct(props, this);
   }
 }
+export class GuLambdaFunction extends LambdaFunction {
 
-export class GuLambdaDockerFunction extends Function {
+  constructor(scope: GuStack, id: string, props: GuFunctionProps) {
+    const { app, fileName } = props;
+
+    const bucket = Bucket.fromBucketName(
+      scope,
+      `${id}-bucket`,
+      GuDistributionBucketParameter.getInstance(scope).valueAsString
+    );
+    const objectKey = GuDistributable.getObjectKey(scope, { app }, { fileName });
+    const code = Code.fromBucket(bucket, objectKey);
+    super(scope, id, {
+      ...props,
+      code,
+    });
+
+    bucket.grantRead(this, objectKey);
+
+  }
+}
+
+export class GuLambdaDockerFunction extends LambdaFunction {
   public readonly app: string;
   constructor(scope: GuStack, id: string, props: GuFunctionDockerProps) {
-    const defaultEnvironmentVariables = {
-      STACK: scope.stack,
-      STAGE: scope.stage,
-      APP: props.app,
-    };
 
     const repository = Repository.fromRepositoryAttributes(scope, `${id}-ecr-repo`, {
       repositoryArn: props.repositoryArn,
@@ -151,38 +156,9 @@ export class GuLambdaDockerFunction extends Function {
       code: Code.fromEcrImage(repository, {
         tagOrDigest: props.tagOrDigest,
       }),
-      environment: {
-        ...props.environment,
-        ...defaultEnvironmentVariables,
-      },
       runtime: Runtime.FROM_IMAGE,
       handler: Handler.FROM_IMAGE,
-      memorySize: props.memorySize ?? 512,
-      timeout: props.timeout ?? Duration.seconds(30),
     });
-
     this.app = props.app;
-
-    if (props.errorPercentageMonitoring) {
-      new GuLambdaErrorPercentageAlarm(scope, `${id}-ErrorPercentageAlarmForLambda`, {
-        ...props.errorPercentageMonitoring,
-        lambda: this,
-      });
-    }
-
-    if (props.throttlingMonitoring) {
-      new GuLambdaThrottlingAlarm(scope, `${id}-ThrottlingAlarmForLambda`, {
-        ...props.throttlingMonitoring,
-        lambda: this,
-      });
-    }
-    const ssmParamReadPolicies: PolicyStatement[] = [
-      new ReadParametersByPath(scope, props),
-      new ReadParametersByName(scope, props),
-    ];
-
-    ssmParamReadPolicies.map((policy) => this.addToRolePolicy(policy));
-
-    AppIdentity.taggedConstruct(props, this);
   }
 }
