@@ -2,7 +2,7 @@ import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuLambdaFunction } from "./lambda";
+import { GuLambdaDockerFunction, GuLambdaFunction } from "./lambda";
 
 describe("The GuLambdaFunction class", () => {
   it("should create the code object from the bucket and key passed in", () => {
@@ -170,6 +170,27 @@ describe("The GuLambdaFunction class", () => {
 
     Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
       Timeout: 30,
+    });
+  });
+});
+
+describe("The GuLambdaDockerFunction class", () => {
+  it("should create the code object from the repositoryArn and repositoryName", () => {
+    const stack = simpleGuStackForTesting();
+
+    new GuLambdaDockerFunction(stack, "lambda", {
+      repositoryArn: "arn:aws:ecr:eu-west-1:201359054765:repository/app",
+      repositoryName: "repositoryName",
+      tagOrDigest: '1',
+      app: "testing",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::Lambda::Function", {
+      Code: {
+        ImageUri: {
+          "Fn::Join": ["", ["201359054765.dkr.ecr.eu-west-1.", { Ref: "AWS::URLSuffix" }, "/repositoryName:1"]],
+        },
+      },
     });
   });
 });
