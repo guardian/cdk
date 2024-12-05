@@ -54,6 +54,10 @@ export interface GuGithubActionsRoleProps {
 }
 
 /*
+Note you can only have one of these per AWS account - `OIDCProvider`s are keyed by the
+provider domain, ie `token.actions.githubusercontent.com`, so this must be instantiated
+as a singleton. At the Guardian we do this in https://github.com/guardian/aws-account-setup .
+
 AWS CDK implements an OIDCProvider as a custom resource.
 This requires a lambda to be deployed into the account.
 As far as I can tell, the lambda is automating the setting of `ThumbprintList`, which is quite generic.
@@ -63,7 +67,7 @@ See:
   - https://github.com/aws/aws-cdk/blob/851c8ca9989856fa61496ff113f9cb8c66d02f3b/packages/%40aws-cdk/aws-iam/lib/oidc-provider.ts
   - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
  */
-class GitHubOidcProvider extends CfnResource {
+export class GitHubOidcProvider extends CfnResource {
   constructor(scope: GuStack) {
     super(scope, "GithubActionsOidc", {
       type: "AWS::IAM::OIDCProvider",
@@ -89,7 +93,7 @@ export class GuGithubActionsRole extends GuRole {
   constructor(scope: GuStack, props: GuGithubActionsRoleProps) {
     super(scope, "GithubActionsRole", {
       assumedBy: new FederatedPrincipal(
-        new GitHubOidcProvider(scope).ref,
+        `arn:aws:iam::${scope.account}:oidc-provider/${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}`,
         {
           StringLike: {
             [`${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}:sub`]: GuGithubActionsRepositoryCondition.toString(

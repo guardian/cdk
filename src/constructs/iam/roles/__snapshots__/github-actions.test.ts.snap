@@ -42,19 +42,6 @@ exports[`The GitHubActionsRole construct should create the correct resources wit
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GithubActionsOidc": {
-      "Properties": {
-        "ClientIdList": [
-          "sts.amazonaws.com",
-        ],
-        "ThumbprintList": [
-          "6938fd4d98bab03faadb97b34396831e3780aea1",
-          "1c58a3a8518e8759bf075b76b750d4f2df264fcd",
-        ],
-        "Url": "https://token.actions.githubusercontent.com",
-      },
-      "Type": "AWS::IAM::OIDCProvider",
-    },
     "GithubActionsRoleF5CC769F": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -69,7 +56,16 @@ exports[`The GitHubActionsRole construct should create the correct resources wit
               "Effect": "Allow",
               "Principal": {
                 "Federated": {
-                  "Ref": "GithubActionsOidc",
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":oidc-provider/token.actions.githubusercontent.com",
+                    ],
+                  ],
                 },
               },
             },
