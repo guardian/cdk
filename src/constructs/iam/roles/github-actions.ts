@@ -75,6 +75,7 @@ export class GitHubOidcProvider extends CfnResource {
         Url: `https://${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}`,
         ClientIdList: ["sts.amazonaws.com"],
         ThumbprintList: GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINTS,
+        Tags: scope.tags.renderedTags,
       },
     });
   }
