@@ -1,5 +1,12 @@
 # @guardian/cdk
 
+## 61.0.1
+
+### Patch Changes
+
+- 60639fd: Apply the standard `Stack`, `Stage`, `App` and `gu:repo` tags to the `AWS::IAM::OIDCProvider` resource
+  created via the `GitHubOidcProvider` construct.
+
 ## 61.0.0
 
 ### Major Changes
