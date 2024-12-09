@@ -37,7 +37,7 @@ export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "c
 
 export interface GuFunctionDockerProps extends FunctionOptions, AppIdentity, AlarmProps, RepositoryProps {}
 
-interface LambaProps extends FunctionProps, AppIdentity, AlarmProps {}
+interface LambdaProps extends FunctionProps, AppIdentity, AlarmProps {}
 
 function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
   if (memorySize) {
@@ -74,9 +74,9 @@ function defaultMemorySize(runtime: Runtime, memorySize?: number): number {
  * consider using a pattern which instantiates a Lambda with an event source e.g. [[`GuScheduledLambda`]].
  */
 
-abstract class LambdaFunction extends Function {
+abstract class LambdaBaseFunction extends Function {
   public readonly app: string;
-  constructor(scope: GuStack, id: string, props: LambaProps) {
+  constructor(scope: GuStack, id: string, props: LambdaProps) {
     const { app, runtime, memorySize, timeout, code } = props;
 
     const defaultEnvironmentVariables = {
@@ -120,11 +120,10 @@ abstract class LambdaFunction extends Function {
     AppIdentity.taggedConstruct(props, this);
   }
 }
-export class GuLambdaFunction extends LambdaFunction {
-
+export class GuLambdaFunction extends LambdaBaseFunction {
+  public readonly fileName: string;
   constructor(scope: GuStack, id: string, props: GuFunctionProps) {
     const { app, fileName } = props;
-
     const bucket = Bucket.fromBucketName(
       scope,
       `${id}-bucket`,
@@ -136,13 +135,12 @@ export class GuLambdaFunction extends LambdaFunction {
       ...props,
       code,
     });
-
+    this.fileName = fileName;
     bucket.grantRead(this, objectKey);
-
   }
 }
 
-export class GuLambdaDockerFunction extends LambdaFunction {
+export class GuLambdaDockerFunction extends LambdaBaseFunction {
   public readonly app: string;
   constructor(scope: GuStack, id: string, props: GuFunctionDockerProps) {
 
