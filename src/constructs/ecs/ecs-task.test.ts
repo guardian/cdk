@@ -49,6 +49,7 @@ describe("The GuEcsTask pattern", () => {
       cpu: 1024,
       memory: 1024,
       storage: 30,
+      volumeMountPath: "/opt/testing",
       monitoringConfiguration: { snsTopicArn: "arn:something:else:here:we:goalarm-topic", noMonitoring: false },
       taskCommand: `echo "yo ho row ho it's a pirates life for me"`,
       securityGroups: [securityGroup(stack, app)],

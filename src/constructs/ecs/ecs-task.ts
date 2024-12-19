@@ -120,6 +120,13 @@ export interface GuEcsTaskProps extends AppIdentity {
   securityGroups?: ISecurityGroup[];
   customTaskPolicies?: PolicyStatement[];
   environmentOverrides?: TaskEnvironmentVariable[];
+  /**
+   * If your container needs to write to disk whilst running, you will need to mount a non-root volume to use. Setting
+   * volumeMountPath will ensure a volume is mounted at that location, making use of Faragate ephemeral storage (set by
+   * 'storage' param)
+   *
+   */
+  volumeMountPath?: string;
   storage?: number;
   /**
    * Whether to give the task IAM role access to the account's dist bucket.
@@ -128,11 +135,6 @@ export interface GuEcsTaskProps extends AppIdentity {
    * shoud set this value to `false`.
    */
   enableDistributablePolicy?: boolean;
-  /**
-   * When this parameter is true, the container is given read-only access to its root file system.
-   * @default false
-   */
-  readonlyRootFilesystem?: boolean;
   /**
    * If `true`, CloudWatch Container Insights will be enabled for the cluster
    * @default false
@@ -185,8 +187,8 @@ export class GuEcsTask extends Construct {
       monitoringConfiguration,
       securityGroups = [],
       environmentOverrides,
+      volumeMountPath,
       enableDistributablePolicy = true,
-      readonlyRootFilesystem = false,
       containerInsights = false,
     } = props;
 
@@ -227,8 +229,20 @@ export class GuEcsTask extends Construct {
         streamPrefix: app,
         logRetention: 14,
       }),
-      readonlyRootFilesystem,
+      readonlyRootFilesystem: true,
     });
+
+    if (volumeMountPath) {
+      taskDefinition.addVolume({
+        name: `${app}-volume`,
+      });
+
+      containerDefinition.addMountPoints({
+        sourceVolume: `${app}-volume`,
+        containerPath: volumeMountPath,
+        readOnly: false,
+      });
+    }
 
     if (enableDistributablePolicy) {
       const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });

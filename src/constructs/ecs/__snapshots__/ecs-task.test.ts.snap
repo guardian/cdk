@@ -479,8 +479,15 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
               },
             },
             "Memory": 1024,
+            "MountPoints": [
+              {
+                "ContainerPath": "/opt/testing",
+                "ReadOnly": false,
+                "SourceVolume": "ecs-test-volume",
+              },
+            ],
             "Name": "test-ecs-task-ecs-test-TaskContainer",
-            "ReadonlyRootFilesystem": false,
+            "ReadonlyRootFilesystem": true,
           },
         ],
         "Cpu": "1024",
@@ -531,6 +538,11 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
             "Arn",
           ],
         },
+        "Volumes": [
+          {
+            "Name": "ecs-test-volume",
+          },
+        ],
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
@@ -1191,8 +1203,15 @@ exports[`The GuEcsTask pattern should support overriding the subnets used by the
               },
             },
             "Memory": 1024,
+            "MountPoints": [
+              {
+                "ContainerPath": "/opt/testing",
+                "ReadOnly": false,
+                "SourceVolume": "ecs-test-volume",
+              },
+            ],
             "Name": "test-ecs-task-ecs-test-TaskContainer",
-            "ReadonlyRootFilesystem": false,
+            "ReadonlyRootFilesystem": true,
           },
         ],
         "Cpu": "1024",
@@ -1243,6 +1262,11 @@ exports[`The GuEcsTask pattern should support overriding the subnets used by the
             "Arn",
           ],
         },
+        "Volumes": [
+          {
+            "Name": "ecs-test-volume",
+          },
+        ],
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
