@@ -3,7 +3,7 @@ import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
 import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
-import type { RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
+import type { ContainerDefinition, RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   Compatibility,
@@ -129,11 +129,6 @@ export interface GuEcsTaskProps extends AppIdentity {
    */
   enableDistributablePolicy?: boolean;
   /**
-   * When this parameter is true, the container is given read-only access to its root file system.
-   * @default false
-   */
-  readonlyRootFilesystem?: boolean;
-  /**
    * If `true`, CloudWatch Container Insights will be enabled for the cluster
    * @default false
    */
@@ -164,7 +159,10 @@ const getContainer = (config: ContainerConfiguration) => {
  *
  */
 export class GuEcsTask extends Construct {
-  stateMachine: StateMachine;
+  public readonly stateMachine: StateMachine;
+  public readonly taskDefinition: TaskDefinition;
+  public readonly containerDefinition: ContainerDefinition;
+  public readonly task: EcsRunTask;
 
   constructor(scope: GuStack, id: string, props: GuEcsTaskProps) {
     super(scope, id);
@@ -186,7 +184,6 @@ export class GuEcsTask extends Construct {
       securityGroups = [],
       environmentOverrides,
       enableDistributablePolicy = true,
-      readonlyRootFilesystem = false,
       containerInsights = false,
     } = props;
 
@@ -216,6 +213,7 @@ export class GuEcsTask extends Construct {
         operatingSystemFamily: OperatingSystemFamily.of("LINUX"),
       },
     });
+    this.taskDefinition = taskDefinition;
 
     const containerDefinition = taskDefinition.addContainer(`${id}-TaskContainer`, {
       image: getContainer(containerConfiguration),
@@ -227,8 +225,9 @@ export class GuEcsTask extends Construct {
         streamPrefix: app,
         logRetention: 14,
       }),
-      readonlyRootFilesystem,
+      readonlyRootFilesystem: true,
     });
+    this.containerDefinition = containerDefinition;
 
     if (enableDistributablePolicy) {
       const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });
@@ -256,6 +255,7 @@ export class GuEcsTask extends Construct {
         },
       ],
     });
+    this.task = task;
 
     this.stateMachine = new StateMachine(scope, `${id}-StateMachine`, {
       definitionBody: DefinitionBody.fromChainable(task),
