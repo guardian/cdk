@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.1.0
+
+### Minor Changes
+
+- a11349f: Expose taskDefinition, containerDefinition and task in `GuEcsTask`
+
 ## 61.0.2
 
 ### Patch Changes
