@@ -2,4 +2,4 @@
 "@guardian/cdk": minor
 ---
 
-Expose taskDefinition, containerDefinition and task in ecsruntask
+Expose taskDefinition, containerDefinition and task in `GuEcsTask`
