@@ -395,6 +395,28 @@ exports[`The GuVpc construct should match snapshot 1`] = `
             ],
           ],
         },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "VpcEndpointType": "Gateway",
         "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
@@ -931,6 +953,28 @@ exports[`The GuVpc construct should match snapshot 1`] = `
             ],
           ],
         },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Name",
+            "Value": "Test/MyVpc",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
         "VpcEndpointType": "Gateway",
         "VpcId": {
           "Ref": "MyVpcF9F0CA6F",
