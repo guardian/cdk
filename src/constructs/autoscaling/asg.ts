@@ -10,7 +10,7 @@ import type { AmigoProps } from "../../types/amigo";
 import { GuAppAwareConstruct } from "../../utils/mixin/app-aware-construct";
 import { GuAmiParameter } from "../core";
 import type { AppIdentity, GuStack } from "../core";
-import { GuHttpsEgressSecurityGroup, GuWazuhAccess } from "../ec2";
+import { GuHttpsEgressSecurityGroup } from "../ec2";
 import { GuInstanceRole } from "../iam";
 
 // Since we want to override the types of what gets passed in for the below props,
@@ -64,9 +64,8 @@ export interface GuAutoScalingGroupProps
  * You may wish to instantiate [[`GuInstanceRole`]] yourself as a basis for this custom role, as it allows custom permissions
  * to be passed in.
  *
- * All EC2 instances in this group will be automatically associated with two security groups:
- * 1. [[`GuHttpsEgressSecurityGroup`]], which allows outbound traffic over HTTPS.
- * 2. [[`GuWazuhAccess`]], which allows instances to communicate with Wazuh (for security monitoring).
+ * All EC2 instances in this group will be automatically associated with the [[`GuHttpsEgressSecurityGroup`]] security groups,
+ * which allows outbound traffic over HTTPS.
  *
  * If additional ingress or egress rules are required, define custom security groups and pass them in via the
  * `additionalSecurityGroups` prop.
@@ -141,12 +140,10 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       httpPutResponseHopLimit,
     });
 
-    // Add Wazuh & additional consumer specified Security Groups
+    // Add additional consumer specified Security Groups
     // Note: Launch templates via CDK allow specifying only one SG, so use connections
     // https://github.com/aws/aws-cdk/issues/18712
-    [GuWazuhAccess.getInstance(scope, vpc), ...additionalSecurityGroups].forEach((sg) =>
-      launchTemplate.connections.addSecurityGroup(sg),
-    );
+    additionalSecurityGroups.forEach((sg) => launchTemplate.connections.addSecurityGroup(sg));
 
     const asgProps: AutoScalingGroupProps = {
       ...props,
