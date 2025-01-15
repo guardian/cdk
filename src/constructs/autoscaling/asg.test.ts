@@ -135,9 +135,6 @@ describe("The GuAutoScalingGroup", () => {
             "Fn::GetAtt": [Match.stringLikeRegexp(`GuHttpsEgressSecurityGroup${app}[A-Z0-9]+`), "GroupId"],
           },
           {
-            "Fn::GetAtt": ["WazuhSecurityGroup", "GroupId"],
-          },
-          {
             "Fn::GetAtt": [Match.stringLikeRegexp("SecurityGroupTesting[A-Z0-9]+"), "GroupId"],
           },
           {
