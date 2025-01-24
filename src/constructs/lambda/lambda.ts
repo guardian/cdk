@@ -7,10 +7,11 @@ import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { GuDistributable } from "../../types";
 import type { GuLambdaErrorPercentageMonitoringProps, GuLambdaThrottlingMonitoringProps } from "../cloudwatch";
-import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch";
+import { GuLambdaErrorPercentageAlarm, GuLambdaThrottlingAlarm } from "../cloudwatch/lambda-alarms";
 import type { GuStack } from "../core";
-import { AppIdentity, GuDistributionBucketParameter } from "../core";
-import { ReadParametersByName, ReadParametersByPath } from "../iam";
+import { AppIdentity } from "../core/identity";
+import { GuDistributionBucketParameter } from "../core/parameters/s3";
+import { ReadParametersByName, ReadParametersByPath } from "../iam/policies/parameter-store-read";
 
 export interface GuFunctionProps extends GuDistributable, Omit<FunctionProps, "code">, AppIdentity {
   /**
