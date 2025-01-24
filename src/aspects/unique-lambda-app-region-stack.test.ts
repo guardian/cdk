@@ -2,16 +2,16 @@ import { App, Stack } from "aws-cdk-lib";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { UniqueAppRegionStackAspect } from "./unique-lambda-app-region-stack";
+import { UniqueLambdaAppRegionStackAspect } from "./unique-lambda-app-region-stack";
 
 const testLambdaProps = { handler: "index.handler", fileName: "test", runtime: Runtime.NODEJS_20_X };
 describe("UniqueAppRegionStackAspect", () => {
   let stack: GuStack;
-  let aspect: UniqueAppRegionStackAspect;
+  let aspect: UniqueLambdaAppRegionStackAspect;
 
   beforeEach(() => {
     stack = new GuStack(new App(), "TestStack", { stack: "test", stage: "CODE" });
-    aspect = new UniqueAppRegionStackAspect(stack);
+    aspect = new UniqueLambdaAppRegionStackAspect(stack);
   });
 
   it("should allow unique app combinations", () => {
