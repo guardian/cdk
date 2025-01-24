@@ -1,6 +1,10 @@
 import type { IAspect, Stack } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
-import { GuLambdaFunction } from "../constructs/lambda";
+import type { GuLambdaFunction } from "../constructs/lambda";
+
+const isGuLambdaFunction = (node: IConstruct): node is GuLambdaFunction => {
+  return node.constructor.name === "GuLambdaFunction";
+};
 
 export class UniqueLambdaAppRegionStackAspect implements IAspect {
   readonly stack: Stack;
@@ -12,7 +16,8 @@ export class UniqueLambdaAppRegionStackAspect implements IAspect {
   }
 
   public visit(node: IConstruct): void {
-    if (node instanceof GuLambdaFunction) {
+    // using a type guard instead of instanceof to avoid circular dependencies
+    if (isGuLambdaFunction(node)) {
       const combination = `${this.stack.region}:${this.stack.stackName}:${node.app}`;
 
       if (this.seenCombinations.has(combination)) {
