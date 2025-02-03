@@ -7,8 +7,8 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
       "GuStack",
       "GuDistributionBucketParameter",
       "GuVpcParameter",
-      "GuSubnetListParameter",
-      "GuSubnetListParameter",
+      "GuVpcPublicSubnetsParameter",
+      "GuVpcPrivateSubnetsParameter",
       "GuEc2AppExperimental",
       "GuCertificate",
       "GuInstanceRole",
@@ -58,14 +58,14 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
-    "testguec2appPrivateSubnets": {
+    "VpcPrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
-      "Description": "A list of private subnets",
+      "Description": "A comma-separated list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "testguec2appPublicSubnets": {
+    "VpcPublicSubnets": {
       "Default": "/account/vpc/primary/subnets/public",
-      "Description": "A list of public subnets",
+      "Description": "A comma-separated list of public subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
@@ -173,7 +173,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           },
         ],
         "VPCZoneIdentifier": {
-          "Ref": "testguec2appPrivateSubnets",
+          "Ref": "VpcPrivateSubnets",
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
@@ -478,7 +478,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           },
         ],
         "Subnets": {
-          "Ref": "testguec2appPublicSubnets",
+          "Ref": "VpcPublicSubnets",
         },
         "Tags": [
           {

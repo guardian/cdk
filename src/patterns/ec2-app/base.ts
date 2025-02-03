@@ -8,7 +8,7 @@ import {
   UserPoolClientIdentityProvider,
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
-import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { InstanceType, IPeer, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
@@ -30,7 +30,7 @@ import {
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuAccessLoggingBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
-import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
+import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
 import { GuLambdaFunction } from "../../constructs/lambda";
@@ -39,6 +39,7 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
+import { GuVpcImport } from "../../constructs/vpc";
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
@@ -188,17 +189,6 @@ export interface GuEc2AppProps extends AppIdentity {
    * @see https://github.com/guardian/aws-account-setup
    */
   vpc?: IVpc;
-  /**
-   * Specify private subnets if using a non-default VPC or (generally
-   * discouraged) to limit to a subset of the available subnets.
-   */
-  privateSubnets?: ISubnet[];
-
-  /**
-   * Specify private subnets if using a non-default VPC or (generally
-   * discouraged) to limit to a subset of the available subnets.
-   */
-  publicSubnets?: ISubnet[];
 
   /**
    * Configure Google Auth.
@@ -373,14 +363,18 @@ export class GuEc2App extends Construct {
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData: userDataLike,
       imageRecipe,
-      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
-      privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
-      publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
+      vpc = GuVpcImport.fromSsmParameters(scope).vpc,
       instanceMetadataHopLimit,
       updatePolicy,
       defaultInstanceWarmup,
       instanceMetricGranularity,
     } = props;
+
+    const { privateSubnets, publicSubnets } = vpc;
+
+    if (privateSubnets.length === 0 || publicSubnets.length === 0) {
+      throw new Error("VPC must have both private and public subnets");
+    }
 
     super(scope, app); // The assumption is `app` is unique
 

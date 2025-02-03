@@ -6,8 +6,8 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
     "gu:cdk:constructs": [
       "GuStack",
       "GuVpcParameter",
-      "GuSubnetListParameter",
-      "GuSubnetListParameter",
+      "GuVpcPublicSubnetsParameter",
+      "GuVpcPrivateSubnetsParameter",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
@@ -59,14 +59,14 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
-    "testguec2appPrivateSubnets": {
+    "VpcPrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
-      "Description": "A list of private subnets",
+      "Description": "A comma-separated list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "testguec2appPublicSubnets": {
+    "VpcPublicSubnets": {
       "Default": "/account/vpc/primary/subnets/public",
-      "Description": "A list of public subnets",
+      "Description": "A comma-separated list of public subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
@@ -133,7 +133,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           },
         ],
         "VPCZoneIdentifier": {
-          "Ref": "testguec2appPrivateSubnets",
+          "Ref": "VpcPrivateSubnets",
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
@@ -453,7 +453,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           },
         ],
         "Subnets": {
-          "Ref": "testguec2appPublicSubnets",
+          "Ref": "VpcPublicSubnets",
         },
         "Tags": [
           {
@@ -889,8 +889,8 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
     "gu:cdk:constructs": [
       "GuStack",
       "GuVpcParameter",
-      "GuSubnetListParameter",
-      "GuSubnetListParameter",
+      "GuVpcPublicSubnetsParameter",
+      "GuVpcPrivateSubnetsParameter",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
@@ -941,14 +941,14 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
-    "testguec2appPrivateSubnets": {
+    "VpcPrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
-      "Description": "A list of private subnets",
+      "Description": "A comma-separated list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "testguec2appPublicSubnets": {
+    "VpcPublicSubnets": {
       "Default": "/account/vpc/primary/subnets/public",
-      "Description": "A list of public subnets",
+      "Description": "A comma-separated list of public subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
@@ -1015,7 +1015,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           },
         ],
         "VPCZoneIdentifier": {
-          "Ref": "testguec2appPrivateSubnets",
+          "Ref": "VpcPrivateSubnets",
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
@@ -1308,7 +1308,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           },
         ],
         "Subnets": {
-          "Ref": "testguec2appPublicSubnets",
+          "Ref": "VpcPublicSubnets",
         },
         "Tags": [
           {
