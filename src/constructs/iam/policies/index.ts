@@ -4,6 +4,7 @@ export * from "./base-policy";
 export * from "./cloudwatch";
 export * from "./describe-ec2";
 export * from "./dynamodb";
+export * from "./kcl";
 export * from "./log-shipping";
 export * from "./parameter-store-read";
 export * from "./s3-get-object";
