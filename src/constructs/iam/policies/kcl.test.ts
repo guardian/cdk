@@ -121,4 +121,14 @@ describe("GuKCLPolicy", () => {
       },
     });
   });
+
+  it("should match policy snapshot", () => {
+    const stack = simpleGuStackForTesting();
+
+    const policy = new GuKCLPolicy(stack, { streamName: "streamFoo", applicationName: "appBar" });
+
+    attachPolicyToTestRole(stack, policy);
+
+    expect(JSON.stringify(Template.fromStack(stack).findResources("AWS::IAM::Policy"), null, 2)).toMatchSnapshot();
+  });
 });
