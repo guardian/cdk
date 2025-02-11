@@ -5,6 +5,7 @@ import gitUrlParse from "git-url-parse";
 import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
 import { CfnParameterReporter } from "../../aspects/cfn-parameter-reporter";
 import { Metadata } from "../../aspects/metadata";
+import { UniqueLambdaAppRegionStackAspect } from "../../aspects/unique-lambda-app-region-stack";
 import { ContextKeys, MetadataKeys, TrackingTag } from "../../constants";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
@@ -151,6 +152,7 @@ export class GuStack extends Stack implements StackStageIdentity {
 
     Aspects.of(this).add(new CfnIncludeReporter());
     Aspects.of(this).add(new CfnParameterReporter());
+    Aspects.of(this).add(new UniqueLambdaAppRegionStackAspect(this));
   }
 
   /**
