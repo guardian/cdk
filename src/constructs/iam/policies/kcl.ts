@@ -51,7 +51,7 @@ export class GuKCLPolicy extends GuPolicy {
     const metricsTable = `${props.applicationName}-WorkerMetricStats`;
     const coordinatorTable = `${props.applicationName}-CoordinatorState`;
 
-    super(scope, "GuKCLPolicy", {
+    super(scope, `GuKCLPolicy${props.applicationName}`, {
       statements: [
         allow("kinesis", kinesisActions, [`stream/${props.streamName}`]),
         allow("kinesis", kinesisEnhancedFanOutActions, [`stream/${props.streamName}/consumer/*`]),

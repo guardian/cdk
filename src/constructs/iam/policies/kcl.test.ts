@@ -11,7 +11,7 @@ describe("GuKCLPolicy", () => {
     attachPolicyToTestRole(stack, policy);
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
-      PolicyName: "GuKCLPolicy9F96CFCB",
+      PolicyName: "GuKCLPolicyappBar97AA7802",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
