@@ -18,7 +18,13 @@ const kinesisActions: string[] = [
 
 const kinesisEnhancedFanOutActions: string[] = ["SubscribeToShard", "DescribeStreamConsumer"];
 
-const actionsOnAllTables: string[] = ["Scan", "CreateTable", "DescribeTable", "GetItem", "PutItem"];
+const actionsOnAllTables: string[] = [
+  "Scan",
+  "CreateTable", // Allow KCL creating the lease, metrics, and coordinator tables - see https://github.com/guardian/cdk/pull/2578#discussion_r1954061397
+  "DescribeTable",
+  "GetItem",
+  "PutItem",
+];
 
 const additionalLeaseTableActions: string[] = ["UpdateTable", "UpdateItem", "DeleteItem"];
 
