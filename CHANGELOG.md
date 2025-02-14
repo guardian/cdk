@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.3.0
+
+### Minor Changes
+
+- fabe6d1: Fix construct id for GuKCLPolicy
+
 ## 61.2.0
 
 ### Minor Changes
