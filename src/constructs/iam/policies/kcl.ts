@@ -36,7 +36,7 @@ const additionalLeaseTableActions: string[] = ["UpdateTable", "UpdateItem", "Del
  * @see https://docs.aws.amazon.com/streams/latest/dev/kcl-iam-permissions.html
  */
 export class GuKCLPolicy extends GuPolicy {
-  constructor(scope: GuStack, props: KCLApplication) {
+  constructor(scope: GuStack, id: string, props: KCLApplication) {
     function allow(actionType: string, actions: string[], resources: string[]): PolicyStatement {
       return new PolicyStatement({
         effect: Effect.ALLOW,
@@ -57,7 +57,7 @@ export class GuKCLPolicy extends GuPolicy {
     const metricsTable = `${props.applicationName}-WorkerMetricStats`;
     const coordinatorTable = `${props.applicationName}-CoordinatorState`;
 
-    super(scope, `GuKCLPolicy${props.applicationName}`, {
+    super(scope, id, {
       statements: [
         allow("kinesis", kinesisActions, [`stream/${props.streamName}`]),
         allow("kinesis", kinesisEnhancedFanOutActions, [`stream/${props.streamName}/consumer/*`]),

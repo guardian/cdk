@@ -6,12 +6,12 @@ describe("GuKCLPolicy", () => {
   it("should create a policy granting sufficient permissions for the KCL", () => {
     const stack = simpleGuStackForTesting();
 
-    const policy = new GuKCLPolicy(stack, { streamName: "streamFoo", applicationName: "appBar" });
+    const policy = new GuKCLPolicy(stack, "StreamFooKCLPolicy", { streamName: "streamFoo", applicationName: "appBar" });
 
     attachPolicyToTestRole(stack, policy);
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
-      PolicyName: "GuKCLPolicyappBar97AA7802",
+      PolicyName: "StreamFooKCLPolicy36019522",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
