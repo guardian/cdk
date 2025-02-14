@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.2.0
+
+### Minor Changes
+
+- 5cae0ff: Add GuKCLPolicy, a IAM-policy construct for the Kinesis Client Library
+
 ## 61.1.4
 
 ### Patch Changes
