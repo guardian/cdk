@@ -1,4 +1,5 @@
 import { Template } from "aws-cdk-lib/assertions";
+import { Stream } from "aws-cdk-lib/aws-kinesis";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuKCLPolicy } from "./kcl";
 
@@ -6,7 +7,15 @@ describe("GuKCLPolicy", () => {
   it("should create a policy granting sufficient permissions for the KCL", () => {
     const stack = simpleGuStackForTesting();
 
-    const policy = new GuKCLPolicy(stack, { streamName: "streamFoo", applicationName: "appBar" });
+    const streamName: string = "streamFoo";
+    const policy = new GuKCLPolicy(stack, {
+      stream: Stream.fromStreamArn(
+        stack,
+        streamName,
+        `arn:aws:kinesis:${stack.region}:${stack.account}:stream/${streamName}`,
+      ),
+      applicationName: "appBar",
+    });
 
     attachPolicyToTestRole(stack, policy);
 

@@ -1,9 +1,10 @@
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import type { IStream } from "aws-cdk-lib/aws-kinesis";
 import type { GuStack } from "../../core";
 import { GuPolicy } from "./base-policy";
 
 export interface KCLApplication {
-  streamName: string;
+  stream: IStream;
   applicationName: string;
 }
 
@@ -59,8 +60,8 @@ export class GuKCLPolicy extends GuPolicy {
 
     super(scope, `GuKCLPolicy${props.applicationName}`, {
       statements: [
-        allow("kinesis", kinesisActions, [`stream/${props.streamName}`]),
-        allow("kinesis", kinesisEnhancedFanOutActions, [`stream/${props.streamName}/consumer/*`]),
+        allow("kinesis", kinesisActions, [`stream/${props.stream.streamName}`]),
+        allow("kinesis", kinesisEnhancedFanOutActions, [`stream/${props.stream.streamName}/consumer/*`]),
         allowDynamoDB(actionsOnAllTables, [leaseTable, metricsTable, coordinatorTable]),
         allowDynamoDB(additionalLeaseTableActions, [leaseTable]),
         allowDynamoDB(["Query"], [`${leaseTable}/index/*`]),
