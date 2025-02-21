@@ -1,5 +1,29 @@
 # @guardian/cdk
 
+## 61.3.0
+
+### Minor Changes
+
+- fabe6d1: Fix construct id for GuKCLPolicy
+
+## 61.2.0
+
+### Minor Changes
+
+- 5cae0ff: Add GuKCLPolicy, a IAM-policy construct for the Kinesis Client Library
+
+## 61.1.4
+
+### Patch Changes
+
+- c19ee84: Update aws-cdk to 2.178.1, aws-cdk-lib to 2.178.1, constructs to 10.4.2
+
+## 61.1.3
+
+### Patch Changes
+
+- f3e3fe8: Update aws-cdk to 2.177.0, aws-cdk-lib to 2.177.0, constructs to 10.4.2
+
 ## 61.1.2
 
 ### Patch Changes
