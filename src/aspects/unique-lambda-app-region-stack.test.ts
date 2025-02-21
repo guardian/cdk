@@ -31,7 +31,7 @@ describe("UniqueAppRegionStackAspect", () => {
     expect(() => {
       aspect.visit(lambda1);
       aspect.visit(lambda2);
-    }).toThrow("GuLambdaFunction must have a unique combination of app, region and stack");
+    }).toThrow("GuLambdaFunction must have a unique combination of app, region and stack. Found duplicate: app1");
   });
 
   it("should ignore non-GuLambdaFunction constructs", () => {
