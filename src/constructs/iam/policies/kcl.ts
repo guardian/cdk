@@ -24,9 +24,11 @@ const actionsOnAllTables: string[] = [
   "DescribeTable",
   "GetItem",
   "PutItem",
+  "UpdateItem",
+  "DeleteItem",
 ];
 
-const additionalLeaseTableActions: string[] = ["UpdateTable", "UpdateItem", "DeleteItem"];
+const additionalLeaseTableActions: string[] = ["UpdateTable"];
 
 /**
  * Creates an `AWS::IAM::Policy` to grant all the required permissions for the Kinesis Client Library

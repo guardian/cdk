@@ -55,6 +55,8 @@ describe("GuKCLPolicy", () => {
               "dynamodb:DescribeTable",
               "dynamodb:GetItem",
               "dynamodb:PutItem",
+              "dynamodb:UpdateItem",
+              "dynamodb:DeleteItem",
             ],
             Effect: "Allow",
             Resource: [
@@ -91,7 +93,7 @@ describe("GuKCLPolicy", () => {
             ],
           },
           {
-            Action: ["dynamodb:UpdateTable", "dynamodb:UpdateItem", "dynamodb:DeleteItem"],
+            Action: "dynamodb:UpdateTable",
             Effect: "Allow",
             Resource: {
               "Fn::Join": [
