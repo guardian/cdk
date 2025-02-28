@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.3.1
+
+### Patch Changes
+
+- 57ed86d: GuKCLPolicy: Fix DynamoDB permissions on new KCL v3 tables
+
 ## 61.3.0
 
 ### Minor Changes
