@@ -740,11 +740,11 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-4.zip",
+          "S3Key": "test-stack/TEST/my-app-4/my-app-4.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "my-app-4",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
@@ -764,7 +764,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-4",
           },
           {
             "Key": "gu:cdk:version",
@@ -818,7 +818,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-4",
           },
           {
             "Key": "gu:cdk:version",
@@ -879,7 +879,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-4.zip",
+                      "/test-stack/TEST/my-app-4/my-app-4.zip",
                     ],
                   ],
                 },
@@ -900,7 +900,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/my-app-4",
                   ],
                 ],
               },
@@ -923,7 +923,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/my-app-4/*",
                   ],
                 ],
               },
@@ -950,11 +950,11 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-1.zip",
+          "S3Key": "test-stack/TEST/my-app-1/my-app-1.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "my-app-1",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
@@ -974,7 +974,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-1",
           },
           {
             "Key": "gu:cdk:version",
@@ -1036,7 +1036,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-1.zip",
+                      "/test-stack/TEST/my-app-1/my-app-1.zip",
                     ],
                   ],
                 },
@@ -1057,7 +1057,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/my-app-1",
                   ],
                 ],
               },
@@ -1080,7 +1080,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/my-app-1/*",
                   ],
                 ],
               },
@@ -1128,7 +1128,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-1",
           },
           {
             "Key": "gu:cdk:version",
@@ -1160,11 +1160,11 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-3.zip",
+          "S3Key": "test-stack/TEST/my-app-3/my-app-3.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "my-app-3",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
@@ -1184,7 +1184,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-3",
           },
           {
             "Key": "gu:cdk:version",
@@ -1238,7 +1238,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-3",
           },
           {
             "Key": "gu:cdk:version",
@@ -1299,7 +1299,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-3.zip",
+                      "/test-stack/TEST/my-app-3/my-app-3.zip",
                     ],
                   ],
                 },
@@ -1320,7 +1320,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/my-app-3",
                   ],
                 ],
               },
@@ -1343,7 +1343,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/my-app-3/*",
                   ],
                 ],
               },
@@ -1370,11 +1370,11 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "test-stack/TEST/testing/my-app-2.zip",
+          "S3Key": "test-stack/TEST/my-app-2/my-app-2.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "testing",
+            "APP": "my-app-2",
             "STACK": "test-stack",
             "STAGE": "TEST",
           },
@@ -1394,7 +1394,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-2",
           },
           {
             "Key": "gu:cdk:version",
@@ -1448,7 +1448,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "Tags": [
           {
             "Key": "App",
-            "Value": "testing",
+            "Value": "my-app-2",
           },
           {
             "Key": "gu:cdk:version",
@@ -1509,7 +1509,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/test-stack/TEST/testing/my-app-2.zip",
+                      "/test-stack/TEST/my-app-2/my-app-2.zip",
                     ],
                   ],
                 },
@@ -1530,7 +1530,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing",
+                    ":parameter/TEST/test-stack/my-app-2",
                   ],
                 ],
               },
@@ -1553,7 +1553,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/testing/*",
+                    ":parameter/TEST/test-stack/my-app-2/*",
                   ],
                 ],
               },
