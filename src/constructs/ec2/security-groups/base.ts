@@ -41,7 +41,6 @@ export interface GuSecurityGroupProps extends GuBaseSecurityGroupProps, AppIdent
  * An ingress rule on port 22 is strictly forbidden as SSH via SSM is preferred.
  *
  * Prefer to use a concrete implementation where possible. See:
- * - [[GuWazuhAccess]]
  * - [[GuPublicInternetAccessSecurityGroup]]
  * - [[GuHttpsEgressSecurityGroup]]
  */
