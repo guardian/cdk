@@ -259,16 +259,6 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
                 ],
               },
             },
-            {
-              "Action": "kinesis:DescribeStream",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "KinesisStream46752A3E",
-                  "Arn",
-                ],
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
