@@ -47,7 +47,7 @@ describe("The GuEcsTask pattern", () => {
       app: app,
       taskTimeoutInMinutes: 60,
       cpu: 1024,
-      memory: 1024,
+      memory: 2048,
       storage: 30,
       monitoringConfiguration: { snsTopicArn: "arn:something:else:here:we:goalarm-topic", noMonitoring: false },
       taskCommand: `echo "yo ho row ho it's a pirates life for me"`,
