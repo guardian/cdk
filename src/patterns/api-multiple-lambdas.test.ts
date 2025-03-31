@@ -10,7 +10,63 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     const defaultProps = {
       handler: "handler.ts",
       runtime: Runtime.NODEJS_14_X,
+    };
+    const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
+      ...defaultProps,
+      app: "my-app-1",
+      fileName: "my-app-1.zip",
+    });
+    const lambdaTwo = new GuLambdaFunction(stack, "lambda-two", {
+      ...defaultProps,
+      app: "my-app-2",
+      fileName: "my-app-2.zip",
+    });
+    const lambdaThree = new GuLambdaFunction(stack, "lambda-three", {
+      ...defaultProps,
+      app: "my-app-3",
+      fileName: "my-app-3.zip",
+    });
+    const lambdaFour = new GuLambdaFunction(stack, "lambda-four", {
+      ...defaultProps,
+      app: "my-app-4",
+      fileName: "my-app-4.zip",
+    });
+    new GuApiGatewayWithLambdaByPath(stack, {
       app: "testing",
+      monitoringConfiguration: { noMonitoring: true },
+      targets: [
+        {
+          path: "/test",
+          httpMethod: "GET",
+          lambda: lambdaOne,
+        },
+        {
+          path: "/test",
+          httpMethod: "POST",
+          lambda: lambdaTwo,
+        },
+        {
+          path: "/test/a/long/path",
+          httpMethod: "GET",
+          lambda: lambdaThree,
+        },
+        {
+          path: "/test/api-key",
+          httpMethod: "GET",
+          lambda: lambdaFour,
+          apiKeyRequired: true,
+        },
+      ],
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should fail if lambdas share the same app", () => {
+    const stack = simpleGuStackForTesting();
+    const defaultProps = {
+      handler: "handler.ts",
+      app: "testing",
+      runtime: Runtime.NODEJS_14_X,
     };
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       ...defaultProps,
@@ -55,7 +111,9 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
         },
       ],
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    expect(() => Template.fromStack(stack)).toThrow(
+      "GuLambdaFunction must have a unique combination of app, region and stack",
+    );
   });
 
   it("should create an alarm if the relevant monitoring configuration is provided", () => {
