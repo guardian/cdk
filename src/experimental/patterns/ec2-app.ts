@@ -7,6 +7,7 @@ import type { IConstruct } from "constructs";
 import { MetadataKeys } from "../../constants";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import type { GuStack } from "../../constructs/core";
+import type { GuApplicationTargetGroup } from "../../constructs/loadbalancing";
 import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
 import { isSingletonPresentInStack } from "../../utils/singleton";
@@ -41,17 +42,17 @@ export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
  *
  * TODO Expose the healthcheck grace period as a property on {@link GuEc2App} and remove this `Aspect`.
  */
-class AutoScalingRollingUpdateTimeout implements IAspect {
+export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
   public readonly stack: GuStack;
-  private static instance: AutoScalingRollingUpdateTimeout | undefined;
+  private static instance: GuAutoScalingRollingUpdateTimeoutExperimental | undefined;
 
   private constructor(scope: GuStack) {
     this.stack = scope;
   }
 
-  public static getInstance(stack: GuStack): AutoScalingRollingUpdateTimeout {
+  public static getInstance(stack: GuStack): GuAutoScalingRollingUpdateTimeoutExperimental {
     if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new AutoScalingRollingUpdateTimeout(stack);
+      this.instance = new GuAutoScalingRollingUpdateTimeoutExperimental(stack);
     }
     return this.instance;
   }
@@ -109,20 +110,19 @@ class AutoScalingRollingUpdateTimeout implements IAspect {
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
-// eslint-disable-next-line custom-rules/experimental-classes -- this class is not indented for public use
-export class HorizontallyScalingDeploymentProperties implements IAspect {
+export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IAspect {
   public readonly stack: GuStack;
   public readonly asgToParamMap: Map<string, CfnParameter>;
-  private static instance: HorizontallyScalingDeploymentProperties | undefined;
+  private static instance: GuHorizontallyScalingDeploymentPropertiesExperimental | undefined;
 
   private constructor(scope: GuStack) {
     this.stack = scope;
     this.asgToParamMap = new Map();
   }
 
-  public static getInstance(stack: GuStack): HorizontallyScalingDeploymentProperties {
+  public static getInstance(stack: GuStack): GuHorizontallyScalingDeploymentPropertiesExperimental {
     if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new HorizontallyScalingDeploymentProperties(stack);
+      this.instance = new GuHorizontallyScalingDeploymentPropertiesExperimental(stack);
     }
 
     return this.instance;
@@ -254,6 +254,127 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
 }
 
 /**
+ * Configures the rolling update policy for the autoscaling group.
+ *
+ * Most applications should not need to instantiate this class directly as this policy is set by GuEc2AppExperimental.
+ *
+ * If you need to use this class for a service other than MAPI, please speak to DevX about your use-case first.
+ */
+export class GuRollingUpdatePolicyExperimental {
+  static getPolicy(maximumInstances: number, minimumInstances?: number) {
+    return UpdatePolicy.rollingUpdate({
+      maxBatchSize: maximumInstances,
+      minInstancesInService: minimumInstances,
+      minSuccessPercentage: 100,
+      waitOnResourceSignals: true,
+      /*
+      If a scale-in event fires during an `AutoScalingRollingUpdate` operation, the update could fail and rollback.
+      For this reason, we suspend the `AlarmNotification` process, else availability of a service cannot be guaranteed.
+      Consequently, services cannot scale-out during deployments.
+      If AWS ever supports suspending scale-out and scale-in independently, we should allow scale-out.
+       */
+      suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
+      // Note: there is also an important property called pauseTime, but this is set via an Aspect.
+    });
+  }
+}
+
+export interface GuRoleForRollingUpdateExperimentalProps {
+  autoScalingGroup: GuAutoScalingGroup;
+}
+
+/**
+ * Grants the role associated with your autoscaling group the necessary permissions for the rolling update deployment
+ * mechanism.
+ *
+ * Most applications should not need to instantiate this class directly as these permission changes are granted
+ * by GuEc2AppExperimental.
+ *
+ * If you need to use this class for a service other than MAPI, please speak to DevX about your use-case first.
+ */
+export class GuRoleForRollingUpdateExperimental {
+  constructor(scope: GuStack, props: GuRoleForRollingUpdateExperimentalProps) {
+    const policy = AsgRollingUpdatePolicy.getInstance(scope);
+    policy.attachToRole(props.autoScalingGroup.role);
+
+    // Create the Policy with necessary permissions first.
+    // Then create the ASG that requires the permissions.
+    const cfnPolicy = policy.node.defaultChild as CfnPolicy;
+    const cfnAutoScalingGroup = props.autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+    cfnAutoScalingGroup.addDependency(cfnPolicy);
+  }
+}
+
+export interface GuUserDataForRollingUpdateExperimentalProps {
+  autoScalingGroup: GuAutoScalingGroup;
+  targetGroup: GuApplicationTargetGroup;
+  applicationPort: number;
+  buildIdentifier: string;
+}
+
+/**
+ * Modifies the user-data script (which runs whenever an instance is launched) to make it compatible with the new
+ * rolling update deployment mechanism.
+ *
+ * Most applications should not need to instantiate this class directly as these user-data changes are already made
+ * by GuEc2AppExperimental.
+ *
+ * If you need to use this class for a service other than MAPI, please speak to DevX about your use-case first.
+ */
+export class GuUserDataForRollingUpdateExperimental {
+  constructor(scope: GuStack, props: GuUserDataForRollingUpdateExperimentalProps) {
+    const { region, stackId } = scope;
+    const { autoScalingGroup, targetGroup, applicationPort, buildIdentifier } = props;
+    const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+
+    /*
+      `aws` is available via AMIgo baked AMIs.
+      See https://github.com/guardian/amigo/tree/main/roles/aws-tools.
+       */
+    autoScalingGroup.userData.addCommands(
+      `# ${GuEc2AppExperimental.name} UserData Start`,
+      `
+      TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+      INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/instance-id")
+
+      STATE=$(aws elbv2 describe-target-health \
+        --target-group-arn ${targetGroup.targetGroupArn} \
+        --region ${region} \
+        --targets Id=$INSTANCE_ID,Port=${applicationPort} \
+        --query "TargetHealthDescriptions[0].TargetHealth.State")
+
+      until [ "$STATE" == "\\"healthy\\"" ]; do
+        echo "Instance running build ${buildIdentifier} not yet healthy within target group. Current state $STATE. Sleeping..."
+        sleep ${RollingUpdateDurations.sleep.toSeconds()}
+        STATE=$(aws elbv2 describe-target-health \
+          --target-group-arn ${targetGroup.targetGroupArn} \
+          --region ${region} \
+          --targets Id=$INSTANCE_ID,Port=${applicationPort} \
+          --query "TargetHealthDescriptions[0].TargetHealth.State")
+      done
+
+      echo "Instance running build ${buildIdentifier} is healthy in target group."
+      `,
+      `# ${GuEc2AppExperimental.name} UserData End`,
+    );
+
+    autoScalingGroup.userData.addOnExitCommands(
+      `
+        cfn-signal --stack ${stackId} \
+          --resource ${cfnAutoScalingGroup.logicalId} \
+          --region ${region} \
+          --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
+        `,
+    );
+
+    // If https://github.com/guardian/devx-logs is used, this tag will be added as a marker to logs in Central ELK.
+    Tags.of(autoScalingGroup.instanceLaunchTemplate).add(MetadataKeys.BUILD_IDENTIFIER, buildIdentifier, {
+      applyToLaunchedInstances: true,
+    });
+  }
+}
+
+/**
  * An experimental pattern to instantiate an EC2 application that is updated entirely via CloudFormation.
  * It sets the update policy of the `AWS::AutoScaling::AutoScalingGroup` to `AutoScalingRollingUpdate`.
  * When a CloudFormation update is applied, the current instances in the ASG will be replaced.
@@ -291,32 +412,20 @@ export class GuEc2AppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppExperimentalProps) {
     const { minimumInstances, maximumInstances = minimumInstances * 2 } = props.scaling;
     const { applicationPort, buildIdentifier } = props;
-    const { region, stackId } = scope;
 
     super(scope, {
       ...props,
-      updatePolicy: UpdatePolicy.rollingUpdate({
-        maxBatchSize: maximumInstances,
-        minInstancesInService: minimumInstances,
-        minSuccessPercentage: 100,
-        waitOnResourceSignals: true,
-
-        /*
-        If a scale-in event fires during an `AutoScalingRollingUpdate` operation, the update could fail and rollback.
-        For this reason, we suspend the `AlarmNotification` process, else availability of a service cannot be guaranteed.
-        Consequently, services cannot scale-out during deployments.
-        If AWS ever supports suspending scale-out and scale-in independently, we should allow scale-out.
-         */
-        suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
-      }),
+      // Note: if the service uses horizontal scaling, minimumInstances is overridden by an Aspect (to prevent accidental scale downs!)
+      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(maximumInstances, minimumInstances),
     });
 
     const { autoScalingGroup, targetGroup } = this;
-    const { userData, role } = autoScalingGroup;
     const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
 
+    // Note: if the service uses horizontal scaling, this property is unset by an Aspect (to prevent accidental scale downs!)
     cfnAutoScalingGroup.desiredCapacity = minimumInstances.toString();
 
+    // This is used when an ASG is first created; it is not needed to support the new deployment mechanism
     cfnAutoScalingGroup.cfnOptions.creationPolicy = {
       autoScalingCreationPolicy: {
         minSuccessfulInstancesPercent: 100,
@@ -326,61 +435,16 @@ export class GuEc2AppExperimental extends GuEc2App {
       },
     };
 
-    const policy = AsgRollingUpdatePolicy.getInstance(scope);
-    policy.attachToRole(role);
-
-    // Create the Policy with necessary permissions first.
-    // Then create the ASG that requires the permissions.
-    const cfnPolicy = policy.node.defaultChild as CfnPolicy;
-    cfnAutoScalingGroup.addDependency(cfnPolicy);
-
-    /*
-    `aws` is available via AMIgo baked AMIs.
-    See https://github.com/guardian/amigo/tree/main/roles/aws-tools.
-     */
-    userData.addCommands(
-      `# ${GuEc2AppExperimental.name} UserData Start`,
-      `
-      TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-      INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/instance-id")
-
-      STATE=$(aws elbv2 describe-target-health \
-        --target-group-arn ${targetGroup.targetGroupArn} \
-        --region ${region} \
-        --targets Id=$INSTANCE_ID,Port=${applicationPort} \
-        --query "TargetHealthDescriptions[0].TargetHealth.State")
-
-      until [ "$STATE" == "\\"healthy\\"" ]; do
-        echo "Instance running build ${buildIdentifier} not yet healthy within target group. Current state $STATE. Sleeping..."
-        sleep ${RollingUpdateDurations.sleep.toSeconds()}
-        STATE=$(aws elbv2 describe-target-health \
-          --target-group-arn ${targetGroup.targetGroupArn} \
-          --region ${region} \
-          --targets Id=$INSTANCE_ID,Port=${applicationPort} \
-          --query "TargetHealthDescriptions[0].TargetHealth.State")
-      done
-
-      echo "Instance running build ${buildIdentifier} is healthy in target group."
-      `,
-      `# ${GuEc2AppExperimental.name} UserData End`,
-    );
-
-    userData.addOnExitCommands(
-      `
-        cfn-signal --stack ${stackId} \
-          --resource ${cfnAutoScalingGroup.logicalId} \
-          --region ${region} \
-          --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
-        `,
-    );
-
-    // If https://github.com/guardian/devx-logs is used, this tag will be added as a marker to logs in Central ELK.
-    Tags.of(autoScalingGroup.instanceLaunchTemplate).add(MetadataKeys.BUILD_IDENTIFIER, buildIdentifier, {
-      applyToLaunchedInstances: true,
+    new GuRoleForRollingUpdateExperimental(scope, { autoScalingGroup });
+    new GuUserDataForRollingUpdateExperimental(scope, {
+      autoScalingGroup,
+      targetGroup,
+      applicationPort,
+      buildIdentifier,
     });
 
     // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
-    Aspects.of(scope).add(AutoScalingRollingUpdateTimeout.getInstance(scope));
-    Aspects.of(scope).add(HorizontallyScalingDeploymentProperties.getInstance(scope));
+    Aspects.of(scope).add(GuAutoScalingRollingUpdateTimeoutExperimental.getInstance(scope));
+    Aspects.of(scope).add(GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(scope));
   }
 }
