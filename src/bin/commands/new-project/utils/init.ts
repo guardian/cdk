@@ -117,7 +117,7 @@ function createPackageJson(outputDirectory: string): void {
       test: "jest",
       "test-update": "jest -u",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
-      lint: "eslint lib/** bin/** --ext .ts --no-error-on-unmatched-pattern",
+      lint: "eslint lib/** bin/** --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
@@ -131,25 +131,6 @@ function createPackageJson(outputDirectory: string): void {
         "^.+\\.tsx?$": "ts-jest",
       },
       setupFilesAfterEnv: ["./jest.setup.js"],
-    },
-
-    eslintConfig: {
-      root: true,
-      env: {
-        node: true,
-        jest: true,
-      },
-      extends: ["@guardian/eslint-config-typescript"],
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: "module",
-      },
-      plugins: ["@typescript-eslint"],
-      rules: {
-        "@typescript-eslint/no-inferrable-types": 0,
-        "import/no-namespace": 2,
-      },
-      ignorePatterns: ["**/*.js", "node_modules", "cdk.out", ".eslintrc.js", "jest.config.js"],
     },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
