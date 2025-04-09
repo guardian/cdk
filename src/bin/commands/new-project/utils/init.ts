@@ -71,7 +71,7 @@ function createPackageJson(outputDirectory: string): void {
   const isTest = NODE_ENV?.toUpperCase() === "TEST" || CI?.toUpperCase() === "TRUE";
 
   const coreDeps: Record<string, string> = [
-    "@guardian/eslint-config-typescript",
+    "@guardian/eslint-config",
     "@guardian/tsconfig",
     "@types/jest",
     "@types/node",
