@@ -167,7 +167,9 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
     this.imageRecipe = imageRecipe;
     this.instanceLaunchTemplate = launchTemplate;
 
-    targetGroup && this.attachToApplicationTargetGroup(targetGroup);
+    if (targetGroup) {
+      this.attachToApplicationTargetGroup(targetGroup);
+    }
 
     const cfnAsg = this.node.defaultChild as CfnAutoScalingGroup;
 

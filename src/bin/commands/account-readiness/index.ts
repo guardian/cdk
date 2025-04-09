@@ -25,7 +25,9 @@ export const accountReadinessCommand = async (props: AwsConfig): CliCommandRespo
   }
 
   if (!report.isPass) {
-    report.msg && console.log(report.msg + "\n");
+    if (report.msg) {
+      console.log(report.msg + "\n");
+    }
     report.errors.forEach((errMsg, name) => console.log(`${chalk.red(name)}: ${errMsg}`));
     console.log();
   }
