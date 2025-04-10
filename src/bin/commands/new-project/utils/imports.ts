@@ -90,11 +90,17 @@ export class Imports {
         }
       })
       .forEach(([lib, imports]) => {
-        imports.basic && code.line(`import "${lib}";`);
+        if (imports.basic) {
+          code.line(`import "${lib}";`);
+        }
 
-        imports.types.length && code.line(`import type { ${imports.types.sort().join(", ")} } from "${lib}";`);
+        if (imports.types.length) {
+          code.line(`import type { ${imports.types.sort().join(", ")} } from "${lib}";`);
+        }
 
-        imports.components.length && code.line(`import { ${imports.components.sort().join(", ")} } from "${lib}";`);
+        if (imports.components.length) {
+          code.line(`import { ${imports.components.sort().join(", ")} } from "${lib}";`);
+        }
       });
     code.line();
   }
