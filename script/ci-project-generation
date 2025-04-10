@@ -22,12 +22,10 @@ npm pack --pack-destination $TMP_DIR
     exit 1
   fi
 
-  npm install guardian-cdk-*.tgz
-
   # Ensure the CLI runs - the exit code should be 0.
-  npx gu-cdk --version
+  npx --yes guardian-cdk-*.tgz --version
 
-  NODE_ENV=test npx gu-cdk new \
+  NODE_ENV=test npx --yes guardian-cdk-*.tgz new \
     --app integration-test \
     --stack cdk \
     --stage CODE \

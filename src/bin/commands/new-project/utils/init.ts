@@ -84,14 +84,7 @@ function createPackageJson(outputDirectory: string): void {
   ].reduce((acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }), {});
 
   const cdkDeps: Record<string, string> = {
-    /*
-      Do not add `@guardian/cdk` to the generated `package.json` file when in TEST as we'll `npm link` it instead.
-      See https://docs.npmjs.com/cli/v8/commands/npm-link#caveat
-
-      TODO remove this once the `new` command allows opting out of automatic dependency installation
-       */
-    ...(!isTest && { "@guardian/cdk": LibraryInfo.VERSION }),
-
+    "@guardian/cdk": isTest ? `file:../guardian-cdk-${LibraryInfo.VERSION}.tgz` : LibraryInfo.VERSION,
     "aws-cdk": LibraryInfo.AWS_CDK_VERSION,
     "aws-cdk-lib": LibraryInfo.AWS_CDK_LIB_VERSION,
     constructs: LibraryInfo.CONSTRUCTS_VERSION,
