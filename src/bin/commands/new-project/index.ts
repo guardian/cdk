@@ -145,13 +145,9 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   }
 
   // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter
-  await execute(
-    "./node_modules/.bin/eslint",
-    ["lib/** bin/**", "--ext .ts", "--no-error-on-unmatched-pattern", "--fix"],
-    {
-      cwd: config.cdkDir,
-    },
-  );
+  await execute("./node_modules/.bin/eslint", ["lib/** bin/**", "--no-error-on-unmatched-pattern", "--fix"], {
+    cwd: config.cdkDir,
+  });
 
   ux.action.start(chalk.yellow("Running lint check..."));
   await commands.lint();

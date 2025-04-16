@@ -58,7 +58,7 @@ export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
       ...sharedPolicies,
       new GuGetDistributablePolicy(scope, props),
       new GuParameterStoreReadPolicy(scope, props),
-      ...(props.additionalPolicies ? props.additionalPolicies : []),
+      ...(props.additionalPolicies ?? []),
     ];
 
     policies.forEach((p) => p.attachToRole(this));

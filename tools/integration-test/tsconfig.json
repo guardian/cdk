@@ -3,13 +3,10 @@
   "compilerOptions": {
     "module": "CommonJS"
   },
-  "include": [
-    "src/**/*", "bin/**/*"
-  ],
+  "include": ["src/**/*", "bin/**/*"],
   "exclude": [
     "node_modules",
     "cdk.out",
-    "src/**/*.test.ts",
-    "src/**/__snapshots__/**"
+    "lib/**/__snapshots__/**"
   ]
 }
