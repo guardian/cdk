@@ -177,12 +177,7 @@ export interface GuEc2AppProps extends AppIdentity {
    * Specify certificate for the load balancer.
    */
   certificateProps?: GuDomainName;
-  /**
-   * Disable imdsv2. Most of the time you should not set this.
-   *
-   * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
-   */
-  withoutImdsv2?: boolean;
+
   /**
    * Configure AMIgo image recipe. This is only necessary if you are using GuCDK to generate your riff-raff.yaml file.
    */
@@ -372,7 +367,6 @@ export class GuEc2App extends Construct {
       roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData: userDataLike,
-      withoutImdsv2,
       imageRecipe,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
@@ -423,7 +417,6 @@ export class GuEc2App extends Construct {
       instanceType,
       minimumInstances,
       maximumInstances,
-      withoutImdsv2,
       role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
       healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
       userData: userData instanceof GuUserData ? userData.userData : userData,
