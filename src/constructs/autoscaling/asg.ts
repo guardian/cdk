@@ -49,7 +49,6 @@ export interface GuAutoScalingGroupProps
   userData: UserData;
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
-  withoutImdsv2?: boolean;
   httpPutResponseHopLimit?: number;
   enabledDetailedInstanceMonitoring?: boolean;
   defaultInstanceWarmup?: Duration;
@@ -98,7 +97,6 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       targetGroup,
       userData,
       vpc,
-      withoutImdsv2 = false,
       httpPutResponseHopLimit,
       updatePolicy,
       enabledDetailedInstanceMonitoring,
@@ -130,7 +128,13 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       // Do not use the default AWS security group which allows egress on any port.
       // Favour HTTPS only egress rules by default.
       securityGroup: GuHttpsEgressSecurityGroup.forVpc(scope, { app, vpc }),
-      requireImdsv2: !withoutImdsv2,
+
+      /*
+      Ensure we satisfy FSBP EC2.8 control. If needed, an escape hatch can override this.
+      See https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-8.
+       */
+      requireImdsv2: true,
+
       instanceMetadataTags: true,
       userData,
       role,
