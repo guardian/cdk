@@ -14,6 +14,7 @@ import {
   OperatingSystemFamily,
   TaskDefinition,
 } from "aws-cdk-lib/aws-ecs";
+import type { ContainerInsights } from "aws-cdk-lib/aws-ecs/lib/cluster";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { DefinitionBody, IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
@@ -128,11 +129,13 @@ export interface GuEcsTaskProps extends AppIdentity {
    * shoud set this value to `false`.
    */
   enableDistributablePolicy?: boolean;
+
   /**
-   * If `true`, CloudWatch Container Insights will be enabled for the cluster
-   * @default false
+   * The CloudWatch Container Insights setting
+   *
+   * @see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-container-insights.html
    */
-  containerInsights?: boolean;
+  containerInsights: ContainerInsights;
 }
 
 /**
@@ -184,7 +187,7 @@ export class GuEcsTask extends Construct {
       securityGroups = [],
       environmentOverrides,
       enableDistributablePolicy = true,
-      containerInsights = false,
+      containerInsights,
     } = props;
 
     if (storage && storage < 21) {
@@ -199,7 +202,7 @@ export class GuEcsTask extends Construct {
       clusterName: `${app}-cluster-${stage}`,
       enableFargateCapacityProviders: true,
       vpc,
-      containerInsights,
+      containerInsightsV2: containerInsights,
     });
 
     const taskDefinition = new TaskDefinition(scope, `${id}-TaskDefinition`, {
