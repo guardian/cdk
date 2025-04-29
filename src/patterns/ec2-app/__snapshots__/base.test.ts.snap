@@ -760,6 +760,9 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             "HttpTokens": "required",
             "InstanceMetadataTags": "enabled",
           },
+          "Monitoring": {
+            "Enabled": false,
+          },
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
@@ -1559,6 +1562,9 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           "MetadataOptions": {
             "HttpTokens": "required",
             "InstanceMetadataTags": "enabled",
+          },
+          "Monitoring": {
+            "Enabled": false,
           },
           "SecurityGroupIds": [
             {

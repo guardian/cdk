@@ -27,6 +27,7 @@ describe("The GuAutoScalingGroup", () => {
     instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
     userData: UserData.custom(["#!/bin/bash", "service some-dependency start", "service my-app start"].join("\n")),
     minimumInstances: 1,
+    instanceMetricGranularity: "5Minute",
   };
 
   test("Uses the AppIdentity to create the logicalId and tag the resource", () => {
@@ -168,6 +169,7 @@ describe("The GuAutoScalingGroup", () => {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       minimumInstances: 1,
+      instanceMetricGranularity: "5Minute",
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::Role", { appIdentity: { app: "TestApp" } });
@@ -204,6 +206,7 @@ describe("The GuAutoScalingGroup", () => {
         ],
       }),
       minimumInstances: 1,
+      instanceMetricGranularity: "5Minute",
     });
 
     const template = Template.fromStack(stack);
@@ -244,6 +247,7 @@ describe("The GuAutoScalingGroup", () => {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       vpc,
       minimumInstances: 3,
+      instanceMetricGranularity: "5Minute",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::AutoScalingGroup", {
@@ -262,6 +266,7 @@ describe("The GuAutoScalingGroup", () => {
       vpc,
       minimumInstances: 2,
       maximumInstances: 11,
+      instanceMetricGranularity: "5Minute",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::AutoScaling::AutoScalingGroup", {

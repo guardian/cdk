@@ -305,12 +305,6 @@ export interface GuEc2AppProps extends AppIdentity {
   updatePolicy?: UpdatePolicy;
 
   /**
-   * This setting configures the launch template to enable or disable detailed monitoring on instances.
-   *
-   * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-monitoring.html
-   */
-  enabledDetailedInstanceMonitoring?: boolean;
-  /**
    * You can specify how long after an instance reaches the InService state it waits before contributing
    * usage data to the aggregated metrics. This specified time is called the default instance warmup.
    * This keeps dynamic scaling from being affected by metrics for individual instances that aren't yet
@@ -319,6 +313,17 @@ export interface GuEc2AppProps extends AppIdentity {
    * @see https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html
    */
   defaultInstanceWarmup?: Duration;
+
+  /**
+   * How often to send EC2 metrics, such as CPU usage.
+   * By default, AWS will produce `5Minute` granular metrics.
+   *
+   * It is recommended to produce `1Minute` granular metrics in production,
+   * especially when using ASG metrics to trigger horizontal scaling as it allows for earlier scaling.
+   *
+   * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html
+   */
+  instanceMetricGranularity: "1Minute" | "5Minute";
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -373,8 +378,8 @@ export class GuEc2App extends Construct {
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       instanceMetadataHopLimit,
       updatePolicy,
-      enabledDetailedInstanceMonitoring,
       defaultInstanceWarmup,
+      instanceMetricGranularity,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -431,8 +436,8 @@ export class GuEc2App extends Construct {
       imageRecipe,
       httpPutResponseHopLimit: instanceMetadataHopLimit,
       updatePolicy,
-      enabledDetailedInstanceMonitoring,
       defaultInstanceWarmup,
+      instanceMetricGranularity,
     });
 
     // This allows automatic shipping of instance Cloud Init logs when using the

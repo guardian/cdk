@@ -34,6 +34,7 @@ describe("GuUserData", () => {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       minimumInstances: 1,
       app: "testing",
+      instanceMetricGranularity: "5Minute",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {
@@ -80,6 +81,7 @@ describe("GuUserData", () => {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       minimumInstances: 1,
       app: "testing",
+      instanceMetricGranularity: "5Minute",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::EC2::LaunchTemplate", {

@@ -19,6 +19,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -38,6 +39,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [Peer.ipv4("1.2.3.4/5")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -57,6 +59,7 @@ describe("the GuEC2App pattern", function () {
       access: { scope: AccessScope.INTERNAL, cidrRanges: [Peer.ipv4("10.0.0.0/8")] },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -88,6 +91,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: {
         distributable: {
           fileName: "my-app.deb",
@@ -160,6 +164,7 @@ describe("the GuEC2App pattern", function () {
         },
         unhealthyInstancesAlarm: false,
       },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
     });
     //The shape of this alarm is tested at construct level
@@ -189,6 +194,7 @@ describe("the GuEC2App pattern", function () {
         unhealthyInstancesAlarm: false,
       },
       userData: UserData.forLinux(),
+      instanceMetricGranularity: "5Minute",
     });
     //The shape of this alarm is tested at construct level
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::CloudWatch::Alarm", /^High4xxPercentageAlarm.+/);
@@ -213,6 +219,7 @@ describe("the GuEC2App pattern", function () {
         http5xxAlarm: false,
         unhealthyInstancesAlarm: true,
       },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
     });
     //The shape of this alarm is tested at construct level
@@ -238,6 +245,7 @@ describe("the GuEC2App pattern", function () {
         http5xxAlarm: false,
         unhealthyInstancesAlarm: false,
       },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
     });
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 0);
@@ -258,6 +266,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
     });
 
@@ -307,6 +316,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
     });
 
@@ -340,6 +350,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
         }),
     ).toThrowError(
@@ -364,6 +375,7 @@ describe("the GuEC2App pattern", function () {
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
         }),
     ).toThrowError(
@@ -386,6 +398,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       roleConfiguration: {
         withoutLogShipping: true,
@@ -491,6 +504,7 @@ describe("the GuEC2App pattern", function () {
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux({ shebang: "#!/user/data/from/pattern" }),
     });
 
@@ -517,6 +531,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       blockDevices: [
         {
@@ -558,6 +573,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
     });
 
@@ -597,6 +613,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "node-app.code.example.com",
@@ -612,6 +629,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "play-app.code.example.com",
@@ -651,6 +669,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
@@ -680,6 +699,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       accessLogging: { enabled: false },
     });
@@ -709,6 +729,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       applicationLogging: { enabled: true },
     });
@@ -738,6 +759,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       applicationLogging: { enabled: true, systemdUnitName: "not-my-app-name" },
     });
@@ -768,6 +790,7 @@ UserData from accessed construct`);
           minimumInstances: 1,
         },
         monitoringConfiguration: { noMonitoring: true },
+        instanceMetricGranularity: "5Minute",
         userData: UserData.forLinux(),
         applicationLogging: { enabled: true },
         roleConfiguration: {
@@ -795,6 +818,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       accessLogging: { enabled: false },
     });
@@ -823,6 +847,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       accessLogging: { enabled: false },
       googleAuth: {
@@ -864,6 +889,7 @@ UserData from accessed construct`);
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
           accessLogging: { enabled: false },
           googleAuth: {
@@ -894,6 +920,7 @@ UserData from accessed construct`);
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
           accessLogging: { enabled: false },
           googleAuth: {
@@ -924,6 +951,7 @@ UserData from accessed construct`);
             minimumInstances: 1,
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
           accessLogging: { enabled: false },
           googleAuth: {
@@ -943,6 +971,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -968,6 +997,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -996,6 +1026,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1028,6 +1059,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1048,6 +1080,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1081,6 +1114,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1105,6 +1139,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1133,6 +1168,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "1Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1140,7 +1176,6 @@ UserData from accessed construct`);
       scaling: {
         minimumInstances: 1,
       },
-      enabledDetailedInstanceMonitoring: true,
     });
     Template.fromStack(stack).hasResource("AWS::EC2::LaunchTemplate", {
       Properties: {
@@ -1161,6 +1196,7 @@ UserData from accessed construct`);
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
@@ -1168,7 +1204,6 @@ UserData from accessed construct`);
       scaling: {
         minimumInstances: 1,
       },
-      enabledDetailedInstanceMonitoring: true,
       defaultInstanceWarmup: Duration.minutes(2),
     });
     Template.fromStack(stack).hasResource("AWS::AutoScaling::AutoScalingGroup", {
