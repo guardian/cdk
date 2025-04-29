@@ -20,7 +20,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
-      "GuWazuhAccess",
       "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
@@ -534,27 +533,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "LoadBalancerTestguec2appSecurityGrouptoTestWazuhSecurityGroup8092AEDC3000E12CA15B": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": {
-          "Fn::GetAtt": [
-            "WazuhSecurityGroup",
-            "GroupId",
-          ],
-        },
-        "FromPort": 3000,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "ToPort": 3000,
-      },
-      "Type": "AWS::EC2::SecurityGroupEgress",
-    },
     "ParameterStoreReadTestguec2app072DCDE1": {
       "Properties": {
         "PolicyDocument": {
@@ -675,27 +653,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "RestrictedIngressSecurityGroupTestguec2apptoTestWazuhSecurityGroup8092AEDC3000E2216923": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": {
-          "Fn::GetAtt": [
-            "WazuhSecurityGroup",
-            "GroupId",
-          ],
-        },
-        "FromPort": 3000,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "RestrictedIngressSecurityGroupTestguec2appF4DE7574",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "ToPort": 3000,
-      },
-      "Type": "AWS::EC2::SecurityGroupEgress",
-    },
     "SsmSshPolicy4CFC977E": {
       "Properties": {
         "PolicyDocument": {
@@ -781,91 +738,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "WazuhSecurityGroup": {
-      "Properties": {
-        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Wazuh event logging",
-            "FromPort": 1514,
-            "IpProtocol": "tcp",
-            "ToPort": 1514,
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Wazuh agent registration",
-            "FromPort": 1515,
-            "IpProtocol": "tcp",
-            "ToPort": 1515,
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-        "VpcId": {
-          "Ref": "VpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "WazuhSecurityGroupfromTestLoadBalancerTestguec2appSecurityGroup5F9E11C9300023EFEFE4": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "FromPort": 3000,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "WazuhSecurityGroup",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
-            "GroupId",
-          ],
-        },
-        "ToPort": 3000,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "WazuhSecurityGroupfromTestRestrictedIngressSecurityGroupTestguec2app006B9AC1300032C8ABF9": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "FromPort": 3000,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "WazuhSecurityGroup",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "RestrictedIngressSecurityGroupTestguec2appF4DE7574",
-            "GroupId",
-          ],
-        },
-        "ToPort": 3000,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
     "teststackTESTtestguec2appAA7F41BE": {
       "DependsOn": [
         "InstanceRoleTestguec2appC325BE42",
@@ -892,12 +764,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
             {
               "Fn::GetAtt": [
                 "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
-                "GroupId",
-              ],
-            },
-            {
-              "Fn::GetAtt": [
-                "WazuhSecurityGroup",
                 "GroupId",
               ],
             },
@@ -1034,7 +900,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
-      "GuWazuhAccess",
       "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
@@ -1529,27 +1394,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "LoadBalancerTestguec2appSecurityGrouptoTestWazuhSecurityGroup8092AEDC3000E12CA15B": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": {
-          "Fn::GetAtt": [
-            "WazuhSecurityGroup",
-            "GroupId",
-          ],
-        },
-        "FromPort": 3000,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "ToPort": 3000,
-      },
-      "Type": "AWS::EC2::SecurityGroupEgress",
-    },
     "ParameterStoreReadTestguec2app072DCDE1": {
       "Properties": {
         "PolicyDocument": {
@@ -1694,70 +1538,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "WazuhSecurityGroup": {
-      "Properties": {
-        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Wazuh event logging",
-            "FromPort": 1514,
-            "IpProtocol": "tcp",
-            "ToPort": 1514,
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Wazuh agent registration",
-            "FromPort": 1515,
-            "IpProtocol": "tcp",
-            "ToPort": 1515,
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-        "VpcId": {
-          "Ref": "VpcId",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "WazuhSecurityGroupfromTestLoadBalancerTestguec2appSecurityGroup5F9E11C9300023EFEFE4": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "FromPort": 3000,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "WazuhSecurityGroup",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "LoadBalancerTestguec2appSecurityGroupCC6F85C1",
-            "GroupId",
-          ],
-        },
-        "ToPort": 3000,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
     "teststackTESTtestguec2appAA7F41BE": {
       "DependsOn": [
         "InstanceRoleTestguec2appC325BE42",
@@ -1784,12 +1564,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
             {
               "Fn::GetAtt": [
                 "GuHttpsEgressSecurityGroupTestguec2appEBD7B195",
-                "GroupId",
-              ],
-            },
-            {
-              "Fn::GetAtt": [
-                "WazuhSecurityGroup",
                 "GroupId",
               ],
             },
