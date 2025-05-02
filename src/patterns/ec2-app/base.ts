@@ -1,7 +1,7 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
 import { Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
-import { HealthCheck } from "aws-cdk-lib/aws-autoscaling";
+import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
 import {
   ProviderAttribute,
   UserPool,
@@ -418,7 +418,13 @@ export class GuEc2App extends Construct {
       minimumInstances,
       maximumInstances,
       role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
-      healthCheck: HealthCheck.elb({ grace: Duration.minutes(2) }), // should this be defaulted at pattern or construct level?
+
+      // TODO should this be defaulted at pattern or construct level?
+      healthChecks: HealthChecks.withAdditionalChecks({
+        additionalTypes: [AdditionalHealthCheckType.ELB],
+        gracePeriod: Duration.minutes(2),
+      }),
+
       userData: userData instanceof GuUserData ? userData.userData : userData,
       vpcSubnets: { subnets: privateSubnets },
       ...(blockDevices && { blockDevices }),

@@ -1,6 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
 import type { ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { SecurityGroup, Subnet, Vpc } from "aws-cdk-lib/aws-ec2";
+import { ContainerInsights } from "aws-cdk-lib/aws-ecs";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
@@ -32,6 +33,7 @@ describe("The GuEcsTask pattern", () => {
       vpc,
       subnets: vpc.privateSubnets,
       app: "ecs-test",
+      containerInsights: ContainerInsights.DISABLED,
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
@@ -53,6 +55,7 @@ describe("The GuEcsTask pattern", () => {
       taskCommand: `echo "yo ho row ho it's a pirates life for me"`,
       securityGroups: [securityGroup(stack, app)],
       customTaskPolicies: [testPolicy],
+      containerInsights: ContainerInsights.DISABLED,
     });
   };
 
