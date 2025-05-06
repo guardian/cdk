@@ -1,5 +1,13 @@
 # @guardian/cdk
 
+## 61.5.1
+
+### Patch Changes
+
+- 34c96ee: fix(GuEcsTaskProps): Change type of `containerInsights` property from `boolean` to `ContainerInsights`.
+
+  This enables support of enhanced ECS monitoring and addresses an AWS CDK deprecation warning.
+
 ## 61.5.0
 
 ### Minor Changes
