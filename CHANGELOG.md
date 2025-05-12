@@ -12,39 +12,78 @@
 
 ### Minor Changes
 
-- 2a75b9f: Removes `GuWazuhAccess` security group as Wazuh has been deprecated.
+Removes `GuWazuhAccess` security group as Wazuh has been deprecated (#2561).
 
-  This change will remove a resource of logical ID `WazuhSecurityGroup` from stacks that use a `GuAutoScalingGroup`.
-  The snapshot diff will include the removal of the following resource:
+This change will remove a resource of logical ID `WazuhSecurityGroup` from stacks that use a `GuAutoScalingGroup`.
+The snapshot diff will include the removal of the following resource:
 
-  ```json
-  {
-    "Resources": {
-      "WazuhSecurityGroup": {
-        "Properties": {
-          "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-          "SecurityGroupEgress": [
-            {
-              "CidrIp": "0.0.0.0/0",
-              "Description": "Wazuh event logging",
-              "FromPort": 1514,
-              "IpProtocol": "tcp",
-              "ToPort": 1514
-            },
-            {
-              "CidrIp": "0.0.0.0/0",
-              "Description": "Wazuh agent registration",
-              "FromPort": 1515,
-              "IpProtocol": "tcp",
-              "ToPort": 1515
-            }
-          ],
-          "Type": "AWS::EC2::SecurityGroup"
-        }
+```json
+{
+  "Resources": {
+    "WazuhSecurityGroup": {
+      "Properties": {
+        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Wazuh event logging",
+            "FromPort": 1514,
+            "IpProtocol": "tcp",
+            "ToPort": 1514
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Wazuh agent registration",
+            "FromPort": 1515,
+            "IpProtocol": "tcp",
+            "ToPort": 1515
+          }
+        ],
+        "Type": "AWS::EC2::SecurityGroup"
       }
     }
   }
-  ```
+}
+```
+
+#### How to update to this version
+This version of `@guardian/cdk` detaches the `WazuhSecurityGroup` security group from any autoscaling group and deletes it in one step.
+When using [Riff-Raff's autoscaling deployment type](https://riffraff.gutools.co.uk/docs/magenta-lib/types#autoscaling), upgrading needs to be performed in two steps, across two independent pull requests.
+If we do not, Riff-Raff will fail with an error similar to:
+
+> WazuhSecurityGroup(AWS::EC2::SecurityGroup}: DELETE_FAILED resource sg-1234 has a dependent object (Service: Ec2, Status Code: 400) (SDK Attempt Count: 1)
+
+1. For the first pull request, we'll detach the `WazuhSecurityGroup` security group from the autoscaling group.
+
+   In this step, we detach the `WazuhSecurityGroup` security group from the autoscaling group by upgrading to v61.5.0
+   and temporarily recreate `WazuhSecurityGroup` as a resource in the CloudFormation stack:
+
+   ```ts
+   declare const myApp: GuEc2App;
+
+   const { vpc } = myApp;
+
+   // A temporary security group with a fixed logical ID, replicating the one removed from GuCDK v61.5.0.
+   const tempSecurityGroup = new SecurityGroup(this, "WazuhSecurityGroup", {
+     vpc,
+     // Must keep the same description, else CloudFormation will try to replace the security group
+     // See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-securitygroup.html#cfn-ec2-securitygroup-groupdescription.
+     description: "Allow outbound traffic from wazuh agent to manager",
+   });
+   this.overrideLogicalId(tempSecurityGroup, {
+     logicalId: "WazuhSecurityGroup",
+     reason:
+       "Part one of updating to GuCDK 61.5.0+ whilst using Riff-Raff's ASG deployment type",
+   });
+   ```
+
+2. For the second pull request, we'll remove the `WazuhSecurityGroup` security group.
+
+   Now that the security group is unused, we can remove it from the stack by deleting the `tempSecurityGroup` variable created above.
+
+> [!NOTE]
+> - We've opted against issuing a release for each of these steps as most projects upgrade to the latest version.
+> - The new deployment mechanism offered by `GuEc2AppExperimental` does not need this workaround as CloudFormation works out the dependency tree itself.
 
 ## 61.4.0
 
