@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.5.2
+
+### Patch Changes
+
+- 515e00e: Update aws-cdk to 2.1014.0, aws-cdk-lib to 2.195.0, constructs to 10.4.2
+
 ## 61.5.1
 
 ### Patch Changes
@@ -47,6 +53,7 @@ The snapshot diff will include the removal of the following resource:
 ```
 
 #### How to update to this version
+
 This version of `@guardian/cdk` detaches the `WazuhSecurityGroup` security group from any autoscaling group and deletes it in one step.
 When using [Riff-Raff's autoscaling deployment type](https://riffraff.gutools.co.uk/docs/magenta-lib/types#autoscaling), upgrading needs to be performed in two steps, across two independent pull requests.
 If we do not, Riff-Raff will fail with an error similar to:
@@ -72,8 +79,7 @@ If we do not, Riff-Raff will fail with an error similar to:
    });
    this.overrideLogicalId(tempSecurityGroup, {
      logicalId: "WazuhSecurityGroup",
-     reason:
-       "Part one of updating to GuCDK 61.5.0+ whilst using Riff-Raff's ASG deployment type",
+     reason: "Part one of updating to GuCDK 61.5.0+ whilst using Riff-Raff's ASG deployment type",
    });
    ```
 
@@ -82,6 +88,7 @@ If we do not, Riff-Raff will fail with an error similar to:
    Now that the security group is unused, we can remove it from the stack by deleting the `tempSecurityGroup` variable created above.
 
 > [!NOTE]
+>
 > - We've opted against issuing a release for each of these steps as most projects upgrade to the latest version.
 > - The new deployment mechanism offered by `GuEc2AppExperimental` does not need this workaround as CloudFormation works out the dependency tree itself.
 
