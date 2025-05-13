@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.6.0
+
+### Minor Changes
+
+- 50d5978: Addition of new experimental deployment mechanism support for MAPI.
+
 ## 61.5.2
 
 ### Patch Changes
