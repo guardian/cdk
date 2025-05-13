@@ -7,7 +7,7 @@ import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { HorizontallyScalingDeploymentProperties } from "../experimental/patterns/ec2-app";
+import { GuHorizontallyScalingDeploymentPropertiesExperimental } from "../experimental/patterns/ec2-app";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
 import {
   cloudFormationDeployment,
@@ -276,7 +276,8 @@ export class RiffRaffYamlFile {
 
           const amiParametersToTags = getAmiParameters(autoscalingGroups);
 
-          const minInServiceParamMap = HorizontallyScalingDeploymentProperties.getInstance(stack).asgToParamMap;
+          const minInServiceParamMap =
+            GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(stack).asgToParamMap;
           const minInServiceAsgs = autoscalingGroups.filter((asg) => minInServiceParamMap.has(asg.node.id));
           const minInstancesInServiceParameters = getMinInstancesInServiceParameters(minInServiceAsgs);
 
