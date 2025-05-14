@@ -13,6 +13,8 @@ import type { AppIdentity, GuStack } from "../core";
 import { GuHttpsEgressSecurityGroup } from "../ec2";
 import { GuInstanceRole } from "../iam";
 
+export type InstanceMetricGranularity = "1Minute" | "5Minute";
+
 // Since we want to override the types of what gets passed in for the below props,
 // we need to use Omit<T, U> to remove them from the interface this extends
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
@@ -47,10 +49,21 @@ export interface GuAutoScalingGroupProps
   imageRecipe?: string | AmigoProps;
   instanceType: InstanceType;
   userData: UserData;
+
+  /**
+   * How often to send EC2 metrics, such as CPU usage.
+   * By default, AWS will produce `5Minute` granular metrics.
+   *
+   * It is recommended to produce `1Minute` granular metrics in production,
+   * especially when using ASG metrics to trigger horizontal scaling as it allows for earlier scaling.
+   *
+   * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html
+   */
+  instanceMetricGranularity: InstanceMetricGranularity;
+
   additionalSecurityGroups?: ISecurityGroup[];
   targetGroup?: ApplicationTargetGroup;
   httpPutResponseHopLimit?: number;
-  enabledDetailedInstanceMonitoring?: boolean;
   defaultInstanceWarmup?: Duration;
 }
 
@@ -98,8 +111,8 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       vpc,
       httpPutResponseHopLimit,
       updatePolicy,
-      enabledDetailedInstanceMonitoring,
       defaultInstanceWarmup,
+      instanceMetricGranularity,
     } = props;
 
     // Ensure min and max are defined in the same way. Throwing an `Error` when necessary. For example when min is defined via a Mapping, but max is not.
@@ -109,11 +122,13 @@ export class GuAutoScalingGroup extends GuAppAwareConstruct(AutoScalingGroup) {
       );
     }
 
+    const detailedMonitoring = instanceMetricGranularity === "1Minute";
+
     // Generate an ID unique to this app
     const launchTemplateId = `${scope.stack}-${scope.stage}-${app}`;
     const launchTemplate = new LaunchTemplate(scope, launchTemplateId, {
       blockDevices,
-      detailedMonitoring: enabledDetailedInstanceMonitoring,
+      detailedMonitoring,
       instanceType,
       machineImage: {
         getImage: (): MachineImageConfig => {

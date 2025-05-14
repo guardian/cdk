@@ -29,6 +29,7 @@ describe("The GuEc2AppExperimental pattern", () => {
       access: { scope: AccessScope.PUBLIC },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
       monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
       userData,
       certificateProps: {
         domainName: "domain-name-for-your-application.example",

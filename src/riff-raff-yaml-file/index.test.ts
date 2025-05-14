@@ -609,6 +609,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "rip.gu.com",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -709,6 +710,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "rip.gu.com",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -914,6 +916,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "api.devx.gutools.co.uk",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -937,6 +940,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "data-collector.devx.gutools.co.uk",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -1062,6 +1066,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "api.devx.gutools.co.uk",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -1284,6 +1289,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "rip.gu.com",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -1362,6 +1368,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "rip.gu.com",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
@@ -1442,6 +1449,7 @@ describe("The RiffRaffYamlFile class", () => {
             domainName: "rip.gu.com",
           },
           monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
           scaling: {
             minimumInstances: 1,
           },
