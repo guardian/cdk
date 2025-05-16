@@ -72,7 +72,9 @@ export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
         construct.cfnOptions.updatePolicy = {
           autoScalingRollingUpdate: {
             ...currentRollingUpdate,
-            pauseTime: Duration.seconds(signalTimeoutSeconds).toIsoString(),
+            pauseTime: Duration.seconds(
+              Duration.parse(currentRollingUpdate.pauseTime ?? "0").toSeconds() + signalTimeoutSeconds,
+            ).toIsoString(),
           },
         };
       }
@@ -251,6 +253,19 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
    * process.env.GITHUB_RUN_NUMBER
    */
   buildIdentifier: string;
+  /**
+   * The amount of time that newly launched instances will spend warming-up / serving fewer requests than other instances.
+   * The range is 30-900 seconds (15 minutes). The default is 0 seconds (disabled).
+   *
+   * See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html#slow-start-mode
+   * for more details.
+   *
+   * We recommend enabling this setting if you run a high-traffic service, particularly if it is JVM-based.
+   *
+   * Note that there is a trade-off between reliability and speed here; a longer duration will give new instances
+   * more time to warm-up, but it will also slow down deployments and scale-up events.
+   */
+  slowStartDuration?: Duration;
 }
 
 /**
@@ -261,7 +276,11 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
  * If you need to use this class for a service other than MAPI, please speak to DevX about your use-case first.
  */
 export class GuRollingUpdatePolicyExperimental {
-  static getPolicy(maximumInstances: number, minimumInstances?: number) {
+  static getPolicy(
+    maximumInstances: number,
+    minimumInstances?: number,
+    slowStartDuration: Duration = Duration.seconds(0),
+  ) {
     return UpdatePolicy.rollingUpdate({
       maxBatchSize: maximumInstances,
       minInstancesInService: minimumInstances,
@@ -274,7 +293,19 @@ export class GuRollingUpdatePolicyExperimental {
       If AWS ever supports suspending scale-out and scale-in independently, we should allow scale-out.
        */
       suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
-      // Note: there is also an important property called pauseTime, but this is set via an Aspect.
+      /*
+      Note: this is increased via an Aspect which also takes healthcheck grace period into account.
+
+      It was easier to pass the slow start duration through here rather than trying to do this via the
+      GuAutoScalingRollingUpdateTimeoutExperimental aspect.
+
+      If we do this via the aspect then we need to find all mappings between ASGs and target groups and then
+      get the relevant slow start duration for each. This is probably possible but would be reasonably complex.
+      However, it's worth mentioning that by taking this approach we open up a small risk that things will not work
+      as expected if users enable slow start via a different mechanism (e.g. by modifying the target group outside
+      the pattern).
+       */
+      pauseTime: slowStartDuration,
     });
   }
 }
@@ -310,6 +341,7 @@ export interface GuUserDataForRollingUpdateExperimentalProps {
   targetGroup: GuApplicationTargetGroup;
   applicationPort: number;
   buildIdentifier: string;
+  slowStartDuration?: Duration;
 }
 
 /**
@@ -324,7 +356,7 @@ export interface GuUserDataForRollingUpdateExperimentalProps {
 export class GuUserDataForRollingUpdateExperimental {
   constructor(scope: GuStack, props: GuUserDataForRollingUpdateExperimentalProps) {
     const { region, stackId } = scope;
-    const { autoScalingGroup, targetGroup, applicationPort, buildIdentifier } = props;
+    const { autoScalingGroup, targetGroup, applicationPort, buildIdentifier, slowStartDuration } = props;
     const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
 
     /*
@@ -332,7 +364,7 @@ export class GuUserDataForRollingUpdateExperimental {
       See https://github.com/guardian/amigo/tree/main/roles/aws-tools.
        */
     autoScalingGroup.userData.addCommands(
-      `# ${GuEc2AppExperimental.name} UserData Start`,
+      `# ${GuEc2AppExperimental.name} Instance Health Check Start`,
       `
       TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
       INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/instance-id")
@@ -355,8 +387,35 @@ export class GuUserDataForRollingUpdateExperimental {
 
       echo "Instance running build ${buildIdentifier} is healthy in target group."
       `,
-      `# ${GuEc2AppExperimental.name} UserData End`,
+      `# ${GuEc2AppExperimental.name} Instance Health Check End`,
     );
+
+    if (slowStartDuration) {
+      const slowStartInSeconds = slowStartDuration.toSeconds().toString();
+      targetGroup.setAttribute("slow_start.duration_seconds", slowStartInSeconds);
+      autoScalingGroup.userData.addCommands(
+        `# ${GuEc2AppExperimental.name} SlowStart Wait Period Start`,
+        `
+        echo "Sleeping for ${slowStartInSeconds} seconds while instance running build ${buildIdentifier} warms up..."
+        sleep ${slowStartInSeconds}s
+        echo "Instance running build ${buildIdentifier} should have warmed up by now..."
+
+        STATE=$(aws elbv2 describe-target-health \
+        --target-group-arn ${targetGroup.targetGroupArn} \
+        --region ${region} \
+        --targets Id=$INSTANCE_ID,Port=${applicationPort} \
+        --query "TargetHealthDescriptions[0].TargetHealth.State")
+
+        if [ "$STATE" == "\\"healthy\\"" ]; then
+           echo "Instance running build ${buildIdentifier} is ready to start serving a normal percentage of requests"
+        else
+          echo "Instance running build ${buildIdentifier} was not healthy after warm-up period; a failure signal will be sent"
+          exit 1
+        fi
+        `,
+        `# ${GuEc2AppExperimental.name} SlowStart Wait Period End`,
+      );
+    }
 
     autoScalingGroup.userData.addOnExitCommands(
       `
@@ -411,12 +470,17 @@ export class GuUserDataForRollingUpdateExperimental {
 export class GuEc2AppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppExperimentalProps) {
     const { minimumInstances, maximumInstances = minimumInstances * 2 } = props.scaling;
-    const { applicationPort, buildIdentifier } = props;
+    const { applicationPort, buildIdentifier, slowStartDuration } = props;
+
+    const slowStartDurationInSeconds = slowStartDuration?.toSeconds();
+    if (slowStartDurationInSeconds && (slowStartDurationInSeconds < 30 || slowStartDurationInSeconds > 900)) {
+      throw new Error("Slow start duration must be between 30 and 900 seconds");
+    }
 
     super(scope, {
       ...props,
       // Note: if the service uses horizontal scaling, minimumInstances is overridden by an Aspect (to prevent accidental scale downs!)
-      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(maximumInstances, minimumInstances),
+      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(maximumInstances, minimumInstances, slowStartDuration),
     });
 
     const { autoScalingGroup, targetGroup } = this;
@@ -441,6 +505,7 @@ export class GuEc2AppExperimental extends GuEc2App {
       targetGroup,
       applicationPort,
       buildIdentifier,
+      slowStartDuration,
     });
 
     // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.

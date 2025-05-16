@@ -840,7 +840,7 @@ aws s3 cp 's3://",
                   },
                   "/test-stack/TEST/test-gu-ec2-app/test-gu-ec2-app-123.deb' '/test-gu-ec2-app/test-gu-ec2-app-123.deb'
 dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
-# GuEc2AppExperimental UserData Start
+# GuEc2AppExperimental Instance Health Check Start
 
       TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
       INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/instance-id")
@@ -871,7 +871,7 @@ dpkg -i /test-gu-ec2-app/test-gu-ec2-app-123.deb
 
       echo "Instance running build TEST is healthy in target group."
       
-# GuEc2AppExperimental UserData End",
+# GuEc2AppExperimental Instance Health Check End",
                 ],
               ],
             },

@@ -121,8 +121,8 @@ describe("The GuEc2AppExperimental pattern", () => {
     const totalLines = splitUserData.length;
 
     const appCommandPosition = splitUserData.indexOf(userDataCommand);
-    const startMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental UserData Start");
-    const endMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental UserData End");
+    const startMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental Instance Health Check Start");
+    const endMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental Instance Health Check End");
 
     // Application user data should be before the target group healthcheck polling.
     expect(appCommandPosition).toBeLessThan(startMarkerPosition);
@@ -267,5 +267,73 @@ describe("The GuEc2AppExperimental pattern", () => {
     }).toThrowError(
       "Failed to detect the autoscaling group relating to the scaling policy on path test/ScaleOut. Was it created in the scope of a GuAutoScalingGroup?",
     );
+  });
+
+  it("should add the correct target group attributes if slow start is enabled", () => {
+    const stack = simpleGuStackForTesting();
+    new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(44) });
+    const template = getTemplateAfterAspectInvocation(stack);
+    template.hasResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      Properties: {
+        TargetGroupAttributes: Match.arrayWith([
+          { Key: "deregistration_delay.timeout_seconds", Value: "30" },
+          { Key: "stickiness.enabled", Value: "false" },
+          { Key: "slow_start.duration_seconds", Value: "44" },
+        ]),
+      },
+    });
+  });
+
+  it("should update the pause time for the rolling update correctly", () => {
+    const stack = simpleGuStackForTesting();
+    new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.minutes(1) });
+    const template = getTemplateAfterAspectInvocation(stack);
+    template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      UpdatePolicy: {
+        AutoScalingRollingUpdate: {
+          PauseTime: "PT4M",
+        },
+      },
+    });
+  });
+
+  it("should update the script correctly if slow start is enabled", () => {
+    const stack = simpleGuStackForTesting();
+    const userDataCommand = `echo "Hello there"`;
+    const userData = UserData.forLinux();
+    userData.addCommands(userDataCommand);
+
+    const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
+      ...initialProps(stack),
+      slowStartDuration: Duration.seconds(30),
+    });
+
+    const renderedUserData = autoScalingGroup.userData.render();
+    const splitUserData = renderedUserData.split("\n");
+    const totalLines = splitUserData.length;
+
+    const healthCheckMarkerEnd = splitUserData.indexOf("# GuEc2AppExperimental Instance Health Check End");
+    const slowStartMarkerStart = splitUserData.indexOf("# GuEc2AppExperimental SlowStart Wait Period Start");
+    const slowStartMarkerEnd = splitUserData.indexOf("# GuEc2AppExperimental SlowStart Wait Period End");
+
+    // Health check polling should end just before the slow start pause kicks in
+    expect(healthCheckMarkerEnd).toEqual(slowStartMarkerStart - 1);
+
+    // If slow start is enabled, the logic related to this should be the last thing in the user data script.
+    expect(slowStartMarkerEnd).toEqual(totalLines - 1);
+  });
+
+  it("should throw an error if the slow start value is too low", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(29) });
+    }).toThrowError("Slow start duration must be between 30 and 900 seconds");
+  });
+
+  it("should throw an error if the slow start value is too high", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(901) });
+    }).toThrowError("Slow start duration must be between 30 and 900 seconds");
   });
 });
