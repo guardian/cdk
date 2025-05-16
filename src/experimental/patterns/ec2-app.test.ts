@@ -276,11 +276,11 @@ describe("The GuEc2AppExperimental pattern", () => {
     template.hasResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
       Properties: {
         TargetGroupAttributes: Match.arrayWith([
-          { Key: "deregistration_delay.timeout_seconds", Value: "30"},
+          { Key: "deregistration_delay.timeout_seconds", Value: "30" },
           { Key: "stickiness.enabled", Value: "false" },
-          { Key: "slow_start.duration_seconds", Value: "44" }
+          { Key: "slow_start.duration_seconds", Value: "44" },
         ]),
-      }
+      },
     });
   });
 
@@ -291,9 +291,9 @@ describe("The GuEc2AppExperimental pattern", () => {
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       UpdatePolicy: {
         AutoScalingRollingUpdate: {
-          PauseTime: 'PT4M'
+          PauseTime: "PT4M",
         },
-      }
+      },
     });
   });
 
@@ -303,7 +303,10 @@ describe("The GuEc2AppExperimental pattern", () => {
     const userData = UserData.forLinux();
     userData.addCommands(userDataCommand);
 
-    const { autoScalingGroup } = new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(30) });
+    const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
+      ...initialProps(stack),
+      slowStartDuration: Duration.seconds(30),
+    });
 
     const renderedUserData = autoScalingGroup.userData.render();
     const splitUserData = renderedUserData.split("\n");
@@ -318,7 +321,5 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     // If slow start is enabled, the logic related to this should be the last thing in the user data script.
     expect(slowStartMarkerEnd).toEqual(totalLines - 1);
-
   });
-
 });

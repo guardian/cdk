@@ -72,7 +72,9 @@ export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
         construct.cfnOptions.updatePolicy = {
           autoScalingRollingUpdate: {
             ...currentRollingUpdate,
-            pauseTime: Duration.seconds(Duration.parse(currentRollingUpdate.pauseTime ?? '0').toSeconds() + signalTimeoutSeconds).toIsoString(),
+            pauseTime: Duration.seconds(
+              Duration.parse(currentRollingUpdate.pauseTime ?? "0").toSeconds() + signalTimeoutSeconds,
+            ).toIsoString(),
           },
         };
       }
@@ -288,7 +290,7 @@ export class GuRollingUpdatePolicyExperimental {
        */
       suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
       // Note: this is increased via an Aspect which also takes healthcheck grace period into account.
-      pauseTime: slowStartDuration
+      pauseTime: slowStartDuration,
     });
   }
 }
@@ -375,7 +377,7 @@ export class GuUserDataForRollingUpdateExperimental {
 
     if (slowStartDuration) {
       const slowStartInSeconds = slowStartDuration.toSeconds().toString();
-      targetGroup.setAttribute("slow_start.duration_seconds", slowStartInSeconds)
+      targetGroup.setAttribute("slow_start.duration_seconds", slowStartInSeconds);
       autoScalingGroup.userData.addCommands(
         `# ${GuEc2AppExperimental.name} SlowStart Wait Period Start`,
         `
@@ -396,7 +398,7 @@ export class GuUserDataForRollingUpdateExperimental {
           exit 1
         fi
         `,
-        `# ${GuEc2AppExperimental.name} SlowStart Wait Period End`
+        `# ${GuEc2AppExperimental.name} SlowStart Wait Period End`,
       );
     }
 
@@ -458,7 +460,11 @@ export class GuEc2AppExperimental extends GuEc2App {
     super(scope, {
       ...props,
       // Note: if the service uses horizontal scaling, minimumInstances is overridden by an Aspect (to prevent accidental scale downs!)
-      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(slowStartDuration ?? Duration.seconds(0), maximumInstances, minimumInstances),
+      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(
+        slowStartDuration ?? Duration.seconds(0),
+        maximumInstances,
+        minimumInstances,
+      ),
     });
 
     const { autoScalingGroup, targetGroup } = this;
@@ -483,7 +489,7 @@ export class GuEc2AppExperimental extends GuEc2App {
       targetGroup,
       applicationPort,
       buildIdentifier,
-      slowStartDuration
+      slowStartDuration,
     });
 
     // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
