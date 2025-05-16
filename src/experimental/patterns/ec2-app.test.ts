@@ -322,4 +322,18 @@ describe("The GuEc2AppExperimental pattern", () => {
     // If slow start is enabled, the logic related to this should be the last thing in the user data script.
     expect(slowStartMarkerEnd).toEqual(totalLines - 1);
   });
+
+  it("should throw an error if the slow start value is too low", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(29) });
+    }).toThrowError("Slow start duration must be between 30 and 900 seconds");
+  });
+
+  it("should throw an error if the slow start value is too high", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(901) });
+    }).toThrowError("Slow start duration must be between 30 and 900 seconds");
+  });
 });

@@ -254,8 +254,8 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
    */
   buildIdentifier: string;
   /**
-   * The amount of time that newly launched instances will spend warming-up / serving fewer requests than other instances
-   * (defaults to 0 seconds).
+   * The amount of time that newly launched instances will spend warming-up / serving fewer requests than other instances.
+   * The range is 30-900 seconds (15 minutes). The default is 0 seconds (disabled).
    *
    * See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html#slow-start-mode
    * for more details.
@@ -471,6 +471,11 @@ export class GuEc2AppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GuEc2AppExperimentalProps) {
     const { minimumInstances, maximumInstances = minimumInstances * 2 } = props.scaling;
     const { applicationPort, buildIdentifier, slowStartDuration } = props;
+
+    const slowStartDurationInSeconds = slowStartDuration?.toSeconds();
+    if (slowStartDurationInSeconds && (slowStartDurationInSeconds < 30 || slowStartDurationInSeconds > 900)) {
+      throw new Error("Slow start duration must be between 30 and 900 seconds");
+    }
 
     super(scope, {
       ...props,
