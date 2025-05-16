@@ -276,7 +276,7 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
  * If you need to use this class for a service other than MAPI, please speak to DevX about your use-case first.
  */
 export class GuRollingUpdatePolicyExperimental {
-  static getPolicy(slowStartDuration: Duration, maximumInstances: number, minimumInstances?: number) {
+  static getPolicy(maximumInstances: number, minimumInstances?: number, slowStartDuration?: Duration) {
     return UpdatePolicy.rollingUpdate({
       maxBatchSize: maximumInstances,
       minInstancesInService: minimumInstances,
@@ -290,7 +290,7 @@ export class GuRollingUpdatePolicyExperimental {
        */
       suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
       // Note: this is increased via an Aspect which also takes healthcheck grace period into account.
-      pauseTime: slowStartDuration,
+      pauseTime: slowStartDuration ?? Duration.seconds(0),
     });
   }
 }
@@ -460,11 +460,7 @@ export class GuEc2AppExperimental extends GuEc2App {
     super(scope, {
       ...props,
       // Note: if the service uses horizontal scaling, minimumInstances is overridden by an Aspect (to prevent accidental scale downs!)
-      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(
-        slowStartDuration ?? Duration.seconds(0),
-        maximumInstances,
-        minimumInstances,
-      ),
+      updatePolicy: GuRollingUpdatePolicyExperimental.getPolicy(maximumInstances, minimumInstances, slowStartDuration),
     });
 
     const { autoScalingGroup, targetGroup } = this;
