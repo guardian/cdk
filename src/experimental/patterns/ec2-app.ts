@@ -276,7 +276,11 @@ export interface GuEc2AppExperimentalProps extends Omit<GuEc2AppProps, "updatePo
  * If you need to use this class for a service other than MAPI, please speak to DevX about your use-case first.
  */
 export class GuRollingUpdatePolicyExperimental {
-  static getPolicy(maximumInstances: number, minimumInstances?: number, slowStartDuration?: Duration) {
+  static getPolicy(
+    maximumInstances: number,
+    minimumInstances?: number,
+    slowStartDuration: Duration = Duration.seconds(0),
+  ) {
     return UpdatePolicy.rollingUpdate({
       maxBatchSize: maximumInstances,
       minInstancesInService: minimumInstances,
@@ -289,8 +293,19 @@ export class GuRollingUpdatePolicyExperimental {
       If AWS ever supports suspending scale-out and scale-in independently, we should allow scale-out.
        */
       suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
-      // Note: this is increased via an Aspect which also takes healthcheck grace period into account.
-      pauseTime: slowStartDuration ?? Duration.seconds(0),
+      /*
+      Note: this is increased via an Aspect which also takes healthcheck grace period into account.
+
+      It was easier to pass the slow start duration through here rather than trying to do this via the
+      GuAutoScalingRollingUpdateTimeoutExperimental aspect.
+
+      If we do this via the aspect then we need to find all mappings between ASGs and target groups and then
+      get the relevant slow start duration for each. This is probably possible but would be reasonably complex.
+      However, it's worth mentioning that by taking this approach we open up a small risk that things will not work
+      as expected if users enable slow start via a different mechanism (e.g. by modifying the target group outside
+      the pattern).
+       */
+      pauseTime: slowStartDuration,
     });
   }
 }
