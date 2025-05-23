@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.8.1
+
+### Patch Changes
+
+- 2ec1d32: chore(deps): bump `codemaker` from 1.111.0 to 1.112.0
+
 ## 61.8.0
 
 ### Minor Changes
