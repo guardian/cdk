@@ -1,5 +1,0 @@
----
-"@guardian/cdk": patch
----
-
-test

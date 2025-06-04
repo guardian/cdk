@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.8.2
+
+### Patch Changes
+
+- 01bb75c: test
+
 ## 61.8.1
 
 ### Patch Changes
