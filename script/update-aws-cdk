@@ -57,9 +57,6 @@ raisePR() {
 
   addChangeset "$AWSCDK_VERSION" "$COMMIT_BODY"
 
-  git config user.name guardian-ci
-  git config user.email guardian-ci@@users.noreply.github.com
-
   git checkout -b "$BRANCH_NAME"
 
   for file in package.json package-lock.json tools/integration-test/package.json .changeset/aws-cdk-update-v*.md; do

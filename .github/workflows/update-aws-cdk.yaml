@@ -24,11 +24,24 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Configure git
+        run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+
       - name: "AWS CDK update"
         env:
-          # This action will raise a PR to edit package.json and package-lock.json.
-          # PRs raised by the default `secrets.GITHUB_TOKEN` will not trigger CI, so we need to provide a different token.
-          # This is a PAT for the guardian-ci user.
-          # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token
-          GITHUB_TOKEN: ${{ secrets.GU_GUARDIAN_CI_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: ./script/update-aws-cdk
