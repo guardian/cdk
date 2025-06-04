@@ -45,3 +45,6 @@ Once you've confirmed that your account is ready, you can start provisioning you
 We welcome contributions to `@guardian/cdk`!
 
 To get started, please read our [Contribution Guidelines](./docs/contributing.md).
+
+> [!NOTE]
+> This repository uses the GitHub App [guardian/cdk](https://github.com/organizations/guardian/settings/apps/guardian-cdk) (requires GitHub admin) for various automations.
