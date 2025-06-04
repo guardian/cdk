@@ -57,7 +57,7 @@ jobs:
           publish: npx changeset publish
           title: "🦋 Release package updates"
           commit: "Bump package version"
-
+          setupGitUser: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
