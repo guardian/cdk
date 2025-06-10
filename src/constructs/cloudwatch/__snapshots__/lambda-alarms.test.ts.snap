@@ -594,6 +594,7 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
                 ],
               ],
             },
+            "ReturnData": true,
           },
           {
             "Id": "m1",
