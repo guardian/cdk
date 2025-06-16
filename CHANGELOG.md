@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.8.2
+
+### Patch Changes
+
+- 1336b63: Update import path of `ContainerInsights`.
+
 ## 61.8.1
 
 ### Patch Changes
