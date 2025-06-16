@@ -3,7 +3,6 @@ import { Alarm, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import { SnsAction } from "aws-cdk-lib/aws-cloudwatch-actions";
 import type { ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import type { IRepository } from "aws-cdk-lib/aws-ecr";
-import type { ContainerDefinition, RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   Compatibility,
@@ -14,7 +13,7 @@ import {
   OperatingSystemFamily,
   TaskDefinition,
 } from "aws-cdk-lib/aws-ecs";
-import type { ContainerInsights } from "aws-cdk-lib/aws-ecs/lib/cluster";
+import type { ContainerDefinition, ContainerInsights, RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
 import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { DefinitionBody, IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
