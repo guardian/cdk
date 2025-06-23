@@ -68,6 +68,7 @@ exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct 
             "Expression": "100*m1/m2",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for testing",
+            "ReturnData": true,
           },
           {
             "Id": "m1",

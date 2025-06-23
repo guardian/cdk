@@ -144,6 +144,7 @@ exports[`The GuAlb4xxPercentageAlarm construct should create the correct alarm r
             "Expression": "100*(m1+m2)/m3",
             "Id": "expr_1",
             "Label": "% of 4XX responses served for testing (load balancer and instances combined)",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
@@ -386,6 +387,7 @@ exports[`The GuAlb5xxPercentageAlarm construct should create the correct alarm r
             "Expression": "100*(m1+m2)/m3",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for testing (load balancer and instances combined)",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
