@@ -176,8 +176,6 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
             asgNodeId,
             new CfnParameter(this.stack, cfnParameterName, {
               type: "Number",
-              default: parseInt(cfnAutoScalingGroup.minSize),
-              maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
             }),
           );
         }

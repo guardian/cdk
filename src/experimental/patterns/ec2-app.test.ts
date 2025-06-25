@@ -154,8 +154,6 @@ describe("The GuEc2AppExperimental pattern", () => {
     const parameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
     template.hasParameter(parameterName, {
       Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
     });
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
@@ -219,8 +217,6 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     template.hasParameter(parameterName, {
       Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
     });
 
     template.resourceCountIs("AWS::AutoScaling::AutoScalingGroup", 1);
