@@ -4,8 +4,11 @@ import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { CfnScalingPolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
+import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { GuUserData } from "../../constructs/autoscaling";
+import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
+import type { GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
 import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
@@ -267,6 +270,193 @@ describe("The GuEc2AppExperimental pattern", () => {
     }).toThrowError(
       "Failed to detect the autoscaling group relating to the scaling policy on path test/ScaleOut. Was it created in the scope of a GuAutoScalingGroup?",
     );
+  });
+
+  it("should add the correct CFN Parameters for each stage", () => {
+    const app = new App();
+
+    interface MicroserviceProps extends GuStackProps {
+      scaling: GuAsgCapacity;
+    }
+
+    class Microservice extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(scope: App, id: string, props: MicroserviceProps) {
+        super(scope, id, {
+          ...props,
+        });
+        const ec2App = new GuEc2AppExperimental(this, {
+          ...initialProps(this),
+          scaling: props.scaling,
+        });
+        ec2App.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+          targetRequestsPerMinute: 100,
+        });
+      }
+    }
+
+    const codeStack = new Microservice(app, "CODE", {
+      stack: "playground",
+      stage: "CODE",
+      scaling: { minimumInstances: 1, maximumInstances: 2 },
+    });
+    const prodStack = new Microservice(app, "PROD", {
+      stack: "playground",
+      stage: "PROD",
+      scaling: { minimumInstances: 3, maximumInstances: 12 },
+    });
+
+    const codeTemplate = getTemplateAfterAspectInvocation(codeStack);
+    const prodTemplate = getTemplateAfterAspectInvocation(prodStack);
+
+    const parameterName = "MinInstancesInServiceFortestguec2app";
+
+    codeTemplate.hasParameter(parameterName, {
+      Type: "Number",
+      Default: 1,
+      MaxValue: 1,
+    });
+
+    prodTemplate.hasParameter(parameterName, {
+      Type: "Number",
+      Default: 3,
+      MaxValue: 11,
+    });
+  });
+
+  it("should only add the relevant CFN Parameters for each service", () => {
+    const app = new App();
+
+    interface MicroserviceProps extends GuStackProps {
+      appName: string;
+    }
+
+    class Microservice extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(scope: App, id: string, props: MicroserviceProps) {
+        super(scope, id, {
+          ...props,
+        });
+        const ec2App = new GuEc2AppExperimental(this, {
+          ...initialProps(this, props.appName),
+        });
+        ec2App.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+          targetRequestsPerMinute: 100,
+        });
+      }
+    }
+
+    const appA = new Microservice(app, "app-a-PROD", { stack: "playground", stage: "PROD", appName: "app-a" });
+    const appB = new Microservice(app, "app-b-PROD", { stack: "playground", stage: "PROD", appName: "app-b" });
+
+    const templateA = getTemplateAfterAspectInvocation(appA);
+    const templateB = getTemplateAfterAspectInvocation(appB);
+
+    templateA.hasParameter("MinInstancesInServiceForappa", {
+      Type: "Number",
+      Default: 1,
+      MaxValue: 1,
+    });
+
+    expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
+
+    templateB.hasParameter("MinInstancesInServiceForappb", {
+      Type: "Number",
+      Default: 1,
+      MaxValue: 1,
+    });
+
+    expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
+  });
+
+  it("should configure the update policy correctly for each stage", () => {
+    const app = new App();
+
+    class Microservice extends GuStack {
+      public readonly autoScalingGroup: GuAutoScalingGroup;
+
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(scope: App, id: string, props: GuStackProps) {
+        super(scope, id, {
+          ...props,
+        });
+        const ec2AppProps: GuEc2AppExperimentalProps = initialProps(this);
+        const ec2App = new GuEc2AppExperimental(this, ec2AppProps);
+        this.autoScalingGroup = ec2App.autoScalingGroup;
+      }
+    }
+
+    const codeStack = new Microservice(app, "CODE", { stack: "playground", stage: "CODE" });
+    const prodStack = new Microservice(app, "PROD", { stack: "playground", stage: "PROD" });
+
+    // Enable dynamic scaling in PROD only
+    prodStack.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+      targetRequestsPerMinute: 100,
+    });
+
+    const codeTemplate = getTemplateAfterAspectInvocation(codeStack);
+    const prodTemplate = getTemplateAfterAspectInvocation(prodStack);
+
+    codeTemplate.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      UpdatePolicy: {
+        AutoScalingRollingUpdate: {
+          MinInstancesInService: 1,
+        },
+      },
+    });
+
+    prodTemplate.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      UpdatePolicy: {
+        AutoScalingRollingUpdate: {
+          MinInstancesInService: {
+            Ref: "MinInstancesInServiceFortestguec2app",
+          },
+        },
+      },
+    });
+  });
+
+  it("should set desired capacity correctly for each stage", () => {
+    const app = new App();
+
+    class Microservice extends GuStack {
+      public readonly autoScalingGroup: GuAutoScalingGroup;
+
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(scope: App, id: string, props: GuStackProps) {
+        super(scope, id, {
+          ...props,
+        });
+        const ec2AppProps: GuEc2AppExperimentalProps = initialProps(this);
+        const ec2App = new GuEc2AppExperimental(this, ec2AppProps);
+        this.autoScalingGroup = ec2App.autoScalingGroup;
+      }
+    }
+
+    const codeStack = new Microservice(app, "CODE", { stack: "playground", stage: "CODE" });
+    const prodStack = new Microservice(app, "PROD", { stack: "playground", stage: "PROD" });
+
+    // Enable dynamic scaling in PROD only
+    prodStack.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+      targetRequestsPerMinute: 100,
+    });
+
+    const codeTemplate = getTemplateAfterAspectInvocation(codeStack);
+    const prodTemplate = getTemplateAfterAspectInvocation(prodStack);
+
+    codeTemplate.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Properties: {
+        DesiredCapacity: "1",
+        Tags: Match.arrayWith([{ Key: "App", Value: "test-gu-ec2-app", PropagateAtLaunch: true }]),
+      },
+    });
+
+    prodTemplate.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+      Properties: {
+        DesiredCapacity: Match.absent(),
+        Tags: Match.arrayWith([{ Key: "App", Value: "test-gu-ec2-app", PropagateAtLaunch: true }]),
+      },
+    });
   });
 
   it("should add the correct target group attributes if slow start is enabled", () => {
