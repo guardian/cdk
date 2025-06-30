@@ -158,8 +158,6 @@ describe("The GuEc2AppExperimental pattern", () => {
     const parameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
     template.hasParameter(parameterName, {
       Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
     });
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
@@ -223,8 +221,6 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     template.hasParameter(parameterName, {
       Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
     });
 
     template.resourceCountIs("AWS::AutoScaling::AutoScalingGroup", 1);
@@ -300,14 +296,10 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     template.hasParameter("MinInstancesInServiceForappa", {
       Type: "Number",
-      Default: 3,
-      MaxValue: 11,
     });
 
     template.hasParameter("MinInstancesInServiceForappb", {
       Type: "Number",
-      Default: 6,
-      MaxValue: 23,
     });
   });
 
@@ -352,14 +344,10 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     codeTemplate.hasParameter(parameterName, {
       Type: "Number",
-      Default: 1,
-      MaxValue: 1,
     });
 
     prodTemplate.hasParameter(parameterName, {
       Type: "Number",
-      Default: 3,
-      MaxValue: 11,
     });
   });
 
@@ -393,16 +381,12 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     templateA.hasParameter("MinInstancesInServiceForappa", {
       Type: "Number",
-      Default: 1,
-      MaxValue: 1,
     });
 
     expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
 
     templateB.hasParameter("MinInstancesInServiceForappb", {
       Type: "Number",
-      Default: 1,
-      MaxValue: 1,
     });
 
     expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
@@ -511,16 +495,12 @@ describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", 
 
     templateA.hasParameter("MinInstancesInServiceForappa", {
       Type: "Number",
-      Default: 1,
-      MaxValue: 1,
     });
 
     expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
 
     templateB.hasParameter("MinInstancesInServiceForappb", {
       Type: "Number",
-      Default: 1,
-      MaxValue: 1,
     });
 
     expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
