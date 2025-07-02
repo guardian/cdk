@@ -1,5 +1,17 @@
 # @guardian/cdk
 
+## 61.9.0
+
+### Minor Changes
+
+- 339c2e9: Improves the safety of the new deployment mechanism for services which scale horizontally.
+
+  As part of this the `default` and `maxValue` properties of the `MinInstancesInServiceFor<app>` parameter (which is used by Riff-Raff) have been removed.
+
+### Patch Changes
+
+- 888d5e2: Update aws-cdk to 2.1018.0, aws-cdk-lib to 2.200.1, constructs to 10.4.2
+
 ## 61.8.2
 
 ### Patch Changes
