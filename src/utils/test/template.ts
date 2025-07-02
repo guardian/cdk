@@ -19,7 +19,8 @@ export function getTemplateAfterAspectInvocation(stack: GuStack): Template {
   }
 
   const { artifacts } = app.synth();
-  const cfnStack = artifacts.find((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
+  const cfnStacks = artifacts.filter((_): _ is CloudFormationStackArtifact => _ instanceof CloudFormationStackArtifact);
+  const cfnStack = cfnStacks.find((artifact) => artifact.id === stack.node.id);
 
   if (!cfnStack) {
     throw new Error("Unable to locate a CloudFormationStackArtifact");

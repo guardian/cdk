@@ -131,7 +131,7 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
   }
 
   public visit(construct: IConstruct) {
-    if (construct instanceof CfnScalingPolicy) {
+    if (construct instanceof CfnScalingPolicy && construct.stack.stackName === this.stack.stackName) {
       const { node } = construct;
       const { scopes, path } = node;
 
@@ -176,8 +176,6 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
             asgNodeId,
             new CfnParameter(this.stack, cfnParameterName, {
               type: "Number",
-              default: parseInt(cfnAutoScalingGroup.minSize),
-              maxValue: parseInt(cfnAutoScalingGroup.maxSize) - 1,
             }),
           );
         }

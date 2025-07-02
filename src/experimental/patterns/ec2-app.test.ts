@@ -1,46 +1,50 @@
-import { App, Duration } from "aws-cdk-lib";
+import { App, Aspects, Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { CfnScalingPolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
+import type { GuStackProps } from "../../constructs/core";
 import { GuStack } from "../../constructs/core";
+import { GuEc2App } from "../../patterns";
+import type { GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
+import { GuHorizontallyScalingDeploymentPropertiesExperimental } from "./ec2-app";
 import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
+
+function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2AppExperimentalProps {
+  const buildNumber = 123;
+
+  const { userData } = new GuUserData(scope, {
+    app,
+    distributable: {
+      fileName: `${app}-${buildNumber}.deb`,
+      executionStatement: `dpkg -i /${app}/${app}-${buildNumber}.deb`,
+    },
+  });
+
+  return {
+    applicationPort: 9000,
+    app,
+    access: { scope: AccessScope.PUBLIC },
+    instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+    monitoringConfiguration: { noMonitoring: true },
+    instanceMetricGranularity: "5Minute",
+    userData,
+    certificateProps: {
+      domainName: "domain-name-for-your-application.example",
+    },
+    scaling: {
+      minimumInstances: 1,
+    },
+    buildIdentifier: "TEST",
+  };
+}
 
 // TODO test User Data includes a build number
 describe("The GuEc2AppExperimental pattern", () => {
-  function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2AppExperimentalProps {
-    const buildNumber = 123;
-
-    const { userData } = new GuUserData(scope, {
-      app,
-      distributable: {
-        fileName: `${app}-${buildNumber}.deb`,
-        executionStatement: `dpkg -i /${app}/${app}-${buildNumber}.deb`,
-      },
-    });
-
-    return {
-      applicationPort: 9000,
-      app,
-      access: { scope: AccessScope.PUBLIC },
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      monitoringConfiguration: { noMonitoring: true },
-      instanceMetricGranularity: "5Minute",
-      userData,
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      scaling: {
-        minimumInstances: 1,
-      },
-      buildIdentifier: "TEST",
-    };
-  }
-
   it("matches the snapshot", () => {
     const stack = simpleGuStackForTesting();
     new GuEc2AppExperimental(stack, initialProps(stack));
@@ -154,8 +158,6 @@ describe("The GuEc2AppExperimental pattern", () => {
     const parameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
     template.hasParameter(parameterName, {
       Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
     });
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
       Properties: {
@@ -219,8 +221,6 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     template.hasParameter(parameterName, {
       Type: "Number",
-      Default: 5,
-      MaxValue: 9, // (min * 2) - 1
     });
 
     template.resourceCountIs("AWS::AutoScaling::AutoScalingGroup", 1);
@@ -267,6 +267,129 @@ describe("The GuEc2AppExperimental pattern", () => {
     }).toThrowError(
       "Failed to detect the autoscaling group relating to the scaling policy on path test/ScaleOut. Was it created in the scope of a GuAutoScalingGroup?",
     );
+  });
+
+  it("should add the correct CFN Parameters for more than one EC2 app in the same stack", () => {
+    const app = new App();
+    const stack = new GuStack(app, "test", {
+      stack: "test-stack",
+      stage: "TEST",
+    });
+
+    const appA = new GuEc2AppExperimental(stack, {
+      ...initialProps(stack, "app-a"),
+      scaling: { minimumInstances: 3, maximumInstances: 12 },
+    });
+    appA.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+      targetRequestsPerMinute: 99,
+    });
+
+    const appB = new GuEc2AppExperimental(stack, {
+      ...initialProps(stack, "app-b"),
+      scaling: { minimumInstances: 6, maximumInstances: 24 },
+    });
+    appB.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+      targetRequestsPerMinute: 100,
+    });
+
+    const template = getTemplateAfterAspectInvocation(stack);
+
+    template.hasParameter("MinInstancesInServiceForappa", {
+      Type: "Number",
+    });
+
+    template.hasParameter("MinInstancesInServiceForappb", {
+      Type: "Number",
+    });
+  });
+
+  it("should add the correct CFN Parameters for two separate stacks in the same app", () => {
+    const app = new App();
+
+    interface MicroserviceProps extends GuStackProps {
+      scaling: GuAsgCapacity;
+    }
+
+    class Microservice extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(scope: App, id: string, props: MicroserviceProps) {
+        super(scope, id, {
+          ...props,
+        });
+        const ec2App = new GuEc2AppExperimental(this, {
+          ...initialProps(this),
+          scaling: props.scaling,
+        });
+        ec2App.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+          targetRequestsPerMinute: 100,
+        });
+      }
+    }
+
+    const codeStack = new Microservice(app, "CODE", {
+      stack: "playground",
+      stage: "CODE",
+      scaling: { minimumInstances: 1, maximumInstances: 2 },
+    });
+    const prodStack = new Microservice(app, "PROD", {
+      stack: "playground",
+      stage: "PROD",
+      scaling: { minimumInstances: 3, maximumInstances: 12 },
+    });
+
+    const codeTemplate = getTemplateAfterAspectInvocation(codeStack);
+    const prodTemplate = getTemplateAfterAspectInvocation(prodStack);
+
+    const parameterName = "MinInstancesInServiceFortestguec2app";
+
+    codeTemplate.hasParameter(parameterName, {
+      Type: "Number",
+    });
+
+    prodTemplate.hasParameter(parameterName, {
+      Type: "Number",
+    });
+  });
+
+  it("should only add the relevant CFN Parameters for different services which share the same App", () => {
+    const app = new App();
+
+    interface MicroserviceProps extends GuStackProps {
+      appName: string;
+    }
+
+    class Microservice extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(scope: App, id: string, props: MicroserviceProps) {
+        super(scope, id, {
+          ...props,
+        });
+        const ec2App = new GuEc2AppExperimental(this, {
+          ...initialProps(this, props.appName),
+        });
+        ec2App.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+          targetRequestsPerMinute: 100,
+        });
+      }
+    }
+
+    const appA = new Microservice(app, "app-a-PROD", { stack: "playground", stage: "PROD", appName: "app-a" });
+    const appB = new Microservice(app, "app-b-PROD", { stack: "playground", stage: "PROD", appName: "app-b" });
+
+    const templateA = getTemplateAfterAspectInvocation(appA);
+    const templateB = getTemplateAfterAspectInvocation(appB);
+
+    templateA.hasParameter("MinInstancesInServiceForappa", {
+      Type: "Number",
+    });
+
+    expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
+
+    templateB.hasParameter("MinInstancesInServiceForappb", {
+      Type: "Number",
+    });
+
+    expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
   });
 
   it("should add the correct target group attributes if slow start is enabled", () => {
@@ -335,5 +458,51 @@ describe("The GuEc2AppExperimental pattern", () => {
     expect(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(901) });
     }).toThrowError("Slow start duration must be between 30 and 900 seconds");
+  });
+});
+
+describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", () => {
+  it("should ignore scaling policies and ASGs from other stacks if it is applied at App level", () => {
+    const app = new App();
+
+    interface MicroserviceProps extends GuStackProps {
+      appName: string;
+    }
+
+    class Microservice extends GuStack {
+      // eslint-disable-next-line custom-rules/valid-constructors -- this is a test
+      constructor(app: App, id: string, props: MicroserviceProps) {
+        super(app, id, {
+          ...props,
+        });
+        const ec2App = new GuEc2App(this, {
+          ...initialProps(this, props.appName),
+        });
+        ec2App.autoScalingGroup.scaleOnRequestCount("ScaleOnRequests", {
+          targetRequestsPerMinute: 100,
+        });
+        const cfnAsg = ec2App.autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+        cfnAsg.cfnOptions.updatePolicy = { autoScalingRollingUpdate: {} };
+        Aspects.of(app).add(GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(this));
+      }
+    }
+
+    const appA = new Microservice(app, "app-a-PROD", { stack: "playground", stage: "PROD", appName: "app-a" });
+    const appB = new Microservice(app, "app-b-PROD", { stack: "playground", stage: "PROD", appName: "app-b" });
+
+    const templateA = getTemplateAfterAspectInvocation(appA);
+    const templateB = getTemplateAfterAspectInvocation(appB);
+
+    templateA.hasParameter("MinInstancesInServiceForappa", {
+      Type: "Number",
+    });
+
+    expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
+
+    templateB.hasParameter("MinInstancesInServiceForappb", {
+      Type: "Number",
+    });
+
+    expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
   });
 });
