@@ -245,7 +245,9 @@ export class GuEcsTask extends Construct {
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
       ],
-      resources: ["*"],
+      // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
+      // note that if you are using a region other than eu-west-1 you'll need to add extra repositories here
+      resources: ["694911143906.dkr.ecr.eu-west-1.amazonaws.com/aws-guardduty-agent-fargate"],
     });
 
     taskDefinition.addToExecutionRolePolicy(guardDutyPolicy);
