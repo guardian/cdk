@@ -243,9 +243,9 @@ export class GuEcsTask extends Construct {
         "ecr:GetAuthorizationToken",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage"
+        "ecr:BatchGetImage",
       ],
-      resources: ["*"]
+      resources: ["*"],
     });
 
     taskDefinition.addToExecutionRolePolicy(guardDutyPolicy);
