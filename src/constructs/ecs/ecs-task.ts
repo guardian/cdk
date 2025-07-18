@@ -14,7 +14,7 @@ import {
   TaskDefinition,
 } from "aws-cdk-lib/aws-ecs";
 import type { ContainerDefinition, ContainerInsights, RepositoryImageProps } from "aws-cdk-lib/aws-ecs";
-import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { DefinitionBody, IntegrationPattern, JsonPath, StateMachine, Timeout } from "aws-cdk-lib/aws-stepfunctions";
 import type { TaskEnvironmentVariable } from "aws-cdk-lib/aws-stepfunctions-tasks";
@@ -235,6 +235,22 @@ export class GuEcsTask extends Construct {
       const distPolicy = new GuGetDistributablePolicyStatement(scope, { app });
       taskDefinition.addToTaskRolePolicy(distPolicy);
     }
+
+    // See https://docs.aws.amazon.com/guardduty/latest/ug/prereq-runtime-monitoring-ecs-support.html#before-enable-runtime-monitoring-ecs
+    const guardDutyPolicy = new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+      ],
+      // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
+      // note that if you are using a region other than eu-west-1 you'll need to add extra repositories here
+      resources: ["694911143906.dkr.ecr.eu-west-1.amazonaws.com/aws-guardduty-agent-fargate"],
+    });
+
+    taskDefinition.addToExecutionRolePolicy(guardDutyPolicy);
 
     (customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
