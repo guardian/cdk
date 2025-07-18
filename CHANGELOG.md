@@ -1,5 +1,15 @@
 # @guardian/cdk
 
+## 61.10.0
+
+### Minor Changes
+
+- 9db50ef: Add required permissions to GuEcsTask pattern for guard duty sidecar container
+
+### Patch Changes
+
+- 6c611c8: Broaden CDK peer dependency ranges to allow any aws-cdk/construct version provided more recent than the specified version
+
 ## 61.9.0
 
 ### Minor Changes
