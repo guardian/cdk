@@ -2,4 +2,4 @@
 "@guardian/cdk": minor
 ---
 
-Add required permissions for guard duty sidecar container
+Add required permissions to GuEcsTask pattern for guard duty sidecar container
