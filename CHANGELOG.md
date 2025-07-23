@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 61.10.1
+
+### Patch Changes
+
+- 0b264a3: Fix resource property of guard duty IAM role for ECS task pattern
+
 ## 61.10.0
 
 ### Minor Changes
