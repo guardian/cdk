@@ -236,21 +236,23 @@ export class GuEcsTask extends Construct {
       taskDefinition.addToTaskRolePolicy(distPolicy);
     }
 
+    // these policies are needed for guard duty runtime monitoring
     // See https://docs.aws.amazon.com/guardduty/latest/ug/prereq-runtime-monitoring-ecs-support.html#before-enable-runtime-monitoring-ecs
-    const guardDutyPolicy = new PolicyStatement({
+    const getAuthTokenPolicy = new PolicyStatement({
       effect: Effect.ALLOW,
-      actions: [
-        "ecr:GetAuthorizationToken",
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage",
-      ],
+      actions: ["ecr:GetAuthorizationToken"],
+      resources: ["*"],
+    });
+    const guardDutyContainerPolicy = new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
       // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
       // note that if you are using a region other than eu-west-1 you'll need to add extra repositories here
-      resources: ["694911143906.dkr.ecr.eu-west-1.amazonaws.com/aws-guardduty-agent-fargate"],
+      resources: ["arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate"],
     });
 
-    taskDefinition.addToExecutionRolePolicy(guardDutyPolicy);
+    taskDefinition.addToExecutionRolePolicy(getAuthTokenPolicy);
+    taskDefinition.addToExecutionRolePolicy(guardDutyContainerPolicy);
 
     (customTaskPolicies ?? []).forEach((p) => taskDefinition.addToTaskRolePolicy(p));
 
