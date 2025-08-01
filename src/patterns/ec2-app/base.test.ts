@@ -71,7 +71,7 @@ describe("the GuEC2App pattern", function () {
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Scheme: "internal",
       Subnets: {
-        Ref: "testguec2appPrivateSubnets",
+        Ref: "VpcPrivateSubnets",
       },
     });
   });
