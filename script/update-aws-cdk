@@ -51,11 +51,17 @@ raisePR() {
   AWSCDKLIB_VERSION=$(jq -r '.peerDependencies."aws-cdk-lib"' < "$ROOT_DIR/package.json")
   CONSTRUCT_VERSION=$(jq -r '.peerDependencies.constructs' < "$ROOT_DIR/package.json")
 
-  BRANCH_NAME="update-aws-cdk-$AWSCDK_VERSION"
+  AWSCDK_VERSION_CLEANED=$(
+    echo "$AWSCDK_VERSION" \
+    | sed 's/\^//g' # Remove ^ to ensure a valid branch name. See https://git-scm.com/docs/git-check-ref-format.
+  )
+
+  BRANCH_NAME="update-aws-cdk-$AWSCDK_VERSION_CLEANED"
+
   COMMIT_SUBJECT="fix(deps): Update AWS CDK libraries to $AWSCDK_VERSION, and constructs to $CONSTRUCT_VERSION"
   COMMIT_BODY="Update aws-cdk to $AWSCDK_VERSION, aws-cdk-lib to $AWSCDKLIB_VERSION, constructs to $CONSTRUCT_VERSION"
 
-  addChangeset "$AWSCDK_VERSION" "$COMMIT_BODY"
+  addChangeset "$AWSCDK_VERSION_CLEANED" "$COMMIT_BODY"
 
   git checkout -b "$BRANCH_NAME"
 
