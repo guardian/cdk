@@ -153,6 +153,9 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "RestApitestPOSTEE6B79A5",
         "RestApitest9059D171",
       ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": {
