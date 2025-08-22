@@ -543,6 +543,9 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
         "lambdaapiproxyB573C729",
         "lambdaapiANY4EBCADD1",
       ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "Description": "this is a test",
         "RestApiId": {
@@ -1258,6 +1261,9 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
         "lambdaapiproxyB573C729",
         "lambdaapiANY4EBCADD1",
       ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "Description": "this is a test",
         "RestApiId": {

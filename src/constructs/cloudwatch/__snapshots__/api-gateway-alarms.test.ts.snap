@@ -226,6 +226,9 @@ exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct 
         "RestApiGET0F59260B",
         "RestApitest9059D171",
       ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": {
