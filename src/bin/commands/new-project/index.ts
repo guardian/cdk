@@ -2,17 +2,17 @@ import { existsSync } from "fs";
 import { basename, dirname, join } from "path";
 import { ux } from "@oclif/core";
 import chalk from "chalk";
-import kebabCase from "lodash.kebabcase";
 import type { CliCommandResponse } from "../../../types/cli";
 import { execute } from "../../../utils/exec";
 import { gitRootOrCwd } from "../../../utils/git";
+import { toKebabCase, toPascalCase } from "../../../utils/string";
 import { constructApp } from "./utils/app";
 import { Imports } from "./utils/imports";
 import { buildDirectory } from "./utils/init";
 import { constructTest } from "./utils/snapshot";
 import { constructStack } from "./utils/stack";
 import type { Name } from "./utils/utils";
-import { getCommands, pascalCase } from "./utils/utils";
+import { getCommands } from "./utils/utils";
 
 export type PackageManager = "npm" | "yarn";
 
@@ -65,10 +65,10 @@ function getConfig(props: NewProjectProps): NewProjectConfig {
   const rootDir = gitRootOrCwd();
   const cdkDir = join(rootDir, "/cdk");
 
-  const appName = pascalCase(app);
-  const kebabAppName = kebabCase(appName);
-  const stackName = pascalCase(stack);
-  const kebabStackName = kebabCase(stackName);
+  const appName = toPascalCase(app);
+  const kebabAppName = toKebabCase(appName);
+  const stackName = toPascalCase(stack);
+  const kebabStackName = toKebabCase(stackName);
 
   const config: NewProjectConfig = {
     init,
