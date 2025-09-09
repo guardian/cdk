@@ -1,5 +1,6 @@
 import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import { getAsgRollingUpdateCfnParameterName } from "../../experimental/patterns/ec2-app";
+import { toKebabCase } from "../../utils/string";
 import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentParameters } from "../types";
 
 export function cloudFormationDeployment(
@@ -20,8 +21,7 @@ export function cloudFormationDeployment(
     constructor: { name },
   } = cdkStack;
 
-  // TODO remove `lodash.kebabcase` dep as it's not that much code to kebab-ise a string...
-  const kebabClassName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+  const kebabClassName = toKebabCase(name);
 
   const templateStagePaths = cdkStacks.reduce(
     (acc, { stage, templateFile }) => ({

@@ -36,7 +36,6 @@
     "@types/jest": "^29.5.14",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.camelcase": "^4.3.9",
-    "@types/lodash.kebabcase": "^4.1.9",
     "@types/lodash.upperfirst": "^4.3.9",
     "@types/node": "22.15.30",
     "@types/yargs": "^17.0.33",
@@ -62,7 +61,6 @@
     "git-url-parse": "^16.0.1",
     "js-yaml": "^4.1.0",
     "lodash.camelcase": "^4.3.0",
-    "lodash.kebabcase": "^4.1.1",
     "lodash.upperfirst": "^4.3.1",
     "read-pkg-up": "7.0.1",
     "yargs": "^17.7.2"
