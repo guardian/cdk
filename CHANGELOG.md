@@ -1,5 +1,23 @@
 # @guardian/cdk
 
+## 61.11.0
+
+### Minor Changes
+
+- 44adc37: feat(experimental-ec2-pattern): Echo RiffRaffDeploymentId in user-data
+
+  This change adds a new CloudFormation parameter, `RiffRaffDeploymentId`, to be set by Riff-Raff during deployment (see guardian/riff-raff#1469).
+  This parameter is echoed out in the user-data. This means a redeployment of the same build creates a CloudFormation changeset with a new launch template.
+  Consequently, the running EC2 instances are cycled. This means scheduled deployments are possible.
+
+### Patch Changes
+
+- 838492c: Update aws-cdk to ^2.1018.0, aws-cdk-lib to ^2.200.1, constructs to ^10.4.2
+- 1e87504: Remove lodash dependencies
+- 848d54f: Remove unused `RegexPattern.S3ARN`.
+
+  The regex isn't used (other than within tests of this repository), so we can safely remove it.
+
 ## 61.10.1
 
 ### Patch Changes
@@ -62,7 +80,6 @@
   We'd recommend using detailed monitoring for production environments.
 
   See also:
-
   - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-detailed-monitoring.html
   - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html
 
@@ -197,7 +214,6 @@ If we do not, Riff-Raff will fail with an error similar to:
 - 3851bd2: Upgrade to ESLint 9.x and @guardian/eslint-config
 
   ## Upgrade Guide
-
   1. Update required dependencies
 
   ```bash
@@ -380,7 +396,6 @@ If we do not, Riff-Raff will fail with an error similar to:
 - 8e1c15f: ECS task now uses GuVpc.subnetsFromParameter rather than defaulting to CDK context
 
   Note that this is a breaking change, because the previous behaviour was [this](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions_tasks.EcsRunTask.html#subnets)
-
   - which relied on a CDK context file with details of the different subnets.
 
 ### Patch Changes
@@ -749,7 +764,6 @@ If we do not, Riff-Raff will fail with an error similar to:
 ### Minor Changes
 
 - edf5c7a: - Add `readonlyRootFilesystem` prop to specify whether the container is given read-only access to its root file system
-
   - Add `containerInsights` prop to enable CloudWatch insights
   - Replace deprecated state machine definition
 
@@ -758,7 +772,6 @@ If we do not, Riff-Raff will fail with an error similar to:
 ### Major Changes
 
 - 4548884: This change includes some potentially breaking changes for consumers of:
-
   - [`GuEc2App`](https://guardian.github.io/cdk/classes/patterns.GuEc2App.html)
   - [`GuPlayApp`](https://guardian.github.io/cdk/classes/patterns.GuPlayApp.html) (a subclass of `GuEc2App`)
   - [`GuPlayWorkerApp`](https://guardian.github.io/cdk/classes/patterns.GuPlayWorkerApp.html) (a subclass of `GuEc2App`)
@@ -854,7 +867,6 @@ If we do not, Riff-Raff will fail with an error similar to:
 ### Patch Changes
 
 - 8ead267: Remove direct dependencies that should be peer ones:
-
   - `aws-cdk-lib`
   - `constructs`
 
@@ -924,7 +936,6 @@ If we do not, Riff-Raff will fail with an error similar to:
   Currently the `riff-raff.yaml` generator is not able to create dependencies between `cloud-formation` deployments. This means each `cloud-formation` deployment could happen at the same time.
 
   This does not work in the scenario where we have:
-
   - Stack A containing a bucket
   - Stack B CODE containing an app that uses A's bucket
   - Stack B PROD containing an app that uses A's bucket
