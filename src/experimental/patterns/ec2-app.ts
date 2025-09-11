@@ -342,6 +342,25 @@ export interface GuUserDataForRollingUpdateExperimentalProps {
   slowStartDuration?: Duration;
 }
 
+class GuRiffRaffDeploymentIdParameter extends CfnParameter {
+  private static instance: GuRiffRaffDeploymentIdParameter | undefined;
+
+  private constructor(scope: GuStack) {
+    super(scope, "RiffRaffDeploymentId", {
+      type: "String",
+      description: "Used by Riff-Raff to inject the deployment ID.",
+    });
+  }
+
+  public static getInstance(stack: GuStack): GuRiffRaffDeploymentIdParameter {
+    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
+      this.instance = new GuRiffRaffDeploymentIdParameter(stack);
+    }
+
+    return this.instance;
+  }
+}
+
 /**
  * Modifies the user-data script (which runs whenever an instance is launched) to make it compatible with the new
  * rolling update deployment mechanism.
@@ -356,6 +375,13 @@ export class GuUserDataForRollingUpdateExperimental {
     const { region, stackId } = scope;
     const { autoScalingGroup, targetGroup, applicationPort, buildIdentifier, slowStartDuration } = props;
     const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+
+    const deploymentId = GuRiffRaffDeploymentIdParameter.getInstance(scope);
+
+    // This allows redeployment of the same build to cycle instances
+    autoScalingGroup.userData.addCommands(
+      `echo "Launch template last updated by Riff-Raff deployment ID: ${deploymentId.valueAsString}"`,
+    );
 
     /*
       `aws` is available via AMIgo baked AMIs.
