@@ -8,10 +8,34 @@ set -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 ROOT_DIR=$DIR/..
 
-updateAwsCdk() {
-  # `npx` to avoid a devDependency (and the Dependabot PRs)
+updateDependency() {
+  DEPENDENCY_NAME=$1
+
+  echo "Updating $DEPENDENCY_NAME (if available)"
+
+  # `npx` to avoid a devDependency (and the Dependabot PRs).
   # See https://www.npmjs.com/package/npm-check-updates
-  npx npm-check-updates@16.3.25 "aws-cdk-lib" "aws-cdk" "constructs" --upgrade --deep --target minor
+  npx npm-check-updates "$DEPENDENCY_NAME" --upgrade --deep --target minor
+
+  FILE=package.json
+  TMP_FILE=package.json.tmp
+
+  NEW_VERSION=$(jq -r ".devDependencies.\"${DEPENDENCY_NAME}\"" < "$ROOT_DIR/$FILE")
+
+  # Peer dependencies describe the version clients need.
+  # The ^ allows them to use a matching or higher minor/patch version.
+  # The means clients can use Dependabot.
+  NEW_PEER_VERSION="^${NEW_VERSION}"
+
+  # Synchronise the version within peerDependencies in package.json.
+  # As jq doesn't support in-place editing, write to a temp file and move it back.
+  jq ".peerDependencies.\"${DEPENDENCY_NAME}\" |= \"${NEW_PEER_VERSION}\"" $FILE > $TMP_FILE && mv $TMP_FILE $FILE
+}
+
+updateAwsCdk() {
+  updateDependency aws-cdk
+  updateDependency aws-cdk-lib
+  updateDependency constructs
 
   # Deliberately NOT `npm ci` as we're going to raise a PR with the resulting changes to package-lock.json
   # --ignore-scripts for speed
