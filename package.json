@@ -37,8 +37,8 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "22.15.30",
     "@types/yargs": "^17.0.33",
-    "aws-cdk": "2.1024.0",
-    "aws-cdk-lib": "2.210.0",
+    "aws-cdk": "2.1029.1",
+    "aws-cdk-lib": "2.214.0",
     "constructs": "10.4.2",
     "eslint": "^9.34.0",
     "eslint-plugin-custom-rules": "file:tools/eslint",
@@ -62,8 +62,8 @@
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
-    "aws-cdk": "^2.1018.0",
-    "aws-cdk-lib": "^2.200.1",
+    "aws-cdk": "^2.1029.1",
+    "aws-cdk-lib": "^2.214.0",
     "constructs": "^10.4.2"
   }
 }
