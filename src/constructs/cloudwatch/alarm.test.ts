@@ -35,11 +35,7 @@ describe("The GuAlarm class", () => {
       "Fn::Join": [
         "",
         [
-          "arn:aws:sns:",
-          {
-            Ref: "AWS::Region",
-          },
-          ":",
+          "arn:aws:sns:eu-west-1:",
           {
             Ref: "AWS::AccountId",
           },

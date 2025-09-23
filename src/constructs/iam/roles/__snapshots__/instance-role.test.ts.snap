@@ -153,11 +153,7 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -176,11 +172,7 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -380,11 +372,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:kinesis:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:kinesis:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -502,11 +490,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -525,11 +509,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -561,11 +541,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -584,11 +560,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -753,11 +725,7 @@ exports[`The GuInstanceRole construct should create an additional logging policy
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:kinesis:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:kinesis:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -832,11 +800,7 @@ exports[`The GuInstanceRole construct should create an additional logging policy
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -855,11 +819,7 @@ exports[`The GuInstanceRole construct should create an additional logging policy
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1051,11 +1011,7 @@ exports[`The GuInstanceRole construct should create the correct resources with m
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1074,11 +1030,7 @@ exports[`The GuInstanceRole construct should create the correct resources with m
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },

@@ -1,4 +1,4 @@
-import { App, Duration } from "aws-cdk-lib";
+import { App, Aws, Duration } from "aws-cdk-lib";
 import { CfnScalingPolicy, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
@@ -187,7 +187,13 @@ describe("The RiffRaffYamlFile class", () => {
   it("Should throw if there is an unresolved region", () => {
     const app = new App();
     class MyApplicationStack extends GuStack {}
-    new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
+    new MyApplicationStack(app, "App-CODE-deploy", {
+      stack: "deploy",
+      stage: "CODE",
+      env: {
+        region: Aws.REGION, // Use the pseudo parameter, which is only resolved at runtime
+      },
+    });
 
     expect(() => {
       new RiffRaffYamlFile(app);

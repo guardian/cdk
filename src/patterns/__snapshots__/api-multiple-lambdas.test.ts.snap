@@ -24,11 +24,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
             {
               "Ref": "RestApi0C43BF4B",
             },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region",
-            },
-            ".",
+            ".execute-api.eu-west-1.",
             {
               "Ref": "AWS::URLSuffix",
             },
@@ -141,7 +137,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b": {
+    "RestApiDeployment180EC50348a2a47c013558d7a78300d2ef8753ea": {
       "DependsOn": [
         "RestApitestalongpathGET4832AA08",
         "RestApitestalongpath289D7A7A",
@@ -170,7 +166,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b",
+          "Ref": "RestApiDeployment180EC50348a2a47c013558d7a78300d2ef8753ea",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -227,11 +223,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambdaoneA536F07A",
@@ -270,11 +262,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -311,11 +299,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -348,11 +332,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -389,11 +369,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -423,11 +399,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambdatwoAFC8CEF1",
@@ -499,11 +471,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambdathreeD95CE916",
@@ -542,11 +510,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -583,11 +547,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -630,11 +590,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambdafour0ED67C43",
@@ -673,11 +629,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -714,11 +666,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -895,11 +843,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -918,11 +862,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1052,11 +992,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1075,11 +1011,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1315,11 +1247,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1338,11 +1266,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1525,11 +1449,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1548,11 +1468,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },

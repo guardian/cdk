@@ -122,11 +122,7 @@ exports[`The GuAlb4xxPercentageAlarm construct should create the correct alarm r
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -365,11 +361,7 @@ exports[`The GuAlb5xxPercentageAlarm construct should create the correct alarm r
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -682,11 +674,7 @@ exports[`The GuUnhealthyInstancesAlarm construct should create the correct alarm
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },

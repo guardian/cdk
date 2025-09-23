@@ -427,11 +427,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
                     {
                       "Ref": "AWS::Partition",
                     },
-                    ":events:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    ":events:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -472,9 +468,7 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
                 "awslogs-group": {
                   "Ref": "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A",
                 },
-                "awslogs-region": {
-                  "Ref": "AWS::Region",
-                },
+                "awslogs-region": "eu-west-1",
                 "awslogs-stream-prefix": "ecs-test",
               },
             },
@@ -1153,11 +1147,7 @@ exports[`The GuEcsTask pattern should support overriding the subnets used by the
                     {
                       "Ref": "AWS::Partition",
                     },
-                    ":events:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    ":events:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1198,9 +1188,7 @@ exports[`The GuEcsTask pattern should support overriding the subnets used by the
                 "awslogs-group": {
                   "Ref": "testecstaskecstestTaskDefinitiontestecstaskecstestTaskContainerLogGroup3F63585A",
                 },
-                "awslogs-region": {
-                  "Ref": "AWS::Region",
-                },
+                "awslogs-region": "eu-west-1",
                 "awslogs-stream-prefix": "ecs-test",
               },
             },

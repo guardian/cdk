@@ -76,11 +76,7 @@ describe("The GuKinesisLambda pattern", () => {
         "Fn::Join": [
           "",
           [
-            "arn:aws:kinesis:",
-            {
-              Ref: "AWS::Region",
-            },
-            ":",
+            "arn:aws:kinesis:eu-west-1:",
             {
               Ref: "AWS::AccountId",
             },

@@ -422,11 +422,7 @@ describe("the GuEC2App pattern", function () {
               "Fn::Join": [
                 "",
                 [
-                  "arn:aws:kinesis:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
+                  "arn:aws:kinesis:eu-west-1:",
                   {
                     Ref: "AWS::AccountId",
                   },
@@ -454,11 +450,7 @@ describe("the GuEC2App pattern", function () {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },
@@ -470,11 +462,7 @@ describe("the GuEC2App pattern", function () {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },

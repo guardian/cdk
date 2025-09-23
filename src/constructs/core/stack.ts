@@ -1,4 +1,4 @@
-import type { App, CfnElement, StackProps } from "aws-cdk-lib";
+import type { App, CfnElement, Environment, StackProps } from "aws-cdk-lib";
 import { Annotations, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
 import gitUrlParse from "git-url-parse";
@@ -48,22 +48,19 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 }
 
 /**
- * GuStack provides the `stack` and `stage` parameters to a template.
- * It also takes the `app` in the constructor.
+ * GuStack is the base class for all stacks in the GuCDK library.
+ * It applies the following tags to all resources:
+ * - `Stack`
+ * - `Stage`
+ * - `App` (if provided)
+ * - `gu:cdk:version` - this tag enables us to measure adoption of this library
+ * - `gu:repo`
  *
- * GuStack will add the Stack, Stage and App tags to all resources.
+ * It also defaults to using the `eu-west-1` region.
+ * This can be overridden via the `env` property,
+ * either setting a concrete region string or using `Aws.REGION` to use the pseudo parameter.
  *
- * GuStack also adds the tag `X-Gu-CDK-Version`.
- * This tag allows us to measure adoption of this library.
- * It's value is the version of guardian/cdk being used, as defined in `package.json`.
- * As a result, the change sets between version numbers will be fairly noisy,
- * as all resources receive a tag update.
- * It is recommended to upgrade the version of @guardian/cdk being used in two steps:
- *   1. Bump the library, apply the tag updates
- *   2. Make any other stack changes
- *
- * Typical usage is to extend GuStack:
- *
+ * @usage
  * ```typescript
  * class MyStack extends GuStack {
  *   constructor(scope: App, id: string, props: GuStackProps) {
@@ -117,8 +114,14 @@ export class GuStack extends Stack implements StackStageIdentity {
   constructor(scope: App, id: string, props: GuStackProps) {
     const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, app, withoutTags } = props;
 
+    const env: Environment = {
+      region: "eu-west-1",
+      ...props.env,
+    };
+
     super(scope, id, {
       ...props,
+      env,
       stackName: cloudFormationStackName,
 
       // TODO Use `DefaultStackSynthesizer` or create own synthesizer?

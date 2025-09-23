@@ -101,11 +101,7 @@ describe("The GuApiLambda pattern", () => {
               {
                 Ref: "AWS::Partition",
               },
-              ":apigateway:",
-              {
-                Ref: "AWS::Region",
-              },
-              ":lambda:path/2015-03-31/functions/",
+              ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
               {
                 "Fn::GetAtt": ["lambda8B5974B5", "Arn"],
               },
@@ -142,11 +138,7 @@ describe("The GuApiLambda pattern", () => {
               {
                 Ref: "AWS::Partition",
               },
-              ":apigateway:",
-              {
-                Ref: "AWS::Region",
-              },
-              ":lambda:path/2015-03-31/functions/",
+              ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
               {
                 Ref: "lambdaAliasForLambda426FBB83", // This is the important difference when compared to the test above
               },

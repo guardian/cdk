@@ -181,11 +181,7 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -204,11 +200,7 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -237,11 +229,7 @@ exports[`GuLambdaThrottlingAlarm construct should match snapshot 1`] = `
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
@@ -485,11 +473,7 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -508,11 +492,7 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -541,11 +521,7 @@ exports[`The GuLambdaErrorPercentageAlarm construct should create the correct al
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },

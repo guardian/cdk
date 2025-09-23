@@ -22,11 +22,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
             {
               "Ref": "lambdaapiC1812993",
             },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region",
-            },
-            ".",
+            ".execute-api.eu-west-1.",
             {
               "Ref": "AWS::URLSuffix",
             },
@@ -268,11 +264,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -291,11 +283,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -331,11 +319,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambda8B5974B5",
@@ -377,11 +361,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -414,11 +394,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -537,7 +513,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": {
+    "lambdaapiDeployment8E95B585f450787d98e065485974b1c24ee3c233": {
       "DependsOn": [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -560,7 +536,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
+          "Ref": "lambdaapiDeployment8E95B585f450787d98e065485974b1c24ee3c233",
         },
         "RestApiId": {
           "Ref": "lambdaapiC1812993",
@@ -656,11 +632,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambda8B5974B5",
@@ -699,11 +671,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -736,11 +704,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -798,11 +762,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
             {
               "Ref": "lambdaapiC1812993",
             },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region",
-            },
-            ".",
+            ".execute-api.eu-west-1.",
             {
               "Ref": "AWS::URLSuffix",
             },
@@ -986,11 +946,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1009,11 +965,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -1049,11 +1001,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambda8B5974B5",
@@ -1095,11 +1043,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -1132,11 +1076,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -1255,7 +1195,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670": {
+    "lambdaapiDeployment8E95B585f450787d98e065485974b1c24ee3c233": {
       "DependsOn": [
         "lambdaapiproxyANYA94E968A",
         "lambdaapiproxyB573C729",
@@ -1278,7 +1218,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
+          "Ref": "lambdaapiDeployment8E95B585f450787d98e065485974b1c24ee3c233",
         },
         "RestApiId": {
           "Ref": "lambdaapiC1812993",
@@ -1324,11 +1264,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
                 {
                   "Ref": "AWS::Partition",
                 },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
                     "lambda8B5974B5",
@@ -1367,11 +1303,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },
@@ -1404,11 +1336,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
+              ":execute-api:eu-west-1:",
               {
                 "Ref": "AWS::AccountId",
               },

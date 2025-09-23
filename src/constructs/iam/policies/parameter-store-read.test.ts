@@ -22,11 +22,7 @@ describe("ParameterStoreReadPolicy", () => {
               "Fn::Join": [
                 "",
                 [
-                  "arn:aws:ssm:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
+                  "arn:aws:ssm:eu-west-1:",
                   {
                     Ref: "AWS::AccountId",
                   },
@@ -42,11 +38,7 @@ describe("ParameterStoreReadPolicy", () => {
               "Fn::Join": [
                 "",
                 [
-                  "arn:aws:ssm:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
+                  "arn:aws:ssm:eu-west-1:",
                   {
                     Ref: "AWS::AccountId",
                   },

@@ -26,10 +26,7 @@ describe("GuKCLPolicy", () => {
             ],
             Effect: "Allow",
             Resource: {
-              "Fn::Join": [
-                "",
-                ["arn:aws:kinesis:", { Ref: "AWS::Region" }, ":", { Ref: "AWS::AccountId" }, ":stream/streamFoo"],
-              ],
+              "Fn::Join": ["", ["arn:aws:kinesis:eu-west-1:", { Ref: "AWS::AccountId" }, ":stream/streamFoo"]],
             },
           },
           {
@@ -38,13 +35,7 @@ describe("GuKCLPolicy", () => {
             Resource: {
               "Fn::Join": [
                 "",
-                [
-                  "arn:aws:kinesis:",
-                  { Ref: "AWS::Region" },
-                  ":",
-                  { Ref: "AWS::AccountId" },
-                  ":stream/streamFoo/consumer/*",
-                ],
+                ["arn:aws:kinesis:eu-west-1:", { Ref: "AWS::AccountId" }, ":stream/streamFoo/consumer/*"],
               ],
             },
           },
@@ -61,33 +52,18 @@ describe("GuKCLPolicy", () => {
             Effect: "Allow",
             Resource: [
               {
+                "Fn::Join": ["", ["arn:aws:dynamodb:eu-west-1:", { Ref: "AWS::AccountId" }, ":table/appBar"]],
+              },
+              {
                 "Fn::Join": [
                   "",
-                  ["arn:aws:dynamodb:", { Ref: "AWS::Region" }, ":", { Ref: "AWS::AccountId" }, ":table/appBar"],
+                  ["arn:aws:dynamodb:eu-west-1:", { Ref: "AWS::AccountId" }, ":table/appBar-WorkerMetricStats"],
                 ],
               },
               {
                 "Fn::Join": [
                   "",
-                  [
-                    "arn:aws:dynamodb:",
-                    { Ref: "AWS::Region" },
-                    ":",
-                    { Ref: "AWS::AccountId" },
-                    ":table/appBar-WorkerMetricStats",
-                  ],
-                ],
-              },
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:dynamodb:",
-                    { Ref: "AWS::Region" },
-                    ":",
-                    { Ref: "AWS::AccountId" },
-                    ":table/appBar-CoordinatorState",
-                  ],
+                  ["arn:aws:dynamodb:eu-west-1:", { Ref: "AWS::AccountId" }, ":table/appBar-CoordinatorState"],
                 ],
               },
             ],
@@ -96,27 +72,21 @@ describe("GuKCLPolicy", () => {
             Action: "dynamodb:UpdateTable",
             Effect: "Allow",
             Resource: {
-              "Fn::Join": [
-                "",
-                ["arn:aws:dynamodb:", { Ref: "AWS::Region" }, ":", { Ref: "AWS::AccountId" }, ":table/appBar"],
-              ],
+              "Fn::Join": ["", ["arn:aws:dynamodb:eu-west-1:", { Ref: "AWS::AccountId" }, ":table/appBar"]],
             },
           },
           {
             Action: "dynamodb:Query",
             Effect: "Allow",
             Resource: {
-              "Fn::Join": [
-                "",
-                ["arn:aws:dynamodb:", { Ref: "AWS::Region" }, ":", { Ref: "AWS::AccountId" }, ":table/appBar/index/*"],
-              ],
+              "Fn::Join": ["", ["arn:aws:dynamodb:eu-west-1:", { Ref: "AWS::AccountId" }, ":table/appBar/index/*"]],
             },
           },
           {
             Action: "cloudwatch:PutMetricData",
             Effect: "Allow",
             Resource: {
-              "Fn::Join": ["", ["arn:aws:cloudwatch:", { Ref: "AWS::Region" }, ":", { Ref: "AWS::AccountId" }, ":*"]],
+              "Fn::Join": ["", ["arn:aws:cloudwatch:eu-west-1:", { Ref: "AWS::AccountId" }, ":*"]],
             },
           },
         ],

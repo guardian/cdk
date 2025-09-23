@@ -26,11 +26,7 @@ describe("The GuDynamoDBReadPolicy construct", () => {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },
@@ -42,11 +38,7 @@ describe("The GuDynamoDBReadPolicy construct", () => {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },
@@ -80,11 +72,7 @@ describe("The GuDynamoDBWritePolicy construct", () => {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },
@@ -96,11 +84,7 @@ describe("The GuDynamoDBWritePolicy construct", () => {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },

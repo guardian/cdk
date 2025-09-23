@@ -18,11 +18,7 @@ describe("GuSESSenderPolicy", () => {
               "Fn::Join": [
                 "",
                 [
-                  "arn:aws:ses:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
+                  "arn:aws:ses:eu-west-1:",
                   {
                     Ref: "AWS::AccountId",
                   },

@@ -19,11 +19,7 @@ exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct 
             {
               "Ref": "RestApi0C43BF4B",
             },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region",
-            },
-            ".",
+            ".execute-api.eu-west-1.",
             {
               "Ref": "AWS::URLSuffix",
             },
@@ -46,11 +42,7 @@ exports[`The GuApiGateway5xxPercentageAlarm construct should create the correct 
             "Fn::Join": [
               "",
               [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
+                "arn:aws:sns:eu-west-1:",
                 {
                   "Ref": "AWS::AccountId",
                 },
