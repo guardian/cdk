@@ -642,7 +642,7 @@ UserData from accessed construct`);
     });
   });
 
-  it("can be configured with access logging", function () {
+  it("has access logging enabled by default", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
@@ -659,7 +659,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -667,7 +666,10 @@ UserData from accessed construct`);
         { Key: "deletion_protection.enabled", Value: "true" },
         { Key: "access_logs.s3.enabled", Value: "true" },
         { Key: "access_logs.s3.bucket", Value: { Ref: "AccessLoggingBucket" } },
-        { Key: "access_logs.s3.prefix", Value: "access-logging-prefix" },
+        {
+          Key: "access_logs.s3.prefix",
+          Value: `application-load-balancer/TEST/test-stack/${app}`,
+        },
       ]),
     });
   });
@@ -689,7 +691,7 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: false },
+      withAccessLogging: false,
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -808,7 +810,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: false },
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -837,7 +838,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: false },
       googleAuth: {
         enabled: true,
         domain,
@@ -879,7 +879,6 @@ UserData from accessed construct`);
           monitoringConfiguration: { noMonitoring: true },
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
-          accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
             domain,
@@ -910,7 +909,6 @@ UserData from accessed construct`);
           monitoringConfiguration: { noMonitoring: true },
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
-          accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
             domain,
@@ -941,7 +939,6 @@ UserData from accessed construct`);
           monitoringConfiguration: { noMonitoring: true },
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
-          accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
             domain,
@@ -1056,10 +1053,6 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       instanceMetadataHopLimit: 2,
-      accessLogging: {
-        enabled: true,
-        prefix: "test-1",
-      },
     });
 
     new GuEc2App(stack, {
@@ -1077,20 +1070,26 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       instanceMetadataHopLimit: 2,
-      accessLogging: {
-        enabled: true,
-        prefix: "test-2",
-      },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-1" })]),
-      LoadBalancerAttributes: Match.arrayWith([Match.objectLike({ Key: "access_logs.s3.prefix", Value: "test-1" })]),
+      LoadBalancerAttributes: Match.arrayWith([
+        Match.objectLike({
+          Key: "access_logs.s3.prefix",
+          Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-1",
+        }),
+      ]),
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-2" })]),
-      LoadBalancerAttributes: Match.arrayWith([Match.objectLike({ Key: "access_logs.s3.prefix", Value: "test-2" })]),
+      LoadBalancerAttributes: Match.arrayWith([
+        Match.objectLike({
+          Key: "access_logs.s3.prefix",
+          Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-2",
+        }),
+      ]),
     });
   });
 
