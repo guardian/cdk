@@ -642,65 +642,129 @@ UserData from accessed construct`);
     });
   });
 
-  it("has access logging enabled by default", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      scaling: {
-        minimumInstances: 1,
-      },
-      monitoringConfiguration: { noMonitoring: true },
-      instanceMetricGranularity: "5Minute",
-      userData: UserData.forLinux(),
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      LoadBalancerAttributes: Match.arrayWith([
-        { Key: "deletion_protection.enabled", Value: "true" },
-        { Key: "access_logs.s3.enabled", Value: "true" },
-        { Key: "access_logs.s3.bucket", Value: { Ref: "AccessLoggingBucket" } },
-        {
-          Key: "access_logs.s3.prefix",
-          Value: `application-load-balancer/TEST/test-stack/${app}`,
+  describe("Access logging behaviour", function () {
+    it("is enabled by default", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      const app = "test-gu-ec2-app";
+      new GuEc2App(stack, {
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app,
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
         },
-      ]),
-    });
-  });
-
-  it("can disable access logging if desired", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    new GuEc2App(stack, {
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      scaling: {
-        minimumInstances: 1,
-      },
-      monitoringConfiguration: { noMonitoring: true },
-      instanceMetricGranularity: "5Minute",
-      userData: UserData.forLinux(),
-      withAccessLogging: false,
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      LoadBalancerAttributes: Match.arrayWith([
-        {
-          Key: "access_logs.s3.enabled",
-          Value: "false",
+        scaling: {
+          minimumInstances: 1,
         },
-      ]),
+        monitoringConfiguration: { noMonitoring: true },
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+      });
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+        LoadBalancerAttributes: Match.arrayWith([
+          { Key: "deletion_protection.enabled", Value: "true" },
+          { Key: "access_logs.s3.enabled", Value: "true" },
+          { Key: "access_logs.s3.bucket", Value: { Ref: "AccessLoggingBucket" } },
+          {
+            Key: "access_logs.s3.prefix",
+            Value: `application-load-balancer/TEST/test-stack/${app}`,
+          },
+        ]),
+      });
+    });
+
+    it("can be disabled", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      const app = "test-gu-ec2-app";
+      new GuEc2App(stack, {
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app,
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        scaling: {
+          minimumInstances: 1,
+        },
+        monitoringConfiguration: { noMonitoring: true },
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        withAccessLogging: false,
+      });
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+        LoadBalancerAttributes: Match.arrayWith([
+          {
+            Key: "access_logs.s3.enabled",
+            Value: "false",
+          },
+        ]),
+      });
+    });
+
+    it("supports more than one EC2 app with load balancer access logs enabled", () => {
+      const stack = simpleGuStackForTesting({
+        env: {
+          region: "test",
+        },
+      });
+
+      new GuEc2App(stack, {
+        applicationPort: 3000,
+        app: "test-gu-ec2-app-1",
+        access: { scope: AccessScope.PUBLIC },
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        monitoringConfiguration: { noMonitoring: true },
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        scaling: {
+          minimumInstances: 1,
+        },
+        instanceMetadataHopLimit: 2,
+      });
+
+      new GuEc2App(stack, {
+        applicationPort: 3000,
+        app: "test-gu-ec2-app-2",
+        access: { scope: AccessScope.PUBLIC },
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        monitoringConfiguration: { noMonitoring: true },
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        scaling: {
+          minimumInstances: 1,
+        },
+        instanceMetadataHopLimit: 2,
+      });
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+        Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-1" })]),
+        LoadBalancerAttributes: Match.arrayWith([
+          Match.objectLike({
+            Key: "access_logs.s3.prefix",
+            Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-1",
+          }),
+        ]),
+      });
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+        Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-2" })]),
+        LoadBalancerAttributes: Match.arrayWith([
+          Match.objectLike({
+            Key: "access_logs.s3.prefix",
+            Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-2",
+          }),
+        ]),
+      });
     });
   });
 
@@ -1028,68 +1092,6 @@ UserData from accessed construct`);
           HttpTokens: "required",
         },
       },
-    });
-  });
-
-  it("supports more than one EC2 app with load balancer access logs enabled", () => {
-    const stack = simpleGuStackForTesting({
-      env: {
-        region: "test",
-      },
-    });
-
-    new GuEc2App(stack, {
-      applicationPort: 3000,
-      app: "test-gu-ec2-app-1",
-      access: { scope: AccessScope.PUBLIC },
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      monitoringConfiguration: { noMonitoring: true },
-      instanceMetricGranularity: "5Minute",
-      userData: UserData.forLinux(),
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      scaling: {
-        minimumInstances: 1,
-      },
-      instanceMetadataHopLimit: 2,
-    });
-
-    new GuEc2App(stack, {
-      applicationPort: 3000,
-      app: "test-gu-ec2-app-2",
-      access: { scope: AccessScope.PUBLIC },
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      monitoringConfiguration: { noMonitoring: true },
-      instanceMetricGranularity: "5Minute",
-      userData: UserData.forLinux(),
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      scaling: {
-        minimumInstances: 1,
-      },
-      instanceMetadataHopLimit: 2,
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-1" })]),
-      LoadBalancerAttributes: Match.arrayWith([
-        Match.objectLike({
-          Key: "access_logs.s3.prefix",
-          Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-1",
-        }),
-      ]),
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
-      Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-2" })]),
-      LoadBalancerAttributes: Match.arrayWith([
-        Match.objectLike({
-          Key: "access_logs.s3.prefix",
-          Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-2",
-        }),
-      ]),
     });
   });
 
