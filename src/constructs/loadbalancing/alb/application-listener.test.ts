@@ -38,7 +38,7 @@ const getAppTargetGroup = (stack: GuStack): GuApplicationTargetGroup => {
 
 describe("The GuApplicationListener class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
@@ -54,7 +54,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("sets default props", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
@@ -70,7 +70,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("merges default and passed in props", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationListener(stack, "ApplicationListener", {
       ...app,
@@ -87,7 +87,7 @@ describe("The GuApplicationListener class", () => {
   });
 
   test("Can override default protocol with prop", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationListener(stack, "Listener", {
       loadBalancer: getLoadBalancer(stack),
@@ -104,7 +104,7 @@ describe("The GuApplicationListener class", () => {
 
 describe("The GuHttpsApplicationListener class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuHttpsApplicationListener(stack, "HttpsApplicationListener", {
       ...app,
@@ -120,7 +120,7 @@ describe("The GuHttpsApplicationListener class", () => {
   });
 
   test("sets default props", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       certificate: getCertificate(stack),
@@ -144,7 +144,7 @@ describe("The GuHttpsApplicationListener class", () => {
   });
 
   test("wires up the certificate which is passed in correctly", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       certificate: getCertificate(stack),
@@ -164,7 +164,7 @@ describe("The GuHttpsApplicationListener class", () => {
   });
 
   test("sets the port to 8080 if a certificate is not supplied", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       loadBalancer: getLoadBalancer(stack),
@@ -177,7 +177,7 @@ describe("The GuHttpsApplicationListener class", () => {
   });
 
   test("sets the protocol to http if a certificate is not supplied", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuHttpsApplicationListener(stack, "ApplicationListener", {
       loadBalancer: getLoadBalancer(stack),

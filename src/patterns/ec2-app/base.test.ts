@@ -12,7 +12,7 @@ import { GuEc2App } from "./base";
 
 describe("the GuEC2App pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -32,7 +32,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can produce a restricted EC2 app locked to specific CIDR ranges", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -52,7 +52,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("can produce an EC2 app with an internal load balancer (located in private subnets)", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -77,7 +77,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("adds the correct permissions for apps which need to fetch private config from s3", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -143,7 +143,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates a High5xxPercentageAlarm if the relevant monitoringConfiguration is provided", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -172,7 +172,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates a High4xxPercentageAlarm if the relevant monitoringConfiguration is provided", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -201,7 +201,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates an UnhealthyInstancesAlarm if the user enables it", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -227,7 +227,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("Skips alarm creation if the user explicitly opts-out", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -252,7 +252,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("creates the appropriate ingress rules for a restricted access application", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -302,7 +302,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("allows all connections if set to public", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -334,7 +334,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("errors if specifying open access as well as specific CIDR ranges", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     expect(
       () =>
@@ -359,7 +359,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("errors if specifying public CIDR ranges with internal access scope", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     expect(
       () =>
@@ -384,7 +384,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("correctly wires up custom role configuration", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -422,11 +422,7 @@ describe("the GuEC2App pattern", function () {
               "Fn::Join": [
                 "",
                 [
-                  "arn:aws:kinesis:",
-                  {
-                    Ref: "AWS::Region",
-                  },
-                  ":",
+                  "arn:aws:kinesis:eu-west-1:",
                   {
                     Ref: "AWS::AccountId",
                   },
@@ -454,11 +450,7 @@ describe("the GuEC2App pattern", function () {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },
@@ -470,11 +462,7 @@ describe("the GuEC2App pattern", function () {
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:dynamodb:",
-                    {
-                      Ref: "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:dynamodb:eu-west-1:",
                     {
                       Ref: "AWS::AccountId",
                     },
@@ -490,7 +478,7 @@ describe("the GuEC2App pattern", function () {
   });
 
   it("sub-constructs can be accessed and modified after declaring the pattern", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     const pattern = new GuEc2App(stack, {
       applicationPort: 3000,
@@ -517,7 +505,7 @@ UserData from accessed construct`);
   });
 
   it("users can optionally configure block devices", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -559,7 +547,7 @@ UserData from accessed construct`);
   });
 
   it("users can override resources and constructs if desired", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     const pattern = new GuEc2App(stack, {
       applicationPort: 3000,
@@ -606,7 +594,7 @@ UserData from accessed construct`);
   });
 
   it("can handle multiple EC2 apps in a single stack", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "NodeApp",
@@ -654,7 +642,7 @@ UserData from accessed construct`);
     });
   });
 
-  it("can be configured with access logging", function () {
+  it("has access logging enabled by default", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const app = "test-gu-ec2-app";
     new GuEc2App(stack, {
@@ -671,7 +659,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: true, prefix: "access-logging-prefix" },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -679,7 +666,10 @@ UserData from accessed construct`);
         { Key: "deletion_protection.enabled", Value: "true" },
         { Key: "access_logs.s3.enabled", Value: "true" },
         { Key: "access_logs.s3.bucket", Value: { Ref: "AccessLoggingBucket" } },
-        { Key: "access_logs.s3.prefix", Value: "access-logging-prefix" },
+        {
+          Key: "access_logs.s3.prefix",
+          Value: `application-load-balancer/TEST/test-stack/${app}`,
+        },
       ]),
     });
   });
@@ -701,7 +691,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: false },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -820,7 +809,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: false },
     });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -849,7 +837,6 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      accessLogging: { enabled: false },
       googleAuth: {
         enabled: true,
         domain,
@@ -891,7 +878,6 @@ UserData from accessed construct`);
           monitoringConfiguration: { noMonitoring: true },
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
-          accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
             domain,
@@ -922,7 +908,6 @@ UserData from accessed construct`);
           monitoringConfiguration: { noMonitoring: true },
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
-          accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
             domain,
@@ -953,7 +938,6 @@ UserData from accessed construct`);
           monitoringConfiguration: { noMonitoring: true },
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
-          accessLogging: { enabled: false },
           googleAuth: {
             enabled: true,
             domain,
@@ -964,7 +948,7 @@ UserData from accessed construct`);
   });
 
   it("should provides a default healthcheck", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -990,7 +974,7 @@ UserData from accessed construct`);
   });
 
   it("allows a custom healthcheck", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -1019,7 +1003,7 @@ UserData from accessed construct`);
   });
 
   it("can specify instance metadata hop limit", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -1068,10 +1052,6 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       instanceMetadataHopLimit: 2,
-      accessLogging: {
-        enabled: true,
-        prefix: "test-1",
-      },
     });
 
     new GuEc2App(stack, {
@@ -1089,25 +1069,31 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       instanceMetadataHopLimit: 2,
-      accessLogging: {
-        enabled: true,
-        prefix: "test-2",
-      },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-1" })]),
-      LoadBalancerAttributes: Match.arrayWith([Match.objectLike({ Key: "access_logs.s3.prefix", Value: "test-1" })]),
+      LoadBalancerAttributes: Match.arrayWith([
+        Match.objectLike({
+          Key: "access_logs.s3.prefix",
+          Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-1",
+        }),
+      ]),
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       Tags: Match.arrayWith([Match.objectLike({ Key: "App", Value: "test-gu-ec2-app-2" })]),
-      LoadBalancerAttributes: Match.arrayWith([Match.objectLike({ Key: "access_logs.s3.prefix", Value: "test-2" })]),
+      LoadBalancerAttributes: Match.arrayWith([
+        Match.objectLike({
+          Key: "access_logs.s3.prefix",
+          Value: "application-load-balancer/TEST/test-stack/test-gu-ec2-app-2",
+        }),
+      ]),
     });
   });
 
   it("uses the latest security policy", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -1131,7 +1117,7 @@ UserData from accessed construct`);
   });
 
   it("has a defined UpdatePolicy when provided with one", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuEc2App(stack, {
       applicationPort: 3000,
@@ -1161,7 +1147,7 @@ UserData from accessed construct`);
   });
 
   it("set detailed monitoring on the ASG launch template when set", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
@@ -1189,7 +1175,7 @@ UserData from accessed construct`);
   });
 
   it("set defaultInstanceWarmup on the ASG when set", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",

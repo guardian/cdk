@@ -21,7 +21,7 @@ const app: AppIdentity = {
 
 describe("The GuApplicationLoadBalancer class", () => {
   it("should use the AppIdentity to form its auto-generated logicalId", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     GuTemplate.fromStack(stack).hasResourceWithLogicalId(
@@ -31,7 +31,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   it("should apply the App tag", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -41,7 +41,7 @@ describe("The GuApplicationLoadBalancer class", () => {
 
   test("deletes the Type property if the removeType prop is set to true", () => {
     // not using an auto-generated logicalId to make the expectation notation easier
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
       vpc,
@@ -54,7 +54,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   test("sets the deletion protection value to true by default", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
@@ -68,7 +68,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   it("creates an cloudformation output of the dns name", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
@@ -76,7 +76,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   it("adds headers that include the TLS version and the cipher suite used during negotiation", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
@@ -91,7 +91,7 @@ describe("The GuApplicationLoadBalancer class", () => {
   });
 
   it("drops invalid headers before forwarding requests to the target", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 

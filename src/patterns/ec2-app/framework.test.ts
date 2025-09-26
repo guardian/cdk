@@ -6,7 +6,7 @@ import { GuNodeApp, GuPlayApp, GuPlayWorkerApp } from "./framework";
 
 describe("Framework level EC2 app patterns", () => {
   test("GuNodeApp exposes port 3000", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuNodeApp(stack, {
       app: "NodeApp",
       access: { scope: AccessScope.PUBLIC },
@@ -29,7 +29,7 @@ describe("Framework level EC2 app patterns", () => {
   });
 
   it("GuPlayApp exposes port 9000", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuPlayApp(stack, {
       app: "PlayApp",
       access: { scope: AccessScope.RESTRICTED, cidrRanges: [] },
@@ -52,7 +52,7 @@ describe("Framework level EC2 app patterns", () => {
   });
 
   it("GuPlayWorkerApp has no internal or external access", function () {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuPlayWorkerApp(stack, {
       app: "PlayApp",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
