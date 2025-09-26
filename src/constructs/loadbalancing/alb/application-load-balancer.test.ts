@@ -104,4 +104,42 @@ describe("The GuApplicationLoadBalancer class", () => {
       ]),
     });
   });
+
+  it("has access logging enabled by default", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: Match.arrayWith([
+        {
+          Key: "access_logs.s3.enabled",
+          Value: "true",
+        },
+        {
+          Key: "access_logs.s3.bucket",
+          Value: {
+            Ref: "AccessLoggingBucket",
+          },
+        },
+        {
+          Key: "access_logs.s3.prefix",
+          Value: `application-load-balancer/TEST/test-stack/${app.app}`,
+        },
+      ]),
+    });
+  });
+
+  it("can have access logging disabled", () => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, withAccessLogging: false });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
+      LoadBalancerAttributes: Match.arrayWith([
+        {
+          Key: "access_logs.s3.enabled",
+          Value: "false",
+        },
+      ]),
+    });
+  });
 });

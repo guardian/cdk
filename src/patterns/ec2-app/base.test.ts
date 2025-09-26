@@ -691,13 +691,14 @@ UserData from accessed construct`);
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
+      withAccessLogging: false,
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::LoadBalancer", {
       LoadBalancerAttributes: Match.arrayWith([
         {
-          Key: "deletion_protection.enabled",
-          Value: "true",
+          Key: "access_logs.s3.enabled",
+          Value: "false",
         },
       ]),
     });
