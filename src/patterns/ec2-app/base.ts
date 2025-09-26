@@ -15,7 +15,6 @@ import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticload
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
-import { Bucket } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
@@ -29,7 +28,7 @@ import {
   GuUnhealthyInstancesAlarm,
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuAccessLoggingBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
+import { AppIdentity, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
@@ -43,23 +42,6 @@ import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
-
-export interface AccessLoggingProps {
-  /**
-   * Enable (load balancer) access logs.
-   *
-   * Note, you will need to specify a region in your stack declaration to use
-   * this.
-   * See`https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-elasticloadbalancingv2.ApplicationLoadBalancer.html#logwbraccesswbrlogsbucket-prefix`
-   */
-  enabled: boolean;
-  /**
-   * S3 prefix for the logs.
-   *
-   * @defaultValue no prefix
-   */
-  prefix?: string;
-}
 
 /**
  * To ship your application logs to ELK automatically, you must:
@@ -161,10 +143,17 @@ export interface GuEc2AppProps extends AppIdentity {
    * Enable and configures application logs.
    */
   applicationLogging?: ApplicationLoggingProps;
+
   /**
-   * Enable and configures access logs.
+   * Enable access logging for this load balancer.
+   * Access logs are written to an S3 bucket within your AWS account.
+   * The bucket is created by {@link https://github.com/guardian/aws-account-setup}.
+   * The logs are queryable via the `gucdk_access_logs` Athena database.
+   *
+   * @defaultValue true
    */
-  accessLogging?: AccessLoggingProps;
+  withAccessLogging?: boolean;
+
   /**
    * Add block devices (additional storage).
    */
@@ -360,7 +349,7 @@ export class GuEc2App extends Construct {
   constructor(scope: GuStack, props: GuEc2AppProps) {
     const {
       access,
-      accessLogging = { enabled: false },
+      withAccessLogging = true,
       app,
       // We should update this default once a significant number of apps have migrated to devx-logs
       applicationLogging = { enabled: false },
@@ -464,20 +453,8 @@ export class GuEc2App extends Construct {
       vpcSubnets: {
         subnets: access.scope === AccessScope.INTERNAL ? privateSubnets : publicSubnets,
       },
+      withAccessLogging,
     });
-
-    if (accessLogging.enabled) {
-      const accessLoggingBucket = GuAccessLoggingBucketParameter.getInstance(scope);
-
-      loadBalancer.logAccessLogs(
-        Bucket.fromBucketName(
-          scope,
-          AppIdentity.suffixText(props, "AccessLoggingBucket"),
-          accessLoggingBucket.valueAsString,
-        ),
-        accessLogging.prefix,
-      );
-    }
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
       app,

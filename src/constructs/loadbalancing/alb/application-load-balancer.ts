@@ -1,8 +1,10 @@
-import { CfnOutput } from "aws-cdk-lib";
+import { Annotations, CfnOutput } from "aws-cdk-lib";
 import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import type { AppIdentity, GuStack } from "../../core";
+import type { GuStack } from "../../core";
+import { AppIdentity, GuAccessLoggingBucketParameter } from "../../core";
 
 /**
  * Adds the following headers to each request before forwarding it to the target:
@@ -26,6 +28,16 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
    * If a Load Balancer is replaced it is likely to lead to downtime.
    */
   removeType?: boolean;
+
+  /**
+   * Enable access logging for this load balancer.
+   * Access logs are written to an S3 bucket within your AWS account.
+   * The bucket is created by {@link https://github.com/guardian/aws-account-setup}.
+   * The logs are queryable via the `gucdk_access_logs` Athena database.
+   *
+   * @default true
+   */
+  withAccessLogging?: boolean;
 }
 
 /**
@@ -40,14 +52,30 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  */
 export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLoadBalancer) {
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
+    const { app, removeType, withAccessLogging = true } = props;
+    const { stack, stage } = scope;
+
     super(scope, id, { deletionProtection: true, ...props });
 
     this.setAttribute(TLS_VERSION_AND_CIPHER_SUITE_HEADERS_ENABLED, "true");
     this.setAttribute(DROP_INVALID_HEADER_FIELDS_ENABLED, "true");
 
-    if (props.removeType) {
+    if (removeType) {
       const cfnLb = this.node.defaultChild as CfnLoadBalancer;
       cfnLb.addPropertyDeletionOverride("Type");
+    }
+
+    if (withAccessLogging) {
+      const bucket = Bucket.fromBucketName(
+        scope,
+        AppIdentity.suffixText(props, "AccessLoggingBucket"),
+        GuAccessLoggingBucketParameter.getInstance(scope).valueAsString,
+      );
+      const prefix = `application-load-balancer/${stage}/${stack}/${app}`;
+      this.logAccessLogs(bucket, prefix);
+    } else {
+      this.setAttribute("access_logs.s3.enabled", "false");
+      Annotations.of(this).addInfo(`Access logs disabled for load balancer`);
     }
 
     new CfnOutput(this, `${this.idWithApp}-DnsName`, {
