@@ -114,7 +114,8 @@ _This stage removes all redundant resources from your original template._
 
 _At the end of this stage, the vast majority of your resources will be created
 via the CDK pattern. Some resources, such as Dynamo tables, may still be defined
-in your original CFN template._
+in your original CFN template. We recommend migrating [stateful resources](stateful-resources.md) as
+a follow-up task, as these require a bit of care._
 
 1. View request count metrics for old vs new API Gateway instances in CloudWatch.
 

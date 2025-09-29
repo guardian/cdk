@@ -26,10 +26,14 @@ need to adapt these steps slightly.
 
   There's an example of this [here](https://github.com/guardian/tag-janitor/blob/9e2222d7cea6b37a48e5327efecf7b543b81af15/cdk/lib/cdk-stack.ts#L57-L62).
 
-2. Remove the CloudFormation YAML file from your repository.
+2. Remove the legacy infrastructure from your repository.
 
   In simple cases it may be possible to remove the whole file. If so, you
   should also be able to remove the `CfnInclude` block.
+
+  In more complex cases, you may need to remove the majority of resources from the file and retain the file itself with
+  the 'stateful' resources (such as a DynamoDB table) only. We recommend migrating [stateful resources](stateful-resources.md) as
+  a follow-up task, as these require a bit of care.
 
   Note that AWS will provision the new version of the Lambda function before
   the old one is removed, so the two Lambdas (and their schedules) will coexist
