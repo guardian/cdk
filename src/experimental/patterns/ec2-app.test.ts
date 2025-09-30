@@ -46,13 +46,13 @@ function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2App
 // TODO test User Data includes a build number
 describe("The GuEc2AppExperimental pattern", () => {
   it("matches the snapshot", () => {
-    const stack = simpleGuStackForTesting();
-    new GuEc2AppExperimental(stack, initialProps(stack));
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuEc2AppExperimental(stack, { ...initialProps(stack), withAccessLogging: true });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should create an ASG with min, max, and desired capacity set", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuEc2AppExperimental(stack, { ...initialProps(stack), scaling: { minimumInstances: 5 } });
 
@@ -66,7 +66,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should create an ASG with a resource signal count that matches the min instances", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuEc2AppExperimental(stack, { ...initialProps(stack), scaling: { minimumInstances: 5 } });
 
@@ -83,7 +83,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should have a PauseTime higher than the ASG healthcheck grace period", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, initialProps(stack));
 
     const tenMinutes = Duration.minutes(10);
@@ -112,7 +112,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should add to the end of the user data", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const userDataCommand = `echo "Hello there"`;
     const userData = UserData.forLinux();
@@ -136,7 +136,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should only adjust properties of a horizontally scaling service", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const scalingApp = "my-scaling-app";
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
@@ -188,7 +188,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should add a single CFN Parameter per ASG regardless of how many scaling policies are attached to it", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const scalingApp = "my-scaling-app";
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, {
@@ -242,6 +242,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     const stack = new GuStack(cdkApp, "test", {
       stack: "test-stack",
       stage: "TEST",
+      env: { region: "eu-west-1" },
     });
 
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, initialProps(stack));
@@ -274,6 +275,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     const stack = new GuStack(app, "test", {
       stack: "test-stack",
       stage: "TEST",
+      env: { region: "eu-west-1" },
     });
 
     const appA = new GuEc2AppExperimental(stack, {
@@ -330,11 +332,13 @@ describe("The GuEc2AppExperimental pattern", () => {
       stack: "playground",
       stage: "CODE",
       scaling: { minimumInstances: 1, maximumInstances: 2 },
+      env: { region: "eu-west-1" },
     });
     const prodStack = new Microservice(app, "PROD", {
       stack: "playground",
       stage: "PROD",
       scaling: { minimumInstances: 3, maximumInstances: 12 },
+      env: { region: "eu-west-1" },
     });
 
     const codeTemplate = getTemplateAfterAspectInvocation(codeStack);
@@ -373,8 +377,18 @@ describe("The GuEc2AppExperimental pattern", () => {
       }
     }
 
-    const appA = new Microservice(app, "app-a-PROD", { stack: "playground", stage: "PROD", appName: "app-a" });
-    const appB = new Microservice(app, "app-b-PROD", { stack: "playground", stage: "PROD", appName: "app-b" });
+    const appA = new Microservice(app, "app-a-PROD", {
+      stack: "playground",
+      stage: "PROD",
+      appName: "app-a",
+      env: { region: "eu-west-1" },
+    });
+    const appB = new Microservice(app, "app-b-PROD", {
+      stack: "playground",
+      stage: "PROD",
+      appName: "app-b",
+      env: { region: "eu-west-1" },
+    });
 
     const templateA = getTemplateAfterAspectInvocation(appA);
     const templateB = getTemplateAfterAspectInvocation(appB);
@@ -393,7 +407,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should add the correct target group attributes if slow start is enabled", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(44) });
     const template = getTemplateAfterAspectInvocation(stack);
     template.hasResource("AWS::ElasticLoadBalancingV2::TargetGroup", {
@@ -408,7 +422,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should update the pause time for the rolling update correctly", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.minutes(1) });
     const template = getTemplateAfterAspectInvocation(stack);
     template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -421,7 +435,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should update the script correctly if slow start is enabled", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const userDataCommand = `echo "Hello there"`;
     const userData = UserData.forLinux();
     userData.addCommands(userDataCommand);
@@ -447,14 +461,14 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should throw an error if the slow start value is too low", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(29) });
     }).toThrowError("Slow start duration must be between 30 and 900 seconds");
   });
 
   it("should throw an error if the slow start value is too high", () => {
-    const stack = simpleGuStackForTesting();
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(901) });
     }).toThrowError("Slow start duration must be between 30 and 900 seconds");
@@ -487,8 +501,18 @@ describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", 
       }
     }
 
-    const appA = new Microservice(app, "app-a-PROD", { stack: "playground", stage: "PROD", appName: "app-a" });
-    const appB = new Microservice(app, "app-b-PROD", { stack: "playground", stage: "PROD", appName: "app-b" });
+    const appA = new Microservice(app, "app-a-PROD", {
+      stack: "playground",
+      stage: "PROD",
+      appName: "app-a",
+      env: { region: "eu-west-1" },
+    });
+    const appB = new Microservice(app, "app-b-PROD", {
+      stack: "playground",
+      stage: "PROD",
+      appName: "app-b",
+      env: { region: "eu-west-1" },
+    });
 
     const templateA = getTemplateAfterAspectInvocation(appA);
     const templateB = getTemplateAfterAspectInvocation(appB);

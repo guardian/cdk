@@ -19,8 +19,11 @@ const app: AppIdentity = {
 
 describe("The GuAlb5xxPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
@@ -30,8 +33,11 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
   });
 
   it("should use a custom description if one is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       alarmDescription: "test-custom-alarm-description",
       tolerated5xxPercentage: 1,
@@ -44,8 +50,11 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
   });
 
   it("should use a custom alarm name if one is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       alarmName: "test-custom-alarm-name",
       tolerated5xxPercentage: 1,
@@ -58,8 +67,11 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
   });
 
   it("should adjust the number of evaluation periods if a custom value is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       tolerated5xxPercentage: 1,
       numberOfMinutesAboveThresholdBeforeAlarm: 3,
@@ -74,8 +86,11 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
 
 describe("The GuAlb4xxPercentageAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       tolerated4xxPercentage: 1,
       snsTopicName: "test-topic",
@@ -85,8 +100,11 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
   });
 
   it("should use a custom description if one is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       alarmDescription: "test-custom-alarm-description",
       tolerated4xxPercentage: 1,
@@ -99,8 +117,11 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
   });
 
   it("should use a custom alarm name if one is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       alarmName: "test-custom-alarm-name",
       tolerated4xxPercentage: 1,
@@ -113,8 +134,11 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
   });
 
   it("should adjust the number of evaluation periods if a custom value is provided", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const props = {
       tolerated4xxPercentage: 1,
       numberOfMinutesAboveThresholdBeforeAlarm: 3,
@@ -129,8 +153,11 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
 
 describe("The GuUnhealthyInstancesAlarm construct", () => {
   it("should create the correct alarm resource with minimal config", () => {
-    const stack = simpleGuStackForTesting();
-    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
+      ...app,
+      vpc,
+    });
     const targetGroup = new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
     new ApplicationListener(stack, "ApplicationListener", {
       protocol: ApplicationProtocol.HTTP,
