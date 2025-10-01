@@ -18,15 +18,13 @@ If you are starting from scratch, see the [new project guide](setting-up-a-gucdk
 
 ## Identify the right GuCDK pattern
 
-| YAML Infrastructure                                                                   | Application type                    | GuCDK pattern to use            |
-|---------------------------------------------------------------------------------------|-------------------------------------|---------------------------------|
-| `AWS::AutoScaling::AutoScalingGroup` with `AWS::ElasticLoadBalancing::LoadBalancer`   | Serving HTTP traffic                | `GuEc2App`                      |
-| `AWS::AutoScaling::AutoScalingGroup` with `AWS::ElasticLoadBalancingV2::LoadBalancer` | Serving HTTP traffic                | `GuEc2App`                      |
-| `AWS::AutoScaling::AutoScalingGroup` with `AWS::ElasticLoadBalancing::LoadBalancer`   | Polling/running tasks on a schedule | `GuPlayWorkerApp`               |
-| `AWS::AutoScaling::AutoScalingGroup` with `AWS::ElasticLoadBalancingV2::LoadBalancer` | Polling/running tasks on a schedule | `GuPlayWorkerApp`               |
-| `AWS::Lambda::Function` (single) with `AWS::ApiGateway::RestApi`                      | Serving HTTP traffic                | `GuApiLambda`                   |
-| `AWS::Lambda::Function` (multiple) with `AWS::ApiGateway::RestApi`                    | Serving HTTP traffic                | `GuApiGatewayWithLambdaByPath`  |
-| `AWS::Lambda::Function` with `AWS::Events::Rule`                                      | Polling/running tasks on a schedule | `GuScheduledLambda`             |
+| YAML Infrastructure                                                                                                                        | Application type                    | GuCDK pattern to use            |
+|--------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|---------------------------------|
+| `AWS::AutoScaling::AutoScalingGroup` with either `AWS::ElasticLoadBalancing::LoadBalancer` or `AWS::ElasticLoadBalancingV2::LoadBalancer`  | Serving HTTP traffic                | `GuEc2App`                      |
+| `AWS::AutoScaling::AutoScalingGroup` with either `AWS::ElasticLoadBalancing::LoadBalancer` or `AWS::ElasticLoadBalancingV2::LoadBalancer`  | Polling/running tasks on a schedule | `GuPlayWorkerApp`               |
+| `AWS::Lambda::Function` (single) with `AWS::ApiGateway::RestApi`                                                                           | Serving HTTP traffic                | `GuApiLambda`                   |
+| `AWS::Lambda::Function` (multiple) with `AWS::ApiGateway::RestApi`                                                                         | Serving HTTP traffic                | `GuApiGatewayWithLambdaByPath`  |
+| `AWS::Lambda::Function` with `AWS::Events::Rule`                                                                                           | Polling/running tasks on a schedule | `GuScheduledLambda`             |
 
 ## Check account readiness
 
