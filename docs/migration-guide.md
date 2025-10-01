@@ -100,4 +100,4 @@ In order to achieve this, you should now follow the specific migration guide for
 - [for `GuApiLambda` or `GuApiGatewayWithLambdaByPath`](./migration-guide-api-with-lambda.md)
 - [for `GuScheduledLambda`](./migration-guide-scheduled-lambda.md)
 
-If your pattern is not listed here then please contact the DevX Reliability & Operations team for support.
+If you plan to migrate to the `GuPlayWorkerApp` pattern then please contact the DevX Reliability & Operations team for support.
