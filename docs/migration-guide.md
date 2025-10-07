@@ -6,20 +6,27 @@ If you are starting from scratch, see the [new project guide](setting-up-a-gucdk
 
 ---
 
-## Account readiness
+## Overall migration process
 
-`@guardian/cdk` patterns and constructs rely on parameter store values for things like VPC identifiers and dist buckets.
+1. Identify the [GuCDK pattern](https://guardian.github.io/cdk/modules/patterns.html) which works for your app
+1. Add GuCDK to your repository and CI/CD process
+1. Instantiate a GuCDK pattern alongside your legacy infrastructure (dual-stack), for stateless resources
+1. Switch your production workload (e.g. serving HTTP traffic or processing data) to the GuCDK infrastructure
+1. Remove legacy infrastructure for stateless resources
+1. Where necessary, define stateful resources (e.g. DBs) via cdk components instead of via the original template
 
-To ensure AWS your account is set up correctly, run:
+## Identify the right GuCDK pattern
 
-    npx @guardian/cdk@latest account-readiness --profile [profile]
+| YAML Infrastructure                                                                                                                        | Application type                    | GuCDK pattern to use            |
+|--------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|---------------------------------|
+| `AWS::AutoScaling::AutoScalingGroup` with either `AWS::ElasticLoadBalancing::LoadBalancer` or `AWS::ElasticLoadBalancingV2::LoadBalancer`  | Serving HTTP traffic                | `GuEc2App`                      |
+| `AWS::AutoScaling::AutoScalingGroup` with either `AWS::ElasticLoadBalancing::LoadBalancer` or `AWS::ElasticLoadBalancingV2::LoadBalancer`  | Polling/running tasks on a schedule | `GuPlayWorkerApp`               |
+| `AWS::Lambda::Function` (single) with `AWS::ApiGateway::RestApi`                                                                           | Serving HTTP traffic                | `GuApiLambda`                   |
+| `AWS::Lambda::Function` (multiple) with `AWS::ApiGateway::RestApi`                                                                         | Serving HTTP traffic                | `GuApiGatewayWithLambdaByPath`  |
+| `AWS::Lambda::Function` with `AWS::Events::Rule`                                                                                           | Polling/running tasks on a schedule | `GuScheduledLambda`             |
 
-Then follow the instructions for any errors.
+## Add GuCDK to your repository and CI/CD process
 
-## Process
-Generally speaking, we've found this to be a good process to follow when migrating a stack to GuCDK (assumes use of `npm`):
-
-### Introduce CDK to the repository with CI/CD
 1. Create a new project specifying the `--yaml-template-location` flag.
 
    ```shell
@@ -49,8 +56,8 @@ Generally speaking, we've found this to be a good process to follow when migrati
    ```shell
    npm run diff -- --template cloudformation/trigr.cfn.yaml Trigr-PROD
    ```
-   Use `Trig-PROD` as found in `cdk.ts`:  
-   
+   Use `Trig-PROD` as found in `cdk.ts`:
+
    `(new Trigr(app, "Trigr-PROD", { stack: "ophan", stage: "PROD" });)`
 
 
@@ -62,7 +69,6 @@ Generally speaking, we've found this to be a good process to follow when migrati
 
 5. Raise a PR and merge.
 
-### Migration to CDK
 We now have something like this:
 
 ```
@@ -77,28 +83,10 @@ The end goal is for CDK to do all the work, and remove the YAML template:
 CDK -> cfn.json
 ```
 
-In the previous phase, we also created a [snapshot test](https://docs.aws.amazon.com/cdk/v2/guide/testing.html#testing_snapshot) (`cdk/lib/*.test.ts`),
-which we can treat as the source of truth, representing the exact resources in the stack. We can now begin the migration process.
+In order to achieve this, you should now follow the specific migration guide for the pattern that you're moving to:
 
-**Pro-tip:** Annotate the existing YAML template with inline comments as part of the migration and get it reviewed by your team - it might transpire that a resource is no longer needed and can be removed, meaning there's less to migrate!
+- [for `GuEc2App`](./migration-guide-ec2.md)
+- [for `GuApiLambda` or `GuApiGatewayWithLambdaByPath`](./migration-guide-api-with-lambda.md)
+- [for `GuScheduledLambda`](./migration-guide-scheduled-lambda.md)
 
-As a first step, it is a good idea to read through the template to understand if you have any [stateful resources](stateful-resources.md), as these require a bit of care.
-
-When migrating stateful resources:
-1. Identify a resource(s) to move from YAML to CDK.
-2. Write the CDK and comment out/delete the resource(s) from the YAML template.
-3. Run the tests:
-   - If the changes are acceptable, update the snapshot.
-   - If the changes are not acceptable, refactor CDK and re-run the tests.
-4. With the smallest change made, we can now raise a PR, merge it, and move to the next resource(s).
-
-That is, we can use the snapshot in a [red/green refactor cycle](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html).
-We'll repeat this process until the YAML template is empty and can be removed.
-
-Please also read the specific guides for:
-- [for EC2 apps](./migration-guide-ec2.md)
-- [for Lambdas which run on a schedule/cron](./migration-guide-scheduled-lambda.md)
-- [for an API which serves requests using AWS Lambda](./migration-guide-api-with-lambda.md)
-
-:information_source: Migration guides will be coming soon for other architectures.
-Please contact DevX if you'd like to discuss the migration of an application which uses an architecture that is not listed above.
+If you plan to migrate to the `GuPlayWorkerApp` pattern then please contact the DevX Reliability & Operations team for support.
