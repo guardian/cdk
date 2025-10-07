@@ -9,7 +9,6 @@ If you are starting from scratch, see the [new project guide](setting-up-a-gucdk
 ## Overall migration process
 
 1. Identify the [GuCDK pattern](https://guardian.github.io/cdk/modules/patterns.html) which works for your app
-1. Check account readiness
 1. Add GuCDK to your repository and CI/CD process
 1. Instantiate a GuCDK pattern alongside your legacy infrastructure (dual-stack), for stateless resources
 1. Switch your production workload (e.g. serving HTTP traffic or processing data) to the GuCDK infrastructure
@@ -25,16 +24,6 @@ If you are starting from scratch, see the [new project guide](setting-up-a-gucdk
 | `AWS::Lambda::Function` (single) with `AWS::ApiGateway::RestApi`                                                                           | Serving HTTP traffic                | `GuApiLambda`                   |
 | `AWS::Lambda::Function` (multiple) with `AWS::ApiGateway::RestApi`                                                                         | Serving HTTP traffic                | `GuApiGatewayWithLambdaByPath`  |
 | `AWS::Lambda::Function` with `AWS::Events::Rule`                                                                                           | Polling/running tasks on a schedule | `GuScheduledLambda`             |
-
-## Check account readiness
-
-`@guardian/cdk` patterns and constructs rely on parameter store values for things like VPC identifiers and dist buckets.
-
-To ensure AWS your account is set up correctly, run:
-
-    npx @guardian/cdk@latest account-readiness --profile [profile]
-
-Then follow the instructions for any errors.
 
 ## Add GuCDK to your repository and CI/CD process
 
