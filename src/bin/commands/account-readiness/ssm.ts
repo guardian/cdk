@@ -1,4 +1,5 @@
-import AWS from "aws-sdk";
+import { EC2 } from "@aws-sdk/client-ec2";
+import { SSM } from "@aws-sdk/client-ssm";
 import chalk from "chalk";
 import type { SsmParameterPath } from "../../../constants";
 import { ALL_SSM_PARAMETER_PATHS } from "../../../constants";
@@ -13,20 +14,20 @@ interface SSMParameterReadinessOutput {
 }
 
 const ssmParamReadiness = async ({ credentialProvider, region }: AwsConfig): Promise<SSMParameterReadinessOutput> => {
-  const ssmClient = new AWS.SSM({
-    credentialProvider,
+  const ssmClient = new SSM({
+    credentials: credentialProvider,
     region,
   });
 
-  const ec2Client = new AWS.EC2({
-    credentialProvider,
+  const ec2Client = new EC2({
+    credentials: credentialProvider,
     region,
   });
 
   const ssmParams = ALL_SSM_PARAMETER_PATHS.filter((param) => !param.optional);
   const paths: string[] = ssmParams.map((param: SsmParameterPath) => param.path);
 
-  const awsResponse = await ssmClient.getParameters({ Names: paths }).promise();
+  const awsResponse = await ssmClient.getParameters({ Names: paths });
 
   const notFoundParameters = awsResponse.InvalidParameters ?? [];
   const notFoundInDetail = ssmParams.filter((_) => notFoundParameters.includes(_.path));
