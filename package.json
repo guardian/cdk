@@ -52,8 +52,10 @@
     "typescript": "5.1.6"
   },
   "dependencies": {
+    "@aws-sdk/client-ec2": "^3.908.0",
+    "@aws-sdk/client-ssm": "^3.908.0",
+    "@aws-sdk/credential-providers": "^3.908.0",
     "@oclif/core": "3.26.6",
-    "aws-sdk": "^2.1692.0",
     "chalk": "^4.1.2",
     "codemaker": "^1.114.1",
     "git-url-parse": "^16.0.1",

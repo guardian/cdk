@@ -1,6 +1,5 @@
-import type AWS from "aws-sdk";
-import type { DescribeSubnetsResult, DescribeVpcsResult, SubnetList, Vpc, VpcList } from "aws-sdk/clients/ec2";
-import type { ParameterList } from "aws-sdk/clients/ssm";
+import type { DescribeSubnetsResult, DescribeVpcsResult, EC2, Subnet, Vpc } from "@aws-sdk/client-ec2";
+import type { Parameter, SSM } from "@aws-sdk/client-ssm";
 import { ALL_SSM_PARAMETER_PATHS, VPC_SSM_PARAMETER_PREFIX } from "../../constants";
 import type { VpcInDetail } from "../../types/cli";
 import { sum } from "../math";
@@ -14,17 +13,16 @@ export const vpcSsmParameterPaths: RegExp[] = primaryVpcSsmParameterPaths.map((p
   return new RegExp(`^${reBody}$`);
 });
 
-const getSsmParametersWithVpcPrefix = async (ssmClient: AWS.SSM): Promise<ParameterList> => {
-  const params = await ssmClient
-    .getParametersByPath({
-      Path: VPC_SSM_PARAMETER_PREFIX,
-      Recursive: true,
-    })
-    .promise();
+const getSsmParametersWithVpcPrefix = async (ssmClient: SSM): Promise<Parameter[]> => {
+  const params = await ssmClient.getParametersByPath({
+    Path: VPC_SSM_PARAMETER_PREFIX,
+    Recursive: true,
+  });
+
   return params.Parameters ?? [];
 };
 
-export const getSsmParametersForVpc = async (ssmClient: AWS.SSM): Promise<ParameterList> => {
+export const getSsmParametersForVpc = async (ssmClient: SSM): Promise<Parameter[]> => {
   const paramsWithVpcPrefix = await getSsmParametersWithVpcPrefix(ssmClient);
 
   return paramsWithVpcPrefix.filter((param) => {
@@ -37,22 +35,22 @@ export const getSsmParametersForVpc = async (ssmClient: AWS.SSM): Promise<Parame
   });
 };
 
-const getSubnetsForVpc = async (vpc: Vpc, ec2Client: AWS.EC2): Promise<SubnetList> => {
+const getSubnetsForVpc = async (vpc: Vpc, ec2Client: EC2): Promise<Subnet[]> => {
   if (!vpc.VpcId) {
     return [];
   }
-  const response: DescribeSubnetsResult = await ec2Client
-    .describeSubnets({ Filters: [{ Name: "vpc-id", Values: [vpc.VpcId] }] })
-    .promise();
+  const response: DescribeSubnetsResult = await ec2Client.describeSubnets({
+    Filters: [{ Name: "vpc-id", Values: [vpc.VpcId] }],
+  });
   return response.Subnets ?? [];
 };
 
-const getVpcs = async (ec2Client: AWS.EC2): Promise<VpcList> => {
-  const vpcs: DescribeVpcsResult = await ec2Client.describeVpcs().promise();
+const getVpcs = async (ec2Client: EC2): Promise<Vpc[]> => {
+  const vpcs: DescribeVpcsResult = await ec2Client.describeVpcs();
   return vpcs.Vpcs ?? [];
 };
 
-const totalUnusedAddressesInSubnet = (subnets: SubnetList): number => {
+const totalUnusedAddressesInSubnet = (subnets: Subnet[]): number => {
   return sum(subnets.map((_) => _.AvailableIpAddressCount ?? 0));
 };
 
@@ -70,7 +68,7 @@ const countFromCidr = (cidr: string): number => {
   return Math.pow(2, hostBits) - UNUSABLE_IPS_IN_CIDR_BLOCK;
 };
 
-const totalCapacityOfSubnet = (subnets: SubnetList): number => {
+const totalCapacityOfSubnet = (subnets: Subnet[]): number => {
   const counts = subnets
     .map((subnet) => subnet.CidrBlock)
     .map((cidrBlock) => (cidrBlock ? countFromCidr(cidrBlock) : 0));
@@ -78,7 +76,7 @@ const totalCapacityOfSubnet = (subnets: SubnetList): number => {
   return sum(counts.filter((_) => !!_));
 };
 
-export const getVpcsInDetail = async (ec2Client: AWS.EC2): Promise<VpcInDetail[]> => {
+export const getVpcsInDetail = async (ec2Client: EC2): Promise<VpcInDetail[]> => {
   const vpcs = await getVpcs(ec2Client);
 
   return await Promise.all(

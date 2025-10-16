@@ -1,8 +1,8 @@
-import type { CredentialProviderChain } from "aws-sdk";
-import type { SubnetList, Vpc } from "aws-sdk/clients/ec2";
+import type { Subnet, Vpc } from "@aws-sdk/client-ec2";
+import type { AwsCredentialIdentityProvider } from "@aws-sdk/types";
 
 export interface AwsConfig {
-  credentialProvider: CredentialProviderChain;
+  credentialProvider: AwsCredentialIdentityProvider;
   region: string;
 }
 
@@ -17,6 +17,6 @@ export type CliCommandResponse = Promise<
 >;
 
 export interface VpcInDetail extends Vpc {
-  subnets: SubnetList;
+  subnets: Subnet[];
   isUsed: boolean;
 }
