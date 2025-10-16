@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 62.1.0
+
+### Minor Changes
+
+- a335873: Upgrade aws sdk to v3
+
 ## 62.0.1
 
 ### Patch Changes
