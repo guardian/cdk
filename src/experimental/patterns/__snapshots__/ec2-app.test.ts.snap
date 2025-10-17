@@ -196,6 +196,10 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           "PauseTime": "PT3M",
           "SuspendProcesses": [
             "AlarmNotification",
+            "AZRebalance",
+            "InstanceRefresh",
+            "ReplaceUnhealthy",
+            "ScheduledActions",
           ],
           "WaitOnResourceSignals": true,
         },
