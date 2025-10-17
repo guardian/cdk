@@ -285,12 +285,17 @@ export class GuRollingUpdatePolicyExperimental {
       minSuccessPercentage: 100,
       waitOnResourceSignals: true,
       /*
-      If a scale-in event fires during an `AutoScalingRollingUpdate` operation, the update could fail and rollback.
-      For this reason, we suspend the `AlarmNotification` process, else availability of a service cannot be guaranteed.
-      Consequently, services cannot scale-out during deployments.
-      If AWS ever supports suspending scale-out and scale-in independently, we should allow scale-out.
+      All of these processes can launch and/or terminate instances and if this happens during a deployment it might
+      cause the rolling update to fail: https://repost.aws/knowledge-center/auto-scaling-group-rolling-updates
+      The full list of processes can be found here: https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html#process-types
        */
-      suspendProcesses: [ScalingProcess.ALARM_NOTIFICATION],
+      suspendProcesses: [
+        ScalingProcess.ALARM_NOTIFICATION,
+        ScalingProcess.AZ_REBALANCE,
+        ScalingProcess.INSTANCE_REFRESH,
+        ScalingProcess.REPLACE_UNHEALTHY,
+        ScalingProcess.SCHEDULED_ACTIONS,
+      ],
       /*
       Note: this is increased via an Aspect which also takes healthcheck grace period into account.
 
