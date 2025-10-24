@@ -10,7 +10,10 @@
   "bin": {
     "gu-cdk": "bin/gu-cdk"
   },
-  "repository": "github:guardian/cdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guardian/cdk.git"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "eslint src",
