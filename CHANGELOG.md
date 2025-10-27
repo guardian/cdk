@@ -1,5 +1,13 @@
 # @guardian/cdk
 
+## 62.1.1
+
+### Patch Changes
+
+- d0ad2ec: no-op
+
+  This is a no-op release to test migration to [NPM trusted publishing](https://docs.npmjs.com/trusted-publishers).
+
 ## 62.1.0
 
 ### Minor Changes
