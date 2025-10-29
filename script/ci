@@ -19,6 +19,8 @@ runIntegrationTest() {
 main() {
   preamble
 
+  corepack enable
+
   # We have `prepare` script to enable the use of `@guardian/cdk` directly from GitHub (`npm install guardian/cdk#some-branch-or-commit`).
   # This is useful for testing before publishing a new version.
   # In CI we don't need to run this script, so ignore it.

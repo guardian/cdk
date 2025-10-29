@@ -21,10 +21,7 @@ jobs:
           node-version-file: ".nvmrc"
           cache: npm
 
-      # See https://docs.npmjs.com/trusted-publishers
-      # Find the latest version with `npm info npm@latest version`
-      - name: Install suitable NPM version for trusted publishing
-        run: npm install -g npm@11.6.2
+      - run: corepack enable
 
       - name: Install
         run: npm ci
