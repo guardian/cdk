@@ -1,9 +1,11 @@
 import type { IAspect } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
 import { Aspects, CfnParameter, Duration, Tags } from "aws-cdk-lib";
 import { CfnAutoScalingGroup, CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import type { CfnPolicy } from "aws-cdk-lib/aws-iam";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { MetadataKeys } from "../../constants";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import type { GuStack } from "../../constructs/core";
@@ -112,13 +114,14 @@ export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
-export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IAspect {
-  public readonly stack: GuStack;
+export class GuHorizontallyScalingDeploymentPropertiesExperimental extends Construct implements IAspect {
+  public readonly stack: Stack;
   public readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: GuHorizontallyScalingDeploymentPropertiesExperimental | undefined;
 
   private constructor(scope: GuStack) {
-    this.stack = scope;
+    super(scope, GuHorizontallyScalingDeploymentPropertiesExperimental.name);
+    this.stack = Stack.of(this);
     this.asgToParamMap = new Map();
   }
 
