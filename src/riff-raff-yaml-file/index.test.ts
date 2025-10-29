@@ -4,13 +4,11 @@ import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { AccessScope } from "../constants";
-import type { GuAutoScalingGroup } from "../constructs/autoscaling";
 import type { GuStackProps } from "../constructs/core";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
+import { GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
-import { getTemplateAfterAspectInvocation } from "../utils/test";
 import { RiffRaffYamlFile } from "./index";
 
 describe("The RiffRaffYamlFile class", () => {
@@ -1423,26 +1421,27 @@ describe("The RiffRaffYamlFile class", () => {
     `);
   });
 
-  it("Should include minInstancesInServiceParameters when GuEc2AppExperimental has a scaling policy", () => {
-    const app = new App({ outdir: "/tmp/cdk.out" });
+  describe("Calculation of the minInstancesInServiceParameters deployment parameter", () => {
+    interface ApplicationStackProps extends GuStackProps {
+      app: string;
+      withScalingPolicy: boolean;
+    }
 
-    class MyApplicationStack extends GuStack {
-      public readonly asg: GuAutoScalingGroup;
-
+    class ApplicationStack extends GuStack {
       // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
-      constructor(app: App, id: string, props: GuStackProps) {
-        super(app, id, props);
+      constructor(scope: App, id: string, props: ApplicationStackProps) {
+        super(scope, id, props);
 
-        const appName = "my-app";
+        const { app, withScalingPolicy } = props;
 
         const { autoScalingGroup } = new GuEc2AppExperimental(this, {
-          app: appName,
+          app,
           instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
           access: { scope: AccessScope.PUBLIC },
           userData: {
             distributable: {
-              fileName: `${appName}.deb`,
-              executionStatement: `dpkg -i /${appName}/${appName}.deb`,
+              fileName: `${app}.deb`,
+              executionStatement: `dpkg -i /${app}/${app}.deb`,
             },
           },
           certificateProps: {
@@ -1458,71 +1457,481 @@ describe("The RiffRaffYamlFile class", () => {
           buildIdentifier: "TEST",
         });
 
-        new CfnScalingPolicy(autoScalingGroup, "ScaleOut", {
-          autoScalingGroupName: autoScalingGroup.autoScalingGroupName,
-          policyType: "SimpleScaling",
-          adjustmentType: "ChangeInCapacity",
-          scalingAdjustment: 1,
-        });
-
-        this.asg = autoScalingGroup;
+        if (withScalingPolicy) {
+          new CfnScalingPolicy(autoScalingGroup, "ScaleOut", {
+            autoScalingGroupName: autoScalingGroup.autoScalingGroupName,
+            policyType: "SimpleScaling",
+            adjustmentType: "ChangeInCapacity",
+            scalingAdjustment: 1,
+          });
+        }
       }
     }
 
-    const guStack = new MyApplicationStack(app, "test-stack", {
-      stack: "test",
-      stage: "TEST",
-      env: { region: "eu-west-1" },
+    it("should be included when there is a scaling policy", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      new ApplicationStack(app, "test-stack", {
+        stack: "test",
+        stage: "TEST",
+        app: "my-app",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      // Ensure the Aspects are invoked (see https://github.com/aws/aws-cdk/issues/29047)...
+      app.synth();
+
+      // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+      const actual = new RiffRaffYamlFile(app).toYAML();
+
+      expect(actual).toMatchInlineSnapshot(`
+        "allowedStages:
+          - TEST
+        deployments:
+          asg-upload-eu-west-1-test-my-app:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-app
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-app
+          cfn-eu-west-1-test-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                TEST: test-stack.template.json
+              amiParametersToTags:
+                AMIMyapp:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+              minInstancesInServiceParameters:
+                MinInstancesInServiceFormyapp:
+                  App: my-app
+            dependencies:
+              - asg-upload-eu-west-1-test-my-app
+        "
+      `);
     });
 
-    // Ensure the Aspects are invoked...
-    getTemplateAfterAspectInvocation(guStack);
+    it("should not be included when there is no scaling policy", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
 
-    // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
-    const actual = new RiffRaffYamlFile(app).toYAML();
+      new ApplicationStack(app, "test-stack", {
+        stack: "test",
+        stage: "TEST",
+        app: "my-app",
+        withScalingPolicy: false,
+        env: { region: "eu-west-1" },
+      });
 
-    const cfnParameterName = getAsgRollingUpdateCfnParameterName(guStack.asg);
+      // Ensure the Aspects are invoked (see https://github.com/aws/aws-cdk/issues/29047)...
+      app.synth();
 
-    expect(actual).toMatchInlineSnapshot(`
-      "allowedStages:
-        - TEST
-      deployments:
-        asg-upload-eu-west-1-test-my-app:
-          type: autoscaling
-          actions:
-            - uploadArtifacts
-          regions:
-            - eu-west-1
-          stacks:
-            - test
-          app: my-app
-          parameters:
-            bucketSsmLookup: true
-            prefixApp: true
-          contentDirectory: my-app
-        cfn-eu-west-1-test-my-application-stack:
-          type: cloud-formation
-          regions:
-            - eu-west-1
-          stacks:
-            - test
-          app: my-application-stack
-          contentDirectory: /tmp/cdk.out
-          parameters:
-            templateStagePaths:
-              TEST: test-stack.template.json
-            amiParametersToTags:
-              AMIMyapp:
-                BuiltBy: amigo
-                AmigoStage: PROD
-                Recipe: arm64-bionic-java11-deploy-infrastructure
-                Encrypted: 'true'
-            minInstancesInServiceParameters:
-              ${cfnParameterName}:
-                App: my-app
-          dependencies:
-            - asg-upload-eu-west-1-test-my-app
-      "
+      // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+      const actual = new RiffRaffYamlFile(app).toYAML();
+
+      expect(actual).toMatchInlineSnapshot(`
+        "allowedStages:
+          - TEST
+        deployments:
+          asg-upload-eu-west-1-test-my-app:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-app
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-app
+          cfn-eu-west-1-test-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                TEST: test-stack.template.json
+              amiParametersToTags:
+                AMIMyapp:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+            dependencies:
+              - asg-upload-eu-west-1-test-my-app
+        "
+      `);
+    });
+
+    it("should be included when there is a scaling policy (multiple stages)", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      new ApplicationStack(app, "my-stack-CODE", {
+        stack: "test",
+        stage: "CODE",
+        app: "my-app",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      new ApplicationStack(app, "my-stack-PROD", {
+        stack: "test",
+        stage: "PROD",
+        app: "my-app",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      // Ensure the Aspects are invoked (see https://github.com/aws/aws-cdk/issues/29047)...
+      app.synth();
+
+      // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+      const actual = new RiffRaffYamlFile(app).toYAML();
+
+      expect(actual).toMatchInlineSnapshot(`
+        "allowedStages:
+          - CODE
+          - PROD
+        deployments:
+          asg-upload-eu-west-1-test-my-app:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-app
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-app
+          cfn-eu-west-1-test-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                CODE: my-stack-CODE.template.json
+                PROD: my-stack-PROD.template.json
+              amiParametersToTags:
+                AMIMyapp:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+              minInstancesInServiceParameters:
+                MinInstancesInServiceFormyapp:
+                  App: my-app
+            dependencies:
+              - asg-upload-eu-west-1-test-my-app
+        "
+      `);
+    });
+
+    it("should be included when there is a scaling policy (different stacks)", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      class MyApiStack extends ApplicationStack {}
+      class MyFrontendStack extends ApplicationStack {}
+
+      new MyApiStack(app, "my-api-stack", {
+        stack: "test",
+        stage: "PROD",
+        app: "my-api-stack",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      new MyFrontendStack(app, "my-frontend-stack", {
+        stack: "test",
+        stage: "PROD",
+        app: "my-frontend-stack",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      // Ensure the Aspects are invoked (see https://github.com/aws/aws-cdk/issues/29047)...
+      app.synth();
+
+      // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+      const actual = new RiffRaffYamlFile(app).toYAML();
+
+      expect(actual).toMatchInlineSnapshot(`
+        "allowedStages:
+          - PROD
+        deployments:
+          asg-upload-eu-west-1-test-my-api-stack:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-api-stack
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-api-stack
+          cfn-eu-west-1-test-my-api-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-api-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                PROD: my-api-stack.template.json
+              amiParametersToTags:
+                AMIMyapistack:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+              minInstancesInServiceParameters:
+                MinInstancesInServiceFormyapistack:
+                  App: my-api-stack
+            dependencies:
+              - asg-upload-eu-west-1-test-my-api-stack
+          asg-upload-eu-west-1-test-my-frontend-stack:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-frontend-stack
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-frontend-stack
+          cfn-eu-west-1-test-my-frontend-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-frontend-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                PROD: my-frontend-stack.template.json
+              amiParametersToTags:
+                AMIMyfrontendstack:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+              minInstancesInServiceParameters:
+                MinInstancesInServiceFormyfrontendstack:
+                  App: my-frontend-stack
+            dependencies:
+              - asg-upload-eu-west-1-test-my-frontend-stack
+        "
     `);
+    });
+
+    it("should only(???) be included when there is a scaling policy (multiple stages)", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      new ApplicationStack(app, "my-app-CODE", {
+        stack: "test",
+        stage: "CODE",
+        app: "my-app",
+        withScalingPolicy: false, // no need to horizontally scale CODE
+        env: { region: "eu-west-1" },
+      });
+
+      new ApplicationStack(app, "my-app-PROD", {
+        stack: "test",
+        stage: "PROD",
+        app: "my-app",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      // Ensure the Aspects are invoked (see https://github.com/aws/aws-cdk/issues/29047)...
+      app.synth();
+
+      // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+      const actual = new RiffRaffYamlFile(app).toYAML();
+
+      expect(actual).toMatchInlineSnapshot(`
+        "allowedStages:
+          - CODE
+          - PROD
+        deployments:
+          asg-upload-eu-west-1-test-my-app:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-app
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-app
+          cfn-eu-west-1-test-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                CODE: my-app-CODE.template.json
+                PROD: my-app-PROD.template.json
+              amiParametersToTags:
+                AMIMyapp:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+              minInstancesInServiceParameters:
+                MinInstancesInServiceFormyapp:
+                  App: my-app
+            dependencies:
+              - asg-upload-eu-west-1-test-my-app
+        "
+      `);
+    });
+
+    it("should only be included when there is a scaling policy (different stacks)", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      class MyApiStack extends ApplicationStack {}
+      class MyFrontendStack extends ApplicationStack {}
+
+      new MyApiStack(app, "my-api-stack", {
+        stack: "test",
+        stage: "PROD",
+        app: "my-api-stack",
+        withScalingPolicy: false,
+        env: { region: "eu-west-1" },
+      });
+
+      new MyFrontendStack(app, "my-frontend-stack", {
+        stack: "test",
+        stage: "PROD",
+        app: "my-frontend-stack",
+        withScalingPolicy: true,
+        env: { region: "eu-west-1" },
+      });
+
+      // Ensure the Aspects are invoked (see https://github.com/aws/aws-cdk/issues/29047)...
+      app.synth();
+
+      // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+      const actual = new RiffRaffYamlFile(app).toYAML();
+
+      expect(actual).toMatchInlineSnapshot(`
+        "allowedStages:
+          - PROD
+        deployments:
+          asg-upload-eu-west-1-test-my-api-stack:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-api-stack
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-api-stack
+          cfn-eu-west-1-test-my-api-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-api-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                PROD: my-api-stack.template.json
+              amiParametersToTags:
+                AMIMyapistack:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+            dependencies:
+              - asg-upload-eu-west-1-test-my-api-stack
+          asg-upload-eu-west-1-test-my-frontend-stack:
+            type: autoscaling
+            actions:
+              - uploadArtifacts
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-frontend-stack
+            parameters:
+              bucketSsmLookup: true
+              prefixApp: true
+            contentDirectory: my-frontend-stack
+          cfn-eu-west-1-test-my-frontend-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - test
+            app: my-frontend-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                PROD: my-frontend-stack.template.json
+              amiParametersToTags:
+                AMIMyfrontendstack:
+                  BuiltBy: amigo
+                  AmigoStage: PROD
+                  Recipe: arm64-bionic-java11-deploy-infrastructure
+                  Encrypted: 'true'
+              minInstancesInServiceParameters:
+                MinInstancesInServiceFormyfrontendstack:
+                  App: my-frontend-stack
+            dependencies:
+              - asg-upload-eu-west-1-test-my-frontend-stack
+        "
+      `);
+    });
   });
 });
