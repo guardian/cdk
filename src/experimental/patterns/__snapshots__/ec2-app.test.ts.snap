@@ -197,6 +197,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           "SuspendProcesses": [
             "AlarmNotification",
             "AZRebalance",
+            "HealthCheck",
             "InstanceRefresh",
             "ReplaceUnhealthy",
             "ScheduledActions",

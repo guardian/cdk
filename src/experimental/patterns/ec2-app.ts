@@ -292,6 +292,7 @@ export class GuRollingUpdatePolicyExperimental {
       suspendProcesses: [
         ScalingProcess.ALARM_NOTIFICATION,
         ScalingProcess.AZ_REBALANCE,
+        ScalingProcess.HEALTH_CHECK,
         ScalingProcess.INSTANCE_REFRESH,
         ScalingProcess.REPLACE_UNHEALTHY,
         ScalingProcess.SCHEDULED_ACTIONS,
