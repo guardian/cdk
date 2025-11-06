@@ -8,6 +8,7 @@ The new deployment mechanism (`GuEc2AppExperimental`) now suspends some addition
 `InstanceRefresh`
 `ReplaceUnhealthy`
 `ScheduledActions`
+`HealthCheck`
 
 https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html#process-types
 
