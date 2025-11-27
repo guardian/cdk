@@ -9,7 +9,7 @@ updates:
     commit-message:
       prefix: "chore(deps): "
     groups:
-      all:
+      "github actions":
         patterns: ["*"]
 
   - package-ecosystem: 'npm'
@@ -30,8 +30,11 @@ updates:
       - dependency-name: "aws-cdk-lib"
       - dependency-name: "constructs"
     groups:
-      all:
+      "npm dependencies":
         patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: 'npm'
     directory: '/tools/integration-test'
@@ -46,5 +49,8 @@ updates:
       - dependency-name: "aws-cdk-lib"
       - dependency-name: "constructs"
     groups:
-      all:
+      "integration test":
         patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
