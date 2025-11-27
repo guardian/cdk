@@ -30,8 +30,11 @@ updates:
       - dependency-name: "aws-cdk-lib"
       - dependency-name: "constructs"
     groups:
-      all:
+      npm_minor_patch:
         patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: 'npm'
     directory: '/tools/integration-test'
@@ -48,3 +51,6 @@ updates:
     groups:
       all:
         patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
