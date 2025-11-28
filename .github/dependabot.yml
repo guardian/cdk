@@ -40,6 +40,13 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # we don't have a clean upgrade plan for typescript at the moment
+      - dependency-name: "typescript"
+      # this dependency appears to have been updated by the maintainer into a somewhat broken state
+      # I think it would be good to abandon our use of it
+      - dependency-name: "@types/git-url-parse again"
+      - dependency-name: "git-url-parse"
 
   - package-ecosystem: 'npm'
     directory: '/tools/integration-test'
