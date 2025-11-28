@@ -9,7 +9,7 @@ updates:
     commit-message:
       prefix: "chore(deps): "
     groups:
-      "github actions":
+      github-actions:
         patterns: ["*"]
 
   - package-ecosystem: 'npm'
@@ -30,7 +30,7 @@ updates:
       - dependency-name: "aws-cdk-lib"
       - dependency-name: "constructs"
     groups:
-      "npm dependencies":
+      npm-dependencies:
         # minor version updates of prettier tend to introduce linting issues that need to be manually fixed, so there's no point
         # in grouping them
         patterns:
@@ -41,7 +41,7 @@ updates:
           - "minor"
           - "patch"
     ignore:
-      # we don't have a clean upgrade plan for typescript at the moment
+      # The latest updates to typescript break our build and require code changes
       - dependency-name: "typescript"
       # this dependency appears to have been updated by the maintainer into a somewhat broken state
       # I think it would be good to abandon our use of it
@@ -61,7 +61,7 @@ updates:
       - dependency-name: "aws-cdk-lib"
       - dependency-name: "constructs"
     groups:
-      "integration test":
+      integration-test:
         patterns: ["*"]
         update-types:
           - "minor"
