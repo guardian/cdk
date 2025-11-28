@@ -34,9 +34,9 @@ updates:
         # minor version updates of prettier tend to introduce linting issues that need to be manually fixed, so there's no point
         # in grouping them
         patterns:
-          - *
+          - "*"
         exclude-patterns:
-          - prettier
+          - "prettier"
         update-types:
           - "minor"
           - "patch"
