@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 62.1.3
+
+### Patch Changes
+
+- 7c25920: Downgrade `@guardian/eslint-config` to v12.0.0 to remove `react` transitive dependency.
+
 ## 62.1.2
 
 ### Patch Changes
