@@ -29,13 +29,24 @@ updates:
       - dependency-name: "aws-cdk"
       - dependency-name: "aws-cdk-lib"
       - dependency-name: "constructs"
-    groups:
+    groups:        
+        # updates to code quality tools tend to need reformating the code
+        # This group bundles them together
+      code-quality:
+        patterns:
+          - '@guardian/eslint-config'
+          - '@guardian/prettier'
+          - 'eslint'
+          - 'eslint-plugin-*'
+          - 'prettier'
       npm-dependencies:
-        # minor version updates of prettier tend to introduce linting issues that need to be manually fixed, so there's no point
-        # in grouping them
         patterns:
           - "*"
         exclude-patterns:
+          - '@guardian/eslint-config'
+          - '@guardian/prettier'
+          - 'eslint'
+          - 'eslint-plugin-*'
           - "prettier"
         update-types:
           - "minor"
