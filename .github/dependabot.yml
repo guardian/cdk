@@ -58,6 +58,11 @@ updates:
       # I think it would be good to abandon our use of it
       - dependency-name: "@types/git-url-parse again"
       - dependency-name: "git-url-parse"
+      # The version of AWS CDK libraries must match those from @guardian/cdk.
+      # We'd never be able to update them here independently, so just ignore them.
+      - dependency-name: "aws-cdk"
+      - dependency-name: "aws-cdk-lib"
+      - dependency-name: "constructs"
 
   - package-ecosystem: 'npm'
     directory: '/tools/integration-test'
