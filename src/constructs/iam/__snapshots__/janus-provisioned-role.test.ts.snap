@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuJanusProvisionedRole construct creates role with all Janus tags when all properties are provided 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuJanusProvisionedRole",
+      "GuGetS3ObjectsPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "ProvisionedRole97EAFC50": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sts.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:janus:description",
+            "Value": "Access to resources needed for basic day-to-day work on the Security HQ app.",
+          },
+          {
+            "Key": "gu:janus:discoverable",
+            "Value": "true",
+          },
+          {
+            "Key": "gu:janus:name",
+            "Value": "Security HQ Developer",
+          },
+          {
+            "Key": "gu:janus:permission",
+            "Value": "security-hq-dev",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ReadS3FileAD380B27": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::config-bucket/config",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ReadS3FileAD380B27",
+        "Roles": [
+          {
+            "Ref": "ProvisionedRole97EAFC50",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
+
+exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus tags when only mandatory properties are provided 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuJanusProvisionedRole",
+      "GuGetS3ObjectsPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "ProvisionedRole97EAFC50": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sts.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:janus:discoverable",
+            "Value": "true",
+          },
+          {
+            "Key": "gu:janus:permission",
+            "Value": "security-hq-dev",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ReadS3FileAD380B27": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::config-bucket/config",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ReadS3FileAD380B27",
+        "Roles": [
+          {
+            "Ref": "ProvisionedRole97EAFC50",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
