@@ -5,11 +5,6 @@ import { GuRole } from "./roles";
 
 export interface GuJanusProvisionedRoleProps {
   /**
-   * Allows multiple roles to be defined in a stack.
-   */
-  id: string;
-
-  /**
    * Tells Janus which ProvisionedRole this IAM role is part of.
    */
   janusPermission: string;
@@ -32,8 +27,7 @@ export interface GuJanusProvisionedRoleProps {
  * and its metadata.
  *
  * ```typescript
- * new GuJanusProvisionedRole(stack, {
- *   id: "SomeAppDevProvisionedRole",
+ * new GuJanusProvisionedRole(stack, "SomeAppDevProvisionedRole", {
  *   janusPermission: "some-app-dev",
  *   janusName: "Some App Developer",
  *   janusDescription: "Description of role that will be shown in Janus.",
@@ -41,8 +35,8 @@ export interface GuJanusProvisionedRoleProps {
  * ```
  */
 export class GuJanusProvisionedRole extends GuRole {
-  constructor(scope: GuStack, props: GuJanusProvisionedRoleProps) {
-    super(scope, props.id, {
+  constructor(scope: GuStack, id: string, props: GuJanusProvisionedRoleProps) {
+    super(scope, id, {
       // Will be assumed by a Janus user via STS service
       assumedBy: new ServicePrincipal("sts.amazonaws.com"),
     });

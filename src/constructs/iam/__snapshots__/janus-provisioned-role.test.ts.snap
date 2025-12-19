@@ -66,13 +66,34 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
         "PolicyName": "parameter-store-read-policy",
         "Roles": [
           {
-            "Ref": "ProvisionedRole2D772416E",
+            "Ref": "Role291939BC6",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ProvisionedRole18FD52920": {
+    "ReadS3FileAD380B27": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::config-bucket/config",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ReadS3FileAD380B27",
+        "Roles": [
+          {
+            "Ref": "Role13A5C70C1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "Role13A5C70C1": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -115,7 +136,7 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
       },
       "Type": "AWS::IAM::Role",
     },
-    "ProvisionedRole2D772416E": {
+    "Role291939BC6": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -158,27 +179,6 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
       },
       "Type": "AWS::IAM::Role",
     },
-    "ReadS3FileAD380B27": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::config-bucket/config",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ReadS3FileAD380B27",
-        "Roles": [
-          {
-            "Ref": "ProvisionedRole18FD52920",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
   },
 }
 `;
@@ -194,7 +194,28 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
     "gu:cdk:version": "TEST",
   },
   "Resources": {
-    "ProvisionedRole97EAFC50": {
+    "ReadS3FileAD380B27": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::config-bucket/config",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ReadS3FileAD380B27",
+        "Roles": [
+          {
+            "Ref": "Role1ABCC5F0",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "Role1ABCC5F0": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -245,27 +266,6 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
       },
       "Type": "AWS::IAM::Role",
     },
-    "ReadS3FileAD380B27": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::config-bucket/config",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ReadS3FileAD380B27",
-        "Roles": [
-          {
-            "Ref": "ProvisionedRole97EAFC50",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
   },
 }
 `;
@@ -281,7 +281,28 @@ exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus 
     "gu:cdk:version": "TEST",
   },
   "Resources": {
-    "ProvisionedRole97EAFC50": {
+    "ReadS3FileAD380B27": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::config-bucket/config",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ReadS3FileAD380B27",
+        "Roles": [
+          {
+            "Ref": "Role1ABCC5F0",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "Role1ABCC5F0": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -323,27 +344,6 @@ exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus 
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "ReadS3FileAD380B27": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::config-bucket/config",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ReadS3FileAD380B27",
-        "Roles": [
-          {
-            "Ref": "ProvisionedRole97EAFC50",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
   },
 }
