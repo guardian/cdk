@@ -1,7 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuJanusProvisionedRole } from "./janus-provisioned-role";
-import { GuGetS3ObjectsPolicy } from "./policies";
+import { GuGetS3ObjectsPolicy, GuParameterStoreReadPolicy, ReadParametersByName } from "./policies";
 
 describe("The GuJanusProvisionedRole construct", () => {
   it("creates role with all Janus tags when all properties are provided", () => {
@@ -31,6 +31,28 @@ describe("The GuJanusProvisionedRole construct", () => {
       paths: ["config"],
     });
     policy.attachToRole(role);
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("creates multiple roles in the same stack", () => {
+    const stack = simpleGuStackForTesting();
+    const role1 = new GuJanusProvisionedRole(stack, {
+      id: "ProvisionedRole1",
+      janusPermission: "security-hq-dev",
+    });
+    const policy1 = new GuGetS3ObjectsPolicy(stack, "ReadS3File", {
+      bucketName: "config-bucket",
+      paths: ["config"],
+    });
+    policy1.attachToRole(role1);
+    const role2 = new GuJanusProvisionedRole(stack, {
+      id: "ProvisionedRole2",
+      janusPermission: "security-hq-dev-advanced",
+    });
+    const policy2 = new GuParameterStoreReadPolicy(stack, {
+      app: "test-app",
+    });
+    policy2.attachToRole(role2);
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
