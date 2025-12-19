@@ -1,5 +1,6 @@
 import { Tags } from "aws-cdk-lib";
-import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { ArnPrincipal } from "aws-cdk-lib/aws-iam";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import type { GuStack } from "../core";
 import { GuRole } from "./roles";
 
@@ -36,9 +37,11 @@ export interface GuJanusProvisionedRoleProps {
  */
 export class GuJanusProvisionedRole extends GuRole {
   constructor(scope: GuStack, id: string, props: GuJanusProvisionedRoleProps) {
+    // Existing SSM param in stack account that holds Janus user ARN
+    const janusArnParamValue = StringParameter.valueForStringParameter(scope, "/security/janus/user-arn");
     super(scope, id, {
-      // Will be assumed by a Janus user via STS service
-      assumedBy: new ServicePrincipal("sts.amazonaws.com"),
+      // Will be assumed by Janus user
+      assumedBy: new ArnPrincipal(janusArnParamValue),
     });
     const tags = Tags.of(this);
     tags.add("gu:janus:discoverable", "true");

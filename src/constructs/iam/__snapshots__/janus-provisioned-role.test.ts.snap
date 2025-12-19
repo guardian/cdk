@@ -12,6 +12,12 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
     ],
     "gu:cdk:version": "TEST",
   },
+  "Parameters": {
+    "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "/security/janus/user-arn",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "ParameterStoreReadTestapp55EBEFA5": {
       "Properties": {
@@ -101,7 +107,9 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "sts.amazonaws.com",
+                "AWS": {
+                  "Ref": "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
               },
             },
           ],
@@ -144,7 +152,9 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "sts.amazonaws.com",
+                "AWS": {
+                  "Ref": "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
               },
             },
           ],
@@ -193,6 +203,12 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
     ],
     "gu:cdk:version": "TEST",
   },
+  "Parameters": {
+    "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "/security/janus/user-arn",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "ReadS3FileAD380B27": {
       "Properties": {
@@ -223,7 +239,9 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "sts.amazonaws.com",
+                "AWS": {
+                  "Ref": "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
               },
             },
           ],
@@ -280,6 +298,12 @@ exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus 
     ],
     "gu:cdk:version": "TEST",
   },
+  "Parameters": {
+    "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "/security/janus/user-arn",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "ReadS3FileAD380B27": {
       "Properties": {
@@ -310,7 +334,9 @@ exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus 
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "sts.amazonaws.com",
+                "AWS": {
+                  "Ref": "SsmParameterValuesecurityjanususerarnC96584B6F00A464EAD1953AFF4B05118Parameter",
+                },
               },
             },
           ],
