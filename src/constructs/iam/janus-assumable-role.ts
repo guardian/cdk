@@ -28,7 +28,7 @@ export interface GuJanusAssumableRoleProps {
  * and its metadata.
  *
  * ```typescript
- * new GuJanusAssumableRole(stack, "SomeAppDevAssumableRole", {
+ * new GuJanusAssumableRole(stack, {
  *   janusPermission: "some-app-dev",
  *   janusName: "Some App Developer",
  *   janusDescription: "Description of role that will be shown in Janus.",
@@ -36,10 +36,10 @@ export interface GuJanusAssumableRoleProps {
  * ```
  */
 export class GuJanusAssumableRole extends GuRole {
-  constructor(scope: GuStack, id: string, props: GuJanusAssumableRoleProps) {
+  constructor(scope: GuStack, props: GuJanusAssumableRoleProps) {
     // Existing SSM param in stack account that holds Janus user ARN
     const janusArnParamValue = StringParameter.valueForStringParameter(scope, "/security/janus/user-arn");
-    super(scope, id, {
+    super(scope, `${props.janusPermission}Role`, {
       // Will be assumed by Janus user
       assumedBy: new ArnPrincipal(janusArnParamValue),
     });

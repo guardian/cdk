@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The GuJanusProvisionedRole construct creates multiple roles in the same stack 1`] = `
+exports[`The GuJanusAssumableRole construct creates multiple roles in the same stack 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
@@ -72,7 +72,7 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
         "PolicyName": "parameter-store-read-policy",
         "Roles": [
           {
-            "Ref": "Role291939BC6",
+            "Ref": "securityhqdevadvancedRole0BA24B5E",
           },
         ],
       },
@@ -93,13 +93,13 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
         "PolicyName": "ReadS3FileAD380B27",
         "Roles": [
           {
-            "Ref": "Role13A5C70C1",
+            "Ref": "securityhqdevRoleB8272E08",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "Role13A5C70C1": {
+    "securityhqdevRoleB8272E08": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -144,7 +144,7 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
       },
       "Type": "AWS::IAM::Role",
     },
-    "Role291939BC6": {
+    "securityhqdevadvancedRole0BA24B5E": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -193,7 +193,7 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
 }
 `;
 
-exports[`The GuJanusProvisionedRole construct creates role with all Janus tags when all properties are provided 1`] = `
+exports[`The GuJanusAssumableRole construct creates role with all Janus tags when all properties are provided 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
@@ -225,13 +225,13 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
         "PolicyName": "ReadS3FileAD380B27",
         "Roles": [
           {
-            "Ref": "Role1ABCC5F0",
+            "Ref": "securityhqdevRoleB8272E08",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "Role1ABCC5F0": {
+    "securityhqdevRoleB8272E08": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -288,7 +288,7 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
 }
 `;
 
-exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus tags when only mandatory properties are provided 1`] = `
+exports[`The GuJanusAssumableRole construct creates role with mandatory Janus tags when only mandatory properties are provided 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
@@ -320,13 +320,13 @@ exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus 
         "PolicyName": "ReadS3FileAD380B27",
         "Roles": [
           {
-            "Ref": "Role1ABCC5F0",
+            "Ref": "securityhqdevRoleB8272E08",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "Role1ABCC5F0": {
+    "securityhqdevRoleB8272E08": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
