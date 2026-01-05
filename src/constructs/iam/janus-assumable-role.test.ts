@@ -1,12 +1,12 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuJanusProvisionedRole } from "./janus-provisioned-role";
+import { GuJanusAssumableRole } from "./janus-assumable-role";
 import { GuGetS3ObjectsPolicy, GuParameterStoreReadPolicy } from "./policies";
 
-describe("The GuJanusProvisionedRole construct", () => {
+describe("The GuJanusAssumableRole construct", () => {
   it("creates role with all Janus tags when all properties are provided", () => {
     const stack = simpleGuStackForTesting();
-    const role = new GuJanusProvisionedRole(stack, "Role", {
+    const role = new GuJanusAssumableRole(stack, "Role", {
       janusPermission: "security-hq-dev",
       janusName: "Security HQ Developer",
       janusDescription: "Access to resources needed for basic day-to-day work on the Security HQ app.",
@@ -21,7 +21,7 @@ describe("The GuJanusProvisionedRole construct", () => {
 
   it("creates role with mandatory Janus tags when only mandatory properties are provided", () => {
     const stack = simpleGuStackForTesting();
-    const role = new GuJanusProvisionedRole(stack, "Role", {
+    const role = new GuJanusAssumableRole(stack, "Role", {
       janusPermission: "security-hq-dev",
     });
     const policy = new GuGetS3ObjectsPolicy(stack, "ReadS3File", {
@@ -34,7 +34,7 @@ describe("The GuJanusProvisionedRole construct", () => {
 
   it("creates multiple roles in the same stack", () => {
     const stack = simpleGuStackForTesting();
-    const role1 = new GuJanusProvisionedRole(stack, "Role1", {
+    const role1 = new GuJanusAssumableRole(stack, "Role1", {
       janusPermission: "security-hq-dev",
     });
     const policy1 = new GuGetS3ObjectsPolicy(stack, "ReadS3File", {
@@ -42,7 +42,7 @@ describe("The GuJanusProvisionedRole construct", () => {
       paths: ["config"],
     });
     policy1.attachToRole(role1);
-    const role2 = new GuJanusProvisionedRole(stack, "Role2", {
+    const role2 = new GuJanusAssumableRole(stack, "Role2", {
       janusPermission: "security-hq-dev-advanced",
     });
     const policy2 = new GuParameterStoreReadPolicy(stack, {

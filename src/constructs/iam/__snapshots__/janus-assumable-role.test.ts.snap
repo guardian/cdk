@@ -5,9 +5,9 @@ exports[`The GuJanusProvisionedRole construct creates multiple roles in the same
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuJanusProvisionedRole",
+      "GuJanusAssumableRole",
       "GuGetS3ObjectsPolicy",
-      "GuJanusProvisionedRole",
+      "GuJanusAssumableRole",
       "GuParameterStoreReadPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -198,7 +198,7 @@ exports[`The GuJanusProvisionedRole construct creates role with all Janus tags w
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuJanusProvisionedRole",
+      "GuJanusAssumableRole",
       "GuGetS3ObjectsPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -293,7 +293,7 @@ exports[`The GuJanusProvisionedRole construct creates role with mandatory Janus 
   "Metadata": {
     "gu:cdk:constructs": [
       "GuStack",
-      "GuJanusProvisionedRole",
+      "GuJanusAssumableRole",
       "GuGetS3ObjectsPolicy",
     ],
     "gu:cdk:version": "TEST",

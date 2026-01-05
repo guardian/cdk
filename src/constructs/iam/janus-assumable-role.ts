@@ -4,7 +4,7 @@ import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import type { GuStack } from "../core";
 import { GuRole } from "./roles";
 
-export interface GuJanusProvisionedRoleProps {
+export interface GuJanusAssumableRoleProps {
   /**
    * Tells Janus which ProvisionedRole this IAM role is part of.
    */
@@ -28,15 +28,15 @@ export interface GuJanusProvisionedRoleProps {
  * and its metadata.
  *
  * ```typescript
- * new GuJanusProvisionedRole(stack, "SomeAppDevProvisionedRole", {
+ * new GuJanusAssumableRole(stack, "SomeAppDevAssumableRole", {
  *   janusPermission: "some-app-dev",
  *   janusName: "Some App Developer",
  *   janusDescription: "Description of role that will be shown in Janus.",
  * })
  * ```
  */
-export class GuJanusProvisionedRole extends GuRole {
-  constructor(scope: GuStack, id: string, props: GuJanusProvisionedRoleProps) {
+export class GuJanusAssumableRole extends GuRole {
+  constructor(scope: GuStack, id: string, props: GuJanusAssumableRoleProps) {
     // Existing SSM param in stack account that holds Janus user ARN
     const janusArnParamValue = StringParameter.valueForStringParameter(scope, "/security/janus/user-arn");
     super(scope, id, {
