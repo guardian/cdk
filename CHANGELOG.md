@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 62.2.0
+
+### Minor Changes
+
+- c49c7a0: Add GuJanusAssumableRole construct
+
 ## 62.1.3
 
 ### Patch Changes
