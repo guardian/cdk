@@ -567,6 +567,8 @@ export class GuEc2App extends Construct {
         },
       });
 
+      Tags.of(authLambda).add("Owner", "DevX");
+
       authLambda.addToRolePolicy(
         new PolicyStatement({
           effect: Effect.ALLOW,
