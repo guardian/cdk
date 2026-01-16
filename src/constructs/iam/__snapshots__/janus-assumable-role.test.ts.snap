@@ -115,14 +115,11 @@ exports[`The GuJanusAssumableRole construct creates multiple roles in the same s
           ],
           "Version": "2012-10-17",
         },
+        "Path": "/gu/janus/discoverable/",
         "Tags": [
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
-          },
-          {
-            "Key": "gu:janus:discoverable",
-            "Value": "true",
           },
           {
             "Key": "gu:janus:permission",
@@ -160,14 +157,11 @@ exports[`The GuJanusAssumableRole construct creates multiple roles in the same s
           ],
           "Version": "2012-10-17",
         },
+        "Path": "/gu/janus/discoverable/",
         "Tags": [
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
-          },
-          {
-            "Key": "gu:janus:discoverable",
-            "Value": "true",
           },
           {
             "Key": "gu:janus:permission",
@@ -247,6 +241,7 @@ exports[`The GuJanusAssumableRole construct creates role with all Janus tags whe
           ],
           "Version": "2012-10-17",
         },
+        "Path": "/gu/janus/discoverable/",
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -255,10 +250,6 @@ exports[`The GuJanusAssumableRole construct creates role with all Janus tags whe
           {
             "Key": "gu:janus:description",
             "Value": "Access to resources needed for basic day-to-day work on the Security HQ app.",
-          },
-          {
-            "Key": "gu:janus:discoverable",
-            "Value": "true",
           },
           {
             "Key": "gu:janus:name",
@@ -342,14 +333,11 @@ exports[`The GuJanusAssumableRole construct creates role with mandatory Janus ta
           ],
           "Version": "2012-10-17",
         },
+        "Path": "/gu/janus/discoverable/",
         "Tags": [
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
-          },
-          {
-            "Key": "gu:janus:discoverable",
-            "Value": "true",
           },
           {
             "Key": "gu:janus:permission",

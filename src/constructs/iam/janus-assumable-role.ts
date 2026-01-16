@@ -42,9 +42,10 @@ export class GuJanusAssumableRole extends GuRole {
     super(scope, `${props.janusPermission}Role`, {
       // Will be assumed by Janus user
       assumedBy: new ArnPrincipal(janusArnParamValue),
+      // IAM API only allows filtering by path prefix
+      path: "/gu/janus/discoverable/",
     });
     const tags = Tags.of(this);
-    tags.add("gu:janus:discoverable", "true");
     tags.add("gu:janus:permission", props.janusPermission);
     if (props.janusName) {
       tags.add("gu:janus:name", props.janusName);
