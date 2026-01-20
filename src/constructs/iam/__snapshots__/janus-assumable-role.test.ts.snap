@@ -122,6 +122,10 @@ exports[`The GuJanusAssumableRole construct creates multiple roles in the same s
             "Value": "TEST",
           },
           {
+            "Key": "gu:janus:discoverable",
+            "Value": "true",
+          },
+          {
             "Key": "gu:janus:permission",
             "Value": "security-hq-dev",
           },
@@ -162,6 +166,10 @@ exports[`The GuJanusAssumableRole construct creates multiple roles in the same s
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          {
+            "Key": "gu:janus:discoverable",
+            "Value": "true",
           },
           {
             "Key": "gu:janus:permission",
@@ -252,6 +260,10 @@ exports[`The GuJanusAssumableRole construct creates role with all Janus tags whe
             "Value": "Access to resources needed for basic day-to-day work on the Security HQ app.",
           },
           {
+            "Key": "gu:janus:discoverable",
+            "Value": "true",
+          },
+          {
             "Key": "gu:janus:name",
             "Value": "Security HQ Developer",
           },
@@ -338,6 +350,10 @@ exports[`The GuJanusAssumableRole construct creates role with mandatory Janus ta
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
+          },
+          {
+            "Key": "gu:janus:discoverable",
+            "Value": "true",
           },
           {
             "Key": "gu:janus:permission",

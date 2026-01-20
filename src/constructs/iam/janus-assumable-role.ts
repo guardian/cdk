@@ -46,6 +46,8 @@ export class GuJanusAssumableRole extends GuRole {
       path: "/gu/janus/discoverable/",
     });
     const tags = Tags.of(this);
+    // Discoverability marked by tag as well as path because tags are easier to find
+    tags.add("gu:janus:discoverable", "true");
     tags.add("gu:janus:permission", props.janusPermission);
     if (props.janusName) {
       tags.add("gu:janus:name", props.janusName);
