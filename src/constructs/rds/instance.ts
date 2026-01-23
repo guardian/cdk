@@ -20,8 +20,7 @@ export interface OptOut extends Pick<DatabaseInstanceProps, "backupRetention" | 
 }
 
 export interface GuDatabaseInstanceProps
-  extends Omit<DatabaseInstanceProps, "instanceType" | "backupRetention" | "preferredBackupWindow">,
-    AppIdentity {
+  extends Omit<DatabaseInstanceProps, "instanceType" | "backupRetention" | "preferredBackupWindow">, AppIdentity {
   instanceType: string;
   /**
    * We recommend using DevX Backups to protect your RDS instance's backups.

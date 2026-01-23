@@ -7,9 +7,7 @@ import type { GuAlarmProps, Http5xxAlarmProps } from "./alarm";
 import { GuAlarm } from "./alarm";
 
 interface GuApiGateway5xxPercentageAlarmProps
-  extends Pick<GuAlarmProps, "snsTopicName">,
-    Http5xxAlarmProps,
-    AppIdentity {
+  extends Pick<GuAlarmProps, "snsTopicName">, Http5xxAlarmProps, AppIdentity {
   apiGatewayInstance: RestApi;
 }
 
