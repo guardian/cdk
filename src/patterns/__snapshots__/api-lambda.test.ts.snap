@@ -49,7 +49,6 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
   },
   "Resources": {
     "CertificateTesting28FCAC6D": {
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "code.theguardian.com",
         "DomainValidationOptions": [
@@ -87,7 +86,6 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Retain",
     },
     "DNS": {
       "Properties": {

@@ -1,4 +1,3 @@
-import { RemovalPolicy } from "aws-cdk-lib";
 import { Certificate, CertificateValidation } from "aws-cdk-lib/aws-certificatemanager";
 import type { CertificateProps } from "aws-cdk-lib/aws-certificatemanager/lib/certificate";
 import { HostedZone } from "aws-cdk-lib/aws-route53";
@@ -32,6 +31,5 @@ export class GuCertificate extends GuAppAwareConstruct(Certificate) {
       app,
     };
     super(scope, "Certificate", awsCertificateProps);
-    this.applyRemovalPolicy(RemovalPolicy.RETAIN);
   }
 }
