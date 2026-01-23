@@ -20,7 +20,8 @@ export type InstanceMetricGranularity = "1Minute" | "5Minute";
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
 // TODO avoid prop nesting to improve discoverability. See https://github.com/aws/aws-cdk/blob/main/docs/DESIGN_GUIDELINES.md#flat.
 export interface GuAutoScalingGroupProps
-  extends Omit<
+  extends
+    Omit<
       AutoScalingGroupProps,
       | "imageId"
       | "osType"

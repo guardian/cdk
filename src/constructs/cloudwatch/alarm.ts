@@ -10,20 +10,18 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
   okAction?: boolean;
 }
 
-export interface Http4xxAlarmProps
-  extends Omit<
-    GuAlarmProps,
-    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
-  > {
+export interface Http4xxAlarmProps extends Omit<
+  GuAlarmProps,
+  "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
+> {
   tolerated4xxPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;
 }
 
-export interface Http5xxAlarmProps
-  extends Omit<
-    GuAlarmProps,
-    "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
-  > {
+export interface Http5xxAlarmProps extends Omit<
+  GuAlarmProps,
+  "snsTopicName" | "evaluationPeriods" | "metric" | "period" | "threshold" | "treatMissingData" | "app"
+> {
   tolerated5xxPercentage: number;
   numberOfMinutesAboveThresholdBeforeAlarm?: number;
 }

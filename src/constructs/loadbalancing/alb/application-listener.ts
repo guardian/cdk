@@ -32,8 +32,7 @@ export class GuApplicationListener extends GuAppAwareConstruct(ApplicationListen
 }
 
 export interface GuHttpsApplicationListenerProps
-  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">,
-    AppIdentity {
+  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">, AppIdentity {
   targetGroup: GuApplicationTargetGroup;
   certificate?: GuCertificate;
 }

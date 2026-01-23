@@ -5,11 +5,10 @@ import type { GuLambdaFunction } from "../lambda";
 import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
 
-export interface GuLambdaErrorPercentageMonitoringProps
-  extends Omit<
-    GuAlarmProps,
-    "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
-  > {
+export interface GuLambdaErrorPercentageMonitoringProps extends Omit<
+  GuAlarmProps,
+  "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
+> {
   toleratedErrorPercentage: number;
   lengthOfEvaluationPeriod?: Duration;
   numberOfEvaluationPeriodsAboveThresholdBeforeAlarm?: number;
@@ -48,11 +47,10 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
   }
 }
 
-export interface GuLambdaThrottlingMonitoringProps
-  extends Omit<
-    GuAlarmProps,
-    "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
-  > {
+export interface GuLambdaThrottlingMonitoringProps extends Omit<
+  GuAlarmProps,
+  "metric" | "threshold" | "comparisonOperator" | "evaluationPeriods" | "treatMissingData" | "app"
+> {
   /**
    * Sum of thottled invocations above which to alarm.
    *
