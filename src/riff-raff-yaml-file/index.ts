@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 import path from "path";
-import type { App } from "aws-cdk-lib";
+import { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { dump } from "js-yaml";
@@ -206,9 +206,17 @@ export class RiffRaffYamlFile {
     return cdkStack.dependencies.filter((_) => _ instanceof GuStack) as GuStack[];
   }
 
-  // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
-  constructor(app: App) {
-    this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
+  public static fromApp(app: App): RiffRaffYamlFile {
+    const allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
+    return new RiffRaffYamlFile(allCdkStacks);
+  }
+
+  public static fromStacks(stacks: GuStack[]): RiffRaffYamlFile {
+    return new RiffRaffYamlFile(stacks);
+  }
+
+  private constructor(stacks: GuStack[]) {
+    this.allCdkStacks = stacks;
     const allowedStages = new Set(this.allCdkStacks.map(({ stage }) => stage));
     this.allStageTags = Array.from(allowedStages);
     this.allStackTags = Array.from(new Set(this.allCdkStacks.map(({ stack }) => stack)));
@@ -217,7 +225,13 @@ export class RiffRaffYamlFile {
     this.validateStacksInApp();
     this.validateAllRegionsAreResolved();
 
-    this.outdir = app.outdir;
+    const [firstStack] = this.allCdkStacks;
+
+    if (!firstStack) {
+      throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
+    }
+
+    this.outdir = App.of(firstStack)!.outdir;
 
     const deployments = new Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>();
 
