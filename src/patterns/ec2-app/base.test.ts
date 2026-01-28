@@ -1201,4 +1201,72 @@ UserData from accessed construct`);
       },
     });
   });
+
+  it("creates a WAF param when set", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
+      userData: UserData.forLinux(),
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      defaultInstanceWarmup: Duration.minutes(2),
+      waf: { enabled: true },
+    });
+    Template.fromStack(stack).hasResource("AWS::SSM::Parameter", {
+      Properties: {
+        Name: `/infosec/waf/services/TEST/test-gu-ec2-app-alb-arn`,
+        Description: `The ARN of the ALB for TEST-test-gu-ec2-app.`,
+        Value: { Ref: "LoadBalancerTestguec2appC77A055C" },
+        Tier: "Standard",
+        DataType: "text",
+      },
+    });
+  });
+
+  it("creates a WAF param with a specific logical id when set and overridden", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = new GuEc2App(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+      monitoringConfiguration: { noMonitoring: true },
+      instanceMetricGranularity: "5Minute",
+      userData: UserData.forLinux(),
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      scaling: {
+        minimumInstances: 1,
+      },
+      defaultInstanceWarmup: Duration.minutes(2),
+      waf: { enabled: true },
+    });
+
+    stack.overrideLogicalId(app.loadBalancer.waf!, {
+      logicalId: "ssm param escape hatch",
+      reason: "Retaining original parameter's logical ID to avoid deployment issues",
+    });
+
+    const resourceId = Template.fromStack(stack).getResourceId("AWS::SSM::Parameter", {
+      Properties: {
+        Name: `/infosec/waf/services/TEST/test-gu-ec2-app-alb-arn`,
+        Description: `The ARN of the ALB for TEST-test-gu-ec2-app.`,
+        Value: { Ref: "LoadBalancerTestguec2appC77A055C" },
+        Tier: "Standard",
+        DataType: "text",
+      },
+    });
+
+    expect(resourceId).toBe("ssm param escape hatch");
+  });
 });

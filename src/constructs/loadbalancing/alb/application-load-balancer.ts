@@ -2,6 +2,7 @@ import { Annotations, CfnOutput } from "aws-cdk-lib";
 import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { ApplicationLoadBalancerProps, CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Bucket } from "aws-cdk-lib/aws-s3";
+import { ParameterDataType, ParameterTier, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
 import { AppIdentity, GuAccessLoggingBucketParameter } from "../../core";
@@ -38,6 +39,11 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
    * @default true
    */
   withAccessLogging?: boolean;
+
+  /**
+   * Configuration for WAF protection, if desired
+   */
+  waf?: WafProps;
 }
 
 /**
@@ -51,8 +57,11 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
 export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLoadBalancer) {
+
+  public readonly waf?: StringParameter;
+
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
-    const { app, removeType, withAccessLogging = true } = props;
+    const { app, removeType, waf, withAccessLogging = true } = props;
     const { stack, stage } = scope;
 
     super(scope, id, { deletionProtection: true, ...props });
@@ -82,5 +91,21 @@ export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLo
       description: `DNS entry for ${this.idWithApp}`,
       value: this.loadBalancerDnsName,
     }).overrideLogicalId(`${this.idWithApp}DnsName`);
+
+    if (!!waf && waf.enabled) {
+      this.waf = new StringParameter(this, "AlbSsmParam", {
+        parameterName: `/infosec/waf/services/${stage}/${app}-alb-arn`,
+        description: `The ARN of the ALB for ${stage}-${app}.`,
+        simpleName: false,
+        stringValue: this.loadBalancerArn,
+        tier: ParameterTier.STANDARD,
+        dataType: ParameterDataType.TEXT,
+      });
+
+    }
   }
+}
+
+export interface WafProps {
+  enabled: boolean;
 }
