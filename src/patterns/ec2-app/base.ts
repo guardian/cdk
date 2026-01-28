@@ -15,7 +15,7 @@ import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticload
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { ParameterDataType, ParameterTier, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -304,6 +304,11 @@ export interface GuEc2AppProps extends AppIdentity {
   defaultInstanceWarmup?: Duration;
 
   /**
+   * You can specify if the arn of this load balancer should be exposed for protection via WAF
+   */
+  waf?: boolean;
+
+  /**
    * How often to send EC2 metrics, such as CPU usage.
    * By default, AWS will produce `5Minute` granular metrics.
    *
@@ -369,6 +374,7 @@ export class GuEc2App extends Construct {
       updatePolicy,
       defaultInstanceWarmup,
       instanceMetricGranularity,
+      waf
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -652,6 +658,18 @@ export class GuEc2App extends Construct {
       });
 
       loadBalancer.addSecurityGroup(idpEgressSecurityGroup);
+    }
+
+    if (waf) {
+      const stage = scope.stage
+      new StringParameter(this, "AlbSsmParam", {
+        parameterName: `/infosec/waf/services/${stage}/${app}-alb-arn`,
+        description: `The ARN of the ALB for ${stage}-${app}.`,
+        simpleName: false,
+        stringValue: loadBalancer.loadBalancerArn,
+        tier: ParameterTier.STANDARD,
+        dataType: ParameterDataType.TEXT,
+      });
     }
 
     this.vpc = vpc;
