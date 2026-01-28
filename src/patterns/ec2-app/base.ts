@@ -374,7 +374,7 @@ export class GuEc2App extends Construct {
       updatePolicy,
       defaultInstanceWarmup,
       instanceMetricGranularity,
-      waf
+      waf,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -661,7 +661,7 @@ export class GuEc2App extends Construct {
     }
 
     if (waf) {
-      const stage = scope.stage
+      const stage = scope.stage;
       new StringParameter(this, "AlbSsmParam", {
         parameterName: `/infosec/waf/services/${stage}/${app}-alb-arn`,
         description: `The ARN of the ALB for ${stage}-${app}.`,

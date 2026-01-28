@@ -1225,7 +1225,7 @@ UserData from accessed construct`);
       Properties: {
         Name: `/infosec/waf/services/TEST/test-gu-ec2-app-alb-arn`,
         Description: `The ARN of the ALB for TEST-test-gu-ec2-app.`,
-        Value: { "Ref": "LoadBalancerTestguec2appC77A055C" },
+        Value: { Ref: "LoadBalancerTestguec2appC77A055C" },
         Tier: "Standard",
         DataType: "text",
       },
