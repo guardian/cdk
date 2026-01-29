@@ -15,7 +15,7 @@ import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticload
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { ParameterDataType, ParameterTier, StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -304,6 +304,26 @@ export interface GuEc2AppProps extends AppIdentity {
   defaultInstanceWarmup?: Duration;
 
   /**
+   * You can specify if the arn of this load balancer should be exposed for protection via WAF
+   *
+   * If this value changes, it is only picked up on WAF configuration redeploy.
+   *
+   * NB this parameter setting _alone_ is not sufficient to protect the application.
+   * You must also ensure that the application and stage combination is present in the WAF
+   * configuration.
+   *
+   * See https://github.com/guardian/waf/tree/main/lib
+   *
+   * There is a "gotcha" when migrating to this functionality.  You may not change only the Logical
+   * ID of an SSM Parameter (see https://docs.aws.amazon.com/cdk/v2/guide/identifiers.html) and the
+   * parameter name must be of the required form, meaning you cannot have an alternate name.
+   *
+   * At present it is necessary to remove the old param and immediately redeploy with the new param.
+   * This does not affect protection unless and until the WAF configuration is redeployed.
+   */
+  waf?: boolean;
+
+  /**
    * How often to send EC2 metrics, such as CPU usage.
    * By default, AWS will produce `5Minute` granular metrics.
    *
@@ -369,6 +389,7 @@ export class GuEc2App extends Construct {
       updatePolicy,
       defaultInstanceWarmup,
       instanceMetricGranularity,
+      waf,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -652,6 +673,18 @@ export class GuEc2App extends Construct {
       });
 
       loadBalancer.addSecurityGroup(idpEgressSecurityGroup);
+    }
+
+    if (waf) {
+      const stage = scope.stage;
+      new StringParameter(this, "AlbSsmParam", {
+        parameterName: `/infosec/waf/services/${stage}/${app}-alb-arn`,
+        description: `The ARN of the ALB for ${stage}-${app}.`,
+        simpleName: false,
+        stringValue: loadBalancer.loadBalancerArn,
+        tier: ParameterTier.STANDARD,
+        dataType: ParameterDataType.TEXT,
+      });
     }
 
     this.vpc = vpc;
