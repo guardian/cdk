@@ -305,6 +305,21 @@ export interface GuEc2AppProps extends AppIdentity {
 
   /**
    * You can specify if the arn of this load balancer should be exposed for protection via WAF
+   *
+   * If this value changes, it is only picked up on WAF configuration redeploy.
+   *
+   * NB this parameter setting _alone_ is not sufficient to protect the application.
+   * You must also ensure that the application and stage combination is present in the WAF
+   * configuration.
+   *
+   * See https://github.com/guardian/waf/tree/main/lib
+   *
+   * There is a "gotcha" when migrating to this functionality.  You may not change only the Logical
+   * ID of an SSM Parameter (see https://docs.aws.amazon.com/cdk/v2/guide/identifiers.html) and the
+   * parameter name must be of the required form, meaning you cannot have an alternate name.
+   *
+   * At present it is necessary to remove the old param and immediately redeploy with the new param.
+   * This does not affect protection unless and until the WAF configuration is redeployed.
    */
   waf?: boolean;
 
