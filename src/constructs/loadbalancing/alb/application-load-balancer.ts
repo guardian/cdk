@@ -5,7 +5,8 @@ import { Bucket } from "aws-cdk-lib/aws-s3";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { GuStack } from "../../core";
 import { AppIdentity, GuAccessLoggingBucketParameter } from "../../core";
-import { Waf, WafProps } from "../waf";
+import type { WafProps } from "../waf";
+import { Waf } from "../waf";
 
 /**
  * Adds the following headers to each request before forwarding it to the target:
