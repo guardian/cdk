@@ -1219,7 +1219,7 @@ UserData from accessed construct`);
         minimumInstances: 1,
       },
       defaultInstanceWarmup: Duration.minutes(2),
-      waf: true,
+      waf: {enabled: true},
     });
     Template.fromStack(stack).hasResource("AWS::SSM::Parameter", {
       Properties: {
