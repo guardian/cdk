@@ -38,6 +38,7 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
+import type { WafProps } from "../../constructs/loadbalancing";
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
@@ -304,6 +305,32 @@ export interface GuEc2AppProps extends AppIdentity {
   defaultInstanceWarmup?: Duration;
 
   /**
+   * You can specify if the arn of this load balancer should be exposed for protection via WAF
+   *
+   * If this value changes, it is only picked up on WAF configuration redeploy.
+   *
+   * NB this parameter setting _alone_ is not sufficient to protect the application.
+   * You must also ensure that the application and stage combination is present in the WAF
+   * configuration.
+   *
+   * See https://github.com/guardian/waf/tree/main/lib
+   *
+   * There is a "gotcha" when migrating to this functionality.  You may not change only the Logical
+   * ID of an SSM Parameter (see https://docs.aws.amazon.com/cdk/v2/guide/identifiers.html) and the
+   * parameter name must be of the required form, meaning you cannot have an alternate name.
+   *
+   * You can either:
+   *
+   * Remove the old param and immediately redeploy with the new param (this does not affect
+   * protection unless and until the WAF configuration is redeployed)
+   *
+   *   OR
+   *
+   * Create an escape hatch by overriding the logical id (see "ssm param escape hatch" test for example)
+   **/
+  waf?: WafProps;
+
+  /**
    * How often to send EC2 metrics, such as CPU usage.
    * By default, AWS will produce `5Minute` granular metrics.
    *
@@ -369,6 +396,7 @@ export class GuEc2App extends Construct {
       updatePolicy,
       defaultInstanceWarmup,
       instanceMetricGranularity,
+      waf,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -454,6 +482,7 @@ export class GuEc2App extends Construct {
         subnets: access.scope === AccessScope.INTERNAL ? privateSubnets : publicSubnets,
       },
       withAccessLogging,
+      waf,
     });
 
     const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
