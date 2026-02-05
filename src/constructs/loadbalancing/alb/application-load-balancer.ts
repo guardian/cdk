@@ -57,7 +57,6 @@ interface GuApplicationLoadBalancerProps extends ApplicationLoadBalancerProps, A
  * @see https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md
  */
 export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLoadBalancer) {
-
   public readonly waf?: StringParameter;
 
   constructor(scope: GuStack, id: string, props: GuApplicationLoadBalancerProps) {
@@ -101,7 +100,6 @@ export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLo
         tier: ParameterTier.STANDARD,
         dataType: ParameterDataType.TEXT,
       });
-
     }
   }
 }
