@@ -207,7 +207,6 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
       },
     },
     "CertificateTestguec2app86EE2D42": {
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "domain-name-for-your-application.example",
         "Tags": [
@@ -239,7 +238,6 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Retain",
     },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {

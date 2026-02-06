@@ -11,7 +11,6 @@ exports[`The GuCertificate class should create a new certificate (which requires
   },
   "Resources": {
     "CertificateTesting28FCAC6D": {
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "domain-name-for-your-application.example",
         "Tags": [
@@ -43,7 +42,6 @@ exports[`The GuCertificate class should create a new certificate (which requires
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Retain",
     },
   },
 }
@@ -60,7 +58,6 @@ exports[`The GuCertificate class should create a new certificate when hosted zon
   },
   "Resources": {
     "CertificateTesting28FCAC6D": {
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "domain-name-for-your-application.example",
         "DomainValidationOptions": [
@@ -98,7 +95,6 @@ exports[`The GuCertificate class should create a new certificate when hosted zon
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Retain",
     },
   },
 }
