@@ -38,6 +38,7 @@ new MyStack(app, "my-stack-PROD", {});
 ```
 
 ### Advanced usage
+#### Additional deployment types
 As noted above, only specific deployment types are currently supported.
 
 If you want to add additional deployment types, you can do so by instantiating `RiffRaffYamlFile` directly:
@@ -78,6 +79,37 @@ riffRaff.synth();
 ```
 
 When the CDK stack is synthesized, a `riff-raff.yaml` file will be created in the output directory, typically `/<repo-root>/cdk/cdk.out`.
+
+#### Multiple Riff-Raff projects in a single repository
+If your repository deploys multiple Riff-Raff projects, multiple `riff-raff.yaml` files can be created thus:
+
+```ts
+import { RiffRaffYamlFile } from "./index";
+
+const appForInfra = new App();
+
+const myInfraStack = new MyInfraStack(appForInfra, "my-infra-stack", {
+  stack: "playground",
+  stage: "INFRA",
+  env: { region: "eu-west-1" },
+});
+
+const appForMyApp = new App();
+
+const myAppStackCODE = new MyAppStack(appForMyApp, "my-stack-CODE", {
+  stack: "playground",
+  stage: "CODE",
+  env: { region: "eu-west-1" },
+});
+const myAppStackPROD = new MyAppStack(appForMyApp, "my-stack-PROD", {
+  stack: "playground",
+  stage: "CODE",
+  env: { region: "eu-west-1" },
+});
+
+new RiffRaffYamlFile(appForInfra, "playground::core-infra"); // Generates a file to `cdk.out/playground::core-infra/riff-raff.yaml`
+new RiffRaffYamlFile(appForMyApp, "playground::my-app"); // Generates a file to `cdk.out/playground::my-app/riff-raff.yaml`
+```
 
 ## Package layout
 `RiffRaffYamlFile` assumes CI has uploaded files in the following structure:
