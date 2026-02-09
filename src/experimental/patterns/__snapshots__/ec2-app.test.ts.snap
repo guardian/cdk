@@ -26,6 +26,8 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
       "GuRiffRaffDeploymentIdParameter",
+      "GuAutoScalingRollingUpdateTimeoutExperimental",
+      "GuHorizontallyScalingDeploymentPropertiesExperimental",
     ],
     "gu:cdk:version": "TEST",
   },

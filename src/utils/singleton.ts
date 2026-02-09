@@ -1,4 +1,5 @@
-import type { Stack } from "aws-cdk-lib/core/lib/stack";
+import { Stack } from "aws-cdk-lib";
+import type { Construct } from "constructs";
 import type { GuStack } from "../constructs/core";
 
 /**
@@ -35,7 +36,6 @@ import type { GuStack } from "../constructs/core";
  *
  * @see https://github.com/aws/aws-cdk/blob/0ea4b19afd639541e5f1d7c1783032ee480c307e/packages/%40aws-cdk/core/lib/private/refs.ts#L47-L50
  */
-export const isSingletonPresentInStack = (stack: GuStack, maybeSingletonInstance?: { stack: Stack }): boolean => {
-  // destructured `maybeSingletonInstance` to support `CfnElement`s (aka parameters) and `Resource`s, which do not share a type
-  return maybeSingletonInstance ? maybeSingletonInstance.stack.node === stack.node : false;
+export const isSingletonPresentInStack = (stack: GuStack, maybeSingletonInstance?: Construct): boolean => {
+  return maybeSingletonInstance ? Stack.of(maybeSingletonInstance) === stack : false;
 };

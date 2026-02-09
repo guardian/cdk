@@ -1,9 +1,11 @@
 import type { IAspect } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
 import { Aspects, CfnParameter, Duration, Tags } from "aws-cdk-lib";
 import { CfnAutoScalingGroup, CfnScalingPolicy, ScalingProcess, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import type { CfnPolicy } from "aws-cdk-lib/aws-iam";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { MetadataKeys } from "../../constants";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
 import type { GuStack } from "../../constructs/core";
@@ -42,12 +44,11 @@ export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
  *
  * TODO Expose the healthcheck grace period as a property on {@link GuEc2App} and remove this `Aspect`.
  */
-export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
-  public readonly stack: GuStack;
+export class GuAutoScalingRollingUpdateTimeoutExperimental extends Construct implements IAspect {
   private static instance: GuAutoScalingRollingUpdateTimeoutExperimental | undefined;
 
   private constructor(scope: GuStack) {
-    this.stack = scope;
+    super(scope, GuAutoScalingRollingUpdateTimeoutExperimental.name);
   }
 
   public static getInstance(stack: GuStack): GuAutoScalingRollingUpdateTimeoutExperimental {
@@ -112,13 +113,12 @@ export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
-export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IAspect {
-  public readonly stack: GuStack;
+export class GuHorizontallyScalingDeploymentPropertiesExperimental extends Construct implements IAspect {
   public readonly asgToParamMap: Map<string, CfnParameter>;
   private static instance: GuHorizontallyScalingDeploymentPropertiesExperimental | undefined;
 
   private constructor(scope: GuStack) {
-    this.stack = scope;
+    super(scope, GuHorizontallyScalingDeploymentPropertiesExperimental.name);
     this.asgToParamMap = new Map();
   }
 
@@ -131,7 +131,8 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
   }
 
   public visit(construct: IConstruct) {
-    if (construct instanceof CfnScalingPolicy && construct.stack.stackName === this.stack.stackName) {
+    const stack = Stack.of(this);
+    if (construct instanceof CfnScalingPolicy && construct.stack === stack) {
       const { node } = construct;
       const { scopes, path } = node;
 
@@ -174,7 +175,7 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
           const cfnParameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
           this.asgToParamMap.set(
             asgNodeId,
-            new CfnParameter(this.stack, cfnParameterName, {
+            new CfnParameter(stack, cfnParameterName, {
               type: "Number",
             }),
           );
