@@ -145,7 +145,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
     "CertificateTestguec2app86EE2D42": {
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "domain-name-for-your-application.example",
         "Tags": [
@@ -177,7 +176,6 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Retain",
     },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {
@@ -1035,7 +1033,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
     "CertificateTestguec2app86EE2D42": {
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "domain-name-for-your-application.example",
         "Tags": [
@@ -1067,7 +1064,6 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Retain",
     },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {
