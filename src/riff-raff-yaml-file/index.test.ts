@@ -43,7 +43,7 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "CODE",
     });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -114,7 +114,7 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "CODE",
     });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -180,7 +180,7 @@ describe("The RiffRaffYamlFile class", () => {
     new MyDatabaseStack(app, "Database-CODE-deploy", { ...region, stack: "deploy", stage: "PROD" });
 
     expect(() => {
-      new RiffRaffYamlFile(app);
+      RiffRaffYamlFile.fromApp(app);
     }).toThrowError("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
   });
 
@@ -190,7 +190,7 @@ describe("The RiffRaffYamlFile class", () => {
     new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
 
     expect(() => {
-      new RiffRaffYamlFile(app);
+      RiffRaffYamlFile.fromApp(app);
     }).toThrowError("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
   });
 
@@ -199,7 +199,7 @@ describe("The RiffRaffYamlFile class", () => {
     class MyApplicationStack extends GuStack {}
     new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     // Not sure why we have the extra `"` characters...they don't appear in the resulting file on disk...
     expect(actual).toMatchInlineSnapshot(`
@@ -227,7 +227,7 @@ describe("The RiffRaffYamlFile class", () => {
     new MyApplicationStack(app, "App-PROD-deploy", { stack: "deploy", stage: "PROD", env: { region: "eu-west-1" } });
     new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -275,7 +275,7 @@ describe("The RiffRaffYamlFile class", () => {
       env: { region: "us-east-1" },
     });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -332,7 +332,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -408,7 +408,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -488,7 +488,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -548,7 +548,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -621,7 +621,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -725,7 +725,7 @@ describe("The RiffRaffYamlFile class", () => {
     new MyApplicationStack(app, "test-stack-eu-PROD", { stack: "test", stage: "PROD", env: { region: "eu-west-1" } });
     new MyApplicationStack(app, "test-stack-us-PROD", { stack: "test", stage: "PROD", env: { region: "us-east-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -954,7 +954,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -1081,7 +1081,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "CODE", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -1147,7 +1147,7 @@ describe("The RiffRaffYamlFile class", () => {
       env: { region: "eu-west-1" },
     });
 
-    const riffraff = new RiffRaffYamlFile(app);
+    const riffraff = RiffRaffYamlFile.fromApp(app);
 
     riffraff.riffRaffYaml.deployments.set("upload-my-static-files", {
       app: "my-static-site",
@@ -1228,7 +1228,7 @@ describe("The RiffRaffYamlFile class", () => {
     codeStack.addDependency(sharedResources);
     prodStack.addDependency(sharedResources);
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
     "allowedStages:
@@ -1302,7 +1302,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -1381,7 +1381,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     new MyApplicationStack(app, "test-stack", { stack: "test", stage: "TEST", env: { region: "eu-west-1" } });
 
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
       "allowedStages:
@@ -1479,7 +1479,7 @@ describe("The RiffRaffYamlFile class", () => {
     getTemplateAfterAspectInvocation(guStack);
 
     // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
-    const actual = new RiffRaffYamlFile(app).toYAML();
+    const actual = RiffRaffYamlFile.fromApp(app).toYAML();
 
     const cfnParameterName = getAsgRollingUpdateCfnParameterName(guStack.asg);
 
@@ -1524,5 +1524,145 @@ describe("The RiffRaffYamlFile class", () => {
             - asg-upload-eu-west-1-test-my-app
       "
     `);
+  });
+
+  it("Should support instantiation with a subset of GuStacks from an App", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyCoreInfrastructureStack extends GuStack {}
+    class MyApplicationStack extends GuStack {}
+
+    const props = {
+      env: {
+        region: "eu-west-1",
+      },
+      stack: "deploy",
+    };
+
+    const infraStack = new MyCoreInfrastructureStack(app, "MyCoreInfrastructure-INFRA", {
+      ...props,
+      stage: "INFRA",
+    });
+    const applicationStacks = [
+      new MyApplicationStack(app, "MyApp-CODE", {
+        ...props,
+        stage: "CODE",
+      }),
+      new MyApplicationStack(app, "MyApp-PROD", {
+        ...props,
+        stage: "PROD",
+      }),
+    ];
+
+    expect(RiffRaffYamlFile.fromStacks([infraStack], "tools:core-infra").toYAML()).toMatchInlineSnapshot(`
+        "allowedStages:
+          - INFRA
+        deployments:
+          cfn-eu-west-1-deploy-my-core-infrastructure-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - deploy
+            app: my-core-infrastructure-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                INFRA: MyCoreInfrastructure-INFRA.template.json
+        "
+      `);
+
+    expect(RiffRaffYamlFile.fromStacks(applicationStacks, "tools:my-app").toYAML()).toMatchInlineSnapshot(`
+        "allowedStages:
+          - CODE
+          - PROD
+        deployments:
+          cfn-eu-west-1-deploy-my-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - deploy
+            app: my-application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                CODE: MyApp-CODE.template.json
+                PROD: MyApp-PROD.template.json
+        "
+    `);
+  });
+
+  it("Should throw when instantiated from a subset of GuStacks and there are missing stack definitions", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyCoreInfrastructureStack extends GuStack {}
+    class MyApplicationStack extends GuStack {}
+
+    const region = {
+      env: {
+        region: "eu-west-1",
+      },
+    };
+
+    const infraStacks = [
+      new MyCoreInfrastructureStack(app, "MyCoreInfrastructure-INFRA-deploy", {
+        ...region,
+        stack: "deploy",
+        stage: "INFRA",
+      }),
+      new MyCoreInfrastructureStack(app, "MyCoreInfrastructure-INFRA-media-service", {
+        ...region,
+        stack: "media-service",
+        stage: "INFRA",
+      }),
+    ];
+
+    const applicationStacks = [
+      new MyApplicationStack(app, "App-CODE-deploy", { ...region, stack: "deploy", stage: "CODE" }),
+      new MyApplicationStack(app, "App-PROD-media-service", {
+        ...region,
+        stack: "media-service",
+        stage: "PROD",
+      }),
+      new MyApplicationStack(app, "App-PROD-deploy", { ...region, stack: "deploy", stage: "PROD" }),
+    ];
+
+    // No error as all stacks with INFRA stage are included
+    expect(() => RiffRaffYamlFile.fromStacks(infraStacks, "misc:core-infra")).not.toThrow();
+
+    // Missing an instance of `MyApplication` for stack=media-service stage=CODE
+    expect(() => {
+      RiffRaffYamlFile.fromStacks(applicationStacks, "misc:my-app");
+    }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+  });
+
+  it("Should throw when GuStacks have been instantiated from multiple Apps", () => {
+    const app1 = new App({ outdir: "/tmp/cdk.out" });
+    const app2 = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {}
+
+    const props = {
+      env: {
+        region: "eu-west-1",
+      },
+      stack: "deploy",
+    };
+
+    const applicationStacks = [
+      new MyApplicationStack(app1, "MyApp-CODE", {
+        ...props,
+        stage: "CODE",
+      }),
+      new MyApplicationStack(app2, "MyApp-PROD", {
+        ...props,
+        stage: "PROD",
+      }),
+    ];
+
+    expect(() => {
+      RiffRaffYamlFile.fromStacks(applicationStacks, "tools:my-app");
+    }).toThrow("Unable to produce a working riff-raff.yaml file; provided stacks do not belong to the same CDK App");
   });
 });

@@ -30,7 +30,7 @@ import { RiffRaffYamlFile } from "../riff-raff-yaml-file";
  */
 export class GuRoot extends App {
   override synth(options?: StageSynthesisOptions): CloudAssembly {
-    new RiffRaffYamlFile(this).synth();
+    RiffRaffYamlFile.fromApp(this).synth();
     return super.synth(options);
   }
 }
