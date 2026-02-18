@@ -1,0 +1,479 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The GuJanusAssumablePolicy construct adds all Janus tags to all policies when all properties are provided 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuAllowPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625ArtifactHash8BDE14D3": {
+      "Description": "Artifact hash for asset "bc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625"",
+      "Type": "String",
+    },
+    "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3Bucket0A7F1CF4": {
+      "Description": "S3 bucket for asset "bc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625"",
+      "Type": "String",
+    },
+    "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3VersionKey4A0917CC": {
+      "Description": "S3 key for asset version "bc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625"",
+      "Type": "String",
+    },
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3Bucket0A7F1CF4",
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3VersionKey4A0917CC",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3VersionKey4A0917CC",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs22.x",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "GuAllowPolicyAssumable9337A36C": {
+      "Properties": {
+        "Description": "",
+        "Path": "/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "S3:*",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "GuAllowPolicyTagManagedPolicy8F7BE09F": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "GuAllowPolicyTagManagedPolicyCustomResourcePolicyE3AF4587",
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{"service":"IAM","action":"tagPolicy","parameters":{"PolicyArn":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "","Tags":[{"Key":"gu:janus:permission","Value":"testing-janus-permission"},{"Key":"gu:janus:discoverable","Value":"true"},{"Key":"gu:janus:name","Value":"Testing Janus permission"},{"Key":"gu:janus:description","Value":"Some text describing janus permission testing"}]},"physicalResourceId":{"id":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "-tags"}}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{"service":"IAM","action":"tagPolicy","parameters":{"PolicyArn":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "","Tags":[{"Key":"gu:janus:permission","Value":"testing-janus-permission"},{"Key":"gu:janus:discoverable","Value":"true"},{"Key":"gu:janus:name","Value":"Testing Janus permission"},{"Key":"gu:janus:description","Value":"Some text describing janus permission testing"}]},"physicalResourceId":{"id":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "-tags"}}",
+            ],
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "GuAllowPolicyTagManagedPolicyCustomResourcePolicyE3AF4587": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "iam:TagPolicy",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuAllowPolicyTagManagedPolicyCustomResourcePolicyE3AF4587",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
+
+exports[`The GuJanusAssumablePolicy construct creates role with mandatory Janus tags when only mandatory properties are provided 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuAllowPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625ArtifactHash8BDE14D3": {
+      "Description": "Artifact hash for asset "bc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625"",
+      "Type": "String",
+    },
+    "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3Bucket0A7F1CF4": {
+      "Description": "S3 bucket for asset "bc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625"",
+      "Type": "String",
+    },
+    "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3VersionKey4A0917CC": {
+      "Description": "S3 key for asset version "bc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625"",
+      "Type": "String",
+    },
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3Bucket0A7F1CF4",
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3VersionKey4A0917CC",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersbc8ef58951f4c88e641dd23090e9d2e2e61c7530a07960e767522941e959b625S3VersionKey4A0917CC",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs22.x",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "GuAllowPolicyAssumable9337A36C": {
+      "Properties": {
+        "Description": "",
+        "Path": "/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "S3:*",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "GuAllowPolicyTagManagedPolicy8F7BE09F": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "GuAllowPolicyTagManagedPolicyCustomResourcePolicyE3AF4587",
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{"service":"IAM","action":"tagPolicy","parameters":{"PolicyArn":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "","Tags":[{"Key":"gu:janus:permission","Value":"testing-janus-permission"},{"Key":"gu:janus:discoverable","Value":"true"},{"Key":"gu:janus:name"},{"Key":"gu:janus:description"}]},"physicalResourceId":{"id":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "-tags"}}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{"service":"IAM","action":"tagPolicy","parameters":{"PolicyArn":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "","Tags":[{"Key":"gu:janus:permission","Value":"testing-janus-permission"},{"Key":"gu:janus:discoverable","Value":"true"},{"Key":"gu:janus:name"},{"Key":"gu:janus:description"}]},"physicalResourceId":{"id":"",
+              {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+              "-tags"}}",
+            ],
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "GuAllowPolicyTagManagedPolicyCustomResourcePolicyE3AF4587": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "iam:TagPolicy",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "GuAllowPolicyAssumable9337A36C",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuAllowPolicyTagManagedPolicyCustomResourcePolicyE3AF4587",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
