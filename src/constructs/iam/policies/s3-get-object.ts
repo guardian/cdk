@@ -12,6 +12,17 @@ export interface GuGetS3ObjectPolicyProps extends GuNoStatementsPolicyProps {
 }
 
 export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
+  static buildStatements(bucketName: string, paths?: string[]): PolicyStatement[] {
+    const resolvedPaths = paths ?? ["*"];
+    return [
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["s3:GetObject"],
+        resources: resolvedPaths.map((path) => `arn:aws:s3:::${bucketName}/${path}`),
+      }),
+    ];
+  }
+
   constructor(scope: GuStack, id: string, props: GuGetS3ObjectPolicyProps) {
     const paths: string[] = props.paths ?? ["*"];
     const s3Resources: string[] = paths.map((path) => `arn:aws:s3:::${props.bucketName}/${path}`);
@@ -71,6 +82,10 @@ export class GuGetDistributablePolicyStatement extends PolicyStatement {
 }
 
 export class GuGetPrivateConfigPolicy extends GuGetS3ObjectsPolicy {
+  static buildStatements(bucket: string, files?: string[]): PolicyStatement[] {
+    return GuGetS3ObjectsPolicy.buildStatements(bucket, files);
+  }
+
   constructor(scope: GuStack, id: string, props: GuPrivateS3ConfigurationProps) {
     super(scope, id, { bucketName: props.bucket.valueAsString, paths: props.files });
   }

@@ -1,3 +1,4 @@
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
 import { GuAnghammaradTopicParameter } from "../../core";
@@ -11,6 +12,17 @@ import { GuAllowPolicy } from "./base-policy";
  * @see https://github.com/guardian/anghammarad
  */
 export class GuAnghammaradSenderPolicy extends GuAllowPolicy {
+  static buildStatements(scope: GuStack): PolicyStatement[] {
+    const anghammaradTopicParameter = GuAnghammaradTopicParameter.getInstance(scope);
+    return [
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["sns:Publish"],
+        resources: [anghammaradTopicParameter.valueAsString],
+      }),
+    ];
+  }
+
   private static instance: GuAnghammaradSenderPolicy | undefined;
 
   private constructor(scope: GuStack) {

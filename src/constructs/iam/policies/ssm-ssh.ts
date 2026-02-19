@@ -1,3 +1,4 @@
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { isSingletonPresentInStack } from "../../../utils/singleton";
 import type { GuStack } from "../../core";
 import { GuAllowPolicy } from "./base-policy";
@@ -14,6 +15,31 @@ import { GuAllowPolicy } from "./base-policy";
  * @see https://github.com/guardian/ssm-scala
  */
 export class GuSsmSshPolicy extends GuAllowPolicy {
+  static buildStatements(): PolicyStatement[] {
+    return [
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: [
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply",
+          "ssm:UpdateInstanceInformation",
+          "ssm:ListInstanceAssociations",
+          "ssm:DescribeInstanceProperties",
+          "ssm:DescribeDocumentParameters",
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel",
+        ],
+        resources: ["*"],
+      }),
+    ];
+  }
+
   private static instance: GuSsmSshPolicy | undefined;
 
   private constructor(scope: GuStack) {
