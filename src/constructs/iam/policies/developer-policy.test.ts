@@ -9,10 +9,10 @@ describe("GuDeveloperPolicy", () => {
       allow: [
         {
           actions: ["s3:GetObject"],
-          resources: ["*"]
-        }
+          resources: ["*"],
+        },
       ],
-      permission: "test123"
+      permission: "test123",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
