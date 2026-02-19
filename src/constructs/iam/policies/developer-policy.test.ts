@@ -2,7 +2,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuDeveloperPolicy } from "./developer-policy";
 
-describe("GuManagedPolicy", () => {
+describe("GuDeveloperPolicy", () => {
   test("if a single action is provided, the resulting Managed Policy resource's action will be a single item", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicy(stack, "AllowS3GetObject", {
