@@ -3,7 +3,7 @@ import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuDeveloperPolicy } from "./developer-policy";
 
 describe("GuDeveloperPolicy", () => {
-  test("if a single action is provided, the resulting Managed Policy resource's action will be a single item", () => {
+  test("if a single action is provided, the resulting Developer Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       allow: {
