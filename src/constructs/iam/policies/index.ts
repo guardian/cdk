@@ -6,6 +6,7 @@ export * from "./describe-ec2";
 export * from "./dynamodb";
 export * from "./kcl";
 export * from "./log-shipping";
+export * from "./developer-policy";
 export * from "./parameter-store-read";
 export * from "./s3-get-object";
 export * from "./s3-put-object";
