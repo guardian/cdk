@@ -3,7 +3,7 @@ import { Effect, ManagedPolicy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../core";
 import type { GuAllowPolicyProps, GuDenyPolicyProps } from "./base-policy";
 
-export type GuDeveloperPolicyProps = Omit<ManagedPolicyProps, "statements"> & {
+export type GuDeveloperPolicyProps = Omit<ManagedPolicyProps, "users" | "roles" | "groups" | "statements" | "path"> & {
   allow: GuAllowPolicyProps[];
   deny?: GuDenyPolicyProps[];
   permission: string;
@@ -45,6 +45,7 @@ export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
     super(scope, id, {
       description: `${props.permission} developer policy`,
+      managedPolicyName: props.permission,
       ...props,
       path: `/developer-policy/${props.permission}/`,
     });
