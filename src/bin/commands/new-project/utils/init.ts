@@ -106,7 +106,6 @@ function createPackageJson(outputDirectory: string): void {
     version: "0.0.0",
     private: true,
     scripts: {
-      build: "tsc",
       test: "jest",
       "test-update": "jest -u",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
