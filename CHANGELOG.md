@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 62.3.4
+
+### Patch Changes
+
+- 7d08810: Remove unnecessary npm script from new project template
+
 ## 62.3.3
 
 ### Patch Changes
