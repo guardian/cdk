@@ -2,4 +2,5 @@
 "@guardian/cdk": minor
 ---
 
-Create "raw" managed policy using existing class props
+Add a class for safe instantiation of managed policies with a specific structure of path
+which enables them to be discoverable.

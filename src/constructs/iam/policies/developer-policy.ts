@@ -1,12 +1,23 @@
-import type { ManagedPolicyProps } from "aws-cdk-lib/aws-iam";
 import { Effect, ManagedPolicy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../core";
 import type { GuAllowPolicyProps, GuDenyPolicyProps } from "./base-policy";
 
-export type GuDeveloperPolicyProps = Omit<ManagedPolicyProps, "users" | "roles" | "groups" | "statements" | "path"> & {
+export type GuDeveloperPolicyProps = {
+  /**
+   * List of explicitly allowed permissions given by this policy.
+   */
   allow: GuAllowPolicyProps[];
+  /**
+   * List of explicitly denied permissions which can be used to fine tune this policy by pruning the allow permissions.
+   */
   deny?: GuDenyPolicyProps[];
+  /**
+   * The unique identifier of the policy, which will be displayed when creating credentials.
+   */
   permission: string;
+  /**
+   * An optional description of the policy which will be displayed if present.
+   */
   description?: string;
 };
 
@@ -45,7 +56,6 @@ export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
     super(scope, id, {
       description: `${props.permission} developer policy`,
-      managedPolicyName: props.permission,
       ...props,
       path: `/developer-policy/${props.permission}/`,
     });
