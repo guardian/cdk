@@ -1,8 +1,9 @@
+import { Annotations } from "aws-cdk-lib";
 import { Effect, ManagedPolicy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../core";
 import type { GuAllowPolicyProps, GuDenyPolicyProps } from "./base-policy";
 
-export type GuDeveloperPolicyProps = {
+export type GuWorkloadPolicyProps = {
   /**
    * List of explicitly allowed permissions given by this policy.
    */
@@ -52,14 +53,33 @@ export type GuDeveloperPolicyProps = {
  *       aws:cdk:path: janus-resources-for-testing-managed-policy-tagging/justin-testing/Resource* ```
  * ```
  */
-export class GuDeveloperPolicy extends ManagedPolicy {
-  constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
+export class GuWorkloadPolicy extends ManagedPolicy {
+  constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
     super(scope, id, {
       description: `${props.permission} developer policy`,
       ...props,
-      path: `/developer-policy/${props.permission}/`,
+      path: `/workload-policy/${props.permission}/`,
     });
+
+    let valid = true;
+
     for (const allowed of props.allow) {
+
+      // validity checks
+      const name = allowed.policyName ?? allowed.actions.join(",") + ' on ' + allowed.resources.join(",");
+      for (const resource of allowed.resources) {
+        if (resource === "*") {
+          Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
+          valid = false;
+        }
+      }
+      for (const action of allowed.actions) {
+        if (action === "*") {
+          const name = allowed.policyName ?? allowed.actions.join(",");
+          Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
+          valid = false;
+        }
+      }
       this.addStatements(
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -68,6 +88,11 @@ export class GuDeveloperPolicy extends ManagedPolicy {
         }),
       );
     }
+
+    if (!valid) {
+      throw new Error("Overly broad permission present, see annotations for details");
+    }
+
     const { deny = [] } = props;
     for (const denied of deny) {
       this.addStatements(
