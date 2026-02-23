@@ -3,13 +3,13 @@ import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuWorkloadPolicy } from "./workload-policy";
 
 describe("GuDeveloperPolicy", () => {
-  test("if a single action is provided, the resulting Developer Policy resource's statement will have a single item", () => {
+  test("if a single action is provided, the resulting Workload Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
     new GuWorkloadPolicy(stack, "AllowS3GetObject", {
       allow: [
         {
           actions: ["s3:GetObject"],
-          resources: ["*"],
+          resources: ["s3:///log-bucket"],
         },
       ],
       permission: "test123",
@@ -23,12 +23,28 @@ describe("GuDeveloperPolicy", () => {
           {
             Action: "s3:GetObject",
             Effect: "Allow",
-            Resource: "*",
+            Resource: "s3:///log-bucket",
           },
         ],
       },
     });
   });
+
+  test("throws an error if a wide-open permissions is requested", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuWorkloadPolicy(stack, "AllowS3GetObject", {
+        allow: [
+          {
+            actions: ["s3:GetObject"],
+            resources: ["*"],
+          },
+        ],
+        permission: "test123",
+      });
+    }).toThrow("Overly broad permission present, see annotations for details");
+  });
+
   test("if multiple actions are provided, the resulting Managed Policy resource's action will container all items", () => {
     const stack = simpleGuStackForTesting();
     new GuWorkloadPolicy(stack, "AllowS3GetObject", {
