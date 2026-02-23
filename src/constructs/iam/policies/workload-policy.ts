@@ -64,9 +64,8 @@ export class GuWorkloadPolicy extends ManagedPolicy {
     let valid = true;
 
     for (const allowed of props.allow) {
-
       // validity checks
-      const name = allowed.policyName ?? allowed.actions.join(",") + ' on ' + allowed.resources.join(",");
+      const name = allowed.policyName ?? allowed.actions.join(",") + " on " + allowed.resources.join(",");
       for (const resource of allowed.resources) {
         if (resource === "*") {
           Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
