@@ -181,7 +181,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     expect(() => {
       new RiffRaffYamlFile(app);
-    }).toThrowError("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
+    }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
   });
 
   it("Should throw if there is an unresolved region", () => {
@@ -191,7 +191,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     expect(() => {
       new RiffRaffYamlFile(app);
-    }).toThrowError("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
+    }).toThrow("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
   });
 
   it("Should add a cloud-formation deployment", () => {

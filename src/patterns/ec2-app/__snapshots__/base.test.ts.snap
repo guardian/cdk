@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specific CIDR ranges 1`] = `
 {
