@@ -1,5 +1,13 @@
 # @guardian/cdk
 
+## 62.3.5
+
+### Patch Changes
+
+- abf37bc: Update aws-cdk to ^2.1107.0, aws-cdk-lib to ^2.240.0, constructs to ^10.5.1
+- f0c4165: Update dependencies to resolve security vulnerability CVE-2026-26996.
+- 4baf9ed: Update dependencies to resolve security vulnerability CVE-2026-26278.
+
 ## 62.3.4
 
 ### Patch Changes
