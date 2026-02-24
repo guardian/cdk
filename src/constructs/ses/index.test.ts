@@ -25,7 +25,7 @@ describe("The GuEmailIdentity construct", () => {
           domainName: validDomain,
           app: `test-${index}`,
         });
-      }).not.toThrowError();
+      }).not.toThrow();
     });
 
     expect(() => {
@@ -33,9 +33,7 @@ describe("The GuEmailIdentity construct", () => {
         domainName: "my-service.theguardian.com",
         app: "test",
       });
-    }).toThrowError(
-      "Auto verification is only supported for certain domains. my-service.theguardian.com is not supported.",
-    );
+    }).toThrow("Auto verification is only supported for certain domains. my-service.theguardian.com is not supported.");
   });
 
   it("should create DKIM CNAME records as required to verify the EmailIdentity", () => {

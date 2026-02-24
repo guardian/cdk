@@ -28,7 +28,7 @@ describe("The GuAppAwareConstruct mixin", () => {
 
     expect(() => {
       new TestConstruct(stack, "MyBucket", {});
-    }).toThrowError("Cannot use the GuAppAwareConstruct mixin without an AppIdentity");
+    }).toThrow("Cannot use the GuAppAwareConstruct mixin without an AppIdentity");
   });
 
   it("should suffix the id with the app identifier", () => {

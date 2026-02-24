@@ -35,7 +35,7 @@ describe("The GuDnsRecordSet construct", () => {
         resourceRecords: ["apple.example.com", "banana.example.com"],
         ttl: Duration.hours(1),
       });
-    }).toThrowError(
+    }).toThrow(
       "According to RFC, a CNAME record should not return multiple answers. Doing so may cause problems during resolution.",
     );
   });

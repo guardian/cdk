@@ -9,7 +9,7 @@ describe("AppAccess.validate", () => {
         scope: AccessScope.RESTRICTED,
         cidrRanges: [Peer.ipv4("1.2.3.4/21"), Peer.ipv4("10.0.0.0/0")],
       });
-    }).not.toThrowError();
+    }).not.toThrow();
   });
 
   it("should not allow RestrictedAccess to grant global access", () => {
@@ -18,7 +18,7 @@ describe("AppAccess.validate", () => {
         scope: AccessScope.RESTRICTED,
         cidrRanges: [Peer.ipv4("1.2.3.4/21"), Peer.anyIpv4()],
       });
-    }).toThrowError(
+    }).toThrow(
       `Restricted apps cannot be globally accessible. Adjust CIDR ranges (1.2.3.4/21, 0.0.0.0/0) or use Public.`,
     );
   });
@@ -29,7 +29,7 @@ describe("AppAccess.validate", () => {
         scope: AccessScope.INTERNAL,
         cidrRanges: [Peer.ipv4("10.0.0.0/0")],
       });
-    }).not.toThrowError();
+    }).not.toThrow();
   });
 
   it("should not allow InternalAccess to grant external access", () => {
@@ -38,7 +38,7 @@ describe("AppAccess.validate", () => {
         scope: AccessScope.INTERNAL,
         cidrRanges: [Peer.ipv4("10.0.0.0/0"), Peer.ipv4("1.2.3.4/21")],
       });
-    }).toThrowError(
+    }).toThrow(
       `Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (10.0.0.0/0, 1.2.3.4/21) or use Restricted.`,
     );
   });

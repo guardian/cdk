@@ -353,7 +353,7 @@ describe("the GuEC2App pattern", function () {
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
         }),
-    ).toThrowError(
+    ).toThrow(
       "Restricted apps cannot be globally accessible. Adjust CIDR ranges (0.0.0.0/0, 1.2.3.4/32) or use Public.",
     );
   });
@@ -378,7 +378,7 @@ describe("the GuEC2App pattern", function () {
           instanceMetricGranularity: "5Minute",
           userData: UserData.forLinux(),
         }),
-    ).toThrowError(
+    ).toThrow(
       "Internal apps should only be accessible on 10. ranges. Adjust CIDR ranges (93.1.2.3/12) or use Restricted.",
     );
   });
@@ -851,7 +851,7 @@ UserData from accessed construct`);
           withoutLogShipping: true,
         },
       });
-    }).toThrowError(
+    }).toThrow(
       "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
         "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
     );
@@ -949,7 +949,7 @@ UserData from accessed construct`);
             allowedGroups: [],
           },
         }),
-    ).toThrowError("googleAuth.allowedGroups cannot be empty!");
+    ).toThrow("googleAuth.allowedGroups cannot be empty!");
   });
 
   it("throws when googleAuth.sessionTimeoutInMinutes is > 60", () => {
@@ -979,7 +979,7 @@ UserData from accessed construct`);
             sessionTimeoutInMinutes: 61,
           },
         }),
-    ).toThrowError("googleAuth.sessionTimeoutInMinutes must be <= 60!");
+    ).toThrow("googleAuth.sessionTimeoutInMinutes must be <= 60!");
   });
 
   it("throws when googleAuth.allowedGroups contains groups using non-standard domains", () => {
@@ -1009,7 +1009,7 @@ UserData from accessed construct`);
             allowedGroups: ["apple@guardian.co.uk", "engineering@theguardian.com"],
           },
         }),
-    ).toThrowError("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
+    ).toThrow("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
   });
 
   it("should provides a default healthcheck", function () {

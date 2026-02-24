@@ -265,7 +265,7 @@ describe("The GuEc2AppExperimental pattern", () => {
 
     expect(() => {
       cdkApp.synth();
-    }).toThrowError(
+    }).toThrow(
       "Failed to detect the autoscaling group relating to the scaling policy on path test/ScaleOut. Was it created in the scope of a GuAutoScalingGroup?",
     );
   });
@@ -464,14 +464,14 @@ describe("The GuEc2AppExperimental pattern", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(29) });
-    }).toThrowError("Slow start duration must be between 30 and 900 seconds");
+    }).toThrow("Slow start duration must be between 30 and 900 seconds");
   });
 
   it("should throw an error if the slow start value is too high", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(901) });
-    }).toThrowError("Slow start duration must be between 30 and 900 seconds");
+    }).toThrow("Slow start duration must be between 30 and 900 seconds");
   });
 });
 
