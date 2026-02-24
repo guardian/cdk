@@ -51,13 +51,13 @@
     "serve": "^14.2.5",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.28.16",
+    "typedoc": "^0.28.17",
     "typescript": "5.1.6"
   },
   "dependencies": {
-    "@aws-sdk/client-ec2": "^3.989.0",
-    "@aws-sdk/client-ssm": "^3.989.0",
-    "@aws-sdk/credential-providers": "^3.989.0",
+    "@aws-sdk/client-ec2": "^3.996.0",
+    "@aws-sdk/client-ssm": "^3.996.0",
+    "@aws-sdk/credential-providers": "^3.996.0",
     "@oclif/core": "3.26.6",
     "chalk": "^4.1.2",
     "codemaker": "^1.126.0",
