@@ -168,7 +168,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   console.log(tree);
 
   const docsUrl = "https://github.com/guardian/cdk/tree/main/docs";
-  ux.url(chalk.green(`Please see the docs (${docsUrl}) for next steps.`), docsUrl);
+  console.log(chalk.green(`Please see the docs (${docsUrl}) for next steps.`));
 
   return Promise.resolve(0);
 };
