@@ -1,7 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuDeveloperPolicy } from "./developer-policy";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 describe("GuDeveloperPolicy", () => {
   test("if a single action is provided, the resulting Workload Policy resource's statement will have a single item", () => {

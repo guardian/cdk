@@ -62,7 +62,6 @@ export type GuWorkloadPolicyProps = {
  */
 export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
-
     super(scope, id, {
       description: `${props.permission} developer policy`,
       ...props,
