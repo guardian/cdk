@@ -1,6 +1,7 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuDeveloperPolicy } from "./developer-policy";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 describe("GuDeveloperPolicy", () => {
   test("if a single action is provided, the resulting Workload Policy resource's statement will have a single item", () => {
@@ -30,7 +31,7 @@ describe("GuDeveloperPolicy", () => {
     });
   });
 
-  test("throws an error if a wide-open permissions is requested", () => {
+  test("throws an error if a wide-open policy is allowed", () => {
     const stack = simpleGuStackForTesting();
     expect(() => {
       new GuDeveloperPolicy(stack, "AllowS3GetObject", {
@@ -39,6 +40,22 @@ describe("GuDeveloperPolicy", () => {
             actions: ["s3:GetObject"],
             resources: ["*"],
           },
+        ],
+        permission: "test123",
+      });
+    }).toThrow("Overly broad permission present, see annotations for details");
+  });
+
+  test("throws an error if a wide-open statement is requested", () => {
+    const stack = simpleGuStackForTesting();
+    expect(() => {
+      new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+        statements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:GetObject"],
+            resources: ["*"],
+          }),
         ],
         permission: "test123",
       });

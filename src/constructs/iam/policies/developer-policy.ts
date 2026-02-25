@@ -7,7 +7,7 @@ export type GuWorkloadPolicyProps = {
   /**
    * List of explicitly allowed permissions given by this policy.
    */
-  readonly allow: GuAllowPolicyProps[];
+  readonly allow?: GuAllowPolicyProps[];
   /**
    * List of explicitly denied permissions which can be used to fine tune this policy by pruning the allow permissions.
    */
@@ -62,6 +62,7 @@ export type GuWorkloadPolicyProps = {
  */
 export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
+
     super(scope, id, {
       description: `${props.permission} developer policy`,
       ...props,
@@ -70,7 +71,28 @@ export class GuDeveloperPolicy extends ManagedPolicy {
 
     let valid = true;
 
-    for (const allowed of props.allow) {
+    const { statements = [] } = props;
+    for (const statement of statements) {
+      if (statement.effect === Effect.ALLOW) {
+        for (const action of statement.actions) {
+          if (action === "*") {
+            const name = statement.actions.join(",");
+            Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
+            valid = false;
+          }
+        }
+        for (const resource of statement.resources) {
+          if (resource === "*") {
+            const name = statement.actions.join(",");
+            Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
+            valid = false;
+          }
+        }
+      }
+    }
+
+    const { allow = [] } = props;
+    for (const allowed of allow) {
       // validity checks
       const name = allowed.policyName ?? allowed.actions.join(",") + " on " + allowed.resources.join(",");
       for (const resource of allowed.resources) {
