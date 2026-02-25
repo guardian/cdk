@@ -7,19 +7,26 @@ export type GuWorkloadPolicyProps = {
   /**
    * List of explicitly allowed permissions given by this policy.
    */
-  allow: GuAllowPolicyProps[];
+  readonly allow: GuAllowPolicyProps[];
   /**
    * List of explicitly denied permissions which can be used to fine tune this policy by pruning the allow permissions.
    */
-  deny?: GuDenyPolicyProps[];
+  readonly deny?: GuDenyPolicyProps[];
+  /**
+   * Initial set of permissions to add to this policy document.
+   * You can also use `addPermission(statement)` to add permissions later.
+   *
+   * @default - No statements.
+   */
+  readonly statements?: PolicyStatement[];
   /**
    * The unique identifier of the policy, which will be displayed when creating credentials.
    */
-  permission: string;
+  readonly permission: string;
   /**
    * An optional description of the policy which will be displayed if present.
    */
-  description?: string;
+  readonly description?: string;
 };
 
 /**
@@ -53,12 +60,12 @@ export type GuWorkloadPolicyProps = {
  *       aws:cdk:path: janus-resources-for-testing-managed-policy-tagging/justin-testing/Resource* ```
  * ```
  */
-export class GuWorkloadPolicy extends ManagedPolicy {
+export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
     super(scope, id, {
       description: `${props.permission} developer policy`,
       ...props,
-      path: `/workload-policy/${props.permission}/`,
+      path: `/developer-policy/${props.permission}/`,
     });
 
     let valid = true;

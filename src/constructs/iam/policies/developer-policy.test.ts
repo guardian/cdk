@@ -1,11 +1,11 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
-import { GuWorkloadPolicy } from "./workload-policy";
+import { GuDeveloperPolicy } from "./developer-policy";
 
 describe("GuDeveloperPolicy", () => {
   test("if a single action is provided, the resulting Workload Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
-    new GuWorkloadPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       allow: [
         {
           actions: ["s3:GetObject"],
@@ -16,7 +16,7 @@ describe("GuDeveloperPolicy", () => {
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
-      Path: "/workload-policy/test123/",
+      Path: "/developer-policy/test123/",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -33,7 +33,7 @@ describe("GuDeveloperPolicy", () => {
   test("throws an error if a wide-open permissions is requested", () => {
     const stack = simpleGuStackForTesting();
     expect(() => {
-      new GuWorkloadPolicy(stack, "AllowS3GetObject", {
+      new GuDeveloperPolicy(stack, "AllowS3GetObject", {
         allow: [
           {
             actions: ["s3:GetObject"],
@@ -47,7 +47,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("if multiple actions are provided, the resulting Managed Policy resource's action will container all items", () => {
     const stack = simpleGuStackForTesting();
-    new GuWorkloadPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       allow: [
         {
           actions: ["s3:GetObject"],
@@ -70,7 +70,7 @@ describe("GuDeveloperPolicy", () => {
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
       Description: "testtesttest",
-      Path: "/workload-policy/test321/",
+      Path: "/developer-policy/test321/",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
