@@ -1,12 +1,12 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { simpleGuStackForTesting } from "../../../utils/test";
-import { GuDeveloperPolicy } from "./developer-policy";
+import { simpleGuStackForTesting } from "../../../../utils/test";
+import { GuDeveloperPolicyExperimental } from "./developer-policy";
 
-describe("GuDeveloperPolicy", () => {
+describe("GuDeveloperPolicyExperimental", () => {
   test("if a single action is provided, the resulting Workload Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       allow: [
         {
           actions: ["s3:GetObject"],
@@ -34,7 +34,7 @@ describe("GuDeveloperPolicy", () => {
   test("throws an error if a wide-open policy is allowed", () => {
     const stack = simpleGuStackForTesting();
     expect(() => {
-      new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+      new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
         allow: [
           {
             actions: ["s3:GetObject"],
@@ -49,7 +49,7 @@ describe("GuDeveloperPolicy", () => {
   test("throws an error if a wide-open statement is requested", () => {
     const stack = simpleGuStackForTesting();
     expect(() => {
-      new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+      new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
         statements: [
           new PolicyStatement({
             effect: Effect.ALLOW,
@@ -64,7 +64,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("if multiple actions are provided, the resulting Managed Policy resource's action will container all items", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       allow: [
         {
           actions: ["s3:GetObject"],

@@ -1,7 +1,7 @@
 import { Annotations } from "aws-cdk-lib";
 import { Effect, ManagedPolicy, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import type { GuStack } from "../../core";
-import type { GuAllowPolicyProps, GuDenyPolicyProps } from "./base-policy";
+import type { GuStack } from "../../../../constructs/core";
+import type { GuAllowPolicyProps, GuDenyPolicyProps } from "../../../../constructs/iam";
 
 export type GuWorkloadPolicyProps = {
   /**
@@ -59,8 +59,10 @@ export type GuWorkloadPolicyProps = {
  *     Metadata:
  *       aws:cdk:path: janus-resources-for-testing-managed-policy-tagging/justin-testing/Resource* ```
  * ```
+ *
+ * @experimental
  */
-export class GuDeveloperPolicy extends ManagedPolicy {
+export class GuDeveloperPolicyExperimental extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
     super(scope, id, {
       description: `${props.permission} developer policy`,
