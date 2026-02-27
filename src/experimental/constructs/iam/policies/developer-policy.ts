@@ -70,45 +70,47 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
       path: `/developer-policy/${props.permission}/`,
     });
 
-    let valid = true;
+    const { statements = [], allow = [] } = props;
 
-    const { statements = [] } = props;
-    for (const statement of statements) {
-      if (statement.effect === Effect.ALLOW) {
-        for (const action of statement.actions) {
-          if (action === "*") {
-            const name = statement.actions.join(",");
-            Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
-            valid = false;
-          }
-        }
-        for (const resource of statement.resources) {
-          if (resource === "*") {
-            const name = statement.actions.join(",");
-            Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
-            valid = false;
-          }
-        }
-      }
+    const statementsAllowed = statements.filter((statement) => statement.effect === Effect.ALLOW);
+    const statementsStarActions = statementsAllowed.filter((statement) => statement.actions.includes("*"));
+    const statementsStarResources = statementsAllowed.filter((statement) => statement.resources.includes("*"));
+
+    statementsStarActions.forEach((statement) => {
+      const name = statement.actions.join(",");
+      Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
+    });
+
+    statementsStarResources.forEach((statement) => {
+      const name = statement.actions.join(",");
+      Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
+    });
+
+    const allowStarActions = allow.filter((allowed) => allowed.actions.includes("*"));
+    const allowStarResources = allow.filter((allowed) => allowed.resources.includes("*"));
+
+    allowStarActions.forEach((statement) => {
+      const name = statement.policyName ?? statement.actions.join(",") + " on " + statement.resources.join(",");
+      Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
+    });
+
+    allowStarResources.forEach((statement) => {
+      const name = statement.policyName ?? statement.actions.join(",");
+      Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
+    });
+
+    const allStar = [
+      ...statementsStarActions,
+      ...statementsStarResources,
+      ...allowStarResources,
+      ...allowStarResources,
+    ];
+
+    if (allStar.length > 0) {
+      throw new Error("Overly broad permission present, see annotations for details");
     }
 
-    const { allow = [] } = props;
     for (const allowed of allow) {
-      // validity checks
-      const name = allowed.policyName ?? allowed.actions.join(",") + " on " + allowed.resources.join(",");
-      for (const resource of allowed.resources) {
-        if (resource === "*") {
-          Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
-          valid = false;
-        }
-      }
-      for (const action of allowed.actions) {
-        if (action === "*") {
-          const name = allowed.policyName ?? allowed.actions.join(",");
-          Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
-          valid = false;
-        }
-      }
       this.addStatements(
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -116,10 +118,6 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
           actions: allowed.actions,
         }),
       );
-    }
-
-    if (!valid) {
-      throw new Error("Overly broad permission present, see annotations for details");
     }
 
     const { deny = [] } = props;
