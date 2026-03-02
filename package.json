@@ -58,7 +58,7 @@
     "@aws-sdk/client-ec2": "^3.996.0",
     "@aws-sdk/client-ssm": "^3.996.0",
     "@aws-sdk/credential-providers": "^3.996.0",
-    "@oclif/core": "4.8.1",
+    "@oclif/core": "4.8.2",
     "chalk": "^4.1.2",
     "codemaker": "^1.126.0",
     "git-url-parse": "^16.0.1",
