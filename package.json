@@ -27,7 +27,7 @@
     "prepack": "cp -r src/bin/commands/new-project/template lib/bin/commands/new-project/template",
     "release": "npx changeset",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
-    "serve:docs": "rm -rf target && typedoc && serve target",
+    "serve:docs": "rm -rf target && typedoc && open target/index.html",
     "cli:dev": "ts-node src/bin/index.ts"
   },
   "devDependencies": {
@@ -48,7 +48,6 @@
     "gh-pages": "^6.3.0",
     "jest": "30.2.0",
     "prettier": "^3.8.1",
-    "serve": "^14.2.5",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.17",
