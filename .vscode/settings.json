@@ -1,9 +1,12 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "files.watcherExclude": {
     "**/target": true
+  },
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "/Users/jorge_azevedo/.local/share/mise/shims/node"
   }
 }

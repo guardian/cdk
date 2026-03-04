@@ -86,6 +86,33 @@ describe("The GuScheduledLambda pattern", () => {
     });
   });
 
+  it("should produce stable resource IDs when using a cron schedule", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_20_X,
+      rules: [{ schedule: Schedule.expression("cron(* * * * ? *)") }],
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuScheduledLambda(stack, "my-lambda-function", props);
+    const template = Template.fromStack(stack);
+    const resources = template.toJSON().Resources as Record<string, { Type: string }>;
+    const ruleIds = Object.keys(resources).filter((id) => {
+      return resources[id]?.Type === "AWS::Events::Rule";
+    });
+
+    // Resource IDs must not contain characters from cron expressions such as ( ) * ?
+    for (const id of ruleIds) {
+      expect(id).not.toMatch(/[^a-zA-Z0-9]/);
+    }
+
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
   it("should create the correct resources with an input in the rule", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
