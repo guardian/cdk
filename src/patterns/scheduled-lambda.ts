@@ -52,7 +52,14 @@ export class GuScheduledLambda extends GuLambdaFunction {
       // If we have an alias, use this to ensure that all invocations are handled by a published Lambda version.
       // Otherwise, use the latest unpublished version ($LATEST)
       const resourceToInvoke = this.alias ?? this;
-      new Rule(this, `${id}-${rule.schedule.expressionString}-${index}`, {
+
+      // Sanitize the expression string for use in a construct ID.
+      // Schedule expressions like `cron(* * * * ? *)` contain characters
+      // that are invalid in CloudFormation logical IDs and lead to
+      // unstable resource identifiers across deployments.
+      const sanitisedExpression = rule.schedule.expressionString.replace(/[^a-zA-Z0-9-]/g, "");
+
+      new Rule(this, `${id}-${sanitisedExpression}-${index}`, {
         schedule: rule.schedule,
         targets: [new LambdaFunction(resourceToInvoke, { event: rule.input })],
         ...(rule.description && { description: rule.description }),
