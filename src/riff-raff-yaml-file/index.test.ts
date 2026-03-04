@@ -1525,4 +1525,113 @@ describe("The RiffRaffYamlFile class", () => {
       "
     `);
   });
+
+  it("Should include minInstancesInServiceParameters when GuEc2AppExperimental has a scaling policy (multiple stacks)", () => {
+    const app = new App({ outdir: "/tmp/cdk.out" });
+
+    class MyApplicationStack extends GuStack {
+      public readonly asg: GuAutoScalingGroup;
+
+      // eslint-disable-next-line custom-rules/valid-constructors -- unit testing
+      constructor(app: App, id: string, props: GuStackProps) {
+        super(app, id, props);
+
+        const appName = "my-app";
+
+        const { autoScalingGroup } = new GuEc2AppExperimental(this, {
+          app: appName,
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+          access: { scope: AccessScope.PUBLIC },
+          userData: {
+            distributable: {
+              fileName: `${appName}.deb`,
+              executionStatement: `dpkg -i /${appName}/${appName}.deb`,
+            },
+          },
+          certificateProps: {
+            domainName: "rip.gu.com",
+          },
+          monitoringConfiguration: { noMonitoring: true },
+          instanceMetricGranularity: "5Minute",
+          scaling: {
+            minimumInstances: 1,
+          },
+          applicationPort: 9000,
+          imageRecipe: "arm64-bionic-java11-deploy-infrastructure",
+          buildIdentifier: "TEST",
+        });
+
+        new CfnScalingPolicy(autoScalingGroup, "ScaleOut", {
+          autoScalingGroupName: autoScalingGroup.autoScalingGroupName,
+          policyType: "SimpleScaling",
+          adjustmentType: "ChangeInCapacity",
+          scalingAdjustment: 1,
+        });
+
+        this.asg = autoScalingGroup;
+      }
+    }
+
+    new MyApplicationStack(app, "my-stack-CODE", {
+      stack: "test",
+      stage: "CODE",
+      env: { region: "eu-west-1" },
+    });
+
+    new MyApplicationStack(app, "my-stack-PROD", {
+      stack: "test",
+      stage: "PROD",
+      env: { region: "eu-west-1" },
+    });
+
+    // Ensure the Aspects are invoked...
+    app.synth();
+
+    // ...so that the CFN Parameters are added to the template, to then be processed by the `RiffRaffYamlFile`
+    const actual = new RiffRaffYamlFile(app).toYAML();
+
+    expect(actual).toMatchInlineSnapshot(`
+      "allowedStages:
+        - CODE
+        - PROD
+      deployments:
+        asg-upload-eu-west-1-test-my-app:
+          type: autoscaling
+          actions:
+            - uploadArtifacts
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-app
+          parameters:
+            bucketSsmLookup: true
+            prefixApp: true
+          contentDirectory: my-app
+        cfn-eu-west-1-test-my-application-stack:
+          type: cloud-formation
+          regions:
+            - eu-west-1
+          stacks:
+            - test
+          app: my-application-stack
+          contentDirectory: /tmp/cdk.out
+          parameters:
+            templateStagePaths:
+              CODE: my-stack-CODE.template.json
+              PROD: my-stack-PROD.template.json
+            amiParametersToTags:
+              AMIMyapp:
+                BuiltBy: amigo
+                AmigoStage: PROD
+                Recipe: arm64-bionic-java11-deploy-infrastructure
+                Encrypted: 'true'
+            minInstancesInServiceParameters:
+              MinInstancesInServiceFormyapp:
+                App: my-app
+          dependencies:
+            - asg-upload-eu-west-1-test-my-app
+      "
+    `);
+  });
 });
