@@ -86,6 +86,22 @@ describe("The GuScheduledLambda pattern", () => {
     });
   });
 
+  it("should create the correct resources with a cron schedule", () => {
+    const stack = simpleGuStackForTesting();
+    const noMonitoring: NoMonitoring = { noMonitoring: true };
+    const props = {
+      fileName: "lambda.zip",
+      functionName: "my-lambda-function",
+      handler: "my-lambda/handler",
+      runtime: Runtime.NODEJS_12_X,
+      rules: [{ schedule: Schedule.expression("cron(0 8 ? * MON-FRI *)") }],
+      monitoringConfiguration: noMonitoring,
+      app: "testing",
+    };
+    new GuScheduledLambda(stack, "my-lambda-function", props);
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
   it("should create the correct resources with an input in the rule", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
