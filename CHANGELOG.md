@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 62.5.2
+
+### Patch Changes
+
+- b2f227f: Updating `@aws-sdk/*` dependencies.
+
 ## 62.5.1
 
 ### Patch Changes
