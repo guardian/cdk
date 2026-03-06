@@ -1,6 +1,6 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Annotations, Aspects } from "aws-cdk-lib";
-import { CfnManagedPolicy, Effect, ManagedPolicy, PolicyDocument, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { CfnManagedPolicy, Effect, ManagedPolicy, type PolicyDocument, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import type { GuStack } from "../../../../constructs/core";
 import type { GuAllowPolicyProps, GuDenyPolicyProps } from "../../../../constructs/iam";
@@ -130,20 +130,24 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
         return;
       }
       if (!("Statement" in policyDocumentJson)) {
-        return
+        return;
       }
-      if (!Array.isArray(policyDocumentJson.Statement) || policyDocumentJson.Statement.length==0) {
-        return
+      if (!Array.isArray(policyDocumentJson.Statement) || policyDocumentJson.Statement.length == 0) {
+        return;
       }
 
       // For the following conditions, though, we want to make stronger assertions: present and not too broad
       for (const statement of policyDocumentJson.Statement) {
         if (!("Action" in statement)) {
           Annotations.of(node).addError("Statement is missing an Action");
-        } else if (typeof statement.Action === 'string' && statement.Action === '*' ) {
-          Annotations.of(node).addError("Statement Action is too broad");
-        } else if (Array.isArray(statement.Action) && statement.Action.includes('*')) {
-          Annotations.of(node).addError("Statement Action is too broad");
+        } else {
+          const action = (statement as { Action: unknown }).Action;
+
+          if (typeof action === "string" && action === "*") {
+            Annotations.of(node).addError("Statement Action is too broad");
+          } else if (Array.isArray(action) && action.includes("*")) {
+            Annotations.of(node).addError("Statement Action is too broad");
+          }
         }
 
         if (!("Effect" in statement)) {
@@ -152,10 +156,14 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
 
         if (!("Resource" in statement)) {
           Annotations.of(node).addError("Statement is missing an Resource");
-        } else if (typeof statement.Resource === "string" && statement.Resource === "*") {
-          Annotations.of(node).addError("Statement Resource is too broad");
-        } else if (Array.isArray(statement.Resource) && statement.Resource.includes("*")) {
-          Annotations.of(node).addError("Statement Resource is too broad");
+        } else {
+          const resource = (statement as { Resource: unknown }).Resource;
+
+          if (typeof resource === "string" && resource === "*") {
+            Annotations.of(node).addError("Statement Resource is too broad");
+          } else if (Array.isArray(resource) && resource.includes("*")) {
+            Annotations.of(node).addError("Statement Resource is too broad");
+          }
         }
       }
     }

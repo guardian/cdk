@@ -1,5 +1,4 @@
-import { Template } from "aws-cdk-lib/assertions";
-import { Annotations } from "aws-cdk-lib/assertions";
+import { Annotations, Template } from "aws-cdk-lib/assertions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { simpleGuStackForTesting } from "../../../../utils/test";
 import { GuDeveloperPolicyExperimental } from "./developer-policy";
@@ -107,26 +106,26 @@ describe("GuDeveloperPolicyExperimental", () => {
   test("throws an error if empty allow is provided", () => {
     const stack = simpleGuStackForTesting();
     expect(() => {
-        new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
-          allow: [],
-          permission: "test123",
-        });
+      new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+        allow: [],
+        permission: "test123",
+      });
     }).toThrow("Empty allow array passed to GuDeveloperPolicyExperimental");
   });
 
   test("throws an error if empty deny is provided", () => {
     const stack = simpleGuStackForTesting();
     expect(() => {
-        new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
-          allow: [
-            {
-              actions: ["s3:GetObject"],
-              resources: ["s3:///log-bucket"],
-            },
-          ],
-          deny: [],
-          permission: "test123",
-        });
+      new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+        allow: [
+          {
+            actions: ["s3:GetObject"],
+            resources: ["s3:///log-bucket"],
+          },
+        ],
+        deny: [],
+        permission: "test123",
+      });
     }).toThrow("Empty deny array passed to GuDeveloperPolicyExperimental");
   });
 
