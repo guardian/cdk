@@ -1,5 +1,44 @@
 # @guardian/cdk
 
+## 62.5.2
+
+### Patch Changes
+
+- b2f227f: Updating `@aws-sdk/*` dependencies.
+
+## 62.5.1
+
+### Patch Changes
+
+- 6c73caa: Update aws-cdk to ^2.1108.0, aws-cdk-lib to ^2.241.0, constructs to ^10.5.1
+
+## 62.5.0
+
+### Minor Changes
+
+- 6a41012: Remove dependency `@oclif/core`.
+
+  We were using `@oclif/core` to create a spinner with the new project CLI. See https://github.com/oclif/core/tree/main/src/ux#action.
+  We currently have some open vulnerabilities with `minimatch`, which `@oclif/core` adds transitively.
+  This change removes `@oclif/core` in favour of `console.log` statements.
+
+## 62.4.0
+
+### Minor Changes
+
+- 62c6674: Add a class for safe instantiation of managed policies with a specific structure of path
+  which enables them to be discoverable.
+
+  This enables teams to define sets of permissions which are re-usable and can be used to
+  create credentials suitable to approach a given workload, consistent with the Principle
+  of Least Privilege. This is preferred to existing workflows where a wide-ranging
+  developer role is used.
+
+  These can be reused in multiple locations, so, for example, an EC2 instance can be given
+  a specific set of permissions which are also identically available for a support task.
+  Changing one would then change the other, ensuring encapsulation of requirements in a
+  single place.
+
 ## 62.3.5
 
 ### Patch Changes

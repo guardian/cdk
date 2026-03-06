@@ -1,6 +1,5 @@
 import { existsSync } from "fs";
 import { basename, dirname, join } from "path";
-import { ux } from "@oclif/core";
 import chalk from "chalk";
 import type { CliCommandResponse } from "../../../types/cli";
 import { execute } from "../../../utils/exec";
@@ -139,9 +138,9 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   const commands = getCommands(config.packageManager, config.cdkDir);
 
   if (config.init) {
-    ux.action.start(chalk.yellow("Installing dependencies. This may take a while..."));
+    console.log(chalk.yellow("Installing dependencies. This may take a while..."));
     await commands.installDependencies();
-    ux.action.stop();
+    console.log(chalk.green("  ✅ Successfully installed dependencies"));
   }
 
   // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter
@@ -149,17 +148,17 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     cwd: config.cdkDir,
   });
 
-  ux.action.start(chalk.yellow("Running lint check..."));
+  console.log(chalk.yellow("Running lint check..."));
   await commands.lint();
-  ux.action.stop();
+  console.log(chalk.green("  ✅ Successfully passed lint check"));
 
-  ux.action.start(chalk.yellow("Running tests..."));
+  console.log(chalk.yellow("Running tests..."));
   await commands.test();
-  ux.action.stop();
+  console.log(chalk.green("  ✅ Successfully passed tests"));
 
-  ux.action.start(chalk.yellow("Running initial synthesis..."));
+  console.log(chalk.yellow("Running initial synthesis..."));
   await commands.synth();
-  ux.action.stop();
+  console.log(chalk.green("  ✅ Successfully synthesized CDK app"));
 
   console.log(chalk.green("Success! Here's a summary of the created files:"));
   const tree = await execute("tree", ["-I 'node_modules|cdk.out'"], {
