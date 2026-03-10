@@ -136,33 +136,31 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
         return;
       }
 
-      // For the following conditions, though, we want to make stronger assertions: present and not too broad
+      // For the following conditions, we want to make a strong assertions: you cannot "Allow" with wildcards.
       for (const statement of policyDocumentJson.Statement) {
-        if (!("Action" in statement)) {
-          Annotations.of(node).addError("Statement is missing an Action");
-        } else {
-          const action = (statement as { Action: unknown }).Action;
+        if (!("Effect" in statement) || (statement as { Effect: unknown }).Effect === Effect.ALLOW) {
+          if (!("Action" in statement)) {
+            Annotations.of(node).addError("Statement is missing an Action");
+          } else {
+            const action = (statement as { Action: unknown }).Action;
 
-          if (typeof action === "string" && action === "*") {
-            Annotations.of(node).addError("Statement Action is too broad");
-          } else if (Array.isArray(action) && action.includes("*")) {
-            Annotations.of(node).addError("Statement Action is too broad");
+            if (typeof action === "string" && action === "*") {
+              Annotations.of(node).addError("Statement Action is too broad");
+            } else if (Array.isArray(action) && action.includes("*")) {
+              Annotations.of(node).addError("Statement Action is too broad");
+            }
           }
-        }
 
-        if (!("Effect" in statement)) {
-          Annotations.of(node).addError("Statement is missing an Effect");
-        }
+          if (!("Resource" in statement)) {
+            Annotations.of(node).addError("Statement is missing an Resource");
+          } else {
+            const resource = (statement as { Resource: unknown }).Resource;
 
-        if (!("Resource" in statement)) {
-          Annotations.of(node).addError("Statement is missing an Resource");
-        } else {
-          const resource = (statement as { Resource: unknown }).Resource;
-
-          if (typeof resource === "string" && resource === "*") {
-            Annotations.of(node).addError("Statement Resource is too broad");
-          } else if (Array.isArray(resource) && resource.includes("*")) {
-            Annotations.of(node).addError("Statement Resource is too broad");
+            if (typeof resource === "string" && resource === "*") {
+              Annotations.of(node).addError("Statement Resource is too broad");
+            } else if (Array.isArray(resource) && resource.includes("*")) {
+              Annotations.of(node).addError("Statement Resource is too broad");
+            }
           }
         }
       }

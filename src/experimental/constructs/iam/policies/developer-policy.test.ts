@@ -10,7 +10,7 @@ describe("GuDeveloperPolicyExperimental", () => {
       allow: [
         {
           actions: ["s3:GetObject"],
-          resources: ["s3:///log-bucket"],
+          resources: ["s3:/log-bucket"],
         },
       ],
       permission: "test123",
@@ -24,7 +24,7 @@ describe("GuDeveloperPolicyExperimental", () => {
           {
             Action: "s3:GetObject",
             Effect: "Allow",
-            Resource: "s3:///log-bucket",
+            Resource: "s3:/log-bucket",
           },
         ],
       },
@@ -38,7 +38,7 @@ describe("GuDeveloperPolicyExperimental", () => {
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
           Effect: "Allow",
-          Resource: "s3:///log-bucket",
+          Resource: "s3:/log-bucket",
         }),
       ],
       permission: "test123",
@@ -52,7 +52,7 @@ describe("GuDeveloperPolicyExperimental", () => {
           {
             Action: "s3:GetObject",
             Effect: "Allow",
-            Resource: "s3:///log-bucket",
+            Resource: "s3:/log-bucket",
           },
         ],
       },
@@ -79,7 +79,7 @@ describe("GuDeveloperPolicyExperimental", () => {
       allow: [
         {
           actions: ["*"],
-          resources: ["s3://*"],
+          resources: ["s3:*"],
         },
       ],
       permission: "test123",
@@ -102,6 +102,35 @@ describe("GuDeveloperPolicyExperimental", () => {
     Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad");
   });
 
+  test("adds an error if a wide-open policy statement with no effect is present", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["*"],
+          Resource: "s3:*",
+        }),
+      ],
+      permission: "test123",
+    });
+    Annotations.fromStack(stack).hasError("*", "Statement Action is too broad");
+  });
+
+  test("does not add an error if a wide-open policy statement with a Deny effect is present", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Effect: "Deny",
+          Action: ["*"],
+          Resource: "s3:*",
+        }),
+      ],
+      permission: "test123",
+    });
+    Annotations.fromStack(stack).hasNoError("*", "Statement Action is too broad");
+  });
+
   test("adds an error if a wide-open action/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
@@ -109,7 +138,7 @@ describe("GuDeveloperPolicyExperimental", () => {
         PolicyStatement.fromJson({
           Effect: "Allow",
           Action: ["*"],
-          Resource: "s3://*",
+          Resource: "s3:*",
         }),
       ],
       permission: "test123",
@@ -139,7 +168,7 @@ describe("GuDeveloperPolicyExperimental", () => {
         new PolicyStatement({
           effect: Effect.ALLOW,
           actions: ["*"],
-          resources: ["s3://*"],
+          resources: ["s3:*"],
         }),
       ],
       permission: "test123",
@@ -164,7 +193,7 @@ describe("GuDeveloperPolicyExperimental", () => {
         allow: [
           {
             actions: ["s3:GetObject"],
-            resources: ["s3:///log-bucket"],
+            resources: ["s3:/log-bucket"],
           },
         ],
         deny: [],
@@ -180,7 +209,7 @@ describe("GuDeveloperPolicyExperimental", () => {
         deny: [
           {
             actions: ["s3:GetObject"],
-            resources: ["s3:///log-bucket"],
+            resources: ["s3:/log-bucket"],
           },
         ],
         permission: "test123",
