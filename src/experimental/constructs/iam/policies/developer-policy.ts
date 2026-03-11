@@ -144,10 +144,11 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
           } else {
             const action = (statement as { Action: unknown }).Action;
 
-            if (typeof action === "string" && action === "*") {
-              Annotations.of(node).addError("Statement Action is too broad");
-            } else if (Array.isArray(action) && action.includes("*")) {
-              Annotations.of(node).addError("Statement Action is too broad");
+            if (typeof action === "string") {
+              this.checkAction(action, node);
+            } else if (Array.isArray(action)) {
+              const actionArray = action as string[];
+              actionArray.forEach((action) => this.checkAction(action, node));
             }
           }
 
@@ -156,14 +157,41 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
           } else {
             const resource = (statement as { Resource: unknown }).Resource;
 
-            if (typeof resource === "string" && resource === "*") {
-              Annotations.of(node).addError("Statement Resource is too broad");
-            } else if (Array.isArray(resource) && resource.includes("*")) {
-              Annotations.of(node).addError("Statement Resource is too broad");
+            if (typeof resource === "string") {
+              this.checkResource(resource, node);
+            } else if (Array.isArray(resource)) {
+              const resourceArray = resource as string[];
+              resourceArray.forEach((resource) => {
+                this.checkResource(resource, node);
+              });
             }
           }
         }
       }
     }
+  }
+
+  /**
+   * Ensure that we don't have either actions or resources of the following forms:
+   *
+   *   *
+   *   s3:*
+   *   arn:aws:dynamodb:us-east-2:account-ID-without-hyphens:table/*
+   *   arn:aws:s3:::*
+   *
+   * @param checkString resource or action
+   * @param node
+   * @private
+   */
+  private check(checkString: string, checkType: string, node: CfnManagedPolicy) {
+    if (checkString === "*" || checkString.indexOf(":*") || checkString.indexOf("/*") > 0) {
+      Annotations.of(node).addError(`Statement ${checkType} is too broad: ${checkString}`);
+    }
+  }
+  private checkAction(checkString: string, node: CfnManagedPolicy) {
+    this.check(checkString, "Action", node);
+  }
+  private checkResource(checkString: string, node: CfnManagedPolicy) {
+    this.check(checkString, "Resource", node);
   }
 }
