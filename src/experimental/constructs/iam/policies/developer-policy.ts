@@ -1,6 +1,6 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Annotations, Aspects } from "aws-cdk-lib";
-import type { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, type PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnManagedPolicy, ManagedPolicy, type PolicyDocument } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import type { GuStack } from "../../../../constructs/core";
