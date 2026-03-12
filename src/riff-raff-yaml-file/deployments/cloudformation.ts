@@ -1,5 +1,5 @@
 import type { GuAutoScalingGroup } from "../../constructs/autoscaling";
-import { getAsgRollingUpdateCfnParameterName } from "../../experimental/patterns/ec2-app";
+import type { GuAsgMinInstancesInServiceParameterExperimental } from "../../experimental/patterns/ec2-app";
 import { toKebabCase } from "../../utils/string";
 import type { CdkStacksDifferingOnlyByStage, RiffRaffDeployment, RiffRaffDeploymentParameters } from "../types";
 
@@ -75,16 +75,14 @@ export function getAmiParameters(autoScalingGroups: GuAutoScalingGroup[]): RiffR
 }
 
 export function getMinInstancesInServiceParameters(
-  autoScalingGroups: GuAutoScalingGroup[],
+  cfnParameters: Map<string, GuAsgMinInstancesInServiceParameterExperimental>,
 ): RiffRaffDeploymentParameters {
-  return autoScalingGroups.reduce<RiffRaffDeploymentParameters>((acc, asg) => {
-    const { app } = asg;
-    const cfnParameter = getAsgRollingUpdateCfnParameterName(asg);
-    return {
-      ...acc,
-      [cfnParameter]: {
-        App: app,
-      },
-    };
-  }, {});
+  const response: RiffRaffDeploymentParameters = {};
+
+  cfnParameters.forEach((cfnParam, cfnParamName) => {
+    const app = cfnParam.asg.app;
+    response[cfnParamName] = { App: app };
+  });
+
+  return response;
 }
