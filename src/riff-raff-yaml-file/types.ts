@@ -43,3 +43,5 @@ export type GroupedCdkStacks = Record<
   ClassName,
   Record<StackTag, Record<Region, Record<StageTag, CdkStacksDifferingOnlyByStage>>>
 >;
+
+export type RiffRaffDeployments = Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>;
