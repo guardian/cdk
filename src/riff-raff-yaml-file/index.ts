@@ -1,6 +1,7 @@
 import { writeFileSync } from "fs";
 import path from "path";
-import type { App } from "aws-cdk-lib";
+import type { App, CfnParameter } from "aws-cdk-lib";
+import { Aspects } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
 import { dump } from "js-yaml";
@@ -282,17 +283,49 @@ export class RiffRaffYamlFile {
             });
           }
 
-          const minInServiceParamMap =
-            GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(stack).asgToParamMap;
-          const minInServiceAsgs = autoscalingGroups.filter((asg) => minInServiceParamMap.has(asg.node.id));
+          /*
+          At this point, `stacks` is a collection of similar `GuStack`s that differ only by their `stage`.
+          We're about to identify if there are any scaling policies present.
+          To support the possibility of there being a scaling policy in PROD but not CODE, we look at the `Aspects` of each stack.
 
-          /**
-           * Only add the `minInstancesInServiceParameters` property if there are some ASGs affected by {@link GuHorizontallyScalingDeploymentPropertiesExperimental}.
+          Ideally this could be simpler: loop over each stack and call `GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance().asgToParams`.
+          However that throws an exception for an as yet unknown reason.
+          TODO understand why singleton `GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance()` throws an exception here
            */
-          if (minInServiceAsgs.length > 0) {
-            updateDeploymentParameters(deployments, cfnDeployment, {
-              minInstancesInServiceParameters: getMinInstancesInServiceParameters(minInServiceAsgs),
-            });
+          const asgToParamMap: Map<string, CfnParameter> = stacks
+            // Find all `GuHorizontallyScalingDeploymentPropertiesExperimental` attached to a stack, or `undefined`
+            .flatMap((stack) =>
+              Aspects.of(stack).all.filter(
+                (_): _ is GuHorizontallyScalingDeploymentPropertiesExperimental =>
+                  _ instanceof GuHorizontallyScalingDeploymentPropertiesExperimental,
+              ),
+            )
+
+            // Remove the `undefined` values
+            .filter(Boolean)
+
+            // For each `GuHorizontallyScalingDeploymentPropertiesExperimental` attached to the stacks, obtain the collection of `CfnParameters` we need to list in `riff-raff.yaml`
+            .map((_) => _.asgToParamMap)
+
+            // Combine the above collections into one
+            .reduce((acc, map) => {
+              map.forEach((value, key) => {
+                acc.set(key, value);
+              });
+              return acc;
+            }, new Map<string, CfnParameter>());
+
+          if (asgToParamMap.size > 0) {
+            const minInServiceAsgs = autoscalingGroups.filter((asg) => asgToParamMap.has(asg.node.id));
+
+            /**
+             * Only add the `minInstancesInServiceParameters` property if there are some ASGs affected by {@link GuHorizontallyScalingDeploymentPropertiesExperimental}.
+             */
+            if (minInServiceAsgs.length > 0) {
+              updateDeploymentParameters(deployments, cfnDeployment, {
+                minInstancesInServiceParameters: getMinInstancesInServiceParameters(minInServiceAsgs),
+              });
+            }
           }
         });
       });
