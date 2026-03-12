@@ -1,5 +1,7 @@
-import { Annotations } from "aws-cdk-lib";
-import { Effect, ManagedPolicy, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import type { IAspect } from "aws-cdk-lib";
+import { Annotations, Aspects } from "aws-cdk-lib";
+import { CfnManagedPolicy, Effect, ManagedPolicy, type PolicyDocument, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import type { IConstruct } from "constructs";
 import type { GuStack } from "../../../../constructs/core";
 import type { GuAllowPolicyProps, GuDenyPolicyProps } from "../../../../constructs/iam";
 
@@ -70,45 +72,29 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
       path: `/developer-policy/${props.permission}/`,
     });
 
-    let valid = true;
+    // Don't mind if it's missing, but if it's used it must not be empty
+    if (props.statements?.length == 0) {
+      throw new Error("Empty statements array passed to GuDeveloperPolicyExperimental");
+    }
 
-    const { statements = [] } = props;
-    for (const statement of statements) {
-      if (statement.effect === Effect.ALLOW) {
-        for (const action of statement.actions) {
-          if (action === "*") {
-            const name = statement.actions.join(",");
-            Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
-            valid = false;
-          }
-        }
-        for (const resource of statement.resources) {
-          if (resource === "*") {
-            const name = statement.actions.join(",");
-            Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
-            valid = false;
-          }
-        }
-      }
+    // Don't mind if it's missing, but if it's used it must not be empty
+    if (props.allow?.length == 0) {
+      throw new Error("Empty allow array passed to GuDeveloperPolicyExperimental");
+    }
+
+    // Don't mind if it's missing, but if it's used it must not be empty
+    if (props.deny?.length == 0) {
+      throw new Error("Empty deny array passed to GuDeveloperPolicyExperimental");
+    }
+
+    // // Don't mind if either are missing, but one must exist
+    if (!(props.statements || props.allow)) {
+      throw new Error("No statements or allow values passed to GuDeveloperPolicyExperimental");
     }
 
     const { allow = [] } = props;
+
     for (const allowed of allow) {
-      // validity checks
-      const name = allowed.policyName ?? allowed.actions.join(",") + " on " + allowed.resources.join(",");
-      for (const resource of allowed.resources) {
-        if (resource === "*") {
-          Annotations.of(this).addError(`Resource of '*' found in ${name} ALLOW permission`);
-          valid = false;
-        }
-      }
-      for (const action of allowed.actions) {
-        if (action === "*") {
-          const name = allowed.policyName ?? allowed.actions.join(",");
-          Annotations.of(this).addError(`Action of '*' found in ${name} ALLOW permission`);
-          valid = false;
-        }
-      }
       this.addStatements(
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -116,10 +102,6 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
           actions: allowed.actions,
         }),
       );
-    }
-
-    if (!valid) {
-      throw new Error("Overly broad permission present, see annotations for details");
     }
 
     const { deny = [] } = props;
@@ -132,5 +114,84 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
         }),
       );
     }
+
+    // Later, apply to the stack and check for specific errors
+    Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker());
+  }
+}
+
+class GuDeveloperPolicyExperimentalChecker implements IAspect {
+  public visit(node: IConstruct): void {
+    if (node instanceof CfnManagedPolicy) {
+      const policyDocumentJson: unknown = (node.policyDocument as PolicyDocument).toJSON();
+
+      // These conditions will result in failures from the AWS classes themselves, so we don't need to validate them.
+      if (policyDocumentJson === null || typeof policyDocumentJson !== "object") {
+        return;
+      }
+      if (!("Statement" in policyDocumentJson)) {
+        return;
+      }
+      if (!Array.isArray(policyDocumentJson.Statement) || policyDocumentJson.Statement.length == 0) {
+        return;
+      }
+
+      // For the following conditions, we want to make a strong assertions: you cannot "Allow" with wildcards.
+      for (const statement of policyDocumentJson.Statement) {
+        if (!("Effect" in statement) || (statement as { Effect: unknown }).Effect === Effect.ALLOW) {
+          if (!("Action" in statement)) {
+            Annotations.of(node).addError("Statement is missing an Action");
+          } else {
+            const action = (statement as { Action: unknown }).Action;
+
+            if (typeof action === "string") {
+              this.checkAction(action, node);
+            } else if (Array.isArray(action)) {
+              const actionArray = action as string[];
+              actionArray.forEach((action) => this.checkAction(action, node));
+            }
+          }
+
+          if (!("Resource" in statement)) {
+            Annotations.of(node).addError("Statement is missing an Resource");
+          } else {
+            const resource = (statement as { Resource: unknown }).Resource;
+
+            if (typeof resource === "string") {
+              this.checkResource(resource, node);
+            } else if (Array.isArray(resource)) {
+              const resourceArray = resource as string[];
+              resourceArray.forEach((resource) => {
+                this.checkResource(resource, node);
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Ensure that we don't have either actions or resources of the following forms:
+   *
+   *   *
+   *   s3:*
+   *   arn:aws:dynamodb:us-east-2:account-ID-without-hyphens:table/*
+   *   arn:aws:s3:::*
+   *
+   * @param checkString resource or action
+   * @param node
+   * @private
+   */
+  private check(checkString: string, checkType: string, node: CfnManagedPolicy) {
+    if (checkString === "*" || checkString.indexOf(":*") || checkString.indexOf("/*") > 0) {
+      Annotations.of(node).addError(`Statement ${checkType} is too broad: ${checkString}`);
+    }
+  }
+  private checkAction(checkString: string, node: CfnManagedPolicy) {
+    this.check(checkString, "Action", node);
+  }
+  private checkResource(checkString: string, node: CfnManagedPolicy) {
+    this.check(checkString, "Resource", node);
   }
 }
