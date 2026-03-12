@@ -131,7 +131,7 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
   }
 
   public visit(construct: IConstruct) {
-    if (construct instanceof CfnScalingPolicy && construct.stack.stackName === this.stack.stackName) {
+    if (CfnScalingPolicy.isCfnScalingPolicy(construct) && construct.stack.stackName === this.stack.stackName) {
       const { node } = construct;
       const { scopes, path } = node;
 
