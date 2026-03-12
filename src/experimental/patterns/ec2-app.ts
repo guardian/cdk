@@ -132,7 +132,8 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental extends Const
 
   public visit(construct: IConstruct) {
     const stack = Stack.of(this);
-    if (construct instanceof CfnScalingPolicy && construct.stack === stack) {
+
+    if (CfnScalingPolicy.isCfnScalingPolicy(construct) && construct.stack === stack) {
       const { node } = construct;
       const { scopes, path } = node;
 
