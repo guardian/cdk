@@ -30,7 +30,17 @@ import { RiffRaffYamlFile } from "../riff-raff-yaml-file";
  */
 export class GuRoot extends App {
   override synth(options?: StageSynthesisOptions): CloudAssembly {
+    const cloudAssembly: CloudAssembly = super.synth(options);
+
+    /**
+     * {@link RiffRaffYamlFile} requires all Aspects to have been evaluated, specifically {@link GuHorizontallyScalingDeploymentPropertiesExperimental}.
+     * Aspects are evaluated during creation of a {@link CloudAssembly}.
+     * Therefore {@link RiffRaffYamlFile} must come after the call to `super.synth`.
+     *
+     * @see https://github.com/aws/aws-cdk/issues/29047
+     */
     new RiffRaffYamlFile(this).synth();
-    return super.synth(options);
+
+    return cloudAssembly;
   }
 }
