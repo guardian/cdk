@@ -1,19 +1,11 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Annotations, Aspects } from "aws-cdk-lib";
-import { CfnManagedPolicy, Effect, ManagedPolicy, type PolicyDocument, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, type PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { CfnManagedPolicy, ManagedPolicy, type PolicyDocument } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import type { GuStack } from "../../../../constructs/core";
-import type { GuAllowPolicyProps, GuDenyPolicyProps } from "../../../../constructs/iam";
 
 export type GuWorkloadPolicyProps = {
-  /**
-   * List of explicitly allowed permissions given by this policy.
-   */
-  readonly allow?: GuAllowPolicyProps[];
-  /**
-   * List of explicitly denied permissions which can be used to fine tune this policy by pruning the allow permissions.
-   */
-  readonly deny?: GuDenyPolicyProps[];
   /**
    * Initial set of permissions to add to this policy document.
    * You can also use `addPermission(statement)` to add permissions later.
@@ -75,44 +67,6 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
     // Don't mind if it's missing, but if it's used it must not be empty
     if (props.statements?.length == 0) {
       throw new Error("Empty statements array passed to GuDeveloperPolicyExperimental");
-    }
-
-    // Don't mind if it's missing, but if it's used it must not be empty
-    if (props.allow?.length == 0) {
-      throw new Error("Empty allow array passed to GuDeveloperPolicyExperimental");
-    }
-
-    // Don't mind if it's missing, but if it's used it must not be empty
-    if (props.deny?.length == 0) {
-      throw new Error("Empty deny array passed to GuDeveloperPolicyExperimental");
-    }
-
-    // // Don't mind if either are missing, but one must exist
-    if (!(props.statements || props.allow)) {
-      throw new Error("No statements or allow values passed to GuDeveloperPolicyExperimental");
-    }
-
-    const { allow = [] } = props;
-
-    for (const allowed of allow) {
-      this.addStatements(
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          resources: allowed.resources,
-          actions: allowed.actions,
-        }),
-      );
-    }
-
-    const { deny = [] } = props;
-    for (const denied of deny) {
-      this.addStatements(
-        new PolicyStatement({
-          effect: Effect.DENY,
-          resources: denied.resources,
-          actions: denied.actions,
-        }),
-      );
     }
 
     // Later, apply to the stack and check for specific errors
