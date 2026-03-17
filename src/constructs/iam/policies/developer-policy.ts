@@ -1,57 +1,54 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Annotations, Aspects } from "aws-cdk-lib";
 import { Effect, type PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { CfnManagedPolicy, ManagedPolicy, type PolicyDocument } from "aws-cdk-lib/aws-iam";
+import { CfnManagedPolicy, ManagedPolicy } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import type { GuStack } from "../../core";
 
 export type GuDeveloperPolicyProps = {
   /**
-   * Initial set of permissions to add to this policy document.
-   * You can also use `addPermission(statement)` to add permissions later.
+   * IAM policy statements to include in the developer policy.
    *
-   * @default - No statements.
+   * At least one statement is required.
    */
-  readonly statements?: PolicyStatement[];
+  readonly statements: [PolicyStatement, ...PolicyStatement[]];
   /**
-   * The unique identifier of the developer policy grant.
+   * Unique identifier of the developer policy grant.
+   * This must match the grant ID used in Janus DeveloperPolicyGrant!
    */
   readonly grantId: string;
   /**
-   * A description of the policy which will be displayed.
+   * The managed policy description is also used as a
+   * friendly display name for the policy in Janus.
+   *
+   * Keep this short so it fits on a single line in the Janus UI.
    */
   readonly description: string;
 };
 
 /**
- * Creates a structured `AWS::IAM::ManagedPolicy` resource to manage arbitrary permissions on general account
- * resources which can then be used to create limited permission credentials for use with specific activities.
+ * Creates a structured `AWS::IAM::ManagedPolicy` used by Janus developer policy grants.
+ * The policy should have the least permissions required to carry out
+ * a particular task or workflow.
  *
- * The permission scope is not controlled.  This class should be used with care to create minimal permissions.
- * To that end, broad ALLOW permissions can be pruned with narrower optional DENY permissions.
- *
- * `grantId` is prefixed with `/developer-policy/` and postfixed with `/` to construct the path.  This will
- * be used for discovery and matching with grants given in Janus.  It is restricted to the same character set as AWS `path`.
- *
- * `description` is used to construct the AWS Managed Policy description and used for display.
- *
- * ```yaml
- *  TestingECAE2E87:
- *     Type: AWS::IAM::ManagedPolicy
- *     Properties:
- *       Description: This is testing stuff
- *       Path: /developer-policy/read-from-mybucket-under-mypath/
- *       PolicyDocument:
- *         Statement:
- *           - Action: s3:GetObject
- *             Effect: Allow
- *             Resource: arn:aws:s3:::mybucket/mypath
- *           - Action: s3:GetObject
- *             Effect: Deny
- *             Resource: arn:aws:s3:::mybucket/mypath/butnotthispath
- *         Version: "2012-10-17"
- *     Metadata:
- *       aws:cdk:path: janus-resources-for-testing-managed-policy-tagging/justin-testing/Resource* ```
+ * Example:
+ * ```ts
+ * new GuDeveloperPolicy(stack, "ReadLogsPolicy", {
+ *   grantId: "read-logs-support",
+ *   description: "Read logs for Support tooling",
+ *   statements: [
+ *     new PolicyStatement({
+ *       effect: Effect.ALLOW,
+ *       actions: ["logs:GetLogEvents"],
+ *       resources: ["arn:aws:logs:eu-west-1:123456789012:log-group:/aws/lambda/my-app:*"],
+ *     }),
+ *     new PolicyStatement({
+ *       effect: Effect.DENY,
+ *       actions: ["logs:GetLogEvents"],
+ *       resources: ["arn:aws:logs:eu-west-1:123456789012:log-group:/aws/lambda/my-app:log-stream:secret*"],
+ *     }),
+ *   ],
+ * });
  * ```
  */
 export class GuDeveloperPolicy extends ManagedPolicy {
@@ -61,11 +58,6 @@ export class GuDeveloperPolicy extends ManagedPolicy {
       path: `/developer-policy/${props.grantId}/`,
     });
 
-    // Don't mind if it's missing, but if it's used it must not be empty
-    if (props.statements?.length == 0) {
-      throw new Error("Empty statements array passed to GuDeveloperPolicyExperimental");
-    }
-
     // Later, apply to the stack and check for specific errors
     Aspects.of(this).add(new GuDeveloperPolicyChecker());
   }
@@ -74,21 +66,32 @@ export class GuDeveloperPolicy extends ManagedPolicy {
 class GuDeveloperPolicyChecker implements IAspect {
   public visit(node: IConstruct): void {
     if (node instanceof CfnManagedPolicy) {
-      const policyDocumentJson: unknown = (node.policyDocument as PolicyDocument).toJSON();
+      const policyDocumentJson = this.getPolicyDocumentJson(node.policyDocument as unknown);
 
       // These conditions will result in failures from the AWS classes themselves, so we don't need to validate them.
       if (policyDocumentJson === null || typeof policyDocumentJson !== "object") {
         return;
       }
       if (!("Statement" in policyDocumentJson)) {
+        Annotations.of(node).addError("Policy document must include at least one Statement");
         return;
       }
-      if (!Array.isArray(policyDocumentJson.Statement) || policyDocumentJson.Statement.length == 0) {
+      if (!Array.isArray(policyDocumentJson.Statement)) {
+        Annotations.of(node).addError("Policy document Statement must be an array");
+        return;
+      }
+      if (policyDocumentJson.Statement.length === 0) {
+        Annotations.of(node).addError("Policy document must include at least one Statement");
         return;
       }
 
       // For the following conditions, we want to make a strong assertions: you cannot "Allow" with wildcards.
       for (const statement of policyDocumentJson.Statement) {
+        if (statement === null || typeof statement !== "object") {
+          Annotations.of(node).addError("Statement must be an object");
+          continue;
+        }
+
         if (!("Effect" in statement) || (statement as { Effect: unknown }).Effect === Effect.ALLOW) {
           if (!("Action" in statement)) {
             Annotations.of(node).addError("Statement is missing an Action");
@@ -122,6 +125,19 @@ class GuDeveloperPolicyChecker implements IAspect {
     }
   }
 
+  private getPolicyDocumentJson(policyDocument: unknown): unknown {
+    if (
+      policyDocument !== null &&
+      typeof policyDocument === "object" &&
+      "toJSON" in policyDocument &&
+      typeof (policyDocument as { toJSON?: unknown }).toJSON === "function"
+    ) {
+      return (policyDocument as { toJSON: () => unknown }).toJSON();
+    }
+
+    return policyDocument;
+  }
+
   /**
    * Ensure that we don't have either actions or resources of the following forms:
    *
@@ -130,9 +146,9 @@ class GuDeveloperPolicyChecker implements IAspect {
    *   arn:aws:dynamodb:us-east-2:account-ID-without-hyphens:table/*
    *   arn:aws:s3:::*
    *
-   * @param checkString resource or action
-   * @param checkType
-   * @param node
+   * @param checkString Action or resource value to validate.
+   * @param checkType Label used in validation error messages (for example, Action or Resource).
+   * @param node Policy node used to attach validation annotations.
    * @private
    */
   private check(checkString: string, checkType: string, node: CfnManagedPolicy) {

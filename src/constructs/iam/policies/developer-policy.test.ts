@@ -1,4 +1,5 @@
 import { Annotations, Template } from "aws-cdk-lib/assertions";
+import type { CfnManagedPolicy } from "aws-cdk-lib/aws-iam";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuDeveloperPolicy } from "./developer-policy";
@@ -160,5 +161,53 @@ describe("GuDeveloperPolicy", () => {
     });
     Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
     Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: arn:aws:s3:::*");
+  });
+
+  test("adds an error if the policy document statement field is not an array", () => {
+    const stack = simpleGuStackForTesting();
+    const policy = new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Effect: "Allow",
+          Action: ["s3:GetObject"],
+          Resource: "arn:aws:s3:::test-bucket/*",
+        }),
+      ],
+      grantId: "test123",
+      description: "test policy",
+    });
+
+    const cfnPolicy: CfnManagedPolicy = policy.node.defaultChild as CfnManagedPolicy;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- intentional: testing checker behaviour with a malformed policy document
+    cfnPolicy.policyDocument = {
+      Version: "2012-10-17",
+      Statement: "not-an-array",
+    } as unknown as CfnManagedPolicy["policyDocument"];
+
+    Annotations.fromStack(stack).hasError("*", "Policy document Statement must be an array");
+  });
+
+  test("adds an error if the policy document statement field is an empty array", () => {
+    const stack = simpleGuStackForTesting();
+    const policy = new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Effect: "Allow",
+          Action: ["s3:GetObject"],
+          Resource: "arn:aws:s3:::test-bucket/*",
+        }),
+      ],
+      grantId: "test123",
+      description: "test policy",
+    });
+
+    const cfnPolicy: CfnManagedPolicy = policy.node.defaultChild as CfnManagedPolicy;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- intentional: testing checker behaviour with a malformed policy document
+    cfnPolicy.policyDocument = {
+      Version: "2012-10-17",
+      Statement: [],
+    } as unknown as CfnManagedPolicy["policyDocument"];
+
+    Annotations.fromStack(stack).hasError("*", "Policy document must include at least one Statement");
   });
 });
