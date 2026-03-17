@@ -3,9 +3,9 @@ import { Annotations, Aspects } from "aws-cdk-lib";
 import { Effect, type PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnManagedPolicy, ManagedPolicy, type PolicyDocument } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
-import type { GuStack } from "../../../../constructs/core";
+import type { GuStack } from "../../core";
 
-export type GuWorkloadPolicyProps = {
+export type GuDeveloperPolicyProps = {
   /**
    * Initial set of permissions to add to this policy document.
    * You can also use `addPermission(statement)` to add permissions later.
@@ -28,7 +28,7 @@ export type GuWorkloadPolicyProps = {
  * resources which can then be used to create limited permission credentials for use with specific activities.
  *
  * The permission scope is not controlled.  This class should be used with care to create minimal permissions.
- * To that end, broad ALLOW permissions can pruned with narrower optional DENY permissions.
+ * To that end, broad ALLOW permissions can be pruned with narrower optional DENY permissions.
  *
  * `permission` is prefixed with `/developer-policy/` and postfixed with `/` to construct the path.  This will
  * be used for discovery and display.  It is restricted to the same character set as AWS `path`.
@@ -53,11 +53,9 @@ export type GuWorkloadPolicyProps = {
  *     Metadata:
  *       aws:cdk:path: janus-resources-for-testing-managed-policy-tagging/justin-testing/Resource* ```
  * ```
- *
- * @experimental
  */
-export class GuDeveloperPolicyExperimental extends ManagedPolicy {
-  constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
+export class GuDeveloperPolicy extends ManagedPolicy {
+  constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
     super(scope, id, {
       description: `${props.permission} developer policy`,
       ...props,
@@ -70,11 +68,11 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
     }
 
     // Later, apply to the stack and check for specific errors
-    Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker());
+    Aspects.of(this).add(new GuDeveloperPolicyChecker());
   }
 }
 
-class GuDeveloperPolicyExperimentalChecker implements IAspect {
+class GuDeveloperPolicyChecker implements IAspect {
   public visit(node: IConstruct): void {
     if (node instanceof CfnManagedPolicy) {
       const policyDocumentJson: unknown = (node.policyDocument as PolicyDocument).toJSON();
