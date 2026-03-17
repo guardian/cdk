@@ -1,0 +1,35 @@
+{
+  "name" : "cdk",
+  "image" : "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "customizations" : {
+    "vscode" : {
+      "extensions" : [
+        "hverlin.mise-vscode"
+      ]
+    },
+    "jetbrains" : {
+      "plugins" : [
+        "com.github.l34130.mise",
+        "NodeJS"
+      ]
+    }
+  },
+  "forwardPorts" : [
+  ],
+  "mounts" : [
+    {
+      "source" : "devenv-mise-data-volume",
+      "target" : "/mnt/mise-data",
+      "type" : "volume"
+    }
+  ],
+  "containerEnv" : {
+    "MISE_DATA_DIR" : "/mnt/mise-data",
+    "MISE_INSTALL_PATH" : "/mnt/mise-data/mise"
+  },
+  "remoteEnv" : {
+    "PATH" : "${containerEnv:PATH}:/mnt/mise-data/shims"
+  },
+  "onCreateCommand" : "((cd . && printf '%s' \"IyEvdXNyL2Jpbi9lbnYgYmFzaAojIFNldHMgdXAgdG9vbGluZy1yZWxhdGVkIGNhY2hpbmcgaW5zaWRlIHRoZSBkZXZjb250YWluZXIgYWZ0ZXIgY3JlYXRpb24uCnNldCAtZXVvIHBpcGVmYWlsCgpsb2coKSAgeyBlY2hvIC1lICJcMDMzWzE7MzRtW3NldHVwXSAkKlwwMzNbMG0iOyB9Cndhcm4oKSB7IGVjaG8gLWUgIlwwMzNbMTszM21bc2V0dXBdICQqXDAzM1swbSI7IH0Kb2soKSAgIHsgZWNobyAtZSAiXDAzM1sxOzMybVtzZXR1cF0gJCpcMDMzWzBtIjsgfQoKaWYgW1sgLXogJE1JU0VfREFUQV9ESVIgXV07IHRoZW4KICAgIHdhcm4gIk1JU0VfREFUQV9ESVIgbm90IHNldCIKICAgIGV4aXQgMQpmaQoKbG9nICJTZXR0aW5nIHVwIG1pc2UgZGF0YS4iCgpsb2cgIkVuc3VyaW5nIGNvcnJlY3Qgb3duZXJzaGlwIG9mIHRoZSBzaGFyZWQgbWlzZSBkYXRhIHZvbHVtZS4iCnN1ZG8gY2hvd24gLVIgdnNjb2RlOnZzY29kZSAkTUlTRV9EQVRBX0RJUgoKb2sgIm1pc2UgZGF0YSBjb21wbGV0ZS4iCg==\" | base64 -d | bash -euo pipefail)) | sudo tee /var/log/on-create.log",
+  "postCreateCommand" : "((cd . && printf '%s' \"IyEvdXNyL2Jpbi9lbnYgYmFzaAojIFNldHMgdXAgbWlzZSBpbnNpZGUgdGhlIGRldmNvbnRhaW5lciBhZnRlciBjcmVhdGlvbi4KIwojIEFsc28gbG9ncyB1c2VmdWwgaW5mbyAoaW5jbHVkaW5nIHRoZSBvdXRwdXQgZnJvbSBgbWlzZSBkb2N0b3JgKSB0byB0aGUgdGVybWluYWwgdG8gaGVscCB3aXRoIGRlYnVnZ2luZy4Kc2V0IC1ldW8gcGlwZWZhaWwKCmxvZygpICB7IGVjaG8gLWUgIlwwMzNbMTszNG1bc2V0dXBdICQqXDAzM1swbSI7IH0Kd2FybigpIHsgZWNobyAtZSAiXDAzM1sxOzMzbVtzZXR1cF0gJCpcMDMzWzBtIjsgfQpvaygpICAgeyBlY2hvIC1lICJcMDMzWzE7MzJtW3NldHVwXSAkKlwwMzNbMG0iOyB9CgppZiBbWyAteiAkTUlTRV9EQVRBX0RJUiBdXTsgdGhlbgogICAgd2FybiAiTUlTRV9EQVRBX0RJUiBub3Qgc2V0IgogICAgZXhpdCAxCmZpCgpsb2cgIlNldHRpbmcgdXAgbWlzZS4iCgppZiB0ZXN0IC1mICIkTUlTRV9JTlNUQUxMX1BBVEgiOyB0aGVuCiAgbG9nICJtaXNlIGlzIGFscmVhZHkgcHJlc2VudCBhdCAkTUlTRV9JTlNUQUxMX1BBVEguIgplbHNlCiAgbG9nICJJbnN0YWxsaW5nIG1pc2UuLi4iCiAgY3VybCAtZnNTTCBodHRwczovL21pc2UucnVuL2Jhc2ggfCBzaApmaQoKbG9nICJTeW1saW5raW5nICRNSVNFX0lOU1RBTExfUEFUSCB0byAvdXNyL2xvY2FsL2Jpbi9taXNlLiIKc3VkbyBsbiAtc2YgIiRNSVNFX0lOU1RBTExfUEFUSCIgL3Vzci9sb2NhbC9iaW4vbWlzZQoKbG9nICJDaGVja2luZyBtaXNlIGlzIHdvcmtpbmcgY29ycmVjdGx5LiIKbWlzZSAtLXZlcnNpb24KCmxvZyAiVXBkYXRpbmcgbWlzZSBpZiBuZWVkZWQuIgptaXNlIHNlbGYtdXBkYXRlIC0teWVzIHx8IHdhcm4gIlNraXBwaW5nIG1pc2Ugc2VsZi11cGRhdGUgLSB5b3UgbWF5IGJlIG9mZmxpbmUuIgoKbG9nICJUcnVzdGluZyBtaXNlIGNvbmZpZyAoc2VlOiBodHRwczovL21pc2UuamR4LmRldi9jbGkvdHJ1c3QuaHRtbCkuIgptaXNlIHRydXN0IC0teWVzIHx8IHRydWUKCm1pc2UgaW5zdGFsbCB8fCB3YXJuICJtaXNlIGluc3RhbGwgZmFpbGVkLiBZb3UgbWF5IG5lZWQgdG8gcnVuIG1pc2UgaW5zdGFsbCBtYW51YWxseSBpbnNpZGUgdGhlIGNvbnRhaW5lci4iCgpsb2cgIkZpbmFsIGNoZWNrcy4iCmV4cG9ydCBQQVRIPSIkTUlTRV9EQVRBX0RJUi9zaGltczokUEFUSCIKbWlzZSBkb2N0b3IKCm9rICJtaXNlIHNldHVwIGNvbXBsZXRlIGF0ICRNSVNFX0lOU1RBTExfUEFUSC4iCg==\" | base64 -d | bash -euo pipefail)) | sudo tee /var/log/post-create.log"
+}
