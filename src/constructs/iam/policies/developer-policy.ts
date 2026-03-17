@@ -14,9 +14,9 @@ export type GuDeveloperPolicyProps = {
    */
   readonly statements?: PolicyStatement[];
   /**
-   * The unique identifier of the policy, which will be displayed when creating credentials.
+   * The unique identifier of the developer policy grant.
    */
-  readonly permission: string;
+  readonly grantId: string;
   /**
    * An optional description of the policy which will be displayed if present.
    */
@@ -30,8 +30,8 @@ export type GuDeveloperPolicyProps = {
  * The permission scope is not controlled.  This class should be used with care to create minimal permissions.
  * To that end, broad ALLOW permissions can be pruned with narrower optional DENY permissions.
  *
- * `permission` is prefixed with `/developer-policy/` and postfixed with `/` to construct the path.  This will
- * be used for discovery and display.  It is restricted to the same character set as AWS `path`.
+ * `grantId` is prefixed with `/developer-policy/` and postfixed with `/` to construct the path.  This will
+ * be used for discovery and matching with grants given in Janus.  It is restricted to the same character set as AWS `path`.
  *
  * `description` is optionally used to construct the AWS Managed Policy description and used for display.
  *
@@ -57,9 +57,9 @@ export type GuDeveloperPolicyProps = {
 export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
     super(scope, id, {
-      description: `${props.permission} developer policy`,
+      description: `${props.grantId} developer policy`,
       ...props,
-      path: `/developer-policy/${props.permission}/`,
+      path: `/developer-policy/${props.grantId}/`,
     });
 
     // Don't mind if it's missing, but if it's used it must not be empty
