@@ -18,9 +18,9 @@ export type GuDeveloperPolicyProps = {
    */
   readonly grantId: string;
   /**
-   * An optional description of the policy which will be displayed if present.
+   * A description of the policy which will be displayed.
    */
-  readonly description?: string;
+  readonly description: string;
 };
 
 /**
@@ -33,7 +33,7 @@ export type GuDeveloperPolicyProps = {
  * `grantId` is prefixed with `/developer-policy/` and postfixed with `/` to construct the path.  This will
  * be used for discovery and matching with grants given in Janus.  It is restricted to the same character set as AWS `path`.
  *
- * `description` is optionally used to construct the AWS Managed Policy description and used for display.
+ * `description` is used to construct the AWS Managed Policy description and used for display.
  *
  * ```yaml
  *  TestingECAE2E87:
@@ -57,7 +57,6 @@ export type GuDeveloperPolicyProps = {
 export class GuDeveloperPolicy extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
     super(scope, id, {
-      description: `${props.grantId} developer policy`,
       ...props,
       path: `/developer-policy/${props.grantId}/`,
     });
@@ -132,6 +131,7 @@ class GuDeveloperPolicyChecker implements IAspect {
    *   arn:aws:s3:::*
    *
    * @param checkString resource or action
+   * @param checkType
    * @param node
    * @private
    */

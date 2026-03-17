@@ -15,9 +15,11 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Description: "test policy",
       Path: "/developer-policy/test123/",
       PolicyDocument: {
         Version: "2012-10-17",
@@ -43,6 +45,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: *");
   });
@@ -58,6 +61,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: s3://*");
   });
@@ -72,6 +76,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
   });
@@ -87,6 +92,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasNoError("*", "Statement Action is too broad: *");
   });
@@ -102,6 +108,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
   });
@@ -117,6 +124,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: *");
   });
@@ -132,6 +140,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
   });
@@ -147,6 +156,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
+      description: "test policy",
     });
     Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
     Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: arn:aws:s3:::*");
