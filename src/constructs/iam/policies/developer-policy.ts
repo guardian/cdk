@@ -107,7 +107,7 @@ class GuDeveloperPolicyChecker implements IAspect {
           }
 
           if (!("Resource" in statement)) {
-            Annotations.of(node).addError("Statement is missing an Resource");
+            Annotations.of(node).addError("Statement is missing a Resource");
           } else {
             const resource = (statement as { Resource: unknown }).Resource;
 
