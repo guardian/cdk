@@ -33,6 +33,9 @@ export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
  * Ensures the `AutoScalingRollingUpdate` of an AutoScaling Group has a `PauseTime` matching the healthcheck grace period.
  * It also ensures the `CreationPolicy` resource signal `Timeout` matches the healthcheck grace period.
  *
+ * @note
+ * Be sure to instantiate this only once for an entire {@link GuStack}, else the properties of the ASG will be incorrectly updated multiple times.
+ *
  * @internal
  *
  * @privateRemarks
@@ -522,8 +525,19 @@ export class GuEc2AppExperimental extends GuEc2App {
       slowStartDuration,
     });
 
-    // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
-    Aspects.of(scope).add(new GuAutoScalingRollingUpdateTimeoutExperimental());
+    /*
+    Instantiate the `GuAutoScalingRollingUpdateTimeoutExperimental` exactly once for a GuStack.
+    Whilst multiple instances are syntactically valid, it will cause ASG nodes to be incorrectly evaluated/mutated multiple times.
+    TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
+     */
+    const allAspects = Aspects.of(scope).all;
+    const maybeRollingUpdateTimeoutAspect = allAspects.find(
+      (_) => _ instanceof GuAutoScalingRollingUpdateTimeoutExperimental,
+    );
+    if (!maybeRollingUpdateTimeoutAspect) {
+      Aspects.of(scope).add(new GuAutoScalingRollingUpdateTimeoutExperimental());
+    }
+
     Aspects.of(scope).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
   }
 }

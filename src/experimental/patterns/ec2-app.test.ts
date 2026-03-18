@@ -497,7 +497,7 @@ describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", 
         });
         const cfnAsg = ec2App.autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
         cfnAsg.cfnOptions.updatePolicy = { autoScalingRollingUpdate: {} };
-        Aspects.of(app).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
+        Aspects.of(this).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
       }
     }
 
