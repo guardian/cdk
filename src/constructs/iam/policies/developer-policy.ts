@@ -68,7 +68,7 @@ class GuDeveloperPolicyChecker implements IAspect {
     if (node instanceof CfnManagedPolicy) {
       const policyDocumentJson = this.getPolicyDocumentJson(node.policyDocument as unknown);
 
-      // These conditions will result in failures from the AWS classes themselves, so we don't need to validate them.
+      // First perform basic policy document shape validation and emit annotations for invalid or missing Statements.
       if (policyDocumentJson === null || typeof policyDocumentJson !== "object") {
         return;
       }
