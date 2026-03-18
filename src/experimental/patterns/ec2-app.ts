@@ -43,20 +43,6 @@ export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
  * TODO Expose the healthcheck grace period as a property on {@link GuEc2App} and remove this `Aspect`.
  */
 export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
-  public readonly stack: GuStack;
-  private static instance: GuAutoScalingRollingUpdateTimeoutExperimental | undefined;
-
-  private constructor(scope: GuStack) {
-    this.stack = scope;
-  }
-
-  public static getInstance(stack: GuStack): GuAutoScalingRollingUpdateTimeoutExperimental {
-    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new GuAutoScalingRollingUpdateTimeoutExperimental(stack);
-    }
-    return this.instance;
-  }
-
   public visit(construct: IConstruct) {
     if (construct instanceof CfnAutoScalingGroup) {
       const currentRollingUpdate = construct.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
@@ -537,7 +523,7 @@ export class GuEc2AppExperimental extends GuEc2App {
     });
 
     // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
-    Aspects.of(scope).add(GuAutoScalingRollingUpdateTimeoutExperimental.getInstance(scope));
+    Aspects.of(scope).add(new GuAutoScalingRollingUpdateTimeoutExperimental());
     Aspects.of(scope).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
   }
 }
