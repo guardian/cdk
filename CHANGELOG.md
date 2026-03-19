@@ -1,5 +1,15 @@
 # @guardian/cdk
 
+## 62.6.0
+
+### Minor Changes
+
+- 87b8f74: Remove redundant GuJanusAssumableRole now that it has been superseded by GuDeveloperPolicy. In principle a breaking change but this role is not in use anywhere so there needs to be no change to consuming code.
+
+### Patch Changes
+
+- 4c43c08: Update `fast-xml-parser` and `@aws-sdk/xml-builder` transitive dependencies to address security vulnerabilities (CVE-2026-33036).
+
 ## 62.5.4
 
 ### Patch Changes
