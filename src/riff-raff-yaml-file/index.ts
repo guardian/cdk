@@ -7,7 +7,7 @@ import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { GuHorizontallyScalingDeploymentPropertiesExperimental } from "../experimental/patterns/ec2-app";
+import { GuAsgMinInstancesInServiceParameterExperimental } from "../experimental/patterns/ec2-app";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
 import {
   cloudFormationDeployment,
@@ -15,6 +15,7 @@ import {
   getMinInstancesInServiceParameters,
 } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
+import { updateDeploymentParameters } from "./deployments/update-parameters";
 import { groupByClassNameStackRegionStage } from "./group-by";
 import type {
   GroupedCdkStacks,
@@ -274,25 +275,40 @@ export class RiffRaffYamlFile {
             deployments.set(asgDeployment.name, asgDeployment.props);
           });
 
-          const amiParametersToTags = getAmiParameters(autoscalingGroups);
+          // only add the `amiParametersToTags` property if there are some ASGs in the stack
+          if (autoscalingGroups.length > 0) {
+            updateDeploymentParameters(deployments, cfnDeployment, {
+              amiParametersToTags: getAmiParameters(autoscalingGroups),
+            });
+          }
 
-          const minInServiceParamMap =
-            GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(stack).asgToParamMap;
-          const minInServiceAsgs = autoscalingGroups.filter((asg) => minInServiceParamMap.has(asg.node.id));
-          const minInstancesInServiceParameters = getMinInstancesInServiceParameters(minInServiceAsgs);
+          /*
+          At this point, `stacks` is a collection of similar `GuStack`s that differ only by their `stage`.
+          We're about to add `minInstancesInServiceParameters` to assist Riff-Raff when deploying ASGs with scaling policies.
+          This is driven by the presence of conditionally added CFN Parameters.
+          To support the possibility of there being a scaling policy in PROD but not CODE, look at all the CFN Parameters in `stacks`.
+           */
+          const minInstancesInServiceParameters: Map<string, GuAsgMinInstancesInServiceParameterExperimental> = stacks
+            .flatMap((stack) => Object.values(stack.parameters))
+            .filter(
+              (_): _ is GuAsgMinInstancesInServiceParameterExperimental =>
+                _ instanceof GuAsgMinInstancesInServiceParameterExperimental,
+            )
+            .reduce((acc, item) => {
+              if (!acc.has(item.node.id)) {
+                acc.set(item.node.id, item);
+              }
+              return acc;
+            }, new Map<string, GuAsgMinInstancesInServiceParameterExperimental>());
 
-          deployments.set(cfnDeployment.name, {
-            ...cfnDeployment.props,
-            parameters: {
-              ...cfnDeployment.props.parameters,
-
-              // only add the `amiParametersToTags` property if there are some
-              ...(autoscalingGroups.length > 0 && { amiParametersToTags }),
-
-              // only add the `minInstancesInServiceParameters` property if there are some
-              ...(minInServiceAsgs.length > 0 && { minInstancesInServiceParameters }),
-            },
-          });
+          /**
+           * Only add the `minInstancesInServiceParameters` property if there are some ASGs affected by {@link GuHorizontallyScalingDeploymentPropertiesExperimental}.
+           */
+          if (minInstancesInServiceParameters.size > 0) {
+            updateDeploymentParameters(deployments, cfnDeployment, {
+              minInstancesInServiceParameters: getMinInstancesInServiceParameters(minInstancesInServiceParameters),
+            });
+          }
         });
       });
     });
