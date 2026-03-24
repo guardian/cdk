@@ -29,6 +29,14 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
   app?: string;
 
   /**
+   * The name of the Riff-Raff project used to deploy these resources.
+   * If provided, it is used as the value of the `gu:riff-raff-project` tag on all resources.
+   *
+   * @see https://github.com/guardian/riffraff-platform
+   */
+  riffRaffProjectName?: string;
+
+  /**
    * The AWS CloudFormation stack name (as shown in the AWS CloudFormation UI).
    * @defaultValue the `GU_CFN_STACK_NAME` environment variable
    */
@@ -78,6 +86,7 @@ export class GuStack extends Stack implements StackStageIdentity {
   public readonly stack: string;
   public readonly stage: string;
   public readonly app: string | undefined;
+  public readonly riffRaffProjectName: string | undefined;
 
   /**
    * The repository name, if it can be determined from the context or the git remote origin url.
@@ -115,7 +124,14 @@ export class GuStack extends Stack implements StackStageIdentity {
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App
   constructor(scope: App, id: string, props: GuStackProps) {
-    const { cloudFormationStackName = process.env.GU_CFN_STACK_NAME, stack, stage, app, withoutTags } = props;
+    const {
+      cloudFormationStackName = process.env.GU_CFN_STACK_NAME,
+      stack,
+      stage,
+      app,
+      riffRaffProjectName,
+      withoutTags,
+    } = props;
 
     super(scope, id, {
       ...props,
@@ -129,6 +145,7 @@ export class GuStack extends Stack implements StackStageIdentity {
     this.stack = stack;
     this.stage = stage.toUpperCase();
     this.app = app;
+    this.riffRaffProjectName = riffRaffProjectName;
     this.repositoryName = this.tryGetRepositoryTag();
 
     if (!withoutTags) {
@@ -138,6 +155,10 @@ export class GuStack extends Stack implements StackStageIdentity {
       this.addTag("Stage", this.stage);
       if (this.app) {
         this.addTag("App", this.app);
+      }
+
+      if (this.riffRaffProjectName) {
+        this.addTag("gu:riff-raff-project", this.riffRaffProjectName);
       }
 
       if (this.repositoryName) {
