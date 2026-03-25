@@ -1159,18 +1159,10 @@ describe("The RiffRaffYamlFile class", () => {
   it("Should support cloudformation stacks that depend on other cloudformation stacks", () => {
     const app = new App({ outdir: "/tmp/cdk.out" });
 
-    class SharedResourceStack extends GuStack {}
+    class DatabaseStack extends GuStack {}
     class ApplicationStack extends GuStack {}
 
-    const sharedResources = new SharedResourceStack(app, "Shared-INFRA", {
-      env: {
-        region: "eu-west-1",
-      },
-      stack: "deploy",
-      stage: "INFRA",
-    });
-
-    const codeStack = new ApplicationStack(app, "App-CODE", {
+    const databaseCode = new DatabaseStack(app, "Database-CODE", {
       env: {
         region: "eu-west-1",
       },
@@ -1178,7 +1170,7 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "CODE",
     });
 
-    const prodStack = new ApplicationStack(app, "App-PROD", {
+    const databaseProd = new DatabaseStack(app, "Database-PROD", {
       env: {
         region: "eu-west-1",
       },
@@ -1186,28 +1178,44 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "PROD",
     });
 
-    codeStack.addDependency(sharedResources);
-    prodStack.addDependency(sharedResources);
+    const appCode = new ApplicationStack(app, "App-CODE", {
+      env: {
+        region: "eu-west-1",
+      },
+      stack: "deploy",
+      stage: "CODE",
+    });
+
+    const appProd = new ApplicationStack(app, "App-PROD", {
+      env: {
+        region: "eu-west-1",
+      },
+      stack: "deploy",
+      stage: "PROD",
+    });
+
+    appCode.addDependency(databaseCode);
+    appProd.addDependency(databaseProd);
 
     const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
     "allowedStages:
-      - INFRA
       - CODE
       - PROD
     deployments:
-      cfn-eu-west-1-deploy-shared-resource-stack:
+      cfn-eu-west-1-deploy-database-stack:
         type: cloud-formation
         regions:
           - eu-west-1
         stacks:
           - deploy
-        app: shared-resource-stack
+        app: database-stack
         contentDirectory: /tmp/cdk.out
         parameters:
           templateStagePaths:
-            INFRA: Shared-INFRA.template.json
+            CODE: Database-CODE.template.json
+            PROD: Database-PROD.template.json
       cfn-eu-west-1-deploy-application-stack:
         type: cloud-formation
         regions:
@@ -1221,7 +1229,7 @@ describe("The RiffRaffYamlFile class", () => {
             CODE: App-CODE.template.json
             PROD: App-PROD.template.json
         dependencies:
-          - cfn-eu-west-1-deploy-shared-resource-stack
+          - cfn-eu-west-1-deploy-database-stack
     "
     `);
   });
