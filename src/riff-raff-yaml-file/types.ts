@@ -32,16 +32,4 @@ export interface RiffRaffDeployment {
   props: RiffRaffDeploymentProps;
 }
 
-/*
- The aim here is to produce an identity of a `GuStack` as a composite of:
-   - Class name
-   - Stack tag
-   - Region
- Finally, group by stage to help form the `templateStagePaths` property for the `cloud-formation` deployment type in `riff-raff.yaml`.
- */
-export type GroupedCdkStacks = Record<
-  ClassName,
-  Record<StackTag, Record<Region, Record<StageTag, CdkStacksDifferingOnlyByStage>>>
->;
-
 export type RiffRaffDeployments = Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>;

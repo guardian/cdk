@@ -16,9 +16,8 @@ import {
 } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
 import { updateDeploymentParameters } from "./deployments/update-parameters";
-import { groupByClassNameStackRegionStage } from "./group-by";
+import { groupByClassName, groupByRegion, groupByStackTag, groupByStageTag } from "./group-by";
 import type {
-  GroupedCdkStacks,
   Region,
   RiffRaffDeployment,
   RiffRaffDeploymentName,
@@ -218,12 +217,10 @@ export class RiffRaffYamlFile {
 
     const deployments = new Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>();
 
-    const groupedStacks: GroupedCdkStacks = groupByClassNameStackRegionStage(allCdkStacks);
-
-    Object.values(groupedStacks).forEach((stackTagGroup) => {
-      Object.values(stackTagGroup).forEach((regionGroup) => {
-        Object.values(regionGroup).forEach((stageGroup) => {
-          const stacks: GuStack[] = Object.values(stageGroup).flat();
+    Object.values(groupByClassName(allCdkStacks)).forEach((stacksGroupedByClassName) => {
+      Object.values(groupByStackTag(stacksGroupedByClassName)).forEach((stacksGroupedByStackTag) => {
+        Object.values(groupByRegion(stacksGroupedByStackTag)).forEach((stacksGroupedByRegion) => {
+          const stacks: GuStack[] = Object.values(groupByStageTag(stacksGroupedByRegion)).flat();
 
           // The items in `stacks` only differ by stage, so we can just use the first item in the list.
           const [stack] = stacks;
