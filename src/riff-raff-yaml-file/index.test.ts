@@ -155,43 +155,6 @@ describe("The RiffRaffYamlFile class", () => {
     `);
   });
 
-  it("Should throw when there are missing stack definitions", () => {
-    const app = new App();
-
-    class MyApplicationStack extends GuStack {}
-    class MyDatabaseStack extends GuStack {}
-
-    const region = {
-      env: {
-        region: "eu-west-1",
-      },
-    };
-
-    new MyApplicationStack(app, "App-CODE-deploy", { ...region, stack: "deploy", stage: "CODE" });
-    new MyApplicationStack(app, "App-PROD-media-service", {
-      ...region,
-      stack: "media-service",
-      stage: "PROD",
-    });
-
-    new MyApplicationStack(app, "App-PROD-deploy", { ...region, stack: "deploy", stage: "PROD" });
-    new MyDatabaseStack(app, "Database-CODE-deploy", { ...region, stack: "deploy", stage: "PROD" });
-
-    expect(() => {
-      new RiffRaffYamlFile(app);
-    }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
-  });
-
-  it("Should throw if there is an unresolved region", () => {
-    const app = new App();
-    class MyApplicationStack extends GuStack {}
-    new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
-
-    expect(() => {
-      new RiffRaffYamlFile(app);
-    }).toThrow("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
-  });
-
   it("Should add a cloud-formation deployment", () => {
     const app = new App({ outdir: "/tmp/cdk.out" });
     class MyApplicationStack extends GuStack {}
@@ -1932,6 +1895,110 @@ describe("The RiffRaffYamlFile class", () => {
               - asg-upload-eu-west-1-test-my-frontend-stack
         "
       `);
+    });
+  });
+
+  describe("The validation checks performed during initialisation", () => {
+    it("should throw if there is an unresolved region", () => {
+      const app = new App();
+      class MyApplicationStack extends GuStack {}
+      new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
+    });
+
+    it("should throw when the CODE database definition is missing", () => {
+      const app = new App();
+
+      class MyApplicationStack extends GuStack {}
+      class MyDatabaseStack extends GuStack {}
+
+      new MyApplicationStack(app, "App-CODE-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "CODE",
+      });
+      new MyApplicationStack(app, "App-PROD-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      new MyDatabaseStack(app, "Database-PROD-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+    });
+
+    it("should throw when the stack of media-service has no CODE stage", () => {
+      const app = new App();
+
+      class MyApplicationStack extends GuStack {}
+
+      new MyApplicationStack(app, "App-CODE-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "CODE",
+      });
+      new MyApplicationStack(app, "App-PROD-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      new MyApplicationStack(app, "App-PROD-media-service", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "media-service",
+        stage: "PROD",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+    });
+
+    it("should throw when region definitions are missing (no PROD eu-west-1, no CODE us-east-1)", () => {
+      const app = new App();
+
+      class MyApplicationStack extends GuStack {}
+
+      new MyApplicationStack(app, "App-CODE-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "CODE",
+      });
+      new MyApplicationStack(app, "App-PROD-deploy", {
+        env: {
+          region: "us-east-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 2 definitions");
     });
   });
 });
