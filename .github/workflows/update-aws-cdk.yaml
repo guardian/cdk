@@ -22,7 +22,6 @@ jobs:
           ref: main
       - uses: actions/setup-node@v6
         with:
-          node-version-file: '.tool-versions'
           cache: npm
       - uses: actions/create-github-app-token@v2
         id: app-token
