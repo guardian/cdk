@@ -30,7 +30,8 @@ export interface GuStackProps extends Omit<StackProps, "stackName"> {
 
   /**
    * The name of the Riff-Raff project used to deploy these resources.
-   * If provided, it is used as the value of the `gu:riff-raff-project` tag on all resources.
+   * Used as the value of the `gu:riff-raff-project` tag on all resources.
+   * If using {@link GuRoot} or {@link RiffRaffYamlFile}, this value is also used in the location of the generated `riff-raff.yaml`.
    *
    * @see https://github.com/guardian/riffraff-platform
    */

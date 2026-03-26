@@ -1,6 +1,7 @@
 import type { GuStack } from "../constructs/core";
 import { groupBy } from "../utils/array";
-import type { ClassName, Region, StackTag, StageTag } from "./types";
+import type { ClassName, Region, RiffRaffProjectName, StackTag, StageTag } from "./types";
+import { UnknownRiffRaffProjectName } from "./types";
 
 export function groupByClassName(cdkStacks: GuStack[]): Record<ClassName, GuStack[]> {
   return groupBy(cdkStacks, (stack) => stack.constructor.name);
@@ -16,4 +17,8 @@ export function groupByStageTag(cdkStacks: GuStack[]): Record<StageTag, GuStack[
 
 export function groupByRegion(cdkStacks: GuStack[]): Record<Region, GuStack[]> {
   return groupBy(cdkStacks, ({ region }) => region);
+}
+
+export function groupByRiffRaffProjectName(cdkStacks: GuStack[]): Record<RiffRaffProjectName, GuStack[]> {
+  return groupBy(cdkStacks, (_) => _.riffRaffProjectName ?? UnknownRiffRaffProjectName);
 }
