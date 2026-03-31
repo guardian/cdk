@@ -45,9 +45,9 @@ describe("GuDeveloperPolicyExperimental", () => {
       permission: "test123",
     });
 
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Resource is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Resource is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -63,9 +63,9 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Resource is too broad: s3://*. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Resource is too broad: s3://*. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -80,9 +80,9 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -100,7 +100,7 @@ describe("GuDeveloperPolicyExperimental", () => {
     });
     Annotations.fromStack(stack).hasNoError(
       "*",
-      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -116,9 +116,9 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -137,7 +137,7 @@ describe("GuDeveloperPolicyExperimental", () => {
     });
     Annotations.fromStack(stack).hasNoError(
       "*",
-      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -153,9 +153,9 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Resource is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Resource is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -171,9 +171,9 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 
@@ -189,13 +189,13 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
-    Annotations.fromStack(stack).hasWarning(
+    Annotations.fromStack(stack).hasError(
       "*",
-      "Statement Resource is too broad: arn:aws:s3:::*. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+      "Statement Resource is too broad: arn:aws:s3:::*. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
   });
 });
