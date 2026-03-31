@@ -22,9 +22,9 @@ export type GuWorkloadPolicyProps = {
    */
   readonly description?: string;
   /**
-   * An optional marker which suppresses the warnings on overbroad permissions
+   * An optional marker which suppresses the check and warnings on overbroad permissions
    */
-  readonly isBroad?: boolean;
+  readonly withoutPolicyChecks?: boolean;
 };
 
 /**
@@ -73,18 +73,16 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
       throw new Error("Empty statements array passed to GuDeveloperPolicyExperimental");
     }
 
-    // Later, apply to the stack and check for specific errors
-    Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker(scope, props));
+    if (!props.withoutPolicyChecks) {
+      // Later, apply to the stack and check for specific errors
+      Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker());
+    }
   }
 }
 
 class GuDeveloperPolicyExperimentalChecker implements IAspect {
-  shouldCheck?: boolean;
-  constructor(scope: GuStack, props: GuWorkloadPolicyProps) {
-    this.shouldCheck = !props.isBroad;
-  }
   public visit(node: IConstruct): void {
-    if (this.shouldCheck && node instanceof CfnManagedPolicy) {
+    if (node instanceof CfnManagedPolicy) {
       const policyDocumentJson: unknown = (node.policyDocument as PolicyDocument).toJSON();
 
       // These conditions will result in failures from the AWS classes themselves, so we don't need to validate them.

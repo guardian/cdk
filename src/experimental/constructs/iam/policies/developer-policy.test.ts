@@ -133,7 +133,7 @@ describe("GuDeveloperPolicyExperimental", () => {
         }),
       ],
       permission: "test123",
-      isBroad: true,
+      withoutPolicyChecks: true,
     });
     Annotations.fromStack(stack).hasNoError(
       "*",
