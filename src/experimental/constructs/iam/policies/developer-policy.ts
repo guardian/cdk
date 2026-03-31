@@ -147,7 +147,9 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
    */
   private check(checkString: string, checkType: string, node: CfnManagedPolicy) {
     if (checkString === "*" || checkString.indexOf(":*") || checkString.indexOf("/*") > 0) {
-      Annotations.of(node).addWarning(`Statement ${checkType} is too broad: ${checkString}`);
+      Annotations.of(node).addWarning(
+        `Statement ${checkType} is too broad: ${checkString}. If this is necessary and intended, use isBroad: true in properties to turn off this warning`,
+      );
     }
   }
   private checkAction(checkString: string, node: CfnManagedPolicy) {

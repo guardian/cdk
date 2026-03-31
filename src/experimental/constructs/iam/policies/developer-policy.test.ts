@@ -44,7 +44,11 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Resource is too broad: *");
+
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Resource is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("adds an error if a wide-open resource/allow policy statement is present", () => {
@@ -59,7 +63,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Resource is too broad: s3://*");
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Resource is too broad: s3://*. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("adds an error if a wide-open policy statement with no effect is present", () => {
@@ -73,7 +80,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("does not add an error if a wide-open policy statement with a Deny effect is present", () => {
@@ -88,7 +98,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasNoError("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasNoError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("adds an error if a wide-open action/allow policy statement is present", () => {
@@ -103,7 +116,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("does not add an error if a wide-open action/allow policy statement is present but the isBroad marker is used", () => {
@@ -119,7 +135,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       permission: "test123",
       isBroad: true,
     });
-    Annotations.fromStack(stack).hasNoError("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasNoError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("adds an error if a wide-open statement resource is requested", () => {
@@ -134,7 +153,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Resource is too broad: *");
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Resource is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("adds an error if a wide-open statement action is requested", () => {
@@ -149,7 +171,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 
   test("adds an error if both a wide-open statement action and a resource is requested", () => {
@@ -164,7 +189,13 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasWarning("*", "Statement Action is too broad: *");
-    Annotations.fromStack(stack).hasWarning("*", "Statement Resource is too broad: arn:aws:s3:::*");
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
+    Annotations.fromStack(stack).hasWarning(
+      "*",
+      "Statement Resource is too broad: arn:aws:s3:::*. If this is necessary and intended, use isBroad: true in properties to turn off this warning",
+    );
   });
 });
