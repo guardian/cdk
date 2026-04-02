@@ -9,7 +9,8 @@ import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
-import { RiffRaffYamlFile } from "./index";
+import { UnknownRiffRaffProjectName } from "./types";
+import { RiffRaffYamlFile, validateRiffRaffYamlDirectory } from "./index";
 
 describe("The RiffRaffYamlFile class", () => {
   it("Should support deploying different GuStacks to multiple AWS accounts (aka Riff-Raff stacks), and regions", () => {
@@ -1110,7 +1111,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     const riffraff = new RiffRaffYamlFile(app);
 
-    riffraff.riffRaffYaml.deployments.set("upload-my-static-files", {
+    riffraff.configuration.get(UnknownRiffRaffProjectName)?.deployments.set("upload-my-static-files", {
       app: "my-static-site",
       contentDirectory: "my-static-site",
       parameters: {
@@ -2008,5 +2009,157 @@ describe("The RiffRaffYamlFile class", () => {
         new RiffRaffYamlFile(app);
       }).toThrow("Unable to produce a working riff-raff.yaml file; missing 2 definitions");
     });
+
+    it("should generate multiple configurations", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      class MyCoreInfraStack extends GuStack {}
+      class MyApplicationStack extends GuStack {}
+
+      new MyCoreInfraStack(app, "MyCoreInfra", {
+        stack: "deploy",
+        stage: "INFRA",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::core-infra",
+      });
+
+      new MyApplicationStack(app, "MyApp-CODE", {
+        stack: "deploy",
+        stage: "CODE",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      new MyApplicationStack(app, "MyApp-PROD", {
+        stack: "deploy",
+        stage: "PROD",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      const riffraff = new RiffRaffYamlFile(app);
+
+      expect(Array.from(riffraff.configuration.keys())).toEqual(["deploy::core-infra", "deploy::my-app"]);
+
+      expect(riffraff.toYAML("deploy::core-infra")).toMatchInlineSnapshot(`
+        "allowedStages:
+          - INFRA
+        deployments:
+          cfn-eu-west-1-deploy-my-core-infra-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - deploy
+            app: my-core-infra-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                INFRA: MyCoreInfra.template.json
+        "
+      `);
+      expect(riffraff.toYAML("deploy::my-app")).toMatchInlineSnapshot(`
+        "allowedStages:
+          - CODE
+          - PROD
+        deployments:
+          cfn-eu-west-1-deploy-my-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - deploy
+            app: my-application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                CODE: MyApp-CODE.template.json
+                PROD: MyApp-PROD.template.json
+        "
+      `);
+    });
+
+    it("should throw when generating multiple configurations and there are missing definitions", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      class MyCoreInfraStack extends GuStack {}
+      class MyApplicationStack extends GuStack {}
+      class MyDatabaseStack extends GuStack {}
+
+      new MyCoreInfraStack(app, "MyCoreInfra", {
+        stack: "deploy",
+        stage: "INFRA",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::core-infra",
+      });
+
+      new MyApplicationStack(app, "MyApp-CODE", {
+        stack: "deploy",
+        stage: "CODE",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      new MyApplicationStack(app, "MyApp-PROD", {
+        stack: "deploy",
+        stage: "PROD",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      new MyDatabaseStack(app, "MyDatabase-PROD", {
+        stack: "deploy",
+        stage: "PROD",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+    });
+  });
+});
+
+describe("The validateRiffRaffYamlDirectory function", () => {
+  it("accepts a child directory", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "playground::my-project");
+    expect(actual).toBe("/tmp/cdk.out/playground::my-project");
+  });
+
+  it("accepts a grand-child directory", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "playground/my-project");
+    expect(actual).toBe("/tmp/cdk.out/playground/my-project");
+  });
+
+  it("accepts the empty string", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "");
+    expect(actual).toBe("/tmp/cdk.out");
+  });
+
+  it("accepts a .. directory name", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "..final");
+    expect(actual).toBe("/tmp/cdk.out/..final");
+  });
+
+  it("rejects a parent directory", () => {
+    expect(() => {
+      validateRiffRaffYamlDirectory("/tmp/cdk.out", "../playground::my-project");
+    }).toThrow(
+      "Directory traversal detected: '../playground::my-project' would create a directory outside of /tmp/cdk.out (riffRaffProjectName=../playground::my-project, resolvedPath='/tmp/playground::my-project', resolvedBase='/tmp/cdk.out')",
+    );
+  });
+
+  it("accepts an ancestor directory", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "child/../final");
+    expect(actual).toBe("/tmp/cdk.out/final");
+  });
+
+  it("rejects a multi-ancestor directory", () => {
+    expect(() => {
+      validateRiffRaffYamlDirectory("/tmp/cdk.out", "child/../somewhere/../../final");
+    }).toThrow(
+      "Directory traversal detected: 'child/../somewhere/../../final' would create a directory outside of /tmp/cdk.out (riffRaffProjectName=child/../somewhere/../../final, resolvedPath='/tmp/final', resolvedBase='/tmp/cdk.out')",
+    );
   });
 });
