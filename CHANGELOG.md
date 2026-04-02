@@ -1,5 +1,152 @@
 # @guardian/cdk
 
+## 63.0.0
+
+### Major Changes
+
+- c6e30e1: Support generating multiple `riff-raff.yaml` files. To do this, set the `riffRaffProjectName` property of a `GuStack`.
+  This is helpful in a few scenarios, for example if you have a singleton (INFRA) stack, and CODE/PROD application stacks.
+
+  In the following, two files will be produced:
+  - `/path/to/cdk.out/deploy::core-infra/riff-raff.yaml`
+  - `/path/to/cdk.out/deploy::my-app/riff-raff.yaml`
+
+  ```ts
+  class MyCoreInfraStack extends GuStack {}
+  class MyApplicationStack extends GuStack {}
+
+  new MyCoreInfraStack(app, "MyCoreInfra", {
+    stack: "deploy",
+    stage: "INFRA",
+    env: { region: "eu-west-1" },
+    riffRaffProjectName: "deploy::core-infra",
+  });
+
+  new MyApplicationStack(app, "MyApp-CODE", {
+    stack: "deploy",
+    stage: "CODE",
+    env: { region: "eu-west-1" },
+    riffRaffProjectName: "deploy::my-app",
+  });
+
+  new MyApplicationStack(app, "MyApp-PROD", {
+    stack: "deploy",
+    stage: "PROD",
+    env: { region: "eu-west-1" },
+    riffRaffProjectName: "deploy::my-app",
+  });
+  ```
+
+  BREAKING CHANGE: Within `RiffRaffYamlFile` the `riffRaffYaml` property has been removed.
+  NOTE: If you're using `GuRoot`, this change should not impact you.
+
+  To migrate, use the `configuration` property:
+
+  ```ts
+  // BEFORE
+  const app = new App();
+  const riffRaff = new RiffRaffYamlFile(app);
+  const deployments = riffRaff.riffRaffYaml.deployments;
+
+  const myStack = new MyStack(app, "my-stack", {
+    stack: "playground",
+    stage: "PROD",
+    env: { region: "eu-west-1" },
+    riffRaffProjectName: "playground::my-stack",
+  });
+
+  deployments.set("additional-deployment", {
+    type: "aws-s3",
+    ...
+  });
+
+  // AFTER
+  const app = new App();
+  const riffRaff = new RiffRaffYamlFile(app);
+  const { configuration } = riffRaff;
+
+  configuration.get("playground::my-stack")?.deployments.set("additional-deployment", {
+    type: "aws-s3",
+    ...
+  });
+  ```
+
+### Minor Changes
+
+- 59367ec: Add optional `riffRaffProjectName` property to `GuStackProps` representing the name of the Riff-Raff project used to deploy these resources.
+  If provided, it is used as the value of the `gu:riff-raff-project` tag on all resources.
+
+  See also https://github.com/guardian/riffraff-platform.
+
+### Patch Changes
+
+- a02c318: Correctly validate stack existence when instantiating a `RiffRaffYamlFile` to generate `riff-raff.yaml`.
+
+  Given the below set of stacks, an `Error` will now be thrown as there is a missing instance of `MyDatabaseStack` for `CODE`.
+
+  ```typescript
+  new MyApplicationStack(app, "App-CODE-deploy", {
+    env: {
+      region: "eu-west-1",
+    },
+    stack: "deploy",
+    stage: "CODE",
+  });
+  new MyApplicationStack(app, "App-PROD-deploy", {
+    env: {
+      region: "eu-west-1",
+    },
+    stack: "deploy",
+    stage: "PROD",
+  });
+
+  new MyDatabaseStack(app, "Database-PROD-deploy", {
+    env: {
+      region: "eu-west-1",
+    },
+    stack: "deploy",
+    stage: "PROD",
+  });
+  ```
+
+  Previously, the validation would incorrectly pass.
+
+  <details><summary>Invalid `riff-raff.yaml`</summary>
+  <p>
+
+  ```yaml
+  allowedStages:
+    - CODE
+    - PROD
+  deployments:
+    cfn-eu-west-1-deploy-my-application-stack:
+      type: cloud-formation
+      regions:
+        - eu-west-1
+      stacks:
+        - deploy
+      app: my-application-stack
+      contentDirectory: /private/var/folders/0_/pvjwppsx5cl19t4n6_rmm_y80000gp/T/cdk.out9xIUJu
+      parameters:
+        templateStagePaths:
+          CODE: App-CODE-deploy.template.json
+          PROD: App-PROD-deploy.template.json
+    cfn-eu-west-1-deploy-my-database-stack:
+      type: cloud-formation
+      regions:
+        - eu-west-1
+      stacks:
+        - deploy
+      app: my-database-stack
+      contentDirectory: /private/var/folders/0_/pvjwppsx5cl19t4n6_rmm_y80000gp/T/cdk.out9xIUJu
+      parameters:
+        templateStagePaths:
+          PROD: Database-PROD-deploy.template.json
+  ```
+
+  </p>
+  </details>
+
 ## 62.6.1
 
 ### Patch Changes
