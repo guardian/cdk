@@ -9,7 +9,8 @@ import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
-import { RiffRaffYamlFile } from "./index";
+import { UnknownRiffRaffProjectName } from "./types";
+import { RiffRaffYamlFile, validateRiffRaffYamlDirectory } from "./index";
 
 describe("The RiffRaffYamlFile class", () => {
   it("Should support deploying different GuStacks to multiple AWS accounts (aka Riff-Raff stacks), and regions", () => {
@@ -153,43 +154,6 @@ describe("The RiffRaffYamlFile class", () => {
               CODE: App-CODE-security.template.json
       "
     `);
-  });
-
-  it("Should throw when there are missing stack definitions", () => {
-    const app = new App();
-
-    class MyApplicationStack extends GuStack {}
-    class MyDatabaseStack extends GuStack {}
-
-    const region = {
-      env: {
-        region: "eu-west-1",
-      },
-    };
-
-    new MyApplicationStack(app, "App-CODE-deploy", { ...region, stack: "deploy", stage: "CODE" });
-    new MyApplicationStack(app, "App-PROD-media-service", {
-      ...region,
-      stack: "media-service",
-      stage: "PROD",
-    });
-
-    new MyApplicationStack(app, "App-PROD-deploy", { ...region, stack: "deploy", stage: "PROD" });
-    new MyDatabaseStack(app, "Database-CODE-deploy", { ...region, stack: "deploy", stage: "PROD" });
-
-    expect(() => {
-      new RiffRaffYamlFile(app);
-    }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions"); // Stack of media-service has no CODE stage
-  });
-
-  it("Should throw if there is an unresolved region", () => {
-    const app = new App();
-    class MyApplicationStack extends GuStack {}
-    new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
-
-    expect(() => {
-      new RiffRaffYamlFile(app);
-    }).toThrow("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
   });
 
   it("Should add a cloud-formation deployment", () => {
@@ -1147,7 +1111,7 @@ describe("The RiffRaffYamlFile class", () => {
 
     const riffraff = new RiffRaffYamlFile(app);
 
-    riffraff.riffRaffYaml.deployments.set("upload-my-static-files", {
+    riffraff.configuration.get(UnknownRiffRaffProjectName)?.deployments.set("upload-my-static-files", {
       app: "my-static-site",
       contentDirectory: "my-static-site",
       parameters: {
@@ -1196,18 +1160,10 @@ describe("The RiffRaffYamlFile class", () => {
   it("Should support cloudformation stacks that depend on other cloudformation stacks", () => {
     const app = new App({ outdir: "/tmp/cdk.out" });
 
-    class SharedResourceStack extends GuStack {}
+    class DatabaseStack extends GuStack {}
     class ApplicationStack extends GuStack {}
 
-    const sharedResources = new SharedResourceStack(app, "Shared-INFRA", {
-      env: {
-        region: "eu-west-1",
-      },
-      stack: "deploy",
-      stage: "INFRA",
-    });
-
-    const codeStack = new ApplicationStack(app, "App-CODE", {
+    const databaseCode = new DatabaseStack(app, "Database-CODE", {
       env: {
         region: "eu-west-1",
       },
@@ -1215,7 +1171,7 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "CODE",
     });
 
-    const prodStack = new ApplicationStack(app, "App-PROD", {
+    const databaseProd = new DatabaseStack(app, "Database-PROD", {
       env: {
         region: "eu-west-1",
       },
@@ -1223,28 +1179,44 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "PROD",
     });
 
-    codeStack.addDependency(sharedResources);
-    prodStack.addDependency(sharedResources);
+    const appCode = new ApplicationStack(app, "App-CODE", {
+      env: {
+        region: "eu-west-1",
+      },
+      stack: "deploy",
+      stage: "CODE",
+    });
+
+    const appProd = new ApplicationStack(app, "App-PROD", {
+      env: {
+        region: "eu-west-1",
+      },
+      stack: "deploy",
+      stage: "PROD",
+    });
+
+    appCode.addDependency(databaseCode);
+    appProd.addDependency(databaseProd);
 
     const actual = new RiffRaffYamlFile(app).toYAML();
 
     expect(actual).toMatchInlineSnapshot(`
     "allowedStages:
-      - INFRA
       - CODE
       - PROD
     deployments:
-      cfn-eu-west-1-deploy-shared-resource-stack:
+      cfn-eu-west-1-deploy-database-stack:
         type: cloud-formation
         regions:
           - eu-west-1
         stacks:
           - deploy
-        app: shared-resource-stack
+        app: database-stack
         contentDirectory: /tmp/cdk.out
         parameters:
           templateStagePaths:
-            INFRA: Shared-INFRA.template.json
+            CODE: Database-CODE.template.json
+            PROD: Database-PROD.template.json
       cfn-eu-west-1-deploy-application-stack:
         type: cloud-formation
         regions:
@@ -1258,7 +1230,7 @@ describe("The RiffRaffYamlFile class", () => {
             CODE: App-CODE.template.json
             PROD: App-PROD.template.json
         dependencies:
-          - cfn-eu-west-1-deploy-shared-resource-stack
+          - cfn-eu-west-1-deploy-database-stack
     "
     `);
   });
@@ -1933,5 +1905,261 @@ describe("The RiffRaffYamlFile class", () => {
         "
       `);
     });
+  });
+
+  describe("The validation checks performed during initialisation", () => {
+    it("should throw if there is an unresolved region", () => {
+      const app = new App();
+      class MyApplicationStack extends GuStack {}
+      new MyApplicationStack(app, "App-CODE-deploy", { stack: "deploy", stage: "CODE" });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set");
+    });
+
+    it("should throw when the CODE database definition is missing", () => {
+      const app = new App();
+
+      class MyApplicationStack extends GuStack {}
+      class MyDatabaseStack extends GuStack {}
+
+      new MyApplicationStack(app, "App-CODE-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "CODE",
+      });
+      new MyApplicationStack(app, "App-PROD-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      new MyDatabaseStack(app, "Database-PROD-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+    });
+
+    it("should throw when the stack of media-service has no CODE stage", () => {
+      const app = new App();
+
+      class MyApplicationStack extends GuStack {}
+
+      new MyApplicationStack(app, "App-CODE-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "CODE",
+      });
+      new MyApplicationStack(app, "App-PROD-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      new MyApplicationStack(app, "App-PROD-media-service", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "media-service",
+        stage: "PROD",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+    });
+
+    it("should throw when region definitions are missing (no PROD eu-west-1, no CODE us-east-1)", () => {
+      const app = new App();
+
+      class MyApplicationStack extends GuStack {}
+
+      new MyApplicationStack(app, "App-CODE-deploy", {
+        env: {
+          region: "eu-west-1",
+        },
+        stack: "deploy",
+        stage: "CODE",
+      });
+      new MyApplicationStack(app, "App-PROD-deploy", {
+        env: {
+          region: "us-east-1",
+        },
+        stack: "deploy",
+        stage: "PROD",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 2 definitions");
+    });
+
+    it("should generate multiple configurations", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      class MyCoreInfraStack extends GuStack {}
+      class MyApplicationStack extends GuStack {}
+
+      new MyCoreInfraStack(app, "MyCoreInfra", {
+        stack: "deploy",
+        stage: "INFRA",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::core-infra",
+      });
+
+      new MyApplicationStack(app, "MyApp-CODE", {
+        stack: "deploy",
+        stage: "CODE",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      new MyApplicationStack(app, "MyApp-PROD", {
+        stack: "deploy",
+        stage: "PROD",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      const riffraff = new RiffRaffYamlFile(app);
+
+      expect(Array.from(riffraff.configuration.keys())).toEqual(["deploy::core-infra", "deploy::my-app"]);
+
+      expect(riffraff.toYAML("deploy::core-infra")).toMatchInlineSnapshot(`
+        "allowedStages:
+          - INFRA
+        deployments:
+          cfn-eu-west-1-deploy-my-core-infra-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - deploy
+            app: my-core-infra-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                INFRA: MyCoreInfra.template.json
+        "
+      `);
+      expect(riffraff.toYAML("deploy::my-app")).toMatchInlineSnapshot(`
+        "allowedStages:
+          - CODE
+          - PROD
+        deployments:
+          cfn-eu-west-1-deploy-my-application-stack:
+            type: cloud-formation
+            regions:
+              - eu-west-1
+            stacks:
+              - deploy
+            app: my-application-stack
+            contentDirectory: /tmp/cdk.out
+            parameters:
+              templateStagePaths:
+                CODE: MyApp-CODE.template.json
+                PROD: MyApp-PROD.template.json
+        "
+      `);
+    });
+
+    it("should throw when generating multiple configurations and there are missing definitions", () => {
+      const app = new App({ outdir: "/tmp/cdk.out" });
+
+      class MyCoreInfraStack extends GuStack {}
+      class MyApplicationStack extends GuStack {}
+      class MyDatabaseStack extends GuStack {}
+
+      new MyCoreInfraStack(app, "MyCoreInfra", {
+        stack: "deploy",
+        stage: "INFRA",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::core-infra",
+      });
+
+      new MyApplicationStack(app, "MyApp-CODE", {
+        stack: "deploy",
+        stage: "CODE",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      new MyApplicationStack(app, "MyApp-PROD", {
+        stack: "deploy",
+        stage: "PROD",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      new MyDatabaseStack(app, "MyDatabase-PROD", {
+        stack: "deploy",
+        stage: "PROD",
+        env: { region: "eu-west-1" },
+        riffRaffProjectName: "deploy::my-app",
+      });
+
+      expect(() => {
+        new RiffRaffYamlFile(app);
+      }).toThrow("Unable to produce a working riff-raff.yaml file; missing 1 definitions");
+    });
+  });
+});
+
+describe("The validateRiffRaffYamlDirectory function", () => {
+  it("accepts a child directory", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "playground::my-project");
+    expect(actual).toBe("/tmp/cdk.out/playground::my-project");
+  });
+
+  it("accepts a grand-child directory", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "playground/my-project");
+    expect(actual).toBe("/tmp/cdk.out/playground/my-project");
+  });
+
+  it("accepts the empty string", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "");
+    expect(actual).toBe("/tmp/cdk.out");
+  });
+
+  it("accepts a .. directory name", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "..final");
+    expect(actual).toBe("/tmp/cdk.out/..final");
+  });
+
+  it("rejects a parent directory", () => {
+    expect(() => {
+      validateRiffRaffYamlDirectory("/tmp/cdk.out", "../playground::my-project");
+    }).toThrow(
+      "Directory traversal detected: '../playground::my-project' would create a directory outside of /tmp/cdk.out (riffRaffProjectName=../playground::my-project, resolvedPath='/tmp/playground::my-project', resolvedBase='/tmp/cdk.out')",
+    );
+  });
+
+  it("accepts an ancestor directory", () => {
+    const actual = validateRiffRaffYamlDirectory("/tmp/cdk.out", "child/../final");
+    expect(actual).toBe("/tmp/cdk.out/final");
+  });
+
+  it("rejects a multi-ancestor directory", () => {
+    expect(() => {
+      validateRiffRaffYamlDirectory("/tmp/cdk.out", "child/../somewhere/../../final");
+    }).toThrow(
+      "Directory traversal detected: 'child/../somewhere/../../final' would create a directory outside of /tmp/cdk.out (riffRaffProjectName=child/../somewhere/../../final, resolvedPath='/tmp/final', resolvedBase='/tmp/cdk.out')",
+    );
   });
 });
