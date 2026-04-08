@@ -3,7 +3,6 @@ export * from "./assume-role";
 export * from "./base-policy";
 export * from "./cloudwatch";
 export * from "./describe-ec2";
-export * from "./developer-policy";
 export * from "./dynamodb";
 export * from "./kcl";
 export * from "./log-shipping";

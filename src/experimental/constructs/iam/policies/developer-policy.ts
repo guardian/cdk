@@ -1,26 +1,28 @@
 import type { IAspect } from "aws-cdk-lib";
 import { Annotations, Aspects } from "aws-cdk-lib";
-import { Effect, type PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { CfnManagedPolicy, ManagedPolicy, type PolicyDocument } from "aws-cdk-lib/aws-iam";
+import { Effect, type PolicyDocument, type PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { CfnManagedPolicy, ManagedPolicy } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import type { GuStack } from "../../../../constructs/core";
 
-export type GuWorkloadPolicyProps = {
+export type GuDeveloperPolicyExperimentalProps = {
   /**
-   * Initial set of permissions to add to this policy document.
-   * You can also use `addPermission(statement)` to add permissions later.
+   * IAM policy statements to include in the developer policy.
    *
-   * @default - No statements.
+   * At least one statement is required.
    */
-  readonly statements?: PolicyStatement[];
+  readonly statements: [PolicyStatement, ...PolicyStatement[]];
   /**
-   * The unique identifier of the policy, which will be displayed when creating credentials.
+   * Unique identifier of the developer policy grant.
+   * This must match the grant ID used in Janus DeveloperPolicyGrant!
    */
-  readonly permission: string;
+  readonly grantId: string;
   /**
-   * An optional description of the policy which will be displayed if present.
+   * A friendly display name to help choose the correct developer policy in Janus or elsewhere.
+   *
+   * In AWS this will appear as the managed policy description.
    */
-  readonly description?: string;
+  readonly friendlyName: string;
   /**
    * An optional marker which suppresses the check and warnings on overbroad permissions
    */
@@ -32,7 +34,7 @@ export type GuWorkloadPolicyProps = {
  * resources which can then be used to create limited permission credentials for use with specific activities.
  *
  * The permission scope is not controlled.  This class should be used with care to create minimal permissions.
- * To that end, broad ALLOW permissions can pruned with narrower optional DENY permissions.
+ * To that end, broad ALLOW permissions can be pruned with narrower optional DENY permissions.
  *
  * `permission` is prefixed with `/developer-policy/` and postfixed with `/` to construct the path.  This will
  * be used for discovery and display.  It is restricted to the same character set as AWS `path`.
@@ -61,17 +63,12 @@ export type GuWorkloadPolicyProps = {
  * @experimental
  */
 export class GuDeveloperPolicyExperimental extends ManagedPolicy {
-  constructor(scope: GuStack, id: string, props: GuWorkloadPolicyProps) {
+  constructor(scope: GuStack, id: string, props: GuDeveloperPolicyExperimentalProps) {
     super(scope, id, {
-      description: `${props.permission} developer policy`,
       ...props,
-      path: `/developer-policy/${props.permission}/`,
+      path: `/developer-policy/${props.grantId}/`,
+      description: props.friendlyName,
     });
-
-    // Don't mind if it's missing, but if it's used it must not be empty
-    if (props.statements?.length == 0) {
-      throw new Error("Empty statements array passed to GuDeveloperPolicyExperimental");
-    }
 
     if (!props.withoutPolicyChecks) {
       // Later, apply to the stack and check for specific errors
@@ -92,7 +89,10 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
       if (!("Statement" in policyDocumentJson)) {
         return;
       }
-      if (!Array.isArray(policyDocumentJson.Statement) || policyDocumentJson.Statement.length == 0) {
+      if (!Array.isArray(policyDocumentJson.Statement)) {
+        return;
+      }
+      if (policyDocumentJson.Statement.length === 0) {
         return;
       }
 
@@ -114,7 +114,7 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
 
           if (!("Resource" in statement)) {
             // Typescript requires us to check this, because the data model doesn't guarantee it
-            Annotations.of(node).addError("Statement is missing an Resource");
+            Annotations.of(node).addError("Statement is missing a Resource");
           } else {
             const resource = (statement as { Resource: unknown }).Resource;
 
@@ -140,12 +140,13 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
    *   arn:aws:dynamodb:us-east-2:account-ID-without-hyphens:table/*
    *   arn:aws:s3:::*
    *
-   * @param checkString resource or action
-   * @param node
+   * @param checkString Action or resource value to validate.
+   * @param checkType Label used in validation error messages (for example, Action or Resource).
+   * @param node Policy node used to attach validation annotations.
    * @private
    */
   private check(checkString: string, checkType: string, node: CfnManagedPolicy) {
-    if (checkString === "*" || checkString.indexOf(":*") || checkString.indexOf("/*") > 0) {
+    if (checkString === "*" || checkString.includes(":*") || checkString.includes("/*")) {
       Annotations.of(node).addError(
         `Statement ${checkType} is too broad: ${checkString}. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check`,
       );

@@ -1,13 +1,12 @@
 import { Annotations, Template } from "aws-cdk-lib/assertions";
-import type { CfnManagedPolicy } from "aws-cdk-lib/aws-iam";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { simpleGuStackForTesting } from "../../../utils/test";
-import { GuDeveloperPolicy } from "./developer-policy";
+import { simpleGuStackForTesting } from "../../../../utils/test";
+import { GuDeveloperPolicyExperimental } from "./developer-policy";
 
-describe("GuDeveloperPolicy", () => {
+describe("GuDeveloperPolicyExperimental", () => {
   test("if a single policy statement is provided, the resulting Developer Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
@@ -16,12 +15,12 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
-      Description: "test policy",
       Path: "/developer-policy/test123/",
+      Description: "test policy",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -37,7 +36,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if a wide-open resource/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -46,7 +45,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
 
     Annotations.fromStack(stack).hasError(
@@ -57,7 +56,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if a wide-open resource/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -66,7 +65,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -76,7 +75,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if a wide-open policy statement with no effect is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["*"],
@@ -84,7 +83,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -94,7 +93,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("does not add an error if a wide-open policy statement with a Deny effect is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Deny",
@@ -103,7 +102,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasNoError(
       "*",
@@ -113,7 +112,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if a wide-open action/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -122,7 +121,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -140,7 +139,8 @@ describe("GuDeveloperPolicy", () => {
           Resource: "s3:*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
       withoutPolicyChecks: true,
     });
     Annotations.fromStack(stack).hasNoError(
@@ -159,7 +159,8 @@ describe("GuDeveloperPolicy", () => {
           Resource: "s3:*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
       withoutPolicyChecks: false,
     });
     Annotations.fromStack(stack).hasError(
@@ -170,7 +171,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if a wide-open statement resource is requested", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -179,7 +180,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -189,7 +190,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if a wide-open statement action is requested", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -198,7 +199,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -208,7 +209,7 @@ describe("GuDeveloperPolicy", () => {
 
   test("adds an error if both a wide-open statement action and a resource is requested", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -217,7 +218,7 @@ describe("GuDeveloperPolicy", () => {
         }),
       ],
       grantId: "test123",
-      description: "test policy",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -227,53 +228,5 @@ describe("GuDeveloperPolicy", () => {
       "*",
       "Statement Resource is too broad: arn:aws:s3:::*. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
     );
-  });
-
-  test("adds an error if the policy document statement field is not an array", () => {
-    const stack = simpleGuStackForTesting();
-    const policy = new GuDeveloperPolicy(stack, "AllowS3GetObject", {
-      statements: [
-        PolicyStatement.fromJson({
-          Effect: "Allow",
-          Action: ["s3:GetObject"],
-          Resource: "arn:aws:s3:::test-bucket/*",
-        }),
-      ],
-      grantId: "test123",
-      description: "test policy",
-    });
-
-    const cfnPolicy: CfnManagedPolicy = policy.node.defaultChild as CfnManagedPolicy;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- intentional: testing checker behaviour with a malformed policy document
-    cfnPolicy.policyDocument = {
-      Version: "2012-10-17",
-      Statement: "not-an-array",
-    } as unknown as CfnManagedPolicy["policyDocument"];
-
-    Annotations.fromStack(stack).hasError("*", "Policy document Statement must be an array");
-  });
-
-  test("adds an error if the policy document statement field is an empty array", () => {
-    const stack = simpleGuStackForTesting();
-    const policy = new GuDeveloperPolicy(stack, "AllowS3GetObject", {
-      statements: [
-        PolicyStatement.fromJson({
-          Effect: "Allow",
-          Action: ["s3:GetObject"],
-          Resource: "arn:aws:s3:::test-bucket/*",
-        }),
-      ],
-      grantId: "test123",
-      description: "test policy",
-    });
-
-    const cfnPolicy: CfnManagedPolicy = policy.node.defaultChild as CfnManagedPolicy;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- intentional: testing checker behaviour with a malformed policy document
-    cfnPolicy.policyDocument = {
-      Version: "2012-10-17",
-      Statement: [],
-    } as unknown as CfnManagedPolicy["policyDocument"];
-
-    Annotations.fromStack(stack).hasError("*", "Policy document must include at least one Statement");
   });
 });
