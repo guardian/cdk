@@ -141,6 +141,25 @@ describe("GuDeveloperPolicyExperimental", () => {
     );
   });
 
+  test("do not add an error if a wide-open action/allow policy statement is present and the withoutPolicyChecks marker is used but false", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Effect: "Allow",
+          Action: ["*"],
+          Resource: "s3:*",
+        }),
+      ],
+      permission: "test123",
+      withoutPolicyChecks: false,
+    });
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
+  });
+
   test("adds an error if a wide-open statement resource is requested", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
