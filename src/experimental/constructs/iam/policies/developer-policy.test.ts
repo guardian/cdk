@@ -122,7 +122,7 @@ describe("GuDeveloperPolicyExperimental", () => {
     );
   });
 
-  test("does not add an error if a wide-open action/allow policy statement is present but the isBroad marker is used", () => {
+  test("does not add an error if a wide-open action/allow policy statement is present but the withoutPolicyChecks marker is used", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
