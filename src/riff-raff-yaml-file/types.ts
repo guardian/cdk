@@ -1,11 +1,19 @@
 // type aliases to, hopefully, improve readability
 import type { GuStack } from "../constructs/core";
 
+export type RiffRaffProjectName = string;
 export type ClassName = string;
 export type StackTag = string;
 export type StageTag = string;
 export type Region = string;
 export type CdkStacksDifferingOnlyByStage = GuStack[];
+
+/**
+ * The default value used to group {@link GuStack} when generating a `riff-raff.yaml` file.
+ * This value will be used when the {@link GuStack} does not have a `riffRaffProjectName` property set.
+ * Should only be externally used if adding a custom deployment to the `riff-raff.yaml` file.
+ */
+export const UnknownRiffRaffProjectName: RiffRaffProjectName = "gu:cdk:constants:unknown-riff-raff-project-name";
 
 export interface RiffRaffYaml {
   allowedStages: Set<StageTag>;
@@ -32,14 +40,4 @@ export interface RiffRaffDeployment {
   props: RiffRaffDeploymentProps;
 }
 
-/*
- The aim here is to produce an identity of a `GuStack` as a composite of:
-   - Class name
-   - Stack tag
-   - Region
- Finally, group by stage to help form the `templateStagePaths` property for the `cloud-formation` deployment type in `riff-raff.yaml`.
- */
-export type GroupedCdkStacks = Record<
-  ClassName,
-  Record<StackTag, Record<Region, Record<StageTag, CdkStacksDifferingOnlyByStage>>>
->;
+export type RiffRaffDeployments = Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>;

@@ -27,4 +27,30 @@ describe("groupBy", () => {
       ],
     });
   });
+
+  it("should support providing a default value when a field can be undefined", () => {
+    interface Food {
+      name: string;
+      kind: "fruit" | "vegetable";
+      variety?: string;
+    }
+
+    const data: Food[] = [
+      { name: "apple", kind: "fruit", variety: "gala" },
+      { name: "banana", kind: "fruit" },
+      { name: "carrot", kind: "vegetable" },
+      { name: "daikon", kind: "vegetable" },
+    ];
+
+    const actual = groupBy(data, (_) => _.variety ?? "unknown");
+
+    expect(actual).toEqual({
+      gala: [{ name: "apple", kind: "fruit", variety: "gala" }],
+      unknown: [
+        { name: "banana", kind: "fruit" },
+        { name: "carrot", kind: "vegetable" },
+        { name: "daikon", kind: "vegetable" },
+      ],
+    });
+  });
 });

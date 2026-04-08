@@ -12,7 +12,7 @@ import type { GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, simpleGuStackForTesting } from "../../utils/test";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
 import { GuHorizontallyScalingDeploymentPropertiesExperimental } from "./ec2-app";
-import { getAsgRollingUpdateCfnParameterName, GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
+import { GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
 
 function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2AppExperimentalProps {
   const buildNumber = 123;
@@ -155,7 +155,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     const template = getTemplateAfterAspectInvocation(stack);
 
     // The scaling ASG should NOT have `DesiredCapacity` set, and `MinInstancesInService` set via a CFN Parameter
-    const parameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
+    const parameterName = "MinInstancesInServiceFormyscalingapp";
     template.hasParameter(parameterName, {
       Type: "Number",
     });
@@ -497,7 +497,7 @@ describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", 
         });
         const cfnAsg = ec2App.autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
         cfnAsg.cfnOptions.updatePolicy = { autoScalingRollingUpdate: {} };
-        Aspects.of(app).add(GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(this));
+        Aspects.of(this).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
       }
     }
 

@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import type { App } from "aws-cdk-lib";
 import { Token } from "aws-cdk-lib";
@@ -7,7 +7,7 @@ import { dump } from "js-yaml";
 import { GuAutoScalingGroup } from "../constructs/autoscaling";
 import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
-import { GuHorizontallyScalingDeploymentPropertiesExperimental } from "../experimental/patterns/ec2-app";
+import { GuAsgMinInstancesInServiceParameterExperimental } from "../experimental/patterns/ec2-app";
 import { autoscalingDeployment, uploadAutoscalingArtifact } from "./deployments/autoscaling";
 import {
   cloudFormationDeployment,
@@ -15,17 +15,54 @@ import {
   getMinInstancesInServiceParameters,
 } from "./deployments/cloudformation";
 import { updateLambdaDeployment, uploadLambdaArtifact } from "./deployments/lambda";
-import { groupByClassNameStackRegionStage } from "./group-by";
+import { updateDeploymentParameters } from "./deployments/update-parameters";
+import {
+  groupByClassName,
+  groupByRegion,
+  groupByRiffRaffProjectName,
+  groupByStackTag,
+  groupByStageTag,
+} from "./group-by";
 import type {
-  GroupedCdkStacks,
+  ClassName,
   Region,
   RiffRaffDeployment,
   RiffRaffDeploymentName,
   RiffRaffDeploymentProps,
+  RiffRaffProjectName,
   RiffRaffYaml,
   StackTag,
   StageTag,
 } from "./types";
+import { UnknownRiffRaffProjectName } from "./types";
+
+function validateAllRegionsAreResolved(regions: Region[]): void {
+  const unresolved = regions.filter((region) => Token.isUnresolved(region));
+
+  if (unresolved.length !== 0) {
+    throw new Error(`Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set`);
+  }
+}
+
+function getLambdas(cdkStack: GuStack): GuLambdaFunction[] {
+  return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction) as GuLambdaFunction[];
+}
+
+function getAutoScalingGroups(cdkStack: GuStack): GuAutoScalingGroup[] {
+  return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
+}
+
+function getGuStackDependencies(cdkStack: GuStack): GuStack[] {
+  return cdkStack.dependencies.filter((_) => _ instanceof GuStack) as GuStack[];
+}
+
+interface MissingStack {
+  riffRaffProjectName: RiffRaffProjectName;
+  className: ClassName;
+  stack: StackTag;
+  stage: StageTag;
+  region: Region;
+}
 
 /**
  * A class that creates a `riff-raff.yaml` file.
@@ -71,243 +108,167 @@ import type {
  * @see https://riffraff.gutools.co.uk/docs/magenta-lib/types
  */
 export class RiffRaffYamlFile {
-  private readonly allCdkStacks: GuStack[];
-  private readonly allStackTags: StackTag[];
-  private readonly allStageTags: StageTag[];
-  private readonly allRegions: Region[];
   private readonly outdir: string;
 
   /**
-   * The `riff-raff.yaml` file as an object.
+   * A mapping between a Riff-Raff project and `riff-raff.yaml` content as an object.
    *
    * It is useful for specifying additional deployment types that GuCDK does not support.
    * Consider raising an issue or pull request if you think it should be supported.
    *
-   * In most cases, you shouldn't need to access this.
-   * No validation is performed on the parameters you provide, so you might get deployment errors.
-   *
    * @see https://riffraff.gutools.co.uk/docs/magenta-lib/types
    */
-  public readonly riffRaffYaml: RiffRaffYaml;
-
-  private isCdkStackPresent(expectedStack: StackTag, expectedStage: StageTag): boolean {
-    const matches = this.allCdkStacks.find((cdkStack) => {
-      const { stack, stage } = cdkStack;
-      return stack === expectedStack && stage === expectedStage;
-    });
-
-    return !!matches;
-  }
-
-  /**
-   * Check there are the appropriate number of `GuStack`s.
-   * Expect to find an instance for each combination of `stack`, and `stage`.
-   *
-   * If not valid, a message is logged describing what is missing to aid debugging.
-   *
-   * Given the following:
-   *
-   * ```ts
-   * const app = new App();
-   *
-   * class MyApplicationStack extends GuStack { }
-   *
-   * new MyApplicationStack(app, "App-CODE-deploy", {
-   *   env: {
-   *     region: "eu-west-1",
-   *   },
-   *   stack: "deploy",
-   *   stage: "CODE"
-   * });
-   *
-   * new MyApplicationStack(app, "App-PROD-media-service", {
-   *   env: {
-   *     region: "eu-west-1",
-   *   },
-   *   stack: "media-service",
-   *   stage: "PROD",
-   * });
-   *
-   * new MyApplicationStack(app, "App-PROD-deploy", {
-   *   env: {
-   *     region: "eu-west-1",
-   *   },
-   *   stack: "deploy",
-   *   stage: "PROD"
-   * });
-   * ```
-   *
-   * This will log a message like this, where ❌ denotes something missing,
-   * specifically there is no `CODE` template for `media-service`.
-   *
-   * ```log
-   * Unable to produce a working riff-raff.yaml file; missing 1 definitions (details below)
-   *
-   * ┌───────────────┬──────┬──────┐
-   * │    (index)    │ CODE │ PROD │
-   * ├───────────────┼──────┼──────┤
-   * │    deploy     │ '✅' │ '✅' │
-   * │ media-service │ '❌' │ '✅' │
-   * └───────────────┴──────┴──────┘
-   * ```
-   *
-   * @private
-   */
-  private validateStacksInApp(): void {
-    type Found = "✅";
-    type NotFound = "❌";
-    type AppValidation = Record<StackTag, Record<StageTag, Found | NotFound>>;
-
-    const { allStackTags, allStageTags } = this;
-
-    const checks: AppValidation = allStackTags.reduce((accStackTag, stackTag) => {
-      return {
-        ...accStackTag,
-        [stackTag]: allStageTags.reduce((accStageTag, stageTag) => {
-          return {
-            ...accStageTag,
-            [stageTag]: this.isCdkStackPresent(stackTag, stageTag) ? "✅" : "❌",
-          };
-        }, {}),
-      };
-    }, {});
-
-    const missingDefinitions: Array<Found | NotFound> = Object.values(checks).flatMap((groupedByStackTag) => {
-      return Object.values(groupedByStackTag).filter((_) => _ === "❌");
-    });
-
-    if (missingDefinitions.length > 0) {
-      const message = `Unable to produce a working riff-raff.yaml file; missing ${missingDefinitions.length} definitions`;
-
-      console.log(`${message} (details below)`);
-      console.table(checks);
-
-      throw new Error(message);
-    }
-  }
-
-  private validateAllRegionsAreResolved(): void {
-    const unresolved = this.allRegions.filter((region) => Token.isUnresolved(region));
-
-    if (unresolved.length !== 0) {
-      throw new Error(`Unable to produce a working riff-raff.yaml file; all stacks must have an explicit region set`);
-    }
-  }
-
-  private getLambdas(cdkStack: GuStack): GuLambdaFunction[] {
-    return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction) as GuLambdaFunction[];
-  }
-
-  private getAutoScalingGroups(cdkStack: GuStack): GuAutoScalingGroup[] {
-    return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
-  }
-
-  private getGuStackDependencies(cdkStack: GuStack): GuStack[] {
-    return cdkStack.dependencies.filter((_) => _ instanceof GuStack) as GuStack[];
-  }
+  public readonly configuration: Map<RiffRaffProjectName, RiffRaffYaml>;
 
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
-    this.allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
-    const allowedStages = new Set(this.allCdkStacks.map(({ stage }) => stage));
-    this.allStageTags = Array.from(allowedStages);
-    this.allStackTags = Array.from(new Set(this.allCdkStacks.map(({ stack }) => stack)));
-    this.allRegions = Array.from(new Set(this.allCdkStacks.map(({ region }) => region)));
+    const allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
+    const allRegions = Array.from(new Set(allCdkStacks.map((_) => _.region)));
 
-    this.validateStacksInApp();
-    this.validateAllRegionsAreResolved();
+    validateAllRegionsAreResolved(allRegions);
 
     this.outdir = app.outdir;
+    const configuration = new Map<RiffRaffProjectName, RiffRaffYaml>();
+    const missingStacks: MissingStack[] = [];
 
-    const deployments = new Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>();
+    Object.entries(groupByRiffRaffProjectName(allCdkStacks)).forEach(
+      ([riffRaffProjectName, stacksGroupedByRiffRaffProject]) => {
+        const allowedStages = new Set(stacksGroupedByRiffRaffProject.map((_) => _.stage));
+        const requiredStages = Array.from(allowedStages);
+        const deployments = new Map<RiffRaffDeploymentName, RiffRaffDeploymentProps>();
 
-    const groupedStacks: GroupedCdkStacks = groupByClassNameStackRegionStage(this.allCdkStacks);
+        Object.entries(groupByClassName(stacksGroupedByRiffRaffProject)).forEach(
+          ([className, stacksGroupedByClassName]) => {
+            Object.entries(groupByStackTag(stacksGroupedByClassName)).forEach(([stackTag, stacksGroupedByStackTag]) => {
+              Object.entries(groupByRegion(stacksGroupedByStackTag)).forEach(([region, stacksGroupedByRegion]) => {
+                const stacks: GuStack[] = Object.values(groupByStageTag(stacksGroupedByRegion)).flat();
 
-    Object.values(groupedStacks).forEach((stackTagGroup) => {
-      Object.values(stackTagGroup).forEach((regionGroup) => {
-        Object.values(regionGroup).forEach((stageGroup) => {
-          const stacks: GuStack[] = Object.values(stageGroup).flat();
+                requiredStages.forEach((requiredStage) => {
+                  if (!stacks.find(({ stage }) => stage === requiredStage)) {
+                    missingStacks.push({
+                      riffRaffProjectName,
+                      className,
+                      region,
+                      stack: stackTag,
+                      stage: requiredStage,
+                    });
+                  }
+                });
 
-          // The items in `stacks` only differ by stage, so we can just use the first item in the list.
-          const [stack] = stacks;
+                // The items in `stacks` only differ by stage, so we can just use the first item in the list.
+                const [stack] = stacks;
 
-          if (!stack) {
-            throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
-          }
+                if (!stack) {
+                  throw new Error("Unable to produce a working riff-raff.yaml file; there are no stacks!");
+                }
 
-          const lambdas = this.getLambdas(stack);
-          const autoscalingGroups = this.getAutoScalingGroups(stack);
+                const lambdas = getLambdas(stack);
+                const autoscalingGroups = getAutoScalingGroups(stack);
 
-          const artifactUploads: RiffRaffDeployment[] = [
-            lambdas.filter((_) => !_.withoutArtifactUpload).map(uploadLambdaArtifact),
-            autoscalingGroups.map(uploadAutoscalingArtifact),
-          ].flat();
-          artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
+                const artifactUploads: RiffRaffDeployment[] = [
+                  lambdas.filter((_) => !_.withoutArtifactUpload).map(uploadLambdaArtifact),
+                  autoscalingGroups.map(uploadAutoscalingArtifact),
+                ].flat();
+                artifactUploads.forEach(({ name, props }) => deployments.set(name, props));
 
-          const parentStacks: RiffRaffDeployment[] = this.getGuStackDependencies(stack).map((x) =>
-            cloudFormationDeployment([x], [], this.outdir),
-          );
+                const parentStacks: RiffRaffDeployment[] = getGuStackDependencies(stack).map((x) =>
+                  cloudFormationDeployment([x], [], this.outdir),
+                );
 
-          const cfnDeployment = cloudFormationDeployment(stacks, [...artifactUploads, ...parentStacks], this.outdir);
-          deployments.set(cfnDeployment.name, cfnDeployment.props);
+                const cfnDeployment = cloudFormationDeployment(
+                  stacks,
+                  [...artifactUploads, ...parentStacks],
+                  this.outdir,
+                );
+                deployments.set(cfnDeployment.name, cfnDeployment.props);
 
-          const lambdasWithoutAnAlias = lambdas.filter((lambda) => lambda.alias === undefined);
-          // If the Lambda has an alias it is using versioning. When using versioning, there is no need for Riff-Raff
-          // to modify the unpublished version of the function
-          lambdasWithoutAnAlias.forEach((lambda) => {
-            const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
-            deployments.set(lambdaDeployment.name, lambdaDeployment.props);
-          });
+                const lambdasWithoutAnAlias = lambdas.filter((lambda) => lambda.alias === undefined);
+                // If the Lambda has an alias it is using versioning. When using versioning, there is no need for Riff-Raff
+                // to modify the unpublished version of the function
+                lambdasWithoutAnAlias.forEach((lambda) => {
+                  const lambdaDeployment = updateLambdaDeployment(lambda, cfnDeployment);
+                  deployments.set(lambdaDeployment.name, lambdaDeployment.props);
+                });
 
-          /*
-          Instances in an ASG with an `AutoScalingRollingUpdate` update policy are rotated via CloudFormation.
-          Therefore, they do not need to also perform an `autoscaling` deployment via Riff-Raff.
-           */
-          const legacyAutoscalingGroups = autoscalingGroups.filter((asg) => {
-            const { cfnOptions } = asg.node.defaultChild as CfnAutoScalingGroup;
-            const { updatePolicy } = cfnOptions;
-            return updatePolicy?.autoScalingRollingUpdate === undefined;
-          });
+                /*
+                Instances in an ASG with an `AutoScalingRollingUpdate` update policy are rotated via CloudFormation.
+                Therefore, they do not need to also perform an `autoscaling` deployment via Riff-Raff.
+                */
+                const legacyAutoscalingGroups = autoscalingGroups.filter((asg) => {
+                  const { cfnOptions } = asg.node.defaultChild as CfnAutoScalingGroup;
+                  const { updatePolicy } = cfnOptions;
+                  return updatePolicy?.autoScalingRollingUpdate === undefined;
+                });
 
-          legacyAutoscalingGroups.forEach((asg) => {
-            const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
-            deployments.set(asgDeployment.name, asgDeployment.props);
-          });
+                legacyAutoscalingGroups.forEach((asg) => {
+                  const asgDeployment = autoscalingDeployment(asg, cfnDeployment);
+                  deployments.set(asgDeployment.name, asgDeployment.props);
+                });
 
-          const amiParametersToTags = getAmiParameters(autoscalingGroups);
+                // only add the `amiParametersToTags` property if there are some ASGs in the stack
+                if (autoscalingGroups.length > 0) {
+                  updateDeploymentParameters(deployments, cfnDeployment, {
+                    amiParametersToTags: getAmiParameters(autoscalingGroups),
+                  });
+                }
 
-          const minInServiceParamMap =
-            GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(stack).asgToParamMap;
-          const minInServiceAsgs = autoscalingGroups.filter((asg) => minInServiceParamMap.has(asg.node.id));
-          const minInstancesInServiceParameters = getMinInstancesInServiceParameters(minInServiceAsgs);
+                /*
+                At this point, `stacks` is a collection of similar `GuStack`s that differ only by their `stage`.
+                We're about to add `minInstancesInServiceParameters` to assist Riff-Raff when deploying ASGs with scaling policies.
+                This is driven by the presence of conditionally added CFN Parameters.
+                To support the possibility of there being a scaling policy in PROD but not CODE, look at all the CFN Parameters in `stacks`.
+                 */
+                const minInstancesInServiceParameters: Map<string, GuAsgMinInstancesInServiceParameterExperimental> =
+                  stacks
+                    .flatMap((stack) => Object.values(stack.parameters))
+                    .filter(
+                      (_): _ is GuAsgMinInstancesInServiceParameterExperimental =>
+                        _ instanceof GuAsgMinInstancesInServiceParameterExperimental,
+                    )
+                    .reduce((acc, item) => {
+                      if (!acc.has(item.node.id)) {
+                        acc.set(item.node.id, item);
+                      }
+                      return acc;
+                    }, new Map<string, GuAsgMinInstancesInServiceParameterExperimental>());
 
-          deployments.set(cfnDeployment.name, {
-            ...cfnDeployment.props,
-            parameters: {
-              ...cfnDeployment.props.parameters,
+                /**
+                 * Only add the `minInstancesInServiceParameters` property if there are some ASGs affected by {@link GuHorizontallyScalingDeploymentPropertiesExperimental}.
+                 */
+                if (minInstancesInServiceParameters.size > 0) {
+                  updateDeploymentParameters(deployments, cfnDeployment, {
+                    minInstancesInServiceParameters: getMinInstancesInServiceParameters(
+                      minInstancesInServiceParameters,
+                    ),
+                  });
+                }
+              });
+            });
+          },
+        );
 
-              // only add the `amiParametersToTags` property if there are some
-              ...(autoscalingGroups.length > 0 && { amiParametersToTags }),
+        configuration.set(riffRaffProjectName, { allowedStages, deployments });
+      },
+    );
 
-              // only add the `minInstancesInServiceParameters` property if there are some
-              ...(minInServiceAsgs.length > 0 && { minInstancesInServiceParameters }),
-            },
-          });
-        });
-      });
-    });
+    if (missingStacks.length > 0) {
+      const message = `Unable to produce a working riff-raff.yaml file; missing ${missingStacks.length} definitions`;
+      console.log(`${message} (details below)`);
+      console.table(missingStacks);
 
-    this.riffRaffYaml = {
-      allowedStages,
-      deployments,
-    };
+      throw new Error(message);
+    }
+
+    this.configuration = configuration;
   }
 
   /**
-   * The `riff-raff.yaml` file as a string.
+   * A `riff-raff.yaml` file as a string.
    * Useful for testing.
+   *
+   * @param riffRaffProjectName which project to convert to YAML. Defaults to {@link UnknownRiffRaffProjectName} - any {@link GuStack} without an explicit `riffRaffProjectName` property.
    */
-  toYAML(): string {
+  toYAML(riffRaffProjectName: RiffRaffProjectName = UnknownRiffRaffProjectName): string {
     // Add support for ES6 Set and Map. See https://github.com/nodeca/js-yaml/issues/436.
     const replacer = (_key: string, value: unknown) => {
       if (value instanceof Set) {
@@ -321,15 +282,46 @@ export class RiffRaffYamlFile {
       return value;
     };
 
-    return dump(this.riffRaffYaml, { replacer });
+    const content = this.configuration.get(riffRaffProjectName);
+
+    if (!content) {
+      throw new Error(`No Riff-Raff project found with name: ${riffRaffProjectName}`);
+    }
+
+    return dump(content, { replacer });
   }
 
   /**
-   * Write the `riff-raff.yaml` file to disk.
-   * It'll be located with the CFN JSON templates generated by `cdk synth`.
+   * Write the `riff-raff.yaml` file(s) to disk, located in the same directory as the CFN JSON templates generated by `cdk synth`.
    */
   synth(): void {
-    const outPath = path.join(this.outdir, "riff-raff.yaml");
-    writeFileSync(outPath, this.toYAML());
+    this.configuration.forEach((_, riffRaffProjectName) => {
+      const targetDirectory =
+        riffRaffProjectName === UnknownRiffRaffProjectName
+          ? this.outdir
+          : validateRiffRaffYamlDirectory(this.outdir, riffRaffProjectName);
+
+      if (!existsSync(targetDirectory)) {
+        mkdirSync(targetDirectory, { recursive: true });
+      }
+
+      const outPath = path.join(targetDirectory, "riff-raff.yaml");
+      writeFileSync(outPath, this.toYAML(riffRaffProjectName));
+    });
   }
+}
+
+export function validateRiffRaffYamlDirectory(basePath: string, riffRaffProjectName: RiffRaffProjectName): string {
+  const resolvedBase = path.resolve(basePath);
+  const resolvedPath = path.resolve(basePath, riffRaffProjectName);
+  const relativePath = path.relative(resolvedBase, resolvedPath);
+  const isOutside = relativePath === ".." || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath);
+
+  if (isOutside) {
+    throw new Error(
+      `Directory traversal detected: '${riffRaffProjectName}' would create a directory outside of ${basePath} (riffRaffProjectName=${riffRaffProjectName}, resolvedPath='${resolvedPath}', resolvedBase='${resolvedBase}')`,
+    );
+  }
+
+  return resolvedPath;
 }

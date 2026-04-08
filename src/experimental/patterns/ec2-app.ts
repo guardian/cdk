@@ -6,7 +6,7 @@ import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
 import { MetadataKeys } from "../../constants";
 import { GuAutoScalingGroup } from "../../constructs/autoscaling";
-import type { GuStack } from "../../constructs/core";
+import { GuStack } from "../../constructs/core";
 import type { GuApplicationTargetGroup } from "../../constructs/loadbalancing";
 import type { GuEc2AppProps } from "../../patterns";
 import { GuEc2App } from "../../patterns";
@@ -33,6 +33,9 @@ export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
  * Ensures the `AutoScalingRollingUpdate` of an AutoScaling Group has a `PauseTime` matching the healthcheck grace period.
  * It also ensures the `CreationPolicy` resource signal `Timeout` matches the healthcheck grace period.
  *
+ * @note
+ * Be sure to instantiate this only once for an entire {@link GuStack}, else the properties of the ASG will be incorrectly updated multiple times.
+ *
  * @internal
  *
  * @privateRemarks
@@ -43,20 +46,6 @@ export const RollingUpdateDurations: AutoScalingRollingUpdateDurations = {
  * TODO Expose the healthcheck grace period as a property on {@link GuEc2App} and remove this `Aspect`.
  */
 export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
-  public readonly stack: GuStack;
-  private static instance: GuAutoScalingRollingUpdateTimeoutExperimental | undefined;
-
-  private constructor(scope: GuStack) {
-    this.stack = scope;
-  }
-
-  public static getInstance(stack: GuStack): GuAutoScalingRollingUpdateTimeoutExperimental {
-    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new GuAutoScalingRollingUpdateTimeoutExperimental(stack);
-    }
-    return this.instance;
-  }
-
   public visit(construct: IConstruct) {
     if (construct instanceof CfnAutoScalingGroup) {
       const currentRollingUpdate = construct.cfnOptions.updatePolicy?.autoScalingRollingUpdate;
@@ -106,32 +95,13 @@ export class GuAutoScalingRollingUpdateTimeoutExperimental implements IAspect {
  *  - If the service is fully scaled, it'll be set to (at least) `MaxSize` - 1
  *
  * @privateRemarks
- * - Temporarily implemented as a singleton to ensure only one instance is added to a stack,
- *   else multiple attempts to add the same CFN Parameter will be made and fail.
  * - Once out of experimental, instantiate this `Aspect` directly in {@link GuStack}.
  *
  * @see https://github.com/guardian/testing-asg-rolling-update
  */
 export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IAspect {
-  public readonly stack: GuStack;
-  public readonly asgToParamMap: Map<string, CfnParameter>;
-  private static instance: GuHorizontallyScalingDeploymentPropertiesExperimental | undefined;
-
-  private constructor(scope: GuStack) {
-    this.stack = scope;
-    this.asgToParamMap = new Map();
-  }
-
-  public static getInstance(stack: GuStack): GuHorizontallyScalingDeploymentPropertiesExperimental {
-    if (!this.instance || !isSingletonPresentInStack(stack, this.instance)) {
-      this.instance = new GuHorizontallyScalingDeploymentPropertiesExperimental(stack);
-    }
-
-    return this.instance;
-  }
-
   public visit(construct: IConstruct) {
-    if (construct instanceof CfnScalingPolicy && construct.stack.stackName === this.stack.stackName) {
+    if (CfnScalingPolicy.isCfnScalingPolicy(construct)) {
       const { node } = construct;
       const { scopes, path } = node;
 
@@ -168,19 +138,7 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
          */
         cfnAutoScalingGroup.desiredCapacity = undefined;
 
-        const asgNodeId = autoScalingGroup.node.id;
-
-        if (!this.asgToParamMap.has(asgNodeId)) {
-          const cfnParameterName = getAsgRollingUpdateCfnParameterName(autoScalingGroup);
-          this.asgToParamMap.set(
-            asgNodeId,
-            new CfnParameter(this.stack, cfnParameterName, {
-              type: "Number",
-            }),
-          );
-        }
-
-        const minInstancesInService = this.asgToParamMap.get(asgNodeId)!;
+        const minInstancesInService = GuAsgMinInstancesInServiceParameterExperimental.getInstance(autoScalingGroup);
 
         cfnAutoScalingGroup.cfnOptions.updatePolicy = {
           autoScalingRollingUpdate: {
@@ -193,9 +151,38 @@ export class GuHorizontallyScalingDeploymentPropertiesExperimental implements IA
   }
 }
 
-export function getAsgRollingUpdateCfnParameterName(autoScalingGroup: GuAutoScalingGroup) {
-  const { app } = autoScalingGroup;
-  return `MinInstancesInServiceFor${app.replaceAll("-", "")}`;
+/**
+ * A CloudFormation parameter used to make the `MinInstancesInService` property of an ASG dynamic during deployment with Riff-Raff.
+ * This shouldn't be instantiated directly, but via {@link GuHorizontallyScalingDeploymentPropertiesExperimental}.
+ */
+export class GuAsgMinInstancesInServiceParameterExperimental extends CfnParameter {
+  public readonly asg: GuAutoScalingGroup;
+
+  private constructor(scope: GuStack, id: string, autoScalingGroup: GuAutoScalingGroup) {
+    super(scope, id, { type: "Number" });
+    this.asg = autoScalingGroup;
+  }
+
+  public static getInstance(autoScalingGroup: GuAutoScalingGroup): GuAsgMinInstancesInServiceParameterExperimental {
+    const stack = GuStack.of(autoScalingGroup) as GuStack;
+    const { app } = autoScalingGroup;
+    const id = `MinInstancesInServiceFor${app.replaceAll("-", "")}`;
+
+    const maybeParameter = stack.parameters[id];
+
+    if (!maybeParameter) {
+      return new GuAsgMinInstancesInServiceParameterExperimental(stack, id, autoScalingGroup);
+    }
+
+    // This shouldn't happen
+    if (!(maybeParameter instanceof GuAsgMinInstancesInServiceParameterExperimental)) {
+      throw new Error(
+        `CFN parameter ${id} exists but is of type ${maybeParameter.constructor.name} instead of ${GuAsgMinInstancesInServiceParameterExperimental.name}.`,
+      );
+    }
+
+    return maybeParameter;
+  }
 }
 
 /**
@@ -538,8 +525,19 @@ export class GuEc2AppExperimental extends GuEc2App {
       slowStartDuration,
     });
 
-    // TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
-    Aspects.of(scope).add(GuAutoScalingRollingUpdateTimeoutExperimental.getInstance(scope));
-    Aspects.of(scope).add(GuHorizontallyScalingDeploymentPropertiesExperimental.getInstance(scope));
+    /*
+    Instantiate the `GuAutoScalingRollingUpdateTimeoutExperimental` exactly once for a GuStack.
+    Whilst multiple instances are syntactically valid, it will cause ASG nodes to be incorrectly evaluated/mutated multiple times.
+    TODO Once out of experimental, instantiate these `Aspect`s directly in `GuStack`.
+     */
+    const allAspects = Aspects.of(scope).all;
+    const maybeRollingUpdateTimeoutAspect = allAspects.find(
+      (_) => _ instanceof GuAutoScalingRollingUpdateTimeoutExperimental,
+    );
+    if (!maybeRollingUpdateTimeoutAspect) {
+      Aspects.of(scope).add(new GuAutoScalingRollingUpdateTimeoutExperimental());
+    }
+
+    Aspects.of(scope).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
   }
 }
