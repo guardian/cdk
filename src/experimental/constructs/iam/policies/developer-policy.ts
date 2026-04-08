@@ -113,7 +113,8 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
           }
 
           if (!("Resource" in statement)) {
-            Annotations.of(node).addWarning("Statement is missing an Resource");
+            // Typescript requires us to check this, because the data model doesn't guarantee it
+            Annotations.of(node).addError("Statement is missing an Resource");
           } else {
             const resource = (statement as { Resource: unknown }).Resource;
 
