@@ -21,6 +21,10 @@ export type GuWorkloadPolicyProps = {
    * An optional description of the policy which will be displayed if present.
    */
   readonly description?: string;
+  /**
+   * An optional marker which suppresses the check and warnings on overbroad permissions
+   */
+  readonly withoutPolicyChecks?: boolean;
 };
 
 /**
@@ -69,8 +73,10 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
       throw new Error("Empty statements array passed to GuDeveloperPolicyExperimental");
     }
 
-    // Later, apply to the stack and check for specific errors
-    Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker());
+    if (!props.withoutPolicyChecks) {
+      // Later, apply to the stack and check for specific errors
+      Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker());
+    }
   }
 }
 
@@ -107,6 +113,7 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
           }
 
           if (!("Resource" in statement)) {
+            // Typescript requires us to check this, because the data model doesn't guarantee it
             Annotations.of(node).addError("Statement is missing an Resource");
           } else {
             const resource = (statement as { Resource: unknown }).Resource;
@@ -139,7 +146,9 @@ class GuDeveloperPolicyExperimentalChecker implements IAspect {
    */
   private check(checkString: string, checkType: string, node: CfnManagedPolicy) {
     if (checkString === "*" || checkString.indexOf(":*") || checkString.indexOf("/*") > 0) {
-      Annotations.of(node).addError(`Statement ${checkType} is too broad: ${checkString}`);
+      Annotations.of(node).addError(
+        `Statement ${checkType} is too broad: ${checkString}. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check`,
+      );
     }
   }
   private checkAction(checkString: string, node: CfnManagedPolicy) {

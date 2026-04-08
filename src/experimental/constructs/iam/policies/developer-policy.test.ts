@@ -44,7 +44,11 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: *");
+
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Resource is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("adds an error if a wide-open resource/allow policy statement is present", () => {
@@ -59,7 +63,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: s3://*");
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Resource is too broad: s3://*. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("adds an error if a wide-open policy statement with no effect is present", () => {
@@ -73,7 +80,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("does not add an error if a wide-open policy statement with a Deny effect is present", () => {
@@ -88,7 +98,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasNoError("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasNoError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("adds an error if a wide-open action/allow policy statement is present", () => {
@@ -103,7 +116,48 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
+  });
+
+  test("does not add an error if a wide-open action/allow policy statement is present but the withoutPolicyChecks marker is used", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Effect: "Allow",
+          Action: ["*"],
+          Resource: "s3:*",
+        }),
+      ],
+      permission: "test123",
+      withoutPolicyChecks: true,
+    });
+    Annotations.fromStack(stack).hasNoError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
+  });
+
+  test("do not add an error if a wide-open action/allow policy statement is present and the withoutPolicyChecks marker is used but false", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Effect: "Allow",
+          Action: ["*"],
+          Resource: "s3:*",
+        }),
+      ],
+      permission: "test123",
+      withoutPolicyChecks: false,
+    });
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("adds an error if a wide-open statement resource is requested", () => {
@@ -118,7 +172,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: *");
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Resource is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("adds an error if a wide-open statement action is requested", () => {
@@ -133,7 +190,10 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 
   test("adds an error if both a wide-open statement action and a resource is requested", () => {
@@ -148,7 +208,13 @@ describe("GuDeveloperPolicyExperimental", () => {
       ],
       permission: "test123",
     });
-    Annotations.fromStack(stack).hasError("*", "Statement Action is too broad: *");
-    Annotations.fromStack(stack).hasError("*", "Statement Resource is too broad: arn:aws:s3:::*");
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Action is too broad: *. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "Statement Resource is too broad: arn:aws:s3:::*. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
   });
 });
