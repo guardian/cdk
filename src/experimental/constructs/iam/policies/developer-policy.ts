@@ -18,7 +18,7 @@ export type GuDeveloperPolicyExperimentalProps = {
    */
   readonly grantId: string;
   /**
-   * A friendly display name to help choose the correct developer policy in Janus or elsewhere.
+   * A brief description to help choose the correct developer policy in Janus or elsewhere.
    *
    * In AWS this will appear as the managed policy description.
    */
@@ -66,7 +66,7 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyExperimentalProps) {
     super(scope, id, {
       ...props,
-      path: `/developer-policy/${props.grantId}/`,
+      path: `/developer-policy/${scope.repositoryName}/${props.grantId}/`,
       description: props.friendlyName,
     });
 
