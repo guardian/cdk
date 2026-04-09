@@ -70,14 +70,35 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
       description: props.friendlyName,
     });
 
+    Aspects.of(this).add(new GuDeveloperPolicyExperimentalRequiredChecker());
+
     if (!props.withoutPolicyChecks) {
       // Later, apply to the stack and check for specific errors
-      Aspects.of(this).add(new GuDeveloperPolicyExperimentalChecker());
+      Aspects.of(this).add(new GuDeveloperPolicyExperimentalOptionalChecker());
     }
   }
 }
 
-class GuDeveloperPolicyExperimentalChecker implements IAspect {
+// Add checks here that we require and don't allow users to opt out of.
+class GuDeveloperPolicyExperimentalRequiredChecker implements IAspect {
+  public visit(node: IConstruct): void {
+    if (node instanceof CfnManagedPolicy) {
+      const description = node.description;
+      const maxLength = 60;
+
+      if (!description?.length) {
+        Annotations.of(node).addError("friendlyName must be filled in");
+      } else if (description.length > maxLength) {
+        Annotations.of(node).addError(
+          `friendlyName must be no more than ${maxLength} characters long, but was ${description.length} characters`,
+        );
+      }
+    }
+  }
+}
+
+// Add checks here that we recommend for most scenarios but don't require.
+class GuDeveloperPolicyExperimentalOptionalChecker implements IAspect {
   public visit(node: IConstruct): void {
     if (node instanceof CfnManagedPolicy) {
       const policyDocumentJson: unknown = (node.policyDocument as PolicyDocument).toJSON();

@@ -1,5 +1,5 @@
 import { App } from "aws-cdk-lib";
-import { Annotations, Template } from "aws-cdk-lib/assertions";
+import { Annotations, Match, Template } from "aws-cdk-lib/assertions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { ContextKeys } from "../../../../constants";
 import { GuStack } from "../../../../constructs/core";
@@ -255,5 +255,76 @@ describe("GuDeveloperPolicyExperimental", () => {
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
       Path: "/developer-policy/guardian/my-repo/test123/",
     });
+  });
+
+  test("adds an error if friendlyName is empty", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "",
+    });
+    Annotations.fromStack(stack).hasError("*", "friendlyName must be filled in");
+  });
+
+  test("adds an error if friendlyName exceeds 60 characters", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "a".repeat(61),
+    });
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "friendlyName must be no more than 60 characters long, but was 61 characters",
+    );
+  });
+
+  test("does not add an error if friendlyName is exactly 60 characters", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "a".repeat(60),
+    });
+    Annotations.fromStack(stack).hasNoError("*", Match.anyValue());
+  });
+
+  test("adds an error if friendlyName exceeds 60 characters even when withoutPolicyChecks is true", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "a".repeat(61),
+      withoutPolicyChecks: true,
+    });
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "friendlyName must be no more than 60 characters long, but was 61 characters",
+    );
   });
 });
