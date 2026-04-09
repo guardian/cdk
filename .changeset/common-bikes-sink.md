@@ -2,4 +2,8 @@
 "@guardian/cdk": minor
 ---
 
-Move GuDeveloperPolicy out of experimental section now that it's stable. This is a breaking change for users of GuDeveloperPolicy but as it's experimental we can consider it a minor change.
+Minor improvements to the GuDeveloperPolicy class to make it more intuitive for users.
+* path includes source repo name to help map the policy back from AWS to its source codebase
+* friendlyName is now a required attribute that maps to the managed policy's description
+* The policy must have at least one statement
+* permission attribute is now called grantId to match with the corresponding Janus structure
