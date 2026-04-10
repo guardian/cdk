@@ -1,10 +1,13 @@
-import { Annotations, Template } from "aws-cdk-lib/assertions";
+import { App } from "aws-cdk-lib";
+import { Annotations, Match, Template } from "aws-cdk-lib/assertions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { ContextKeys } from "../../../../constants";
+import { GuStack } from "../../../../constructs/core";
 import { simpleGuStackForTesting } from "../../../../utils/test";
 import { GuDeveloperPolicyExperimental } from "./developer-policy";
 
 describe("GuDeveloperPolicyExperimental", () => {
-  test("if a single policy statement is provided, the resulting Workload Policy resource's statement will have a single item", () => {
+  test("if a single policy statement is provided, the resulting Developer Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
       statements: [
@@ -14,11 +17,13 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "s3:/log-bucket",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
-      Path: "/developer-policy/test123/",
+      Path: "/developer-policy/guardian/cdk/test-stack/TEST/test123/",
+      Description: "test policy",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [
@@ -42,7 +47,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
 
     Annotations.fromStack(stack).hasError(
@@ -61,7 +67,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "s3://*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -78,7 +85,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "s3:*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -96,7 +104,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "arn:aws:s3:us-east-2:111122223333:table/*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasNoError(
       "*",
@@ -114,7 +123,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "s3:*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -132,7 +142,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "s3:*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
       withoutPolicyChecks: true,
     });
     Annotations.fromStack(stack).hasNoError(
@@ -151,7 +162,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           Resource: "s3:*",
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
       withoutPolicyChecks: false,
     });
     Annotations.fromStack(stack).hasError(
@@ -170,7 +182,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           resources: ["*"],
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -188,7 +201,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           resources: ["s3://*"],
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -206,7 +220,8 @@ describe("GuDeveloperPolicyExperimental", () => {
           resources: ["arn:aws:s3:::*"],
         }),
       ],
-      permission: "test123",
+      grantId: "test123",
+      friendlyName: "test policy",
     });
     Annotations.fromStack(stack).hasError(
       "*",
@@ -215,6 +230,167 @@ describe("GuDeveloperPolicyExperimental", () => {
     Annotations.fromStack(stack).hasError(
       "*",
       "Statement Resource is too broad: arn:aws:s3:::*. If this is necessary and intended, use withoutPolicyChecks: true in properties to turn off this check",
+    );
+  });
+
+  test("constructs the path using the repository name derived from context", () => {
+    const stack = new GuStack(
+      new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repo" } }),
+      "Test",
+      { stack: "test-stack", stage: "TEST" },
+    );
+
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/my-path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "test policy",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/guardian/my-repo/test-stack/TEST/test123/",
+    });
+  });
+
+  test("constructs the path using the stack name", () => {
+    const makeStack = (stack: string) =>
+      new GuStack(
+        new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repo" } }),
+        "Test",
+        { stack, stage: "TEST" },
+      );
+
+    const policyProps = {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/my-path",
+        }),
+      ] as [ReturnType<typeof PolicyStatement.fromJson>],
+      grantId: "test123",
+      friendlyName: "test policy",
+    };
+
+    const contentStack = makeStack("content");
+    new GuDeveloperPolicyExperimental(contentStack, "AllowS3GetObject", policyProps);
+    Template.fromStack(contentStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/guardian/my-repo/content/TEST/test123/",
+    });
+
+    const platformStack = makeStack("platform");
+    new GuDeveloperPolicyExperimental(platformStack, "AllowS3GetObject", policyProps);
+    Template.fromStack(platformStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/guardian/my-repo/platform/TEST/test123/",
+    });
+  });
+
+  test("constructs the path using the stage derived from the stack", () => {
+    const makeStack = (stage: string) =>
+      new GuStack(
+        new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repo" } }),
+        "Test",
+        { stack: "test-stack", stage },
+      );
+
+    const policyProps = {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/my-path",
+        }),
+      ] as [ReturnType<typeof PolicyStatement.fromJson>],
+      grantId: "test123",
+      friendlyName: "test policy",
+    };
+
+    const codeStack = makeStack("CODE");
+    new GuDeveloperPolicyExperimental(codeStack, "AllowS3GetObject", policyProps);
+    Template.fromStack(codeStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/guardian/my-repo/test-stack/CODE/test123/",
+    });
+
+    const prodStack = makeStack("PROD");
+    new GuDeveloperPolicyExperimental(prodStack, "AllowS3GetObject", policyProps);
+    Template.fromStack(prodStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/guardian/my-repo/test-stack/PROD/test123/",
+    });
+  });
+
+  test("adds an error if friendlyName is empty", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "",
+    });
+    Annotations.fromStack(stack).hasError("*", "friendlyName must be filled in");
+  });
+
+  test("adds an error if friendlyName exceeds 60 characters", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "a".repeat(61),
+    });
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "friendlyName must be no more than 60 characters long, but was 61 characters",
+    );
+  });
+
+  test("does not add an error if friendlyName is exactly 60 characters", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "a".repeat(60),
+    });
+    Annotations.fromStack(stack).hasNoError("*", Match.anyValue());
+  });
+
+  test("adds an error if friendlyName exceeds 60 characters even when withoutPolicyChecks is true", () => {
+    const stack = simpleGuStackForTesting();
+    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/path",
+        }),
+      ],
+      grantId: "test123",
+      friendlyName: "a".repeat(61),
+      withoutPolicyChecks: true,
+    });
+    Annotations.fromStack(stack).hasError(
+      "*",
+      "friendlyName must be no more than 60 characters long, but was 61 characters",
     );
   });
 });
