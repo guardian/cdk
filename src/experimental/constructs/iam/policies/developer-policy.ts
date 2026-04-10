@@ -66,6 +66,7 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyExperimentalProps) {
     super(scope, id, {
       ...props,
+      // Bear in mind that path has max length 512 chars
       path: `/developer-policy/${scope.stage}/${scope.repositoryName}/${props.grantId}/`,
       description: props.friendlyName,
     });
