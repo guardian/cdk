@@ -66,7 +66,7 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
   constructor(scope: GuStack, id: string, props: GuDeveloperPolicyExperimentalProps) {
     super(scope, id, {
       ...props,
-      path: `/developer-policy/${scope.repositoryName}/${props.grantId}/`,
+      path: `/developer-policy/${scope.stage}/${scope.repositoryName}/${props.grantId}/`,
       description: props.friendlyName,
     });
 

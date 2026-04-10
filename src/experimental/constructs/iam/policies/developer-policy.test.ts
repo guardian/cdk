@@ -22,7 +22,7 @@ describe("GuDeveloperPolicyExperimental", () => {
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
-      Path: "/developer-policy/guardian/cdk/test123/",
+      Path: "/developer-policy/TEST/guardian/cdk/test123/",
       Description: "test policy",
       PolicyDocument: {
         Version: "2012-10-17",
@@ -253,7 +253,40 @@ describe("GuDeveloperPolicyExperimental", () => {
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
-      Path: "/developer-policy/guardian/my-repo/test123/",
+      Path: "/developer-policy/TEST/guardian/my-repo/test123/",
+    });
+  });
+
+  test("constructs the path using the stage derived from the stack", () => {
+    const makeStack = (stage: string) =>
+      new GuStack(
+        new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repo" } }),
+        "Test",
+        { stack: "test-stack", stage },
+      );
+
+    const policyProps = {
+      statements: [
+        PolicyStatement.fromJson({
+          Action: ["s3:GetObject"],
+          Effect: "Allow",
+          Resource: "arn:aws:s3:::my-bucket/my-path",
+        }),
+      ] as [ReturnType<typeof PolicyStatement.fromJson>],
+      grantId: "test123",
+      friendlyName: "test policy",
+    };
+
+    const codeStack = makeStack("CODE");
+    new GuDeveloperPolicyExperimental(codeStack, "AllowS3GetObject", policyProps);
+    Template.fromStack(codeStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/CODE/guardian/my-repo/test123/",
+    });
+
+    const prodStack = makeStack("PROD");
+    new GuDeveloperPolicyExperimental(prodStack, "AllowS3GetObject", policyProps);
+    Template.fromStack(prodStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
+      Path: "/developer-policy/PROD/guardian/my-repo/test123/",
     });
   });
 
