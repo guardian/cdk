@@ -67,7 +67,7 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
     super(scope, id, {
       ...props,
       // Bear in mind that path has max length 512 chars
-      path: `/developer-policy/${scope.stage}/${scope.repositoryName}/${props.grantId}/`,
+      path: `/developer-policy/${scope.repositoryName}/${scope.stack}/${scope.stage}/${props.grantId}/`,
       description: props.friendlyName,
     });
 
