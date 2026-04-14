@@ -4,7 +4,7 @@ import childProcess from "child_process";
 export async function execute(cmd: string, args: string[], { cwd }: { cwd: string }): Promise<string> {
   const child = childProcess.spawn(cmd, args, {
     cwd,
-    shell: true,
+    shell: false,
     stdio: ["ignore", "pipe", "inherit"],
   });
 
