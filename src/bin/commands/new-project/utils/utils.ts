@@ -6,8 +6,8 @@ export interface Name {
   pascal: string;
 }
 
-async function runTask(packageManager: PackageManager, cwd: string, task: string): Promise<string> {
-  return await execute(`${packageManager} ${task}`, [], { cwd });
+async function runTask(packageManager: PackageManager, cwd: string, args: string[]): Promise<string> {
+  return await execute(packageManager, args, { cwd });
 }
 
 export function getCommands(
@@ -20,9 +20,9 @@ export function getCommands(
   test: () => Promise<string>;
 } {
   return {
-    installDependencies: () => runTask(packageManager, cwd, "install"),
-    lint: () => runTask(packageManager, cwd, "run lint"),
-    test: () => runTask(packageManager, cwd, "test -- -u"),
-    synth: () => runTask(packageManager, cwd, "run synth"),
+    installDependencies: () => runTask(packageManager, cwd, ["install"]),
+    lint: () => runTask(packageManager, cwd, ["run", "lint"]),
+    test: () => runTask(packageManager, cwd, ["test", "--", "-u"]),
+    synth: () => runTask(packageManager, cwd, ["run", "synth"]),
   };
 }
