@@ -161,7 +161,7 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   console.log(chalk.green("  ✅ Successfully synthesized CDK app"));
 
   console.log(chalk.green("Success! Here's a summary of the created files:"));
-  const tree = await execute("tree", ["-I 'node_modules|cdk.out'"], {
+  const tree = await execute("tree", ["-I", "node_modules|cdk.out"], {
     cwd: config.cdkDir,
   });
   console.log(tree);
