@@ -61,7 +61,7 @@
     "codemaker": "^1.128.0",
     "git-url-parse": "^16.0.1",
     "js-yaml": "^4.1.1",
-    "read-pkg-up": "7.0.1",
+    "read-pkg-up": "11.0.0",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
