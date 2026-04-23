@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.2.1
+
+### Patch Changes
+
+- d2f2a3a: Update `@aws-sdk/*` dependencies.
+
 ## 63.2.0
 
 ### Minor Changes
