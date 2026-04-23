@@ -43,7 +43,7 @@
     "aws-cdk": "2.1110.0",
     "aws-cdk-lib": "2.241.0",
     "constructs": "10.5.1",
-    "eslint": "^9.39.2",
+    "eslint": "^10.2.1",
     "eslint-plugin-custom-rules": "file:tools/eslint",
     "gh-pages": "^6.3.0",
     "jest": "30.3.0",
