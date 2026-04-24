@@ -34,6 +34,13 @@ There are also some other commands defined in `package.json`:
 However, it's advised you configure your IDE to format on save to avoid horrible
 "correct linting" commits.
 
+### Development Environment
+
+This project comes with a [devcontainer.json](../.devcontainer/shared/devcontainer.json)
+file.  This enables use of development containers in compatible IDEs.  The
+devcontainer files were built with [devenv](https://github.com/guardian/devenv)
+and can be altered with the same tool.
+
 ### Decision Records
 
 [Architecture Decisions
