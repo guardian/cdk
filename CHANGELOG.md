@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.3.0
+
+### Minor Changes
+
+- a7726ad: Add a comment to generated `riff-raff.yaml` files for additional clarity.
+
 ## 63.2.1
 
 ### Patch Changes
