@@ -8,7 +8,7 @@ exports[`the GuEcsApp pattern should produce a functional ECS app with minimal a
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
-      "GuEcsApp",
+      "GuEcsAppExperimental",
       "GuCertificate",
       "GuInstanceRole",
       "GuSsmSshPolicy",

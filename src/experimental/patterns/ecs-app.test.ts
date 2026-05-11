@@ -1,19 +1,19 @@
-import {Template} from "aws-cdk-lib/assertions";
-import {InstanceClass, InstanceSize, InstanceType, UserData} from "aws-cdk-lib/aws-ec2";
-import {AccessScope} from "../../constants";
-import {simpleGuStackForTesting} from "../../utils/test";
-import {GuEcsApp} from "./ecs-app";
+import { Template } from "aws-cdk-lib/assertions";
+import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
+import { AccessScope } from "../../constants";
+import { simpleGuStackForTesting } from "../../utils/test";
+import { GuEcsAppExperimental } from "./ecs-app";
 
 describe("the GuEcsApp pattern", function () {
   it("should produce a functional ECS app with minimal arguments", function () {
-    const stack = simpleGuStackForTesting({env: {region: "eu-west-1"}});
-    new GuEcsApp(stack, {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuEcsAppExperimental(stack, {
       applicationPort: 3000,
       app: "test-gu-ec2-app",
-      access: {scope: AccessScope.PUBLIC},
+      access: { scope: AccessScope.PUBLIC },
       buildIdentifier: "test-build-identifier",
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-      monitoringConfiguration: {noMonitoring: true},
+      monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
       certificateProps: {

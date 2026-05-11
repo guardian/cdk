@@ -1,7 +1,6 @@
-
-import type {GuStack} from "../../constructs/core";
-import type { GuEc2AppProps} from "../../patterns";
-import {GuEc2App} from "../../patterns";
+import type { GuStack } from "../../constructs/core";
+import type { GuEc2AppProps } from "../../patterns";
+import { GuEc2App } from "../../patterns";
 
 interface GUEcsAppProps extends GuEc2AppProps {
   /**
@@ -14,10 +13,8 @@ interface GUEcsAppProps extends GuEc2AppProps {
   buildIdentifier: string;
 }
 
-export class GuEcsApp extends GuEc2App {
-
+export class GuEcsAppExperimental extends GuEc2App {
   constructor(scope: GuStack, props: GUEcsAppProps) {
-
     super(scope, props);
   }
 }
