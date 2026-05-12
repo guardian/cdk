@@ -35,6 +35,12 @@ export interface GuHttpsApplicationListenerProps
   extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">, AppIdentity {
   targetGroup: GuApplicationTargetGroup;
   certificate?: GuCertificate;
+  ecsTargetConfig?: GuEcsTargetConfig;
+}
+
+export interface GuEcsTargetConfig {
+  targetGroup: GuApplicationTargetGroup;
+  weight: number;
 }
 
 /**
@@ -46,7 +52,14 @@ export interface GuHttpsApplicationListenerProps
  */
 export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationListener) {
   constructor(scope: GuStack, id: string, props: GuHttpsApplicationListenerProps) {
-    const { certificate, targetGroup } = props;
+    // FIXME - add a unit test to src/constructs/loadbalancing/alb/application-listener.test.ts for this
+    const { ecsTargetConfig, certificate, targetGroup } = props;
+    const defaultAction = ecsTargetConfig
+      ? ListenerAction.weightedForward([
+          { targetGroup, weight: 1000 - ecsTargetConfig.weight },
+          { targetGroup: ecsTargetConfig.targetGroup, weight: ecsTargetConfig.weight },
+        ])
+      : ListenerAction.forward([targetGroup]);
 
     const mergedProps: GuApplicationListenerProps = {
       port: certificate ? 443 : 8080,
@@ -60,7 +73,7 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
             },
           ]
         : [],
-      defaultAction: ListenerAction.forward([targetGroup]),
+      defaultAction,
     };
 
     super(scope, id, mergedProps);

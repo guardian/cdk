@@ -38,7 +38,7 @@ import {
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
-import type { WafProps } from "../../constructs/loadbalancing";
+import type { GuEcsTargetConfig, WafProps } from "../../constructs/loadbalancing";
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
@@ -340,6 +340,11 @@ export interface GuEc2AppProps extends AppIdentity {
    * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html
    */
   instanceMetricGranularity: "1Minute" | "5Minute";
+
+  /**
+   * Only use this if you are migrating to the GuEcsApp pattern
+   */
+  ecsTargetConfig?: GuEcsTargetConfig;
 }
 
 function restrictedCidrRanges(ranges: IPeer[]) {
@@ -397,6 +402,7 @@ export class GuEc2App extends Construct {
       defaultInstanceWarmup,
       instanceMetricGranularity,
       waf,
+      ecsTargetConfig,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -499,6 +505,7 @@ export class GuEc2App extends Construct {
       loadBalancer,
       certificate,
       targetGroup,
+      ecsTargetConfig,
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
