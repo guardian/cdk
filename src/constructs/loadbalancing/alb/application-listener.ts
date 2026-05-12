@@ -56,7 +56,7 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
     const { ecsTargetConfig, certificate, targetGroup } = props;
     const defaultAction = ecsTargetConfig
       ? ListenerAction.weightedForward([
-          { targetGroup, weight: 1000 - ecsTargetConfig.weight },
+          { targetGroup, weight: 999 - ecsTargetConfig.weight },
           { targetGroup: ecsTargetConfig.targetGroup, weight: ecsTargetConfig.weight },
         ])
       : ListenerAction.forward([targetGroup]);

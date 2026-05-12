@@ -2468,7 +2468,7 @@ exports[`the GuEcsApp pattern should be able to pass its target group to the GuE
                   "TargetGroupArn": {
                     "Ref": "TargetGroupTestgu1F401467",
                   },
-                  "Weight": 500,
+                  "Weight": 499,
                 },
                 {
                   "TargetGroupArn": {
