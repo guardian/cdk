@@ -49,7 +49,7 @@ interface Migration {
 }
 
 // We still need to port (or consider porting) the following functionality over from GuEc2App:
-// * access
+// * access (currently we always create a publicly accessible load balancer)
 // * roleConfiguration? (something similar, although type will differ)
 // * monitoringConfiguration (do we want 5xx/4xx alarms; or something similar to unhealthyInstancesAlarm?)
 // * applicationLogging? (how configurable should this be for ECS?)
@@ -339,7 +339,7 @@ export class GuEcsAppExperimental extends Construct {
       });
       this.listener = listener;
     } else {
-      // FIXME - need to consider how to adapt this when Google Auth is configured at the ALB; currently it will override this
+      // FIXME - need to consider how to adapt this when Google Auth is configured at the ALB; currently it will bypass the AuthenticateCognitoAction
       migrationProps.listener.addAction("SplitTrafficBetweenTwoTargetGroups", {
         action: ListenerAction.weightedForward([
           { targetGroup: ecsTargetGroup, weight: migrationProps.weightForEcsTargetGroup },
