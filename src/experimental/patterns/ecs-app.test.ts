@@ -15,23 +15,13 @@ describe("the GuEcsApp pattern", function () {
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
-      createLoadBalancerAndListener: true,
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  it("should be able to co-exist in the same stack as a GuEc2App if we're skipping load balancer creation", function () {
+  it("should be able to co-exist in the same stack as a GuEc2App if we're sharing load balancer components", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuEcsAppExperimental(stack, {
-      app: "test-gu",
-      imageIdentifier: "sha256:12345",
-      repositoryName: "my-repository",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      createLoadBalancerAndListener: false,
-    });
-    new GuEc2App(stack, {
+    const { loadBalancer, listener, targetGroup } = new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu",
       access: { scope: AccessScope.PUBLIC },
@@ -46,12 +36,6 @@ describe("the GuEcsApp pattern", function () {
         minimumInstances: 1,
       },
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
-  });
-
-  // FIXME - add specific test assertion rather than using a snapshot
-  it("should omit the LB and listener if requested", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEcsAppExperimental(stack, {
       app: "test-gu",
       imageIdentifier: "sha256:12345",
@@ -59,24 +43,19 @@ describe("the GuEcsApp pattern", function () {
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
-      createLoadBalancerAndListener: false,
+      migrationProps: {
+        listener,
+        loadBalancer,
+        targetGroup,
+        weightForEcsTargetGroup: 0,
+      },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  // FIXME - add specific test assertion rather than using a snapshot
-  it("should be able to pass its target group to the GuEc2App to receive a share of the traffic", function () {
+  it("should be able to split traffic between EC2 and ECS target groups", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const ecsApp = new GuEcsAppExperimental(stack, {
-      app: "test-gu",
-      imageIdentifier: "sha256:12345",
-      repositoryName: "my-repository",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      createLoadBalancerAndListener: false,
-    });
-    new GuEc2App(stack, {
+    const { loadBalancer, listener, targetGroup } = new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu",
       access: { scope: AccessScope.PUBLIC },
@@ -90,8 +69,22 @@ describe("the GuEcsApp pattern", function () {
       scaling: {
         minimumInstances: 1,
       },
-      ecsTargetConfig: { targetGroup: ecsApp.targetGroup, weight: 500 },
     });
+    new GuEcsAppExperimental(stack, {
+      app: "test-gu",
+      imageIdentifier: "sha256:12345",
+      repositoryName: "my-repository",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      migrationProps: {
+        listener,
+        loadBalancer,
+        targetGroup,
+        weightForEcsTargetGroup: 500,
+      },
+    });
+    // FIXME - use a specific assertion
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });

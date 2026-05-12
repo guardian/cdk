@@ -11,6 +11,12 @@ import {
   LogDriver,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
+import type {
+  IApplicationListener,
+  IApplicationLoadBalancer,
+  IApplicationTargetGroup,
+} from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
@@ -28,6 +34,14 @@ import {
 import type { GuDomainName } from "../../types";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
 
+interface Migration {
+  loadBalancer: IApplicationLoadBalancer;
+  listener: IApplicationListener;
+  targetGroup: IApplicationTargetGroup;
+  // Must be between 0 and 999 (inclusive)
+  weightForEcsTargetGroup: number;
+}
+
 interface GuEcsAppProps extends AppIdentity {
   /**
    * Which image to run.
@@ -41,15 +55,15 @@ interface GuEcsAppProps extends AppIdentity {
    * Specify certificate for the load balancer.
    */
   certificateProps: GuDomainName; // ??? Do we need to share this?
-  createLoadBalancerAndListener: boolean;
+  migrationProps?: Migration;
 }
 
 export class GuEcsAppExperimental extends Construct {
-  public readonly targetGroup: GuApplicationTargetGroup;
-  public readonly loadBalancer?: GuApplicationLoadBalancer;
-  public readonly listener?: GuHttpsApplicationListener;
+  public readonly targetGroup: IApplicationTargetGroup;
+  public readonly loadBalancer: IApplicationLoadBalancer;
+  public readonly listener: IApplicationListener;
   constructor(scope: GuStack, props: GuEcsAppProps) {
-    const { app, repositoryName, imageIdentifier, certificateProps, createLoadBalancerAndListener } = props;
+    const { app, repositoryName, imageIdentifier, certificateProps, migrationProps } = props;
     super(scope, `${app}-ecs`);
     const vpc = GuVpc.fromIdParameter(scope, "GuVpc");
 
@@ -180,48 +194,7 @@ export class GuEcsAppExperimental extends Construct {
       maxCapacity: 6,
     });
 
-    // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
-    const targetGroup = new GuApplicationTargetGroup(scope, "EcsTargetGroup", {
-      vpc,
-      app,
-      port: 9000, // FIXME - users should set this value via a prop
-      targetGroupName: `${app}-${scope.stage}`, // Add the name here to make it more easily identifiable in the console etc.
-      targets: [ecsService],
-    });
-
-    // FIXME - add AppAccess support to load balancer and listener (currently this only supports 'PUBLIC')
-    if (createLoadBalancerAndListener) {
-      // The id here must be the same as the one used by GuEc2App
-      const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
-        app,
-        vpc,
-        internetFacing: true,
-        vpcSubnets: {
-          subnets: GuVpc.subnetsFromParameter(scope, {
-            type: SubnetType.PUBLIC,
-            app,
-          }),
-        },
-        withAccessLogging: true,
-      });
-      this.loadBalancer = loadBalancer;
-
-      // Similarly the id here must be the same as the one used by GuEc2App
-      const listener = new GuHttpsApplicationListener(scope, "Listener", {
-        app,
-        loadBalancer,
-        certificate: new GuCertificate(scope, {
-          app,
-          domainName: certificateProps.domainName,
-          hostedZoneId: certificateProps.hostedZoneId,
-        }),
-        targetGroup,
-        // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
-        open: true,
-      });
-      this.listener = listener;
-    }
-
+    // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here
     const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
       // See https://github.com/guardian/devx-logs
       image: ContainerImage.fromRegistry("ghcr.io/guardian/devx-logs:2.1.0"),
@@ -260,6 +233,58 @@ export class GuEcsAppExperimental extends Construct {
       readOnly: false,
     });
 
-    this.targetGroup = targetGroup;
+    // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
+    const ecsTargetGroup = new GuApplicationTargetGroup(scope, "EcsTargetGroup", {
+      vpc,
+      app,
+      port: 9000, // FIXME - users should set this value via a prop
+      targetGroupName: `${app}-${scope.stage}`, // Add the name here to make it more easily identifiable in the console etc.
+      targets: [ecsService],
+    });
+
+    // FIXME - add AppAccess support to load balancer and listener (currently this only supports 'PUBLIC')
+    if (!migrationProps) {
+      // The id here must be the same as the one used by GuEc2App
+      const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
+        app,
+        vpc,
+        internetFacing: true,
+        vpcSubnets: {
+          subnets: GuVpc.subnetsFromParameter(scope, {
+            type: SubnetType.PUBLIC,
+            app,
+          }),
+        },
+        withAccessLogging: true,
+      });
+      this.loadBalancer = loadBalancer;
+
+      // Similarly the id here must be the same as the one used by GuEc2App
+      const listener = new GuHttpsApplicationListener(scope, "Listener", {
+        app,
+        loadBalancer,
+        certificate: new GuCertificate(scope, {
+          app,
+          domainName: certificateProps.domainName,
+          hostedZoneId: certificateProps.hostedZoneId,
+        }),
+        targetGroup: ecsTargetGroup,
+        // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
+        open: true,
+      });
+      this.listener = listener;
+    } else {
+      // FIXME - need to add support for Google Auth at the ALB
+      migrationProps.listener.addAction("SplitTrafficBetweenTwoTargetGroups", {
+        action: ListenerAction.weightedForward([
+          { targetGroup: ecsTargetGroup, weight: migrationProps.weightForEcsTargetGroup },
+          { targetGroup: migrationProps.targetGroup, weight: 999 - migrationProps.weightForEcsTargetGroup },
+        ]),
+      });
+      this.loadBalancer = migrationProps.loadBalancer;
+      this.listener = migrationProps.listener;
+    }
+
+    this.targetGroup = ecsTargetGroup;
   }
 }
