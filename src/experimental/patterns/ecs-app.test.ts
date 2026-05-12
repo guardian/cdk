@@ -9,6 +9,10 @@ describe("the GuEcsApp pattern", function () {
   it("should produce a functional ECS app with minimal arguments", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEcsAppExperimental(stack, {
+      applicationPort: 9000,
+      cpu: 1024,
+      memoryLimitMiB: 2048,
+      scaling: { minimumTasks: 3, maximumTasks: 6 },
       app: "test-gu",
       imageIdentifier: "sha256:12345",
       repositoryName: "my-repository",
@@ -38,6 +42,10 @@ describe("the GuEcsApp pattern", function () {
     });
     new GuEcsAppExperimental(stack, {
       app: "test-gu",
+      applicationPort: 9000,
+      cpu: 1024,
+      memoryLimitMiB: 2048,
+      scaling: { minimumTasks: 3, maximumTasks: 6 },
       imageIdentifier: "sha256:12345",
       repositoryName: "my-repository",
       certificateProps: {
@@ -72,6 +80,10 @@ describe("the GuEcsApp pattern", function () {
     });
     new GuEcsAppExperimental(stack, {
       app: "test-gu",
+      applicationPort: 9000,
+      cpu: 1024,
+      memoryLimitMiB: 2048,
+      scaling: { minimumTasks: 3, maximumTasks: 6 },
       imageIdentifier: "sha256:12345",
       repositoryName: "my-repository",
       certificateProps: {

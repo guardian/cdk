@@ -30,9 +30,15 @@ import {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
+  type WafProps,
 } from "../../constructs/loadbalancing";
 import type { GuDomainName } from "../../types";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
+
+interface Scaling {
+  minimumTasks: number;
+  maximumTasks: number;
+}
 
 interface Migration {
   loadBalancer: IApplicationLoadBalancer;
@@ -42,7 +48,28 @@ interface Migration {
   weightForEcsTargetGroup: number;
 }
 
+// We still need to port (or consider porting) the following functionality over from GuEc2App:
+// * access
+// * roleConfiguration? (something similar, although type will differ)
+// * monitoringConfiguration (do we want 5xx/4xx alarms; or something similar to unhealthyInstancesAlarm?)
+// * applicationLogging? (how configurable should this be for ECS?)
+// * vpc? (users can currently pass one in; should we retain support for this?)
+// * privateSubnets? (users can currently pass this in; should we retain support for this?)
+// * publicSubnets? (users can currently pass this in; should we retain support for this?)
+// * googleAuth
+// * healthcheck? (do we want to support customising the health check?)
 interface GuEcsAppProps extends AppIdentity {
+  /**
+   * The port your application runs on.
+   */
+  applicationPort: number;
+  // The defaults from AWS CDK are extremely low so it probably makes sense for us to encode something different
+  // via our pattern - we already do this for Lambda:
+  // https://github.com/guardian/cdk/blob/b567f1219dab416680a68981a488bbbf3564fe2d/src/constructs/lambda/lambda.ts#L65-L76
+  // TODO - should we add a default?
+  cpu: number;
+  // TODO - should we add a default?
+  memoryLimitMiB: number;
   /**
    * Which image to run.
    * This should be the image digest (e.g. 'sha256:abc123') to ensure immutable deployments.
@@ -54,8 +81,43 @@ interface GuEcsAppProps extends AppIdentity {
   /**
    * Specify certificate for the load balancer.
    */
-  certificateProps: GuDomainName; // ??? Do we need to share this?
+  certificateProps: GuDomainName;
+  scaling: Scaling;
   migrationProps?: Migration;
+  /**
+   * Enable access logging for this load balancer.
+   * Access logs are written to an S3 bucket within your AWS account.
+   * The bucket is created by {@link https://github.com/guardian/aws-account-setup}.
+   * The logs are queryable via the `gucdk_access_logs` Athena database.
+   *
+   * @defaultValue true
+   */
+  withAccessLogging?: boolean;
+  /**
+   * You can specify if the arn of this load balancer should be exposed for protection via WAF
+   *
+   * If this value changes, it is only picked up on WAF configuration redeploy.
+   *
+   * NB this parameter setting _alone_ is not sufficient to protect the application.
+   * You must also ensure that the application and stage combination is present in the WAF
+   * configuration.
+   *
+   * See https://github.com/guardian/waf/tree/main/lib
+   *
+   * There is a "gotcha" when migrating to this functionality.  You may not change only the Logical
+   * ID of an SSM Parameter (see https://docs.aws.amazon.com/cdk/v2/guide/identifiers.html) and the
+   * parameter name must be of the required form, meaning you cannot have an alternate name.
+   *
+   * You can either:
+   *
+   * Remove the old param and immediately redeploy with the new param (this does not affect
+   * protection unless and until the WAF configuration is redeployed)
+   *
+   *   OR
+   *
+   * Create an escape hatch by overriding the logical id (see "ssm param escape hatch" test for example)
+   **/
+  waf?: WafProps;
 }
 
 export class GuEcsAppExperimental extends Construct {
@@ -63,7 +125,19 @@ export class GuEcsAppExperimental extends Construct {
   public readonly loadBalancer: IApplicationLoadBalancer;
   public readonly listener: IApplicationListener;
   constructor(scope: GuStack, props: GuEcsAppProps) {
-    const { app, repositoryName, imageIdentifier, certificateProps, migrationProps } = props;
+    const {
+      app,
+      applicationPort,
+      cpu,
+      memoryLimitMiB,
+      repositoryName,
+      imageIdentifier,
+      certificateProps,
+      migrationProps,
+      scaling,
+      withAccessLogging = true,
+      waf,
+    } = props;
     super(scope, `${app}-ecs`);
     const vpc = GuVpc.fromIdParameter(scope, "GuVpc");
 
@@ -107,14 +181,7 @@ export class GuEcsAppExperimental extends Construct {
       },
     });
 
-    const taskDefinition = new FargateTaskDefinition(
-      scope,
-      "EcsTaskDefinition",
-      // The defaults from AWS CDK are extremely low so it probably makes sense for us to encode something different
-      // via our pattern - we already do this for Lambda:
-      // https://github.com/guardian/cdk/blob/b567f1219dab416680a68981a488bbbf3564fe2d/src/constructs/lambda/lambda.ts#L65-L76
-      { memoryLimitMiB: 2048, cpu: 1024 }, // FIXME - users should be able to pass their own values via props
-    );
+    const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", { memoryLimitMiB, cpu });
 
     taskDefinition.addContainer(app, {
       image,
@@ -124,7 +191,7 @@ export class GuEcsAppExperimental extends Construct {
       // This speeds up deployment. We don't need this enabled if users follow the advice to refer to their image
       // using the immutable digest
       versionConsistency: VersionConsistency.DISABLED,
-      portMappings: [{ containerPort: 9000 }], // FIXME - users should set this value via a prop
+      portMappings: [{ containerPort: applicationPort }],
       logging: fireLensLogDriver,
       readonlyRootFilesystem: true,
     });
@@ -144,8 +211,6 @@ export class GuEcsAppExperimental extends Construct {
     taskDefinition.addToTaskRolePolicy(logShippingPolicy);
 
     new GuParameterStoreReadPolicy(scope, { app: `${app}-ecs` }).attachToRole(taskDefinition.taskRole);
-
-    // FIXME - allow users to easily pass in their own IAM permissions; similar to GuInstanceRoleProps
 
     /*
     GuardDuty is enabled at the organisation level and runs as a sidecar.
@@ -190,8 +255,8 @@ export class GuEcsAppExperimental extends Construct {
     });
 
     ecsService.autoScaleTaskCount({
-      minCapacity: 3, // FIXME - users should be able to set these values via props
-      maxCapacity: 6,
+      minCapacity: scaling.minimumTasks,
+      maxCapacity: scaling.maximumTasks,
     });
 
     // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here
@@ -237,12 +302,11 @@ export class GuEcsAppExperimental extends Construct {
     const ecsTargetGroup = new GuApplicationTargetGroup(scope, "EcsTargetGroup", {
       vpc,
       app,
-      port: 9000, // FIXME - users should set this value via a prop
+      port: applicationPort,
       targetGroupName: `${app}-${scope.stage}`, // Add the name here to make it more easily identifiable in the console etc.
       targets: [ecsService],
     });
 
-    // FIXME - add AppAccess support to load balancer and listener (currently this only supports 'PUBLIC')
     if (!migrationProps) {
       // The id here must be the same as the one used by GuEc2App
       const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
@@ -255,7 +319,8 @@ export class GuEcsAppExperimental extends Construct {
             app,
           }),
         },
-        withAccessLogging: true,
+        withAccessLogging,
+        waf,
       });
       this.loadBalancer = loadBalancer;
 
@@ -274,7 +339,7 @@ export class GuEcsAppExperimental extends Construct {
       });
       this.listener = listener;
     } else {
-      // FIXME - need to add support for Google Auth at the ALB
+      // FIXME - need to consider how to adapt this when Google Auth is configured at the ALB; currently it will override this
       migrationProps.listener.addAction("SplitTrafficBetweenTwoTargetGroups", {
         action: ListenerAction.weightedForward([
           { targetGroup: ecsTargetGroup, weight: migrationProps.weightForEcsTargetGroup },
