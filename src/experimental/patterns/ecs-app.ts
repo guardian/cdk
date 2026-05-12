@@ -46,6 +46,8 @@ interface GuEcsAppProps extends AppIdentity {
 
 export class GuEcsAppExperimental extends Construct {
   public readonly targetGroup: GuApplicationTargetGroup;
+  public readonly loadBalancer?: GuApplicationLoadBalancer;
+  public readonly listener?: GuHttpsApplicationListener;
   constructor(scope: GuStack, props: GuEcsAppProps) {
     const { app, repositoryName, imageIdentifier, certificateProps, createLoadBalancerAndListener } = props;
     super(scope, `${app}-ecs`);
@@ -202,9 +204,10 @@ export class GuEcsAppExperimental extends Construct {
         },
         withAccessLogging: true,
       });
+      this.loadBalancer = loadBalancer;
 
       // Similarly the id here must be the same as the one used by GuEc2App
-      new GuHttpsApplicationListener(scope, "Listener", {
+      const listener = new GuHttpsApplicationListener(scope, "Listener", {
         app,
         loadBalancer,
         certificate: new GuCertificate(scope, {
@@ -216,6 +219,7 @@ export class GuEcsAppExperimental extends Construct {
         // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
         open: true,
       });
+      this.listener = listener;
     }
 
     const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
