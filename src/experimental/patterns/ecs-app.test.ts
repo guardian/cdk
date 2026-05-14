@@ -3,6 +3,7 @@ import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib
 import { AccessScope } from "../../constants";
 import { GuEc2App } from "../../patterns";
 import { simpleGuStackForTesting } from "../../utils/test";
+import { MigrateToEcsExperimental } from "../constructs/migrate-to-ecs-target-group";
 import { GuEcsAppExperimental } from "./ecs-app";
 
 describe("the GuEcsApp pattern", function () {
@@ -25,7 +26,7 @@ describe("the GuEcsApp pattern", function () {
 
   it("should be able to co-exist in the same stack as a GuEc2App if we're sharing load balancer components", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const { loadBalancer, listener, targetGroup } = new GuEc2App(stack, {
+    const ec2App = new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu",
       access: { scope: AccessScope.PUBLIC },
@@ -40,7 +41,8 @@ describe("the GuEcsApp pattern", function () {
         minimumInstances: 1,
       },
     });
-    new GuEcsAppExperimental(stack, {
+    const ecsApp = new GuEcsAppExperimental(stack, {
+      createLoadBalancerAndListener: false,
       app: "test-gu",
       applicationPort: 3000,
       cpu: 1024,
@@ -51,19 +53,19 @@ describe("the GuEcsApp pattern", function () {
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
-      migrationProps: {
-        listener,
-        loadBalancer,
-        targetGroup,
-        weightForEcsTargetGroup: 0,
-      },
+    });
+    new MigrateToEcsExperimental(stack, {
+      ec2TargetGroup: ec2App.targetGroup,
+      originalListener: ec2App.listener,
+      ecsTargetGroup: ecsApp.targetGroup,
+      trafficWeightForEcs: 0,
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
   it("should be able to split traffic between EC2 and ECS target groups", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const { loadBalancer, listener, targetGroup } = new GuEc2App(stack, {
+    const ec2App = new GuEc2App(stack, {
       applicationPort: 3000,
       app: "test-gu",
       access: { scope: AccessScope.PUBLIC },
@@ -78,7 +80,8 @@ describe("the GuEcsApp pattern", function () {
         minimumInstances: 1,
       },
     });
-    new GuEcsAppExperimental(stack, {
+    const ecsApp = new GuEcsAppExperimental(stack, {
+      createLoadBalancerAndListener: false,
       app: "test-gu",
       applicationPort: 3000,
       cpu: 1024,
@@ -89,12 +92,12 @@ describe("the GuEcsApp pattern", function () {
       certificateProps: {
         domainName: "domain-name-for-your-application.example",
       },
-      migrationProps: {
-        listener,
-        loadBalancer,
-        targetGroup,
-        weightForEcsTargetGroup: 500,
-      },
+    });
+    new MigrateToEcsExperimental(stack, {
+      ec2TargetGroup: ec2App.targetGroup,
+      originalListener: ec2App.listener,
+      ecsTargetGroup: ecsApp.targetGroup,
+      trafficWeightForEcs: 500,
     });
     // FIXME - use a specific assertion
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();

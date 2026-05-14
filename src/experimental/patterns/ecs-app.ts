@@ -16,7 +16,6 @@ import type {
   IApplicationLoadBalancer,
   IApplicationTargetGroup,
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
@@ -40,14 +39,6 @@ interface Scaling {
   maximumTasks: number;
 }
 
-interface Migration {
-  loadBalancer: IApplicationLoadBalancer;
-  listener: IApplicationListener;
-  targetGroup: IApplicationTargetGroup;
-  // Must be between 0 and 999 (inclusive)
-  weightForEcsTargetGroup: number;
-}
-
 // We still need to port (or consider porting) the following functionality over from GuEc2App:
 // * access (currently we always create a publicly accessible load balancer)
 // * roleConfiguration? (something similar, although type will differ)
@@ -59,6 +50,7 @@ interface Migration {
 // * googleAuth
 // * healthcheck? (do we want to support customising the health check?)
 interface GuEcsAppProps extends AppIdentity {
+  createLoadBalancerAndListener?: boolean;
   /**
    * The port your application runs on.
    */
@@ -83,7 +75,6 @@ interface GuEcsAppProps extends AppIdentity {
    */
   certificateProps: GuDomainName;
   scaling: Scaling;
-  migrationProps?: Migration;
   /**
    * Enable access logging for this load balancer.
    * Access logs are written to an S3 bucket within your AWS account.
@@ -122,18 +113,18 @@ interface GuEcsAppProps extends AppIdentity {
 
 export class GuEcsAppExperimental extends Construct {
   public readonly targetGroup: IApplicationTargetGroup;
-  public readonly loadBalancer: IApplicationLoadBalancer;
-  public readonly listener: IApplicationListener;
+  public readonly loadBalancer?: IApplicationLoadBalancer;
+  public readonly listener?: IApplicationListener;
   constructor(scope: GuStack, props: GuEcsAppProps) {
     const {
       app,
       applicationPort,
+      createLoadBalancerAndListener = true,
       cpu,
       memoryLimitMiB,
       repositoryName,
       imageIdentifier,
       certificateProps,
-      migrationProps,
       scaling,
       withAccessLogging = true,
       waf,
@@ -307,7 +298,7 @@ export class GuEcsAppExperimental extends Construct {
       targets: [ecsService],
     });
 
-    if (!migrationProps) {
+    if (createLoadBalancerAndListener) {
       // The id here must be the same as the one used by GuEc2App
       const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
         app,
@@ -322,7 +313,6 @@ export class GuEcsAppExperimental extends Construct {
         withAccessLogging,
         waf,
       });
-      this.loadBalancer = loadBalancer;
 
       // Similarly the id here must be the same as the one used by GuEc2App
       const listener = new GuHttpsApplicationListener(scope, "Listener", {
@@ -337,17 +327,9 @@ export class GuEcsAppExperimental extends Construct {
         // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
         open: true,
       });
+
+      this.loadBalancer = loadBalancer;
       this.listener = listener;
-    } else {
-      // FIXME - need to consider how to adapt this when Google Auth is configured at the ALB; currently it will bypass the AuthenticateCognitoAction
-      migrationProps.listener.addAction("SplitTrafficBetweenTwoTargetGroups", {
-        action: ListenerAction.weightedForward([
-          { targetGroup: ecsTargetGroup, weight: migrationProps.weightForEcsTargetGroup },
-          { targetGroup: migrationProps.targetGroup, weight: 999 - migrationProps.weightForEcsTargetGroup },
-        ]),
-      });
-      this.loadBalancer = migrationProps.loadBalancer;
-      this.listener = migrationProps.listener;
     }
 
     this.targetGroup = ecsTargetGroup;
