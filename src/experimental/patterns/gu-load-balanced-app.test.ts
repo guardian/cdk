@@ -1582,3 +1582,38 @@ UserData from accessed construct`);
     expect(resourceId).toBe("ssm param escape hatch");
   });
 });
+
+describe("the GuLoadBalancedAppExperimental pattern should support experimental EC2 versioned deployment functionality", function () {
+  it("should produce the correct snapshot if versioned updates are enabled", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu";
+    const buildIdentifier = "123";
+    new GuLoadBalancedAppExperimental(stack, {
+      applicationPort: 3000,
+      app,
+      access: { scope: AccessScope.PUBLIC },
+      monitoringConfiguration: { noMonitoring: true },
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: {
+          distributable: {
+            fileName: `${app}-${buildIdentifier}.deb`,
+            executionStatement: `dpkg -i /${app}/${app}-${buildIdentifier}.deb`,
+          },
+        },
+        scaling: {
+          minimumInstances: 1,
+        },
+        versionedDeployments: {
+          enabled: true,
+          buildIdentifier,
+        },
+      },
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+});
