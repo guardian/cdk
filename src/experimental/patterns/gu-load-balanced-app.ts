@@ -8,6 +8,8 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { Port } from "aws-cdk-lib/aws-ec2";
+import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
@@ -22,7 +24,12 @@ import {
   LogDriver,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
-import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type {
+  HealthCheck as ALBHealthCheck,
+  CfnListener,
+  CfnLoadBalancer,
+  CfnTargetGroup,
+} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
@@ -326,6 +333,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
   public readonly autoScalingGroup?: GuAutoScalingGroup;
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroups: TargetGroups;
+  public readonly ecsSecurityGroup?: GuSecurityGroup;
 
   constructor(scope: GuStack, props: GuLoadBalancedAppExperimentalProps) {
     const {
@@ -540,6 +548,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
 
+      const ecsSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
+        app: `${app}-ecs`,
+        vpc,
+      });
+      this.ecsSecurityGroup = ecsSecurityGroup;
+
       const ecsService = new FargateService(scope, "EcsService", {
         cluster,
         taskDefinition,
@@ -551,12 +565,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [
-          GuHttpsEgressSecurityGroup.forVpc(scope, {
-            app: `${app}-ecs`,
-            vpc,
-          }),
-        ],
+        securityGroups: [ecsSecurityGroup],
       });
 
       ecsService.autoScaleTaskCount({
@@ -850,5 +859,53 @@ export class GuLoadBalancedAppExperimental extends Construct {
     this.loadBalancer = loadBalancer;
     this.listener = listener;
     this.targetGroups = targetGroups;
+  }
+}
+
+export interface MigrationHelperProps {
+  app: string;
+  currentLoadBalancer: CfnLoadBalancer;
+  currentListener: CfnListener;
+  ec2TargetGroup: CfnTargetGroup;
+  ecsPattern: GuLoadBalancedAppExperimental;
+  ec2Weight: number;
+  ecsWeight: number;
+}
+
+export class MigrationHelperExperimental extends Construct {
+  constructor(scope: GuStack, props: MigrationHelperProps) {
+    super(scope, "migration-helper");
+    const { app, currentLoadBalancer, currentListener, ec2TargetGroup, ecsPattern, ec2Weight, ecsWeight } = props;
+    // Remove pattern created load balancer and listener
+    scope.node.tryRemoveChild(AppIdentity.suffixText({ app }, "LoadBalancer"));
+    scope.node.tryRemoveChild(AppIdentity.suffixText({ app }, "Listener"));
+    // Need to allow load balancer to communicate with ECS service via security groups
+    const albToEcsSg = new SecurityGroup(scope, "AlbEcsCommunication", {
+      vpc: ecsPattern.vpc,
+      allowAllOutbound: false,
+    });
+    albToEcsSg.addEgressRule(ecsPattern.ecsSecurityGroup!, Port.tcp(9000), "Allow ALB egress to ECS service");
+    ecsPattern.ecsSecurityGroup!.addIngressRule(albToEcsSg, Port.tcp(9000), "Allow ECS service ingress from ALB");
+    currentLoadBalancer.securityGroups = currentLoadBalancer.securityGroups
+      ? [...currentLoadBalancer.securityGroups, albToEcsSg.securityGroupId]
+      : [];
+    // Split traffic
+    currentListener.defaultActions = [
+      {
+        type: "forward",
+        forwardConfig: {
+          targetGroups: [
+            {
+              targetGroupArn: ec2TargetGroup.attrTargetGroupArn,
+              weight: ec2Weight,
+            },
+            {
+              targetGroupArn: ecsPattern.targetGroups.ecs!.targetGroupArn,
+              weight: ecsWeight,
+            },
+          ],
+        },
+      },
+    ];
   }
 }

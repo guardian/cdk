@@ -1,8 +1,9 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
+import { CfnListener, CfnLoadBalancer, CfnTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
+import { GuLoadBalancedAppExperimental, MigrationHelperExperimental } from "./gu-load-balanced-app";
 
 describe("the GuLoadBalancedAppExperimental pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
@@ -43,6 +44,39 @@ describe("the GuLoadBalancedAppExperimental pattern", function () {
         imageIdentifier: "sha256:12345",
         repositoryName: "my-repository",
       },
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+  it("work with the migration helper", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu";
+    const ecsPattern = new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app,
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        repositoryName: "my-repository",
+      },
+    });
+    const currentLoadBalancer = new CfnLoadBalancer(stack, "LoadBalancer", { securityGroups: ["my-lb-sg"] });
+    const currentListener = new CfnListener(stack, "Listener", { loadBalancerArn: "test", defaultActions: [] });
+    const ec2TargetGroup = new CfnTargetGroup(stack, "Ec2TargetGroup", {});
+    new MigrationHelperExperimental(stack, {
+      app,
+      currentLoadBalancer,
+      currentListener,
+      ec2TargetGroup,
+      ecsPattern,
+      ec2Weight: 499,
+      ecsWeight: 500,
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
