@@ -24,14 +24,14 @@ import {
   LogDriver,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
+import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type {
   HealthCheck as ALBHealthCheck,
-  CfnListener,
   CfnLoadBalancer,
   CfnTargetGroup,
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { CfnListener } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -333,6 +333,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
   public readonly autoScalingGroup?: GuAutoScalingGroup;
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroups: TargetGroups;
+  public readonly fargateService?: FargateService;
   public readonly ecsSecurityGroup?: GuSecurityGroup;
 
   constructor(scope: GuStack, props: GuLoadBalancedAppExperimentalProps) {
@@ -572,6 +573,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
         minCapacity: scaling.minimumTasks,
         maxCapacity: scaling.maximumTasks,
       });
+
+      this.fargateService = ecsService;
 
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
@@ -863,7 +866,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
 }
 
 export interface MigrationHelperProps {
-  app: string;
   currentLoadBalancer: CfnLoadBalancer;
   currentListener: CfnListener;
   ec2TargetGroup: CfnTargetGroup;
@@ -875,11 +877,7 @@ export interface MigrationHelperProps {
 export class MigrationHelperExperimental extends Construct {
   constructor(scope: GuStack, props: MigrationHelperProps) {
     super(scope, "migration-helper");
-    const { app, currentLoadBalancer, currentListener, ec2TargetGroup, ecsPattern, ec2Weight, ecsWeight } = props;
-    // Remove pattern created load balancer and listener
-    scope.node.tryRemoveChild(AppIdentity.suffixText({ app }, "LoadBalancer"));
-    scope.node.tryRemoveChild(AppIdentity.suffixText({ app }, "Listener"));
-    // Need to allow load balancer to communicate with ECS service via security groups
+    const { currentLoadBalancer, currentListener, ec2TargetGroup, ecsPattern, ec2Weight, ecsWeight } = props;
     const albToEcsSg = new SecurityGroup(scope, "AlbEcsCommunication", {
       vpc: ecsPattern.vpc,
       allowAllOutbound: false,

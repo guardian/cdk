@@ -70,7 +70,6 @@ describe("the GuLoadBalancedAppExperimental pattern", function () {
     const currentListener = new CfnListener(stack, "Listener", { loadBalancerArn: "test", defaultActions: [] });
     const ec2TargetGroup = new CfnTargetGroup(stack, "Ec2TargetGroup", {});
     new MigrationHelperExperimental(stack, {
-      app,
       currentLoadBalancer,
       currentListener,
       ec2TargetGroup,
