@@ -3,7 +3,7 @@ import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib
 import { CfnListener, CfnLoadBalancer, CfnTargetGroup } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
-import { GuLoadBalancedAppExperimental, MigrationHelperExperimental } from "./gu-load-balanced-app";
+import { GuLoadBalancedAppExperimental, RouteTrafficToEcsExperimental } from "./gu-load-balanced-app";
 
 describe("the GuLoadBalancedAppExperimental pattern", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
@@ -69,7 +69,7 @@ describe("the GuLoadBalancedAppExperimental pattern", function () {
     const currentLoadBalancer = new CfnLoadBalancer(stack, "LoadBalancer", { securityGroups: ["my-lb-sg"] });
     const currentListener = new CfnListener(stack, "Listener", { loadBalancerArn: "test", defaultActions: [] });
     const ec2TargetGroup = new CfnTargetGroup(stack, "Ec2TargetGroup", {});
-    new MigrationHelperExperimental(stack, {
+    new RouteTrafficToEcsExperimental(stack, {
       currentLoadBalancer,
       currentListener,
       ec2TargetGroup,

@@ -865,7 +865,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
   }
 }
 
-export interface MigrationHelperProps {
+export interface RouteTrafficToEcsExperimentalProps {
   currentLoadBalancer: CfnLoadBalancer;
   currentListener: CfnListener;
   ec2TargetGroup: CfnTargetGroup;
@@ -874,10 +874,18 @@ export interface MigrationHelperProps {
   ecsWeight: number;
 }
 
-export class MigrationHelperExperimental extends Construct {
-  constructor(scope: GuStack, props: MigrationHelperProps) {
+export class RouteTrafficToEcsExperimental extends Construct {
+  constructor(scope: GuStack, props: RouteTrafficToEcsExperimentalProps) {
     super(scope, "migration-helper");
     const { currentLoadBalancer, currentListener, ec2TargetGroup, ecsPattern, ec2Weight, ecsWeight } = props;
+    // We need to remove the link between the load balancer that the pattern creates and the ECS target group because
+    // a target group can only be associated with a single load balancer
+    // Alternatively we could try to remove the load balancer and listener completely, but I couldn't get that working
+    // cleanly using escape hatches
+    ecsPattern.listener.addAction("FixedResponse", {
+      action: ListenerAction.fixedResponse(404),
+    });
+    // Ensure that the existing ALB can communicate with the new ECS target group
     const albToEcsSg = new SecurityGroup(scope, "AlbEcsCommunication", {
       vpc: ecsPattern.vpc,
       allowAllOutbound: false,
@@ -887,7 +895,7 @@ export class MigrationHelperExperimental extends Construct {
     currentLoadBalancer.securityGroups = currentLoadBalancer.securityGroups
       ? [...currentLoadBalancer.securityGroups, albToEcsSg.securityGroupId]
       : [];
-    // Split traffic
+    // Split traffic between EC2 and ECS
     currentListener.defaultActions = [
       {
         type: "forward",

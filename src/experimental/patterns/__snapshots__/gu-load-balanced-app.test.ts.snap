@@ -4068,10 +4068,10 @@ exports[`the GuLoadBalancedAppExperimental pattern work with the migration helpe
         ],
         "DefaultActions": [
           {
-            "TargetGroupArn": {
-              "Ref": "EcsTargetGroupTestguFCB7574C",
+            "FixedResponseConfig": {
+              "StatusCode": "404",
             },
-            "Type": "forward",
+            "Type": "fixed-response",
           },
         ],
         "LoadBalancerArn": {
