@@ -2472,6 +2472,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should produce a functional E
             },
           },
         },
+        "PropagateTags": "SERVICE",
         "Tags": [
           {
             "Key": "gu:cdk:version",

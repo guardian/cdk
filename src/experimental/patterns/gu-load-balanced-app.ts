@@ -11,6 +11,7 @@ import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
+import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   ContainerImage,
@@ -532,6 +533,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         minHealthyPercent: 100,
         // Also important for service deployments; with the AWS defaults we don't get a fast failure when deploying a 'bad' build
         circuitBreaker: { enable: true, rollback: true },
+        propagateTags: PropagatedTagSource.SERVICE,
         // By default, AWS will create a new security group which allows all outbound traffic
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
