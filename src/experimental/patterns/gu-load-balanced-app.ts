@@ -419,15 +419,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ec2: ec2TargetGroup,
       };
 
-      if (!monitoringConfiguration.noMonitoring && monitoringConfiguration.unhealthyInstancesAlarm) {
-        const { snsTopicName } = monitoringConfiguration;
-        new GuUnhealthyInstancesAlarm(scope, {
-          app,
-          targetGroup: ec2TargetGroup,
-          snsTopicName,
-        });
-      }
-
       if (applicationLogging.enabled) {
         // This allows automatic shipping of application logs when using the
         // `cdk-base` Amigo role on your AMI.
@@ -829,6 +820,14 @@ export class GuLoadBalancedAppExperimental extends Construct {
           loadBalancer,
           snsTopicName,
           ...http5xxAlarm,
+        });
+      }
+      if (monitoringConfiguration.unhealthyInstancesAlarm && targetGroups.ec2) {
+        const { snsTopicName } = monitoringConfiguration;
+        new GuUnhealthyInstancesAlarm(scope, {
+          app,
+          targetGroup: targetGroups.ec2,
+          snsTopicName,
         });
       }
     }
