@@ -588,7 +588,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
         vpc,
         app,
         port: applicationPort,
-        targetGroupName: `${app}-${scope.stage}`, // Add the name here to make it more easily identifiable in the console etc.
+        // Use a meaningful name here so that people can easily identify it in the console etc.
+        targetGroupName: `${app}-${scope.stage}-${scope.stack}-ecs`,
         targets: [ecsService],
       });
 
@@ -784,6 +785,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       userPoolClient.node.addDependency(userPoolIdp);
 
+      if (props.ecsProps) {
+        throw new Error("Using Google Auth with ECS is currently unsupported");
+        // I think that the code here will probably work fine but it needs some dedicated testing.
+        // For Google auth to work we need to 'authenticate-cognito' and then forward to a target group.
+        // If we are operating with EC2 and ECS backends then this forwarded request could be sent to either backend.
+        // Let's deploy this to a DevX service and check it's valid/works as expected before opening this up to other teams.
+      }
       listener.addAction("CognitoAuth", {
         action: new AuthenticateCognitoAction({
           userPool: userPool,
