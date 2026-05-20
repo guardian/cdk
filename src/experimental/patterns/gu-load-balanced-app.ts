@@ -9,7 +9,6 @@ import {
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
-import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
 import {
@@ -391,7 +390,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         maximumInstances,
         role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
 
-        // TODO should this be defaulted at pattern or construct level?
         healthChecks: HealthChecks.withAdditionalChecks({
           additionalTypes: [AdditionalHealthCheckType.ELB],
           gracePeriod: Duration.minutes(2),
@@ -451,22 +449,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
     // Setup ECS-specific infrastructure
     if (ecsProps) {
       const { cpu, memoryLimitMiB, repositoryName, imageIdentifier, scaling } = ecsProps;
-      // FIXME - we should clean this up before moving this pattern out of experimental
-      // Trying to use a GuVpc with the ECS Cluster construct fails with the following error:
-      // ValidationError: There are no 'Public' subnet groups in this VPC. Available types:
-      const vpcThatEcsClusterConstructWillAccept = Vpc.fromVpcAttributes(scope, "Vpc", {
-        vpcId: vpc.vpcId,
-        // We have to provide public subnet ids to avoid a validation error, but they are unused
-        publicSubnetIds: [""],
-        // This seems to be the important bit that is missing from the IVpc that GuCDK provides
-        privateSubnetIds: privateSubnets.map((subnet) => subnet.subnetId),
-        availabilityZones: [""], // The type system forces us to provide this, but it doesn't actually seem to be needed
-      });
-      const cluster = new Cluster(scope, "EcsCluster", {
-        // We have to pass in an IVpc here, but the generated CFN only actually references the private subnets ids when
-        // setting up the ECS service.
-        vpc: vpcThatEcsClusterConstructWillAccept,
-      });
+
+      const cluster = new Cluster(this, "EcsCluster", { vpc });
 
       // Need to figure out how to make this cross-account, but this is fine for the simple case where the app and the
       // ECR repo are both in the Deploy Tools account
@@ -543,6 +527,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const ecsService = new FargateService(scope, "EcsService", {
         cluster,
         taskDefinition,
+        vpcSubnets: { subnets: privateSubnets },
         // Important for service deployments; with the AWS defaults the service can be scaled down when deploying
         minHealthyPercent: 100,
         // Also important for service deployments; with the AWS defaults we don't get a fast failure when deploying a 'bad' build

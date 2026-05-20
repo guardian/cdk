@@ -2418,29 +2418,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should produce a functional E
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Retain",
     },
-    "EcsCluster97242B84": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::ECS::Cluster",
-    },
     "EcsService81FC6EF6": {
       "DependsOn": [
         "EcsTaskDefinitionTaskRoleDefaultPolicy1FD2F057",
@@ -2449,7 +2426,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should produce a functional E
       ],
       "Properties": {
         "Cluster": {
-          "Ref": "EcsCluster97242B84",
+          "Ref": "testguEcsCluster02799D79",
         },
         "DeploymentConfiguration": {
           "Alarms": {
@@ -2533,7 +2510,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should produce a functional E
             [
               "service/",
               {
-                "Ref": "EcsCluster97242B84",
+                "Ref": "testguEcsCluster02799D79",
               },
               "/",
               {
@@ -3227,6 +3204,29 @@ exports[`the GuLoadBalancedAppExperimental pattern should produce a functional E
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "testguEcsCluster02799D79": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
     },
   },
 }
