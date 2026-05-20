@@ -65,7 +65,7 @@ import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
 
-interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
+export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   /**
    * Network access restrictions for your load balancer.
    *
