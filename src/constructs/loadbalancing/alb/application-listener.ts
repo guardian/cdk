@@ -31,9 +31,8 @@ export class GuApplicationListener extends GuAppAwareConstruct(ApplicationListen
   }
 }
 
-export interface GuHttpsApplicationListenerProps
-  extends Omit<GuApplicationListenerProps, "defaultAction" | "certificates">, AppIdentity {
-  targetGroup: GuApplicationTargetGroup;
+export interface GuHttpsApplicationListenerProps extends Omit<GuApplicationListenerProps, "certificates">, AppIdentity {
+  targetGroup?: GuApplicationTargetGroup;
   certificate?: GuCertificate;
 }
 
@@ -60,7 +59,7 @@ export class GuHttpsApplicationListener extends GuAppAwareConstruct(ApplicationL
             },
           ]
         : [],
-      defaultAction: ListenerAction.forward([targetGroup]),
+      defaultAction: targetGroup ? ListenerAction.forward([targetGroup]) : props.defaultAction,
     };
 
     super(scope, id, mergedProps);

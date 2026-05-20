@@ -342,7 +342,10 @@ export interface GuEc2AppProps extends AppIdentity {
   instanceMetricGranularity: "1Minute" | "5Minute";
 }
 
-function restrictedCidrRanges(ranges: IPeer[]) {
+/**
+ * Use this to allow specific CIDR ranges to access a load balancer over HTTPS
+ */
+export function restrictedCidrRanges(ranges: IPeer[]) {
   return ranges.map((range) => ({
     range,
     port: Port.tcp(443),
