@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.3.1
+
+### Patch Changes
+
+- b656328: Correct Riff-Raff project tag key to match the one previously introduced in https://github.com/guardian/riff-raff/pull/1374/changes: `gu:riff-raff:project`.
+
 ## 63.3.0
 
 ### Minor Changes
