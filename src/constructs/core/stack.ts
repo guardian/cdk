@@ -159,7 +159,7 @@ export class GuStack extends Stack implements StackStageIdentity {
       }
 
       if (this.riffRaffProjectName) {
-        this.addTag("gu:riff-raff-project", this.riffRaffProjectName);
+        this.addTag("gu:riff-raff:project", this.riffRaffProjectName);
       }
 
       if (this.repositoryName) {
