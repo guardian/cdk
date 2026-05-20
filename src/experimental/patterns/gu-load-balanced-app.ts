@@ -579,8 +579,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         vpc,
         app,
         port: applicationPort,
-        // Use a meaningful name here so that people can easily identify it in the console etc.
-        targetGroupName: `${app}-${scope.stage}-${scope.stack}-ecs`,
         targets: [ecsService],
       });
 

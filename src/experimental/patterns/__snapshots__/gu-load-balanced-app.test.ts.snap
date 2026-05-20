@@ -1934,7 +1934,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 5,
         "HealthyThresholdCount": 5,
-        "Name": "test-gu-TEST-test-stack-ecs",
         "Port": 3000,
         "Protocol": "HTTP",
         "Tags": [
