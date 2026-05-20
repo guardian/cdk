@@ -212,29 +212,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should be capable of splittin
       },
       "Type": "AWS::IAM::Policy",
     },
-    "EcsCluster97242B84": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::ECS::Cluster",
-    },
     "EcsService81FC6EF6": {
       "DependsOn": [
         "EcsTaskDefinitionTaskRoleDefaultPolicy1FD2F057",
@@ -243,7 +220,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should be capable of splittin
       ],
       "Properties": {
         "Cluster": {
-          "Ref": "EcsCluster97242B84",
+          "Ref": "testguEcsCluster02799D79",
         },
         "DeploymentConfiguration": {
           "Alarms": {
@@ -289,6 +266,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should be capable of splittin
             },
           },
         },
+        "PropagateTags": "SERVICE",
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -327,7 +305,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should be capable of splittin
             [
               "service/",
               {
-                "Ref": "EcsCluster97242B84",
+                "Ref": "testguEcsCluster02799D79",
               },
               "/",
               {
@@ -1362,6 +1340,29 @@ exports[`the GuLoadBalancedAppExperimental pattern should be capable of splittin
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "testguEcsCluster02799D79": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
     },
     "teststackTESTtestgu5E2363A5": {
       "DependsOn": [

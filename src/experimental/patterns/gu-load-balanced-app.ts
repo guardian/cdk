@@ -88,10 +88,6 @@ interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
    */
   withAccessLogging?: boolean;
   /**
-   * Configure IAM roles for autoscaling group EC2 instances.
-   */
-  roleConfiguration?: GuInstanceRoleProps; //FIXME - use a different type name with the same shape
-  /**
    * Enable and configure alarms.
    */
   monitoringConfiguration: Alarms | NoMonitoring;
@@ -242,6 +238,10 @@ interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     applicationLogging?: ApplicationLoggingProps;
     /**
+     * Configure IAM roles for autoscaling group EC2 instances.
+     */
+    roleConfiguration?: GuInstanceRoleProps;
+    /**
      * Add block devices (additional storage).
      */
     blockDevices?: BlockDevice[];
@@ -312,14 +312,6 @@ interface TargetGroups {
 }
 
 export class GuLoadBalancedAppExperimental extends Construct {
-  /*
-   * These are public for now, as this allows users to
-   * modify these constructs as desired to fit their
-   * specific needs.
-   * In the future, we might build functionality to better enable users
-   * to access in-pattern constructs, but this would allow teams to be unblocked
-   * in the short term.
-   * */
   public readonly vpc: IVpc;
   public readonly certificate?: GuCertificate;
   public readonly loadBalancer: GuApplicationLoadBalancer;
@@ -335,7 +327,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
       applicationPort,
       certificateProps,
       monitoringConfiguration,
-      roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
@@ -352,10 +343,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
     // Setup EC2-specific infrastructure
     if (ec2Props) {
       const {
-        // We should update this default once a significant number of apps have migrated to devx-logs
         applicationLogging = { enabled: false },
         blockDevices,
         instanceType,
+        roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
         scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
         userData: userDataLike,
         imageRecipe,
@@ -364,8 +355,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         defaultInstanceWarmup,
         instanceMetricGranularity,
       } = ec2Props;
-      // We should really prevent users from doing this via the type system,
-      // but that requires a breaking change to the API
+
       if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
         throw new Error(
           "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
