@@ -316,6 +316,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
   public readonly certificate?: GuCertificate;
   public readonly loadBalancer: GuApplicationLoadBalancer;
   public readonly autoScalingGroup?: GuAutoScalingGroup;
+  public readonly ecsService?: FargateService;
   public readonly listener: GuHttpsApplicationListener;
   public readonly targetGroups: TargetGroups;
 
@@ -540,6 +541,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
         minCapacity: scaling.minimumTasks,
         maxCapacity: scaling.maximumTasks,
       });
+
+      this.ecsService = ecsService;
 
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
