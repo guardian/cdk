@@ -342,7 +342,9 @@ export interface GuEc2AppProps extends AppIdentity {
   instanceMetricGranularity: "1Minute" | "5Minute";
 }
 
-// eslint-disable-next-line @guardian/tsdoc-required/tsdoc-required -- testing
+/**
+ * Use this to allow specific CIDR ranges to access a load balancer over HTTPS
+ */
 export function restrictedCidrRanges(ranges: IPeer[]) {
   return ranges.map((range) => ({
     range,
