@@ -1,48 +1,23 @@
 /* eslint "@guardian/tsdoc-required/tsdoc-required": 2 -- to begin rolling this out for public APIs. */
-import { Duration, SecretValue, Tags } from "aws-cdk-lib";
+import type { Duration } from "aws-cdk-lib";
 import type { BlockDevice, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
-import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
-import {
-  ProviderAttribute,
-  UserPool,
-  UserPoolClientIdentityProvider,
-  UserPoolIdentityProviderGoogle,
-} from "aws-cdk-lib/aws-cognito";
-import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { Port, UserData } from "aws-cdk-lib/aws-ec2";
+import type { InstanceType, ISubnet, IVpc, UserData } from "aws-cdk-lib/aws-ec2";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import { Construct } from "constructs";
-import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
-import { GuCertificate } from "../../constructs/acm";
-import type { GuUserDataProps } from "../../constructs/autoscaling";
-import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
+import type { GuCertificate } from "../../constructs/acm";
+import type { GuAutoScalingGroup, GuUserDataProps } from "../../constructs/autoscaling";
 import type { Http4xxAlarmProps, Http5xxAlarmProps, NoMonitoring } from "../../constructs/cloudwatch";
-import {
-  GuAlb4xxPercentageAlarm,
-  GuAlb5xxPercentageAlarm,
-  GuUnhealthyInstancesAlarm,
-} from "../../constructs/cloudwatch";
-import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuLoggingStreamNameParameter } from "../../constructs/core";
-import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
+import type { AppIdentity, GuStack } from "../../constructs/core";
 import type { GuInstanceRoleProps } from "../../constructs/iam";
-import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
-import { GuLambdaFunction } from "../../constructs/lambda";
-import {
+import type {
   GuApplicationLoadBalancer,
   GuApplicationTargetGroup,
   GuHttpsApplicationListener,
 } from "../../constructs/loadbalancing";
 import type { WafProps } from "../../constructs/loadbalancing";
-import { AppAccess } from "../../types";
+import { GuLoadBalancedAppExperimental } from "../../experimental/patterns/gu-load-balanced-app";
+import type { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
-import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 
 /**
  * To ship your application logs to ELK automatically, you must:
@@ -343,24 +318,13 @@ export interface GuEc2AppProps extends AppIdentity {
 }
 
 /**
- * Use this to allow specific CIDR ranges to access a load balancer over HTTPS
- */
-export function restrictedCidrRanges(ranges: IPeer[]) {
-  return ranges.map((range) => ({
-    range,
-    port: Port.tcp(443),
-    description: `Allow access on port 443 from ${range.uniqueId}`,
-  }));
-}
-
-/**
  * Pattern which creates the resources needed to run an application on EC2
  * behind a load balancer. For convenience, you may wish to use [[`GuPlayApp`]]
  * or [[`GuNodeApp`]], which extend this class.
  *
  * See props for further details.
  */
-export class GuEc2App extends Construct {
+export class GuEc2App {
   /*
    * These are public for now, as this allows users to
    * modify these constructs as desired to fit their
@@ -379,318 +343,62 @@ export class GuEc2App extends Construct {
   constructor(scope: GuStack, props: GuEc2AppProps) {
     const {
       access,
-      withAccessLogging = true,
+      withAccessLogging,
       app,
-      // We should update this default once a significant number of apps have migrated to devx-logs
-      applicationLogging = { enabled: false },
       applicationPort,
-      blockDevices,
       certificateProps,
-      instanceType,
+      googleAuth,
+      healthcheck,
       monitoringConfiguration,
-      roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
-      scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
-      userData: userDataLike,
+      vpc,
+      privateSubnets,
+      publicSubnets,
+      waf,
+      applicationLogging,
+      blockDevices,
+      instanceType,
+      roleConfiguration,
+      scaling,
+      userData,
       imageRecipe,
-      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
-      privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
-      publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       instanceMetadataHopLimit,
       updatePolicy,
       defaultInstanceWarmup,
       instanceMetricGranularity,
-      waf,
     } = props;
-
-    super(scope, app); // The assumption is `app` is unique
-
-    // We should really prevent users from doing this via the type system,
-    // but that requires a breaking change to the API
-    if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
-      throw new Error(
-        "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
-      );
-    }
-
-    const userData = userDataLike instanceof UserData ? userDataLike : new GuUserData(scope, { ...userDataLike, app });
-
-    AppAccess.validate(access);
-
-    const certificate =
-      typeof certificateProps !== "undefined"
-        ? new GuCertificate(scope, {
-            app,
-            domainName: certificateProps.domainName,
-            hostedZoneId: certificateProps.hostedZoneId,
-          })
-        : undefined;
-
-    const maybePrivateConfigPolicy =
-      userData instanceof GuUserData && userData.configuration
-        ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
-        : [];
-
-    const mergedRoleConfiguration: GuInstanceRoleProps = {
-      withoutLogShipping: roleConfiguration.withoutLogShipping,
-      additionalPolicies: maybePrivateConfigPolicy.concat(roleConfiguration.additionalPolicies ?? []),
-    };
-
-    const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
-      app,
-      vpc,
-      instanceType,
-      minimumInstances,
-      maximumInstances,
-      role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
-
-      // TODO should this be defaulted at pattern or construct level?
-      healthChecks: HealthChecks.withAdditionalChecks({
-        additionalTypes: [AdditionalHealthCheckType.ELB],
-        gracePeriod: Duration.minutes(2),
-      }),
-
-      userData: userData instanceof GuUserData ? userData.userData : userData,
-      vpcSubnets: { subnets: privateSubnets },
-      ...(blockDevices && { blockDevices }),
-      imageRecipe,
-      httpPutResponseHopLimit: instanceMetadataHopLimit,
-      updatePolicy,
-      defaultInstanceWarmup,
-      instanceMetricGranularity,
-    });
-
-    // This allows automatic shipping of instance Cloud Init logs when using the
-    // `cdk-base` Amigo role on your AMI.
-    Tags.of(autoScalingGroup).add(
-      MetadataKeys.LOG_KINESIS_STREAM_NAME,
-      GuLoggingStreamNameParameter.getInstance(scope).valueAsString,
-    );
-
-    if (applicationLogging.enabled) {
-      // This allows automatic shipping of application logs when using the
-      // `cdk-base` Amigo role on your AMI.
-      Tags.of(autoScalingGroup).add(
-        MetadataKeys.SYSTEMD_UNIT,
-        applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`,
-      );
-    }
-
-    const loadBalancer = new GuApplicationLoadBalancer(scope, "LoadBalancer", {
-      app,
-      vpc,
-      // Setting internetFacing to true does not necessarily allow public access to the load balancer itself. That is handled by the listener's `open` prop.
-      internetFacing: access.scope !== AccessScope.INTERNAL,
-      vpcSubnets: {
-        subnets: access.scope === AccessScope.INTERNAL ? privateSubnets : publicSubnets,
-      },
+    const pattern = new GuLoadBalancedAppExperimental(scope, {
+      access,
       withAccessLogging,
-      waf,
-    });
-
-    const targetGroup = new GuApplicationTargetGroup(scope, "TargetGroup", {
       app,
+      applicationPort,
+      certificateProps,
+      googleAuth,
+      healthcheck,
+      monitoringConfiguration,
       vpc,
-      protocol: ApplicationProtocol.HTTP,
-      targets: [autoScalingGroup],
-      port: applicationPort,
-      healthCheck: props.healthcheck,
+      privateSubnets,
+      publicSubnets,
+      waf,
+      ec2Props: {
+        applicationLogging,
+        blockDevices,
+        instanceType,
+        roleConfiguration,
+        scaling,
+        userData,
+        imageRecipe,
+        instanceMetadataHopLimit,
+        updatePolicy,
+        defaultInstanceWarmup,
+        instanceMetricGranularity,
+      },
     });
 
-    const listener = new GuHttpsApplicationListener(scope, "Listener", {
-      app,
-      loadBalancer,
-      certificate,
-      targetGroup,
-      // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
-      open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
-    });
-
-    // Since AWS won't create a security group automatically when open=false, we need to add our own
-    if (access.scope !== AccessScope.PUBLIC) {
-      loadBalancer.addSecurityGroup(
-        new GuSecurityGroup(scope, `${access.scope}IngressSecurityGroup`, {
-          app,
-          vpc,
-          description: "Allow restricted ingress from CIDR ranges",
-          allowAllOutbound: false,
-          ingresses: restrictedCidrRanges(access.cidrRanges),
-        }),
-      );
-    }
-
-    if (!monitoringConfiguration.noMonitoring) {
-      const { http5xxAlarm, http4xxAlarm, snsTopicName, unhealthyInstancesAlarm } = monitoringConfiguration;
-
-      if (http4xxAlarm) {
-        new GuAlb4xxPercentageAlarm(scope, {
-          app,
-          loadBalancer,
-          snsTopicName,
-          ...http4xxAlarm,
-        });
-      }
-      if (http5xxAlarm) {
-        new GuAlb5xxPercentageAlarm(scope, {
-          app,
-          loadBalancer,
-          snsTopicName,
-          ...http5xxAlarm,
-        });
-      }
-      if (unhealthyInstancesAlarm) {
-        new GuUnhealthyInstancesAlarm(scope, {
-          app,
-          targetGroup,
-          snsTopicName,
-        });
-      }
-    }
-
-    if (props.googleAuth?.enabled) {
-      const prefix = `/${scope.stage}/${scope.stack}/${app}`;
-
-      const {
-        allowedGroups = ["engineering@guardian.co.uk"],
-        sessionTimeoutInMinutes = 15,
-        credentialsSecretsManagerPath = `${prefix}/google-auth-credentials`,
-      } = props.googleAuth;
-
-      if (sessionTimeoutInMinutes > 60) {
-        throw new Error("googleAuth.sessionTimeoutInMinutes must be <= 60!");
-      }
-
-      if (allowedGroups.length < 1) {
-        throw new Error("googleAuth.allowedGroups cannot be empty!");
-      }
-
-      if (allowedGroups.find((group) => !group.endsWith("@guardian.co.uk"))) {
-        throw new Error("googleAuth.allowedGroups must use the @guardian.co.uk domain.");
-      }
-
-      const deployToolsAccountId = StringParameter.fromStringParameterName(
-        scope,
-        "deploy-tools-account-id-parameter",
-        NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path,
-      );
-
-      const cognitoAuthStage = props.googleAuth.cognitoAuthStage ?? "PROD";
-
-      // See https://github.com/guardian/cognito-auth-lambdas for the source
-      // code here. ARN format is:
-      // arn:aws:lambda:aws-region:acct-id:function:helloworld.
-      const gatekeeperFunctionArn = `arn:aws:lambda:eu-west-1:${deployToolsAccountId.stringValue}:function:deploy-${cognitoAuthStage}-gatekeeper-lambda`;
-
-      // Note, handler and filename must match here:
-      // https://github.com/guardian/cognito-auth-lambdas.
-      const authLambda = new GuLambdaFunction(scope, "auth-lambda", {
-        app: app,
-        memorySize: 128,
-        handler: "bootstrap",
-        runtime: Runtime.PROVIDED_AL2023,
-        fileName: `deploy/${cognitoAuthStage}/cognito-lambda/devx-cognito-lambda-amd64-v2.zip`,
-        withoutFilePrefix: true,
-        withoutArtifactUpload: true,
-        bucketNamePath: NAMED_SSM_PARAMETER_PATHS.OrganisationDistributionBucket.path,
-        architecture: Architecture.X86_64,
-        environment: {
-          ALLOWED_GROUPS: allowedGroups.join(","),
-          GATEKEEPER_FUNCTION_ARN: gatekeeperFunctionArn,
-        },
-      });
-
-      Tags.of(authLambda).add("Owner", "DevX");
-
-      authLambda.addToRolePolicy(
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["lambda:InvokeFunction"],
-          resources: [gatekeeperFunctionArn],
-        }),
-      );
-
-      // Cognito user pool. We require both lambdas: pre-sign-up runs the first
-      // time a user attempts to authenticate (before they exist in the User
-      // Pool); pre-auth runs in subsequent authentication flows.
-      const userPool = new UserPool(this, "user-pool", {
-        lambdaTriggers: {
-          preAuthentication: authLambda,
-          preSignUp: authLambda,
-        },
-      });
-
-      // These help ensure domain is deterministic but also unique. Key
-      // assumption is that app/stack/stage combo are unique within Guardian.
-      const domainPrefix = `com-gu-${app.toLowerCase()}-${scope.stage.toLowerCase()}`;
-
-      const userPoolDomain = userPool.addDomain("domain", {
-        cognitoDomain: {
-          domainPrefix: getUserPoolDomainPrefix(domainPrefix),
-        },
-      });
-
-      const clientId = SecretValue.secretsManager(credentialsSecretsManagerPath, { jsonField: "clientId" });
-      const clientSecret = SecretValue.secretsManager(credentialsSecretsManagerPath, { jsonField: "clientSecret" });
-
-      const userPoolIdp = new UserPoolIdentityProviderGoogle(scope, "google-idp", {
-        userPool: userPool,
-        clientId: clientId.toString(),
-        clientSecretValue: clientSecret,
-        attributeMapping: {
-          email: ProviderAttribute.GOOGLE_EMAIL,
-          givenName: ProviderAttribute.GOOGLE_GIVEN_NAME,
-          familyName: ProviderAttribute.GOOGLE_FAMILY_NAME,
-          profilePicture: ProviderAttribute.GOOGLE_PICTURE,
-          custom: {
-            name: ProviderAttribute.GOOGLE_NAME,
-          },
-        },
-        scopes: ["openid", "email", "profile"],
-      });
-
-      const userPoolClient = userPool.addClient("alb-client", {
-        supportedIdentityProviders: [UserPoolClientIdentityProvider.GOOGLE],
-        generateSecret: true,
-        oAuth: {
-          callbackUrls: [`https://${props.googleAuth.domain}/oauth2/idpresponse`],
-        },
-
-        // Note: id and access validity token validity cannot be less than one
-        // hour (this is the cognito cookie duration). To quickly invalidate
-        // credentials, disable the user in Cognito. It might be that we want to
-        // parameterise these going forward, but that would require Infosec
-        // discussion.
-        idTokenValidity: Duration.hours(1),
-        accessTokenValidity: Duration.hours(1),
-        refreshTokenValidity: Duration.days(7),
-      });
-
-      userPoolClient.node.addDependency(userPoolIdp);
-
-      listener.addAction("CognitoAuth", {
-        action: new AuthenticateCognitoAction({
-          userPool: userPool,
-          userPoolClient: userPoolClient,
-          userPoolDomain: userPoolDomain,
-          next: ListenerAction.forward([targetGroup]),
-          sessionTimeout: Duration.minutes(sessionTimeoutInMinutes),
-        }),
-      });
-
-      // Need to give the ALB outbound access on 443 for the IdP endpoints.
-      const idpEgressSecurityGroup = new GuHttpsEgressSecurityGroup(scope, "ldp-access", {
-        app,
-        vpc,
-      });
-
-      loadBalancer.addSecurityGroup(idpEgressSecurityGroup);
-    }
-
-    this.vpc = vpc;
-    this.certificate = certificate;
-    this.loadBalancer = loadBalancer;
-    this.autoScalingGroup = autoScalingGroup;
-    this.listener = listener;
-    this.targetGroup = targetGroup;
+    this.vpc = pattern.vpc;
+    this.certificate = pattern.certificate;
+    this.loadBalancer = pattern.loadBalancer;
+    this.autoScalingGroup = pattern.autoScalingGroup!;
+    this.listener = pattern.listener;
+    this.targetGroup = pattern.targetGroups.ec2!;
   }
 }

@@ -7,7 +7,8 @@ import {
   UserPoolClientIdentityProvider,
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
-import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { Port } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
@@ -58,7 +59,6 @@ import {
   type WafProps,
 } from "../../constructs/loadbalancing";
 import type { Alarms, ApplicationLoggingProps } from "../../patterns";
-import { restrictedCidrRanges } from "../../patterns";
 import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
@@ -349,6 +349,17 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
 interface TargetGroups {
   ec2?: GuApplicationTargetGroup;
   ecs?: GuApplicationTargetGroup;
+}
+
+/**
+ * Use this to allow specific CIDR ranges to access a load balancer over HTTPS
+ */
+export function restrictedCidrRanges(ranges: IPeer[]) {
+  return ranges.map((range) => ({
+    range,
+    port: Port.tcp(443),
+    description: `Allow access on port 443 from ${range.uniqueId}`,
+  }));
 }
 
 export class GuLoadBalancedAppExperimental extends Construct {
