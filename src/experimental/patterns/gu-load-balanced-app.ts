@@ -223,6 +223,12 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
    * Create an escape hatch by overriding the logical id (see "ssm param escape hatch" test for example)
    **/
   waf?: WafProps;
+  /**
+   * If you want to use an AutoScaling Group with EC2 instances to serve requests, then pass in relevant props here.
+   *
+   * If you are setting both `ec2Props` and `ecsProps` (i.e. if you are migrating from EC2 to ECS) then you must also
+   * specify weights for each compute type using `targetGroupWeights`.
+   */
   ec2Props?: {
     /**
      * User data for the autoscaling group.
@@ -290,16 +296,50 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     instanceMetricGranularity: "1Minute" | "5Minute";
   };
+  /**
+   * If you want to use an ECS service and ECS tasks to serve requests, then pass in relevant props here.
+   *
+   * If you are setting both `ecsProps` and `ec2Props` (i.e. if you are migrating from EC2 to ECS) then you must also
+   * specify weights for each compute type using `targetGroupWeights`.
+   */
   ecsProps?: {
+    /**
+     * Which image to run.
+     * This should be the image digest (e.g. 'sha256:abc123') to ensure immutable deployments.
+     *
+     * @see https://docs.docker.com/dhi/core-concepts/digests
+     */
     imageIdentifier: string;
     cpu: number;
     memoryLimitMiB: number;
+    /**
+     * ECR repository name which contains your images.
+     */
     repositoryName: string;
+    /**
+     * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
+     * level of availability so that all 3 Availability Zones are utilised.
+     */
     scaling: {
+      /**
+       * Scaling actions will never scale down below this threshold. This also controls the number of tasks that
+       * your ECS service will launch when it is first created.
+       */
       minimumTasks: number;
+      /**
+       * Scaling actions will never scale up above this threshold.
+       *
+       * Note that this max can be exceeded when a deployment runs (unlike the ASG max size). E.g. if maximumTasks is 6,
+       * the service is running 6 tasks and a deployment starts, the ECS service will briefly run with 12 tasks to get
+       * the deployment through.
+       */
       maximumTasks: number;
     };
   };
+  /**
+   * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute
+   * types. The weights must sum to 999.
+   */
   targetGroupWeights?: {
     ecs: number;
     ec2: number;
