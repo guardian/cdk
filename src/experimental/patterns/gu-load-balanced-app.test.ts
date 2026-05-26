@@ -26,7 +26,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
-        repositoryName: "my-repository",
       },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
@@ -54,7 +53,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
-        repositoryName: "my-repository",
       },
       targetGroupWeights: {
         ec2: 499,
@@ -105,7 +103,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
             memoryLimitMiB: 2048,
             scaling: { minimumTasks: 3, maximumTasks: 6 },
             imageIdentifier: "sha256:12345",
-            repositoryName: "my-repository",
           },
         }),
     ).toThrow("EC2 and ECS are both enabled but no target group weights were provided");
@@ -135,7 +132,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
             memoryLimitMiB: 2048,
             scaling: { minimumTasks: 3, maximumTasks: 6 },
             imageIdentifier: "sha256:12345",
-            repositoryName: "my-repository",
           },
           targetGroupWeights: {
             ec2: 999,
@@ -158,6 +154,57 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           },
         }),
     ).toThrow("At least one of 'ec2Props' or 'ecsProps' must be specified");
+  });
+  it("should use the ECR repo name from ecsProps if the user sets this explicitly", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        repositoryName: "guardian/some-other-repo",
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          Image: {
+            "Fn::Join": ["", Match.arrayWith(["/guardian/some-other-repo@sha256:12345"])],
+          },
+        }),
+      ]),
+    });
+  });
+  it("should throw an error if we cannot determine the right repository for ECR", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    // Remove the repositoryName
+    Object.defineProperty(stack, "repositoryName", { value: undefined });
+    expect(
+      () =>
+        new GuLoadBalancedAppExperimental(stack, {
+          monitoringConfiguration: { noMonitoring: true },
+          applicationPort: 3000,
+          access: { scope: AccessScope.PUBLIC },
+          app: "test-gu",
+          certificateProps: {
+            domainName: "domain-name-for-your-application.example",
+          },
+          ecsProps: {
+            cpu: 1024,
+            memoryLimitMiB: 2048,
+            scaling: { minimumTasks: 3, maximumTasks: 6 },
+            imageIdentifier: "sha256:12345",
+          },
+        }),
+    ).toThrow("Could not determine an ECR repository name; please set this manually via ecsProps");
   });
   // Because this has not been tested thoroughly yet
   it("should throw an error if there is an ECS backend and the Google Auth feature is being used", function () {

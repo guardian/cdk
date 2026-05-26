@@ -1997,7 +1997,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                   {
                     "Ref": "AWS::URLSuffix",
                   },
-                  "/my-repository@sha256:12345",
+                  "/guardian/cdk@sha256:12345",
                 ],
               ],
             },
@@ -2037,12 +2037,12 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                 "Value": "test-gu",
               },
               {
-                "Name": "GU_REPO",
-                "Value": "my-repository",
-              },
-              {
                 "Name": "TASK_NAME",
                 "Value": "test-gu",
+              },
+              {
+                "Name": "GU_REPO",
+                "Value": "guardian/cdk",
               },
             ],
             "Essential": true,
@@ -2174,7 +2174,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":repository/my-repository",
+                    ":repository/guardian/cdk",
                   ],
                 ],
               },

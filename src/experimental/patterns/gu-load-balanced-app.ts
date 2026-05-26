@@ -312,9 +312,10 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     cpu: number;
     memoryLimitMiB: number;
     /**
-     * ECR repository name which contains your images.
+     * ECR repository name which contains your images. This defaults to the name of your GitHub repository as we
+     * expect there to be a one-to-one mapping between GitHub repositories and ECR repositories.
      */
-    repositoryName: string;
+    repositoryName?: string;
     /**
      * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
      * level of availability so that all 3 Availability Zones are utilised.
@@ -470,14 +471,19 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, repositoryName, imageIdentifier, scaling } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+
+      const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
+      if (!ecrRepoName) {
+        throw new Error("Could not determine an ECR repository name; please set this manually via ecsProps");
+      }
 
       const cluster = new Cluster(this, "EcsCluster", { vpc });
 
       // Need to figure out how to make this cross-account, but this is fine for the simple case where the app and the
       // ECR repo are both in the Deploy Tools account
       const image = ContainerImage.fromEcrRepository(
-        Repository.fromRepositoryName(scope, "Repo", repositoryName),
+        Repository.fromRepositoryName(scope, "Repo", ecrRepoName),
         imageIdentifier,
       );
 
@@ -574,21 +580,25 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       this.ecsService = ecsService;
 
+      const env =
+        // Required by https://github.com/guardian/devx-logs
+        {
+          STACK: scope.stack,
+          STAGE: scope.stage,
+          APP: app,
+          TASK_NAME: app,
+        };
+
+      // Add the GitHub repo if we can
+      const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
+
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
       // FIXME - incorporate the changes in https://github.com/guardian/cdk-playground/pull/1120
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
         image: ContainerImage.fromRegistry("ghcr.io/guardian/devx-logs:2.1.0"),
-
         // Required by https://github.com/guardian/devx-logs
-        environment: {
-          STACK: scope.stack,
-          STAGE: scope.stage,
-          APP: app,
-          GU_REPO: repositoryName,
-          TASK_NAME: app,
-        },
-
+        environment,
         // Send this container's logs to CloudWatch logs, retained for 1 day
         logging: LogDriver.awsLogs({
           streamPrefix: [scope.stack, scope.stage, app, "devx-logs-sidecar"].join("/"),
