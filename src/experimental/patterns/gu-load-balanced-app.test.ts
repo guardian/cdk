@@ -33,7 +33,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
   });
   it("should be capable of splitting traffic between EC2 and ECS target groups", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
+    const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
       monitoringConfiguration: { noMonitoring: true },
       applicationPort: 3000,
       access: { scope: AccessScope.PUBLIC },
@@ -67,15 +67,11 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ForwardConfig: {
             TargetGroups: [
               {
-                TargetGroupArn: {
-                  Ref: "TargetGroupTestgu1F401467",
-                },
+                TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
                 Weight: 499,
               },
               {
-                TargetGroupArn: {
-                  Ref: "EcsTargetGroupTestguFCB7574C",
-                },
+                TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
                 Weight: 500,
               },
             ],
