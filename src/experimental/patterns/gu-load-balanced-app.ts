@@ -662,25 +662,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       waf,
     });
 
-    let defaultAction: ListenerAction | undefined = undefined;
-    if (targetGroups.ec2 && !targetGroups.ecs) {
-      defaultAction = ListenerAction.forward([targetGroups.ec2]);
-    } else if (targetGroups.ecs && !targetGroups.ec2) {
-      defaultAction = ListenerAction.forward([targetGroups.ecs]);
-    } else if (targetGroups.ec2 && targetGroups.ecs) {
-      if (!targetGroupWeights) {
-        throw new Error("EC2 and ECS are both enabled but no target group weights were provided");
-      }
-      if (targetGroupWeights.ec2 + targetGroupWeights.ecs !== 999) {
-        throw new Error("Combined target group weights for EC2 and ECS must be equal to 999");
-      }
-      defaultAction = ListenerAction.weightedForward([
-        { targetGroup: targetGroups.ec2, weight: targetGroupWeights.ec2 },
-        { targetGroup: targetGroups.ecs, weight: targetGroupWeights.ecs },
-      ]);
-    } else {
-      throw new Error("At least one of 'ec2Props' or 'ecsProps' must be specified");
-    }
+    const defaultAction: ListenerAction | undefined = configureListenerActions(targetGroups, targetGroupWeights);
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
@@ -885,5 +867,32 @@ export class GuLoadBalancedAppExperimental extends Construct {
     this.loadBalancer = loadBalancer;
     this.listener = listener;
     this.targetGroups = targetGroups;
+  }
+}
+
+function configureListenerActions(
+  targetGroups: TargetGroups,
+  targetGroupWeights?: {
+    ecs: number;
+    ec2: number;
+  },
+): ListenerAction {
+  if (targetGroups.ec2 && !targetGroups.ecs) {
+    return ListenerAction.forward([targetGroups.ec2]);
+  } else if (targetGroups.ecs && !targetGroups.ec2) {
+    return ListenerAction.forward([targetGroups.ecs]);
+  } else if (targetGroups.ec2 && targetGroups.ecs) {
+    if (!targetGroupWeights) {
+      throw new Error("EC2 and ECS are both enabled but no target group weights were provided");
+    }
+    if (targetGroupWeights.ec2 + targetGroupWeights.ecs !== 999) {
+      throw new Error("Combined target group weights for EC2 and ECS must be equal to 999");
+    }
+    return ListenerAction.weightedForward([
+      { targetGroup: targetGroups.ec2, weight: targetGroupWeights.ec2 },
+      { targetGroup: targetGroups.ecs, weight: targetGroupWeights.ecs },
+    ]);
+  } else {
+    throw new Error("At least one of 'ec2Props' or 'ecsProps' must be specified");
   }
 }
