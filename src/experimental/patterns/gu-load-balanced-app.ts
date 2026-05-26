@@ -352,12 +352,39 @@ interface TargetGroups {
 }
 
 export class GuLoadBalancedAppExperimental extends Construct {
+  /**
+   * The VPC that the pattern's load balancer, EC2 instances and/or ECS tasks are running in.
+   */
   public readonly vpc: IVpc;
+  /**
+   * The certificate associated with your load balancer. This will only be available if `certificateProps` were
+   * passed in.
+   */
   public readonly certificate?: GuCertificate;
+  /**
+   * The application load balancer that this pattern creates.
+   */
   public readonly loadBalancer: GuApplicationLoadBalancer;
+  /**
+   * The AutoScaling Group that this pattern creates. This will only be available if `ec2Props` are specified.
+   */
   public readonly autoScalingGroup?: GuAutoScalingGroup;
+  /**
+   * The ECS Service that this pattern creates. This will only be available if `ecsProps` are specified.
+   */
   public readonly ecsService?: FargateService;
+  /**
+   * The load balancer listener that this pattern creates.
+   */
   public readonly listener: GuHttpsApplicationListener;
+  /**
+   * The target groups capable of serving traffic routed to this pattern.
+   *
+   * If `ec2Props` were passed in but `ecsProps` were not, there will be a single EC2 target group.
+   * Similarly, if `ecsProps` were passed in but `ec2Props` were not, there will be a single ECS target group.
+   * If both `ec2Props` and `ecsProps` were passed in (e.g. during a migration) then both target groups will be
+   * available.
+   */
   public readonly targetGroups: TargetGroups;
 
   constructor(scope: GuStack, props: GuLoadBalancedAppExperimentalProps) {
