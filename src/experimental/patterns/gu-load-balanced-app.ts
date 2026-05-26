@@ -575,7 +575,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       this.ecsService = ecsService;
 
-      // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here
+      // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
+      // FIXME - incorporate the changes in https://github.com/guardian/cdk-playground/pull/1120
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
         image: ContainerImage.fromRegistry("ghcr.io/guardian/devx-logs:2.1.0"),
