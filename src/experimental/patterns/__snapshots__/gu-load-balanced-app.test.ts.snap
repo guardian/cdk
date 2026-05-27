@@ -2049,7 +2049,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             "FirelensConfiguration": {
               "Type": "fluentbit",
             },
-            "Image": "ghcr.io/guardian/devx-logs:2.1.0",
+            "Image": "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
@@ -2069,6 +2069,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             ],
             "Name": "LogShipping",
             "ReadonlyRootFilesystem": true,
+            "VersionConsistency": "disabled",
           },
         ],
         "Cpu": "1024",

@@ -620,12 +620,14 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
 
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
-      // FIXME - incorporate the changes in https://github.com/guardian/cdk-playground/pull/1120
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
-        image: ContainerImage.fromRegistry("ghcr.io/guardian/devx-logs:2.1.0"),
+        image: ContainerImage.fromRegistry(
+          "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
+        ),
         // Required by https://github.com/guardian/devx-logs
         environment,
+        versionConsistency: VersionConsistency.DISABLED,
         // Send this container's logs to CloudWatch logs, retained for 1 day
         logging: LogDriver.awsLogs({
           streamPrefix: [scope.stack, scope.stage, app, "devx-logs-sidecar"].join("/"),
