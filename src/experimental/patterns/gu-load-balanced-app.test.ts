@@ -1626,12 +1626,22 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
+  it("should throw an error if the user passes an updatePolicy whilst using versioned deployments", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    expect(
+      () =>
+        new GuLoadBalancedAppExperimental(stack, {
+          ...topLevelPropsForVersionedDeployment(),
+          ec2Props: { updatePolicy: UpdatePolicy.replacingUpdate(), ...ec2PropsForVersionedDeployment(stack) },
+        }),
+    ).toThrow("If versionedDeployments are enabled then updatePolicy should not be set via ec2Props");
+  });
   it("should create an ASG with min, max, and desired capacity set", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
-      ec2Props: { ...initialEc2Props(stack), scaling: { minimumInstances: 5 } },
+      ...topLevelPropsForVersionedDeployment(),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack), scaling: { minimumInstances: 5 } },
     });
 
     Template.fromStack(stack).hasResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -1647,8 +1657,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
-      ec2Props: { ...initialEc2Props(stack), scaling: { minimumInstances: 5 } },
+      ...topLevelPropsForVersionedDeployment(),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack), scaling: { minimumInstances: 5 } },
     });
 
     Template.fromStack(stack).hasResource("AWS::AutoScaling::AutoScalingGroup", {
@@ -1666,8 +1676,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
   it("should have a PauseTime higher than the ASG healthcheck grace period", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const { autoScalingGroup } = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
-      ec2Props: { ...initialEc2Props(stack) },
+      ...topLevelPropsForVersionedDeployment(),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack) },
     });
 
     const tenMinutes = Duration.minutes(10);
@@ -1703,8 +1713,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     userData.addCommands(userDataCommand);
 
     const { autoScalingGroup } = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
-      ec2Props: { ...initialEc2Props(stack), userData },
+      ...topLevelPropsForVersionedDeployment(),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack), userData },
     });
 
     const renderedUserData = autoScalingGroup!.userData.render();
@@ -1727,8 +1737,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
 
     const scalingApp = "my-scaling-app";
     const { autoScalingGroup } = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(scalingApp),
-      ec2Props: { ...initialEc2Props(stack, scalingApp), scaling: { minimumInstances: 5 } },
+      ...topLevelPropsForVersionedDeployment(scalingApp),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack, scalingApp), scaling: { minimumInstances: 5 } },
     });
     autoScalingGroup!.scaleOnRequestCount("ScaleOnRequests", {
       targetRequestsPerMinute: 100,
@@ -1736,8 +1746,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
 
     const staticApp = "my-static-app";
     new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(staticApp),
-      ec2Props: { ...initialEc2Props(stack, staticApp) },
+      ...topLevelPropsForVersionedDeployment(staticApp),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack, staticApp) },
     });
 
     const template = getTemplateAfterAspectInvocation(stack);
@@ -1780,8 +1790,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
 
     const scalingApp = "my-scaling-app";
     const { autoScalingGroup } = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(scalingApp),
-      ec2Props: { ...initialEc2Props(stack, scalingApp), scaling: { minimumInstances: 5 } },
+      ...topLevelPropsForVersionedDeployment(scalingApp),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack, scalingApp), scaling: { minimumInstances: 5 } },
     });
     autoScalingGroup!.scaleOnRequestCount("ScaleOnRequests", {
       targetRequestsPerMinute: 100,
@@ -1832,8 +1842,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     });
 
     const { autoScalingGroup } = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
-      ec2Props: { ...initialEc2Props(stack) },
+      ...topLevelPropsForVersionedDeployment(),
+      ec2Props: { ...ec2PropsForVersionedDeployment(stack) },
     });
 
     /**
@@ -1868,16 +1878,22 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     });
 
     const appA = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps("app-a"),
-      ec2Props: { ...initialEc2Props(stack, "app-a"), scaling: { minimumInstances: 3, maximumInstances: 12 } },
+      ...topLevelPropsForVersionedDeployment("app-a"),
+      ec2Props: {
+        ...ec2PropsForVersionedDeployment(stack, "app-a"),
+        scaling: { minimumInstances: 3, maximumInstances: 12 },
+      },
     });
     appA.autoScalingGroup!.scaleOnRequestCount("ScaleOnRequests", {
       targetRequestsPerMinute: 99,
     });
 
     const appB = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps("app-b"),
-      ec2Props: { ...initialEc2Props(stack, "app-b"), scaling: { minimumInstances: 6, maximumInstances: 24 } },
+      ...topLevelPropsForVersionedDeployment("app-b"),
+      ec2Props: {
+        ...ec2PropsForVersionedDeployment(stack, "app-b"),
+        scaling: { minimumInstances: 6, maximumInstances: 24 },
+      },
     });
     appB.autoScalingGroup!.scaleOnRequestCount("ScaleOnRequests", {
       targetRequestsPerMinute: 100,
@@ -1908,8 +1924,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
           ...props,
         });
         const ec2App = new GuLoadBalancedAppExperimental(this, {
-          ...topLevelProps(),
-          ec2Props: { ...initialEc2Props(this), scaling: props.scaling },
+          ...topLevelPropsForVersionedDeployment(),
+          ec2Props: { ...ec2PropsForVersionedDeployment(this), scaling: props.scaling },
         });
         ec2App.autoScalingGroup!.scaleOnRequestCount("ScaleOnRequests", {
           targetRequestsPerMinute: 100,
@@ -1958,8 +1974,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
           ...props,
         });
         const ec2App = new GuLoadBalancedAppExperimental(this, {
-          ...topLevelProps(props.appName),
-          ec2Props: { ...initialEc2Props(this, props.appName) },
+          ...topLevelPropsForVersionedDeployment(props.appName),
+          ec2Props: { ...ec2PropsForVersionedDeployment(this, props.appName) },
         });
         ec2App.autoScalingGroup!.scaleOnRequestCount("ScaleOnRequests", {
           targetRequestsPerMinute: 100,
@@ -1999,9 +2015,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
   it("should add the correct target group attributes if slow start is enabled", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
+      ...topLevelPropsForVersionedDeployment(),
       ec2Props: {
-        ...initialEc2Props(stack),
+        ...ec2PropsForVersionedDeployment(stack),
         versionedDeployments: { enabled: true, buildIdentifier: "123", slowStartDuration: Duration.seconds(44) },
       },
     });
@@ -2020,9 +2036,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
   it("should update the pause time for the rolling update correctly", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
+      ...topLevelPropsForVersionedDeployment(),
       ec2Props: {
-        ...initialEc2Props(stack),
+        ...ec2PropsForVersionedDeployment(stack),
         versionedDeployments: { enabled: true, buildIdentifier: "123", slowStartDuration: Duration.minutes(1) },
       },
     });
@@ -2043,9 +2059,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     userData.addCommands(userDataCommand);
 
     const { autoScalingGroup } = new GuLoadBalancedAppExperimental(stack, {
-      ...topLevelProps(),
+      ...topLevelPropsForVersionedDeployment(),
       ec2Props: {
-        ...initialEc2Props(stack),
+        ...ec2PropsForVersionedDeployment(stack),
         versionedDeployments: { enabled: true, buildIdentifier: "123", slowStartDuration: Duration.seconds(30) },
       },
     });
@@ -2069,9 +2085,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(() => {
       new GuLoadBalancedAppExperimental(stack, {
-        ...topLevelProps(),
+        ...topLevelPropsForVersionedDeployment(),
         ec2Props: {
-          ...initialEc2Props(stack),
+          ...ec2PropsForVersionedDeployment(stack),
           versionedDeployments: { enabled: true, buildIdentifier: "123", slowStartDuration: Duration.seconds(29) },
         },
       });
@@ -2082,9 +2098,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(() => {
       new GuLoadBalancedAppExperimental(stack, {
-        ...topLevelProps(),
+        ...topLevelPropsForVersionedDeployment(),
         ec2Props: {
-          ...initialEc2Props(stack),
+          ...ec2PropsForVersionedDeployment(stack),
           versionedDeployments: { enabled: true, buildIdentifier: "123", slowStartDuration: Duration.seconds(901) },
         },
       });
@@ -2092,7 +2108,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
   });
 });
 
-function topLevelProps(app = "test-gu-ec2-app") {
+function topLevelPropsForVersionedDeployment(app = "test-gu-ec2-app") {
   return {
     applicationPort: 9000,
     app,
@@ -2104,7 +2120,7 @@ function topLevelProps(app = "test-gu-ec2-app") {
   };
 }
 
-function initialEc2Props(scope: GuStack, app = "test-gu-ec2-app") {
+function ec2PropsForVersionedDeployment(scope: GuStack, app = "test-gu-ec2-app") {
   const buildNumber = 123;
   const { userData } = new GuUserData(scope, {
     app,
