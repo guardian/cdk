@@ -514,6 +514,11 @@ export class GuLoadBalancedAppExperimental extends Construct {
       };
 
       if (versionedDeployments?.enabled) {
+        const slowStartDurationInSeconds = versionedDeployments.slowStartDuration?.toSeconds();
+        if (slowStartDurationInSeconds && (slowStartDurationInSeconds < 30 || slowStartDurationInSeconds > 900)) {
+          throw new Error("Slow start duration must be between 30 and 900 seconds");
+        }
+
         const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
         // Note: if the service uses horizontal scaling, this property is unset by an Aspect (to prevent accidental scale downs!)
         cfnAutoScalingGroup.desiredCapacity = minimumInstances.toString();
@@ -524,6 +529,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           targetGroup: ec2TargetGroup,
           applicationPort: applicationPort,
           buildIdentifier: versionedDeployments.buildIdentifier,
+          slowStartDuration: versionedDeployments.slowStartDuration,
         });
 
         // This is used when an ASG is first created; it is not needed to support the new deployment mechanism but we
