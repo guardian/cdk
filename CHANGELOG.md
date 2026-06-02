@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.4.0
+
+### Minor Changes
+
+- 6471e19: Add new GuLoadBalancedAppExperimental pattern which supports EC2 and/or ECS
+
 ## 63.3.1
 
 ### Patch Changes
