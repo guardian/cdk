@@ -286,6 +286,9 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      *
      * In order to use this feature you must include the build number in the name of the artifact that you upload to
      * Riff-Raff. Your userData should also refer to this versioned artifact.
+     *
+     * Users migrating from the `GuEc2AppExperimental` pattern can keep existing deployment behaviour by configuring
+     * these props.
      */
     versionedDeployments?: {
       enabled: boolean;
