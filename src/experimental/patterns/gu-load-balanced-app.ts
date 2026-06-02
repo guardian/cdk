@@ -107,7 +107,7 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   privateSubnets?: ISubnet[];
 
   /**
-   * Specify private subnets if using a non-default VPC or (generally
+   * Specify public subnets if using a non-default VPC or (generally
    * discouraged) to limit to a subset of the available subnets.
    */
   publicSubnets?: ISubnet[];
