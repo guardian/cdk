@@ -691,7 +691,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       waf,
     });
 
-    const defaultAction: ListenerAction | undefined = configureListenerActions(targetGroups, targetGroupWeights);
+    const defaultAction: ListenerAction = configureListenerActions(targetGroups, targetGroupWeights);
 
     const listener = new GuHttpsApplicationListener(scope, "Listener", {
       app,
