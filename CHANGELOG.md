@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.5.0
+
+### Minor Changes
+
+- 991eed0: Add support for EC2 versioned deployments to GuLoadBalancedAppExperimental
+
 ## 63.4.0
 
 ### Minor Changes
