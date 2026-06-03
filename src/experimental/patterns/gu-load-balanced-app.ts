@@ -1,5 +1,5 @@
-import { Duration, SecretValue, Tags } from "aws-cdk-lib";
-import type { BlockDevice, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
+import { Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
 import {
   ProviderAttribute,
@@ -64,6 +64,13 @@ import type { GuAsgCapacity, GuDomainName } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
+import {
+  GuAutoScalingRollingUpdateTimeoutExperimental,
+  GuHorizontallyScalingDeploymentPropertiesExperimental,
+  GuRoleForRollingUpdateExperimental,
+  GuRollingUpdatePolicyExperimental,
+  GuUserDataForRollingUpdateExperimental,
+} from "./ec2-app";
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   /**
@@ -274,7 +281,20 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * and must rely on riffraff to do so.
      */
     updatePolicy?: UpdatePolicy;
-
+    /**
+     * Enable CloudFormation-only deployments for EC2.
+     *
+     * In order to use this feature you must include the build number in the name of the artifact that you upload to
+     * Riff-Raff. Your userData should also refer to this versioned artifact.
+     *
+     * Users migrating from the `GuEc2AppExperimental` pattern can keep existing deployment behaviour by configuring
+     * these props.
+     */
+    versionedDeployments?: {
+      enabled: boolean;
+      buildIdentifier: string;
+      slowStartDuration?: Duration;
+    };
     /**
      * You can specify how long after an instance reaches the InService state it waits before contributing
      * usage data to the aggregated metrics. This specified time is called the default instance warmup.
@@ -419,6 +439,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         userData: userDataLike,
         imageRecipe,
         instanceMetadataHopLimit,
+        versionedDeployments,
         updatePolicy,
         defaultInstanceWarmup,
         instanceMetricGranularity,
@@ -441,6 +462,17 @@ export class GuLoadBalancedAppExperimental extends Construct {
         additionalPolicies: maybePrivateConfigPolicy.concat(roleConfiguration.additionalPolicies ?? []),
       };
 
+      if (versionedDeployments?.enabled && updatePolicy) {
+        throw new Error("If versionedDeployments are enabled then updatePolicy should not be set via ec2Props");
+      }
+      const asgUpdatePolicy = versionedDeployments
+        ? GuRollingUpdatePolicyExperimental.getPolicy(
+            maximumInstances,
+            minimumInstances,
+            versionedDeployments.slowStartDuration,
+          )
+        : updatePolicy;
+
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
         vpc,
@@ -459,12 +491,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ...(blockDevices && { blockDevices }),
         imageRecipe,
         httpPutResponseHopLimit: instanceMetadataHopLimit,
-        updatePolicy,
+        updatePolicy: asgUpdatePolicy,
         defaultInstanceWarmup,
         instanceMetricGranularity,
       });
-
-      this.autoScalingGroup = autoScalingGroup;
 
       // This allows automatic shipping of instance Cloud Init logs when using the
       // `cdk-base` Amigo role on your AMI.
@@ -486,6 +516,46 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ec2: ec2TargetGroup,
       };
 
+      if (versionedDeployments?.enabled) {
+        const slowStartDurationInSeconds = versionedDeployments.slowStartDuration?.toSeconds();
+        if (slowStartDurationInSeconds && (slowStartDurationInSeconds < 30 || slowStartDurationInSeconds > 900)) {
+          throw new Error("Slow start duration must be between 30 and 900 seconds");
+        }
+
+        const cfnAutoScalingGroup = autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
+        // Note: if the service uses horizontal scaling, this property is unset by an Aspect (to prevent accidental scale downs!)
+        cfnAutoScalingGroup.desiredCapacity = minimumInstances.toString();
+
+        new GuRoleForRollingUpdateExperimental(scope, { autoScalingGroup });
+        new GuUserDataForRollingUpdateExperimental(scope, {
+          autoScalingGroup: autoScalingGroup,
+          targetGroup: ec2TargetGroup,
+          applicationPort: applicationPort,
+          buildIdentifier: versionedDeployments.buildIdentifier,
+          slowStartDuration: versionedDeployments.slowStartDuration,
+        });
+
+        // This is used when an ASG is first created; it is not needed to support the new deployment mechanism but we
+        // include it here to avoid creating an unnecessary snapshot diff for existing users of this feature
+        cfnAutoScalingGroup.cfnOptions.creationPolicy = {
+          autoScalingCreationPolicy: {
+            minSuccessfulInstancesPercent: 100,
+          },
+          resourceSignal: {
+            count: minimumInstances,
+          },
+        };
+
+        const allAspects = Aspects.of(scope).all;
+        const maybeRollingUpdateTimeoutAspect = allAspects.find(
+          (_) => _ instanceof GuAutoScalingRollingUpdateTimeoutExperimental,
+        );
+        if (!maybeRollingUpdateTimeoutAspect) {
+          Aspects.of(scope).add(new GuAutoScalingRollingUpdateTimeoutExperimental());
+        }
+        Aspects.of(scope).add(new GuHorizontallyScalingDeploymentPropertiesExperimental());
+      }
+
       if (applicationLogging.enabled) {
         // This allows automatic shipping of application logs when using the
         // `cdk-base` Amigo role on your AMI.
@@ -494,6 +564,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
           applicationLogging.systemdUnitName ? `${applicationLogging.systemdUnitName}.service` : `${app}.service`,
         );
       }
+
+      this.autoScalingGroup = autoScalingGroup;
     }
 
     // Setup ECS-specific infrastructure
