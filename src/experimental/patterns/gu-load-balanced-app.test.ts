@@ -216,6 +216,72 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         }),
     ).toThrow("Could not determine an ECR repository name; please set this manually via ecsProps");
   });
+  it("allows a custom healthcheck to be used for the ECS target group", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      monitoringConfiguration: { noMonitoring: true },
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      healthcheck: {
+        path: "/custom-healthcheck",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      HealthCheckPath: "/custom-healthcheck",
+      TargetType: "ip", // This target type helps to confirm that its the ECS target group
+    });
+  });
+  it("applies the custom healthcheck settings to both target groups when operating in hybrid mode", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      monitoringConfiguration: { noMonitoring: true },
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      healthcheck: {
+        path: "/custom-healthcheck",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        scaling: {
+          minimumInstances: 1,
+        },
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+      targetGroupWeights: {
+        ec2: 499,
+        ecs: 500,
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      HealthCheckPath: "/custom-healthcheck",
+      TargetType: "instance", // The EC2 target group
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+      HealthCheckPath: "/custom-healthcheck",
+      TargetType: "ip", // The ECS target group
+    });
+  });
   // Because this has not been tested thoroughly yet
   it("should throw an error if there is an ECS backend and the Google Auth feature is being used", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
@@ -1348,7 +1414,7 @@ UserData from accessed construct`);
     });
   });
 
-  it("allows a custom healthcheck", function () {
+  it("allows a custom healthcheck to be used for the EC2 target group", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
       applicationPort: 3000,
@@ -1376,6 +1442,7 @@ UserData from accessed construct`);
       HealthCheckProtocol: "HTTP",
       HealthCheckTimeoutSeconds: 5,
       HealthyThresholdCount: 5,
+      TargetType: "instance", // This target type helps to confirm that it's the EC2 target group
     });
   });
 
