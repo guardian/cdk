@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.5.1
+
+### Patch Changes
+
+- 636aad0: fix(ecs): Apply custom healthcheck settings to ECS target group too
+
 ## 63.5.0
 
 ### Minor Changes
