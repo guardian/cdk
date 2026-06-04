@@ -201,7 +201,7 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   };
 
   /**
-   * Specify custom healthcheck
+   * Specify custom healthcheck settings for your load balancer's target group(s).
    */
   healthcheck?: ALBHealthCheck;
   /**
@@ -419,6 +419,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       waf,
+      healthcheck,
       ec2Props,
       ecsProps,
       targetGroupWeights,
@@ -509,7 +510,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         protocol: ApplicationProtocol.HTTP,
         targets: [autoScalingGroup],
         port: applicationPort,
-        healthCheck: props.healthcheck,
+        healthCheck: healthcheck,
       });
 
       targetGroups = {
@@ -731,6 +732,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         app,
         port: applicationPort,
         targets: [ecsService],
+        healthCheck: healthcheck,
       });
 
       targetGroups = {
