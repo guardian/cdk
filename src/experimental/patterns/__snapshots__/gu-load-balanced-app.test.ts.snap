@@ -2680,6 +2680,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "Description": "S3 bucket to store your access logs",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
+    "DeployToolsAccountIdParameter": {
+      "Default": "/organisation/accounts/deployTools",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "LoggingStreamName": {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
@@ -2931,7 +2935,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                 "",
                 [
                   {
-                    "Ref": "AWS::AccountId",
+                    "Ref": "DeployToolsAccountIdParameter",
                   },
                   ".dkr.ecr.eu-west-1.",
                   {
@@ -3113,7 +3117,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                     },
                     ":ecr:eu-west-1:",
                     {
-                      "Ref": "AWS::AccountId",
+                      "Ref": "DeployToolsAccountIdParameter",
                     },
                     ":repository/guardian/cdk",
                   ],
