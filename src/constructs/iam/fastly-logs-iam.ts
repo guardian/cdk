@@ -4,6 +4,7 @@ import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core";
 import { GuPutS3ObjectsPolicy } from "./policies";
 import { GuRole } from "./roles";
+import { GuAbortMultiPartPolicy } from "./policies/s3-abort-multipart-policy";
 
 export interface GuFastlyLogsIamRoleProps {
   /**
@@ -51,6 +52,12 @@ export class GuFastlyLogsIamRole extends GuRole {
       paths: [path],
     });
 
+    const multiPartPolicy = new GuAbortMultiPartPolicy(scope, "GuFastlyLogsIamRoleMultiPartPolicy", {
+      bucketName: props.bucketName,
+      paths: [path],
+    });
+
     policy.attachToRole(this);
+    multiPartPolicy.attachToRole(this);
   }
 }
