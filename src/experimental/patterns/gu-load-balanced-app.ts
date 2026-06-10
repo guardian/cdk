@@ -1,4 +1,4 @@
-import { Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
 import {
@@ -580,10 +580,22 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const cluster = new Cluster(this, "EcsCluster", { vpc });
 
-      // Need to figure out how to make this cross-account, but this is fine for the simple case where the app and the
-      // ECR repo are both in the Deploy Tools account
       const image = ContainerImage.fromEcrRepository(
-        Repository.fromRepositoryName(scope, "Repo", ecrRepoName),
+        // Images are published to the ECR registry in the DeployTools account, so reference that here
+        Repository.fromRepositoryAttributes(this, "Repo", {
+          repositoryArn: scope.formatArn({
+            account: StringParameter.fromStringParameterName(
+              scope,
+              "DeployToolsAccountId",
+              NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path,
+            ).stringValue,
+            arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
+            resource: "repository",
+            resourceName: ecrRepoName,
+            service: "ecr",
+          }),
+          repositoryName: ecrRepoName,
+        }),
         imageIdentifier,
       );
 
