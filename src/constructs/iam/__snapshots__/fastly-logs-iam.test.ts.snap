@@ -7,7 +7,7 @@ exports[`The GuFastlyLogsIamRole construct correctly wires up the policy 1`] = `
       "GuStack",
       "GuFastlyCustomerIdParameter",
       "GuFastlyLogsIamRole",
-      "GuPutS3ObjectsPolicy",
+      "GuAllowPolicy",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -19,6 +19,30 @@ exports[`The GuFastlyLogsIamRole construct correctly wires up the policy 1`] = `
     },
   },
   "Resources": {
+    "GuFastlyLogsIamRoleAllowPolicy00A91AE8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:PutObject",
+                "s3:AbortMultipartUpload",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::test/TEST/stack/app/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuFastlyLogsIamRoleAllowPolicy00A91AE8",
+        "Roles": [
+          {
+            "Ref": "GuFastlyLogsIamRoleE2DAFAB3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "GuFastlyLogsIamRoleE2DAFAB3": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -71,27 +95,6 @@ exports[`The GuFastlyLogsIamRole construct correctly wires up the policy 1`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "GuFastlyLogsIamRolePolicy5BF3CDCA": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:PutObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::test/TEST/stack/app/*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "GuFastlyLogsIamRolePolicy5BF3CDCA",
-        "Roles": [
-          {
-            "Ref": "GuFastlyLogsIamRoleE2DAFAB3",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
   },
 }
