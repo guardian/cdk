@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 63.6.1
+
+### Patch Changes
+
+- 1486ada: Adds s3:AbortMultipartUpload to GuFastlyLogsIamRole
+
 ## 63.6.0
 
 ### Minor Changes
