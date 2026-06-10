@@ -2,9 +2,8 @@ import { AccountPrincipal } from "aws-cdk-lib/aws-iam";
 import { FASTLY_AWS_ACCOUNT_ID } from "../../constants/fastly-aws-account-id";
 import type { GuStack } from "../core";
 import { GuFastlyCustomerIdParameter } from "../core";
-import { GuPutS3ObjectsPolicy } from "./policies";
+import { GuAllowPolicy } from "./policies";
 import { GuRole } from "./roles";
-import { GuAbortMultiPartPolicy } from "./policies/s3-abort-multipart-policy";
 
 export interface GuFastlyLogsIamRoleProps {
   /**
@@ -47,17 +46,10 @@ export class GuFastlyLogsIamRole extends GuRole {
       assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
       externalIds: [fastlyCustomerId],
     });
-    const policy = new GuPutS3ObjectsPolicy(scope, "GuFastlyLogsIamRolePolicy", {
-      bucketName: props.bucketName,
-      paths: [path],
-    });
 
-    const multiPartPolicy = new GuAbortMultiPartPolicy(scope, "GuFastlyLogsIamRoleMultiPartPolicy", {
-      bucketName: props.bucketName,
-      paths: [path],
-    });
-
-    policy.attachToRole(this);
-    multiPartPolicy.attachToRole(this);
+    new GuAllowPolicy(scope, "GuFastlyLogsIamRoleAllowPolicy", {
+      actions: ["s3:PutObject", "s3:AbortMultipartUpload"],
+      resources: [`arn:aws:s3:::${props.bucketName}/${path}`],
+    }).attachToRole(this);
   }
 }
