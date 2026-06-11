@@ -7,7 +7,7 @@ describe("The GuFastlyLogsIamRole construct", () => {
     const stack = simpleGuStackForTesting();
     new GuFastlyLogsIamRole(stack, {
       bucketName: "test",
-      path: "TEST/stack/app/*",
+      paths: ["TEST/stack/app/*"],
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });

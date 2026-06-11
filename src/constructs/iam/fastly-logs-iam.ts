@@ -15,7 +15,7 @@ export interface GuFastlyLogsIamRoleProps {
    * @default - '*'
    * If paths are not specified, access will be granted to the entire S3 bucket.
    */
-  path?: string[];
+  paths?: string[];
   /**
    * The name of the IAM role
    */
@@ -36,7 +36,7 @@ export interface GuFastlyLogsIamRoleProps {
  * ```typescript
  * new GuFastlyLogsIamRole(stack, {
  *   bucketName: "gu-mobile-logs"
- *   path: "fastly/*"
+ *   paths: ["fastly/*"]
  * })
  * ```
  *
@@ -44,7 +44,7 @@ export interface GuFastlyLogsIamRoleProps {
  */
 export class GuFastlyLogsIamRole extends GuRole {
   constructor(scope: GuStack, props: GuFastlyLogsIamRoleProps) {
-    const { path = "*" } = props; // set defaults
+    const { paths = ["*"] } = props; // set defaults
     const fastlyCustomerId = GuFastlyCustomerIdParameter.getInstance(scope).valueAsString;
     super(scope, "GuFastlyLogsIamRole", {
       assumedBy: new AccountPrincipal(FASTLY_AWS_ACCOUNT_ID),
@@ -53,7 +53,7 @@ export class GuFastlyLogsIamRole extends GuRole {
 
     new GuAllowPolicy(scope, "GuFastlyLogsIamRoleAllowPolicy", {
       actions: ["s3:PutObject", "s3:AbortMultipartUpload"],
-      resources: [`arn:aws:s3:::${props.bucketName}/${path}`],
+      resources: paths.map((path) => `arn:aws:s3:::${props.bucketName}/${path}`),
     }).attachToRole(this);
   }
 }
