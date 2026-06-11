@@ -11,11 +11,15 @@ export interface GuFastlyLogsIamRoleProps {
    */
   bucketName: string;
   /**
-   * Path within the S3 bucket where Fastly will ship logs.
+   * Paths within the S3 bucket where Fastly will ship logs.
    * @default - '*'
-   * If path is not specified, access will be granted to the entire S3 bucket.
+   * If paths are not specified, access will be granted to the entire S3 bucket.
    */
-  path?: string;
+  path?: string[];
+  /**
+   * The name of the IAM role
+   */
+  roleName?: string;
 }
 
 /**
