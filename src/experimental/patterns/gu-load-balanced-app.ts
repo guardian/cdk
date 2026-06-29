@@ -357,8 +357,17 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     };
   };
   /**
-   * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute
-   * types. The weights must sum to 999.
+   * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute types.
+   * Each weight must be between 0 and 999. AWS will work out the relative percentage.
+   *
+   * @example - Send 10% of traffic to ECS:
+   *
+   * ```ts
+   * targetGroupWeights: {
+   *   ecs: 1,
+   *   ec2: 9
+   * }
+   * ```
    */
   targetGroupWeights?: {
     ecs: number;
@@ -992,17 +1001,30 @@ function configureListenerActions(
     ec2: number;
   },
 ): ListenerAction {
+  // No ECS target, so forward all traffic to EC2
   if (targetGroups.ec2 && !targetGroups.ecs) {
     return ListenerAction.forward([targetGroups.ec2]);
-  } else if (targetGroups.ecs && !targetGroups.ec2) {
+  }
+
+  // No EC2 target, so forward all traffic to ECS
+  if (targetGroups.ecs && !targetGroups.ec2) {
     return ListenerAction.forward([targetGroups.ecs]);
-  } else if (targetGroups.ec2 && targetGroups.ecs) {
+  }
+
+  if (targetGroups.ec2 && targetGroups.ecs) {
     if (!targetGroupWeights) {
       throw new Error("EC2 and ECS are both enabled but no target group weights were provided");
     }
-    if (targetGroupWeights.ec2 + targetGroupWeights.ecs !== 999) {
-      throw new Error("Combined target group weights for EC2 and ECS must be equal to 999");
+
+    // An individual target can have a weight between 0 and 999. AWS will work out the relative percentage.
+    const isBetween = (n: number, min: number, max: number): boolean => n >= min && n <= max;
+    if (!isBetween(targetGroupWeights.ecs, 0, 999)) {
+      throw new Error("targetGroupWeights.ecs must be between 0 and 999");
     }
+    if (!isBetween(targetGroupWeights.ec2, 0, 999)) {
+      throw new Error("targetGroupWeights.ec2 must be between 0 and 999");
+    }
+
     return ListenerAction.weightedForward([
       { targetGroup: targetGroups.ec2, weight: targetGroupWeights.ec2 },
       { targetGroup: targetGroups.ecs, weight: targetGroupWeights.ecs },
