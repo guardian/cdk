@@ -144,11 +144,11 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
             imageIdentifier: "sha256:12345",
           },
           targetGroupWeights: {
-            ec2: 999,
+            ec2: 1000, // Outside of limit
             ecs: 1,
           },
         }),
-    ).toThrow("Combined target group weights for EC2 and ECS must be equal to 999");
+    ).toThrow("targetGroupWeights.ec2 must be between 0 and 999");
   });
   it("should throw an error if EC2 and ECS props are both omitted", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
