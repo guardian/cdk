@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Bump CDK versions
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: main
       - uses: actions/setup-node@v6
