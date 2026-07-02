@@ -3477,7 +3477,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "ParameterStoreReadTestguecsBA57BA08": {
+    "ParameterStoreReadTestgu2D9B3F35": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -3492,7 +3492,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/test-gu-ecs",
+                    ":parameter/TEST/test-stack/test-gu",
                   ],
                 ],
               },
@@ -3511,7 +3511,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/test-stack/test-gu-ecs/*",
+                    ":parameter/TEST/test-stack/test-gu/*",
                   ],
                 ],
               },

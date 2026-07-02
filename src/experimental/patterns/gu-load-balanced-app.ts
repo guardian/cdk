@@ -637,7 +637,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         GuLogShippingPolicy.getInstance(scope),
 
         // ...to allow reading application config from SSM
-        new GuParameterStoreReadPolicy(scope, { app: `${app}-ecs` }),
+        GuParameterStoreReadPolicy.getInstance(scope, { app }),
 
         // ...permissions specific for this application (provided by client)
         ...additionalPolicies,

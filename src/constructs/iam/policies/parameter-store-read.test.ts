@@ -2,13 +2,15 @@ import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
-describe("ParameterStoreReadPolicy", () => {
-  it("should constrain the policy to the patch of a stack's identity", () => {
+describe("GuParameterStoreReadPolicy", () => {
+  it("should constrain the policy to the path of a stack's identity", () => {
     const stack = simpleGuStackForTesting();
 
-    const policy = new GuParameterStoreReadPolicy(stack, { app: "MyApp" });
+    const policy = GuParameterStoreReadPolicy.getInstance(stack, { app: "MyApp" });
 
     attachPolicyToTestRole(stack, policy);
+
+    Template.fromStack(stack).resourceCountIs("AWS::IAM::Policy", 1);
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
       PolicyName: "parameter-store-read-policy",
@@ -58,5 +60,17 @@ describe("ParameterStoreReadPolicy", () => {
         ],
       },
     });
+  });
+
+  it("can be instantiated for multiple apps", () => {
+    const stack = simpleGuStackForTesting();
+
+    const policy1 = GuParameterStoreReadPolicy.getInstance(stack, { app: "MyApp1" });
+    const policy2 = GuParameterStoreReadPolicy.getInstance(stack, { app: "MyApp2" });
+
+    attachPolicyToTestRole(stack, policy1, "MyRole1");
+    attachPolicyToTestRole(stack, policy2, "MyRole2");
+
+    Template.fromStack(stack).resourceCountIs("AWS::IAM::Policy", 2);
   });
 });
