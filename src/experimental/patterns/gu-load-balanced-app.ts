@@ -631,9 +631,19 @@ export class GuLoadBalancedAppExperimental extends Construct {
         readonlyRootFilesystem: true,
       });
 
-      // Grant standard log shipping and config read permissions to the app
-      GuLogShippingPolicy.getInstance(scope).attachToRole(taskDefinition.taskRole);
-      new GuParameterStoreReadPolicy(scope, { app: `${app}-ecs` }).attachToRole(taskDefinition.taskRole);
+      // Permissions passed to the ECS task...
+      const applicationPermissions: GuPolicy[] = [
+        // ...to allow writing logs to Kinesis
+        GuLogShippingPolicy.getInstance(scope),
+
+        // ...to allow reading application config from SSM
+        new GuParameterStoreReadPolicy(scope, { app: `${app}-ecs` }),
+
+        // ...permissions specific for this application (provided by client)
+        ...additionalPolicies,
+      ];
+
+      applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
 
       /*
       GuardDuty is enabled at the organisation level and runs as a sidecar.
