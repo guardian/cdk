@@ -2653,6 +2653,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "GuLoadBalancedAppExperimental",
       "GuLoggingStreamNameParameter",
       "GuRiffRaffDeploymentIdParameterExperimental",
+      "GuLogShippingPolicy",
       "GuParameterStoreReadPolicy",
       "GuHttpsEgressSecurityGroup",
       "GuApplicationTargetGroup",
@@ -2747,7 +2748,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     },
     "EcsService81FC6EF6": {
       "DependsOn": [
-        "EcsTaskDefinitionTaskRoleDefaultPolicy1FD2F057",
         "EcsTaskDefinitionTaskRoleB7B6D8DD",
         "ListenerTestguCB542308",
       ],
@@ -2826,7 +2826,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     },
     "EcsServiceTaskCountTarget02FCCE22": {
       "DependsOn": [
-        "EcsTaskDefinitionTaskRoleDefaultPolicy1FD2F057",
         "EcsTaskDefinitionTaskRoleB7B6D8DD",
       ],
       "Properties": {
@@ -3224,48 +3223,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::IAM::Role",
     },
-    "EcsTaskDefinitionTaskRoleDefaultPolicy1FD2F057": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "kinesis:Describe*",
-                "kinesis:Put*",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":kinesis:eu-west-1:",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":stream/",
-                    {
-                      "Ref": "LoggingStreamName",
-                    },
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "EcsTaskDefinitionTaskRoleDefaultPolicy1FD2F057",
-        "Roles": [
-          {
-            "Ref": "EcsTaskDefinitionTaskRoleB7B6D8DD",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "GuHttpsEgressSecurityGroupTestguecs783F2306": {
       "Properties": {
         "GroupDescription": "Allow all outbound HTTPS traffic",
@@ -3326,6 +3283,44 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "ToPort": 3000,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuLogShippingPolicy981BFE5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "kinesis:Describe*",
+                "kinesis:Put*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:kinesis:eu-west-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":stream/",
+                    {
+                      "Ref": "LoggingStreamName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": [
+          {
+            "Ref": "EcsTaskDefinitionTaskRoleB7B6D8DD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "ListenerTestguCB542308": {
       "Properties": {

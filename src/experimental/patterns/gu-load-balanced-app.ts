@@ -47,6 +47,7 @@ import { AppIdentity } from "../../constructs/core";
 import { GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
+import { GuLogShippingPolicy } from "../../constructs/iam";
 import { GuInstanceRole } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy } from "../../constructs/iam";
 import { GuParameterStoreReadPolicy } from "../../constructs/iam";
@@ -631,19 +632,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       });
 
       // Grant standard log shipping and config read permissions to the app
-      const logShippingPolicy = new PolicyStatement({
-        actions: ["kinesis:Describe*", "kinesis:Put*"],
-        effect: Effect.ALLOW,
-        resources: [
-          scope.formatArn({
-            service: "kinesis",
-            resource: "stream",
-            resourceName: loggingStreamName,
-          }),
-        ],
-      });
-      taskDefinition.addToTaskRolePolicy(logShippingPolicy);
-
+      GuLogShippingPolicy.getInstance(scope).attachToRole(taskDefinition.taskRole);
       new GuParameterStoreReadPolicy(scope, { app: `${app}-ecs` }).attachToRole(taskDefinition.taskRole);
 
       /*
