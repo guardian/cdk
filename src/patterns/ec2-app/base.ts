@@ -30,7 +30,7 @@ import {
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
-import type { GuInstanceRoleProps } from "../../constructs/iam";
+import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy, GuInstanceRole } from "../../constructs/iam";
 import { GuLambdaFunction } from "../../constructs/lambda";
 import {
@@ -126,10 +126,12 @@ export interface GuEc2AppProps extends AppIdentity {
    * The port your application runs on.
    */
   applicationPort: number;
+
   /**
-   * Configure IAM roles for autoscaling group EC2 instances.
+   * Any additional permissions needed to run the application.
    */
-  roleConfiguration?: GuInstanceRoleProps;
+  additionalPolicies?: GuPolicy[];
+
   /**
    * Enable and configure alarms.
    */
@@ -387,7 +389,7 @@ export class GuEc2App extends Construct {
       certificateProps,
       instanceType,
       monitoringConfiguration,
-      roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
+      additionalPolicies = [],
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData: userDataLike,
       imageRecipe,
@@ -402,15 +404,6 @@ export class GuEc2App extends Construct {
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
-
-    // We should really prevent users from doing this via the type system,
-    // but that requires a breaking change to the API
-    if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
-      throw new Error(
-        "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-          "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
-      );
-    }
 
     const userData = userDataLike instanceof UserData ? userDataLike : new GuUserData(scope, { ...userDataLike, app });
 
@@ -431,8 +424,7 @@ export class GuEc2App extends Construct {
         : [];
 
     const mergedRoleConfiguration: GuInstanceRoleProps = {
-      withoutLogShipping: roleConfiguration.withoutLogShipping,
-      additionalPolicies: maybePrivateConfigPolicy.concat(roleConfiguration.additionalPolicies ?? []),
+      additionalPolicies: maybePrivateConfigPolicy.concat(additionalPolicies),
     };
 
     const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {

@@ -46,7 +46,7 @@ import type { GuStack } from "../../constructs/core";
 import { AppIdentity } from "../../constructs/core";
 import { GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
-import type { GuInstanceRoleProps } from "../../constructs/iam";
+import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
 import { GuInstanceRole } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy } from "../../constructs/iam";
 import { GuParameterStoreReadPolicy } from "../../constructs/iam";
@@ -204,6 +204,12 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
    * Specify custom healthcheck settings for your load balancer's target group(s).
    */
   healthcheck?: ALBHealthCheck;
+
+  /**
+   * Any additional permissions needed to run the application.
+   */
+  additionalPolicies?: GuPolicy[];
+
   /**
    * You can specify if the arn of this load balancer should be exposed for protection via WAF
    *
@@ -249,10 +255,7 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * Enable and configures application logs.
      */
     applicationLogging?: ApplicationLoggingProps;
-    /**
-     * Configure IAM roles for autoscaling group EC2 instances.
-     */
-    roleConfiguration?: GuInstanceRoleProps;
+
     /**
      * Add block devices (additional storage).
      */
@@ -432,6 +435,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       ec2Props,
       ecsProps,
       targetGroupWeights,
+      additionalPolicies = [],
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -444,7 +448,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         applicationLogging = { enabled: false },
         blockDevices,
         instanceType,
-        roleConfiguration = { withoutLogShipping: false, additionalPolicies: [] },
         scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
         userData: userDataLike,
         imageRecipe,
@@ -455,12 +458,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         instanceMetricGranularity,
       } = ec2Props;
 
-      if (applicationLogging.enabled && roleConfiguration.withoutLogShipping) {
-        throw new Error(
-          "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-            "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
-        );
-      }
       const userData =
         userDataLike instanceof UserData ? userDataLike : new GuUserData(scope, { ...userDataLike, app });
       const maybePrivateConfigPolicy =
@@ -468,8 +465,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
           : [];
       const mergedRoleConfiguration: GuInstanceRoleProps = {
-        withoutLogShipping: roleConfiguration.withoutLogShipping,
-        additionalPolicies: maybePrivateConfigPolicy.concat(roleConfiguration.additionalPolicies ?? []),
+        additionalPolicies: maybePrivateConfigPolicy.concat(additionalPolicies),
       };
 
       if (versionedDeployments?.enabled && updatePolicy) {

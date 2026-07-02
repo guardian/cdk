@@ -400,10 +400,7 @@ describe("the GuEC2App pattern", function () {
       monitoringConfiguration: { noMonitoring: true },
       instanceMetricGranularity: "5Minute",
       userData: UserData.forLinux(),
-      roleConfiguration: {
-        withoutLogShipping: true,
-        additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
-      },
+      additionalPolicies: [new GuDynamoDBWritePolicy(stack, "DynamoTable", { tableName: "my-dynamo-table" })],
     });
 
     const template = Template.fromStack(stack);
@@ -826,35 +823,6 @@ UserData from accessed construct`);
         { Key: MetadataKeys.SYSTEMD_UNIT, Value: "not-my-app-name.service" },
       ],
     });
-  });
-
-  it("throws an error if users attempt to ship application logs without the appropriate IAM permissions", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const app = "test-gu-ec2-app";
-    expect(() => {
-      new GuEc2App(stack, {
-        applicationPort: 3000,
-        access: { scope: AccessScope.PUBLIC },
-        app,
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        certificateProps: {
-          domainName: "domain-name-for-your-application.example",
-        },
-        scaling: {
-          minimumInstances: 1,
-        },
-        monitoringConfiguration: { noMonitoring: true },
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        applicationLogging: { enabled: true },
-        roleConfiguration: {
-          withoutLogShipping: true,
-        },
-      });
-    }).toThrow(
-      "Application logging has been enabled (via the `applicationLogging` prop) but your `roleConfiguration` sets " +
-        "`withoutLogShipping` to true. Please turn off application logging or remove `withoutLogShipping`",
-    );
   });
 
   it("adds a tag to aid visibility of stacks using the pattern", () => {
