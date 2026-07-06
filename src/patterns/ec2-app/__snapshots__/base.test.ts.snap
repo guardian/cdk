@@ -591,7 +591,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadTestguec2app072DCDE1",
         "Roles": [
           {
             "Ref": "InstanceRoleTestguec2appC325BE42",
@@ -1463,7 +1463,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadTestguec2app072DCDE1",
         "Roles": [
           {
             "Ref": "InstanceRoleTestguec2appC325BE42",

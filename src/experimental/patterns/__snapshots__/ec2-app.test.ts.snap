@@ -635,7 +635,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadTestguec2app072DCDE1",
         "Roles": [
           {
             "Ref": "InstanceRoleTestguec2appC325BE42",

@@ -13,7 +13,6 @@ describe("GuParameterStoreReadPolicy", () => {
     Template.fromStack(stack).resourceCountIs("AWS::IAM::Policy", 1);
 
     Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
-      PolicyName: "parameter-store-read-policy",
       PolicyDocument: {
         Version: "2012-10-17",
         Statement: [

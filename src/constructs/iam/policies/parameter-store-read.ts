@@ -47,7 +47,6 @@ export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
 
   private constructor(scope: GuStack, props: AppIdentity) {
     super(scope, "ParameterStoreRead", {
-      policyName: "parameter-store-read-policy",
       statements: [new ReadParametersByPath(scope, props), new ReadParametersByName(scope, props)],
       ...props,
     });

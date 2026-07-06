@@ -192,7 +192,7 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadTesting0F3B634A",
         "Roles": [
           {
             "Ref": "InstanceRoleTestingCB7BD146",
@@ -541,7 +541,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadMyfirstappE5C5C329",
         "Roles": [
           {
             "Ref": "InstanceRoleMyfirstapp5C11A22B",
@@ -600,7 +600,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadMysecondapp76C0E32C",
         "Roles": [
           {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
@@ -871,7 +871,7 @@ exports[`The GuInstanceRole construct should create an additional logging policy
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadTesting0F3B634A",
         "Roles": [
           {
             "Ref": "InstanceRoleTestingCB7BD146",
@@ -1090,7 +1090,7 @@ exports[`The GuInstanceRole construct should create the correct resources with m
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "parameter-store-read-policy",
+        "PolicyName": "ParameterStoreReadTesting0F3B634A",
         "Roles": [
           {
             "Ref": "InstanceRoleTestingCB7BD146",
