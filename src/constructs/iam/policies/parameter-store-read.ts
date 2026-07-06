@@ -43,7 +43,7 @@ export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
    * This allows us to implement singleton like behaviour.
    * @private
    */
-  private static instances: WeakMap<GuStack, Record<string, GuParameterStoreReadPolicy>> = new WeakMap();
+  private static instances: Map<GuStack, Map<string, GuParameterStoreReadPolicy>> = new Map();
 
   private constructor(scope: GuStack, props: AppIdentity) {
     super(scope, "ParameterStoreRead", {
@@ -55,23 +55,16 @@ export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
 
   public static getInstance(stack: GuStack, props: AppIdentity): GuParameterStoreReadPolicy {
     const maybeStackInstances = this.instances.get(stack);
-
     if (!maybeStackInstances) {
       const instance = new GuParameterStoreReadPolicy(stack, props);
-      this.instances.set(stack, { [props.app]: instance });
+      this.instances.set(stack, new Map([[props.app, instance]]));
       return instance;
     }
 
-    const maybeInstance = maybeStackInstances[props.app];
-
+    const maybeInstance = maybeStackInstances.get(props.app);
     if (!maybeInstance) {
       const instance = new GuParameterStoreReadPolicy(stack, props);
-
-      this.instances.set(stack, {
-        ...maybeStackInstances,
-        [props.app]: instance,
-      });
-
+      this.instances.set(stack, maybeStackInstances.set(props.app, instance));
       return instance;
     }
 
