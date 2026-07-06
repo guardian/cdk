@@ -38,11 +38,36 @@ export class ReadParametersByName extends PolicyStatement {
  * configuration. See [[`ReadParametersByPath`]] and [[`ReadParametersByName`]] for more details.
  */
 export class GuParameterStoreReadPolicy extends GuAppAwareConstruct(GuPolicy) {
-  constructor(scope: GuStack, props: AppIdentity) {
+  /**
+   * A record of existing instances of this construct, per {@link GuStack}.
+   * This allows us to implement singleton like behaviour.
+   * @private
+   */
+  private static instances: Map<GuStack, Map<string, GuParameterStoreReadPolicy>> = new Map();
+
+  private constructor(scope: GuStack, props: AppIdentity) {
     super(scope, "ParameterStoreRead", {
       policyName: "parameter-store-read-policy",
       statements: [new ReadParametersByPath(scope, props), new ReadParametersByName(scope, props)],
       ...props,
     });
+  }
+
+  public static getInstance(stack: GuStack, props: AppIdentity): GuParameterStoreReadPolicy {
+    const maybeStackInstances = this.instances.get(stack);
+    if (!maybeStackInstances) {
+      const instance = new GuParameterStoreReadPolicy(stack, props);
+      this.instances.set(stack, new Map([[props.app, instance]]));
+      return instance;
+    }
+
+    const maybeInstance = maybeStackInstances.get(props.app);
+    if (!maybeInstance) {
+      const instance = new GuParameterStoreReadPolicy(stack, props);
+      this.instances.set(stack, maybeStackInstances.set(props.app, instance));
+      return instance;
+    }
+
+    return maybeInstance;
   }
 }
