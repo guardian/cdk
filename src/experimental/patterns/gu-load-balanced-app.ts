@@ -23,8 +23,7 @@ import {
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -256,7 +255,6 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * Enable and configures application logs.
      */
     applicationLogging?: ApplicationLoggingProps;
-
     /**
      * Add block devices (additional storage).
      */
@@ -377,6 +375,31 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     ecs: number;
     ec2: number;
   };
+  /**
+   *  Adds deterministic routing rules for EC2 to ECS migrations.
+   *
+   * Enable to allow callers to force a request to a specific target group
+   * using an HTTP header rather than relying on the default weighted routing.
+   * Both `ec2Props` and `ecsProps` have to be configured.
+   *
+   */
+  deterministicRouting?: {
+    enabled: boolean;
+    /**
+     * The HTTP header used to select a target group.
+     * @defaultValue X-Gu-Target-Group
+     */
+    headerName?: string;
+    /**
+     * The header value which routes traffic to EC2.
+     * @defaultValue ec2
+     */
+    ec2HeaderValue?: string;
+    /**
+     * The header value which routes traffic to ECS.
+     * @defaultValue ecs     */
+    ecsHeaderValue?: string;
+  };
 }
 
 interface TargetGroups {
@@ -437,6 +460,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       ecsProps,
       targetGroupWeights,
       additionalPolicies = [],
+      deterministicRouting,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -792,6 +816,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
 
+    configureDeterministicRouting(listener, targetGroups, deterministicRouting);
+
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
       loadBalancer.addSecurityGroup(
@@ -1027,4 +1053,41 @@ function configureListenerActions(
   } else {
     throw new Error("At least one of 'ec2Props' or 'ecsProps' must be specified");
   }
+}
+
+type DeterministicRoutingConfig = {
+  enabled: boolean;
+  headerName?: string;
+  ec2HeaderValue?: string;
+  ecsHeaderValue?: string;
+};
+
+function configureDeterministicRouting(
+  listener: GuHttpsApplicationListener,
+  targetGroups: TargetGroups,
+  deterministicRouting?: DeterministicRoutingConfig,
+): void {
+  if (!deterministicRouting?.enabled) {
+    return;
+  }
+
+  if (!targetGroups.ec2 || !targetGroups.ecs) {
+    throw new Error("Deterministic routing requires both EC2 and ECS target groups");
+  }
+
+  const headerName = deterministicRouting.headerName ?? "X-Gu-Target-Group";
+  const ec2HeaderValue = deterministicRouting.ec2HeaderValue ?? "ec2";
+  const ecsHeaderValue = deterministicRouting.ecsHeaderValue ?? "ecs";
+
+  listener.addAction("DeterministicRouteToEc2", {
+    priority: 10,
+    conditions: [ListenerCondition.httpHeader(headerName, [ec2HeaderValue])],
+    action: ListenerAction.forward([targetGroups.ec2]),
+  });
+
+  listener.addAction("DeterministicRouteToEcs", {
+    priority: 11,
+    conditions: [ListenerCondition.httpHeader(headerName, [ecsHeaderValue])],
+    action: ListenerAction.forward([targetGroups.ecs]),
+  });
 }

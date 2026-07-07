@@ -40,6 +40,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
+
   it("should be capable of splitting traffic between EC2 and ECS target groups", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
@@ -88,6 +89,219 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ],
     });
   });
+
+  it("should create listener rules to deterministically route requests to EC2 or ECS during migration", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        scaling: {
+          minimumInstances: 1,
+        },
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+      targetGroupWeights: {
+        ec2: 499,
+        ecs: 500,
+      },
+
+      deterministicRouting: {
+        enabled: true,
+      },
+    });
+
+    Template.fromStack(stack).resourceCountIs("AWS::ElasticLoadBalancingV2::ListenerRule", 2);
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+      Conditions: Match.arrayWith([
+        Match.objectLike({
+          Field: "http-header",
+          HttpHeaderConfig: {
+            HttpHeaderName: "X-Gu-Target-Group",
+            Values: ["ec2"],
+          },
+        }),
+      ]),
+      Actions: [
+        Match.objectLike({
+          Type: "forward",
+          TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
+        }),
+      ],
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+      Conditions: Match.arrayWith([
+        Match.objectLike({
+          Field: "http-header",
+          HttpHeaderConfig: {
+            HttpHeaderName: "X-Gu-Target-Group",
+            Values: ["ecs"],
+          },
+        }),
+      ]),
+      Actions: [
+        Match.objectLike({
+          Type: "forward",
+          TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
+        }),
+      ],
+    });
+  });
+
+  it("should throw an error if deterministic routing is enabled without both EC2 and ECS target groups", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+
+    expect(
+      () =>
+        new GuLoadBalancedAppExperimental(stack, {
+          monitoringConfiguration: { noMonitoring: true },
+          applicationPort: 3000,
+          access: { scope: AccessScope.PUBLIC },
+          app: "test-gu",
+          certificateProps: {
+            domainName: "domain-name-for-your-application.example",
+          },
+          ec2Props: {
+            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+            instanceMetricGranularity: "5Minute",
+            userData: UserData.forLinux(),
+            scaling: {
+              minimumInstances: 1,
+            },
+          },
+          deterministicRouting: {
+            enabled: true,
+          },
+        }),
+    ).toThrow("Deterministic routing requires both EC2 and ECS target groups");
+  });
+
+  it("should keep weighted forwarding as the default action when deterministic routing is enabled", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        scaling: { minimumInstances: 1 },
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+      targetGroupWeights: {
+        ec2: 499,
+        ecs: 500,
+      },
+      deterministicRouting: {
+        enabled: true,
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+      DefaultActions: [
+        {
+          ForwardConfig: {
+            TargetGroups: [
+              {
+                TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
+                Weight: 499,
+              },
+              {
+                TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
+                Weight: 500,
+              },
+            ],
+          },
+        },
+      ],
+    });
+  });
+
+  it("should use custom deterministic routing header and values when configured", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        scaling: { minimumInstances: 1 },
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+      targetGroupWeights: {
+        ec2: 499,
+        ecs: 500,
+      },
+      deterministicRouting: {
+        enabled: true,
+        headerName: "X-Gu-Test",
+        ec2HeaderValue: "ec2test",
+        ecsHeaderValue: "ecstest",
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+      Conditions: Match.arrayWith([
+        Match.objectLike({
+          Field: "http-header",
+          HttpHeaderConfig: {
+            HttpHeaderName: "X-Gu-Test",
+            Values: ["ec2test"],
+          },
+        }),
+      ]),
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+      Conditions: Match.arrayWith([
+        Match.objectLike({
+          Field: "http-header",
+          HttpHeaderConfig: {
+            HttpHeaderName: "X-Gu-Test",
+            Values: ["ecstest"],
+          },
+        }),
+      ]),
+    });
+  });
+
   it("should throw an error if EC2 and ECS are both present but no weights are provided", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(
@@ -117,6 +331,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         }),
     ).toThrow("EC2 and ECS are both enabled but no target group weights were provided");
   });
+
   it("should throw an error if illegal weights are provided", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(
@@ -150,6 +365,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         }),
     ).toThrow("targetGroupWeights.ec2 must be between 0 and 999");
   });
+
   it("should throw an error if EC2 and ECS props are both omitted", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(
@@ -165,6 +381,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         }),
     ).toThrow("At least one of 'ec2Props' or 'ecsProps' must be specified");
   });
+
   it("should use the ECR repo name from ecsProps if the user sets this explicitly", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
@@ -193,6 +410,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ]),
     });
   });
+
   it("should throw an error if we cannot determine the right repository for ECR", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     // Remove the repositoryName
@@ -216,6 +434,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         }),
     ).toThrow("Could not determine an ECR repository name; please set this manually via ecsProps");
   });
+
   it("allows a custom healthcheck to be used for the ECS target group", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
@@ -241,6 +460,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       TargetType: "ip", // This target type helps to confirm that its the ECS target group
     });
   });
+
   it("applies the custom healthcheck settings to both target groups when operating in hybrid mode", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
@@ -282,6 +502,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       TargetType: "ip", // The ECS target group
     });
   });
+
   // Because this has not been tested thoroughly yet
   it("should throw an error if there is an ECS backend and the Google Auth feature is being used", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
