@@ -276,17 +276,13 @@ export class RiffRaffYamlFile {
         return Array.from(value).map(transformValue);
       }
       if (value instanceof Map) {
-        return Object.fromEntries(
-          Array.from(value.entries()).map(([k, v]) => [k, transformValue(v)]),
-        );
+        return Object.fromEntries(Array.from(value.entries()).map(([k, v]) => [k, transformValue(v)]));
       }
       if (Array.isArray(value)) {
         return value.map(transformValue);
       }
       if (value !== null && typeof value === "object") {
-        return Object.fromEntries(
-          Object.entries(value).map(([k, v]) => [k, transformValue(v)]),
-        );
+        return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, transformValue(v)]));
       }
       return value;
     };
