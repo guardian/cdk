@@ -6,6 +6,19 @@ export function gitRemoteOriginUrl(): string {
   });
 }
 
+/**
+ * Extract the `owner/repo` full name from a git remote URL.
+ *
+ * Supports HTTPS, SSH shorthand (`git@host:owner/repo`), and `ssh://` URLs.
+ */
+export function gitRepoFullName(url: string): string {
+  const match = /([\w.-]+\/[\w.-]+?)(?:\.git)?$/.exec(url);
+  if (!match?.[1]) {
+    throw new Error(`Unable to parse git URL: ${url}`);
+  }
+  return match[1];
+}
+
 export function gitRootOrCwd(): string {
   const cwd = process.cwd();
 
