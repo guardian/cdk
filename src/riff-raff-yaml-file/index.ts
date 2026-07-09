@@ -45,15 +45,15 @@ function validateAllRegionsAreResolved(regions: Region[]): void {
 }
 
 function getLambdas(cdkStack: GuStack): GuLambdaFunction[] {
-  return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction) as GuLambdaFunction[];
+  return cdkStack.node.findAll().filter((_) => _ instanceof GuLambdaFunction);
 }
 
 function getAutoScalingGroups(cdkStack: GuStack): GuAutoScalingGroup[] {
-  return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup) as GuAutoScalingGroup[];
+  return cdkStack.node.findAll().filter((_) => _ instanceof GuAutoScalingGroup);
 }
 
 function getGuStackDependencies(cdkStack: GuStack): GuStack[] {
-  return cdkStack.dependencies.filter((_) => _ instanceof GuStack) as GuStack[];
+  return cdkStack.dependencies.filter((_) => _ instanceof GuStack);
 }
 
 interface MissingStack {
@@ -122,7 +122,7 @@ export class RiffRaffYamlFile {
 
   // eslint-disable-next-line custom-rules/valid-constructors -- this needs to sit above GuStack on the cdk tree
   constructor(app: App) {
-    const allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack) as GuStack[];
+    const allCdkStacks = app.node.findAll().filter((_) => _ instanceof GuStack);
     const allRegions = Array.from(new Set(allCdkStacks.map((_) => _.region)));
 
     validateAllRegionsAreResolved(allRegions);
