@@ -23,8 +23,7 @@ import {
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -256,7 +255,6 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * Enable and configures application logs.
      */
     applicationLogging?: ApplicationLoggingProps;
-
     /**
      * Add block devices (additional storage).
      */
@@ -791,6 +789,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
+    if (targetGroups.ec2 && targetGroups.ecs) {
+      configureDeterministicRouting(listener, targetGroups.ec2, targetGroups.ecs);
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
@@ -1027,4 +1028,26 @@ function configureListenerActions(
   } else {
     throw new Error("At least one of 'ec2Props' or 'ecsProps' must be specified");
   }
+}
+
+function configureDeterministicRouting(
+  listener: GuHttpsApplicationListener,
+  ec2TargetGroup: GuApplicationTargetGroup,
+  ecsTargetGroup: GuApplicationTargetGroup,
+): void {
+  const headerName = "X-Gu-Target-Group";
+  const ec2HeaderValue = "ec2";
+  const ecsHeaderValue = "ecs";
+
+  listener.addAction("DeterministicRouteToEc2", {
+    priority: 10,
+    conditions: [ListenerCondition.httpHeader(headerName, [ec2HeaderValue])],
+    action: ListenerAction.forward([ec2TargetGroup]),
+  });
+
+  listener.addAction("DeterministicRouteToEcs", {
+    priority: 11,
+    conditions: [ListenerCondition.httpHeader(headerName, [ecsHeaderValue])],
+    action: ListenerAction.forward([ecsTargetGroup]),
+  });
 }
