@@ -375,30 +375,6 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     ecs: number;
     ec2: number;
   };
-  /**
-   *  Adds deterministic routing rules for EC2 to ECS migrations.
-   *
-   * Enable to allow callers to force a request to a specific target group
-   * using an HTTP header rather than relying on the default weighted routing.
-   * Both `ec2Props` and `ecsProps` have to be configured.
-   *
-   */
-  deterministicRouting?: {
-    /**
-     * The HTTP header used to select a target group.
-     * @defaultValue X-Gu-Target-Group
-     */
-    headerName?: string;
-    /**
-     * The header value which routes traffic to EC2.
-     * @defaultValue ec2
-     */
-    ec2HeaderValue?: string;
-    /**
-     * The header value which routes traffic to ECS.
-     * @defaultValue ecs     */
-    ecsHeaderValue?: string;
-  };
 }
 
 interface TargetGroups {
@@ -459,7 +435,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
       ecsProps,
       targetGroupWeights,
       additionalPolicies = [],
-      deterministicRouting,
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
@@ -815,7 +790,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
     if (targetGroups.ec2 && targetGroups.ecs) {
-      configureDeterministicRouting(listener, targetGroups.ec2, targetGroups.ecs, deterministicRouting);
+      configureDeterministicRouting(listener, targetGroups.ec2, targetGroups.ecs);
     }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
@@ -1055,21 +1030,14 @@ function configureListenerActions(
   }
 }
 
-type DeterministicRoutingConfig = {
-  headerName?: string;
-  ec2HeaderValue?: string;
-  ecsHeaderValue?: string;
-};
-
 function configureDeterministicRouting(
   listener: GuHttpsApplicationListener,
   ec2TargetGroup: GuApplicationTargetGroup,
   ecsTargetGroup: GuApplicationTargetGroup,
-  deterministicRouting?: DeterministicRoutingConfig,
 ): void {
-  const headerName = deterministicRouting?.headerName ?? "X-Gu-Target-Group";
-  const ec2HeaderValue = deterministicRouting?.ec2HeaderValue ?? "ec2";
-  const ecsHeaderValue = deterministicRouting?.ecsHeaderValue ?? "ecs";
+  const headerName = "X-Gu-Target-Group";
+  const ec2HeaderValue = "ec2";
+  const ecsHeaderValue = "ecs";
 
   listener.addAction("DeterministicRouteToEc2", {
     priority: 10,

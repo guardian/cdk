@@ -207,65 +207,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
   });
 
-  it("should use custom deterministic routing header and values when configured", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-
-    new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ec2Props: {
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        scaling: { minimumInstances: 1 },
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
-        imageIdentifier: "sha256:12345",
-      },
-      targetGroupWeights: {
-        ec2: 499,
-        ecs: 500,
-      },
-      deterministicRouting: {
-        headerName: "X-Gu-Test",
-        ec2HeaderValue: "ec2test",
-        ecsHeaderValue: "ecstest",
-      },
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
-      Conditions: Match.arrayWith([
-        Match.objectLike({
-          Field: "http-header",
-          HttpHeaderConfig: {
-            HttpHeaderName: "X-Gu-Test",
-            Values: ["ec2test"],
-          },
-        }),
-      ]),
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
-      Conditions: Match.arrayWith([
-        Match.objectLike({
-          Field: "http-header",
-          HttpHeaderConfig: {
-            HttpHeaderName: "X-Gu-Test",
-            Values: ["ecstest"],
-          },
-        }),
-      ]),
-    });
-  });
-
   it("should throw an error if EC2 and ECS are both present but no weights are provided", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(
