@@ -118,10 +118,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         ec2: 499,
         ecs: 500,
       },
-
-      deterministicRouting: {
-        enabled: true,
-      },
     });
 
     Template.fromStack(stack).resourceCountIs("AWS::ElasticLoadBalancingV2::ListenerRule", 2);
@@ -163,35 +159,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
   });
 
-  it("should throw an error if deterministic routing is enabled without both EC2 and ECS target groups", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: "domain-name-for-your-application.example",
-          },
-          ec2Props: {
-            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-            instanceMetricGranularity: "5Minute",
-            userData: UserData.forLinux(),
-            scaling: {
-              minimumInstances: 1,
-            },
-          },
-          deterministicRouting: {
-            enabled: true,
-          },
-        }),
-    ).toThrow("Deterministic routing requires both EC2 and ECS target groups");
-  });
-
-  it("should keep weighted forwarding as the default action when deterministic routing is enabled", function () {
+  it("should keep weighted forwarding as the default action", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
       monitoringConfiguration: { noMonitoring: true },
@@ -216,9 +184,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       targetGroupWeights: {
         ec2: 499,
         ecs: 500,
-      },
-      deterministicRouting: {
-        enabled: true,
       },
     });
 
@@ -270,7 +235,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         ecs: 500,
       },
       deterministicRouting: {
-        enabled: true,
         headerName: "X-Gu-Test",
         ec2HeaderValue: "ec2test",
         ecsHeaderValue: "ecstest",

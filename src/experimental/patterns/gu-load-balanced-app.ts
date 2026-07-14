@@ -384,7 +384,6 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
    *
    */
   deterministicRouting?: {
-    enabled: boolean;
     /**
      * The HTTP header used to select a target group.
      * @defaultValue X-Gu-Target-Group
@@ -815,8 +814,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
-
-    configureDeterministicRouting(listener, targetGroups, deterministicRouting);
+    if (targetGroups.ec2 && targetGroups.ecs) {
+      configureDeterministicRouting(listener, targetGroups.ec2, targetGroups.ecs, deterministicRouting);
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
@@ -1056,7 +1056,6 @@ function configureListenerActions(
 }
 
 type DeterministicRoutingConfig = {
-  enabled: boolean;
   headerName?: string;
   ec2HeaderValue?: string;
   ecsHeaderValue?: string;
@@ -1064,30 +1063,23 @@ type DeterministicRoutingConfig = {
 
 function configureDeterministicRouting(
   listener: GuHttpsApplicationListener,
-  targetGroups: TargetGroups,
+  ec2TargetGroup: GuApplicationTargetGroup,
+  ecsTargetGroup: GuApplicationTargetGroup,
   deterministicRouting?: DeterministicRoutingConfig,
 ): void {
-  if (!deterministicRouting?.enabled) {
-    return;
-  }
-
-  if (!targetGroups.ec2 || !targetGroups.ecs) {
-    throw new Error("Deterministic routing requires both EC2 and ECS target groups");
-  }
-
-  const headerName = deterministicRouting.headerName ?? "X-Gu-Target-Group";
-  const ec2HeaderValue = deterministicRouting.ec2HeaderValue ?? "ec2";
-  const ecsHeaderValue = deterministicRouting.ecsHeaderValue ?? "ecs";
+  const headerName = deterministicRouting?.headerName ?? "X-Gu-Target-Group";
+  const ec2HeaderValue = deterministicRouting?.ec2HeaderValue ?? "ec2";
+  const ecsHeaderValue = deterministicRouting?.ecsHeaderValue ?? "ecs";
 
   listener.addAction("DeterministicRouteToEc2", {
     priority: 10,
     conditions: [ListenerCondition.httpHeader(headerName, [ec2HeaderValue])],
-    action: ListenerAction.forward([targetGroups.ec2]),
+    action: ListenerAction.forward([ec2TargetGroup]),
   });
 
   listener.addAction("DeterministicRouteToEcs", {
     priority: 11,
     conditions: [ListenerCondition.httpHeader(headerName, [ecsHeaderValue])],
-    action: ListenerAction.forward([targetGroups.ecs]),
+    action: ListenerAction.forward([ecsTargetGroup]),
   });
 }
