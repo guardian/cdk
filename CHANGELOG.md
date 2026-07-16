@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 64.2.0
+
+### Minor Changes
+
+- ef75d0c: Add STACK, STAGE, APP environment variables to default container of ECS cluster provisioned by `GuLoadBalancedAppExperimental`.
+
 ## 64.1.0
 
 ### Minor Changes
