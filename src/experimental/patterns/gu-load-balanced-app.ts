@@ -439,6 +439,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     super(scope, app); // The assumption is `app` is unique
 
+    const { stack, stage } = scope;
+
     let targetGroups: TargetGroups = {};
 
     // Setup EC2-specific infrastructure
@@ -614,6 +616,18 @@ export class GuLoadBalancedAppExperimental extends Construct {
         },
       });
 
+      const env = {
+        STACK: stack,
+        STAGE: stage,
+        APP: app,
+
+        // Required by https://github.com/guardian/devx-logs
+        TASK_NAME: app,
+      };
+
+      // Add the GitHub repo if we can
+      const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
+
       const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", { memoryLimitMiB, cpu });
 
       taskDefinition.addContainer(app, {
@@ -627,6 +641,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         portMappings: [{ containerPort: applicationPort }],
         logging: fireLensLogDriver,
         readonlyRootFilesystem: true,
+        environment,
       });
 
       // Permissions passed to the ECS task...
@@ -694,25 +709,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       this.ecsService = ecsService;
 
-      const env =
-        // Required by https://github.com/guardian/devx-logs
-        {
-          STACK: scope.stack,
-          STAGE: scope.stage,
-          APP: app,
-          TASK_NAME: app,
-        };
-
-      // Add the GitHub repo if we can
-      const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
-
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
         image: ContainerImage.fromRegistry(
           "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
         ),
-        // Required by https://github.com/guardian/devx-logs
         environment,
         versionConsistency: VersionConsistency.DISABLED,
         // Send this container's logs to CloudWatch logs, retained for 1 day

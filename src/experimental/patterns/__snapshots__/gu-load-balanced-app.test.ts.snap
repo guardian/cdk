@@ -2928,6 +2928,28 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                 "Ref": "RiffRaffDeploymentId",
               },
             },
+            "Environment": [
+              {
+                "Name": "STACK",
+                "Value": "test-stack",
+              },
+              {
+                "Name": "STAGE",
+                "Value": "TEST",
+              },
+              {
+                "Name": "APP",
+                "Value": "test-gu",
+              },
+              {
+                "Name": "TASK_NAME",
+                "Value": "test-gu",
+              },
+              {
+                "Name": "GU_REPO",
+                "Value": "guardian/cdk",
+              },
+            ],
             "Essential": true,
             "Image": {
               "Fn::Join": [
