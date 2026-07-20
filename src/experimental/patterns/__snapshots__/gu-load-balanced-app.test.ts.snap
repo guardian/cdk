@@ -2772,6 +2772,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
           "Type": "ECS",
         },
         "EnableECSManagedTags": false,
+        "EnableExecuteCommand": false,
         "HealthCheckGracePeriodSeconds": 60,
         "LaunchType": "FARGATE",
         "LoadBalancers": [
