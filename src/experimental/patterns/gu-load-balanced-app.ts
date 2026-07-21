@@ -11,6 +11,7 @@ import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
+import { LinuxParameters } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
@@ -357,6 +358,20 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
        */
       maximumTasks: number;
     };
+
+    /**
+     * Whether to enable "ssh" to the container via AWS ECS Exec.
+     *
+     * When enabled, FSBP ECS.5 is actively violated.
+     * Capabilities in the container is dictated by the image.
+     * For example, if the image doesn't have `curl` available, you won't be able to `curl localhost:9000`.
+     *
+     * @default false
+     *
+     * @see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec-run.html
+     * @see https://docs.aws.amazon.com/securityhub/latest/userguide/ecs-controls.html#ecs-5
+     */
+    enableExecuteCommand?: boolean;
   };
   /**
    * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute types.
@@ -577,7 +592,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling, enableExecuteCommand = false } = ecsProps;
 
       const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
       if (!ecrRepoName) {
@@ -642,6 +657,15 @@ export class GuLoadBalancedAppExperimental extends Construct {
         logging: fireLensLogDriver,
         readonlyRootFilesystem: true,
         environment,
+        ...(enableExecuteCommand
+          ? {
+              linuxParameters: new LinuxParameters(scope, `${app}-linux-parameters`, { initProcessEnabled: true }),
+
+              // This violates FSBP ECS.5, but is needed for this feature
+              // See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html#ecs-exec-considerations
+              readonlyRootFilesystem: false,
+            }
+          : {}),
       });
 
       // Permissions passed to the ECS task...
@@ -700,6 +724,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
             vpc,
           }),
         ],
+        enableExecuteCommand,
       });
 
       ecsService.autoScaleTaskCount({
