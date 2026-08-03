@@ -2802,6 +2802,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "PropagateTags": "SERVICE",
         "Tags": [
           {
+            "Key": "App",
+            "Value": "test-gu",
+          },
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -3052,6 +3056,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         ],
         "Tags": [
           {
+            "Key": "App",
+            "Value": "test-gu",
+          },
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -3097,6 +3105,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
           "Version": "2012-10-17",
         },
         "Tags": [
+          {
+            "Key": "App",
+            "Value": "test-gu",
+          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -3190,6 +3202,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "RetentionInDays": 1,
         "Tags": [
           {
+            "Key": "App",
+            "Value": "test-gu",
+          },
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -3225,6 +3241,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
           "Version": "2012-10-17",
         },
         "Tags": [
+          {
+            "Key": "App",
+            "Value": "test-gu",
+          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -3553,6 +3573,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     "testguEcsCluster02799D79": {
       "Properties": {
         "Tags": [
+          {
+            "Key": "App",
+            "Value": "test-gu",
+          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
