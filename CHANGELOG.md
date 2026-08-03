@@ -1,5 +1,22 @@
 # @guardian/cdk
 
+## 64.2.0
+
+### Minor Changes
+
+- ef75d0c: Add STACK, STAGE, APP environment variables to default container of ECS cluster provisioned by `GuLoadBalancedAppExperimental`.
+
+### Patch Changes
+
+- 0a25fcf: Update js-yaml from 4.1.1 to 4.3.0
+- 4a85881: Explicitly add the `App` tag to all resources created by `GuLoadBalancedAppExperimental`. Namely, `App` is added to:
+  - `AWS::ECS::Cluster`
+  - `AWS::ECS::TaskDefinition`
+  - `AWS::ECS::Service`
+
+  Previously, these resources implicitly inherited the `App` tag of the parent CloudFormation stack.
+  The CloudFormation's `App` tag is implicitly set by Riff-Raff via the contents of the `riff-raff.yaml` configuration.
+
 ## 64.1.0
 
 ### Minor Changes
