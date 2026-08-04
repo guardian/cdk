@@ -758,7 +758,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       // Specifically apply App tag to resources.
       // Other resources obtain this tag by extending `GuAppAwareConstruct`.
-      [cluster, taskDefinition, ecsService].forEach((_) => Tags.of(_).add("App", app));
+      [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
     }
 
     // Set up the load balancer and listener components
