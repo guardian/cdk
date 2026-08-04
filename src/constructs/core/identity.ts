@@ -18,12 +18,20 @@ export const AppIdentity = {
     return props ? "app" in props : false;
   },
 
-  addAppToStringEnd(appIdentity: AppIdentity, text: string): string {
+  toAlphanumericTitleCase(appIdentity: AppIdentity) {
     const titleCaseApp = appIdentity.app.charAt(0).toUpperCase() + appIdentity.app.slice(1);
     // CloudFormation Logical Ids must be alphanumeric, so remove any non-alphanumeric characters: https://stackoverflow.com/a/20864946
-    const alphanumericTitleCaseApp = titleCaseApp.replace(/[\W_]+/g, "");
-    return `${text}${alphanumericTitleCaseApp}`;
+    return titleCaseApp.replace(/[\W_]+/g, "");
   },
+
+  addAppToStringEnd(appIdentity: AppIdentity, text: string): string {
+    return [text, AppIdentity.toAlphanumericTitleCase(appIdentity)].join("");
+  },
+
+  addAppToStringStart(appIdentity: AppIdentity, text: string): string {
+    return [AppIdentity.toAlphanumericTitleCase(appIdentity), text].join("");
+  },
+
   taggedConstruct<T extends IConstruct>(appIdentity: AppIdentity, construct: T): T {
     Tags.of(construct).add("App", appIdentity.app);
     return construct;
