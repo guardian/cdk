@@ -1,3 +1,4 @@
+import { isBuiltin } from "node:module";
 import type { CodeMaker } from "codemaker";
 import type { Name } from "./utils";
 
@@ -75,11 +76,16 @@ export class Imports {
   render(code: CodeMaker): void {
     Object.entries(this.imports)
       // Render "basic" imports before any others, still in alphabetical order
+      // Render Node built-in imports before third-party imports (to satisfy `import/order`)
       // Render relative imports after absolute imports
       .sort(([aKey, aImports], [bKey, bImports]) => {
         if (aImports.basic && !bImports.basic) {
           return -1;
         } else if (bImports.basic && !aImports.basic) {
+          return 1;
+        } else if (isBuiltin(aKey) && !isBuiltin(bKey)) {
+          return -1;
+        } else if (isBuiltin(bKey) && !isBuiltin(aKey)) {
           return 1;
         } else if (aKey.startsWith(".") && !bKey.startsWith(".")) {
           return 1;

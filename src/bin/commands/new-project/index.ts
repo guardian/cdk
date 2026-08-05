@@ -143,8 +143,10 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
     console.log(chalk.green("  ✅ Successfully installed dependencies"));
   }
 
-  // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter
-  await execute("./node_modules/.bin/eslint", ["lib/** bin/**", "--no-error-on-unmatched-pattern", "--fix"], {
+  // Run `eslint --fix` on the generated files instead of trying to generate code that completely satisfies the linter.
+  // Each glob must be a separate argument: `execute` uses `spawn` with `shell: false`, so a single
+  // "lib/** bin/**" string would be treated as one (non-matching) pattern and silently fixed nothing.
+  await execute("./node_modules/.bin/eslint", ["lib/**", "bin/**", "--no-error-on-unmatched-pattern", "--fix"], {
     cwd: config.cdkDir,
   });
 
