@@ -743,13 +743,22 @@ export class GuLoadBalancedAppExperimental extends Construct {
       });
 
       // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
-      const ecsTargetGroup = new GuApplicationTargetGroup(scope, "EcsTargetGroup", {
-        vpc,
-        app,
-        port: applicationPort,
-        targets: [ecsService],
-        healthCheck: healthcheck,
-      });
+      const ecsTargetGroup = new GuApplicationTargetGroup(
+        scope,
+
+        // This ID parameter is used to form the resource's logical ID.
+        // If a target group is not explicitly named, CloudFormation will use the logical ID to generate a name of form `<CFN_STACK_NAME>-<LOGICAL_ID>-<12 CHAR GUID>` to a max of 32 chars.
+        // Add the App to the start of the logical ID to make the generated names (slightly) glanceable, e.g "MyAppE-123456123456" vs. "EcsTar-123456123456".
+        AppIdentity.addAppToStringStart(props, "EcsTargetGroup"),
+
+        {
+          vpc,
+          app,
+          port: applicationPort,
+          targets: [ecsService],
+          healthCheck: healthcheck,
+        },
+      );
 
       targetGroups = {
         ...targetGroups,
