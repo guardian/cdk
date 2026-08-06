@@ -393,7 +393,7 @@ export class GuEc2App extends Construct {
       scaling: { minimumInstances, maximumInstances = minimumInstances * 2 },
       userData: userDataLike,
       imageRecipe,
-      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
+      vpc = GuVpc.fromIdParameter(scope, AppIdentity.addAppToStringEnd({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       instanceMetadataHopLimit,

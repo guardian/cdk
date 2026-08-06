@@ -2779,7 +2779,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             "ContainerName": "test-gu",
             "ContainerPort": 3000,
             "TargetGroupArn": {
-              "Ref": "EcsTargetGroupTestguFCB7574C",
+              "Ref": "TestguEcsTargetGroupTestguC2E4D411",
             },
           },
         ],
@@ -2873,55 +2873,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "ServiceNamespace": "ecs",
       },
       "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
-    },
-    "EcsTargetGroupTestguFCB7574C": {
-      "Properties": {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckPath": "/healthcheck",
-        "HealthCheckProtocol": "HTTP",
-        "HealthCheckTimeoutSeconds": 5,
-        "HealthyThresholdCount": 5,
-        "Port": 3000,
-        "Protocol": "HTTP",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "test-gu",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-        "TargetGroupAttributes": [
-          {
-            "Key": "deregistration_delay.timeout_seconds",
-            "Value": "30",
-          },
-          {
-            "Key": "stickiness.enabled",
-            "Value": "false",
-          },
-        ],
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": {
-          "Ref": "VpcId",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "EcsTaskDefinition63157ED3": {
       "Properties": {
@@ -3376,7 +3327,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "DefaultActions": [
           {
             "TargetGroupArn": {
-              "Ref": "EcsTargetGroupTestguFCB7574C",
+              "Ref": "TestguEcsTargetGroupTestguC2E4D411",
             },
             "Type": "forward",
           },
@@ -3569,6 +3520,55 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "TestguEcsTargetGroupTestguC2E4D411": {
+      "Properties": {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPath": "/healthcheck",
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthyThresholdCount": 5,
+        "Port": 3000,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "test-gu",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "TargetGroupAttributes": [
+          {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "30",
+          },
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "testguEcsCluster02799D79": {
       "Properties": {

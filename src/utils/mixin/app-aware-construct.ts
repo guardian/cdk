@@ -20,7 +20,7 @@ export function GuAppAwareConstruct<TBase extends AnyConstructor>(BaseClass: TBa
       }
 
       const app: string = props.app;
-      const idWithApp = AppIdentity.suffixText({ app }, id as string);
+      const idWithApp = AppIdentity.addAppToStringEnd({ app }, id as string);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- mixin
       const newArgs = [scope, idWithApp, props, ...rest];
