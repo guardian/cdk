@@ -12,14 +12,14 @@
 <li><a href="" aria-current="page">GuScheduledLambdaProps</a></li></ul>
 <h1>Interface GuScheduledLambdaProps</h1></div>
 <div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">GuScheduledLambdaProps</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#adotinstrumentation">adotInstrumentation</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">AdotInstrumentationConfig</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#allowallipv6outbound">allowAllIpv6Outbound</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#allowalloutbound">allowAllOutbound</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#allowpublicsubnet">allowPublicSubnet</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#app">app</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#applicationloglevel">applicationLogLevel</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#applicationloglevelv2">applicationLogLevelV2</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ApplicationLogLevel</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#architecture">architecture</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Architecture</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#bucketnamepath">bucketNamePath</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#codesigningconfig">codeSigningConfig</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ICodeSigningConfigRef</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#currentversionoptions">currentVersionOptions</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">VersionOptions</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#deadletterqueue">deadLetterQueue</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IQueue</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#deadletterqueueenabled">deadLetterQueueEnabled</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#deadlettertopic">deadLetterTopic</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ITopic</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#description">description</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#durableconfig">durableConfig</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">DurableConfig</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#enableversioning">enableVersioning</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#environment">environment</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-signature-symbol">[</span><span class="tsd-kind-index-signature">key</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]:</span> <span class="tsd-signature-type">string</span> <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#environmentencryption">environmentEncryption</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IKeyRef</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#ephemeralstoragesize">ephemeralStorageSize</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Size</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#events">events</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IEventSource</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#filename">fileName</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#filesystem">filesystem</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">FileSystem</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#functionname">functionName</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#handler">handler</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#initialpolicy">initialPolicy</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#insightsversion">insightsVersion</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">LambdaInsightsVersion</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#ipv6allowedfordualstack">ipv6AllowedForDualStack</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#layers">layers</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ILayerVersion</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#logformat">logFormat</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#loggingformat">loggingFormat</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">LoggingFormat</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#loggroup">logGroup</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ILogGroupRef</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#logremovalpolicy">logRemovalPolicy</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RemovalPolicy</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#logretention">logRetention</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RetentionDays</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#logretentionretryoptions">logRetentionRetryOptions</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">LogRetentionRetryOptions</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#logretentionrole">logRetentionRole</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IRole</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#maxeventage">maxEventAge</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#memorysize">memorySize</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#monitoringconfiguration">monitoringConfiguration</a><span class="tsd-signature-symbol">:</span><br/>        <span class="tsd-signature-symbol">|</span> <a href="constructs_cloudwatch.GuLambdaErrorPercentageMonitoringProps.html" class="tsd-signature-type tsd-kind-interface">GuLambdaErrorPercentageMonitoringProps</a><br/>        <span class="tsd-signature-symbol">|</span> <a href="constructs_cloudwatch.NoMonitoring.html" class="tsd-signature-type tsd-kind-interface">NoMonitoring</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#onfailure">onFailure</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IDestination</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#onsuccess">onSuccess</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IDestination</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#paramsandsecrets">paramsAndSecrets</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ParamsAndSecretsLayerVersion</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#profiling">profiling</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#profilinggroup">profilingGroup</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IProfilingGroup</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#recursiveloop">recursiveLoop</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RecursiveLoop</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#reservedconcurrentexecutions">reservedConcurrentExecutions</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#retryattempts">retryAttempts</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#role">role</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IRole</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#rules">rules</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><br/>        <span class="tsd-kind-property">description</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>        <span class="tsd-kind-property">input</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RuleTargetInput</span><span class="tsd-signature-symbol">;</span><br/>        <span class="tsd-kind-property">schedule</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Schedule</span><span class="tsd-signature-symbol">;</span><br/>    <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#runtime">runtime</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Runtime</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#runtimemanagementmode">runtimeManagementMode</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RuntimeManagementMode</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#securitygroups">securityGroups</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#snapstart">snapStart</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">SnapStartConf</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#systemloglevel">systemLogLevel</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#systemloglevelv2">systemLogLevelV2</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">SystemLogLevel</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#tenancyconfig">tenancyConfig</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">TenancyConfig</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#throttlingmonitoring">throttlingMonitoring</a><span class="tsd-signature-symbol">?:</span> <a href="constructs_cloudwatch.GuLambdaThrottlingMonitoringProps.html" class="tsd-signature-type tsd-kind-interface">GuLambdaThrottlingMonitoringProps</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#timeout">timeout</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Duration</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#tracing">tracing</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Tracing</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#vpc">vpc</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IVpc</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#vpcsubnets">vpcSubnets</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">SubnetSelection</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#withoutartifactupload">withoutArtifactUpload</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#withoutfileprefix">withoutFilePrefix</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div>
-<section class="tsd-panel tsd-hierarchy" data-refl="661">
+<section class="tsd-panel tsd-hierarchy" data-refl="681">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><a href="constructs_lambda.GuFunctionProps.html" class="tsd-signature-type tsd-kind-interface">GuFunctionProps</a><span class="tsd-signature-symbol">,</span> <span class="tsd-signature-type">&quot;errorPercentageMonitoring&quot;</span><span class="tsd-signature-symbol">&gt;</span>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">GuScheduledLambdaProps</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/patterns/scheduled-lambda.ts#L9">src/patterns/scheduled-lambda.ts:9</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/patterns/scheduled-lambda.ts#L9">src/patterns/scheduled-lambda.ts:9</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -110,7 +110,7 @@
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.adotInstrumentation</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:352</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:353</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="allowallipv6outbound"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>allow<wbr/>All<wbr/>Ipv6<wbr/>Outbound</span><a href="#allowallipv6outbound" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">allowAllIpv6Outbound</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -129,7 +129,7 @@ Instead, configure <code>allowAllIpv6Outbound</code> directly on the security gr
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.allowAllIpv6Outbound</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:285</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:286</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="allowalloutbound"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>allow<wbr/>All<wbr/>Outbound</span><a href="#allowalloutbound" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">allowAllOutbound</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -147,7 +147,7 @@ Instead, configure <code>allowAllOutbound</code> directly on the security group.
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.allowAllOutbound</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:272</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:273</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="allowpublicsubnet"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>allow<wbr/>Public<wbr/>Subnet</span><a href="#allowpublicsubnet" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">allowPublicSubnet</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -165,13 +165,13 @@ Use this property to acknowledge this limitation and still place the function in
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.allowPublicSubnet</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:458</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:459</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="app"><span>app</span><a href="#app" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">app</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_rds.GuDatabaseInstanceProps.html">GuDatabaseInstanceProps</a>.<a href="constructs_rds.GuDatabaseInstanceProps.html#app">app</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/core/identity.ts#L10">src/constructs/core/identity.ts:10</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="applicationloglevel"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span class="deprecated">application<wbr/>Log<wbr/>Level</span><a href="#applicationloglevel" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">applicationLogLevel</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -188,7 +188,7 @@ Use this property to acknowledge this limitation and still place the function in
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.applicationLogLevel</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:533</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:534</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="applicationloglevelv2"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>application<wbr/>Log<wbr/>Level<wbr/>V2</span><a href="#applicationloglevelv2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">applicationLogLevelV2</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ApplicationLogLevel</span></div>
@@ -202,7 +202,7 @@ Use this property to acknowledge this limitation and still place the function in
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.applicationLogLevelV2</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:538</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:539</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="architecture"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>architecture</span><a href="#architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">architecture</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Architecture</span></div>
@@ -216,7 +216,7 @@ Use this property to acknowledge this limitation and still place the function in
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.architecture</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:475</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:476</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="bucketnamepath"><code class="tsd-tag">Optional</code><span>bucket<wbr/>Name<wbr/>Path</span><a href="#bucketnamepath" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">bucketNamePath</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -231,7 +231,7 @@ accounts.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuFunctionProps.html">GuFunctionProps</a>.<a href="constructs_lambda.GuFunctionProps.html#bucketnamepath">bucketNamePath</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/lambda/lambda.ts#L46">src/constructs/lambda/lambda.ts:46</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/lambda/lambda.ts#L46">src/constructs/lambda/lambda.ts:46</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="codesigningconfig"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>code<wbr/>Signing<wbr/>Config</span><a href="#codesigningconfig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">codeSigningConfig</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ICodeSigningConfigRef</span></div>
@@ -245,7 +245,7 @@ accounts.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.codeSigningConfig</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:470</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:471</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="currentversionoptions"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>current<wbr/>Version<wbr/>Options</span><a href="#currentversionoptions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">currentVersionOptions</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">VersionOptions</span></div>
@@ -260,7 +260,7 @@ accounts.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.currentVersionOptions</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:444</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:445</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="deadletterqueue"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>dead<wbr/>Letter<wbr/>Queue</span><a href="#deadletterqueue" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">deadLetterQueue</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IQueue</span></div>
@@ -275,7 +275,7 @@ If SNS topic is desired, specify <code>deadLetterTopic</code> property instead.<
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.deadLetterQueue</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:299</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:300</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="deadletterqueueenabled"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>dead<wbr/>Letter<wbr/>Queue<wbr/>Enabled</span><a href="#deadletterqueueenabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">deadLetterQueueEnabled</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -290,7 +290,7 @@ an SQS queue with default options will be defined for your Function.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.deadLetterQueueEnabled</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:292</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:293</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="deadlettertopic"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>dead<wbr/>Letter<wbr/>Topic</span><a href="#deadlettertopic" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">deadLetterTopic</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ITopic</span></div>
@@ -306,7 +306,7 @@ rather than an SNS topic. Using an SNS topic as a DLQ requires this property to 
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.deadLetterTopic</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:307</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:308</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="description"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>description</span><a href="#description" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">description</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -320,7 +320,7 @@ rather than an SNS topic. Using an SNS topic as a DLQ requires this property to 
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.description</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:155</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:156</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="durableconfig"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>durable<wbr/>Config</span><a href="#durableconfig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">durableConfig</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">DurableConfig</span></div>
@@ -336,7 +336,7 @@ See the 'durableConfig' section in the module README for more details.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.durableConfig</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:495</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:496</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="enableversioning"><code class="tsd-tag">Optional</code><span>enable<wbr/>Versioning</span><a href="#enableversioning" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">enableVersioning</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -347,7 +347,7 @@ CloudFormation. The simplest way to do this is to include the build number in th
 </div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuFunctionProps.html">GuFunctionProps</a>.<a href="constructs_lambda.GuFunctionProps.html#enableversioning">enableVersioning</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/lambda/lambda.ts#L23">src/constructs/lambda/lambda.ts:23</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/lambda/lambda.ts#L23">src/constructs/lambda/lambda.ts:23</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="environment"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>environment</span><a href="#environment" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">environment</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-signature-symbol">[</span><span class="tsd-kind-index-signature">key</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]:</span> <span class="tsd-signature-type">string</span> <span class="tsd-signature-symbol">}</span></div>
@@ -364,7 +364,7 @@ Lambda function source code.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.environment</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:172</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:173</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="environmentencryption"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>environment<wbr/>Encryption</span><a href="#environmentencryption" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">environmentEncryption</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IKeyRef</span></div>
@@ -378,7 +378,7 @@ Lambda function source code.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.environmentEncryption</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:464</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:465</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="ephemeralstoragesize"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>ephemeral<wbr/>Storage<wbr/>Size</span><a href="#ephemeralstoragesize" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">ephemeralStorageSize</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Size</span></div>
@@ -392,7 +392,7 @@ Lambda function source code.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.ephemeralStorageSize</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:196</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:197</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="events"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>events</span><a href="#events" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">events</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IEventSource</span><span class="tsd-signature-symbol">[]</span></div>
@@ -407,7 +407,7 @@ Lambda function source code.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.events</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:383</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:384</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="filename"><span>file<wbr/>Name</span><a href="#filename" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">fileName</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -416,7 +416,7 @@ We'll look for <code>fileName</code> on the path &quot;bucket/stack/stage/app/<f
 </div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuFunctionProps.html">GuFunctionProps</a>.<a href="constructs_lambda.GuFunctionProps.html#filename">fileName</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/types/distributable.ts#L8">src/types/distributable.ts:8</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/types/distributable.ts#L8">src/types/distributable.ts:8</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="filesystem"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>filesystem</span><a href="#filesystem" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">filesystem</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">FileSystem</span></div>
@@ -430,7 +430,7 @@ We'll look for <code>fileName</code> on the path &quot;bucket/stack/stage/app/<f
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.filesystem</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:450</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:451</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="functionname"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>function<wbr/>Name</span><a href="#functionname" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">functionName</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -444,7 +444,7 @@ We'll look for <code>fileName</code> on the path &quot;bucket/stack/stage/app/<f
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.functionName</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:181</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:182</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="handler"><code class="tsd-tag">Readonly</code><span>handler</span><a href="#handler" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">handler</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -459,7 +459,7 @@ the handler.</p>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.handler</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:578</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:579</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="initialpolicy"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>initial<wbr/>Policy</span><a href="#initialpolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">initialPolicy</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">[]</span></div>
@@ -474,7 +474,7 @@ the handler.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.initialPolicy</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:204</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:205</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="insightsversion"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>insights<wbr/>Version</span><a href="#insightsversion" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">insightsVersion</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">LambdaInsightsVersion</span></div>
@@ -498,7 +498,7 @@ the Lambda insights agent installed.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.insightsVersion</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:345</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:346</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="ipv6allowedfordualstack"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>ipv6<wbr/>Allowed<wbr/>For<wbr/>Dual<wbr/>Stack</span><a href="#ipv6allowedfordualstack" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">ipv6AllowedForDualStack</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -513,7 +513,7 @@ the Lambda insights agent installed.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.ipv6AllowedForDualStack</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:238</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:239</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="layers"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>layers</span><a href="#layers" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">layers</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ILayerVersion</span><span class="tsd-signature-symbol">[]</span></div>
@@ -529,7 +529,7 @@ that can be used by multiple functions.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.layers</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:368</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:369</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="logformat"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span class="deprecated">log<wbr/>Format</span><a href="#logformat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">logFormat</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -546,7 +546,7 @@ that can be used by multiple functions.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.logFormat</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:515</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:516</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="loggingformat"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>logging<wbr/>Format</span><a href="#loggingformat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">loggingFormat</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">LoggingFormat</span></div>
@@ -560,7 +560,7 @@ that can be used by multiple functions.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.loggingFormat</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:520</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:521</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="loggroup"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>log<wbr/>Group</span><a href="#loggroup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">logGroup</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ILogGroupRef</span></div>
@@ -577,7 +577,7 @@ If you are deploying to another type of region, please check regional availabili
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.logGroup</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:509</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:510</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="logremovalpolicy"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span class="deprecated">log<wbr/>Removal<wbr/>Policy</span><a href="#logremovalpolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">logRemovalPolicy</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RemovalPolicy</span></div>
@@ -598,7 +598,7 @@ logs.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.logRemovalPolicy</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:418</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:419</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="logretention"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span class="deprecated">log<wbr/>Retention</span><a href="#logretention" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">logRetention</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RetentionDays</span></div>
@@ -626,7 +626,7 @@ Users and code and referencing the name verbatim will have to adjust.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.logRetention</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:406</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:407</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="logretentionretryoptions"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>log<wbr/>Retention<wbr/>Retry<wbr/>Options</span><a href="#logretentionretryoptions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">logRetentionRetryOptions</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">LogRetentionRetryOptions</span></div>
@@ -643,7 +643,7 @@ These options control the retry policy when interacting with CloudWatch APIs.</p
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.logRetentionRetryOptions</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:438</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:439</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="logretentionrole"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>log<wbr/>Retention<wbr/>Role</span><a href="#logretentionrole" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">logRetentionRole</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IRole</span></div>
@@ -660,7 +660,7 @@ that sets the retention policy.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.logRetentionRole</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:428</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:429</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="maxeventage"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>max<wbr/>Event<wbr/>Age</span><a href="#maxeventage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">maxEventAge</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Duration</span></div>
@@ -694,7 +694,7 @@ Developer Guide.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.memorySize</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:190</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:191</li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="monitoringconfiguration"><span>monitoring<wbr/>Configuration</span><a href="#monitoringconfiguration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">monitoringConfiguration</span><span class="tsd-signature-symbol">:</span> <a href="constructs_cloudwatch.GuLambdaErrorPercentageMonitoringProps.html" class="tsd-signature-type tsd-kind-interface">GuLambdaErrorPercentageMonitoringProps</a> <span class="tsd-signature-symbol">|</span> <a href="constructs_cloudwatch.NoMonitoring.html" class="tsd-signature-type tsd-kind-interface">NoMonitoring</a></div>
@@ -702,7 +702,7 @@ Developer Guide.</p>
 <p>Opting-out via the <code>NoMonitoring</code> type is supported but discouraged.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/patterns/scheduled-lambda.ts#L35">src/patterns/scheduled-lambda.ts:35</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/patterns/scheduled-lambda.ts#L35">src/patterns/scheduled-lambda.ts:35</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="onfailure"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>on<wbr/>Failure</span><a href="#onfailure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">onFailure</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IDestination</span></div>
@@ -750,7 +750,7 @@ Developer Guide.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.paramsAndSecrets</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:360</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:361</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="profiling"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>profiling</span><a href="#profiling" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">profiling</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -767,7 +767,7 @@ Developer Guide.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.profiling</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:327</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:328</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="profilinggroup"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>profiling<wbr/>Group</span><a href="#profilinggroup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">profilingGroup</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IProfilingGroup</span></div>
@@ -784,7 +784,7 @@ Developer Guide.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.profilingGroup</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:334</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:335</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="recursiveloop"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>recursive<wbr/>Loop</span><a href="#recursiveloop" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">recursiveLoop</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RecursiveLoop</span></div>
@@ -799,7 +799,7 @@ It lets Lambda detect and terminate unintended recursive loops.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.recursiveLoop</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:527</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:528</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="reservedconcurrentexecutions"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>reserved<wbr/>Concurrent<wbr/>Executions</span><a href="#reservedconcurrentexecutions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">reservedConcurrentExecutions</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span></div>
@@ -816,7 +816,7 @@ It lets Lambda detect and terminate unintended recursive loops.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.reservedConcurrentExecutions</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:375</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:376</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="retryattempts"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>retry<wbr/>Attempts</span><a href="#retryattempts" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">retryAttempts</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span></div>
@@ -854,7 +854,7 @@ Both supplied and generated roles can always be changed by calling <code>addToRo
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.role</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:221</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:222</li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="rules"><span>rules</span><a href="#rules" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">rules</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span> <span class="tsd-kind-property">description</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">input</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RuleTargetInput</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">schedule</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Schedule</span> <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">[]</span></div>
@@ -880,7 +880,7 @@ Both supplied and generated roles can always be changed by calling <code>addToRo
 </ul>
 </div></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/patterns/scheduled-lambda.ts#L13">src/patterns/scheduled-lambda.ts:13</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/patterns/scheduled-lambda.ts#L13">src/patterns/scheduled-lambda.ts:13</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="runtime"><code class="tsd-tag">Readonly</code><span>runtime</span><a href="#runtime" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">runtime</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Runtime</span></div>
@@ -891,7 +891,7 @@ Guide.</p>
 </div><aside class="tsd-sources">
 <p>Inherited from Omit.runtime</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:559</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:560</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="runtimemanagementmode"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>runtime<wbr/>Management<wbr/>Mode</span><a href="#runtimemanagementmode" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">runtimeManagementMode</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">RuntimeManagementMode</span></div>
@@ -905,7 +905,7 @@ Guide.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.runtimeManagementMode</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:480</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:481</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="securitygroups"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>security<wbr/>Groups</span><a href="#securitygroups" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">securityGroups</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISecurityGroup</span><span class="tsd-signature-symbol">[]</span></div>
@@ -920,7 +920,7 @@ Guide.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.securityGroups</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:260</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:261</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="snapstart"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>snap<wbr/>Start</span><a href="#snapstart" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">snapStart</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">SnapStartConf</span></div>
@@ -935,7 +935,7 @@ SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13,
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.snapStart</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:320</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:321</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="systemloglevel"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span class="deprecated">system<wbr/>Log<wbr/>Level</span><a href="#systemloglevel" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">systemLogLevel</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
@@ -952,7 +952,7 @@ SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13,
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.systemLogLevel</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:544</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:545</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="systemloglevelv2"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>system<wbr/>Log<wbr/>Level<wbr/>V2</span><a href="#systemloglevelv2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">systemLogLevelV2</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">SystemLogLevel</span></div>
@@ -966,7 +966,7 @@ SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13,
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.systemLogLevelV2</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:549</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:550</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="tenancyconfig"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>tenancy<wbr/>Config</span><a href="#tenancyconfig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">tenancyConfig</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">TenancyConfig</span></div>
@@ -980,7 +980,7 @@ SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13,
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.tenancyConfig</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:486</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:487</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="throttlingmonitoring"><code class="tsd-tag">Optional</code><span>throttling<wbr/>Monitoring</span><a href="#throttlingmonitoring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">throttlingMonitoring</span><span class="tsd-signature-symbol">?:</span> <a href="constructs_cloudwatch.GuLambdaThrottlingMonitoringProps.html" class="tsd-signature-type tsd-kind-interface">GuLambdaThrottlingMonitoringProps</a></div>
@@ -994,7 +994,7 @@ concerned about throttling.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuFunctionProps.html">GuFunctionProps</a>.<a href="constructs_lambda.GuFunctionProps.html#throttlingmonitoring">throttlingMonitoring</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/lambda/lambda.ts#L36">src/constructs/lambda/lambda.ts:36</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/lambda/lambda.ts#L36">src/constructs/lambda/lambda.ts:36</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="timeout"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>timeout</span><a href="#timeout" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">timeout</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Duration</span></div>
@@ -1010,7 +1010,7 @@ based on the function's expected execution time.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.timeout</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:163</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:164</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="tracing"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>tracing</span><a href="#tracing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">tracing</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Tracing</span></div>
@@ -1024,7 +1024,7 @@ based on the function's expected execution time.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.tracing</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:313</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:314</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="vpc"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>vpc</span><a href="#vpc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">vpc</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">IVpc</span></div>
@@ -1040,7 +1040,7 @@ This is required when <code>vpcSubnets</code> is specified.</p>
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.vpc</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:230</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:231</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="vpcsubnets"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>vpc<wbr/>Subnets</span><a href="#vpcsubnets" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">vpcSubnets</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">SubnetSelection</span></div>
@@ -1058,7 +1058,7 @@ public subnets is not allowed (unless <code>allowPublicSubnet</code> is set to <
 </div></div><aside class="tsd-sources">
 <p>Inherited from Omit.vpcSubnets</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:250</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-lambda/lib/function.d.ts:251</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="withoutartifactupload"><code class="tsd-tag">Optional</code><span>without<wbr/>Artifact<wbr/>Upload</span><a href="#withoutartifactupload" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">withoutArtifactUpload</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -1069,7 +1069,7 @@ an uploadLambda step.</p>
 </div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuFunctionProps.html">GuFunctionProps</a>.<a href="constructs_lambda.GuFunctionProps.html#withoutartifactupload">withoutArtifactUpload</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/lambda/lambda.ts#L62">src/constructs/lambda/lambda.ts:62</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/lambda/lambda.ts#L62">src/constructs/lambda/lambda.ts:62</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="withoutfileprefix"><code class="tsd-tag">Optional</code><span>without<wbr/>File<wbr/>Prefix</span><a href="#withoutfileprefix" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">withoutFilePrefix</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -1080,7 +1080,7 @@ accounts.</p>
 </div><aside class="tsd-sources">
 <p>Inherited from <a href="constructs_lambda.GuFunctionProps.html">GuFunctionProps</a>.<a href="constructs_lambda.GuFunctionProps.html#withoutfileprefix">withoutFilePrefix</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/lambda/lambda.ts#L54">src/constructs/lambda/lambda.ts:54</a></li></ul></aside></section></section></details></div>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/lambda/lambda.ts#L54">src/constructs/lambda/lambda.ts:54</a></li></ul></aside></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

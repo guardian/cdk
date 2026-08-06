@@ -11,14 +11,14 @@
 <li><a href="../modules/constructs_rds.html">constructs/rds</a></li>
 <li><a href="" aria-current="page">GuDatabaseInstance</a></li></ul>
 <h1>Class GuDatabaseInstance</h1></div>
-<section class="tsd-panel tsd-hierarchy" data-refl="7093">
+<section class="tsd-panel tsd-hierarchy" data-refl="7383">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><span class="tsd-signature-type">Mixin</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-keyword">typeof</span> <span class="tsd-signature-type">DatabaseInstance</span><span class="tsd-signature-symbol">,</span> <span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span> <span class="tsd-signature-symbol">&amp;</span> <span class="tsd-signature-type">DatabaseInstance</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">GuDatabaseInstance</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/rds/instance.ts#L33">src/constructs/rds/instance.ts:33</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/rds/instance.ts#L33">src/constructs/rds/instance.ts:33</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -40,6 +40,7 @@
 <a href="#instanceendpoint" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Endpoint</span></a>
 <a href="#instanceresourceid" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Resource<wbr/>Id?</span></a>
 <a href="#instancetype" class="tsd-index-link tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Type</span></a>
+<a href="#managemasteruserpassword" class="tsd-index-link tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>manage<wbr/>Master<wbr/>User<wbr/>Password?</span></a>
 <a href="#newcfnprops" class="tsd-index-link tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>new<wbr/>Cfn<wbr/>Props</span></a>
 <a href="#node" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>node</span></a>
 <a href="#secret" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>secret?</span></a>
@@ -63,6 +64,7 @@
 <a href="#addproxy" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Proxy</span></a>
 <a href="#addrotationmultiuser" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Rotation<wbr/>Multi<wbr/>User</span></a>
 <a href="#addrotationsingleuser" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Rotation<wbr/>Single<wbr/>User</span></a>
+<a href="#applycrossstackreferencestrength" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>apply<wbr/>Cross<wbr/>Stack<wbr/>Reference<wbr/>Strength</span></a>
 <a href="#applyremovalpolicy" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>apply<wbr/>Removal<wbr/>Policy</span></a>
 <a href="#assecretattachmenttarget" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>as<wbr/>Secret<wbr/>Attachment<wbr/>Target</span></a>
 <a href="#generatephysicalname" class="tsd-index-link tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>generate<wbr/>Physical<wbr/>Name</span></a>
@@ -104,7 +106,7 @@
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">GuDatabaseInstance</a></h4><aside class="tsd-sources">
 <p>Overrides GuAppAwareConstruct(DatabaseInstance).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/constructs/rds/instance.ts#L34">src/constructs/rds/instance.ts:34</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/constructs/rds/instance.ts#L34">src/constructs/rds/instance.ts:34</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="properties-1">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -130,13 +132,13 @@
 <div class="tsd-signature"><span class="tsd-kind-property">dbInstanceEndpointAddress</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).dbInstanceEndpointAddress</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:796</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:807</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="dbinstanceendpointport"><code class="tsd-tag">Readonly</code><span>db<wbr/>Instance<wbr/>Endpoint<wbr/>Port</span><a href="#dbinstanceendpointport" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">dbInstanceEndpointPort</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).dbInstanceEndpointPort</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:797</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:808</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="enableiamauthentication"><code class="tsd-tag">Protected</code> <code class="tsd-tag">Optional</code><span>enable<wbr/>Iam<wbr/>Authentication</span><a href="#enableiamauthentication" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">enableIamAuthentication</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
@@ -157,25 +159,31 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).idWithApp</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/c6848de164c4380e1e026ab80d4afe4d9b6fe26c/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/0d1e5e630e3836402cc07f1c301ca4c191d82d89/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="instanceendpoint"><code class="tsd-tag">Readonly</code><span>instance<wbr/>Endpoint</span><a href="#instanceendpoint" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">instanceEndpoint</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Endpoint</span></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).instanceEndpoint</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:799</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:810</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="instanceresourceid"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>instance<wbr/>Resource<wbr/>Id</span><a href="#instanceresourceid" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">instanceResourceId</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).instanceResourceId</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:798</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:809</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="instancetype"><code class="tsd-tag">Protected</code> <code class="tsd-tag">Readonly</code><span>instance<wbr/>Type</span><a href="#instancetype" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">instanceType</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InstanceType</span></div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).instanceType</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:720</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
+<h3 class="tsd-anchor-link" id="managemasteruserpassword"><code class="tsd-tag">Protected</code> <code class="tsd-tag">Optional</code><span>manage<wbr/>Master<wbr/>User<wbr/>Password</span><a href="#managemasteruserpassword" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">manageMasterUserPassword</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
+<p>Inherited from GuAppAwareConstruct(DatabaseInstance).manageMasterUserPassword</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:721</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="newcfnprops"><code class="tsd-tag">Protected</code> <code class="tsd-tag">Readonly</code><span>new<wbr/>Cfn<wbr/>Props</span><a href="#newcfnprops" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">newCfnProps</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CfnDBInstanceProps</span></div><aside class="tsd-sources">
@@ -189,7 +197,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).node</p>
 <ul>
-<li>Defined in node_modules/constructs/lib/construct.d.ts:289</li></ul></aside></section>
+<li>Defined in node_modules/constructs/lib/construct.d.ts:325</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="secret"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>secret</span><a href="#secret" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">secret</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ISecret</span></div>
@@ -197,7 +205,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).secret</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:800</li></ul></aside></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:811</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="sourcecfnprops"><code class="tsd-tag">Protected</code> <code class="tsd-tag">Readonly</code><span>source<wbr/>Cfn<wbr/>Props</span><a href="#sourcecfnprops" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">sourceCfnProps</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CfnDBInstanceProps</span></div><aside class="tsd-sources">
@@ -225,7 +233,7 @@ This should be used in place of <code>id</code> when trying to reference the con
 </div><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).PROPERTY_INJECTION_ID</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:794</li></ul></aside></section></section></details>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:805</li></ul></aside></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="accessors-1">Accessors<a href="#accessors-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -258,7 +266,7 @@ different than the stack they were imported into.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ResourceEnvironment</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).env</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:93</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:94</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="instancearn"><span>instance<wbr/>Arn</span><a href="#instancearn" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -280,7 +288,7 @@ different than the stack they were imported into.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).instanceIdentifier</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:795</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:806</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="physicalname"><code class="tsd-tag">Protected</code><span>physical<wbr/>Name</span><a href="#physicalname" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -300,7 +308,7 @@ cross-environment scenarios.</li>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).physicalName</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:105</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:106</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="stack"><span>stack</span><a href="#stack" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -312,7 +320,7 @@ cross-environment scenarios.</li>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Stack</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).stack</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:92</li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:93</li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -330,7 +338,7 @@ through its absolute name/arn.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance)._enableCrossEnvironment</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:114</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:115</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="addproxy"><span>add<wbr/>Proxy</span><a href="#addproxy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -364,7 +372,7 @@ through its absolute name/arn.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SecretRotation</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).addRotationMultiUser</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:734</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:735</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="addrotationsingleuser"><span>add<wbr/>Rotation<wbr/>Single<wbr/>User</span><a href="#addrotationsingleuser" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -383,7 +391,30 @@ if you want to override the defaults</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SecretRotation</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).addRotationSingleUser</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:730</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:731</li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
+<h3 class="tsd-anchor-link" id="applycrossstackreferencestrength"><span>apply<wbr/>Cross<wbr/>Stack<wbr/>Reference<wbr/>Strength</span><a href="#applycrossstackreferencestrength" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures tsd-is-inherited tsd-is-external">
+<li class="tsd-is-inherited tsd-is-external">
+<div class="tsd-signature tsd-anchor-link" id="applycrossstackreferencestrength-1"><span class="tsd-kind-call-signature">applyCrossStackReferenceStrength</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">strength</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReferenceStrength</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#applycrossstackreferencestrength-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Override the cross-stack reference strength for this resource.</p>
+<p>When set, any cross-stack reference to this resource will use the specified
+mechanism instead of the global default determined by the
+<code>@aws-cdk/core:defaultCrossStackReferences</code> context key. This is useful for
+selectively weakening specific references to avoid the &quot;deadly embrace&quot; problem
+without changing the app-wide default.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">strength</span>: <span class="tsd-signature-type">ReferenceStrength</span></span>
+<div class="tsd-comment tsd-typography"><p>The reference strength to use for this resource.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
+<p>Inherited from GuAppAwareConstruct(DatabaseInstance).applyCrossStackReferenceStrength</p>
+<ul>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:139</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="applyremovalpolicy"><span>apply<wbr/>Removal<wbr/>Policy</span><a href="#applyremovalpolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -405,7 +436,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).applyRemovalPolicy</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:126</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:127</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="assecretattachmenttarget"><span>as<wbr/>Secret<wbr/>Attachment<wbr/>Target</span><a href="#assecretattachmenttarget" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -427,7 +458,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).generatePhysicalName</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:127</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:140</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="getresourcearnattribute"><code class="tsd-tag">Protected</code><span>get<wbr/>Resource<wbr/>Arn<wbr/>Attribute</span><a href="#getresourcearnattribute" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -457,7 +488,7 @@ cross-environment references to work.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).getResourceArnAttribute</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:157</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:170</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="getresourcenameattribute"><code class="tsd-tag">Protected</code><span>get<wbr/>Resource<wbr/>Name<wbr/>Attribute</span><a href="#getresourcenameattribute" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -480,7 +511,7 @@ Commonly this is the resource's <code>ref</code>.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).getResourceNameAttribute</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:139</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:152</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="grantconnect"><span>grant<wbr/>Connect</span><a href="#grantconnect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -503,7 +534,7 @@ or the default database user, obtained from the Secret, if not specified</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Grant</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).grantConnect</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:744</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/aws-rds/lib/instance.d.ts:745</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="metric"><span>metric</span><a href="#metric" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -662,7 +693,7 @@ or the default database user, obtained from the Secret, if not specified</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).toString</p>
 <ul>
-<li>Defined in node_modules/constructs/lib/construct.d.ts:314</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/constructs/lib/construct.d.ts:350</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="with"><span>with</span><a href="#with" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -685,7 +716,7 @@ constructs.</p>
 <aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).with</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:94</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:95</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="fromdatabaseinstanceattributes"><code class="tsd-tag">Static</code><span>from<wbr/>Database<wbr/>Instance<wbr/>Attributes</span><a href="#fromdatabaseinstanceattributes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -752,7 +783,7 @@ this type-testing method instead.</p>
 <aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).isConstruct</p>
 <ul>
-<li>Defined in node_modules/constructs/lib/construct.d.ts:285</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/constructs/lib/construct.d.ts:321</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="isownedresource"><code class="tsd-tag">Static</code><span>is<wbr/>Owned<wbr/>Resource</span><a href="#isownedresource" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -768,7 +799,7 @@ this type-testing method instead.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).isOwnedResource</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:79</li></ul></aside></div></li></ul></section>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:80</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="isresource"><code class="tsd-tag">Static</code><span>is<wbr/>Resource</span><a href="#isresource" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited tsd-is-external">
@@ -784,7 +815,7 @@ this type-testing method instead.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">Resource</span></h4><aside class="tsd-sources">
 <p>Inherited from GuAppAwareConstruct(DatabaseInstance).isResource</p>
 <ul>
-<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:75</li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:76</li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -803,11 +834,11 @@ this type-testing method instead.</p>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Constructors</summary>
 <div><a href="#constructor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Properties</summary>
-<div><a href="#cloudwatchloggroups" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>cloudwatch<wbr/>Log<wbr/>Groups</span></a><a href="#connections" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>connections</span></a><a href="#dbinstanceendpointaddress" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>db<wbr/>Instance<wbr/>Endpoint<wbr/>Address</span></a><a href="#dbinstanceendpointport" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>db<wbr/>Instance<wbr/>Endpoint<wbr/>Port</span></a><a href="#enableiamauthentication" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>enable<wbr/>Iam<wbr/>Authentication</span></a><a href="#engine" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>engine</span></a><a href="#idwithapp" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>id<wbr/>With<wbr/>App</span></a><a href="#instanceendpoint" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Endpoint</span></a><a href="#instanceresourceid" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Resource<wbr/>Id</span></a><a href="#instancetype" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Type</span></a><a href="#newcfnprops" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>new<wbr/>Cfn<wbr/>Props</span></a><a href="#node" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>node</span></a><a href="#secret" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>secret</span></a><a href="#sourcecfnprops" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>source<wbr/>Cfn<wbr/>Props</span></a><a href="#vpc" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>vpc</span></a><a href="#vpcplacement" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>vpc<wbr/>Placement</span></a><a href="#property_injection_id" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>PROPERTY_<wbr/>INJECTION_<wbr/>ID</span></a></div></details>
+<div><a href="#cloudwatchloggroups" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>cloudwatch<wbr/>Log<wbr/>Groups</span></a><a href="#connections" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>connections</span></a><a href="#dbinstanceendpointaddress" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>db<wbr/>Instance<wbr/>Endpoint<wbr/>Address</span></a><a href="#dbinstanceendpointport" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>db<wbr/>Instance<wbr/>Endpoint<wbr/>Port</span></a><a href="#enableiamauthentication" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>enable<wbr/>Iam<wbr/>Authentication</span></a><a href="#engine" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>engine</span></a><a href="#idwithapp" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>id<wbr/>With<wbr/>App</span></a><a href="#instanceendpoint" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Endpoint</span></a><a href="#instanceresourceid" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Resource<wbr/>Id</span></a><a href="#instancetype" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instance<wbr/>Type</span></a><a href="#managemasteruserpassword" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>manage<wbr/>Master<wbr/>User<wbr/>Password</span></a><a href="#newcfnprops" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>new<wbr/>Cfn<wbr/>Props</span></a><a href="#node" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>node</span></a><a href="#secret" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>secret</span></a><a href="#sourcecfnprops" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>source<wbr/>Cfn<wbr/>Props</span></a><a href="#vpc" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>vpc</span></a><a href="#vpcplacement" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>vpc<wbr/>Placement</span></a><a href="#property_injection_id" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>PROPERTY_<wbr/>INJECTION_<wbr/>ID</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Accessors</summary>
 <div><a href="#dbinstanceref" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>db<wbr/>Instance<wbr/>Ref</span></a><a href="#env" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>env</span></a><a href="#instancearn" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>instance<wbr/>Arn</span></a><a href="#instanceidentifier" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>instance<wbr/>Identifier</span></a><a href="#physicalname" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>physical<wbr/>Name</span></a><a href="#stack" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>stack</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
-<div><a href="#_enablecrossenvironment" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>_<wbr/>enable<wbr/>Cross<wbr/>Environment</span></a><a href="#addproxy" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Proxy</span></a><a href="#addrotationmultiuser" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Rotation<wbr/>Multi<wbr/>User</span></a><a href="#addrotationsingleuser" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Rotation<wbr/>Single<wbr/>User</span></a><a href="#applyremovalpolicy" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>apply<wbr/>Removal<wbr/>Policy</span></a><a href="#assecretattachmenttarget" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>as<wbr/>Secret<wbr/>Attachment<wbr/>Target</span></a><a href="#generatephysicalname" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>generate<wbr/>Physical<wbr/>Name</span></a><a href="#getresourcearnattribute" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Resource<wbr/>Arn<wbr/>Attribute</span></a><a href="#getresourcenameattribute" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Resource<wbr/>Name<wbr/>Attribute</span></a><a href="#grantconnect" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>grant<wbr/>Connect</span></a><a href="#metric" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric</span></a><a href="#metriccpuutilization" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>CPU<wbr/>Utilization</span></a><a href="#metricdatabaseconnections" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Database<wbr/>Connections</span></a><a href="#metricfreeablememory" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Freeable<wbr/>Memory</span></a><a href="#metricfreestoragespace" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Free<wbr/>Storage<wbr/>Space</span></a><a href="#metricreadiops" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Read<wbr/>IOPS</span></a><a href="#metricwriteiops" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Write<wbr/>IOPS</span></a><a href="#onevent" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>on<wbr/>Event</span></a><a href="#setlogretention" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Log<wbr/>Retention</span></a><a href="#tostring" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>to<wbr/>String</span></a><a href="#with" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>with</span></a><a href="#fromdatabaseinstanceattributes" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>from<wbr/>Database<wbr/>Instance<wbr/>Attributes</span></a><a href="#fromlookup" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>from<wbr/>Lookup</span></a><a href="#isconstruct" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Construct</span></a><a href="#isownedresource" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Owned<wbr/>Resource</span></a><a href="#isresource" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Resource</span></a></div></details></div></details></div>
+<div><a href="#_enablecrossenvironment" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>_<wbr/>enable<wbr/>Cross<wbr/>Environment</span></a><a href="#addproxy" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Proxy</span></a><a href="#addrotationmultiuser" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Rotation<wbr/>Multi<wbr/>User</span></a><a href="#addrotationsingleuser" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>add<wbr/>Rotation<wbr/>Single<wbr/>User</span></a><a href="#applycrossstackreferencestrength" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>apply<wbr/>Cross<wbr/>Stack<wbr/>Reference<wbr/>Strength</span></a><a href="#applyremovalpolicy" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>apply<wbr/>Removal<wbr/>Policy</span></a><a href="#assecretattachmenttarget" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>as<wbr/>Secret<wbr/>Attachment<wbr/>Target</span></a><a href="#generatephysicalname" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>generate<wbr/>Physical<wbr/>Name</span></a><a href="#getresourcearnattribute" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Resource<wbr/>Arn<wbr/>Attribute</span></a><a href="#getresourcenameattribute" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Resource<wbr/>Name<wbr/>Attribute</span></a><a href="#grantconnect" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>grant<wbr/>Connect</span></a><a href="#metric" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric</span></a><a href="#metriccpuutilization" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>CPU<wbr/>Utilization</span></a><a href="#metricdatabaseconnections" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Database<wbr/>Connections</span></a><a href="#metricfreeablememory" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Freeable<wbr/>Memory</span></a><a href="#metricfreestoragespace" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Free<wbr/>Storage<wbr/>Space</span></a><a href="#metricreadiops" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Read<wbr/>IOPS</span></a><a href="#metricwriteiops" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>metric<wbr/>Write<wbr/>IOPS</span></a><a href="#onevent" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>on<wbr/>Event</span></a><a href="#setlogretention" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Log<wbr/>Retention</span></a><a href="#tostring" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>to<wbr/>String</span></a><a href="#with" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>with</span></a><a href="#fromdatabaseinstanceattributes" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>from<wbr/>Database<wbr/>Instance<wbr/>Attributes</span></a><a href="#fromlookup" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>from<wbr/>Lookup</span></a><a href="#isconstruct" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Construct</span></a><a href="#isownedresource" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Owned<wbr/>Resource</span></a><a href="#isresource" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Resource</span></a></div></details></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html">@guardian/cdk</a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
