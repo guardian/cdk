@@ -21,6 +21,10 @@ describe("gitRepoFullName", () => {
     expect(gitRepoFullName("ssh://git@github.com/guardian/cdk.git")).toBe("guardian/cdk");
   });
 
+  it("should parse a git:// protocol URL", () => {
+    expect(gitRepoFullName("git://github.com/guardian/cdk.git")).toBe("guardian/cdk");
+  });
+
   it("should handle repo names with dots and hyphens", () => {
     expect(gitRepoFullName("https://github.com/guardian/my-dotfiles.v2")).toBe("guardian/my-dotfiles.v2");
   });
