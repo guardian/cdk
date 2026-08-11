@@ -1,5 +1,52 @@
 # @guardian/cdk
 
+## 64.3.0
+
+### Minor Changes
+
+- b13cdba: Changes the stem of the logical ID for the target group created for ECS in the `GuLoadBalancedAppExperimental` pattern. This results in a more a slightly more human-readable name.
+
+  For example, say we have a CloudFormation stack called `deploy-CODE-cdk-playground`, previously the target group name would be `deploy-EcsTar-123456123456`, now it will be `deploy-Cdkpl-123456123456`.
+
+  NOTE: As this is a change to an experimental pattern, it is not considered a breaking change even though it results in recreating a [stateful resource](../docs/stateful-resources.md).
+
+### Patch Changes
+
+- 51bb82e: Update aws-cdk to ^2.1135.0, aws-cdk-lib to ^2.263.0, constructs to ^10.8.1
+- b5ef901: Fix `new` command so generated projects pass their own lint check. The `eslint --fix` step passed `"lib/** bin/**"` as a single argument to `spawn` (with `shell: false`), so the globs never matched and no autofix ran. The globs are now passed as separate arguments. Additionally, generated import statements now place Node built-in modules (e.g. `path`) before third-party imports to satisfy the `import/order` rule.
+
+## 64.2.0
+
+### Minor Changes
+
+- ef75d0c: Add STACK, STAGE, APP environment variables to default container of ECS cluster provisioned by `GuLoadBalancedAppExperimental`.
+
+### Patch Changes
+
+- 0a25fcf: Update js-yaml from 4.1.1 to 4.3.0
+- 4a85881: Explicitly add the `App` tag to all resources created by `GuLoadBalancedAppExperimental`. Namely, `App` is added to:
+  - `AWS::ECS::Cluster`
+  - `AWS::ECS::TaskDefinition`
+  - `AWS::ECS::Service`
+
+  Previously, these resources implicitly inherited the `App` tag of the parent CloudFormation stack.
+  The CloudFormation's `App` tag is implicitly set by Riff-Raff via the contents of the `riff-raff.yaml` configuration.
+
+## 64.1.0
+
+### Minor Changes
+
+- c038df4: Adds deterministic routing rules for EC2 to ECS migrations.
+
+  Allow callers to force a request to a specific target group
+  using an HTTP header rather than relying on the default weighted routing.
+
+  Example usage:
+
+  ```
+  curl -i -H 'X-Gu-Target-Group: ecs' https://cdk-playground.code.dev-gutools.co.uk
+  ```
+
 ## 64.0.0
 
 ### Major Changes

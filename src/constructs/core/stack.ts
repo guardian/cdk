@@ -119,7 +119,7 @@ export class GuStack extends Stack implements StackStageIdentity {
     return this.node
       .findAll()
       .filter((construct) => construct instanceof CfnParameter)
-      .reduce((acc, param) => ({ ...acc, [param.node.id]: param as CfnParameter }), {});
+      .reduce((acc, param) => ({ ...acc, [param.node.id]: param }), {});
   }
 
   // eslint-disable-next-line custom-rules/valid-constructors -- GuStack is the exception as it must take an App

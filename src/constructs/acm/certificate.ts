@@ -23,7 +23,7 @@ export class GuCertificate extends GuAppAwareConstruct(Certificate) {
     const { app, domainName, hostedZoneId } = props;
 
     const maybeHostedZone = hostedZoneId
-      ? HostedZone.fromHostedZoneId(scope, AppIdentity.suffixText({ app }, "HostedZone"), hostedZoneId)
+      ? HostedZone.fromHostedZoneId(scope, AppIdentity.addAppToStringEnd({ app }, "HostedZone"), hostedZoneId)
       : undefined;
 
     const awsCertificateProps: CertificateProps & AppIdentity = {

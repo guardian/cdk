@@ -38,6 +38,6 @@ export class GuApiGateway5xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, AppIdentity.suffixText(props, "ApiGatewayHigh5xxPercentageAlarm"), alarmProps);
+    super(scope, AppIdentity.addAppToStringEnd(props, "ApiGatewayHigh5xxPercentageAlarm"), alarmProps);
   }
 }

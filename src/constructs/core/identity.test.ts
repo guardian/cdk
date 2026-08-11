@@ -3,27 +3,27 @@ import { Template } from "aws-cdk-lib/assertions";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { AppIdentity } from "./identity";
 
-describe("AppIdentity.suffixText", () => {
+describe("AppIdentity.addAppToStringEnd", () => {
   it("should title case the app before suffixing it", () => {
-    const actual = AppIdentity.suffixText({ app: "myapp" }, "InstanceType");
+    const actual = AppIdentity.addAppToStringEnd({ app: "myapp" }, "InstanceType");
     const expected = "InstanceTypeMyapp";
     expect(actual).toEqual(expected);
   });
 
   it("should work with title case input", () => {
-    const actual = AppIdentity.suffixText({ app: "MyApp" }, "InstanceType");
+    const actual = AppIdentity.addAppToStringEnd({ app: "MyApp" }, "InstanceType");
     const expected = "InstanceTypeMyApp";
     expect(actual).toEqual(expected);
   });
 
   it("should work with uppercase input", () => {
-    const actual = AppIdentity.suffixText({ app: "MYAPP" }, "InstanceType");
+    const actual = AppIdentity.addAppToStringEnd({ app: "MYAPP" }, "InstanceType");
     const expected = "InstanceTypeMYAPP";
     expect(actual).toEqual(expected);
   });
 
   it("should handle non-alphanumeric characters (e.g. hyphens)", () => {
-    const actual = AppIdentity.suffixText({ app: "my-app" }, "InstanceType");
+    const actual = AppIdentity.addAppToStringEnd({ app: "my-app" }, "InstanceType");
     const expected = "InstanceTypeMyapp";
     expect(actual).toEqual(expected);
   });

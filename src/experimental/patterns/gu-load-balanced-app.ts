@@ -23,8 +23,7 @@ import {
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -256,7 +255,6 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * Enable and configures application logs.
      */
     applicationLogging?: ApplicationLoggingProps;
-
     /**
      * Add block devices (additional storage).
      */
@@ -428,7 +426,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       applicationPort,
       certificateProps,
       monitoringConfiguration,
-      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
+      vpc = GuVpc.fromIdParameter(scope, AppIdentity.addAppToStringEnd({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       waf,
@@ -440,6 +438,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
     } = props;
 
     super(scope, app); // The assumption is `app` is unique
+
+    const { stack, stage } = scope;
 
     let targetGroups: TargetGroups = {};
 
@@ -616,6 +616,18 @@ export class GuLoadBalancedAppExperimental extends Construct {
         },
       });
 
+      const env = {
+        STACK: stack,
+        STAGE: stage,
+        APP: app,
+
+        // Required by https://github.com/guardian/devx-logs
+        TASK_NAME: app,
+      };
+
+      // Add the GitHub repo if we can
+      const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
+
       const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", { memoryLimitMiB, cpu });
 
       taskDefinition.addContainer(app, {
@@ -629,6 +641,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         portMappings: [{ containerPort: applicationPort }],
         logging: fireLensLogDriver,
         readonlyRootFilesystem: true,
+        environment,
       });
 
       // Permissions passed to the ECS task...
@@ -696,25 +709,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       this.ecsService = ecsService;
 
-      const env =
-        // Required by https://github.com/guardian/devx-logs
-        {
-          STACK: scope.stack,
-          STAGE: scope.stage,
-          APP: app,
-          TASK_NAME: app,
-        };
-
-      // Add the GitHub repo if we can
-      const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
-
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
         image: ContainerImage.fromRegistry(
           "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
         ),
-        // Required by https://github.com/guardian/devx-logs
         environment,
         versionConsistency: VersionConsistency.DISABLED,
         // Send this container's logs to CloudWatch logs, retained for 1 day
@@ -743,18 +743,31 @@ export class GuLoadBalancedAppExperimental extends Construct {
       });
 
       // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
-      const ecsTargetGroup = new GuApplicationTargetGroup(scope, "EcsTargetGroup", {
-        vpc,
-        app,
-        port: applicationPort,
-        targets: [ecsService],
-        healthCheck: healthcheck,
-      });
+      const ecsTargetGroup = new GuApplicationTargetGroup(
+        scope,
+
+        // This ID parameter is used to form the resource's logical ID.
+        // If a target group is not explicitly named, CloudFormation will use the logical ID to generate a name of form `<CFN_STACK_NAME>-<LOGICAL_ID>-<12 CHAR GUID>` to a max of 32 chars.
+        // Add the App to the start of the logical ID to make the generated names (slightly) glanceable, e.g "MyAppE-123456123456" vs. "EcsTar-123456123456".
+        AppIdentity.addAppToStringStart(props, "EcsTargetGroup"),
+
+        {
+          vpc,
+          app,
+          port: applicationPort,
+          targets: [ecsService],
+          healthCheck: healthcheck,
+        },
+      );
 
       targetGroups = {
         ...targetGroups,
         ecs: ecsTargetGroup,
       };
+
+      // Specifically apply App tag to resources.
+      // Other resources obtain this tag by extending `GuAppAwareConstruct`.
+      [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
     }
 
     // Set up the load balancer and listener components
@@ -791,6 +804,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // When open=true, AWS will create a security group which allows all inbound traffic over HTTPS
       open: access.scope === AccessScope.PUBLIC && typeof certificate !== "undefined",
     });
+    if (targetGroups.ec2 && targetGroups.ecs) {
+      configureDeterministicRouting(listener, targetGroups.ec2, targetGroups.ecs);
+    }
 
     // Since AWS won't create a security group automatically when open=false, we need to add our own
     if (access.scope !== AccessScope.PUBLIC) {
@@ -1027,4 +1043,26 @@ function configureListenerActions(
   } else {
     throw new Error("At least one of 'ec2Props' or 'ecsProps' must be specified");
   }
+}
+
+function configureDeterministicRouting(
+  listener: GuHttpsApplicationListener,
+  ec2TargetGroup: GuApplicationTargetGroup,
+  ecsTargetGroup: GuApplicationTargetGroup,
+): void {
+  const headerName = "X-Gu-Target-Group";
+  const ec2HeaderValue = "ec2";
+  const ecsHeaderValue = "ecs";
+
+  listener.addAction("DeterministicRouteToEc2", {
+    priority: 10,
+    conditions: [ListenerCondition.httpHeader(headerName, [ec2HeaderValue])],
+    action: ListenerAction.forward([ec2TargetGroup]),
+  });
+
+  listener.addAction("DeterministicRouteToEcs", {
+    priority: 11,
+    conditions: [ListenerCondition.httpHeader(headerName, [ecsHeaderValue])],
+    action: ListenerAction.forward([ecsTargetGroup]),
+  });
 }

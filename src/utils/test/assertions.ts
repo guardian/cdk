@@ -102,7 +102,11 @@ export class GuTemplate {
       });
     }
 
-    this.template.hasResourceProperties(type, { Tags: sortTagsByKey(Array.from(tagMap.values())) });
+    // Default behaviour (`Match.object`) seems to be "is exact".
+    // Use `Match.arrayWith` for "includes" matching, as AWS CDK also tags some resources which we're not checking for.
+    this.template.hasResourceProperties(type, {
+      Tags: Match.arrayWith(sortTagsByKey(Array.from(tagMap.values()))),
+    });
   }
 
   hasResourceWithTag(type: string, tag: Tag) {
