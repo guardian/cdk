@@ -10,7 +10,6 @@ import {
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import type { Volume } from "aws-cdk-lib/aws-ecs";
 import { OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
 import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
@@ -24,6 +23,9 @@ import {
   LogDriver,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
+import type { CfnService } from "aws-cdk-lib/aws-ecs";
+import type { Volume } from "aws-cdk-lib/aws-ecs";
+import type { CfnCluster } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
@@ -705,6 +707,24 @@ export class GuLoadBalancedAppExperimental extends Construct {
             app: `${app}-ecs`,
             vpc,
           }),
+        ],
+      });
+
+      const cfnCluster = cluster.node.defaultChild as CfnCluster;
+      cfnCluster.clusterSettings = [
+        {
+          name: "containerInsights",
+          value: "enhanced",
+        },
+      ];
+
+      const cfnService = ecsService.node.defaultChild as CfnService;
+      cfnService.addPropertyOverride("Monitoring", {
+        MetricConfigurations: [
+          {
+            MetricNames: ["CPUUtilization", "MemoryUtilization"],
+            ResolutionSeconds: 20,
+          },
         ],
       });
 
