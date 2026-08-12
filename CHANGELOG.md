@@ -1,5 +1,16 @@
 # @guardian/cdk
 
+## 64.4.0
+
+### Minor Changes
+
+- 140f1f5: Explicitly configure ECS tasks in `GuLoadBalancedAppExperimental` to use ARM64 (Graviton) and Linux.
+  This configuration matches our EC2 workloads.
+
+### Patch Changes
+
+- b3108b1: Bump js-yaml from 4.3.0 to 4.3.1
+
 ## 64.3.0
 
 ### Minor Changes
