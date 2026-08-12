@@ -1,4 +1,4 @@
-import { App, Duration } from "aws-cdk-lib";
+import { App, CfnResource, Duration, TagManager } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import {
   BlockDeviceVolume,
@@ -39,6 +39,35 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should apply standard tags to all taggable resources", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+    });
+
+    const taggableResources: CfnResource[] = stack.node
+      .findAll()
+      .filter((_) => TagManager.isTaggable(_) || TagManager.isTaggableV2(_))
+      .filter((_) => CfnResource.isCfnResource(_));
+
+    const template = GuTemplate.fromStack(stack);
+    taggableResources.forEach(({ cfnResourceType }) => {
+      template.hasGuTaggedResource(cfnResourceType, { appIdentity: { app: "test-gu" } });
+    });
   });
 
   it("should be capable of splitting traffic between EC2 and ECS target groups", function () {

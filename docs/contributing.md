@@ -37,7 +37,7 @@ However, it's advised you configure your IDE to format on save to avoid horrible
 ### Development Environment
 
 This project comes with a [devcontainer.json](../.devcontainer/shared/devcontainer.json)
-file.  This enables use of development containers in compatible IDEs.  The
+file. This enables use of development containers in compatible IDEs. The
 devcontainer files were built with [devenv](https://github.com/guardian/devenv)
 and can be altered with the same tool.
 
@@ -108,6 +108,9 @@ stack to test your changes against a real AWS stack.
 This stack isn't user facing. Accidentally causing destruction there is ok - better there than on theguardian.com!
 
 ## Releasing
+
+> [!TIP]
+> You can add the `🐥 Canaries` label to your PR to publish a canary release to NPM before you merge!
 
 We use [changesets](https://github.com/changesets/changesets) to automate NPM releases.
 

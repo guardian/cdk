@@ -285,7 +285,7 @@ export class GuEcsTask extends Construct {
     if (!monitoringConfiguration.noMonitoring) {
       const alarmTopic = Topic.fromTopicArn(
         scope,
-        AppIdentity.suffixText(props, "AlarmTopic"),
+        AppIdentity.addAppToStringEnd(props, "AlarmTopic"),
         monitoringConfiguration.snsTopicArn,
       );
       const alarms = [

@@ -11,6 +11,8 @@ import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
+import { OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
+import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
@@ -426,7 +428,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       applicationPort,
       certificateProps,
       monitoringConfiguration,
-      vpc = GuVpc.fromIdParameter(scope, AppIdentity.suffixText({ app }, "VPC")),
+      vpc = GuVpc.fromIdParameter(scope, AppIdentity.addAppToStringEnd({ app }, "VPC")),
       privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       waf,
@@ -628,7 +630,11 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Add the GitHub repo if we can
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
 
-      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", { memoryLimitMiB, cpu });
+      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", {
+        memoryLimitMiB,
+        cpu,
+        runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
+      });
 
       taskDefinition.addContainer(app, {
         image,
@@ -743,18 +749,31 @@ export class GuLoadBalancedAppExperimental extends Construct {
       });
 
       // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
-      const ecsTargetGroup = new GuApplicationTargetGroup(scope, "EcsTargetGroup", {
-        vpc,
-        app,
-        port: applicationPort,
-        targets: [ecsService],
-        healthCheck: healthcheck,
-      });
+      const ecsTargetGroup = new GuApplicationTargetGroup(
+        scope,
+
+        // This ID parameter is used to form the resource's logical ID.
+        // If a target group is not explicitly named, CloudFormation will use the logical ID to generate a name of form `<CFN_STACK_NAME>-<LOGICAL_ID>-<12 CHAR GUID>` to a max of 32 chars.
+        // Add the App to the start of the logical ID to make the generated names (slightly) glanceable, e.g "MyAppE-123456123456" vs. "EcsTar-123456123456".
+        AppIdentity.addAppToStringStart(props, "EcsTargetGroup"),
+
+        {
+          vpc,
+          app,
+          port: applicationPort,
+          targets: [ecsService],
+          healthCheck: healthcheck,
+        },
+      );
 
       targetGroups = {
         ...targetGroups,
         ecs: ecsTargetGroup,
       };
+
+      // Specifically apply App tag to resources.
+      // Other resources obtain this tag by extending `GuAppAwareConstruct`.
+      [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
     }
 
     // Set up the load balancer and listener components

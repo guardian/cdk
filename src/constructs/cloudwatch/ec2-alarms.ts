@@ -46,7 +46,7 @@ export class GuAlb5xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, AppIdentity.suffixText(props, "High5xxPercentageAlarm"), alarmProps);
+    super(scope, AppIdentity.addAppToStringEnd(props, "High5xxPercentageAlarm"), alarmProps);
   }
 }
 
@@ -78,7 +78,7 @@ export class GuAlb4xxPercentageAlarm extends GuAlarm {
       alarmDescription: props.alarmDescription ?? defaultDescription,
       evaluationPeriods: props.numberOfMinutesAboveThresholdBeforeAlarm ?? 1,
     };
-    super(scope, AppIdentity.suffixText(props, "High4xxPercentageAlarm"), alarmProps);
+    super(scope, AppIdentity.addAppToStringEnd(props, "High4xxPercentageAlarm"), alarmProps);
   }
 }
 
@@ -109,6 +109,6 @@ export class GuUnhealthyInstancesAlarm extends GuAlarm {
       datapointsToAlarm: 30,
       evaluationPeriods,
     };
-    super(scope, AppIdentity.suffixText(props, "UnhealthyInstancesAlarm"), alarmProps);
+    super(scope, AppIdentity.addAppToStringEnd(props, "UnhealthyInstancesAlarm"), alarmProps);
   }
 }

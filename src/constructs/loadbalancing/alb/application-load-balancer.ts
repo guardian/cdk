@@ -76,7 +76,7 @@ export class GuApplicationLoadBalancer extends GuAppAwareConstruct(ApplicationLo
     if (withAccessLogging) {
       const bucket = Bucket.fromBucketName(
         scope,
-        AppIdentity.suffixText(props, "AccessLoggingBucket"),
+        AppIdentity.addAppToStringEnd(props, "AccessLoggingBucket"),
         GuAccessLoggingBucketParameter.getInstance(scope).valueAsString,
       );
       const prefix = `application-load-balancer/${stage}/${stack}/${app}`;
