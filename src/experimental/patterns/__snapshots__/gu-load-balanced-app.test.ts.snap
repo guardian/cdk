@@ -3005,6 +3005,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "RequiresCompatibilities": [
           "FARGATE",
         ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
         "Tags": [
           {
             "Key": "App",

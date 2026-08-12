@@ -11,6 +11,8 @@ import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
+import { OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
+import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
@@ -628,7 +630,11 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Add the GitHub repo if we can
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
 
-      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", { memoryLimitMiB, cpu });
+      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", {
+        memoryLimitMiB,
+        cpu,
+        runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
+      });
 
       taskDefinition.addContainer(app, {
         image,
