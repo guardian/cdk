@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 64.5.0
+
+### Minor Changes
+
+- 7ebce5d: Sets containerInsights to enhanced and adds monitoring settings as default for ECS
+
 ## 64.4.0
 
 ### Minor Changes
