@@ -10,7 +10,7 @@ import {
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import { OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
+import { ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
 import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
@@ -25,7 +25,6 @@ import {
 } from "aws-cdk-lib/aws-ecs";
 import type { CfnService } from "aws-cdk-lib/aws-ecs";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
-import type { CfnCluster } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
@@ -588,7 +587,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         throw new Error("Could not determine an ECR repository name; please set this manually via ecsProps");
       }
 
-      const cluster = new Cluster(this, "EcsCluster", { vpc });
+      const cluster = new Cluster(this, "EcsCluster", {
+        vpc,
+        containerInsightsV2: ContainerInsights.ENHANCED,
+      });
 
       const image = ContainerImage.fromEcrRepository(
         // Images are published to the ECR registry in the DeployTools account, so reference that here
@@ -709,14 +711,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
           }),
         ],
       });
-
-      const cfnCluster = cluster.node.defaultChild as CfnCluster;
-      cfnCluster.clusterSettings = [
-        {
-          name: "containerInsights",
-          value: "enhanced",
-        },
-      ];
 
       const cfnService = ecsService.node.defaultChild as CfnService;
       cfnService.addPropertyOverride("Monitoring", {
