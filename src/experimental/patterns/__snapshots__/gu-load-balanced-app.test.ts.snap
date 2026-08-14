@@ -2783,6 +2783,17 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             },
           },
         ],
+        "Monitoring": {
+          "MetricConfigurations": [
+            {
+              "MetricNames": [
+                "CPUUtilization",
+                "MemoryUtilization",
+              ],
+              "ResolutionSeconds": 20,
+            },
+          ],
+        },
         "NetworkConfiguration": {
           "AwsvpcConfiguration": {
             "AssignPublicIp": "DISABLED",
@@ -3576,6 +3587,12 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     },
     "testguEcsCluster02799D79": {
       "Properties": {
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "enhanced",
+          },
+        ],
         "Tags": [
           {
             "Key": "App",
