@@ -97,7 +97,8 @@ describe("The GuAlarm class", () => {
     const scope = simpleGuStackForTesting({ app: "myapp" });
     const cta = new GuAlarmCta(scope, { elkSpace: "aaa" });
 
-    const expectedLink = "https://logs.gutools.co.uk/s/aaa/app/discover#/?" +
+    const expectedLink =
+      "https://logs.gutools.co.uk/s/aaa/app/discover#/?" +
       "_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))" +
       "&" +
       "_a=(" +
