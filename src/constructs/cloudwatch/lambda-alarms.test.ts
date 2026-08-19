@@ -126,7 +126,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
   });
 
-  it("should generate a log link, if `logLink.elkSpace` and `scope.app` are provided", () => {
+  it("should generate a log link, if `cta.elkSpace` and `scope.app` are provided", () => {
     const stack = simpleGuStackForTesting({ app: "test" });
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -150,7 +150,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
   });
 
-  it("should generate a log link, if `logLink.link` is provided", () => {
+  it("should generate a log link, if `cta.runbook` is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -164,16 +164,16 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       lambda: lambda,
       alarmDescription: "test with link",
       cta: {
-        link: "https://www.example.com",
+        runbook: "https://www.example.com",
       },
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
-      AlarmDescription: "test with link\n\n---\n[link](https://www.example.com)",
+      AlarmDescription: "test with link\n\n---\n[runbook](https://www.example.com)",
     });
   });
 
-  it("should generate two links, if `logLink.link`, `logLink.elkSpace` and `scope.app` are all provided", () => {
+  it("should generate two links, if `cta.runbook`, `cta.elkSpace` and `scope.app` are all provided", () => {
     const stack = simpleGuStackForTesting({ app: "test" });
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -187,7 +187,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       alarmDescription: "test with space",
       lambda: lambda,
       cta: {
-        link: "https://www.example.com",
+        runbook: "https://www.example.com",
         elkSpace: "example",
       },
     };
@@ -195,7 +195,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmDescription:
         "test with space" +
-        "\n\n---\n[link](https://www.example.com)" +
+        "\n\n---\n[runbook](https://www.example.com)" +
         "\n[logs](https://logs.gutools.co.uk/s/example/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))&_a=(columns:!(stack,stage,message,app),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:test-stack),type:phrase),query:(match_phrase:(stack.keyword:test-stack))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:test),type:phrase),query:(match_phrase:(app.keyword:test))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:TEST),type:phrase),query:(match_phrase:(stage.keyword:TEST)))),hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc))))",
     });
   });

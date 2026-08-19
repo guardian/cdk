@@ -112,10 +112,10 @@ describe("The GuAlarm class", () => {
     expect(cta.markdown).toEqual(`---\n[logs](${expectedLink})`);
   });
 
-  it("should generate the correct log link from a link", () => {
+  it("should generate the correct log link from a runbook", () => {
     const scope = simpleGuStackForTesting();
-    const cta = new GuAlarmCta(scope, { link: "https://www.example.com" });
+    const cta = new GuAlarmCta(scope, { runbook: "https://www.example.com" });
     expect(cta.ctaLinks).toEqual(["https://www.example.com"]);
-    expect(cta.markdown).toEqual("---\n[link](https://www.example.com)");
+    expect(cta.markdown).toEqual("---\n[runbook](https://www.example.com)");
   });
 });
