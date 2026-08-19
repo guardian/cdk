@@ -12,7 +12,7 @@ export interface GuAlarmProps extends AlarmProps, AppIdentity {
 }
 
 export interface GuAlarmCtaProps {
-  link?: string;
+  runbook?: string;
   elkSpace?: string;
 }
 
@@ -36,7 +36,7 @@ export class GuAlarmCta {
   ctaLinks: string[];
   markdown: string;
   constructor(scope: GuStack, props: GuAlarmCtaProps) {
-    const providedLink = props.link;
+    const providedRunbook = props.runbook;
     const generatedLink =
       props.elkSpace && scope.app
         ? [
@@ -50,10 +50,10 @@ export class GuAlarmCta {
             ",hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))",
           ].join("")
         : undefined;
-    this.ctaLinks = [providedLink, generatedLink].filter((link): link is string => !!link);
+    this.ctaLinks = [providedRunbook, generatedLink].filter((link): link is string => !!link);
 
     const markdownLinks = [
-      providedLink ? `[link](${providedLink})` : undefined,
+      providedRunbook ? `[runbook](${providedRunbook})` : undefined,
       generatedLink ? `[logs](${generatedLink})` : undefined,
     ].filter((link): link is string => !!link);
     this.markdown = markdownLinks.length > 0 ? ["---", ...markdownLinks].join("\n") : "";
