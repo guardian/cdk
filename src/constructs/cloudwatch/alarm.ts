@@ -34,24 +34,29 @@ export interface Http5xxAlarmProps extends Omit<
 
 export class GuAlarmCta {
   ctaLinks: string[];
+  markdown: string;
   constructor(scope: GuStack, props: GuAlarmCtaProps) {
-    const providedLink = props.link ? [props.link] : [];
+    const providedLink = props.link;
     const generatedLink =
       props.elkSpace && scope.app
         ? [
-            [
-              `https://logs.gutools.co.uk/s/${props.elkSpace}/app/discover#/?`,
-              "_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))",
-              "&",
-              "_a=(columns:!(stack,stage,message,app),filters:!(",
-              `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:${scope.stack}),type:phrase),query:(match_phrase:(stack.keyword:${scope.stack}))),`,
-              `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:${scope.app}),type:phrase),query:(match_phrase:(app.keyword:${scope.app}))),`,
-              `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:${scope.stage}),type:phrase),query:(match_phrase:(stage.keyword:${scope.stage}))))`,
-              ",hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))",
-            ].join(""),
-          ]
-        : [];
-    this.ctaLinks = [...providedLink, ...generatedLink];
+            `https://logs.gutools.co.uk/s/${props.elkSpace}/app/discover#/?`,
+            "_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))",
+            "&",
+            "_a=(columns:!(stack,stage,message,app),filters:!(",
+            `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:${scope.stack}),type:phrase),query:(match_phrase:(stack.keyword:${scope.stack}))),`,
+            `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:${scope.app}),type:phrase),query:(match_phrase:(app.keyword:${scope.app}))),`,
+            `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:${scope.stage}),type:phrase),query:(match_phrase:(stage.keyword:${scope.stage}))))`,
+            ",hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))",
+          ].join("")
+        : undefined;
+    this.ctaLinks = [providedLink, generatedLink].filter((link): link is string => !!link);
+
+    const markdownLinks = [
+      providedLink ? `[link](${providedLink})` : undefined,
+      generatedLink ? `[logs](${generatedLink})` : undefined,
+    ].filter((link): link is string => !!link);
+    this.markdown = markdownLinks.length > 0 ? ["---", ...markdownLinks].join("\n") : "";
   }
 }
 

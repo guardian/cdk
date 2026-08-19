@@ -146,7 +146,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmDescription:
-        "test with space\n\nhttps://logs.gutools.co.uk/s/example/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))&_a=(columns:!(stack,stage,message,app),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:test-stack),type:phrase),query:(match_phrase:(stack.keyword:test-stack))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:test),type:phrase),query:(match_phrase:(app.keyword:test))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:TEST),type:phrase),query:(match_phrase:(stage.keyword:TEST)))),hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))",
+        "test with space\n\n---\n[logs](https://logs.gutools.co.uk/s/example/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))&_a=(columns:!(stack,stage,message,app),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:test-stack),type:phrase),query:(match_phrase:(stack.keyword:test-stack))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:test),type:phrase),query:(match_phrase:(app.keyword:test))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:TEST),type:phrase),query:(match_phrase:(stage.keyword:TEST)))),hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc))))",
     });
   });
 
@@ -169,7 +169,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
-      AlarmDescription: "test with link\n\nhttps://www.example.com",
+      AlarmDescription: "test with link\n\n---\n[link](https://www.example.com)",
     });
   });
 
@@ -195,8 +195,8 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       AlarmDescription:
         "test with space" +
-        "\n\nhttps://www.example.com" +
-        "\n\nhttps://logs.gutools.co.uk/s/example/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))&_a=(columns:!(stack,stage,message,app),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:test-stack),type:phrase),query:(match_phrase:(stack.keyword:test-stack))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:test),type:phrase),query:(match_phrase:(app.keyword:test))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:TEST),type:phrase),query:(match_phrase:(stage.keyword:TEST)))),hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))",
+        "\n\n---\n[link](https://www.example.com)" +
+        "\n[logs](https://logs.gutools.co.uk/s/example/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))&_a=(columns:!(stack,stage,message,app),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:test-stack),type:phrase),query:(match_phrase:(stack.keyword:test-stack))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:test),type:phrase),query:(match_phrase:(app.keyword:test))),('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:TEST),type:phrase),query:(match_phrase:(stage.keyword:TEST)))),hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc))))",
     });
   });
 });
