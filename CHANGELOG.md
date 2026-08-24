@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 64.5.1
+
+### Patch Changes
+
+- 4bef089: Bump brace-expansion to resolve high severity alert.
+
 ## 64.5.0
 
 ### Minor Changes
