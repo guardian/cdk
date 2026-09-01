@@ -593,13 +593,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
       });
 
       const image = ContainerImage.fromEcrRepository(
-        // Images are published to the ECR registry in the DeployTools account, so reference that here
+        // Images are published to the ECR registry in the Artifacts account, so reference that here
         Repository.fromRepositoryAttributes(this, "Repo", {
           repositoryArn: scope.formatArn({
             account: StringParameter.fromStringParameterName(
               scope,
-              "DeployToolsAccountId",
-              NAMED_SSM_PARAMETER_PATHS.DeployToolsAccountId.path,
+              "ArtifactAccountId",
+              NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
             ).stringValue,
             arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
             resource: "repository",
