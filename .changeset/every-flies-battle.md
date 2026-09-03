@@ -2,4 +2,4 @@
 "@guardian/cdk": minor
 ---
 
-Use Artifact account to publish an image to ECR
+Pull images from the Artifacts AWS account within `GuLoadBalancedAppExperimental`.
