@@ -20,6 +20,7 @@ interface NamedSsmParameterPaths {
   FastlyCustomerId: SsmParameterPath;
   OrganisationDistributionBucket: SsmParameterPath;
   DeployToolsAccountId: SsmParameterPath;
+  ArtifactsAccountId: SsmParameterPath;
 }
 
 export const VPC_SSM_PARAMETER_PREFIX = "/account/vpc";
@@ -73,6 +74,10 @@ export const NAMED_SSM_PARAMETER_PATHS: NamedSsmParameterPaths = {
   DeployToolsAccountId: {
     path: "/organisation/accounts/deployTools",
     description: "Account ID of the Deploy Tools account. Useful as some shared resources live here.",
+  },
+  ArtifactsAccountId: {
+    path: "/organisation/accounts/artifacts",
+    description: "Account ID of the Artifacts account. Useful as some shared resources live here.",
   },
 };
 
