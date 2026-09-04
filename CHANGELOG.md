@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 64.6.0
+
+### Minor Changes
+
+- 8bd5641: Pull images from the Artifacts AWS account within `GuLoadBalancedAppExperimental`.
+
 ## 64.5.1
 
 ### Patch Changes
