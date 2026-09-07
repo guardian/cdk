@@ -80,11 +80,16 @@ export class GuAlarm extends Alarm {
   constructor(scope: GuStack, id: string, props: GuAlarmProps) {
     const { region, account } = scope;
     const { snsTopicName, actionsEnabled = true, okAction } = props;
+    const alarmCta: GuAlarmCta | undefined = props.cta && new GuAlarmCta(scope, props.cta);
+    const alarmDescription = [props.alarmDescription, alarmCta?.markdown]
+      .filter((line): line is string => !!line)
+      .join("\n\n");
 
-    super(scope, id, { ...props, actionsEnabled });
+    super(scope, id, { ...props, alarmDescription, actionsEnabled });
 
     const topicArn: string = `arn:aws:sns:${region}:${account}:${snsTopicName}`;
     const snsTopic: ITopic = Topic.fromTopicArn(scope, `SnsTopicFor${id}`, topicArn);
+
     this.addAlarmAction(new SnsAction(snsTopic));
     if (okAction) {
       this.addOkAction(new SnsAction(snsTopic));

@@ -2,7 +2,7 @@ import { Duration } from "aws-cdk-lib";
 import { ComparisonOperator, MathExpression, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 import type { GuStack } from "../core";
 import type { GuLambdaFunction } from "../lambda";
-import { GuAlarm, GuAlarmCta } from "./alarm";
+import { GuAlarm } from "./alarm";
 import type { GuAlarmProps } from "./alarm";
 
 export interface GuLambdaErrorPercentageMonitoringProps extends Omit<
@@ -32,10 +32,8 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
     });
     const defaultAlarmName = `High error percentage from ${props.lambda.functionName} lambda in ${scope.stage}`;
     const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
-    const alarmCta: GuAlarmCta | undefined = props.cta && new GuAlarmCta(scope, props.cta);
-    const alarmDescription = [props.alarmDescription ?? defaultDescription, alarmCta?.markdown]
-      .filter((line): line is string => !!line)
-      .join("\n\n");
+
+    const alarmDescription = props.alarmDescription ?? defaultDescription;
     const alarmProps: GuAlarmProps = {
       ...props,
       app: props.lambda.app,
