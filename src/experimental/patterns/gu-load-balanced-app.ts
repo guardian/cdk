@@ -421,6 +421,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
    */
   public readonly targetGroups: TargetGroups;
 
+  /**
+   * A log driver used to ship logs to Central ELK (via Kinesis).
+   *
+   * @note Only available when using ECS, i.e. when {@link GuLoadBalancedAppExperimental.ecsService} is defined.
+   */
+  public readonly fireLensLogDriver?: FireLensLogDriver;
+
   constructor(scope: GuStack, props: GuLoadBalancedAppExperimentalProps) {
     const {
       access,
@@ -621,6 +628,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
           retry_limit: "2",
         },
       });
+
+      this.fireLensLogDriver = fireLensLogDriver;
 
       const env = {
         STACK: stack,
