@@ -34,7 +34,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
     });
@@ -54,7 +54,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
     });
@@ -91,7 +91,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
       targetGroupWeights: {
@@ -140,7 +140,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
       targetGroupWeights: {
@@ -207,7 +207,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
       targetGroupWeights: {
@@ -259,7 +259,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ecsProps: {
             cpu: 1024,
             memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6 },
+            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
             imageIdentifier: "sha256:12345",
           },
         }),
@@ -289,7 +289,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ecsProps: {
             cpu: 1024,
             memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6 },
+            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
             imageIdentifier: "sha256:12345",
           },
           targetGroupWeights: {
@@ -329,7 +329,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
         repositoryName: "guardian/some-other-repo",
       },
@@ -362,7 +362,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ecsProps: {
             cpu: 1024,
             memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6 },
+            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
             imageIdentifier: "sha256:12345",
           },
         }),
@@ -385,7 +385,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
     });
@@ -419,7 +419,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
         imageIdentifier: "sha256:12345",
       },
       targetGroupWeights: {
@@ -462,7 +462,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ecsProps: {
             cpu: 1024,
             memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6 },
+            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { cpuAvgUtilisationTarget: 20 } },
             imageIdentifier: "sha256:12345",
             repositoryName: "my-repository",
           },
@@ -476,6 +476,56 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           },
         }),
     ).toThrow("Using Google Auth with ECS is currently unsupported");
+  });
+
+  it("should scale on CPU utilisation using aws target tracking", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      applicationPort: 3000,
+      app: "test-gu-ec2-app",
+      access: { scope: AccessScope.PUBLIC },
+      monitoringConfiguration: { noMonitoring: true },
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      healthcheck: {
+        path: "/custom-healthcheck",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        scaling: {
+          minimumInstances: 1,
+        },
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: {
+          minimumTasks: 3,
+          maximumTasks: 6,
+          cpuScaling: {
+            cpuAvgUtilisationTarget: 20,
+            scaleInCooldown: Duration.seconds(60),
+            scaleOutCooldown: Duration.seconds(60),
+          },
+        },
+        imageIdentifier: "sha256:12345",
+      },
+      targetGroupWeights: {
+        ec2: 499,
+        ecs: 500,
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApplicationAutoScaling::ScalingPolicy", {
+      TargetTrackingScalingPolicyConfiguration: {
+        TargetValue: 20,
+        PredefinedMetricSpecification: {
+          PredefinedMetricType: "ECSServiceAverageCPUUtilizationHighResolution",
+        },
+      },
+    });
   });
 });
 
