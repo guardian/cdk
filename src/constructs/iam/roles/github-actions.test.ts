@@ -46,6 +46,37 @@ describe("The GitHubActionsRole construct", () => {
       },
     });
   });
+
+  // See https://github.blog/changelog/2026-04-23-immutable-subject-claims-for-github-actions-oidc-tokens/
+  it("should be possible to use the immutable OIDC subject claim format", () => {
+    const stack = simpleGuStackForTesting();
+    new GuGithubActionsRole(stack, {
+      policies: [
+        new GuGetS3ObjectsPolicy(stack, "GetObjects", {
+          bucketName: "super-secret-stuff",
+        }),
+      ],
+      condition: {
+        githubOrganisation: "octocat@123456",
+        repositories: "my-repo@456789:*", // trailing `:*` to mean any branch in the repository
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Role", {
+      AssumeRolePolicyDocument: {
+        Statement: [
+          {
+            Action: "sts:AssumeRoleWithWebIdentity",
+            Condition: {
+              StringLike: {
+                "token.actions.githubusercontent.com:sub": "repo:octocat@123456/my-repo@456789:*",
+              },
+            },
+          },
+        ],
+      },
+    });
+  });
 });
 
 describe("The GitHubOidcProvider construct", () => {
