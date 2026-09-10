@@ -4,7 +4,7 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuLambdaFunction } from "../lambda";
-import { GuAlarm } from "./alarm";
+import { GuAlarm, GuAlarmCta } from "./alarm";
 
 describe("The GuAlarm class", () => {
   const lambda = (stack: GuStack) =>
@@ -91,5 +91,31 @@ describe("The GuAlarm class", () => {
     Template.fromStack(stack).hasResourceProperties("AWS::CloudWatch::Alarm", {
       OKActions: snsActionsCFN,
     });
+  });
+
+  it("should generate the correct log link from an elk space", () => {
+    const scope = simpleGuStackForTesting({ app: "myapp" });
+    const cta = new GuAlarmCta(scope, { elkSpace: "aaa" });
+
+    const expectedLink =
+      "https://logs.gutools.co.uk/s/aaa/app/discover#/?" +
+      "_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1d,to:now))" +
+      "&" +
+      "_a=(" +
+      "columns:!(stack,stage,message,app)," +
+      "filters:!(" +
+      "('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:test-stack),type:phrase),query:(match_phrase:(stack.keyword:test-stack)))," +
+      "('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:myapp),type:phrase),query:(match_phrase:(app.keyword:myapp)))," +
+      "('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:TEST),type:phrase),query:(match_phrase:(stage.keyword:TEST))))," +
+      "hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))";
+    expect(cta.ctaLinks).toEqual([expectedLink]);
+    expect(cta.markdown).toEqual(`---\n[logs](${expectedLink})`);
+  });
+
+  it("should generate the correct log link from a runbook", () => {
+    const scope = simpleGuStackForTesting();
+    const cta = new GuAlarmCta(scope, { runbook: "https://www.example.com" });
+    expect(cta.ctaLinks).toEqual(["https://www.example.com"]);
+    expect(cta.markdown).toEqual("---\n[runbook](https://www.example.com)");
   });
 });
