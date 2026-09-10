@@ -1,12 +1,11 @@
 import type { App, CfnElement, StackProps } from "aws-cdk-lib";
 import { Annotations, Aspects, CfnParameter, LegacyStackSynthesizer, Stack, Tags } from "aws-cdk-lib";
 import type { IConstruct } from "constructs";
-import gitUrlParse from "git-url-parse";
 import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
 import { CfnParameterReporter } from "../../aspects/cfn-parameter-reporter";
 import { Metadata } from "../../aspects/metadata";
 import { ContextKeys, MetadataKeys, TrackingTag } from "../../constants";
-import { gitRemoteOriginUrl } from "../../utils/git";
+import { gitRemoteOriginUrl, gitRepoFullName } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
 
@@ -187,7 +186,7 @@ export class GuStack extends Stack implements StackStageIdentity {
     try {
       const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
       const repositoryUrl: string = urlFromContext ?? gitRemoteOriginUrl();
-      return gitUrlParse(repositoryUrl).full_name;
+      return gitRepoFullName(repositoryUrl);
     } catch {
       console.info(
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`,
