@@ -46,9 +46,14 @@ export class GuAlarmCta {
             "_a=(columns:!(stack,stage,message,app),filters:!(",
             `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stack.keyword,negate:!f,params:(query:${scope.stack}),type:phrase),query:(match_phrase:(stack.keyword:${scope.stack}))),`,
             `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:app.keyword,negate:!f,params:(query:${scope.app}),type:phrase),query:(match_phrase:(app.keyword:${scope.app}))),`,
-            `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:${scope.stage}),type:phrase),query:(match_phrase:(stage.keyword:${scope.stage}))))`,
-            ",hideChart:!t,interval:auto,query:(language:kuery,query:exception),sort:!(!('@timestamp',desc)))",
+            `('$state':(store:appState),meta:(alias:!n,disabled:!f,key:stage.keyword,negate:!f,params:(query:${scope.stage}),type:phrase),query:(match_phrase:(stage.keyword:${scope.stage})))`,
+            "),",
+            "hideChart:!t,interval:auto,query:(language:kuery,query:''),",
+            "sort:!(!('@timestamp',desc))",
+            ")"
           ].join("")
+
+
         : undefined;
     this.ctaLinks = [providedRunbook, generatedLink].filter((link): link is string => !!link);
 
