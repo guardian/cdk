@@ -1,4 +1,6 @@
 import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import type { PredefinedMetric } from "aws-cdk-lib/aws-applicationautoscaling";
+import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
 import {
@@ -359,6 +361,32 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
        * the deployment through.
        */
       maximumTasks: number;
+      cpuScaling?: {
+        /**
+         * CPU Utilisation Target value used to trigger scaling events.
+         *
+         * AWS ECS Target Tracking Scaling:
+         * {@link https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html}
+         *
+         * Guidance for setting this value is available here:
+         * {@link https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html}
+         */
+        cpuAvgUtilisationTarget: number;
+        /**
+         * Period after a scale in activity completes before another scale in activity can start.
+         *
+         * @default Duration.seconds(300)
+         * @see import("aws-cdk-lib/aws-applicationautoscaling").BaseTargetTrackingProps.scaleInCooldown
+         */
+        scaleInCooldown?: Duration;
+        /**
+         * Period after a scale out activity completes before another scale out activity can start.
+         *
+         * @default Duration.seconds(300)
+         * @see import("aws-cdk-lib/aws-applicationautoscaling").BaseTargetTrackingProps.scaleOutCooldown
+         */
+        scaleOutCooldown?: Duration;
+      };
     };
   };
   /**
@@ -722,10 +750,24 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ],
       });
 
-      ecsService.autoScaleTaskCount({
+      const ecsScalableTarget = ecsService.autoScaleTaskCount({
         minCapacity: scaling.minimumTasks,
         maxCapacity: scaling.maximumTasks,
       });
+
+      if (scaling.cpuScaling) {
+        const cpuScaling = scaling.cpuScaling;
+        // The high resolution predefined metric evaluates every 20s rather than 60s,
+        // so scaling reacts far faster. It isn't in the CDK `PredefinedMetric` enum yet.
+        // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/target-tracking-faster-auto-scaling.html
+        new TargetTrackingScalingPolicy(this, "CpuScaling", {
+          scalingTarget: ecsScalableTarget,
+          targetValue: cpuScaling.cpuAvgUtilisationTarget,
+          predefinedMetric: "ECSServiceAverageCPUUtilizationHighResolution" as unknown as PredefinedMetric,
+          scaleOutCooldown: cpuScaling.scaleOutCooldown,
+          scaleInCooldown: cpuScaling.scaleInCooldown,
+        });
+      }
 
       this.ecsService = ecsService;
 
