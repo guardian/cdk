@@ -10,7 +10,7 @@ import {
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import { ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
+import { CfnTaskDefinition, ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
 import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
@@ -74,6 +74,50 @@ import {
   GuRollingUpdatePolicyExperimental,
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
+
+export interface GuS3FilesVolumeConfiguration {
+  /**
+   * Full ARN of the S3 Files file system to mount.
+   */
+  fileSystemArn: string;
+  /**
+   * Path within the mounted file system to use as the root.
+   *
+   * @defaultValue "/"
+   */
+  rootDirectory?: string;
+  /**
+   * Optional S3 Files access point ARN.
+   */
+  accessPointArn?: string;
+}
+
+export interface GuS3FileMount {
+  /**
+   * The mount path inside the container.
+   */
+  containerPath: string;
+  /**
+   * Full ARN of the S3 Files file system to mount.
+   */
+  fileSystemArn: string;
+  /**
+   * Path within the mounted file system to use as the root.
+   *
+   * @defaultValue "/"
+   */
+  rootDirectory?: string;
+  /**
+   * Optional S3 Files access point ARN.
+   */
+  accessPointArn?: string;
+  /**
+   * Whether the mount should be read-only.
+   *
+   * @defaultValue true
+   */
+  readOnly?: boolean;
+}
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   /**
@@ -342,22 +386,28 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     repositoryName?: string;
     /**
+     * Mount S3 Files volumes directly into the application container.
+     *
+     * Each entry defines both the source S3 Files file system and the container mount path.
+     */
+    s3FilesMounts?: GuS3FileMount[];
+    /**
      * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
      * level of availability so that all 3 Availability Zones are utilised.
      */
     scaling: {
       /**
-       * Scaling actions will never scale down below this threshold. This also controls the number of tasks that
-       * your ECS service will launch when it is first created.
-       */
+        * Scaling actions will never scale down below this threshold. This also controls the number of tasks that
+        * your ECS service will launch when it is first created.
+        */
       minimumTasks: number;
       /**
-       * Scaling actions will never scale up above this threshold.
-       *
-       * Note that this max can be exceeded when a deployment runs (unlike the ASG max size). E.g. if maximumTasks is 6,
-       * the service is running 6 tasks and a deployment starts, the ECS service will briefly run with 12 tasks to get
-       * the deployment through.
-       */
+        * Scaling actions will never scale up above this threshold.
+        *
+        * Note that this max can be exceeded when a deployment runs (unlike the ASG max size). E.g. if maximumTasks is 6,
+        * the service is running 6 tasks and a deployment starts, the ECS service will briefly run with 12 tasks to get
+        * the deployment through.
+        */
       maximumTasks: number;
     };
   };
@@ -580,7 +630,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3FilesMounts = [] } = ecsProps;
 
       const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
       if (!ecrRepoName) {
@@ -640,7 +690,20 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
-      taskDefinition.addContainer(app, {
+      const s3FilesVolumes: Array<{
+        name: string;
+        configuredAtLaunch?: boolean;
+        s3FilesVolumeConfiguration: GuS3FilesVolumeConfiguration;
+      }> = s3FilesMounts.map((mount, index) => ({
+        name: `s3files-volume-${index}`,
+        s3FilesVolumeConfiguration: {
+          fileSystemArn: mount.fileSystemArn,
+          ...(mount.rootDirectory !== undefined && { rootDirectory: mount.rootDirectory }),
+            ...(mount.accessPointArn !== undefined && { accessPointArn: mount.accessPointArn }),
+        },
+      }));
+
+      const appContainer = taskDefinition.addContainer(app, {
         image,
         dockerLabels: {
           RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
@@ -654,6 +717,15 @@ export class GuLoadBalancedAppExperimental extends Construct {
         environment,
       });
 
+      const mountPoints = s3FilesMounts.map((mount, index) => ({
+        containerPath: mount.containerPath,
+        sourceVolume: `s3files-volume-${index}`,
+        readOnly: mount.readOnly ?? true,
+      }));
+      if (mountPoints.length > 0) {
+        appContainer.addMountPoints(...(mountPoints as any));
+      }
+
       // Permissions passed to the ECS task...
       const applicationPermissions: GuPolicy[] = [
         // ...to allow writing logs to Kinesis
@@ -665,6 +737,23 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // ...permissions specific for this application (provided by client)
         ...additionalPolicies,
       ];
+
+      if (s3FilesVolumes.length > 0) {
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
+            resources: [
+              ...new Set(
+                s3FilesVolumes.flatMap(({ s3FilesVolumeConfiguration }) => [
+                  s3FilesVolumeConfiguration.fileSystemArn,
+                  ...(s3FilesVolumeConfiguration.accessPointArn ? [s3FilesVolumeConfiguration.accessPointArn] : []),
+                ]),
+              ),
+            ],
+          }),
+        );
+      }
 
       applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
 
@@ -755,6 +844,24 @@ export class GuLoadBalancedAppExperimental extends Construct {
         name: "logging-volume",
       };
       taskDefinition.addVolume(logVolume);
+
+      const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
+      cfnTaskDefinition.addPropertyOverride("Volumes", [
+        { Name: logVolume.name },
+        ...s3FilesVolumes.map(({ name, configuredAtLaunch, s3FilesVolumeConfiguration }) => ({
+          Name: name,
+          ...(configuredAtLaunch !== undefined && { ConfiguredAtLaunch: configuredAtLaunch }),
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: s3FilesVolumeConfiguration.fileSystemArn,
+            ...(s3FilesVolumeConfiguration.rootDirectory !== undefined && {
+              RootDirectory: s3FilesVolumeConfiguration.rootDirectory,
+            }),
+            ...(s3FilesVolumeConfiguration.accessPointArn !== undefined && {
+              AccessPointArn: s3FilesVolumeConfiguration.accessPointArn,
+            }),
+          },
+        })),
+      ]);
 
       logRouter.addMountPoints({
         containerPath: "/init",
