@@ -3585,6 +3585,22 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
+    "testguCpuScalingEB76A159": {
+      "Properties": {
+        "PolicyName": "TesttestguCpuScalingFF1701D3",
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": {
+          "Ref": "EcsServiceTaskCountTarget02FCCE22",
+        },
+        "TargetTrackingScalingPolicyConfiguration": {
+          "PredefinedMetricSpecification": {
+            "PredefinedMetricType": "ECSServiceAverageCPUUtilizationHighResolution",
+          },
+          "TargetValue": 20,
+        },
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+    },
     "testguEcsCluster02799D79": {
       "Properties": {
         "ClusterSettings": [
