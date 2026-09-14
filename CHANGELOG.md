@@ -1,5 +1,15 @@
 # @guardian/cdk
 
+## 64.7.0
+
+### Minor Changes
+
+- f575ccb: Add support for ECS scaling using CPU Utilisation as a target metric to GuLoadBalancedAppExperimental.
+
+### Patch Changes
+
+- 91c8351: Update js-yaml dependency
+
 ## 64.6.0
 
 ### Minor Changes
