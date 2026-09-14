@@ -89,10 +89,6 @@ export interface GuS3FilesVolumeConfiguration {
    * @defaultValue "/"
    */
   rootDirectory?: string;
-  /**
-   * Optional S3 Files access point ARN.
-   */
-  accessPointArn?: string;
 }
 
 export interface GuS3FileMount {
@@ -110,15 +106,9 @@ export interface GuS3FileMount {
     path: string;
   };
   /**
-   * Path within the mounted file system to use as the root.
-   *
-   * @defaultValue "/"
+   * Sub-path within the file system source to mount into the container.
    */
-  rootDirectory?: string;
-  /**
-   * Optional S3 Files access point ARN.
-   */
-  accessPointArn?: string;
+  subPath: string;
   /**
    * Whether the mount should be read-only.
    *
@@ -735,8 +725,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         name: `s3files-volume-${index}`,
         s3FilesVolumeConfiguration: {
           fileSystemArn: s3FilesFileSystems[index]!.attrFileSystemArn,
-          ...(mount.rootDirectory !== undefined && { rootDirectory: mount.rootDirectory }),
-          ...(mount.accessPointArn !== undefined && { accessPointArn: mount.accessPointArn }),
+          rootDirectory: mount.subPath,
         },
       }));
 
@@ -784,7 +773,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
               ...new Set(
                 s3FilesVolumes.flatMap(({ s3FilesVolumeConfiguration }) => [
                   s3FilesVolumeConfiguration.fileSystemArn,
-                  ...(s3FilesVolumeConfiguration.accessPointArn ? [s3FilesVolumeConfiguration.accessPointArn] : []),
                 ]),
               ),
             ],
@@ -892,9 +880,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
             FileSystemArn: s3FilesVolumeConfiguration.fileSystemArn,
             ...(s3FilesVolumeConfiguration.rootDirectory !== undefined && {
               RootDirectory: s3FilesVolumeConfiguration.rootDirectory,
-            }),
-            ...(s3FilesVolumeConfiguration.accessPointArn !== undefined && {
-              AccessPointArn: s3FilesVolumeConfiguration.accessPointArn,
             }),
           },
         })),
