@@ -707,10 +707,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
-      const defaultS3FilesSource = {
-        bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
-        path: `${stack}/${stage}/${app}/`,
-      };
+      function getDefaultS3FilesSource() {
+        return {
+          bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+          path: `${stack}/${stage}/${app}/`,
+        };
+      }
 
       const resolvedS3FilesMounts = s3ConfigMounts.map((mount) => ({
         ...mount,
@@ -720,7 +722,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       }));
 
       const s3FilesFileSystems = resolvedS3FilesMounts.map((mount, index) => {
-        const source = mount.source ?? defaultS3FilesSource;
+        const source = mount.source ?? getDefaultS3FilesSource();
         const normalizedPrefix = source.path.endsWith("/") ? source.path : `${source.path}/`;
         const roleArnLookup = new AwsCustomResource(scope, `S3FilesLinkedRoleArn${index}`, {
           onCreate: {
