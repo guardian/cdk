@@ -12,34 +12,36 @@ import {
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import { ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
-import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
-import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
+import type { CfnService, MountPoint, Volume } from "aws-cdk-lib/aws-ecs";
 import {
+  CfnTaskDefinition,
   Cluster,
   ContainerImage,
+  ContainerInsights,
+  CpuArchitecture,
   FargateService,
   FargateTaskDefinition,
   FireLensLogDriver,
   FirelensLogRouterType,
   LogDriver,
+  OperatingSystemFamily,
+  PropagatedTagSource,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
-import type { CfnService } from "aws-cdk-lib/aws-ecs";
-import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { CfnFileSystem } from "aws-cdk-lib/aws-s3files";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
-import { GuUserData } from "../../constructs/autoscaling";
-import { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { NoMonitoring } from "../../constructs/cloudwatch";
 import {
   GuAlb4xxPercentageAlarm,
@@ -47,14 +49,15 @@ import {
   GuUnhealthyInstancesAlarm,
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity } from "../../constructs/core";
-import { GuLoggingStreamNameParameter } from "../../constructs/core";
+import { AppIdentity, GuDistributionBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
-import { GuLogShippingPolicy } from "../../constructs/iam";
-import { GuInstanceRole } from "../../constructs/iam";
-import { GuGetPrivateConfigPolicy } from "../../constructs/iam";
-import { GuParameterStoreReadPolicy } from "../../constructs/iam";
+import {
+  GuGetPrivateConfigPolicy,
+  GuInstanceRole,
+  GuLogShippingPolicy,
+  GuParameterStoreReadPolicy,
+} from "../../constructs/iam";
 import { GuLambdaFunction } from "../../constructs/lambda";
 import {
   GuApplicationLoadBalancer,
@@ -64,8 +67,8 @@ import {
 } from "../../constructs/loadbalancing";
 import type { Alarms, ApplicationLoggingProps } from "../../patterns";
 import { restrictedCidrRanges } from "../../patterns";
-import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
+import { AppAccess } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
@@ -76,6 +79,51 @@ import {
   GuRollingUpdatePolicyExperimental,
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
+
+/**
+ * This interface defines the configuration for mounting an S3 Files file system into a container.
+ *
+ * The implementation comes with defaults for every value:
+ *
+ *   s3ConfigMounts: [ {} ]
+ *
+ * will result in the following S3 location being mounted into the container as a file system:
+ *
+ *   /etc/gu/app/ -> s3://dist-bucket/app/stack/stage/conf/
+ *
+ * Any files which need to present in a container in a directory that isn't owned by
+ * the container (eg /etc/nginx/nginx.d/appconfig) should be symlinked.
+ *
+ */
+export interface GuS3ConfigMount {
+  /**
+   * The mount path inside the container.
+   *
+   * @defaultValue `/etc/gu/${app}/`
+   */
+  containerPath?: string;
+  /**
+   * Source S3 location for the S3 Files file system.
+   *
+   * @defaultValue `{ bucket: DistributionBucketName, path: ${stack}/${stage}/${app} }`
+   */
+  source?: {
+    bucket: string;
+    path: string;
+  };
+  /**
+   * Sub-path within the file system source to mount into the container.
+   *
+   * @defaultValue `/conf/`
+   */
+  subPath?: string;
+  /**
+   * Whether the mount should be read-only.
+   *
+   * @defaultValue true
+   */
+  readOnly?: boolean;
+}
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   /**
@@ -344,6 +392,12 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     repositoryName?: string;
     /**
+     * Mount S3 Files volumes directly into the application container.
+     *
+     * Each entry defines both the source S3 Files file system and the container mount path.
+     */
+    s3ConfigMounts?: GuS3ConfigMount[];
+    /**
      * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
      * level of availability so that all 3 Availability Zones are utilised.
      */
@@ -583,7 +637,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3ConfigMounts = [] } = ecsProps;
 
       const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
       if (!ecrRepoName) {
@@ -643,7 +697,57 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
-      taskDefinition.addContainer(app, {
+      function getDefaultS3FilesSource() {
+        return {
+          bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+          path: `${stack}/${stage}/${app}/`,
+        };
+      }
+
+      const resolvedS3FilesMounts = s3ConfigMounts.map((mount) => ({
+        ...mount,
+        containerPath: mount.containerPath ?? `/etc/gu/${app}`,
+        subPath: mount.subPath ?? "/conf",
+        readOnly: mount.readOnly ?? true,
+      }));
+
+      const s3FilesFileSystems = resolvedS3FilesMounts.map((mount, index) => {
+        const source = mount.source ?? getDefaultS3FilesSource();
+        const normalizedPrefix = source.path.endsWith("/") ? source.path : `${source.path}/`;
+        const roleArnLookup = new AwsCustomResource(scope, `S3FilesLinkedRoleArn${index}`, {
+          onCreate: {
+            service: "IAM",
+            action: "getRole",
+            parameters: { RoleName: "AWSServiceRoleForAmazonS3Vectors" },
+            physicalResourceId: PhysicalResourceId.of(`s3files-linked-role-${index}`),
+          },
+          onUpdate: {
+            service: "IAM",
+            action: "getRole",
+            parameters: { RoleName: "AWSServiceRoleForAmazonS3Vectors" },
+            physicalResourceId: PhysicalResourceId.of(`s3files-linked-role-${index}`),
+          },
+          policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: AwsCustomResourcePolicy.ANY_RESOURCE }),
+        });
+        return new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
+          bucket: source.bucket,
+          prefix: normalizedPrefix,
+          roleArn: roleArnLookup.getResponseField("Role.Arn"),
+        });
+      });
+
+      const s3FilesVolumes: Array<{
+        name: string;
+        configuredAtLaunch?: boolean;
+        fileSystemArn: string;
+        rootDirectory: string;
+      }> = resolvedS3FilesMounts.map((mount, index) => ({
+        name: `s3files-volume-${index}`,
+        fileSystemArn: s3FilesFileSystems[index]!.attrFileSystemArn,
+        rootDirectory: mount.subPath,
+      }));
+
+      const appContainer = taskDefinition.addContainer(app, {
         image,
         dockerLabels: {
           RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
@@ -657,6 +761,15 @@ export class GuLoadBalancedAppExperimental extends Construct {
         environment,
       });
 
+      const mountPoints: MountPoint[] = resolvedS3FilesMounts.map((mount, index) => ({
+        containerPath: mount.containerPath,
+        sourceVolume: `s3files-volume-${index}`,
+        readOnly: mount.readOnly,
+      }));
+      if (mountPoints.length > 0) {
+        appContainer.addMountPoints(...mountPoints);
+      }
+
       // Permissions passed to the ECS task...
       const applicationPermissions: GuPolicy[] = [
         // ...to allow writing logs to Kinesis
@@ -668,6 +781,18 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // ...permissions specific for this application (provided by client)
         ...additionalPolicies,
       ];
+
+      if (s3FilesVolumes.length > 0) {
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
+            resources: [
+              ...new Set(s3FilesVolumes.flatMap(sfv => sfv.fileSystemArn))
+            ],
+          }),
+        );
+      }
 
       applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
 
@@ -775,6 +900,19 @@ export class GuLoadBalancedAppExperimental extends Construct {
         name: "logging-volume",
       };
       taskDefinition.addVolume(logVolume);
+
+      const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
+      cfnTaskDefinition.addPropertyOverride("Volumes", [
+        { Name: logVolume.name },
+        ...s3FilesVolumes.map(({ name, configuredAtLaunch, fileSystemArn, rootDirectory }) => ({
+          Name: name,
+          ...(configuredAtLaunch !== undefined && { ConfiguredAtLaunch: configuredAtLaunch }),
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: fileSystemArn,
+            RootDirectory: rootDirectory,
+          },
+        })),
+      ]);
 
       logRouter.addMountPoints({
         containerPath: "/init",

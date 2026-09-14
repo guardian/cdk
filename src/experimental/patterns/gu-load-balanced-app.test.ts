@@ -41,6 +41,113 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
+  it("should create S3 Files resources and mount them in the ECS task definition", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3ConfigMounts: [
+          {
+            containerPath: "/amiable",
+            subPath: "/amiable",
+          },
+        ],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: {
+        Ref: "DistributionBucketName",
+      },
+      Prefix: "test-stack/TEST/test-gu/",
+      RoleArn: {
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesLinkedRoleArn0"), "Role.Arn"],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      Volumes: Match.arrayWith([
+        Match.objectLike({
+          Name: "s3files-volume-0",
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: {
+              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem0"), "FileSystemArn"],
+            },
+            RootDirectory: "/amiable",
+          },
+        }),
+      ]),
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/amiable",
+              SourceVolume: "s3files-volume-0",
+              ReadOnly: true,
+            }),
+          ]),
+        }),
+      ]),
+    });
+  });
+
+  it("should allow overriding S3 Files source bucket and path", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3ConfigMounts: [
+          {
+            containerPath: "/override",
+            source: {
+              bucket: "custom-bucket",
+              path: "custom/path",
+            },
+            readOnly: false,
+          },
+        ],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: "custom-bucket",
+      Prefix: "custom/path/",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/override",
+              ReadOnly: false,
+            }),
+          ]),
+        }),
+      ]),
+    });
+  });
+
   it("should apply standard tags to all taggable resources", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
