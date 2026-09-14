@@ -2652,7 +2652,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "GuSubnetListParameter",
       "GuLoadBalancedAppExperimental",
       "GuLoggingStreamNameParameter",
-      "GuDistributionBucketParameter",
       "GuRiffRaffDeploymentIdParameterExperimental",
       "GuLogShippingPolicy",
       "GuParameterStoreReadPolicy",
@@ -2684,11 +2683,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     },
     "ArtifactAccountIdParameter": {
       "Default": "/organisation/accounts/artifacts",
-      "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-    "DistributionBucketName": {
-      "Default": "/account/services/artifact.bucket",
-      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "LoggingStreamName": {

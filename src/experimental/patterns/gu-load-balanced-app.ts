@@ -78,19 +78,6 @@ import {
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
 
-export interface GuS3FilesVolumeConfiguration {
-  /**
-   * Full ARN of the S3 Files file system to mount.
-   */
-  fileSystemArn: string;
-  /**
-   * Path within the mounted file system to use as the root.
-   *
-   * @defaultValue "/"
-   */
-  rootDirectory?: string;
-}
-
 /**
  * This interface defines the configuration for mounting an S3 Files file system into a container.
  *
@@ -749,13 +736,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const s3FilesVolumes: Array<{
         name: string;
         configuredAtLaunch?: boolean;
-        s3FilesVolumeConfiguration: GuS3FilesVolumeConfiguration;
+        fileSystemArn: string;
+        rootDirectory: string;
       }> = resolvedS3FilesMounts.map((mount, index) => ({
         name: `s3files-volume-${index}`,
-        s3FilesVolumeConfiguration: {
-          fileSystemArn: s3FilesFileSystems[index]!.attrFileSystemArn,
-          rootDirectory: mount.subPath!,
-        },
+        fileSystemArn: s3FilesFileSystems[index]!.attrFileSystemArn,
+        rootDirectory: mount.subPath,
       }));
 
       const appContainer = taskDefinition.addContainer(app, {
@@ -799,9 +785,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
             effect: Effect.ALLOW,
             actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
             resources: [
-              ...new Set(
-                s3FilesVolumes.flatMap(({ s3FilesVolumeConfiguration }) => [s3FilesVolumeConfiguration.fileSystemArn]),
-              ),
+              ...new Set(s3FilesVolumes.flatMap(sfv => sfv.fileSystemArn))
             ],
           }),
         );
@@ -900,14 +884,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
       cfnTaskDefinition.addPropertyOverride("Volumes", [
         { Name: logVolume.name },
-        ...s3FilesVolumes.map(({ name, configuredAtLaunch, s3FilesVolumeConfiguration }) => ({
+        ...s3FilesVolumes.map(({ name, configuredAtLaunch, fileSystemArn, rootDirectory }) => ({
           Name: name,
           ...(configuredAtLaunch !== undefined && { ConfiguredAtLaunch: configuredAtLaunch }),
           S3FilesVolumeConfiguration: {
-            FileSystemArn: s3FilesVolumeConfiguration.fileSystemArn,
-            ...(s3FilesVolumeConfiguration.rootDirectory !== undefined && {
-              RootDirectory: s3FilesVolumeConfiguration.rootDirectory,
-            }),
+            FileSystemArn: fileSystemArn,
+            RootDirectory: rootDirectory,
           },
         })),
       ]);
