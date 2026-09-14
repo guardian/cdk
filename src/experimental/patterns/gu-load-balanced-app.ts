@@ -693,11 +693,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const defaultS3FilesSource = {
         bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
-        path: `${stack}/${stage}/${app}`,
+        path: `${stack}/${stage}/${app}/`,
       };
 
       const s3FilesFileSystems = s3FilesMounts.map((mount, index) => {
         const source = mount.source ?? defaultS3FilesSource;
+        const normalizedPrefix = source.path.endsWith("/") ? source.path : `${source.path}/`;
         const roleArnLookup = new AwsCustomResource(scope, `S3FilesLinkedRoleArn${index}`, {
           onCreate: {
             service: "IAM",
@@ -715,7 +716,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         });
         return new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
           bucket: source.bucket,
-          prefix: source.path,
+          prefix: normalizedPrefix,
           roleArn: roleArnLookup.getResponseField("Role.Arn"),
         });
       });
