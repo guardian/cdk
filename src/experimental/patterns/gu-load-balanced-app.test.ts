@@ -59,7 +59,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         s3FilesMounts: [
           {
             containerPath: "/amiable",
-            rootDirectory: "/amiable",
+            subPath: "/amiable",
           },
         ],
       },
