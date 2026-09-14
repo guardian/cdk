@@ -27,11 +27,13 @@ import type { CfnService } from "aws-cdk-lib/aws-ecs";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { CfnFileSystem } from "aws-cdk-lib/aws-s3files";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -46,6 +48,7 @@ import {
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity } from "../../constructs/core";
+import { GuDistributionBucketParameter } from "../../constructs/core";
 import { GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
@@ -98,9 +101,14 @@ export interface GuS3FileMount {
    */
   containerPath: string;
   /**
-   * Full ARN of the S3 Files file system to mount.
+   * Source S3 location for the S3 Files file system.
+   *
+   * @defaultValue `{ bucket: DistributionBucketName, path: ${stack}/${stage}/${app} }`
    */
-  fileSystemArn: string;
+  source?: {
+    bucket: string;
+    path: string;
+  };
   /**
    * Path within the mounted file system to use as the root.
    *
@@ -690,6 +698,35 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
+      const defaultS3FilesSource = {
+        bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+        path: `${stack}/${stage}/${app}`,
+      };
+
+      const s3FilesFileSystems = s3FilesMounts.map((mount, index) => {
+        const source = mount.source ?? defaultS3FilesSource;
+        const roleArnLookup = new AwsCustomResource(scope, `S3FilesLinkedRoleArn${index}`, {
+          onCreate: {
+            service: "IAM",
+            action: "getRole",
+            parameters: { RoleName: "AWSServiceRoleForAmazonS3Vectors" },
+            physicalResourceId: PhysicalResourceId.of(`s3files-linked-role-${index}`),
+          },
+          onUpdate: {
+            service: "IAM",
+            action: "getRole",
+            parameters: { RoleName: "AWSServiceRoleForAmazonS3Vectors" },
+            physicalResourceId: PhysicalResourceId.of(`s3files-linked-role-${index}`),
+          },
+          policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: AwsCustomResourcePolicy.ANY_RESOURCE }),
+        });
+        return new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
+          bucket: source.bucket,
+          prefix: source.path,
+          roleArn: roleArnLookup.getResponseField("Role.Arn"),
+        });
+      });
+
       const s3FilesVolumes: Array<{
         name: string;
         configuredAtLaunch?: boolean;
@@ -697,9 +734,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       }> = s3FilesMounts.map((mount, index) => ({
         name: `s3files-volume-${index}`,
         s3FilesVolumeConfiguration: {
-          fileSystemArn: mount.fileSystemArn,
+          fileSystemArn: s3FilesFileSystems[index]!.attrFileSystemArn,
           ...(mount.rootDirectory !== undefined && { rootDirectory: mount.rootDirectory }),
-            ...(mount.accessPointArn !== undefined && { accessPointArn: mount.accessPointArn }),
+          ...(mount.accessPointArn !== undefined && { accessPointArn: mount.accessPointArn }),
         },
       }));
 

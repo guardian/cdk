@@ -41,7 +41,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 
-  it("should pass S3 Files volume configuration through to the ECS task definition", function () {
+  it("should create S3 Files resources and mount them in the ECS task definition", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
       monitoringConfiguration: { noMonitoring: true },
@@ -59,11 +59,19 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         s3FilesMounts: [
           {
             containerPath: "/amiable",
-            fileSystemArn: "arn:aws:s3files:eu-west-1:123456789012:file-system/fs-0123456789abcdef0",
             rootDirectory: "/amiable",
-            accessPointArn: "arn:aws:s3files:eu-west-1:123456789012:file-system/fs-0123456789abcdef0/access-point/fsap-0123456789abcdef0",
           },
         ],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: {
+        Ref: "DistributionBucketName",
+      },
+      Prefix: "test/CODE/test-gu",
+      RoleArn: {
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesLinkedRoleArn0"), "Role.Arn"],
       },
     });
 
@@ -72,9 +80,10 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         Match.objectLike({
           Name: "s3files-volume-0",
           S3FilesVolumeConfiguration: {
-            FileSystemArn: "arn:aws:s3files:eu-west-1:123456789012:file-system/fs-0123456789abcdef0",
+            FileSystemArn: {
+              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem0"), "Arn"],
+            },
             RootDirectory: "/amiable",
-            AccessPointArn: "arn:aws:s3files:eu-west-1:123456789012:file-system/fs-0123456789abcdef0/access-point/fsap-0123456789abcdef0",
           },
         }),
       ]),
@@ -85,6 +94,53 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
               ContainerPath: "/amiable",
               SourceVolume: "s3files-volume-0",
               ReadOnly: true,
+            }),
+          ]),
+        }),
+      ]),
+    });
+  });
+
+  it("should allow overriding S3 Files source bucket and path", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3FilesMounts: [
+          {
+            containerPath: "/override",
+            source: {
+              bucket: "custom-bucket",
+              path: "custom/path",
+            },
+            readOnly: false,
+          },
+        ],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: "custom-bucket",
+      Prefix: "custom/path",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/override",
+              ReadOnly: false,
             }),
           ]),
         }),
