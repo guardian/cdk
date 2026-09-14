@@ -56,7 +56,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
-        s3FilesMounts: [
+        s3ConfigMounts: [
           {
             containerPath: "/amiable",
             subPath: "/amiable",
@@ -69,7 +69,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       Bucket: {
         Ref: "DistributionBucketName",
       },
-      Prefix: "test/CODE/test-gu",
+      Prefix: "test-stack/TEST/test-gu/",
       RoleArn: {
         "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesLinkedRoleArn0"), "Role.Arn"],
       },
@@ -81,7 +81,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           Name: "s3files-volume-0",
           S3FilesVolumeConfiguration: {
             FileSystemArn: {
-              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem0"), "Arn"],
+              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem0"), "FileSystemArn"],
             },
             RootDirectory: "/amiable",
           },
@@ -116,7 +116,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
-        s3FilesMounts: [
+        s3ConfigMounts: [
           {
             containerPath: "/override",
             source: {
@@ -131,7 +131,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
 
     Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
       Bucket: "custom-bucket",
-      Prefix: "custom/path",
+      Prefix: "custom/path/",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
