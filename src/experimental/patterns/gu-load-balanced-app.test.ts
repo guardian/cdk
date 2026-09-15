@@ -59,7 +59,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         s3Config: {
           ...getDefaultS3ConfigMount(stack),
           containerPath: "/amiable",
-          subPath: "/amiable",
         },
       },
     });
@@ -76,7 +75,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ],
         ],
       },
-      Prefix: "test-stack/TEST/test-gu/",
+      Prefix: "test-stack/TEST/test-gu/conf/",
       RoleArn: {
         "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole0"), "Arn"],
       },
@@ -90,7 +89,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
             FileSystemArn: {
               "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem0"), "FileSystemArn"],
             },
-            RootDirectory: "/amiable",
+            RootDirectory: "/",
           },
         }),
       ]),
@@ -127,9 +126,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           containerPath: "/override",
           source: {
             bucket: "custom-bucket",
-            path: "custom/path",
+            path: "custom/path/conf",
           },
-          subPath: "/override-conf",
           readOnly: false,
         },
       },
@@ -146,7 +144,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           ],
         ],
       },
-      Prefix: "custom/path/",
+      Prefix: "custom/path/conf/",
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
