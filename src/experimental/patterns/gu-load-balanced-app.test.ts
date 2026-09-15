@@ -59,6 +59,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         s3Config: {
           ...getDefaultS3ConfigMount(stack),
           containerPath: "/amiable",
+          path: "test-stack/TEST/test-gu/conf/",
         },
       },
     });
@@ -124,10 +125,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         imageIdentifier: "sha256:12345",
         s3Config: {
           containerPath: "/override",
-          source: {
-            bucket: "custom-bucket",
-            path: "custom/path/conf",
-          },
+          bucket: "custom-bucket",
+          path: "custom/path/conf",
           readOnly: false,
         },
       },
