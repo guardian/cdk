@@ -56,13 +56,11 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
-        s3ConfigMounts: [
-          {
-            ...getDefaultS3ConfigMount(stack),
-            containerPath: "/amiable",
-            subPath: "/amiable",
-          },
-        ],
+        s3Config: {
+          ...getDefaultS3ConfigMount(stack),
+          containerPath: "/amiable",
+          subPath: "/amiable",
+        },
       },
     });
 
@@ -125,17 +123,15 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
-        s3ConfigMounts: [
-          {
-            containerPath: "/override",
-            source: {
-              bucket: "custom-bucket",
-              path: "custom/path",
-            },
-            subPath: "/override-conf",
-            readOnly: false,
+        s3Config: {
+          containerPath: "/override",
+          source: {
+            bucket: "custom-bucket",
+            path: "custom/path",
           },
-        ],
+          subPath: "/override-conf",
+          readOnly: false,
+        },
       },
     });
 

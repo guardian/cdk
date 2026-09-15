@@ -397,11 +397,9 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     repositoryName?: string;
     /**
-     * Mount S3 Files volumes directly into the application container.
-     *
-     * Each entry defines both the source S3 Files file system and the container mount path.
+     * Mount an S3 Files volume directly into the application container.
      */
-    s3ConfigMounts?: GuS3ConfigMount[];
+    s3Config?: GuS3ConfigMount;
     /**
      * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
      * level of availability so that all 3 Availability Zones are utilised.
@@ -641,7 +639,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3ConfigMounts = [] } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3Config } = ecsProps;
 
       const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
       if (!ecrRepoName) {
@@ -719,40 +717,42 @@ export class GuLoadBalancedAppExperimental extends Construct {
         environment,
       });
 
-      const s3FilesVolumeConfigurations = s3ConfigMounts.map((mount, index) => {
-        const normalizedPrefix = mount.source.path.endsWith("/") ? mount.source.path : `${mount.source.path}/`;
-        const role = new Role(scope, `S3FilesRole${index}`, {
-          assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
-          description: `Role used by the S3 Files filesystem for ${app} mount ${index}`,
-        });
-        const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
-          bucket: getS3FilesBucketArn(mount.source.bucket),
-          prefix: normalizedPrefix,
-          roleArn: role.roleArn,
-        });
+      const s3FilesVolumeConfigurations = s3Config
+        ? [s3Config].map((mount, index) => {
+            const normalizedPrefix = mount.source.path.endsWith("/") ? mount.source.path : `${mount.source.path}/`;
+            const role = new Role(scope, `S3FilesRole${index}`, {
+              assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
+              description: `Role used by the S3 Files filesystem for ${app} mount ${index}`,
+            });
+            const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
+              bucket: getS3FilesBucketArn(mount.source.bucket),
+              prefix: normalizedPrefix,
+              roleArn: role.roleArn,
+            });
 
-        taskDefinition.addToTaskRolePolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
-            resources: [fileSystem.attrFileSystemArn],
-          }),
-        );
+            taskDefinition.addToTaskRolePolicy(
+              new PolicyStatement({
+                effect: Effect.ALLOW,
+                actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
+                resources: [fileSystem.attrFileSystemArn],
+              }),
+            );
 
-        appContainer.addMountPoints({
-          containerPath: mount.containerPath,
-          sourceVolume: `s3files-volume-${index}`,
-          readOnly: mount.readOnly,
-        });
+            appContainer.addMountPoints({
+              containerPath: mount.containerPath,
+              sourceVolume: `s3files-volume-${index}`,
+              readOnly: mount.readOnly,
+            });
 
-        return {
-          Name: `s3files-volume-${index}`,
-          S3FilesVolumeConfiguration: {
-            FileSystemArn: fileSystem.attrFileSystemArn,
-            RootDirectory: mount.subPath,
-          },
-        };
-      });
+            return {
+              Name: `s3files-volume-${index}`,
+              S3FilesVolumeConfiguration: {
+                FileSystemArn: fileSystem.attrFileSystemArn,
+                RootDirectory: mount.subPath,
+              },
+            };
+          })
+        : [];
 
       // Permissions passed to the ECS task...
       const applicationPermissions: GuPolicy[] = [
