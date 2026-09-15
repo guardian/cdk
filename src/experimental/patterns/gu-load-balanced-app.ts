@@ -79,17 +79,8 @@ import {
 /**
  * This interface defines the configuration for mounting an S3 Files file system into a container.
  *
- * The implementation comes with defaults for every value:
- *
- *   s3ConfigMounts: [ {} ]
- *
- * will result in the following S3 location being mounted into the container as a file system:
- *
- *   /etc/gu/app/ -> s3://dist-bucket/app/stack/stage/conf/
- *
- * Any files which need to present in a container in a directory that isn't owned by
- * the container (eg /etc/nginx/nginx.d/appconfig) should be symlinked.
- *
+ * The implementation comes with a default function `getDefaultS3ConfigMount` which can be used
+ * as the basis to spread different values as needed.
  */
 export interface GuS3ConfigMount {
   /**
@@ -98,21 +89,33 @@ export interface GuS3ConfigMount {
   containerPath: string;
   /**
    * Source S3 location for the S3 Files file system.
+   *
+   * The path is the prefix that should be mounted into the container; default is
+   * `${stack}/${stage}/${app}/conf/`.
    */
   source: {
     bucket: string;
     path: string;
   };
   /**
-   * Sub-path within the file system source to mount into the container.
-   */
-  subPath: string;
-  /**
    * Whether the mount should be read-only.
    */
   readOnly: boolean;
 }
 
+/**
+ * Default values for "normal" applications.
+ *
+ *   s3ConfigMounts: getDefaultS3ConfigMount(this)
+ *
+ * will result in the following S3 location being mounted into the container as a file system:
+ *
+ *   /etc/${app}/ -> s3://${dist-bucket}/${stack}/${stage}/${app}/conf/
+ *
+ * Any files which need to present in a container in a directory that isn't owned by
+ * the container (eg /etc/nginx/nginx.d/appconfig) should be symlinked.
+ *
+ */
 export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
   const app = scope.app;
   if (!app) {
@@ -120,12 +123,11 @@ export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
   }
 
   return {
-    containerPath: `/etc/gu/${app}`,
+    containerPath: `/etc/${app}`,
     source: {
       bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
-      path: `${scope.stack}/${scope.stage}/${app}/`,
+      path: `${scope.stack}/${scope.stage}/${app}/conf/`,
     },
-    subPath: "/conf",
     readOnly: true,
   };
 }
@@ -748,7 +750,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
               Name: `s3files-volume-${index}`,
               S3FilesVolumeConfiguration: {
                 FileSystemArn: fileSystem.attrFileSystemArn,
-                RootDirectory: mount.subPath,
+                RootDirectory: "/",
               },
             };
           })
