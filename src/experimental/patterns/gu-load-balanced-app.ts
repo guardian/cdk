@@ -1,4 +1,4 @@
-import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
 import {
@@ -30,11 +30,10 @@ import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadb
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { CfnFileSystem } from "aws-cdk-lib/aws-s3files";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
@@ -701,48 +700,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
         };
       }
 
-      const resolvedS3FilesMounts = s3ConfigMounts.map((mount) => ({
-        ...mount,
-        containerPath: mount.containerPath ?? `/etc/gu/${app}`,
-        subPath: mount.subPath ?? "/conf",
-        readOnly: mount.readOnly ?? true,
-      }));
-
-      const s3FilesFileSystems = resolvedS3FilesMounts.map((mount, index) => {
-        const source = mount.source ?? getDefaultS3FilesSource();
-        const normalizedPrefix = source.path.endsWith("/") ? source.path : `${source.path}/`;
-        const roleArnLookup = new AwsCustomResource(scope, `S3FilesLinkedRoleArn${index}`, {
-          onCreate: {
-            service: "IAM",
-            action: "getRole",
-            parameters: { RoleName: "AWSServiceRoleForAmazonS3Vectors" },
-            physicalResourceId: PhysicalResourceId.of(`s3files-linked-role-${index}`),
-          },
-          onUpdate: {
-            service: "IAM",
-            action: "getRole",
-            parameters: { RoleName: "AWSServiceRoleForAmazonS3Vectors" },
-            physicalResourceId: PhysicalResourceId.of(`s3files-linked-role-${index}`),
-          },
-          policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: AwsCustomResourcePolicy.ANY_RESOURCE }),
-        });
-        return new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
-          bucket: source.bucket,
-          prefix: normalizedPrefix,
-          roleArn: roleArnLookup.getResponseField("Role.Arn"),
-        });
-      });
-
-      const s3FilesVolumes: Array<{
-        name: string;
-        configuredAtLaunch?: boolean;
-        fileSystemArn: string;
-        rootDirectory: string;
-      }> = resolvedS3FilesMounts.map((mount, index) => ({
-        name: `s3files-volume-${index}`,
-        fileSystemArn: s3FilesFileSystems[index]!.attrFileSystemArn,
-        rootDirectory: mount.subPath,
-      }));
+      function getS3FilesBucketArn(bucketName: string): string {
+        return `arn:${Aws.PARTITION}:s3:::${bucketName}`;
+      }
 
       const appContainer = taskDefinition.addContainer(app, {
         image,
@@ -758,14 +718,48 @@ export class GuLoadBalancedAppExperimental extends Construct {
         environment,
       });
 
-      const mountPoints: MountPoint[] = resolvedS3FilesMounts.map((mount, index) => ({
-        containerPath: mount.containerPath,
-        sourceVolume: `s3files-volume-${index}`,
-        readOnly: mount.readOnly,
-      }));
-      if (mountPoints.length > 0) {
-        appContainer.addMountPoints(...mountPoints);
-      }
+      const s3FilesVolumeConfigurations = s3ConfigMounts.map((mount, index) => {
+        const resolvedMount = {
+          ...mount,
+          containerPath: mount.containerPath ?? `/etc/gu/${app}`,
+          subPath: mount.subPath ?? "/conf",
+          readOnly: mount.readOnly ?? true,
+        };
+
+        const source = resolvedMount.source ?? getDefaultS3FilesSource();
+        const normalizedPrefix = source.path.endsWith("/") ? source.path : `${source.path}/`;
+        const role = new Role(scope, `S3FilesRole${index}`, {
+          assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
+          description: `Role used by the S3 Files filesystem for ${app} mount ${index}`,
+        });
+        const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
+          bucket: getS3FilesBucketArn(source.bucket),
+          prefix: normalizedPrefix,
+          roleArn: role.roleArn,
+        });
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
+            resources: [fileSystem.attrFileSystemArn],
+          }),
+        );
+
+        appContainer.addMountPoints({
+          containerPath: resolvedMount.containerPath,
+          sourceVolume: `s3files-volume-${index}`,
+          readOnly: resolvedMount.readOnly,
+        });
+
+        return {
+          Name: `s3files-volume-${index}`,
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: fileSystem.attrFileSystemArn,
+            RootDirectory: resolvedMount.subPath,
+          },
+        };
+      });
 
       // Permissions passed to the ECS task...
       const applicationPermissions: GuPolicy[] = [
@@ -778,18 +772,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // ...permissions specific for this application (provided by client)
         ...additionalPolicies,
       ];
-
-      if (s3FilesVolumes.length > 0) {
-        taskDefinition.addToTaskRolePolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
-            resources: [
-              ...new Set(s3FilesVolumes.flatMap(sfv => sfv.fileSystemArn))
-            ],
-          }),
-        );
-      }
 
       applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
 
@@ -882,17 +864,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       taskDefinition.addVolume(logVolume);
 
       const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
-      cfnTaskDefinition.addPropertyOverride("Volumes", [
-        { Name: logVolume.name },
-        ...s3FilesVolumes.map(({ name, configuredAtLaunch, fileSystemArn, rootDirectory }) => ({
-          Name: name,
-          ...(configuredAtLaunch !== undefined && { ConfiguredAtLaunch: configuredAtLaunch }),
-          S3FilesVolumeConfiguration: {
-            FileSystemArn: fileSystemArn,
-            RootDirectory: rootDirectory,
-          },
-        })),
-      ]);
+      cfnTaskDefinition.addPropertyOverride("Volumes", [{ Name: logVolume.name }, ...s3FilesVolumeConfigurations]);
 
       logRouter.addMountPoints({
         containerPath: "/init",

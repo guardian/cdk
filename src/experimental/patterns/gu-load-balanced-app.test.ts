@@ -67,11 +67,19 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
 
     Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
       Bucket: {
-        Ref: "DistributionBucketName",
+        "Fn::Join": [
+          "",
+          [
+            "arn:",
+            { Ref: "AWS::Partition" },
+            ":s3:::",
+            { Ref: "DistributionBucketName" },
+          ],
+        ],
       },
       Prefix: "test-stack/TEST/test-gu/",
       RoleArn: {
-        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesLinkedRoleArn0"), "Role.Arn"],
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole0"), "Arn"],
       },
     });
 
@@ -130,7 +138,16 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
-      Bucket: "custom-bucket",
+      Bucket: {
+        "Fn::Join": [
+          "",
+          [
+            "arn:",
+            { Ref: "AWS::Partition" },
+            ":s3:::custom-bucket",
+          ],
+        ],
+      },
       Prefix: "custom/path/",
     });
 
