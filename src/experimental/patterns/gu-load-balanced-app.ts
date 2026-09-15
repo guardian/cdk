@@ -83,30 +83,30 @@ import {
  * as the basis to spread different values as needed.
  */
 export interface GuS3ConfigMount {
-  /**
-   * The mount path inside the container.
-   */
-  containerPath: string;
-  /**
-   * Source S3 location for the S3 Files file system.
-   *
-   * The path is the prefix that should be mounted into the container; default is
-   * `${stack}/${stage}/${app}/conf/`.
-   */
-  source: {
-    bucket: string;
-    path: string;
-  };
-  /**
-   * Whether the mount should be read-only.
-   */
-  readOnly: boolean;
+ /**
+  * The mount path inside the container. Note that this must be a directory that is not
+  * currently used. Any directory content at this location in the image will be overwritten
+  * by the mount.
+  */
+ containerPath: string;
+ /**
+  * The name of the S3 bucket to mount.
+  */
+ bucket: string;
+ /**
+  * The S3 prefix to mount into the container.
+  */
+ path: string;
+ /**
+  * Whether the mount should be read-only.
+  */
+ readOnly: boolean;
 }
 
 /**
  * Default values for "normal" applications.
  *
- *   s3ConfigMounts: getDefaultS3ConfigMount(this)
+ *   s3Config: getDefaultS3ConfigMount(this)
  *
  * will result in the following S3 location being mounted into the container as a file system:
  *
@@ -117,19 +117,16 @@ export interface GuS3ConfigMount {
  *
  */
 export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
-  const app = scope.app;
-  if (!app) {
-    throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
-  }
+ if (!scope.app) {
+   throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
+ }
 
-  return {
-    containerPath: `/etc/${app}`,
-    source: {
-      bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
-      path: `${scope.stack}/${scope.stage}/${app}/conf/`,
-    },
-    readOnly: true,
-  };
+ return {
+   containerPath: `/etc/${scope.app}`,
+   bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+   path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
+   readOnly: true,
+ };
 }
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
@@ -400,6 +397,8 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     repositoryName?: string;
     /**
      * Mount an S3 Files volume directly into the application container.
+     *
+     * Supply a single config object.  For common defaults, use getDefaultS3ConfigMount(scope).
      */
     s3Config?: GuS3ConfigMount;
     /**
@@ -701,10 +700,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
-      function getS3FilesBucketArn(bucketName: string): string {
-        return `arn:${Aws.PARTITION}:s3:::${bucketName}`;
-      }
-
       const appContainer = taskDefinition.addContainer(app, {
         image,
         dockerLabels: {
@@ -721,13 +716,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const s3FilesVolumeConfigurations = s3Config
         ? [s3Config].map((mount, index) => {
-            const normalizedPrefix = mount.source.path.endsWith("/") ? mount.source.path : `${mount.source.path}/`;
+            const normalizedPrefix = mount.path.endsWith("/") ? mount.path : `${mount.path}/`;
             const role = new Role(scope, `S3FilesRole${index}`, {
               assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
               description: `Role used by the S3 Files filesystem for ${app} mount ${index}`,
             });
             const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
-              bucket: getS3FilesBucketArn(mount.source.bucket),
+              bucket: `arn:${Aws.PARTITION}:s3:::${mount.bucket}`,
               prefix: normalizedPrefix,
               roleArn: role.roleArn,
             });
