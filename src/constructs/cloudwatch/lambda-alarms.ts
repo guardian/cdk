@@ -32,6 +32,8 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
     });
     const defaultAlarmName = `High error percentage from ${props.lambda.functionName} lambda in ${scope.stage}`;
     const defaultDescription = `${props.lambda.functionName} exceeded ${props.toleratedErrorPercentage}% error rate`;
+
+    const alarmDescription = props.alarmDescription ?? defaultDescription;
     const alarmProps: GuAlarmProps = {
       ...props,
       app: props.lambda.app,
@@ -41,7 +43,7 @@ export class GuLambdaErrorPercentageAlarm extends GuAlarm {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       evaluationPeriods: props.numberOfEvaluationPeriodsAboveThresholdBeforeAlarm ?? 1,
       alarmName: props.alarmName ?? defaultAlarmName,
-      alarmDescription: props.alarmDescription ?? defaultDescription,
+      alarmDescription: alarmDescription,
     };
     super(scope, id, alarmProps);
   }
