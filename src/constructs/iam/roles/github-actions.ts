@@ -18,26 +18,14 @@ const GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN_THUMBPRINTS = [
   "1c58a3a8518e8759bf075b76b750d4f2df264fcd",
 ];
 
-export interface GuGithubActionsRepositoryCondition {
-  /**
-   * The GitHub organisation/user to constrain the IAM Role to.
-   */
-  githubOrganisation: string;
+type ImmutableRepositorySubjectClaim = `${string}@${number}/${string}@${number}`;
 
-  /**
-   * Repositories to constrain the IAM Role to.
-   */
-  repositories?: string;
+export interface GuGithubActionsRepositoryCondition {
+  repository: ImmutableRepositorySubjectClaim;
 }
 
 const GuGithubActionsRepositoryCondition = {
-  toString: ({ githubOrganisation, repositories }: GuGithubActionsRepositoryCondition): string =>
-    `repo:${githubOrganisation}/${repositories ?? "*"}`,
-};
-
-const ALL_GUARDIAN_REPOSITORIES: GuGithubActionsRepositoryCondition = {
-  githubOrganisation: "guardian",
-  repositories: "*",
+  toString: ({ repository }: GuGithubActionsRepositoryCondition): string => `repo:${repository}:*`,
 };
 
 export interface GuGithubActionsRoleProps {
@@ -48,9 +36,8 @@ export interface GuGithubActionsRoleProps {
 
   /**
    * Repositories where GitHub Actions can assumes this role.
-   * Defaults to [[`ALL_GUARDIAN_REPOSITORIES`]].
    */
-  condition?: GuGithubActionsRepositoryCondition;
+  condition: GuGithubActionsRepositoryCondition;
 }
 
 /*
@@ -91,14 +78,14 @@ export class GitHubOidcProvider extends CfnResource {
  *   - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
  */
 export class GuGithubActionsRole extends GuRole {
-  constructor(scope: GuStack, props: GuGithubActionsRoleProps) {
-    super(scope, "GithubActionsRole", {
+  constructor(scope: GuStack, id: string, props: GuGithubActionsRoleProps) {
+    super(scope, id, {
       assumedBy: new FederatedPrincipal(
         `arn:aws:iam::${scope.account}:oidc-provider/${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}`,
         {
           StringLike: {
             [`${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}:sub`]: GuGithubActionsRepositoryCondition.toString(
-              props.condition ?? ALL_GUARDIAN_REPOSITORIES,
+              props.condition,
             ),
           },
         },
