@@ -830,10 +830,19 @@ export class GuLoadBalancedAppExperimental extends Construct {
           roleArn: role.roleArn,
         });
 
+        const actions: string[] = [
+          "s3files:GetFileSystem",
+          "s3files:ListDirectory",
+          "s3files:ReadFile",
+        ];
+        if (!s3Config.readOnly) {
+          actions.push("s3files:WriteFile");
+        }
+
         taskDefinition.addToTaskRolePolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
+            actions,
             resources: [fileSystem.attrFileSystemArn],
           }),
         );
