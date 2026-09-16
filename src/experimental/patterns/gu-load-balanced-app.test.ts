@@ -78,17 +78,17 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
       Prefix: "test-stack/TEST/test-gu/conf/",
       RoleArn: {
-        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole0"), "Arn"],
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole"), "Arn"],
       },
     });
 
     Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
       Volumes: Match.arrayWith([
         Match.objectLike({
-          Name: "s3files-volume-0",
+          Name: "s3files-volume",
           S3FilesVolumeConfiguration: {
             FileSystemArn: {
-              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem0"), "FileSystemArn"],
+              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem"), "FileSystemArn"],
             },
             RootDirectory: "/",
           },
@@ -99,7 +99,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           MountPoints: Match.arrayWith([
             Match.objectLike({
               ContainerPath: "/amiable",
-              SourceVolume: "s3files-volume-0",
+              SourceVolume: "s3files-volume",
               ReadOnly: true,
             }),
           ]),

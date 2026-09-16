@@ -714,43 +714,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         environment,
       });
 
-      const s3FilesVolumeConfigurations = s3Config
-        ? [s3Config].map((mount, index) => {
-            const normalizedPrefix = mount.path.endsWith("/") ? mount.path : `${mount.path}/`;
-            const role = new Role(scope, `S3FilesRole${index}`, {
-              assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
-              description: `Role used by the S3 Files filesystem for ${app} mount ${index}`,
-            });
-            const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem${index}`, {
-              bucket: `arn:${Aws.PARTITION}:s3:::${mount.bucket}`,
-              prefix: normalizedPrefix,
-              roleArn: role.roleArn,
-            });
-
-            taskDefinition.addToTaskRolePolicy(
-              new PolicyStatement({
-                effect: Effect.ALLOW,
-                actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
-                resources: [fileSystem.attrFileSystemArn],
-              }),
-            );
-
-            appContainer.addMountPoints({
-              containerPath: mount.containerPath,
-              sourceVolume: `s3files-volume-${index}`,
-              readOnly: mount.readOnly,
-            });
-
-            return {
-              Name: `s3files-volume-${index}`,
-              S3FilesVolumeConfiguration: {
-                FileSystemArn: fileSystem.attrFileSystemArn,
-                RootDirectory: "/",
-              },
-            };
-          })
-        : [];
-
       // Permissions passed to the ECS task...
       const applicationPermissions: GuPolicy[] = [
         // ...to allow writing logs to Kinesis
@@ -851,10 +814,48 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const logVolume: Volume = {
         name: "logging-volume",
       };
-      taskDefinition.addVolume(logVolume);
+
+      // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
+      const volumes: unknown[] = [{Name: logVolume.name}];
+
+      if (s3Config) {
+        const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
+        const role = new Role(scope, `S3FilesRole`, {
+          assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
+          description: `Role used by the S3 Files filesystem for ${app} mount`,
+        });
+        const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
+          bucket: `arn:${Aws.PARTITION}:s3:::${s3Config.bucket}`,
+          prefix: normalizedPrefix,
+          roleArn: role.roleArn,
+        });
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3files:GetFileSystem", "s3files:ListDirectory", "s3files:ReadFile", "s3files:WriteFile"],
+            resources: [fileSystem.attrFileSystemArn],
+          }),
+        );
+
+        appContainer.addMountPoints({
+          containerPath: s3Config.containerPath,
+          sourceVolume: `s3files-volume`,
+          readOnly: s3Config.readOnly,
+        });
+
+        // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.
+        volumes.push({
+          Name: `s3files-volume`,
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: fileSystem.attrFileSystemArn,
+            RootDirectory: "/",
+          },
+        });
+      }
 
       const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
-      cfnTaskDefinition.addPropertyOverride("Volumes", [{ Name: logVolume.name }, ...s3FilesVolumeConfigurations]);
+      cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
 
       logRouter.addMountPoints({
         containerPath: "/init",
