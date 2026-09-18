@@ -665,6 +665,14 @@ export class GuEc2App extends Construct {
           userPoolDomain: userPoolDomain,
           next: ListenerAction.forward([targetGroup]),
           sessionTimeout: Duration.minutes(sessionTimeoutInMinutes),
+          authenticationRequestExtraParams: {
+            // Hints to the Google signin page that only guardian.co.uk accounts
+            // can sign in to this service.
+            // This could be configurable, but we don't think there's
+            // currently any service using Cognito auth that would allow login
+            // from non-guardian.co.uk Google accounts
+            hd: "guardian.co.uk",
+          },
         }),
       });
 
