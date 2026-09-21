@@ -1,4 +1,4 @@
-import { Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { Aspects, Aws, Duration, SecretValue, Size, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -9,11 +9,12 @@ import {
   UserPoolClientIdentityProvider,
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
-import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { CfnSecurityGroupEgress, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
+import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { CfnSecurityGroupEgress, CpuManufacturer, InstanceGeneration, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
+  Compatibility,
   ContainerImage,
   ContainerInsights,
   CpuArchitecture,
@@ -22,14 +23,25 @@ import {
   FireLensLogDriver,
   FirelensLogRouterType,
   LogDriver,
+  ManagedInstancesCapacityProvider,
+  NetworkMode,
   OperatingSystemFamily,
-  PropagatedTagSource,
+  TaskDefinition,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
+import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import {
+  Effect,
+  InstanceProfile,
+  ManagedPolicy,
+  PolicyDocument,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { CfnFileSystem, CfnMountTarget } from "aws-cdk-lib/aws-s3files";
@@ -72,6 +84,7 @@ import type { GuAsgCapacity, GuDomainName } from "../../types";
 import { AppAccess } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
+import { GuECSManagedInstanceRoleExperimental } from "../constructs/iam/roles";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
 import {
   GuAutoScalingRollingUpdateTimeoutExperimental,
@@ -102,6 +115,74 @@ export interface GuS3ConfigMount {
    * The S3 prefix to mount into the container.
    */
   path: string;
+}
+
+/**
+ * If you want to use an ECS service and ECS tasks to serve requests, then pass in relevant props here.
+ *
+ * If you are setting both `ecsProps` and `ec2Props` (i.e. if you are migrating from EC2 to ECS) then you must also
+ * specify weights for each compute type using `targetGroupWeights`.
+ */
+export interface EcsProps {
+  /**
+   * Which image to run.
+   * This should be the image digest (e.g. 'sha256:abc123') to ensure immutable deployments.
+   *
+   * @see https://docs.docker.com/dhi/core-concepts/digests
+   */
+  imageIdentifier: string;
+  cpu: number;
+  memoryLimitMiB: number;
+  /**
+   * ECR repository name which contains your images.
+   */
+  repositoryName?: ContainerRepositoryName;
+  /**
+   * Mount an S3 Files volume directly into the application container.
+   *
+   * Supply a single config object.  For common defaults, use getDefaultS3ConfigMount(scope).
+   */
+  s3Config?: GuS3ConfigMount;
+  /**
+   * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
+   * level of availability so that all 3 Availability Zones are utilised.
+   */
+  scaling: {
+    /**
+     * Scaling actions will never scale down below this threshold. This also controls the number of tasks that
+     * your ECS service will launch when it is first created.
+     */
+    minimumTasks: number;
+    /**
+     * Scaling actions will never scale up above this threshold.
+     *
+     * Note that this max can be exceeded when a deployment runs (unlike the ASG max size). E.g. if maximumTasks is 6,
+     * the service is running 6 tasks and a deployment starts, the ECS service will briefly run with 12 tasks to get
+     * the deployment through.
+     */
+    maximumTasks: number;
+    cpuScaling?: Pick<TargetTrackingScalingPolicyProps, "targetValue" | "scaleInCooldown" | "scaleOutCooldown">;
+  };
+  /**
+   * Use ECS Managed Instances instead of Fargate to run the app.
+   *
+   * @default - If left unspecified, the app will run on ECS Fargate.
+   */
+  managedInstancesProps?: {
+    /**
+     * Requirements for the Managed EC2 Instances tasks will run on.
+     *
+     * @default - Default requirements are for managed instances to have at minimum the same amount of memory as the provided task, and minimum number of equivalent vCPUs to the tasks CPU units. Additionally, we require latest generation AWS Graviton CPUs for consistent performance. We strongly recommend sticking with the latest generation AWS Graviton CPUs.
+     */
+    instancesRequirements?: InstanceRequirementsConfig;
+  };
+  /**
+   * If true we provision the instanceRole and profile for managed instances.
+   * This needs to be set to true when using Fargate and deployed after managed instances, for a clean rollback.
+   *
+   * @default - false
+   */
+  provisionManagedSecurityRole?: boolean;
 }
 
 /**
@@ -383,47 +464,7 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
    * If you are setting both `ecsProps` and `ec2Props` (i.e. if you are migrating from EC2 to ECS) then you must also
    * specify weights for each compute type using `targetGroupWeights`.
    */
-  ecsProps?: {
-    /**
-     * Which image to run.
-     * This should be the image digest (e.g. 'sha256:abc123') to ensure immutable deployments.
-     *
-     * @see https://docs.docker.com/dhi/core-concepts/digests
-     */
-    imageIdentifier: string;
-    cpu: number;
-    memoryLimitMiB: number;
-    /**
-     * ECR repository name which contains your images.
-     */
-    repositoryName?: ContainerRepositoryName;
-    /**
-     * Mount an S3 Files volume directly into the application container.
-     *
-     * Supply a single config object.  For common defaults, use getDefaultS3ConfigMount(scope).
-     */
-    s3Config?: GuS3ConfigMount;
-    /**
-     * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
-     * level of availability so that all 3 Availability Zones are utilised.
-     */
-    scaling: {
-      /**
-       * Scaling actions will never scale down below this threshold. This also controls the number of tasks that
-       * your ECS service will launch when it is first created.
-       */
-      minimumTasks: number;
-      /**
-       * Scaling actions will never scale up above this threshold.
-       *
-       * Note that this max can be exceeded when a deployment runs (unlike the ASG max size). E.g. if maximumTasks is 6,
-       * the service is running 6 tasks and a deployment starts, the ECS service will briefly run with 12 tasks to get
-       * the deployment through.
-       */
-      maximumTasks: number;
-      cpuScaling?: Pick<TargetTrackingScalingPolicyProps, "targetValue" | "scaleInCooldown" | "scaleOutCooldown">;
-    };
-  };
+  ecsProps?: EcsProps;
   /**
    * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute types.
    * Each weight must be between 0 and 999. AWS will work out the relative percentage.
@@ -723,343 +764,734 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Add the GitHub repo if we can
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
 
-      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", {
-        memoryLimitMiB,
-        cpu,
-        runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
-      });
-
-      const appContainer = taskDefinition.addContainer(app, {
-        image,
-        dockerLabels: {
-          RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
-        },
-        // This speeds up deployment. We don't need this enabled if users follow the advice to refer to their image
-        // using the immutable digest
-        versionConsistency: VersionConsistency.DISABLED,
-        portMappings: [{ containerPort: applicationPort }],
-        logging: this.fireLensLogDriver,
-        readonlyRootFilesystem: true,
-        environment,
-      });
-
-      // Permissions passed to the ECS task...
-      const applicationPermissions: GuPolicy[] = [
-        // ...to allow writing logs to Kinesis
-        GuLogShippingPolicy.getInstance(scope),
-
-        // ...to allow reading application config from SSM
-        GuParameterStoreReadPolicy.getInstance(scope, { app }),
-
-        // ...permissions specific for this application (provided by client)
-        ...additionalPolicies,
-      ];
-
-      applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
-
-      /*
-      GuardDuty is enabled at the organisation level and runs as a sidecar.
-      We need to add specific permissions to allow pulling the GuardDuty image.
-      See https://docs.aws.amazon.com/guardduty/latest/ug/prereq-runtime-monitoring-ecs-support.html.
-       */
-      const guardDutyPolicies = [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["ecr:GetAuthorizationToken"],
-          resources: ["*"],
-        }),
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
-          resources: [
-            // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
-            "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
-          ],
-        }),
-      ];
-
-      guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
-
-      const ecsSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
+      const httpsEgressSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
         app: `${app}-ecs`,
         vpc,
       });
-      const ecsService = new FargateService(scope, "EcsService", {
-        cluster,
-        taskDefinition,
-        vpcSubnets: { subnets: privateSubnets },
-        // Important for service deployments; with the AWS defaults the service can be scaled down when deploying
-        minHealthyPercent: 100,
-        // Also important for service deployments; with the AWS defaults we don't get a fast failure when deploying a 'bad' build
-        circuitBreaker: { enable: true, rollback: true },
-        propagateTags: PropagatedTagSource.SERVICE,
-        // By default, AWS will create a new security group which allows all outbound traffic
-        // We don't want this so explicitly allow outbound HTTPS only
-        // This is what we do for the current GuEc2App pattern:
-        // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [ecsSecurityGroup],
-      });
 
-      const cfnService = ecsService.node.defaultChild as CfnService;
-      cfnService.addPropertyOverride("Monitoring", {
-        MetricConfigurations: [
-          {
-            MetricNames: ["CPUUtilization", "MemoryUtilization"],
-            ResolutionSeconds: 20,
-          },
-        ],
-      });
+      // If we are not using managed instances but we do want to provision the roles (for an easy rollback)
+      // If we are using managed instances these roles will be created in createManagedInstancesConstructs
+      //
+      // TODO: Remove when switching to one of fargate or managed instances.
+      if (!ecsProps.managedInstancesProps && ecsProps.provisionManagedSecurityRole) {
+        const ecsInstanceRole = new GuECSManagedInstanceRoleExperimental(scope, "ECSManagedInstancesRole", {
+          cluster: cluster,
+        });
 
-      const ecsScalableTarget = ecsService.autoScaleTaskCount({
-        minCapacity: scaling.minimumTasks,
-        maxCapacity: scaling.maximumTasks,
-      });
-
-      if (scaling.cpuScaling) {
-        const { targetValue, scaleOutCooldown, scaleInCooldown } = scaling.cpuScaling;
-
-        // The high resolution predefined metric evaluates every 20s rather than 60s,
-        // so scaling reacts far faster. It isn't in the CDK `PredefinedMetric` enum yet.
-        // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/target-tracking-faster-auto-scaling.html
-        //
-        // TODO: Update in line with `PredefinedMetric` enum - https://github.com/aws/aws-cdk/issues/38207
-        new TargetTrackingScalingPolicy(this, "CpuScaling", {
-          scalingTarget: ecsScalableTarget,
-          targetValue: targetValue,
-          predefinedMetric: "ECSServiceAverageCPUUtilizationHighResolution" as unknown as PredefinedMetric,
-          scaleOutCooldown: scaleOutCooldown,
-          scaleInCooldown: scaleInCooldown,
+        new InstanceProfile(scope, "ECSInstanceProfile", {
+          role: ecsInstanceRole,
         });
       }
 
-      this.ecsService = ecsService;
-
-      // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
-      const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
-        // See https://github.com/guardian/devx-logs
-        image: ContainerImage.fromRegistry(
-          "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
-        ),
-        environment,
-        versionConsistency: VersionConsistency.DISABLED,
-        // Send this container's logs to CloudWatch logs, retained for 1 day
-        logging: LogDriver.awsLogs({
-          streamPrefix: [scope.stack, scope.stage, app, "devx-logs-sidecar"].join("/"),
-          logRetention: RetentionDays.ONE_DAY,
-        }),
-
-        firelensConfig: {
-          type: FirelensLogRouterType.FLUENTBIT,
-        },
-
-        // To comply with FSBP ECS.5
-        readonlyRootFilesystem: true,
-      });
-
-      const logVolume: Volume = {
-        name: "logging-volume",
-      };
-
-      // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
-      const volumes: unknown[] = [{ Name: logVolume.name }];
-
-      if (s3Config) {
-        const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
-        const bucketArn = GuS3Bucket.fromBucketName(this, "ConfigBucket", s3Config.bucket).bucketArn;
-        const role = new Role(scope, `S3FilesRole`, {
-          assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
-            StringEquals: {
-              "aws:SourceAccount": scope.account,
-            },
-            ArnLike: {
-              "aws:SourceArn": `arn:${Aws.PARTITION}:s3files:${scope.region}:${scope.account}:file-system/*`,
-            },
-          }),
-          description: `Role used by the S3 Files filesystem for ${app} mount`,
+      if (!ecsProps.managedInstancesProps) {
+        // Fargate infrastructure
+        const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", {
+          memoryLimitMiB,
+          cpu,
+          runtimePlatform: {
+            cpuArchitecture: CpuArchitecture.ARM64,
+            operatingSystemFamily: OperatingSystemFamily.LINUX,
+          },
         });
 
-        // S3 Files needs synchronization permissions even when the container mount is read-only.
-        // The file system prefix does not implicitly restrict these IAM permissions.
-        role.addToPrincipalPolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3:ListBucket", "s3:ListBucketVersions", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
-            resources: [bucketArn],
-          }),
-        );
-        role.addToPrincipalPolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3:AbortMultipartUpload", "s3:DeleteObject*", "s3:GetObject*", "s3:List*", "s3:PutObject*"],
-            resources: [`${bucketArn}/*`],
-          }),
-        );
-        role.addToPrincipalPolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["kms:GenerateDataKey", "kms:Encrypt", "kms:Decrypt", "kms:ReEncryptFrom", "kms:ReEncryptTo"],
-            resources: [`arn:${Aws.PARTITION}:kms:${scope.region}:${scope.account}:key/*`],
-            conditions: {
-              StringLike: {
-                "kms:ViaService": `s3.${scope.region}.${Aws.URL_SUFFIX}`,
-                "kms:EncryptionContext:aws:s3:arn": [bucketArn, `${bucketArn}/*`],
-              },
-            },
-          }),
-        );
+        const appContainer = taskDefinition.addContainer(app, {
+          image,
+          dockerLabels: {
+            RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
+          },
+          // This speeds up deployment. We don't need this enabled if users follow the advice to refer to their image
+          // using the immutable digest
+          versionConsistency: VersionConsistency.DISABLED,
+          portMappings: [{ containerPort: applicationPort }],
+          logging: this.fireLensLogDriver,
+          readonlyRootFilesystem: true,
+          environment,
+        });
 
-        // EventBridge permissions: S3 Files creates rules prefixed "DO-NOT-DELETE-S3-Files"
-        // to detect S3 object changes and trigger data synchronization
-        role.addToPrincipalPolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: [
-              "events:DeleteRule",
-              "events:DisableRule",
-              "events:EnableRule",
-              "events:PutRule",
-              "events:PutTargets",
-              "events:RemoveTargets",
-            ],
-            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/DO-NOT-DELETE-S3-Files*`],
-            conditions: { StringEquals: { "events:ManagedBy": "elasticfilesystem.amazonaws.com" } },
-          }),
-        );
+        // Permissions passed to the ECS task...
+        const applicationPermissions: GuPolicy[] = [
+          // ...to allow writing logs to Kinesis
+          GuLogShippingPolicy.getInstance(scope),
 
-        role.addToPrincipalPolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["events:DescribeRule", "events:ListTargetsByRule"],
-            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
-          }),
-        );
+          // ...to allow reading application config from SSM
+          GuParameterStoreReadPolicy.getInstance(scope, { app }),
 
-        role.addToPrincipalPolicy(
+          // ...permissions specific for this application (provided by client)
+          ...additionalPolicies,
+        ];
+
+        applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
+
+        const guardDutyPolicies = [
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ["events:ListRuleNamesByTarget", "events:ListRules"],
+            actions: ["ecr:GetAuthorizationToken"],
             resources: ["*"],
           }),
-        );
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
+            resources: [
+              // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
+              "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
+            ],
+          }),
+        ];
 
-        const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
-          bucket: bucketArn,
-          prefix: normalizedPrefix,
-          roleArn: role.roleArn,
+        guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
+
+        const ecsService = new FargateService(scope, "EcsService", {
+          cluster,
+          taskDefinition,
+          vpcSubnets: { subnets: privateSubnets },
+          // Important for service deployments; with the AWS defaults the service can be scaled down when deploying
+          minHealthyPercent: 100,
+          // Also important for service deployments; with the AWS defaults we don't get a fast failure when deploying a 'bad' build
+          circuitBreaker: { enable: true, rollback: true },
+          propagateTags: PropagatedTagSource.SERVICE,
+          // By default, AWS will create a new security group which allows all outbound traffic
+          // We don't want this so explicitly allow outbound HTTPS only
+          // This is what we do for the current GuEc2App pattern:
+          // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
+          securityGroups: [httpsEgressSecurityGroup],
         });
-        // Referencing the role ARN alone does not wait for its separately provisioned policy.
-        fileSystem.node.addDependency(role);
 
-        const mountTargetSecurityGroup = new GuSecurityGroup(scope, "S3FilesMountTargetSecurityGroup", {
-          app: `${app}-s3files`,
-          vpc,
-          allowAllOutbound: false,
-          ingresses: [
+        const cfnService = ecsService.node.defaultChild as CfnService;
+        cfnService.addPropertyOverride("Monitoring", {
+          MetricConfigurations: [
             {
-              range: Peer.securityGroupId(ecsSecurityGroup.securityGroupId),
-              port: Port.tcp(2049),
-              description: "Allow ECS tasks to mount S3 Files",
+              MetricNames: ["CPUUtilization", "MemoryUtilization"],
+              ResolutionSeconds: 20,
             },
           ],
-          egresses: [],
-        });
-        new CfnSecurityGroupEgress(scope, "S3FilesTaskEgress", {
-          groupId: ecsSecurityGroup.securityGroupId,
-          destinationSecurityGroupId: mountTargetSecurityGroup.securityGroupId,
-          ipProtocol: "tcp",
-          fromPort: 2049, // Network file system (NFS) port
-          toPort: 2049,
-          description: "Allow NFS traffic to S3 Files mount targets",
         });
 
-        const mountTargets = privateSubnets.map(
-          (subnet, index) =>
-            new CfnMountTarget(scope, `S3FilesMountTarget${index}`, {
-              fileSystemId: fileSystem.attrFileSystemId,
-              subnetId: subnet.subnetId,
-              securityGroups: [mountTargetSecurityGroup.securityGroupId],
-            }),
-        );
-        ecsService.node.addDependency(...mountTargets);
-
-        const actions: string[] = ["s3files:ClientMount"];
-
-        taskDefinition.addToTaskRolePolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions,
-            resources: [fileSystem.attrFileSystemArn],
-          }),
-        );
-
-        // Direct S3 access for read optimization
-        taskDefinition.addToTaskRolePolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3:ListBucket"],
-            resources: [bucketArn],
-          }),
-        );
-
-        taskDefinition.addToTaskRolePolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3:GetObject", "s3:GetObjectVersion"],
-            resources: [`${bucketArn}/*`],
-          }),
-        );
-
-        appContainer.addMountPoints({
-          containerPath: s3Config.containerPath,
-          sourceVolume: `s3files-volume`,
-          readOnly: true,
+        const ecsScalableTarget = ecsService.autoScaleTaskCount({
+          minCapacity: scaling.minimumTasks,
+          maxCapacity: scaling.maximumTasks,
         });
 
-        // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.
-        volumes.push({
-          Name: `s3files-volume`,
-          S3FilesVolumeConfiguration: {
-            FileSystemArn: fileSystem.attrFileSystemArn,
-            RootDirectory: "/",
+        if (scaling.cpuScaling) {
+          const { targetValue, scaleOutCooldown, scaleInCooldown } = scaling.cpuScaling;
+
+          // The high resolution predefined metric evaluates every 20s rather than 60s,
+          // so scaling reacts far faster. It isn't in the CDK `PredefinedMetric` enum yet.
+          // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/target-tracking-faster-auto-scaling.html
+          //
+          // TODO: Update in line with `PredefinedMetric` enum - https://github.com/aws/aws-cdk/issues/38207
+          new TargetTrackingScalingPolicy(this, "CpuScaling", {
+            scalingTarget: ecsScalableTarget,
+            targetValue: targetValue,
+            predefinedMetric: "ECSServiceAverageCPUUtilizationHighResolution" as unknown as PredefinedMetric,
+            scaleOutCooldown: scaleOutCooldown,
+            scaleInCooldown: scaleInCooldown,
+          });
+        }
+
+        this.ecsService = ecsService;
+
+        // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
+        const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
+          // See https://github.com/guardian/devx-logs
+          image: ContainerImage.fromRegistry(
+            "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
+          ),
+          environment,
+          versionConsistency: VersionConsistency.DISABLED,
+          // Send this container's logs to CloudWatch logs, retained for 1 day
+          logging: LogDriver.awsLogs({
+            streamPrefix: [scope.stack, scope.stage, app, "devx-logs-sidecar"].join("/"),
+            logRetention: RetentionDays.ONE_DAY,
+          }),
+
+          firelensConfig: {
+            type: FirelensLogRouterType.FLUENTBIT,
           },
+
+          // To comply with FSBP ECS.5
+          readonlyRootFilesystem: true,
         });
+
+        const logVolume: Volume = {
+          name: "logging-volume",
+        };
+
+        // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
+        const volumes: unknown[] = [{ Name: logVolume.name }];
+
+        if (s3Config) {
+          const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
+          const bucketArn = GuS3Bucket.fromBucketName(this, "ConfigBucket", s3Config.bucket).bucketArn;
+          const role = new Role(scope, `S3FilesRole`, {
+            assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
+              StringEquals: {
+                "aws:SourceAccount": scope.account,
+              },
+              ArnLike: {
+                "aws:SourceArn": `arn:${Aws.PARTITION}:s3files:${scope.region}:${scope.account}:file-system/*`,
+              },
+            }),
+            description: `Role used by the S3 Files filesystem for ${app} mount`,
+          });
+
+          // S3 Files needs synchronization permissions even when the container mount is read-only.
+          // The file system prefix does not implicitly restrict these IAM permissions.
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:ListBucket", "s3:ListBucketVersions", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
+              resources: [bucketArn],
+            }),
+          );
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:AbortMultipartUpload", "s3:DeleteObject*", "s3:GetObject*", "s3:List*", "s3:PutObject*"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["kms:GenerateDataKey", "kms:Encrypt", "kms:Decrypt", "kms:ReEncryptFrom", "kms:ReEncryptTo"],
+              resources: [`arn:${Aws.PARTITION}:kms:${scope.region}:${scope.account}:key/*`],
+              conditions: {
+                StringLike: {
+                  "kms:ViaService": `s3.${scope.region}.${Aws.URL_SUFFIX}`,
+                  "kms:EncryptionContext:aws:s3:arn": [bucketArn, `${bucketArn}/*`],
+                },
+              },
+            }),
+          );
+
+          // EventBridge permissions: S3 Files creates rules prefixed "DO-NOT-DELETE-S3-Files"
+          // to detect S3 object changes and trigger data synchronization
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: [
+                "events:DeleteRule",
+                "events:DisableRule",
+                "events:EnableRule",
+                "events:PutRule",
+                "events:PutTargets",
+                "events:RemoveTargets",
+              ],
+              resources: [`arn:${Aws.PARTITION}:events:*:*:rule/DO-NOT-DELETE-S3-Files*`],
+              conditions: { StringEquals: { "events:ManagedBy": "elasticfilesystem.amazonaws.com" } },
+            }),
+          );
+
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["events:DescribeRule", "events:ListTargetsByRule"],
+              resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+            }),
+          );
+
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["events:ListRuleNamesByTarget", "events:ListRules"],
+              resources: ["*"],
+            }),
+          );
+
+          const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
+            bucket: bucketArn,
+            prefix: normalizedPrefix,
+            roleArn: role.roleArn,
+          });
+          // Referencing the role ARN alone does not wait for its separately provisioned policy.
+          fileSystem.node.addDependency(role);
+
+          const mountTargetSecurityGroup = new GuSecurityGroup(scope, "S3FilesMountTargetSecurityGroup", {
+            app: `${app}-s3files`,
+            vpc,
+            allowAllOutbound: false,
+            ingresses: [
+              {
+                range: Peer.securityGroupId(httpsEgressSecurityGroup.securityGroupId),
+                port: Port.tcp(2049),
+                description: "Allow ECS tasks to mount S3 Files",
+              },
+            ],
+            egresses: [],
+          });
+          new CfnSecurityGroupEgress(scope, "S3FilesTaskEgress", {
+            groupId: httpsEgressSecurityGroup.securityGroupId,
+            destinationSecurityGroupId: mountTargetSecurityGroup.securityGroupId,
+            ipProtocol: "tcp",
+            fromPort: 2049, // Network file system (NFS) port
+            toPort: 2049,
+            description: "Allow NFS traffic to S3 Files mount targets",
+          });
+
+          const mountTargets = privateSubnets.map(
+            (subnet, index) =>
+              new CfnMountTarget(scope, `S3FilesMountTarget${index}`, {
+                fileSystemId: fileSystem.attrFileSystemId,
+                subnetId: subnet.subnetId,
+                securityGroups: [mountTargetSecurityGroup.securityGroupId],
+              }),
+          );
+          ecsService.node.addDependency(...mountTargets);
+
+          const actions: string[] = ["s3files:ClientMount"];
+
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions,
+              resources: [fileSystem.attrFileSystemArn],
+            }),
+          );
+
+          // Direct S3 access for read optimization
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:ListBucket"],
+              resources: [bucketArn],
+            }),
+          );
+
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:GetObject", "s3:GetObjectVersion"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+
+          appContainer.addMountPoints({
+            containerPath: s3Config.containerPath,
+            sourceVolume: `s3files-volume`,
+            readOnly: true,
+          });
+
+          // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.
+          volumes.push({
+            Name: `s3files-volume`,
+            S3FilesVolumeConfiguration: {
+              FileSystemArn: fileSystem.attrFileSystemArn,
+              RootDirectory: "/",
+            },
+          });
+        }
+
+        const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
+        cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
+
+        logRouter.addMountPoints({
+          containerPath: "/init",
+          sourceVolume: logVolume.name,
+          readOnly: false,
+        });
+
+        // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
+        const ecsTargetGroup = new GuApplicationTargetGroup(
+          scope,
+
+          // This ID parameter is used to form the resource's logical ID.
+          // If a target group is not explicitly named, CloudFormation will use the logical ID to generate a name of form `<CFN_STACK_NAME>-<LOGICAL_ID>-<12 CHAR GUID>` to a max of 32 chars.
+          // Add the App to the start of the logical ID to make the generated names (slightly) glanceable, e.g "MyAppE-123456123456" vs. "EcsTar-123456123456".
+          AppIdentity.addAppToStringStart(props, "EcsTargetGroup"),
+
+          {
+            vpc,
+            app,
+            port: applicationPort,
+            targets: [ecsService],
+            healthCheck: healthcheck,
+          },
+        );
+
+        targetGroups = {
+          ...targetGroups,
+          ecs: ecsTargetGroup,
+        };
+
+        // Specifically apply App tag to resources.
+        // Other resources obtain this tag by extending `GuAppAwareConstruct`.
+        [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
+      } else {
+        // Managed Instances infrastructure
+
+        // GuardDuty is enabled at the organisation level and runs as a sidecar.
+        // We need to add specific permissions to allow pulling the GuardDuty image.
+        // See https://docs.aws.amazon.com/guardduty/latest/ug/prereq-runtime-monitoring-ecs-support.html.
+        //
+        // GuardDuty only supports runtime monitoring for ECS Fargate.
+        // For ECS Managed Instances, it supports the Malware Protection for EC2.
+        // See https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_managed-instances.html
+
+        // This is the same as the recommend role for ecs managed instances capacity providers,
+        // except without the `instanceProfileName` set to "ecsInstanceRole" in the `instanceProfile`.
+        //
+        // AWS recommend instanceProfileName is set to ecsInstanceRole as the managed policy
+        // AmazonECSInfrastructureRolePolicyForManagedInstances is by default set to scope `iam:PassRole`
+        // to `arn:aws:iam::*:role/ecsInstanceRole*`.
+        //
+        // Unfortunately setting `instanceProfileName` to ecsInstanceRole means that cloud formation can not
+        // re-deploy the instance role, as it can't generate a different name to cycle between them. For this
+        // reason we do not specify `instanceProfileName`, and we create a custom infrastructure role that
+        // uses the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy and explicitly scopes
+        // `iam:PassRole` to EC2 instances.
+        //
+        // To read more {@link https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html}
+        const ecsInstanceRole = new GuECSManagedInstanceRoleExperimental(scope, "ECSManagedInstancesRole", {
+          cluster: cluster,
+        });
+
+        const instanceProfile = new InstanceProfile(scope, "ECSInstanceProfile", {
+          role: ecsInstanceRole,
+        });
+
+        const managedInstancesCapacityProvider = this.createManagedInstanceCapacityProvider(
+          scope,
+          [httpsEgressSecurityGroup],
+          privateSubnets,
+          ecsProps.managedInstancesProps.instancesRequirements ??
+            defaultManagedInstanceRequirements(memoryLimitMiB, cpu),
+          ecsInstanceRole,
+          instanceProfile,
+        );
+
+        if (managedInstancesCapacityProvider) {
+          cluster.addManagedInstancesCapacityProvider(managedInstancesCapacityProvider);
+        }
+
+        const taskDefinition = ecsProps.managedInstancesProps
+          ? this.createManagedInstanceTaskDefinition(scope, cpu, memoryLimitMiB)
+          : new FargateTaskDefinition(scope, "EcsTaskDefinition", {
+              memoryLimitMiB,
+              cpu,
+              runtimePlatform: {
+                cpuArchitecture: CpuArchitecture.ARM64,
+                operatingSystemFamily: OperatingSystemFamily.LINUX,
+              },
+            });
+
+        const appContainer = taskDefinition.addContainer(app, {
+          image,
+          dockerLabels: {
+            RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
+          },
+          // This speeds up deployment. We don't need this enabled if users follow the advice to refer to their image
+          // using the immutable digest
+          versionConsistency: VersionConsistency.DISABLED,
+          portMappings: [{ containerPort: applicationPort }],
+          logging: this.fireLensLogDriver,
+          readonlyRootFilesystem: true,
+          environment,
+        });
+
+        // Permissions passed to the ECS task...
+        const applicationPermissions: GuPolicy[] = [
+          // ...to allow writing logs to Kinesis
+          GuLogShippingPolicy.getInstance(scope),
+
+          // ...to allow reading application config from SSM
+          GuParameterStoreReadPolicy.getInstance(scope, { app }),
+
+          // ...permissions specific for this application (provided by client)
+          ...additionalPolicies,
+        ];
+
+        applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
+
+        const ecsService = new FargateService(scope, "EcsService", {
+          cluster,
+          taskDefinition,
+          vpcSubnets: { subnets: privateSubnets },
+          // Important for service deployments; with the AWS defaults the service can be scaled down when deploying
+          minHealthyPercent: 100,
+          // Also important for service deployments; with the AWS defaults we don't get a fast failure when deploying a 'bad' build
+          circuitBreaker: { enable: true, rollback: true },
+          propagateTags: PropagatedTagSource.SERVICE,
+          // By default, AWS will create a new security group which allows all outbound traffic
+          // We don't want this so explicitly allow outbound HTTPS only
+          // This is what we do for the current GuEc2App pattern:
+          // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
+          securityGroups: [httpsEgressSecurityGroup],
+          capacityProviderStrategies: [
+            {
+              capacityProvider: managedInstancesCapacityProvider.capacityProviderName,
+              weight: 1,
+            },
+          ],
+        });
+
+        // Important to make sure the ECS service is deleted before the capacity provider.
+        // Without this dependency the capacity provider will fail to be deleted since
+        // it is part of the default strategy for the `ecsService`.
+        ecsService.node.addDependency(managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole);
+
+        const cfnService = ecsService.node.defaultChild as CfnService;
+        cfnService.addPropertyOverride("Monitoring", {
+          MetricConfigurations: [
+            {
+              MetricNames: ["CPUUtilization", "MemoryUtilization"],
+              ResolutionSeconds: 20,
+            },
+          ],
+        });
+
+        const ecsScalableTarget = ecsService.autoScaleTaskCount({
+          minCapacity: scaling.minimumTasks,
+          maxCapacity: scaling.maximumTasks,
+        });
+
+        if (scaling.cpuScaling) {
+          const { targetValue, scaleOutCooldown, scaleInCooldown } = scaling.cpuScaling;
+
+          // The high resolution predefined metric evaluates every 20s rather than 60s,
+          // so scaling reacts far faster. It isn't in the CDK `PredefinedMetric` enum yet.
+          // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/target-tracking-faster-auto-scaling.html
+          //
+          // TODO: Update in line with `PredefinedMetric` enum - https://github.com/aws/aws-cdk/issues/38207
+          new TargetTrackingScalingPolicy(this, "CpuScaling", {
+            scalingTarget: ecsScalableTarget,
+            targetValue: targetValue,
+            predefinedMetric: "ECSServiceAverageCPUUtilizationHighResolution" as unknown as PredefinedMetric,
+            scaleOutCooldown: scaleOutCooldown,
+            scaleInCooldown: scaleInCooldown,
+          });
+        }
+
+        this.ecsService = ecsService;
+
+        // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
+        const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
+          // See https://github.com/guardian/devx-logs
+          image: ContainerImage.fromRegistry(
+            "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
+          ),
+          environment,
+          versionConsistency: VersionConsistency.DISABLED,
+          // Send this container's logs to CloudWatch logs, retained for 1 day
+          logging: LogDriver.awsLogs({
+            streamPrefix: [scope.stack, scope.stage, app, "devx-logs-sidecar"].join("/"),
+            logRetention: RetentionDays.ONE_DAY,
+          }),
+
+          firelensConfig: {
+            type: FirelensLogRouterType.FLUENTBIT,
+          },
+
+          // To comply with FSBP ECS.5
+          readonlyRootFilesystem: true,
+        });
+
+        const logVolume: Volume = {
+          name: "logging-volume",
+        };
+
+        // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
+        const volumes: unknown[] = [{ Name: logVolume.name }];
+
+        if (s3Config) {
+          const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
+          const bucketArn = GuS3Bucket.fromBucketName(this, "ConfigBucket", s3Config.bucket).bucketArn;
+          const role = new Role(scope, `S3FilesRole`, {
+            assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
+              StringEquals: {
+                "aws:SourceAccount": scope.account,
+              },
+              ArnLike: {
+                "aws:SourceArn": `arn:${Aws.PARTITION}:s3files:${scope.region}:${scope.account}:file-system/*`,
+              },
+            }),
+            description: `Role used by the S3 Files filesystem for ${app} mount`,
+          });
+
+          // S3 Files needs synchronization permissions even when the container mount is read-only.
+          // The file system prefix does not implicitly restrict these IAM permissions.
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:ListBucket", "s3:ListBucketVersions", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
+              resources: [bucketArn],
+            }),
+          );
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:AbortMultipartUpload", "s3:DeleteObject*", "s3:GetObject*", "s3:List*", "s3:PutObject*"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["kms:GenerateDataKey", "kms:Encrypt", "kms:Decrypt", "kms:ReEncryptFrom", "kms:ReEncryptTo"],
+              resources: [`arn:${Aws.PARTITION}:kms:${scope.region}:${scope.account}:key/*`],
+              conditions: {
+                StringLike: {
+                  "kms:ViaService": `s3.${scope.region}.${Aws.URL_SUFFIX}`,
+                  "kms:EncryptionContext:aws:s3:arn": [bucketArn, `${bucketArn}/*`],
+                },
+              },
+            }),
+          );
+
+          // EventBridge permissions: S3 Files creates rules prefixed "DO-NOT-DELETE-S3-Files"
+          // to detect S3 object changes and trigger data synchronization
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: [
+                "events:DeleteRule",
+                "events:DisableRule",
+                "events:EnableRule",
+                "events:PutRule",
+                "events:PutTargets",
+                "events:RemoveTargets",
+              ],
+              resources: [`arn:${Aws.PARTITION}:events:*:*:rule/DO-NOT-DELETE-S3-Files*`],
+              conditions: { StringEquals: { "events:ManagedBy": "elasticfilesystem.amazonaws.com" } },
+            }),
+          );
+
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["events:DescribeRule", "events:ListTargetsByRule"],
+              resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+            }),
+          );
+
+          role.addToPrincipalPolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["events:ListRuleNamesByTarget", "events:ListRules"],
+              resources: ["*"],
+            }),
+          );
+
+          const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
+            bucket: bucketArn,
+            prefix: normalizedPrefix,
+            roleArn: role.roleArn,
+          });
+          // Referencing the role ARN alone does not wait for its separately provisioned policy.
+          fileSystem.node.addDependency(role);
+
+          const mountTargetSecurityGroup = new GuSecurityGroup(scope, "S3FilesMountTargetSecurityGroup", {
+            app: `${app}-s3files`,
+            vpc,
+            allowAllOutbound: false,
+            ingresses: [
+              {
+                range: Peer.securityGroupId(httpsEgressSecurityGroup.securityGroupId),
+                port: Port.tcp(2049),
+                description: "Allow ECS tasks to mount S3 Files",
+              },
+            ],
+            egresses: [],
+          });
+          new CfnSecurityGroupEgress(scope, "S3FilesTaskEgress", {
+            groupId: httpsEgressSecurityGroup.securityGroupId,
+            destinationSecurityGroupId: mountTargetSecurityGroup.securityGroupId,
+            ipProtocol: "tcp",
+            fromPort: 2049, // Network file system (NFS) port
+            toPort: 2049,
+            description: "Allow NFS traffic to S3 Files mount targets",
+          });
+
+          const mountTargets = privateSubnets.map(
+            (subnet, index) =>
+              new CfnMountTarget(scope, `S3FilesMountTarget${index}`, {
+                fileSystemId: fileSystem.attrFileSystemId,
+                subnetId: subnet.subnetId,
+                securityGroups: [mountTargetSecurityGroup.securityGroupId],
+              }),
+          );
+          ecsService.node.addDependency(...mountTargets);
+
+          const actions: string[] = ["s3files:ClientMount"];
+
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions,
+              resources: [fileSystem.attrFileSystemArn],
+            }),
+          );
+
+          // Direct S3 access for read optimization
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:ListBucket"],
+              resources: [bucketArn],
+            }),
+          );
+
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:GetObject", "s3:GetObjectVersion"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+
+          appContainer.addMountPoints({
+            containerPath: s3Config.containerPath,
+            sourceVolume: `s3files-volume`,
+            readOnly: true,
+          });
+
+          // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.
+          volumes.push({
+            Name: `s3files-volume`,
+            S3FilesVolumeConfiguration: {
+              FileSystemArn: fileSystem.attrFileSystemArn,
+              RootDirectory: "/",
+            },
+          });
+        }
+
+        const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
+        cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
+
+        logRouter.addMountPoints({
+          containerPath: "/init",
+          sourceVolume: logVolume.name,
+          readOnly: false,
+        });
+
+        // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
+        const ecsTargetGroup = new GuApplicationTargetGroup(
+          scope,
+
+          // This ID parameter is used to form the resource's logical ID.
+          // If a target group is not explicitly named, CloudFormation will use the logical ID to generate a name of form `<CFN_STACK_NAME>-<LOGICAL_ID>-<12 CHAR GUID>` to a max of 32 chars.
+          // Add the App to the start of the logical ID to make the generated names (slightly) glanceable, e.g "MyAppE-123456123456" vs. "EcsTar-123456123456".
+          AppIdentity.addAppToStringStart(props, "EcsTargetGroup"),
+
+          {
+            vpc,
+            app,
+            port: applicationPort,
+            targets: [ecsService],
+            healthCheck: healthcheck,
+          },
+        );
+
+        targetGroups = {
+          ...targetGroups,
+          ecs: ecsTargetGroup,
+        };
+
+        // Specifically apply App tag to resources.
+        // Other resources obtain this tag by extending `GuAppAwareConstruct`.
+        [managedInstancesCapacityProvider, cluster, taskDefinition, ecsService].forEach((_) =>
+          _ ? AppIdentity.taggedConstruct(props, _) : _,
+        );
       }
-
-      const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
-      cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
-
-      logRouter.addMountPoints({
-        containerPath: "/init",
-        sourceVolume: logVolume.name,
-        readOnly: false,
-      });
-
-      // We need a new target group even if we share the other load balancer components with the EC2 infrastructure
-      const ecsTargetGroup = new GuApplicationTargetGroup(
-        scope,
-
-        // This ID parameter is used to form the resource's logical ID.
-        // If a target group is not explicitly named, CloudFormation will use the logical ID to generate a name of form `<CFN_STACK_NAME>-<LOGICAL_ID>-<12 CHAR GUID>` to a max of 32 chars.
-        // Add the App to the start of the logical ID to make the generated names (slightly) glanceable, e.g "MyAppE-123456123456" vs. "EcsTar-123456123456".
-        AppIdentity.addAppToStringStart(props, "EcsTargetGroup"),
-
-        {
-          vpc,
-          app,
-          port: applicationPort,
-          targets: [ecsService],
-          healthCheck: healthcheck,
-        },
-      );
-
-      targetGroups = {
-        ...targetGroups,
-        ecs: ecsTargetGroup,
-      };
-
-      // Specifically apply App tag to resources.
-      // Other resources obtain this tag by extending `GuAppAwareConstruct`.
-      [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
     }
 
     // Set up the load balancer and listener components
@@ -1288,6 +1720,107 @@ export class GuLoadBalancedAppExperimental extends Construct {
     this.listener = listener;
     this.targetGroups = targetGroups;
   }
+
+  /**
+   * Returns a managed instances capacity provider that has been added to construct scope `scope`.
+   *
+   * @param scope - construct scope
+   * @param instanceSecurityGroups - {@link ManagedInstancesCapacityProviderProps#securityGroups}
+   * @param instanceSubnets - {@link ManagedInstancesCapacityProviderProps#subnets}
+   * @param cpuMin - Minimum task CPU units required for EC2 instance. This is converted to vCPU.
+   * @param memoryMinMiB - Minimum memory in MiB for EC2 instance tasks are placed on.
+   * @param clusterArn - ARN of the cluster this capacity provider is scoped to.
+   */
+  private createManagedInstanceCapacityProvider(
+    scope: GuStack,
+    instanceSecurityGroups: ISecurityGroup[],
+    instanceSubnets: ISubnet[],
+    instanceRequirements: InstanceRequirementsConfig,
+    ecsInstanceRole: GuECSManagedInstanceRoleExperimental,
+    instanceProfile: InstanceProfile,
+  ): ManagedInstancesCapacityProvider {
+    const ecsInfrastructurePolicy = ManagedPolicy.fromManagedPolicyArn(
+      scope,
+      "ECSInfrastructurePolicy",
+      "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForManagedInstances",
+    );
+
+    // Needs to be custom to allow for the instance profile not having the standard `instanceProfileName`
+    // set to ecsInstanceRole. See long comment above
+    const infrastructureRole = new Role(scope, "ECSInfrastructureRole", {
+      managedPolicies: [ecsInfrastructurePolicy],
+      assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ecs.amazonaws.com"),
+      inlinePolicies: {
+        PassInstanceRoleToEC2: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["iam:PassRole"],
+              resources: [ecsInstanceRole.roleArn],
+              conditions: {
+                StringLike: {
+                  "iam:PassedToService": "ec2.*",
+                },
+              },
+            }),
+          ],
+        }),
+      },
+    });
+
+    const managedInstancesCapacityProvider = new ManagedInstancesCapacityProvider(
+      scope,
+      "ManagedInstancesCapacityProvider",
+      {
+        subnets: instanceSubnets,
+        securityGroups: instanceSecurityGroups,
+        ec2InstanceProfile: instanceProfile,
+        infrastructureRole,
+        instanceRequirements,
+      },
+    );
+
+    return managedInstancesCapacityProvider;
+  }
+
+  /**
+   * Creates an ECS Task Definition configured for Managed Instances.
+   *
+   * @param scope - TaskDefinition construct scope
+   * @param cpu - {@link TaskDefinitionProps#memoryMiB}
+   * @param memoryLimitMiB - {@link TaskDefinitionProps#memoryLimitMiB}
+   */
+  private createManagedInstanceTaskDefinition(scope: Construct, cpu: number, memoryLimitMiB: number): TaskDefinition {
+    // TODO: If you specify too high minimum memory/cpu then the cloud formation deployment will fail.
+    // Can we add some validation to ensure the task size can resolve to at least 1 instance? Helps surface issues earlier.
+    return new TaskDefinition(scope, "EcsTaskDefinition", {
+      compatibility: Compatibility.MANAGED_INSTANCES,
+      networkMode: NetworkMode.AWS_VPC,
+      memoryMiB: memoryLimitMiB.toString(),
+      cpu: cpu.toString(),
+      runtimePlatform: {
+        cpuArchitecture: CpuArchitecture.ARM64,
+        operatingSystemFamily: OperatingSystemFamily.LINUX,
+      },
+    });
+  }
+}
+
+/**
+ * Returns default EC2 instance requirements for ECS managed instances.
+ *
+ * @param memoryMinMiB - Minimum memory in MiB for managed instance
+ * @param cpu - cpu units for the task, this will be converted to equivelant vCPU.
+ */
+function defaultManagedInstanceRequirements(memoryMinMiB: number, cpu: number): InstanceRequirementsConfig {
+  return {
+    // Latest Graviton
+    instanceGenerations: [InstanceGeneration.CURRENT],
+    cpuManufacturers: [CpuManufacturer.AWS],
+    memoryMin: Size.mebibytes(memoryMinMiB),
+    // We are specifying EC2 vcpu, which is different from cpu units for task definitions.
+    vCpuCountMin: Math.ceil(cpu / 1024),
+  };
 }
 
 function configureListenerActions(
