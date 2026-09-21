@@ -1,4 +1,4 @@
-import { Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { Aspects, Aws, Duration, SecretValue, Size, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -10,26 +10,37 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { CfnSecurityGroupEgress, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
+import { CfnSecurityGroupEgress, CpuManufacturer, InstanceGeneration, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
+  Compatibility,
   ContainerImage,
   ContainerInsights,
   CpuArchitecture,
   FargateService,
-  FargateTaskDefinition,
   FireLensLogDriver,
   FirelensLogRouterType,
   LogDriver,
+  ManagedInstancesCapacityProvider,
+  NetworkMode,
   OperatingSystemFamily,
   PropagatedTagSource,
+  TaskDefinition,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import {
+  Effect,
+  InstanceProfile,
+  ManagedPolicy,
+  PolicyDocument,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { CfnFileSystem, CfnMountTarget } from "aws-cdk-lib/aws-s3files";
@@ -423,6 +434,10 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
       maximumTasks: number;
       cpuScaling?: Pick<TargetTrackingScalingPolicyProps, "targetValue" | "scaleInCooldown" | "scaleOutCooldown">;
     };
+    /**
+     * Use ECS Manages Instances instead of Fargate to run the app.
+     */
+    useManagedInstances?: boolean;
   };
   /**
    * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute types.
@@ -700,6 +715,117 @@ export class GuLoadBalancedAppExperimental extends Construct {
         name: ecrRepoName,
       }).getImage(imageIdentifier);
 
+      const httpsEgressSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
+        app: `${app}-ecs`,
+        vpc,
+      });
+
+      // Allows the ec2 instance to register with the cluster and ECS.
+      const ecsInstanceRolePolicy = ManagedPolicy.fromManagedPolicyArn(
+        this,
+        "ECSInstanceRole",
+        "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
+      );
+
+      // Allows the ec2 instance to pull images from the registry
+      const ecsRegistryPullPolicy = ManagedPolicy.fromManagedPolicyArn(
+        this,
+        "ECSRegistryPullPolicy ",
+        "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+      );
+
+      // This is the same as the recommend profile/role for ecs managed instances capacity provider,
+      // except without the `instanceProfileName` to ecsInstanceRole.
+      //
+      // AWS recommend instanceProfileName is set to ecsInstanceRole as the managed policy
+      // AmazonECSInfrastructureRolePolicyForManagedInstances is by default set to scope `iam:PassRole`
+      // to `arn:aws:iam::*:role/ecsInstanceRole*`.
+      //
+      // Unfortunatley setting `instanceProfileName` to ecsInstanceRole means that cloud formation can not
+      // re-deploy the instance role, as it can't generate a different name to cycle between them. For this
+      // reason we do not specifiy `instanceProfileName`, and we create a custom infrastructure role that
+      // uses the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy and explicitly scopes
+      // `iam:PassRole` to ec2 instances.
+      //
+      // To read more [Amazon ECS Managed Instances instance profile](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html).
+      const ecsInstanceRole = new Role(this, "ECSManagedInstancesRole", {
+        managedPolicies: [ecsInstanceRolePolicy, ecsRegistryPullPolicy],
+        assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ec2.amazonaws.com"),
+      });
+
+      const instanceProfile = new InstanceProfile(this, "ECSManagedInstancesProfile", {
+        role: ecsInstanceRole,
+      });
+
+      const ecsInfrastructurePolicy = ManagedPolicy.fromManagedPolicyArn(
+        this,
+        "ECSInfrastructurePolicy",
+        "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForManagedInstances",
+      );
+
+      // This needs to be custom to allow for the instance profile not having the standard `instanceProfileName`
+      // set to ecsInstanceRole.
+      const infrastructureRole = new Role(this, "ECSInfrastructureRole", {
+        managedPolicies: [ecsInfrastructurePolicy],
+        assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ecs.amazonaws.com"),
+        inlinePolicies: {
+          PassInstanceRoleToEC2: new PolicyDocument({
+            statements: [
+              new PolicyStatement({
+                effect: Effect.ALLOW,
+                actions: ["iam:PassRole"],
+                resources: [ecsInstanceRole.roleArn],
+                conditions: {
+                  StringLike: {
+                    "iam:PassedToService": "ec2.*",
+                  },
+                },
+              }),
+            ],
+          }),
+        },
+      });
+
+      const managedInstancesCapacityProvider = new ManagedInstancesCapacityProvider(
+        this,
+        "ManagedInstancesCapacityProvider",
+        {
+          subnets: privateSubnets,
+          securityGroups: [httpsEgressSecurityGroup],
+          ec2InstanceProfile: instanceProfile,
+          infrastructureRole,
+          instanceRequirements: {
+            // Latest Graviton
+            instanceGenerations: [InstanceGeneration.CURRENT],
+            cpuManufacturers: [CpuManufacturer.AWS],
+            memoryMin: Size.mebibytes(memoryLimitMiB),
+            // We are specifying EC2 vcpu, which is different from cpu units for task definitions.
+            vCpuCountMin: Math.ceil(cpu / 1024),
+          },
+        },
+      );
+
+      cluster.addManagedInstancesCapacityProvider(managedInstancesCapacityProvider);
+
+      // const image = ContainerImage.fromEcrRepository(
+      //   // Images are published to the ECR registry in the Artifacts account, so reference that here
+      //   Repository.fromRepositoryAttributes(this, "Repo", {
+      //     repositoryArn: scope.formatArn({
+      //       account: StringParameter.fromStringParameterName(
+      //         scope,
+      //         "ArtifactAccountId",
+      //         NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
+      //       ).stringValue,
+      //       arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
+      //       resource: "repository",
+      //       resourceName: ecrRepoName,
+      //       service: "ecr",
+      //     }),
+      //     repositoryName: ecrRepoName,
+      //   }),
+      //   imageIdentifier,
+      // );
+
       const loggingStreamName = GuLoggingStreamNameParameter.getInstance(scope).valueAsString;
 
       this.fireLensLogDriver = new FireLensLogDriver({
@@ -723,9 +849,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Add the GitHub repo if we can
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
 
-      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", {
-        memoryLimitMiB,
-        cpu,
+      // TODO: If you specify too high minimum memory/cpu then the cloud formation deployment will fail.
+      // Can we add some validation to ensure the task size can resolve to at least 1 instance? Helps surface issues earlier.
+      const taskDefinition = new TaskDefinition(scope, "EcsTaskDefinition", {
+        compatibility: Compatibility.MANAGED_INSTANCES,
+        networkMode: NetworkMode.AWS_VPC,
+        memoryMiB: memoryLimitMiB.toString(),
+        cpu: cpu.toString(),
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
@@ -773,6 +903,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
           resources: [
             // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
+            // TODO: This seams fargate specific, is there a managed instances version?
             "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
           ],
         }),
@@ -780,10 +911,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
 
-      const ecsSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
-        app: `${app}-ecs`,
-        vpc,
-      });
       const ecsService = new FargateService(scope, "EcsService", {
         cluster,
         taskDefinition,
@@ -797,7 +924,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [ecsSecurityGroup],
+        securityGroups: [httpsEgressSecurityGroup],
+        capacityProviderStrategies: [
+          {
+            capacityProvider: managedInstancesCapacityProvider.capacityProviderName,
+            weight: 1,
+          },
+        ],
       });
 
       const cfnService = ecsService.node.defaultChild as CfnService;
@@ -956,7 +1089,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           allowAllOutbound: false,
           ingresses: [
             {
-              range: Peer.securityGroupId(ecsSecurityGroup.securityGroupId),
+              range: Peer.securityGroupId(httpsEgressSecurityGroup.securityGroupId),
               port: Port.tcp(2049),
               description: "Allow ECS tasks to mount S3 Files",
             },
@@ -964,7 +1097,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           egresses: [],
         });
         new CfnSecurityGroupEgress(scope, "S3FilesTaskEgress", {
-          groupId: ecsSecurityGroup.securityGroupId,
+          groupId: httpsEgressSecurityGroup.securityGroupId,
           destinationSecurityGroupId: mountTargetSecurityGroup.securityGroupId,
           ipProtocol: "tcp",
           fromPort: 2049, // Network file system (NFS) port
@@ -1059,7 +1192,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       // Specifically apply App tag to resources.
       // Other resources obtain this tag by extending `GuAppAwareConstruct`.
-      [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
+      [managedInstancesCapacityProvider, cluster, taskDefinition, ecsService].forEach((_) =>
+        AppIdentity.taggedConstruct(props, _),
+      );
     }
 
     // Set up the load balancer and listener components
