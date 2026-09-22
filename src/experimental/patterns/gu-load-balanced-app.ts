@@ -820,23 +820,88 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       if (s3Config) {
         const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
+        const bucketArn = `arn:${Aws.PARTITION}:s3:::${s3Config.bucket}`;
         const role = new Role(scope, `S3FilesRole`, {
-          assumedBy: new ServicePrincipal("s3files.amazonaws.com"),
+          assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
+            StringEquals: {
+              "aws:SourceAccount": Aws.ACCOUNT_ID,
+            },
+            ArnLike: {
+              "aws:SourceArn": `arn:${Aws.PARTITION}:s3files:${Aws.REGION}:${Aws.ACCOUNT_ID}:file-system/*`,
+            },
+          }),
           description: `Role used by the S3 Files filesystem for ${app} mount`,
         });
+        // Add S3 permissions to the S3 Files service role
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "s3:ListBucket",
+              "s3:GetBucketVersioning",
+              "s3:GetBucketLocation",
+            ],
+            resources: [bucketArn],
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "s3:GetObject",
+              "s3:GetObjectVersion",
+              "s3:GetObjectTagging",
+              "s3:GetObjectVersionTagging",
+              "s3:PutObject",
+              "s3:PutObjectTagging",
+              "s3:DeleteObject",
+              "s3:DeleteObjectVersion",
+            ],
+            resources: [`${bucketArn}/*`],
+          }),
+        );
+
+        // EventBridge permissions: S3 Files creates rules prefixed "DO-NOT-DELETE-S3-Files"
+        // to detect S3 object changes and trigger data synchronization
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "events:DeleteRule",
+              "events:DisableRule",
+              "events:EnableRule",
+              "events:PutRule",
+              "events:PutTargets",
+              "events:RemoveTargets",
+            ],
+            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/DO-NOT-DELETE-S3-Files*`],
+            conditions: { StringEquals: { "events:ManagedBy": "elasticfilesystem.amazonaws.com" } },
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "events:DescribeRule",
+              "events:ListRuleNamesByTarget",
+              "events:ListRules",
+              "events:ListTargetsByRule",
+            ],
+            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+          }),
+        );
+
         const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
-          bucket: `arn:${Aws.PARTITION}:s3:::${s3Config.bucket}`,
+          bucket: bucketArn,
           prefix: normalizedPrefix,
           roleArn: role.roleArn,
         });
 
-        const actions: string[] = [
-          "s3files:GetFileSystem",
-          "s3files:ListDirectory",
-          "s3files:ReadFile",
-        ];
+        const actions: string[] = ["s3files:ClientMount"];
         if (!s3Config.readOnly) {
-          actions.push("s3files:WriteFile");
+          actions.push("s3files:ClientWrite");
         }
 
         taskDefinition.addToTaskRolePolicy(
@@ -846,6 +911,30 @@ export class GuLoadBalancedAppExperimental extends Construct {
             resources: [fileSystem.attrFileSystemArn],
           }),
         );
+
+        // Direct S3 access for read optimization
+        const s3Actions = ["s3:GetObject", "s3:ListBucket"];
+        if (!s3Config.readOnly) {
+          s3Actions.push("s3:PutObject", "s3:DeleteObject");
+        }
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: s3Actions.slice(0, 2), // GetObject and ListBucket
+            resources: [bucketArn, `${bucketArn}/*`],
+          }),
+        );
+
+        if (!s3Config.readOnly) {
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:PutObject", "s3:DeleteObject"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+        }
 
         appContainer.addMountPoints({
           containerPath: s3Config.containerPath,
@@ -1071,13 +1160,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       userPoolClient.node.addDependency(userPoolIdp);
 
-      if (props.ecsProps) {
-        throw new Error("Using Google Auth with ECS is currently unsupported");
-        // I think that the code here will probably work fine but it needs some dedicated testing.
-        // For Google auth to work we need to 'authenticate-cognito' and then forward to a target group.
-        // If we are operating with EC2 and ECS backends then this forwarded request could be sent to either backend.
-        // Let's deploy this to a DevX service and check it's valid/works as expected before opening this up to other teams.
-      }
       listener.addAction("CognitoAuth", {
         action: new AuthenticateCognitoAction({
           userPool: userPool,
