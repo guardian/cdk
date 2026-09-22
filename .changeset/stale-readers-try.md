@@ -3,6 +3,4 @@
 ---
 
 
-BREAKING CHANGE: GuDeveloperPolicyExperimental has been removed. Use GuDeveloperPolicy instead.
-
-Promote developer policy CDK construct from experimental to stable.
+BREAKING CHANGE: `GuDeveloperPolicyExperimental` has been promoted to stable and renamed `GuDeveloperPolicy`
