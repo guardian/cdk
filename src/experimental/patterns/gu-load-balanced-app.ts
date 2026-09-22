@@ -1,5 +1,4 @@
 import { ArnFormat, Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
-import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -86,24 +85,24 @@ import {
  * as the basis to spread different values as needed.
  */
 export interface GuS3ConfigMount {
- /**
-  * The mount path inside the container. Note that this must be a directory that is not
-  * currently used. Any directory content at this location in the image will be overwritten
-  * by the mount.
-  */
- containerPath: string;
- /**
-  * The name of the S3 bucket to mount.
-  */
- bucket: string;
- /**
-  * The S3 prefix to mount into the container.
-  */
- path: string;
- /**
-  * Whether the mount should be read-only.
-  */
- readOnly: boolean;
+  /**
+   * The mount path inside the container. Note that this must be a directory that is not
+   * currently used. Any directory content at this location in the image will be overwritten
+   * by the mount.
+   */
+  containerPath: string;
+  /**
+   * The name of the S3 bucket to mount.
+   */
+  bucket: string;
+  /**
+   * The S3 prefix to mount into the container.
+   */
+  path: string;
+  /**
+   * Whether the mount should be read-only.
+   */
+  readOnly: boolean;
 }
 
 /**
@@ -120,16 +119,16 @@ export interface GuS3ConfigMount {
  *
  */
 export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
- if (!scope.app) {
-   throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
- }
+  if (!scope.app) {
+    throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
+  }
 
- return {
-   containerPath: `/etc/${scope.app}`,
-   bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
-   path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
-   readOnly: true,
- };
+  return {
+    containerPath: `/etc/${scope.app}`,
+    bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+    path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
+    readOnly: true,
+  };
 }
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
@@ -837,7 +836,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       };
 
       // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
-      const volumes: unknown[] = [{Name: logVolume.name}];
+      const volumes: unknown[] = [{ Name: logVolume.name }];
 
       if (s3Config) {
         const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
@@ -857,11 +856,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: [
-              "s3:ListBucket",
-              "s3:GetBucketVersioning",
-              "s3:GetBucketLocation",
-            ],
+            actions: ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
             resources: [bucketArn],
           }),
         );
