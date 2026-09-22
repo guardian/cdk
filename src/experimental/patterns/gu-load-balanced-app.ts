@@ -1,4 +1,7 @@
 import { ArnFormat, Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
+import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
 import { AdditionalHealthCheckType, HealthChecks } from "aws-cdk-lib/aws-autoscaling";
 import {
@@ -419,6 +422,7 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
        * the deployment through.
        */
       maximumTasks: number;
+      cpuScaling?: Pick<TargetTrackingScalingPolicyProps, "targetValue" | "scaleInCooldown" | "scaleOutCooldown">;
     };
   };
   /**
@@ -782,10 +786,27 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ],
       });
 
-      ecsService.autoScaleTaskCount({
+      const ecsScalableTarget = ecsService.autoScaleTaskCount({
         minCapacity: scaling.minimumTasks,
         maxCapacity: scaling.maximumTasks,
       });
+
+      if (scaling.cpuScaling) {
+        const { targetValue, scaleOutCooldown, scaleInCooldown } = scaling.cpuScaling;
+
+        // The high resolution predefined metric evaluates every 20s rather than 60s,
+        // so scaling reacts far faster. It isn't in the CDK `PredefinedMetric` enum yet.
+        // https://docs.aws.amazon.com/AmazonECS/latest/developerguide/target-tracking-faster-auto-scaling.html
+        //
+        // TODO: Update in line with `PredefinedMetric` enum - https://github.com/aws/aws-cdk/issues/38207
+        new TargetTrackingScalingPolicy(this, "CpuScaling", {
+          scalingTarget: ecsScalableTarget,
+          targetValue: targetValue,
+          predefinedMetric: "ECSServiceAverageCPUUtilizationHighResolution" as unknown as PredefinedMetric,
+          scaleOutCooldown: scaleOutCooldown,
+          scaleInCooldown: scaleInCooldown,
+        });
+      }
 
       this.ecsService = ecsService;
 
