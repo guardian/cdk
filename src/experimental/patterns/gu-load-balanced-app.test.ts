@@ -18,7 +18,7 @@ import { GuDynamoDBWritePolicy } from "../../constructs/iam";
 import type { AppAccess, GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { RollingUpdateDurations } from "./ec2-app";
-import { GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
+import { getDefaultS3ConfigMount, GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
 
 describe("the GuLoadBalancedAppExperimental pattern should support new ECS and hybrid functionality", function () {
   it("should produce a functional ECS app with minimal arguments", function () {
@@ -39,6 +39,110 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should create S3 Files resources and mount them in the ECS task definition", function () {
+    const stack = simpleGuStackForTesting({ app: "test-gu", env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3Config: {
+          ...getDefaultS3ConfigMount(stack),
+          containerPath: "/amiable",
+          path: "test-stack/TEST/test-gu/conf/",
+        },
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: {
+        "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::", { Ref: "DistributionBucketName" }]],
+      },
+      Prefix: "test-stack/TEST/test-gu/conf/",
+      RoleArn: {
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole"), "Arn"],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      Volumes: Match.arrayWith([
+        Match.objectLike({
+          Name: "s3files-volume",
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: {
+              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem"), "FileSystemArn"],
+            },
+            RootDirectory: "/",
+          },
+        }),
+      ]),
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/amiable",
+              SourceVolume: "s3files-volume",
+              ReadOnly: true,
+            }),
+          ]),
+        }),
+      ]),
+    });
+  });
+
+  it("should allow overriding S3 Files source bucket and path", function () {
+    const stack = simpleGuStackForTesting({ app: "test-gu", env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3Config: {
+          containerPath: "/override",
+          bucket: "custom-bucket",
+          path: "custom/path/conf",
+          readOnly: false,
+        },
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: {
+        "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::custom-bucket"]],
+      },
+      Prefix: "custom/path/conf/",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/override",
+              ReadOnly: false,
+            }),
+          ]),
+        }),
+      ]),
+    });
   });
 
   it("should apply standard tags to all taggable resources", function () {
