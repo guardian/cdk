@@ -929,16 +929,19 @@ export class GuLoadBalancedAppExperimental extends Construct {
         );
 
         // Direct S3 access for read optimization
-        const s3Actions = ["s3:GetObject", "s3:ListBucket"];
-        if (!s3Config.readOnly) {
-          s3Actions.push("s3:PutObject", "s3:DeleteObject");
-        }
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:ListBucket"],
+            resources: [bucketArn],
+          }),
+        );
 
         taskDefinition.addToTaskRolePolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: s3Actions.slice(0, 2), // GetObject and ListBucket
-            resources: [bucketArn, `${bucketArn}/*`],
+            actions: ["s3:GetObject"],
+            resources: [`${bucketArn}/*`],
           }),
         );
 

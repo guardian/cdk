@@ -730,6 +730,28 @@ describe("the GuLoadBalancedAppExperimental pattern should support all existing 
         ],
       },
     });
+    Template.fromStack(stack).hasResourceProperties("AWS::IAM::Policy", {
+      PolicyDocument: {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Action: "s3:ListBucket",
+            Resource: {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:s3:::",
+                  {
+                    Ref: "DistributionBucketName",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+      },
+    });
   });
 
   it("creates a High5xxPercentageAlarm if the relevant monitoringConfiguration is provided", function () {

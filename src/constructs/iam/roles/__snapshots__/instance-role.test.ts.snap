@@ -11,6 +11,7 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
       "GuDescribeEC2Policy",
       "GuDistributionBucketParameter",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -94,6 +95,37 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestingCB7BD146",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuListBucketPolicyTesting4A0EF854": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyTesting4A0EF854",
         "Roles": [
           {
             "Ref": "InstanceRoleTestingCB7BD146",
@@ -253,9 +285,11 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
       "GuLogShippingPolicy",
       "GuDistributionBucketParameter",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
       "GuInstanceRole",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -358,6 +392,68 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyMysecondapp5096BFDB",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleMysecondapp48DD15D7",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuListBucketPolicyMyfirstapp2EA35135": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyMyfirstapp2EA35135",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleMyfirstapp5C11A22B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuListBucketPolicyMysecondapp13FA6C9F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyMysecondapp13FA6C9F",
         "Roles": [
           {
             "Ref": "InstanceRoleMysecondapp48DD15D7",
@@ -664,6 +760,7 @@ exports[`The GuInstanceRole construct should create an additional logging policy
       "GuLogShippingPolicy",
       "GuDistributionBucketParameter",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -731,6 +828,37 @@ exports[`The GuInstanceRole construct should create an additional logging policy
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestingCB7BD146",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuListBucketPolicyTesting4A0EF854": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyTesting4A0EF854",
         "Roles": [
           {
             "Ref": "InstanceRoleTestingCB7BD146",
@@ -930,6 +1058,7 @@ exports[`The GuInstanceRole construct should create the correct resources with m
       "GuDescribeEC2Policy",
       "GuDistributionBucketParameter",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -992,6 +1121,37 @@ exports[`The GuInstanceRole construct should create the correct resources with m
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyTestingF9D43A3E",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestingCB7BD146",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuListBucketPolicyTesting4A0EF854": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyTesting4A0EF854",
         "Roles": [
           {
             "Ref": "InstanceRoleTestingCB7BD146",
