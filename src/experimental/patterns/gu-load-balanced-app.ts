@@ -34,7 +34,7 @@ import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, InstanceProfile, ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
@@ -604,6 +604,23 @@ export class GuLoadBalancedAppExperimental extends Construct {
         vpc,
       });
 
+      const ecsInfraManagedPolicy = ManagedPolicy.fromManagedPolicyArn(
+        this,
+        "ECSInfraManagedPolicy",
+        "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
+      );
+
+      const ecsInstanceRole = new Role(this, "EcsInstanceRole", {
+        roleName: "ecsInstanceRole",
+        managedPolicies: [ecsInfraManagedPolicy],
+        assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ec2.amazonaws.com"),
+      });
+
+      const instanceProfile = new InstanceProfile(this, "ECSInstanceProfile", {
+        role: ecsInstanceRole,
+        instanceProfileName: "ecsInstanceRole",
+      });
+
       const managedInstancesCapacityProvider = new ManagedInstancesCapacityProvider(
         this,
         "ManagedInstancesCapacityProvider",
@@ -611,6 +628,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           subnets: privateSubnets,
           // TODO: Do we need the same security group for the managed instance as the task?
           securityGroups: [httpsEgressSecurityGroup],
+          ec2InstanceProfile: instanceProfile,
           instanceRequirements: {
             // Graviton
             instanceGenerations: [InstanceGeneration.CURRENT],

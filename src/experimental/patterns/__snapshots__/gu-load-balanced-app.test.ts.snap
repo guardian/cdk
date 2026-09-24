@@ -2546,7 +2546,7 @@ exitCode=$?
                     "Ref": "AWS::StackId",
                   },
                   "           --resource AutoScalingGroupTestguASG6CDCC0F0           --region eu-west-1           --exit-code $exitCode || echo 'Failed to send Cloudformation Signal'
-
+        
 }
 trap exitTrap EXIT
 mkdir -p $(dirname '/test-gu/test-gu-123.deb')
@@ -2583,7 +2583,7 @@ echo "Launch template last updated by Riff-Raff deployment ID: ",
       done
 
       echo "Instance running build 123 is healthy in target group."
-
+      
 # GuEc2AppExperimental Instance Health Check End",
                 ],
               ],
@@ -3604,6 +3604,17 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
     },
+    "testguECSInstanceProfile1CD21326": {
+      "Properties": {
+        "InstanceProfileName": "ecsInstanceRole",
+        "Roles": [
+          {
+            "Ref": "testguEcsInstanceRoleE2321966",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
     "testguEcsCluster02799D79": {
       "Properties": {
         "ClusterSettings": [
@@ -3637,6 +3648,45 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::ECS::Cluster",
     },
+    "testguEcsInstanceRoleE2321966": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
+        ],
+        "RoleName": "ecsInstanceRole",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "testguManagedInstancesCapacityProvider4203E356": {
       "Properties": {
         "ClusterName": {
@@ -3652,7 +3702,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
           "InstanceLaunchTemplate": {
             "Ec2InstanceProfileArn": {
               "Fn::GetAtt": [
-                "testguManagedInstancesCapacityProviderInstanceProfileF2FBD55F",
+                "testguECSInstanceProfile1CD21326",
                 "Arn",
               ],
             },
@@ -3709,143 +3759,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         ],
       },
       "Type": "AWS::ECS::CapacityProvider",
-    },
-    "testguManagedInstancesCapacityProviderInstanceProfileF2FBD55F": {
-      "Properties": {
-        "InstanceProfileName": "ecsInstanceRoleTesttestguManagedInsncesCapacityProvider329A085A",
-        "Roles": [
-          {
-            "Ref": "testguManagedInstancesCapacityProviderInstanceRole9667DB1E",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "testguManagedInstancesCapacityProviderInstanceRole9667DB1E": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ec2.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Policies": [
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": "ecs:DiscoverPollEndpoint",
-                  "Effect": "Allow",
-                  "Resource": "*",
-                  "Sid": "ECSAgentDiscoverPollEndpointPermissions",
-                },
-                {
-                  "Action": "ecs:RegisterContainerInstance",
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::GetAtt": [
-                      "testguEcsCluster02799D79",
-                      "Arn",
-                    ],
-                  },
-                  "Sid": "ECSAgentRegisterPermissions",
-                },
-                {
-                  "Action": "ecs:Poll",
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition",
-                        },
-                        ":ecs:eu-west-1:",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":container-instance/*",
-                      ],
-                    ],
-                  },
-                  "Sid": "ECSAgentPollPermissions",
-                },
-                {
-                  "Action": [
-                    "ecs:StartTelemetrySession",
-                    "ecs:PutSystemLogEvents",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition",
-                        },
-                        ":ecs:eu-west-1:",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":container-instance/*",
-                      ],
-                    ],
-                  },
-                  "Sid": "ECSAgentTelemetryPermissions",
-                },
-                {
-                  "Action": [
-                    "ecs:SubmitAttachmentStateChanges",
-                    "ecs:SubmitTaskStateChange",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::GetAtt": [
-                      "testguEcsCluster02799D79",
-                      "Arn",
-                    ],
-                  },
-                  "Sid": "ECSAgentStateChangePermissions",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "ECSInstancePolicy",
-          },
-        ],
-        "RoleName": "ecsInstanceRoleTesttestguManagedInsncesCapacityProvider329A085A",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "test-gu",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
     },
     "testguManagedInstancesCapacityProviderManagedInstancesCapacityProviderRoleA3664E76": {
       "Properties": {
