@@ -49,7 +49,7 @@ import {
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuDistributionBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
-import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
+import { GuInstanceRoleProps, GuPolicy, GuSyncPrivateConfigPolicy } from "../../constructs/iam";
 import {
   GuGetPrivateConfigPolicy,
   GuInstanceRole,
@@ -529,7 +529,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         userDataLike instanceof UserData ? userDataLike : new GuUserData(scope, { ...userDataLike, app });
       const maybePrivateConfigPolicy =
         userData instanceof GuUserData && userData.configuration
-          ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
+          ? [
+              new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration),
+              new GuSyncPrivateConfigPolicy(scope, "SyncPrivateConfigToS3Policy", userData.configuration),
+            ]
           : [];
       const mergedRoleConfiguration: GuInstanceRoleProps = {
         additionalPolicies: maybePrivateConfigPolicy.concat(additionalPolicies),
@@ -929,16 +932,19 @@ export class GuLoadBalancedAppExperimental extends Construct {
         );
 
         // Direct S3 access for read optimization
-        const s3Actions = ["s3:GetObject", "s3:ListBucket"];
-        if (!s3Config.readOnly) {
-          s3Actions.push("s3:PutObject", "s3:DeleteObject");
-        }
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:ListBucket"],
+            resources: [bucketArn],
+          }),
+        );
 
         taskDefinition.addToTaskRolePolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: s3Actions.slice(0, 2), // GetObject and ListBucket
-            resources: [bucketArn, `${bucketArn}/*`],
+            actions: ["s3:GetObject"],
+            resources: [`${bucketArn}/*`],
           }),
         );
 
