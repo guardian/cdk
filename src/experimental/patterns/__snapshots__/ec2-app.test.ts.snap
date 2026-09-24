@@ -17,6 +17,7 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
@@ -359,6 +360,37 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
         "ToPort": 9000,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuListBucketPolicyTestguec2appB54AA03A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyTestguec2appB54AA03A",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestguec2appC325BE42",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "GuLogShippingPolicy981BFE5A": {
       "Properties": {
