@@ -19,6 +19,16 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
   }
 }
 
+export class GuListBucketPolicy extends GuAppAwareConstruct(GuAllowPolicy) {
+  constructor(scope: GuStack, props: AppIdentity) {
+    super(scope, "GuListBucketPolicy", {
+      ...props,
+      actions: ["s3:ListBucket"],
+      resources: [`arn:aws:s3:::${GuDistributionBucketParameter.getInstance(scope).valueAsString}`],
+    });
+  }
+}
+
 /**
  * Creates an `AWS::IAM::Policy` to grant `s3:GetObject` permission to the account's distribution bucket.
  * The permission is tightly scoped to the path to the app (`bucket/stack/stage/app/*`) and will look something like:
