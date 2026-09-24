@@ -17,6 +17,7 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
       "GuLogShippingPolicy",
       "GuDistributionBucketParameter",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
@@ -318,6 +319,37 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
         "ToPort": 3000,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuListBucketPolicyTestguec2appB54AA03A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyTestguec2appB54AA03A",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestguec2appC325BE42",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "GuLogShippingPolicy981BFE5A": {
       "Properties": {
@@ -908,6 +940,7 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
       "GuLogShippingPolicy",
       "GuDistributionBucketParameter",
       "GuGetDistributablePolicy",
+      "GuListBucketPolicy",
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
@@ -1187,6 +1220,37 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
         "ToPort": 3000,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuListBucketPolicyTestguec2appB54AA03A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuListBucketPolicyTestguec2appB54AA03A",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleTestguec2appC325BE42",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "GuLogShippingPolicy981BFE5A": {
       "Properties": {
