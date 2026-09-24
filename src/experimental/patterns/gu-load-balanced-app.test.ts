@@ -699,7 +699,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support all existing 
         Statement: [
           {
             Effect: "Allow",
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
             Resource: [
               {
                 "Fn::Join": [
