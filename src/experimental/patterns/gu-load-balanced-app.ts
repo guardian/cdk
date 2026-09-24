@@ -1,4 +1,4 @@
-import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -12,34 +12,34 @@ import {
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import { ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
-import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
-import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
+import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   ContainerImage,
+  ContainerInsights,
+  CpuArchitecture,
   FargateService,
   FargateTaskDefinition,
   FireLensLogDriver,
   FirelensLogRouterType,
   LogDriver,
+  OperatingSystemFamily,
+  PropagatedTagSource,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
-import type { CfnService } from "aws-cdk-lib/aws-ecs";
-import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
+import { CfnFileSystem } from "aws-cdk-lib/aws-s3files";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
-import { GuUserData } from "../../constructs/autoscaling";
-import { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { NoMonitoring } from "../../constructs/cloudwatch";
 import {
   GuAlb4xxPercentageAlarm,
@@ -47,14 +47,15 @@ import {
   GuUnhealthyInstancesAlarm,
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity } from "../../constructs/core";
-import { GuLoggingStreamNameParameter } from "../../constructs/core";
+import { AppIdentity, GuDistributionBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
-import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
-import { GuLogShippingPolicy } from "../../constructs/iam";
-import { GuInstanceRole } from "../../constructs/iam";
-import { GuGetPrivateConfigPolicy } from "../../constructs/iam";
-import { GuParameterStoreReadPolicy } from "../../constructs/iam";
+import { GuInstanceRoleProps, GuPolicy, GuSyncPrivateConfigPolicy } from "../../constructs/iam";
+import {
+  GuGetPrivateConfigPolicy,
+  GuInstanceRole,
+  GuLogShippingPolicy,
+  GuParameterStoreReadPolicy,
+} from "../../constructs/iam";
 import { GuLambdaFunction } from "../../constructs/lambda";
 import {
   GuApplicationLoadBalancer,
@@ -64,8 +65,8 @@ import {
 } from "../../constructs/loadbalancing";
 import type { Alarms, ApplicationLoggingProps } from "../../patterns";
 import { restrictedCidrRanges } from "../../patterns";
-import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
+import { AppAccess } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
@@ -76,6 +77,59 @@ import {
   GuRollingUpdatePolicyExperimental,
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
+
+/**
+ * This interface defines the configuration for mounting an S3 Files file system into a container.
+ *
+ * The implementation comes with a default function `getDefaultS3ConfigMount` which can be used
+ * as the basis to spread different values as needed.
+ */
+export interface GuS3ConfigMount {
+  /**
+   * The mount path inside the container. Note that this must be a directory that is not
+   * currently used. Any directory content at this location in the image will be overwritten
+   * by the mount.
+   */
+  containerPath: string;
+  /**
+   * The name of the S3 bucket to mount.
+   */
+  bucket: string;
+  /**
+   * The S3 prefix to mount into the container.
+   */
+  path: string;
+  /**
+   * Whether the mount should be read-only.
+   */
+  readOnly: boolean;
+}
+
+/**
+ * Default values for "normal" applications.
+ *
+ *   s3Config: getDefaultS3ConfigMount(this)
+ *
+ * will result in the following S3 location being mounted into the container as a file system:
+ *
+ *   /etc/${app}/ -> s3://${dist-bucket}/${stack}/${stage}/${app}/conf/
+ *
+ * Any files which need to present in a container in a directory that isn't owned by
+ * the container (eg /etc/nginx/nginx.d/appconfig) should be symlinked.
+ *
+ */
+export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
+  if (!scope.app) {
+    throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
+  }
+
+  return {
+    containerPath: `/etc/${scope.app}`,
+    bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+    path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
+    readOnly: true,
+  };
+}
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   /**
@@ -344,6 +398,12 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     repositoryName?: string;
     /**
+     * Mount an S3 Files volume directly into the application container.
+     *
+     * Supply a single config object.  For common defaults, use getDefaultS3ConfigMount(scope).
+     */
+    s3Config?: GuS3ConfigMount;
+    /**
      * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
      * level of availability so that all 3 Availability Zones are utilised.
      */
@@ -469,7 +529,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         userDataLike instanceof UserData ? userDataLike : new GuUserData(scope, { ...userDataLike, app });
       const maybePrivateConfigPolicy =
         userData instanceof GuUserData && userData.configuration
-          ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
+          ? [
+              new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration),
+              new GuSyncPrivateConfigPolicy(scope, "SyncPrivateConfigToS3Policy", userData.configuration),
+            ]
           : [];
       const mergedRoleConfiguration: GuInstanceRoleProps = {
         additionalPolicies: maybePrivateConfigPolicy.concat(additionalPolicies),
@@ -583,7 +646,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3Config } = ecsProps;
 
       const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
       if (!ecrRepoName) {
@@ -643,7 +706,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
-      taskDefinition.addContainer(app, {
+      const appContainer = taskDefinition.addContainer(app, {
         image,
         dockerLabels: {
           RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
@@ -774,7 +837,145 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const logVolume: Volume = {
         name: "logging-volume",
       };
-      taskDefinition.addVolume(logVolume);
+
+      // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
+      const volumes: unknown[] = [{ Name: logVolume.name }];
+
+      if (s3Config) {
+        const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
+        const bucketArn = `arn:${Aws.PARTITION}:s3:::${s3Config.bucket}`;
+        const role = new Role(scope, `S3FilesRole`, {
+          assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
+            StringEquals: {
+              "aws:SourceAccount": Aws.ACCOUNT_ID,
+            },
+            ArnLike: {
+              "aws:SourceArn": `arn:${Aws.PARTITION}:s3files:${Aws.REGION}:${Aws.ACCOUNT_ID}:file-system/*`,
+            },
+          }),
+          description: `Role used by the S3 Files filesystem for ${app} mount`,
+        });
+        // Add S3 permissions to the S3 Files service role
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
+            resources: [bucketArn],
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "s3:GetObject",
+              "s3:GetObjectVersion",
+              "s3:GetObjectTagging",
+              "s3:GetObjectVersionTagging",
+              "s3:PutObject",
+              "s3:PutObjectTagging",
+              "s3:DeleteObject",
+              "s3:DeleteObjectVersion",
+            ],
+            resources: [`${bucketArn}/*`],
+          }),
+        );
+
+        // EventBridge permissions: S3 Files creates rules prefixed "DO-NOT-DELETE-S3-Files"
+        // to detect S3 object changes and trigger data synchronization
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "events:DeleteRule",
+              "events:DisableRule",
+              "events:EnableRule",
+              "events:PutRule",
+              "events:PutTargets",
+              "events:RemoveTargets",
+            ],
+            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/DO-NOT-DELETE-S3-Files*`],
+            conditions: { StringEquals: { "events:ManagedBy": "elasticfilesystem.amazonaws.com" } },
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "events:DescribeRule",
+              "events:ListRuleNamesByTarget",
+              "events:ListRules",
+              "events:ListTargetsByRule",
+            ],
+            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+          }),
+        );
+
+        const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
+          bucket: bucketArn,
+          prefix: normalizedPrefix,
+          roleArn: role.roleArn,
+        });
+
+        const actions: string[] = ["s3files:ClientMount"];
+        if (!s3Config.readOnly) {
+          actions.push("s3files:ClientWrite");
+        }
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions,
+            resources: [fileSystem.attrFileSystemArn],
+          }),
+        );
+
+        // Direct S3 access for read optimization
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:ListBucket"],
+            resources: [bucketArn],
+          }),
+        );
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:GetObject"],
+            resources: [`${bucketArn}/*`],
+          }),
+        );
+
+        if (!s3Config.readOnly) {
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:PutObject", "s3:DeleteObject"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+        }
+
+        appContainer.addMountPoints({
+          containerPath: s3Config.containerPath,
+          sourceVolume: `s3files-volume`,
+          readOnly: s3Config.readOnly,
+        });
+
+        // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.
+        volumes.push({
+          Name: `s3files-volume`,
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: fileSystem.attrFileSystemArn,
+            RootDirectory: "/",
+          },
+        });
+      }
+
+      const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
+      cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
 
       logRouter.addMountPoints({
         containerPath: "/init",
@@ -981,13 +1182,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       userPoolClient.node.addDependency(userPoolIdp);
 
-      if (props.ecsProps) {
-        throw new Error("Using Google Auth with ECS is currently unsupported");
-        // I think that the code here will probably work fine but it needs some dedicated testing.
-        // For Google auth to work we need to 'authenticate-cognito' and then forward to a target group.
-        // If we are operating with EC2 and ECS backends then this forwarded request could be sent to either backend.
-        // Let's deploy this to a DevX service and check it's valid/works as expected before opening this up to other teams.
-      }
       listener.addAction("CognitoAuth", {
         action: new AuthenticateCognitoAction({
           userPool: userPool,
