@@ -109,7 +109,7 @@ describe("the GuEC2App pattern", function () {
         Statement: [
           {
             Effect: "Allow",
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
             Resource: [
               {
                 "Fn::Join": [

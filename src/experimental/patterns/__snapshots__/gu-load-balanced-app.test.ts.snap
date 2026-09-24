@@ -210,7 +210,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support all existing G
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1100,7 +1103,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support all existing G
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1974,7 +1980,10 @@ exports[`the GuLoadBalancedAppExperimental pattern should support experimental E
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [

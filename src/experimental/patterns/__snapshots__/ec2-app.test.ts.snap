@@ -272,7 +272,10 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [

@@ -660,7 +660,10 @@ exports[`The GuEcsTask pattern should create the correct resources with lots of 
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1386,7 +1389,10 @@ exports[`The GuEcsTask pattern should support overriding the subnets used by the
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [

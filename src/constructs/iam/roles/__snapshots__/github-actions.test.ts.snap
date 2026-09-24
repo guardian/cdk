@@ -26,7 +26,10 @@ exports[`The GitHubActionsRole construct should create the correct resources wit
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::super-secret-stuff/*",
             },

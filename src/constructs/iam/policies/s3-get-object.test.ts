@@ -17,7 +17,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
           {
             Effect: "Allow",
             Resource: "arn:aws:s3:::test/*",
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
           },
         ],
       },
@@ -39,7 +39,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
           {
             Effect: "Allow",
             Resource: "arn:aws:s3:::test/*",
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
           },
         ],
       },
@@ -63,7 +63,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
           {
             Effect: "Allow",
             Resource: ["arn:aws:s3:::test/file1.txt", "arn:aws:s3:::test/file2.txt"],
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
           },
         ],
       },
@@ -89,7 +89,7 @@ describe("The GuGetDistributablePolicy construct", () => {
         Version: "2012-10-17",
         Statement: [
           {
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
             Effect: "Allow",
             Resource: {
               "Fn::Join": [

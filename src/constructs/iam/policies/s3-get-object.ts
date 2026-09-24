@@ -15,7 +15,7 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
   constructor(scope: GuStack, id: string, props: GuGetS3ObjectPolicyProps) {
     const paths: string[] = props.paths ?? ["*"];
     const s3Resources: string[] = paths.map((path) => `arn:aws:s3:::${props.bucketName}/${path}`);
-    super(scope, id, { ...props, actions: ["s3:GetObject"], resources: s3Resources });
+    super(scope, id, { ...props, actions: ["s3:GetObject", "s3:ListBucket"], resources: s3Resources });
   }
 }
 
@@ -64,7 +64,7 @@ export class GuGetDistributablePolicyStatement extends PolicyStatement {
     const path = [scope.stack, scope.stage, props.app, "*"].join("/");
     super({
       effect: Effect.ALLOW,
-      actions: ["s3:GetObject"],
+      actions: ["s3:GetObject", "s3:ListBucket"],
       resources: [`arn:aws:s3:::${GuDistributionBucketParameter.getInstance(scope).valueAsString}/${path}`],
     });
   }

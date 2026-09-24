@@ -54,7 +54,10 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::config/*",
             },
@@ -75,7 +78,10 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -307,7 +313,10 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -339,7 +348,10 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -712,7 +724,10 @@ exports[`The GuInstanceRole construct should create an additional logging policy
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -973,7 +988,10 @@ exports[`The GuInstanceRole construct should create the correct resources with m
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [

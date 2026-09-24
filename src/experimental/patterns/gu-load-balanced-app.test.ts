@@ -18,7 +18,7 @@ import { GuDynamoDBWritePolicy } from "../../constructs/iam";
 import type { AppAccess, GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { RollingUpdateDurations } from "./ec2-app";
-import { GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
+import { getDefaultS3ConfigMount, GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
 
 describe("the GuLoadBalancedAppExperimental pattern should support new ECS and hybrid functionality", function () {
   it("should produce a functional ECS app with minimal arguments", function () {
@@ -39,6 +39,110 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it("should create S3 Files resources and mount them in the ECS task definition", function () {
+    const stack = simpleGuStackForTesting({ app: "test-gu", env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3Config: {
+          ...getDefaultS3ConfigMount(stack),
+          containerPath: "/amiable",
+          path: "test-stack/TEST/test-gu/conf/",
+        },
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: {
+        "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::", { Ref: "DistributionBucketName" }]],
+      },
+      Prefix: "test-stack/TEST/test-gu/conf/",
+      RoleArn: {
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole"), "Arn"],
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      Volumes: Match.arrayWith([
+        Match.objectLike({
+          Name: "s3files-volume",
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: {
+              "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem"), "FileSystemArn"],
+            },
+            RootDirectory: "/",
+          },
+        }),
+      ]),
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/amiable",
+              SourceVolume: "s3files-volume",
+              ReadOnly: true,
+            }),
+          ]),
+        }),
+      ]),
+    });
+  });
+
+  it("should allow overriding S3 Files source bucket and path", function () {
+    const stack = simpleGuStackForTesting({ app: "test-gu", env: { region: "eu-west-1" } });
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        s3Config: {
+          containerPath: "/override",
+          bucket: "custom-bucket",
+          path: "custom/path/conf",
+          readOnly: false,
+        },
+      },
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+      Bucket: {
+        "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::custom-bucket"]],
+      },
+      Prefix: "custom/path/conf/",
+    });
+
+    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+      ContainerDefinitions: Match.arrayWith([
+        Match.objectLike({
+          MountPoints: Match.arrayWith([
+            Match.objectLike({
+              ContainerPath: "/override",
+              ReadOnly: false,
+            }),
+          ]),
+        }),
+      ]),
+    });
   });
 
   it("should apply standard tags to all taggable resources", function () {
@@ -437,47 +541,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
   });
 
-  // Because this has not been tested thoroughly yet
-  it("should throw an error if there is an ECS backend and the Google Auth feature is being used", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const domain = "domain-name-for-your-application.example";
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: domain,
-          },
-          ec2Props: {
-            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-            instanceMetricGranularity: "5Minute",
-            userData: UserData.forLinux(),
-            scaling: {
-              minimumInstances: 1,
-            },
-          },
-          ecsProps: {
-            cpu: 1024,
-            memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-            imageIdentifier: "sha256:12345",
-            repositoryName: "my-repository",
-          },
-          targetGroupWeights: {
-            ec2: 899,
-            ecs: 100,
-          },
-          googleAuth: {
-            enabled: true,
-            domain,
-          },
-        }),
-    ).toThrow("Using Google Auth with ECS is currently unsupported");
-  });
-
   it("should scale on CPU utilisation using aws target tracking", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuLoadBalancedAppExperimental(stack, {
@@ -636,7 +699,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support all existing 
         Statement: [
           {
             Effect: "Allow",
-            Action: "s3:GetObject",
+            Action: ["s3:GetObject", "s3:ListBucket"],
             Resource: [
               {
                 "Fn::Join": [

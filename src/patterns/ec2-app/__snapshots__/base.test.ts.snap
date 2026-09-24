@@ -210,7 +210,10 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1100,7 +1103,10 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:GetObject",
+              "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
