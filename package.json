@@ -6,6 +6,7 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
+    "guard-rules",
     "CHANGELOG.md"
   ],
   "bin": {
@@ -58,6 +59,7 @@
     "@aws-sdk/client-ec2": "^3.1087.0",
     "@aws-sdk/client-ssm": "^3.1087.0",
     "@aws-sdk/credential-providers": "^3.1087.0",
+    "@cdklabs/cdk-validator-cfnguard": "^0.0.62",
     "chalk": "^4.1.2",
     "codemaker": "^1.138.0",
     "git-url-parse": "^16.0.1",
