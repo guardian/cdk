@@ -614,19 +614,17 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Allows the ec2 instance to pull images from the registry
       const ecsRepositoryPullPolicy = ManagedPolicy.fromManagedPolicyArn(
         this,
-        "ECSRepositoryPullPolicy ",
+        "ECSRepositoryPullPolicy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
       );
 
-      const ecsInstanceRole = new Role(this, "EcsInstanceRole", {
-        roleName: "ecsInstanceRole",
+      const ecsInstanceRole = new Role(this, "ECSManagedInstancesRole", {
         managedPolicies: [ecsInstanceRolePolicy, ecsRepositoryPullPolicy],
         assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ec2.amazonaws.com"),
       });
 
-      const instanceProfile = new InstanceProfile(this, "ECSInstanceProfile", {
+      const instanceProfile = new InstanceProfile(this, "ECSManagedInstancesProfile", {
         role: ecsInstanceRole,
-        instanceProfileName: "ecsInstanceRole",
       });
 
       const managedInstancesCapacityProvider = new ManagedInstancesCapacityProvider(

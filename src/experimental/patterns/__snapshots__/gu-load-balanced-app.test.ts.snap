@@ -3604,16 +3604,54 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
     },
-    "testguECSInstanceProfile1CD21326": {
+    "testguECSManagedInstancesProfile37BD9FFD": {
       "Properties": {
-        "InstanceProfileName": "ecsInstanceRole",
         "Roles": [
           {
-            "Ref": "testguEcsInstanceRoleE2321966",
+            "Ref": "testguECSManagedInstancesRoleB969AF12",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
+    },
+    "testguECSManagedInstancesRoleB969AF12": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
+          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "testguEcsCluster02799D79": {
       "Properties": {
@@ -3648,46 +3686,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::ECS::Cluster",
     },
-    "testguEcsInstanceRoleE2321966": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ec2.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
-          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-        ],
-        "RoleName": "ecsInstanceRole",
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/cdk",
-          },
-          {
-            "Key": "Stack",
-            "Value": "test-stack",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
     "testguManagedInstancesCapacityProvider4203E356": {
       "Properties": {
         "ClusterName": {
@@ -3703,7 +3701,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
           "InstanceLaunchTemplate": {
             "Ec2InstanceProfileArn": {
               "Fn::GetAtt": [
-                "testguECSInstanceProfile1CD21326",
+                "testguECSManagedInstancesProfile37BD9FFD",
                 "Arn",
               ],
             },
