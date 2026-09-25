@@ -424,6 +424,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
    */
   public readonly targetGroups: TargetGroups;
 
+  /**
+   * A log driver used to ship logs to Central ELK (via Kinesis).
+   *
+   * @note Only available when using ECS, i.e. when {@link GuLoadBalancedAppExperimental.ecsService} is defined.
+   */
+  public readonly fireLensLogDriver?: FireLensLogDriver;
+
   constructor(scope: GuStack, props: GuLoadBalancedAppExperimentalProps) {
     const {
       access,
@@ -616,7 +623,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const loggingStreamName = GuLoggingStreamNameParameter.getInstance(scope).valueAsString;
 
-      const fireLensLogDriver = new FireLensLogDriver({
+      this.fireLensLogDriver = new FireLensLogDriver({
         options: {
           Name: `kinesis_streams`,
           region: scope.region,
@@ -652,7 +659,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // using the immutable digest
         versionConsistency: VersionConsistency.DISABLED,
         portMappings: [{ containerPort: applicationPort }],
-        logging: fireLensLogDriver,
+        logging: this.fireLensLogDriver,
         readonlyRootFilesystem: true,
         environment,
       });
