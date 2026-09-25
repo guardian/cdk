@@ -18,7 +18,9 @@ describe("GuFsbpValidationPlugin", () => {
   it("fails synthesis when a bucket allows public read (FSBP S3.2)", () => {
     const { app, bucket } = appWithBucket(BlockPublicAccess.BLOCK_ACLS_ONLY);
     bucket.grantPublicAccess("public/*");
-    expect(() => app.synth()).toThrow(/FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED/);
+    expect(() => app.synth()).toThrow(
+      /S3\.2: S3 general purpose buckets should block public read access[\s\S]*FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED/,
+    );
   });
 
   it("can be acknowledged", () => {
