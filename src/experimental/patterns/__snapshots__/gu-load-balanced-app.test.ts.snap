@@ -2651,11 +2651,11 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "GuSubnetListParameter",
       "GuSubnetListParameter",
       "GuLoadBalancedAppExperimental",
+      "GuHttpsEgressSecurityGroup",
       "GuLoggingStreamNameParameter",
       "GuRiffRaffDeploymentIdParameterExperimental",
       "GuLogShippingPolicy",
       "GuParameterStoreReadPolicy",
-      "GuHttpsEgressSecurityGroup",
       "GuApplicationTargetGroup",
       "GuCertificate",
       "GuApplicationLoadBalancer",
@@ -2752,6 +2752,14 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "ListenerTestguCB542308",
       ],
       "Properties": {
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": {
+              "Ref": "testguManagedInstancesCapacityProvider4203E356",
+            },
+            "Weight": 1,
+          },
+        ],
         "Cluster": {
           "Ref": "testguEcsCluster02799D79",
         },
@@ -2773,7 +2781,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         },
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
-        "LaunchType": "FARGATE",
         "LoadBalancers": [
           {
             "ContainerName": "test-gu",
@@ -3014,12 +3021,8 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "Memory": "2048",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": [
-          "FARGATE",
+          "MANAGED_INSTANCES",
         ],
-        "RuntimePlatform": {
-          "CpuArchitecture": "ARM64",
-          "OperatingSystemFamily": "LINUX",
-        },
         "Tags": [
           {
             "Key": "App",
@@ -3601,6 +3604,55 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       },
       "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
     },
+    "testguECSManagedInstancesProfile37BD9FFD": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "testguECSManagedInstancesRoleB969AF12",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "testguECSManagedInstancesRoleB969AF12": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
+          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "testguEcsCluster02799D79": {
       "Properties": {
         "ClusterSettings": [
@@ -3633,6 +3685,132 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         ],
       },
       "Type": "AWS::ECS::Cluster",
+    },
+    "testguManagedInstancesCapacityProvider4203E356": {
+      "Properties": {
+        "ClusterName": {
+          "Ref": "testguEcsCluster02799D79",
+        },
+        "ManagedInstancesProvider": {
+          "InfrastructureRoleArn": {
+            "Fn::GetAtt": [
+              "testguManagedInstancesCapacityProviderManagedInstancesCapacityProviderRoleA3664E76",
+              "Arn",
+            ],
+          },
+          "InstanceLaunchTemplate": {
+            "Ec2InstanceProfileArn": {
+              "Fn::GetAtt": [
+                "testguECSManagedInstancesProfile37BD9FFD",
+                "Arn",
+              ],
+            },
+            "InstanceRequirements": {
+              "CpuManufacturers": [
+                "amazon-web-services",
+              ],
+              "InstanceGenerations": [
+                "current",
+              ],
+              "MemoryMiB": {
+                "Min": 2048,
+              },
+              "VCpuCount": {
+                "Min": 1,
+              },
+            },
+            "NetworkConfiguration": {
+              "SecurityGroups": [
+                {
+                  "Fn::GetAtt": [
+                    "GuHttpsEgressSecurityGroupTestguecs783F2306",
+                    "GroupId",
+                  ],
+                },
+              ],
+              "Subnets": {
+                "Ref": "testguPrivateSubnets",
+              },
+            },
+          },
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "test-gu",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::CapacityProvider",
+    },
+    "testguManagedInstancesCapacityProviderManagedInstancesCapacityProviderRoleA3664E76": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonECSInfrastructureRolePolicyForManagedInstances",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "test-gu",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
   },
 }
