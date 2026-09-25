@@ -33,7 +33,10 @@ describe("GuFsbpValidationPlugin", () => {
 
   it("can be acknowledged", () => {
     const { app, bucket } = appWithBucket({ blockPublicAccess: allowPublicPolicy });
-    Validations.of(bucket).acknowledge({ id: "FSBP::S3_BUCKET_PUBLIC_WRITE_PROHIBITED", reason: "Serves public assets" });
+    Validations.of(bucket).acknowledge({
+      id: "FSBP::S3_BUCKET_PUBLIC_WRITE_PROHIBITED",
+      reason: "Serves public assets",
+    });
     expect(() => app.synth()).not.toThrow();
   });
 });
