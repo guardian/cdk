@@ -34,7 +34,15 @@ import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, InstanceProfile, ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import {
+  Effect,
+  InstanceProfile,
+  ManagedPolicy,
+  PolicyDocument,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
@@ -617,7 +625,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         "ECSRepositoryPullPolicy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
       );
-
       const ecsInstanceRole = new Role(this, "ECSManagedInstancesRole", {
         managedPolicies: [ecsInstanceRolePolicy, ecsRepositoryPullPolicy],
         assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ec2.amazonaws.com"),
@@ -627,6 +634,33 @@ export class GuLoadBalancedAppExperimental extends Construct {
         role: ecsInstanceRole,
       });
 
+      const ecsInfrastructurePolicy = ManagedPolicy.fromManagedPolicyArn(
+        this,
+        "ECSInfrastructurePolicy",
+        "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForManagedInstances",
+      );
+
+      const infrastructureRole = new Role(this, "ECSInfrastructureRole", {
+        managedPolicies: [ecsInfrastructurePolicy],
+        assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ecs.amazonaws.com"),
+        inlinePolicies: {
+          PassInstanceRoleToEC2: new PolicyDocument({
+            statements: [
+              new PolicyStatement({
+                effect: Effect.ALLOW,
+                actions: ["iam:PassRole"],
+                resources: [ecsInstanceRole.roleArn],
+                conditions: {
+                  StringLike: {
+                    "iam:PassedToService": "ec2.*",
+                  },
+                },
+              }),
+            ],
+          }),
+        },
+      });
+
       const managedInstancesCapacityProvider = new ManagedInstancesCapacityProvider(
         this,
         "ManagedInstancesCapacityProvider",
@@ -634,6 +668,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           subnets: privateSubnets,
           // TODO: Do we need the same security group for the managed instance as the task?
           securityGroups: [httpsEgressSecurityGroup],
+          infrastructureRole,
           ec2InstanceProfile: instanceProfile,
           instanceRequirements: {
             // Graviton
