@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
-import { Bucket } from "aws-cdk-lib/aws-s3";
+import { BlockPublicAccess, Bucket } from "aws-cdk-lib/aws-s3";
 import type { AppIdentity, GuStack } from "../../constructs/core";
 import { simpleGuStackForTesting } from "../test";
 import { GuAppAwareConstruct } from "./app-aware-construct";
@@ -40,7 +40,7 @@ describe("The GuAppAwareConstruct mixin", () => {
 
   it("should add the app tag", () => {
     const stack = simpleGuStackForTesting();
-    new TestAppAwareConstruct(stack, "MyBucket", { app: "Test" });
+    new TestAppAwareConstruct(stack, "MyBucket", { app: "Test", blockPublicAccess: BlockPublicAccess.BLOCK_ALL });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });
 });
