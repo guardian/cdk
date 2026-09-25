@@ -7,11 +7,13 @@ const GUARD_RULES_DIR = path.join(__dirname, "..", "..", "guard-rules");
 
 // The FSBP control checked by each rule in `guard-rules`.
 const RULE_CONTROLS: Record<string, string> = {
+  S3_BUCKET_PUBLIC_READ_PROHIBITED: "S3.2",
   S3_BUCKET_PUBLIC_WRITE_PROHIBITED: "S3.3",
 };
 
 // From https://docs.aws.amazon.com/securityhub/latest/userguide/fsbp-standard.html
 const CONTROL_TITLES: Record<string, string> = {
+  "S3.2": "S3 general purpose buckets should block public read access",
   "S3.3": "S3 general purpose buckets should block public write access",
 };
 
