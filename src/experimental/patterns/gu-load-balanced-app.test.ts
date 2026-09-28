@@ -64,7 +64,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::S3Files::FileSystem", {
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::S3Files::FileSystem", {
       Bucket: {
         "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::", { Ref: "DistributionBucketName" }]],
       },
@@ -74,7 +75,44 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+    template.resourceCountIs("AWS::S3Files::MountTarget", 3);
+    template.hasResourceProperties("AWS::S3Files::MountTarget", {
+      FileSystemId: {
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesFileSystem"), "FileSystemId"],
+      },
+      SecurityGroups: [
+        {
+          "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesMountTargetSecurityGroup"), "GroupId"],
+        },
+      ],
+    });
+
+    template.hasResourceProperties("AWS::EC2::SecurityGroup", {
+      SecurityGroupIngress: Match.arrayWith([
+        Match.objectLike({
+          FromPort: 2049,
+          IpProtocol: "tcp",
+          SourceSecurityGroupId: {
+            "Fn::GetAtt": [Match.stringLikeRegexp("^GuHttpsEgressSecurityGroup"), "GroupId"],
+          },
+          ToPort: 2049,
+        }),
+      ]),
+    });
+    template.hasResourceProperties("AWS::EC2::SecurityGroupEgress", {
+      DestinationSecurityGroupId: {
+        "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesMountTargetSecurityGroup"), "GroupId"],
+      },
+      FromPort: 2049,
+      IpProtocol: "tcp",
+      ToPort: 2049,
+    });
+
+    template.hasResource("AWS::ECS::Service", {
+      DependsOn: Match.arrayWith([Match.stringLikeRegexp("^S3FilesMountTarget")]),
+    });
+
+    template.hasResourceProperties("AWS::ECS::TaskDefinition", {
       Volumes: Match.arrayWith([
         Match.objectLike({
           Name: "s3files-volume",
