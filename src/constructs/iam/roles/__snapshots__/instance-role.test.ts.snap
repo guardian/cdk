@@ -111,9 +111,7 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
               "Action": "s3:ListBucket",
               "Condition": {
                 "StringLike": {
-                  "s3:prefix": {
-                    "path": "test-stack/TEST/undefined/conf/",
-                  },
+                  "s3:prefix": "test-stack/TEST/undefined/conf/",
                 },
               },
               "Effect": "Allow",
@@ -415,9 +413,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
               "Action": "s3:ListBucket",
               "Condition": {
                 "StringLike": {
-                  "s3:prefix": {
-                    "path": "test-stack/TEST/undefined/conf/",
-                  },
+                  "s3:prefix": "test-stack/TEST/undefined/conf/",
                 },
               },
               "Effect": "Allow",
@@ -453,9 +449,7 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
               "Action": "s3:ListBucket",
               "Condition": {
                 "StringLike": {
-                  "s3:prefix": {
-                    "path": "test-stack/TEST/undefined/conf/",
-                  },
+                  "s3:prefix": "test-stack/TEST/undefined/conf/",
                 },
               },
               "Effect": "Allow",
@@ -865,9 +859,7 @@ exports[`The GuInstanceRole construct should create an additional logging policy
               "Action": "s3:ListBucket",
               "Condition": {
                 "StringLike": {
-                  "s3:prefix": {
-                    "path": "test-stack/TEST/undefined/conf/",
-                  },
+                  "s3:prefix": "test-stack/TEST/undefined/conf/",
                 },
               },
               "Effect": "Allow",
@@ -1165,9 +1157,7 @@ exports[`The GuInstanceRole construct should create the correct resources with m
               "Action": "s3:ListBucket",
               "Condition": {
                 "StringLike": {
-                  "s3:prefix": {
-                    "path": "test-stack/TEST/undefined/conf/",
-                  },
+                  "s3:prefix": "test-stack/TEST/undefined/conf/",
                 },
               },
               "Effect": "Allow",
