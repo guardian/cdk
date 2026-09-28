@@ -27,7 +27,7 @@ export class GuListBucketPolicy extends GuAppAwareConstruct(GuPolicy) {
       resources: [`arn:aws:s3:::${GuDistributionBucketParameter.getInstance(scope).valueAsString}`],
       actions: ["s3:ListBucket"],
     });
-    stmt.addCondition("StringLike", { "s3:prefix": { path: `${scope.stack}/${scope.stage}/${scope.app}/conf/` } });
+    stmt.addCondition("StringLike", { "s3:prefix": `${scope.stack}/${scope.stage}/${scope.app}/conf/` });
     this.addStatements(stmt);
   }
 }
