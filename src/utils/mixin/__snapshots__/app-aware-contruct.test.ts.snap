@@ -12,6 +12,12 @@ exports[`The GuAppAwareConstruct mixin should add the app tag 1`] = `
     "MyBucketTest262E966E": {
       "DeletionPolicy": "Retain",
       "Properties": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
         "Tags": [
           {
             "Key": "App",
