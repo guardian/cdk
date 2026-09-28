@@ -8,25 +8,23 @@ const GUARD_RULES_DIR = path.join(__dirname, "..", "..", "guard-rules");
 // The FSBP control checked by each rule in `guard-rules`.
 const RULE_CONTROLS: Record<string, string> = {
   S3_BUCKET_PUBLIC_READ_PROHIBITED: "S3.2",
-  S3_BUCKET_PUBLIC_WRITE_PROHIBITED: "S3.3",
 };
 
 // From https://docs.aws.amazon.com/securityhub/latest/userguide/fsbp-standard.html
 const CONTROL_TITLES: Record<string, string> = {
   "S3.2": "S3 general purpose buckets should block public read access",
-  "S3.3": "S3 general purpose buckets should block public write access",
 };
 
 /**
  * Fails synthesis when a template breaches an AWS Foundational Security Best Practices (FSBP) control,
  * as checked by the cfn-guard rules in `guard-rules`.
- * Acknowledge a violation with `Validations.of(construct).acknowledge({ id: "FSBP::S3_BUCKET_PUBLIC_WRITE_PROHIBITED", reason })`.
+ * Acknowledge a violation with `Validations.of(construct).acknowledge({ id: "FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED", reason })`.
  */
 export class GuFsbpValidationPlugin implements IPolicyValidationPlugin {
   // Shared so that registering from every stack is harmless: aws-cdk-lib dedupes plugins by instance.
   public static readonly instance = new GuFsbpValidationPlugin();
 
-  // Also the prefix of acknowledgement IDs, e.g. `FSBP::S3_BUCKET_PUBLIC_WRITE_PROHIBITED`.
+  // Also the prefix of acknowledgement IDs, e.g. `FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED`.
   public readonly name = "FSBP";
 
   // Created lazily, as `CfnGuardValidator` throws on platforms without a bundled cfn-guard binary.

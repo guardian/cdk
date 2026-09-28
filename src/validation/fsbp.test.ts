@@ -24,19 +24,19 @@ describe("GuFsbpValidationPlugin", () => {
     expect(() => app.synth()).not.toThrow();
   });
 
-  it("fails synthesis when a bucket does not block public policies (FSBP S3.3)", () => {
+  it("fails synthesis when a bucket does not block public policies (FSBP S3.2)", () => {
     const { app } = appWithBucket({ blockPublicAccess: allowPublicPolicy });
     expect(() => app.synth()).toThrow(
-      /S3\.3: S3 general purpose buckets should block public write access[\s\S]*FSBP::S3_BUCKET_PUBLIC_WRITE_PROHIBITED/,
+      /S3\.2: S3 general purpose buckets should block public read access[\s\S]*FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED/,
     );
   });
 
   it("can be acknowledged", () => {
     const { app, bucket } = appWithBucket({ blockPublicAccess: allowPublicPolicy });
-    Validations.of(bucket).acknowledge(
-      { id: "FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED", reason: "Serves public assets" },
-      { id: "FSBP::S3_BUCKET_PUBLIC_WRITE_PROHIBITED", reason: "Serves public assets" },
-    );
+    Validations.of(bucket).acknowledge({
+      id: "FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED",
+      reason: "Serves public assets",
+    });
     expect(() => app.synth()).not.toThrow();
   });
 });
