@@ -112,10 +112,10 @@ export interface GuS3ConfigMount {
  *
  * will result in the following S3 location being mounted into the container as a file system:
  *
- *   /etc/${app}/ -> s3://${dist-bucket}/${stack}/${stage}/${app}/conf/
+ *   /etc/gu/s3-sync/ -> s3://${dist-bucket}/${stack}/${stage}/${app}/conf/
  *
- * Any files which need to present in a container in a directory that isn't owned by
- * the container (eg /etc/nginx/nginx.d/appconfig) should be symlinked.
+ * Any files which need to be present in a container in any other directory (eg
+ * /etc/nginx/nginx.d/appconfig) should be symlinked from this location.
  *
  */
 export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
@@ -124,7 +124,7 @@ export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
   }
 
   return {
-    containerPath: `/etc/${scope.app}`,
+    containerPath: `/etc/gu/s3-sync/`,
     bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
     path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
     readOnly: true,

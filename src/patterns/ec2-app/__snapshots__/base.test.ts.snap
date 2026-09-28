@@ -326,6 +326,13 @@ exports[`the GuEC2App pattern can produce a restricted EC2 app locked to specifi
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1227,6 +1234,13 @@ exports[`the GuEC2App pattern should produce a functional EC2 app with minimal a
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
