@@ -326,6 +326,13 @@ exports[`the GuLoadBalancedAppExperimental pattern should support all existing G
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1227,6 +1234,13 @@ exports[`the GuLoadBalancedAppExperimental pattern should support all existing G
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -2133,6 +2147,13 @@ exports[`the GuLoadBalancedAppExperimental pattern should support experimental E
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
