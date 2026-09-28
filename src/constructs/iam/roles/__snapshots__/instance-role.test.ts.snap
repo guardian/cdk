@@ -109,6 +109,13 @@ exports[`The GuInstanceRole construct should allow additional policies to be spe
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -406,6 +413,13 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -437,6 +451,13 @@ exports[`The GuInstanceRole construct should be possible to create multiple inst
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -842,6 +863,13 @@ exports[`The GuInstanceRole construct should create an additional logging policy
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1135,6 +1163,13 @@ exports[`The GuInstanceRole construct should create the correct resources with m
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [

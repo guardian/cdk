@@ -367,6 +367,13 @@ exports[`The GuEc2AppExperimental pattern matches the snapshot 1`] = `
           "Statement": [
             {
               "Action": "s3:ListBucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": {
+                    "path": "test-stack/TEST/undefined/conf/",
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
