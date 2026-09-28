@@ -11,6 +11,7 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { CfnSecurityGroupEgress, Peer, Port } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
@@ -34,7 +35,7 @@ import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv
 import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
-import { CfnFileSystem } from "aws-cdk-lib/aws-s3files";
+import { CfnFileSystem, CfnMountTarget } from "aws-cdk-lib/aws-s3files";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
@@ -494,7 +495,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
       certificateProps,
       monitoringConfiguration,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.addAppToStringEnd({ app }, "VPC")),
-      privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       waf,
       healthcheck,
@@ -503,6 +503,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
       targetGroupWeights,
       additionalPolicies = [],
     } = props;
+    const privateSubnets =
+      props.privateSubnets ??
+      (ecsProps?.s3Config
+        ? // S3 Files needs one scalar subnet ID per mount target; select the three standard private subnets.
+          GuVpc.subnetsFromParameterFixedNumber(scope, { type: SubnetType.PRIVATE, app }, 3)
+        : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }));
 
     super(scope, app); // The assumption is `app` is unique
 
@@ -755,6 +761,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
 
+      const ecsSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
+        app: `${app}-ecs`,
+        vpc,
+      });
       const ecsService = new FargateService(scope, "EcsService", {
         cluster,
         taskDefinition,
@@ -768,12 +778,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [
-          GuHttpsEgressSecurityGroup.forVpc(scope, {
-            app: `${app}-ecs`,
-            vpc,
-          }),
-        ],
+        securityGroups: [ecsSecurityGroup],
       });
 
       const cfnService = ecsService.node.defaultChild as CfnService;
@@ -915,6 +920,38 @@ export class GuLoadBalancedAppExperimental extends Construct {
           prefix: normalizedPrefix,
           roleArn: role.roleArn,
         });
+
+        const mountTargetSecurityGroup = new GuSecurityGroup(scope, "S3FilesMountTargetSecurityGroup", {
+          app: `${app}-s3files`,
+          vpc,
+          allowAllOutbound: false,
+          ingresses: [
+            {
+              range: Peer.securityGroupId(ecsSecurityGroup.securityGroupId),
+              port: Port.tcp(2049),
+              description: "Allow ECS tasks to mount S3 Files",
+            },
+          ],
+          egresses: [],
+        });
+        new CfnSecurityGroupEgress(scope, "S3FilesTaskEgress", {
+          groupId: ecsSecurityGroup.securityGroupId,
+          destinationSecurityGroupId: mountTargetSecurityGroup.securityGroupId,
+          ipProtocol: "tcp",
+          fromPort: 2049,
+          toPort: 2049,
+          description: "Allow NFS traffic to S3 Files mount targets",
+        });
+
+        const mountTargets = privateSubnets.map(
+          (subnet, index) =>
+            new CfnMountTarget(scope, `S3FilesMountTarget${index}`, {
+              fileSystemId: fileSystem.attrFileSystemId,
+              subnetId: subnet.subnetId,
+              securityGroups: [mountTargetSecurityGroup.securityGroupId],
+            }),
+        );
+        ecsService.node.addDependency(...mountTargets);
 
         const actions: string[] = ["s3files:ClientMount"];
         if (!s3Config.readOnly) {
