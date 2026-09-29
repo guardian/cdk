@@ -2,10 +2,9 @@ import path from "path";
 import { CfnGuardValidator } from "@cdklabs/cdk-validator-cfnguard";
 import type { IPolicyValidationContext, IPolicyValidationPlugin, PolicyValidationPluginReport } from "aws-cdk-lib";
 
-// Vendored from https://github.com/aws-cloudformation/aws-guard-rules-registry, selecting the rules that map to FSBP controls.
-const GUARD_RULES_DIR = path.join(__dirname, "..", "..", "guard-rules");
+const GUARD_RULES_DIR = path.join(path.dirname(require.resolve("@guardian/cfn-guard-rules/package.json")), "rules");
 
-// The FSBP control checked by each rule in `guard-rules`.
+// The FSBP control checked by each rule in `@guardian/cfn-guard-rules`.
 const RULE_CONTROLS: Record<string, string> = {
   S3_BUCKET_PUBLIC_READ_PROHIBITED: "S3.2",
 };
@@ -17,7 +16,7 @@ const CONTROL_TITLES: Record<string, string> = {
 
 /**
  * Fails synthesis when a template breaches an AWS Foundational Security Best Practices (FSBP) control,
- * as checked by the cfn-guard rules in `guard-rules`.
+ * as checked by the cfn-guard rules in `@guardian/cfn-guard-rules`.
  * Acknowledge a violation with `Validations.of(construct).acknowledge({ id: "FSBP::S3_BUCKET_PUBLIC_READ_PROHIBITED", reason })`.
  */
 export class GuFsbpValidationPlugin implements IPolicyValidationPlugin {
