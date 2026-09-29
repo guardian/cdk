@@ -91,7 +91,7 @@ Host experiments in an `experimental` directory.
 An `experimental` directory offers similar structure and explicitness to a separate package, at a lower maintenance cost and increased chance of JSII adoption in the future.
 
 As noted, there is a risk that experimental features go unnoticed.
-We could somewhat mitigate this by use of a naming convention: prefer `MyConstructExperimental` over `MyConstrct`.
+We could somewhat mitigate this by use of a naming convention: prefer `MyConstructExperimental` over `MyConstruct`.
 Additionally, the docs for the experimental features should also flag they are experimental.
 
 An natural extension to this directory structure is to create the following top level directories:

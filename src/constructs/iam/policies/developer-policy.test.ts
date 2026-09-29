@@ -1,15 +1,15 @@
 import { App } from "aws-cdk-lib";
 import { Annotations, Match, Template } from "aws-cdk-lib/assertions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { ContextKeys } from "../../../../constants";
-import { GuStack } from "../../../../constructs/core";
-import { simpleGuStackForTesting } from "../../../../utils/test";
-import { GuDeveloperPolicyExperimental } from "./developer-policy";
+import { ContextKeys } from "../../../constants";
+import { simpleGuStackForTesting } from "../../../utils/test";
+import { GuStack } from "../../core";
+import { GuDeveloperPolicy } from "./developer-policy";
 
-describe("GuDeveloperPolicyExperimental", () => {
+describe("GuDeveloperPolicy", () => {
   test("if a single policy statement is provided, the resulting Developer Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
@@ -39,7 +39,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if a wide-open resource/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -59,7 +59,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if a wide-open resource/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -78,7 +78,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if a wide-open policy statement with no effect is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["*"],
@@ -96,7 +96,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("does not add an error if a wide-open policy statement with a Deny effect is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Deny",
@@ -115,7 +115,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if a wide-open action/allow policy statement is present", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -134,7 +134,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("does not add an error if a wide-open action/allow policy statement is present but the withoutPolicyChecks marker is used", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -154,7 +154,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("do not add an error if a wide-open action/allow policy statement is present and the withoutPolicyChecks marker is used but false", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Effect: "Allow",
@@ -174,7 +174,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if a wide-open statement resource is requested", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -193,7 +193,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if a wide-open statement action is requested", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -212,7 +212,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if both a wide-open statement action and a resource is requested", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         new PolicyStatement({
           effect: Effect.ALLOW,
@@ -240,7 +240,7 @@ describe("GuDeveloperPolicyExperimental", () => {
       { stack: "test-stack", stage: "TEST" },
     );
 
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
@@ -278,13 +278,13 @@ describe("GuDeveloperPolicyExperimental", () => {
     };
 
     const contentStack = makeStack("content");
-    new GuDeveloperPolicyExperimental(contentStack, "AllowS3GetObject", policyProps);
+    new GuDeveloperPolicy(contentStack, "AllowS3GetObject", policyProps);
     Template.fromStack(contentStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
       Path: "/developer-policy/guardian/my-repo/content/TEST/test123/",
     });
 
     const platformStack = makeStack("platform");
-    new GuDeveloperPolicyExperimental(platformStack, "AllowS3GetObject", policyProps);
+    new GuDeveloperPolicy(platformStack, "AllowS3GetObject", policyProps);
     Template.fromStack(platformStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
       Path: "/developer-policy/guardian/my-repo/platform/TEST/test123/",
     });
@@ -311,13 +311,13 @@ describe("GuDeveloperPolicyExperimental", () => {
     };
 
     const codeStack = makeStack("CODE");
-    new GuDeveloperPolicyExperimental(codeStack, "AllowS3GetObject", policyProps);
+    new GuDeveloperPolicy(codeStack, "AllowS3GetObject", policyProps);
     Template.fromStack(codeStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
       Path: "/developer-policy/guardian/my-repo/test-stack/CODE/test123/",
     });
 
     const prodStack = makeStack("PROD");
-    new GuDeveloperPolicyExperimental(prodStack, "AllowS3GetObject", policyProps);
+    new GuDeveloperPolicy(prodStack, "AllowS3GetObject", policyProps);
     Template.fromStack(prodStack).hasResourceProperties("AWS::IAM::ManagedPolicy", {
       Path: "/developer-policy/guardian/my-repo/test-stack/PROD/test123/",
     });
@@ -325,7 +325,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if friendlyName is empty", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
@@ -341,7 +341,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if friendlyName exceeds 60 characters", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
@@ -360,7 +360,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("does not add an error if friendlyName is exactly 60 characters", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
@@ -376,7 +376,7 @@ describe("GuDeveloperPolicyExperimental", () => {
 
   test("adds an error if friendlyName exceeds 60 characters even when withoutPolicyChecks is true", () => {
     const stack = simpleGuStackForTesting();
-    new GuDeveloperPolicyExperimental(stack, "AllowS3GetObject", {
+    new GuDeveloperPolicy(stack, "AllowS3GetObject", {
       statements: [
         PolicyStatement.fromJson({
           Action: ["s3:GetObject"],
