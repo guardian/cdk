@@ -4,6 +4,7 @@ import type { AppIdentity, GuStack } from "../../core";
 import {
   GuDescribeEC2Policy,
   GuGetDistributablePolicy,
+  GuListBucketPolicy,
   GuLogShippingPolicy,
   GuParameterStoreReadPolicy,
 } from "../policies";
@@ -56,6 +57,7 @@ export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
     const policies = [
       ...sharedPolicies,
       new GuGetDistributablePolicy(scope, props),
+      new GuListBucketPolicy(scope, props),
       GuParameterStoreReadPolicy.getInstance(scope, props),
       ...(props.additionalPolicies ?? []),
     ];
