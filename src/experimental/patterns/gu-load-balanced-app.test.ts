@@ -508,7 +508,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
             imageIdentifier: "sha256:12345",
           },
         }),
-    ).toThrow("Could not determine an ECR repository name; please set this manually via ecsProps");
+    ).toThrow(
+      "Could not determine an ECR repository name; please either set this manually via ecsProps, or ensure your GuStack has a repositoryName and props has an app.",
+    );
   });
 
   it("allows a custom healthcheck to be used for the ECS target group", function () {

@@ -3039,7 +3039,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                   {
                     "Ref": "AWS::URLSuffix",
                   },
-                  "/guardian/cdk@sha256:12345",
+                  "/guardian/cdk/test-gu@sha256:12345",
                 ],
               ],
             },
@@ -3229,7 +3229,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                     {
                       "Ref": "ArtifactAccountIdParameter",
                     },
-                    ":repository/guardian/cdk",
+                    ":repository/guardian/cdk/test-gu",
                   ],
                 ],
               },
