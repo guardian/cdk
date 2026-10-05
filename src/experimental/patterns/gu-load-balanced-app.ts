@@ -658,9 +658,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
     if (ecsProps) {
       const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3Config } = ecsProps;
 
-      const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
+      const ecrRepoName =
+        ecsProps.repositoryName ?? (scope.repositoryName && app && `${scope.repositoryName}/${app}`);
       if (!ecrRepoName) {
-        throw new Error("Could not determine an ECR repository name; please set this manually via ecsProps");
+        throw new Error("Could not determine an ECR repository name; please either set this manually via ecsProps, or ensure your GuStack has a repositoryName and props has an app.");
       }
 
       const cluster = new Cluster(this, "EcsCluster", {
