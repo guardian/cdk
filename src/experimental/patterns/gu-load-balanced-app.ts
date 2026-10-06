@@ -15,6 +15,7 @@ import { Repository } from "aws-cdk-lib/aws-ecr";
 import {
   Compatibility,
   ContainerInsights,
+  CpuArchitecture,
   FargateService,
   ManagedInstancesCapacityProvider,
   NetworkMode,
@@ -748,6 +749,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
         networkMode: NetworkMode.AWS_VPC,
         memoryMiB: memoryLimitMiB.toString(),
         cpu: cpu.toString(),
+        runtimePlatform: {
+          cpuArchitecture: CpuArchitecture.ARM64,
+        },
       });
 
       taskDefinition.addContainer(app, {

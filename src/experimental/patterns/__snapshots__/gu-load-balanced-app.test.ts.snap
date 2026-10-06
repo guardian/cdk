@@ -3023,6 +3023,9 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         "RequiresCompatibilities": [
           "MANAGED_INSTANCES",
         ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+        },
         "Tags": [
           {
             "Key": "App",
