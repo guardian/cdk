@@ -1,4 +1,4 @@
-import { ArnFormat, Aspects, Duration, SecretValue, Size, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -10,7 +10,7 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { CpuManufacturer, InstanceGeneration, UserData } from "aws-cdk-lib/aws-ec2";
+import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
 import {
   Compatibility,
@@ -686,14 +686,14 @@ export class GuLoadBalancedAppExperimental extends Construct {
           securityGroups: [httpsEgressSecurityGroup],
           ec2InstanceProfile: instanceProfile,
           infrastructureRole,
-          instanceRequirements: {
-            // Latest Graviton
-            instanceGenerations: [InstanceGeneration.CURRENT],
-            cpuManufacturers: [CpuManufacturer.AWS],
-            memoryMin: Size.mebibytes(memoryLimitMiB),
-            // We are specifying EC2 vcpu, which is different from cpu units for task definitions.
-            vCpuCountMin: Math.ceil(cpu / 1024),
-          },
+          // instanceRequirements: {
+          //   // Latest Graviton
+          //   instanceGenerations: [InstanceGeneration.CURRENT],
+          //   cpuManufacturers: [CpuManufacturer.AWS],
+          //   memoryMin: Size.mebibytes(memoryLimitMiB),
+          //   // We are specifying EC2 vcpu, which is different from cpu units for task definitions.
+          //   vCpuCountMin: Math.ceil(cpu / 1024),
+          // },
         },
       );
 

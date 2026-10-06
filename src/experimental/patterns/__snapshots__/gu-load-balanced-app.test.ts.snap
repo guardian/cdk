@@ -3768,20 +3768,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                 "Arn",
               ],
             },
-            "InstanceRequirements": {
-              "CpuManufacturers": [
-                "amazon-web-services",
-              ],
-              "InstanceGenerations": [
-                "current",
-              ],
-              "MemoryMiB": {
-                "Min": 2048,
-              },
-              "VCpuCount": {
-                "Min": 1,
-              },
-            },
             "NetworkConfiguration": {
               "SecurityGroups": [
                 {
