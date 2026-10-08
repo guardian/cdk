@@ -1,13 +1,14 @@
 import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import type { AppIdentity, GuStack } from "../../core";
+import type { GuPolicy } from "../policies";
 import {
   GuDescribeEC2Policy,
   GuGetDistributablePolicy,
   GuLogShippingPolicy,
   GuParameterStoreReadPolicy,
 } from "../policies";
-import type { GuPolicy } from "../policies";
+import { GuListBucketPolicy } from "../policies";
 import { GuSsmSshPolicy } from "../policies/ssm-ssh";
 import { GuRole } from "./roles";
 
@@ -21,6 +22,8 @@ export interface GuInstanceRoleProps {
   withoutLogShipping?: boolean;
 
   additionalPolicies?: GuPolicy[];
+
+  allowS3Sync?: boolean;
 }
 
 export type GuInstanceRolePropsWithApp = GuInstanceRoleProps & AppIdentity;
@@ -47,16 +50,22 @@ export class GuInstanceRole extends GuAppAwareConstruct(GuRole) {
       ...props,
     });
 
-    const sharedPolicies = [
-      GuSsmSshPolicy.getInstance(scope),
-      GuDescribeEC2Policy.getInstance(scope),
-      ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope)]),
-    ];
-
     const policies = [
-      ...sharedPolicies,
+      // Every instance gets ssh via ssm
+      GuSsmSshPolicy.getInstance(scope),
+      // and the ability to describe ec2 instances (for example, to get the instance's own tags)
+      GuDescribeEC2Policy.getInstance(scope),
+      // and the ability to get a distributable (eg a deb file) from S3
       new GuGetDistributablePolicy(scope, props),
+      // and the ability to read from parameter store
       GuParameterStoreReadPolicy.getInstance(scope, props),
+
+      // If log shipping is not opted out, add the ability to write logs to Kinesis
+      ...(props.withoutLogShipping ? [] : [GuLogShippingPolicy.getInstance(scope)]),
+      // If S3 sync is explicitly requested, add the ability to list the distribution bucket by prefix
+      ...(props.allowS3Sync ? [new GuListBucketPolicy(scope, props)] : []),
+
+      // Any additional policies passed in via the `additionalPolicies` prop
       ...(props.additionalPolicies ?? []),
     ];
 

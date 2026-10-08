@@ -3,7 +3,7 @@ import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
 import { GuDistributionBucketParameter } from "../../core";
 import type { AppIdentity, GuStack } from "../../core";
-import { GuAllowPolicy } from "./base-policy";
+import { GuAllowPolicy, GuPolicy } from "./base-policy";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
 
 export interface GuGetS3ObjectPolicyProps extends GuNoStatementsPolicyProps {
@@ -16,6 +16,19 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
     const paths: string[] = props.paths ?? ["*"];
     const s3Resources: string[] = paths.map((path) => `arn:aws:s3:::${props.bucketName}/${path}`);
     super(scope, id, { ...props, actions: ["s3:GetObject"], resources: s3Resources });
+  }
+}
+
+export class GuListBucketPolicy extends GuAppAwareConstruct(GuPolicy) {
+  constructor(scope: GuStack, props: AppIdentity) {
+    super(scope, "GuListBucketPolicy", { ...props, statements: [] });
+    const stmt = new PolicyStatement({
+      effect: Effect.ALLOW,
+      resources: [`arn:aws:s3:::${GuDistributionBucketParameter.getInstance(scope).valueAsString}`],
+      actions: ["s3:ListBucket"],
+    });
+    stmt.addCondition("StringLike", { "s3:prefix": `${scope.stack}/${scope.stage}/${props.app}/conf/` });
+    this.addStatements(stmt);
   }
 }
 
