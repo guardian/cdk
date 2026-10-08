@@ -730,7 +730,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
       });
 
-      taskDefinition.addContainer(app, {
+      const appContainer = taskDefinition.addContainer(app, {
         image,
         dockerLabels: {
           RiffRaffDeploymentId: GuRiffRaffDeploymentIdParameterExperimental.getInstance(scope).valueAsString,
@@ -781,6 +781,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
 
+      const ecsSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
+        app: `${app}-ecs`,
+        vpc,
+      });
       const ecsService = new FargateService(scope, "EcsService", {
         cluster,
         taskDefinition,
@@ -794,12 +798,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [
-          GuHttpsEgressSecurityGroup.forVpc(scope, {
-            app: `${app}-ecs`,
-            vpc,
-          }),
-        ],
+        securityGroups: [ecsSecurityGroup],
       });
 
       const cfnService = ecsService.node.defaultChild as CfnService;
