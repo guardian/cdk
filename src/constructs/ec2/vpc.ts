@@ -64,6 +64,13 @@ export class GuVpc {
     return GuVpc.subnets(scope, subnets.valueAsList);
   }
 
+  /**
+   * Unlike subnetsFromParameter, which preserves an unresolved deployment-time list, this returns
+   * numSubnets individually addressable subnet references using Fn::Select. Use it when iterating
+   * at synthesis time to create resources that each require a single subnet ID.
+   *
+   * Defaults to three subnets; fewer parameter entries fail at deployment, and extra entries are ignored.
+   */
   static subnetsFromParameterFixedNumber(scope: GuStack, props?: GuSubnetProps, numSubnets: number = 3): ISubnet[] {
     const type = props?.type ?? SubnetType.PRIVATE;
     const parameterDefault =
