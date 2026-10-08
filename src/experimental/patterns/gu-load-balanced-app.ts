@@ -321,6 +321,13 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html
      */
     instanceMetricGranularity: "1Minute" | "5Minute";
+
+    /**
+     * This option gives the s3:ListBucket permission in addition the existing s3:GetObject
+     *
+     * This enables the simplification of userdata as a first step toward a docker based deployment.
+     */
+    allowS3Sync?: boolean;
   };
   /**
    * If you want to use an ECS service and ECS tasks to serve requests, then pass in relevant props here.
@@ -470,6 +477,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         updatePolicy,
         defaultInstanceWarmup,
         instanceMetricGranularity,
+        allowS3Sync,
       } = ec2Props;
 
       const userData =
@@ -499,7 +507,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         instanceType,
         minimumInstances,
         maximumInstances,
-        role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
+        role: new GuInstanceRole(scope, { app, allowS3Sync, ...mergedRoleConfiguration }),
 
         healthChecks: HealthChecks.withAdditionalChecks({
           additionalTypes: [AdditionalHealthCheckType.ELB],

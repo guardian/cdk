@@ -2358,6 +2358,38 @@ function topLevelPropsForVersionedDeployment(app = "test-gu-ec2-app") {
   };
 }
 
+describe("the GuLoadBalancedAppExperimental pattern should support s3 sync for EC2 if desired", function () {
+  it("should produce the correct snapshot if allowS3Sync is specified", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = "test-gu";
+    const buildIdentifier = "123";
+    new GuLoadBalancedAppExperimental(stack, {
+      applicationPort: 3000,
+      app,
+      access: { scope: AccessScope.PUBLIC },
+      monitoringConfiguration: { noMonitoring: true },
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: {
+          distributable: {
+            fileName: `${app}-${buildIdentifier}.deb`,
+            executionStatement: `dpkg -i /${app}/${app}-${buildIdentifier}.deb`,
+          },
+        },
+        scaling: {
+          minimumInstances: 1,
+        },
+        allowS3Sync: true,
+      },
+    });
+    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+});
+
 function ec2PropsForVersionedDeployment(scope: GuStack, app = "test-gu-ec2-app") {
   const buildNumber = 123;
   const { userData } = new GuUserData(scope, {
