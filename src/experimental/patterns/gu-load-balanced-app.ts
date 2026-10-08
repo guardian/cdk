@@ -1,4 +1,4 @@
-import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -10,9 +10,10 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { CfnSecurityGroupEgress, Peer, Port } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import type { CfnService, Volume } from "aws-cdk-lib/aws-ecs";
+import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   ContainerImage,
@@ -30,9 +31,10 @@ import {
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
+import { CfnFileSystem, CfnMountTarget } from "aws-cdk-lib/aws-s3files";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
@@ -46,7 +48,7 @@ import {
   GuUnhealthyInstancesAlarm,
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity, GuLoggingStreamNameParameter } from "../../constructs/core";
+import { AppIdentity, GuDistributionBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
 import {
@@ -77,6 +79,59 @@ import {
   GuRollingUpdatePolicyExperimental,
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
+
+/**
+ * This interface defines the configuration for mounting an S3 Files file system into a container.
+ *
+ * The implementation comes with a default function `getDefaultS3ConfigMount` which can be used
+ * as the basis to spread different values as needed.
+ */
+export interface GuS3ConfigMount {
+  /**
+   * The mount path inside the container. Note that this must be a directory that is not
+   * currently used. Any directory content at this location in the image will be overwritten
+   * by the mount.
+   */
+  containerPath: string;
+  /**
+   * The name of the S3 bucket to mount.
+   */
+  bucket: string;
+  /**
+   * The S3 prefix to mount into the container.
+   */
+  path: string;
+  /**
+   * Whether the mount should be read-only.
+   */
+  readOnly: boolean;
+}
+
+/**
+ * Default values for "normal" applications.
+ *
+ *   s3Config: getDefaultS3ConfigMount(this)
+ *
+ * will result in the following S3 location being mounted into the container as a file system:
+ *
+ *   /etc/gu/s3-sync/ -> s3://${dist-bucket}/${stack}/${stage}/${app}/conf/
+ *
+ * Any files which need to be present in a container in any other directory (eg
+ * /etc/nginx/nginx.d/appconfig) should be symlinked from this location.
+ *
+ */
+export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
+  if (!scope.app) {
+    throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
+  }
+
+  return {
+    containerPath: `/etc/gu/s3-sync/`,
+    bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
+    path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
+    readOnly: true,
+  };
+}
 
 export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
   /**
@@ -352,6 +407,12 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     repositoryName?: string;
     /**
+     * Mount an S3 Files volume directly into the application container.
+     *
+     * Supply a single config object.  For common defaults, use getDefaultS3ConfigMount(scope).
+     */
+    s3Config?: GuS3ConfigMount;
+    /**
      * The number of tasks that you want to run. We recommend running 3 tasks for production services which need a high
      * level of availability so that all 3 Availability Zones are utilised.
      */
@@ -448,7 +509,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
       certificateProps,
       monitoringConfiguration,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.addAppToStringEnd({ app }, "VPC")),
-      privateSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       waf,
       healthcheck,
@@ -457,6 +517,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
       targetGroupWeights,
       additionalPolicies = [],
     } = props;
+    const privateSubnets =
+      props.privateSubnets ??
+      (ecsProps?.s3Config
+        ? // Mount targets need individual subnet IDs, not an unresolved list, so use Fn::Select references.
+          // The helper's default count determines how many targets we create at synthesis time.
+          GuVpc.subnetsFromParameterFixedNumber(scope, { type: SubnetType.PRIVATE, app })
+        : GuVpc.subnetsFromParameter(scope, { type: SubnetType.PRIVATE, app }));
 
     super(scope, app); // The assumption is `app` is unique
 
@@ -601,7 +668,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     // Setup ECS-specific infrastructure
     if (ecsProps) {
-      const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+      const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3Config } = ecsProps;
 
       const ecrRepoName = ecsProps.repositoryName ?? (scope.repositoryName && app && `${scope.repositoryName}/${app}`);
       if (!ecrRepoName) {
@@ -794,7 +861,177 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const logVolume: Volume = {
         name: "logging-volume",
       };
-      taskDefinition.addVolume(logVolume);
+
+      // Capitalised because this is raw cfn json: cdk does not have a first-class construct for volumes yet.
+      const volumes: unknown[] = [{ Name: logVolume.name }];
+
+      if (s3Config) {
+        const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
+        const bucketArn = `arn:${Aws.PARTITION}:s3:::${s3Config.bucket}`;
+        const role = new Role(scope, `S3FilesRole`, {
+          assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
+            StringEquals: {
+              "aws:SourceAccount": scope.account,
+            },
+            ArnLike: {
+              "aws:SourceArn": `arn:${Aws.PARTITION}:s3files:${scope.region}:${scope.account}:file-system/*`,
+            },
+          }),
+          description: `Role used by the S3 Files filesystem for ${app} mount`,
+        });
+        // Add S3 permissions to the S3 Files service role
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
+            resources: [bucketArn],
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "s3:GetObject",
+              "s3:GetObjectVersion",
+              "s3:GetObjectTagging",
+              "s3:GetObjectVersionTagging",
+              "s3:PutObject",
+              "s3:PutObjectTagging",
+              "s3:DeleteObject",
+              "s3:DeleteObjectVersion",
+            ],
+            resources: [`${bucketArn}/*`],
+          }),
+        );
+
+        // EventBridge permissions: S3 Files creates rules prefixed "DO-NOT-DELETE-S3-Files"
+        // to detect S3 object changes and trigger data synchronization
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "events:DeleteRule",
+              "events:DisableRule",
+              "events:EnableRule",
+              "events:PutRule",
+              "events:PutTargets",
+              "events:RemoveTargets",
+            ],
+            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/DO-NOT-DELETE-S3-Files*`],
+            conditions: { StringEquals: { "events:ManagedBy": "elasticfilesystem.amazonaws.com" } },
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "events:DescribeRule",
+              "events:ListRuleNamesByTarget",
+              "events:ListRules",
+              "events:ListTargetsByRule",
+            ],
+            resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+          }),
+        );
+
+        const fileSystem = new CfnFileSystem(scope, `S3FilesFileSystem`, {
+          bucket: bucketArn,
+          prefix: normalizedPrefix,
+          roleArn: role.roleArn,
+        });
+
+        const mountTargetSecurityGroup = new GuSecurityGroup(scope, "S3FilesMountTargetSecurityGroup", {
+          app: `${app}-s3files`,
+          vpc,
+          allowAllOutbound: false,
+          ingresses: [
+            {
+              range: Peer.securityGroupId(ecsSecurityGroup.securityGroupId),
+              port: Port.tcp(2049),
+              description: "Allow ECS tasks to mount S3 Files",
+            },
+          ],
+          egresses: [],
+        });
+        new CfnSecurityGroupEgress(scope, "S3FilesTaskEgress", {
+          groupId: ecsSecurityGroup.securityGroupId,
+          destinationSecurityGroupId: mountTargetSecurityGroup.securityGroupId,
+          ipProtocol: "tcp",
+          fromPort: 2049, // Network file system (NFS) port
+          toPort: 2049,
+          description: "Allow NFS traffic to S3 Files mount targets",
+        });
+
+        const mountTargets = privateSubnets.map(
+          (subnet, index) =>
+            new CfnMountTarget(scope, `S3FilesMountTarget${index}`, {
+              fileSystemId: fileSystem.attrFileSystemId,
+              subnetId: subnet.subnetId,
+              securityGroups: [mountTargetSecurityGroup.securityGroupId],
+            }),
+        );
+        ecsService.node.addDependency(...mountTargets);
+
+        const actions: string[] = ["s3files:ClientMount"];
+        if (!s3Config.readOnly) {
+          actions.push("s3files:ClientWrite");
+        }
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions,
+            resources: [fileSystem.attrFileSystemArn],
+          }),
+        );
+
+        // Direct S3 access for read optimization
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:ListBucket"],
+            resources: [bucketArn],
+          }),
+        );
+
+        taskDefinition.addToTaskRolePolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:GetObject"],
+            resources: [`${bucketArn}/*`],
+          }),
+        );
+
+        if (!s3Config.readOnly) {
+          taskDefinition.addToTaskRolePolicy(
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:PutObject", "s3:DeleteObject"],
+              resources: [`${bucketArn}/*`],
+            }),
+          );
+        }
+
+        appContainer.addMountPoints({
+          containerPath: s3Config.containerPath,
+          sourceVolume: `s3files-volume`,
+          readOnly: s3Config.readOnly,
+        });
+
+        // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.
+        volumes.push({
+          Name: `s3files-volume`,
+          S3FilesVolumeConfiguration: {
+            FileSystemArn: fileSystem.attrFileSystemArn,
+            RootDirectory: "/",
+          },
+        });
+      }
+
+      const cfnTaskDefinition = taskDefinition.node.defaultChild as CfnTaskDefinition;
+      cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
 
       logRouter.addMountPoints({
         containerPath: "/init",
