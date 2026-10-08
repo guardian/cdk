@@ -756,11 +756,16 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       this.ecsService = ecsService;
 
+      const accountId = StringParameter.fromStringParameterName(
+        scope,
+        "artifacts-account-id-parameter",
+        NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
+      );
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
         image: ContainerImage.fromRegistry(
-          "ghcr.io/guardian/devx-logs@sha256:cf91724a5166f1c143e07958820aa2122afb61c164b68555d15cb92abb5acda0",
+          `${accountId.stringValue}.dkr.ecr.eu-west-1.amazonaws.com/guardian/devx-logs/devx-logs:lifecycle-am-ac-publish-to-ecr-58`,
         ),
         environment,
         versionConsistency: VersionConsistency.DISABLED,
