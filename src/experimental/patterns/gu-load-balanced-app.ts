@@ -51,6 +51,7 @@ import { AppIdentity } from "../../constructs/core";
 import { GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
+import { GuListBucketPolicy } from "../../constructs/iam";
 import { GuLogShippingPolicy } from "../../constructs/iam";
 import { GuInstanceRole } from "../../constructs/iam";
 import { GuGetPrivateConfigPolicy } from "../../constructs/iam";
@@ -321,6 +322,13 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html
      */
     instanceMetricGranularity: "1Minute" | "5Minute";
+
+    /**
+     * This option gives the s3:ListBucket permission in addition the existing s3:GetObject
+     *
+     * This enables the simplification of userdata as a first step toward a docker based deployment.
+     */
+    allowS3Sync?: boolean;
   };
   /**
    * If you want to use an ECS service and ECS tasks to serve requests, then pass in relevant props here.
@@ -470,6 +478,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         updatePolicy,
         defaultInstanceWarmup,
         instanceMetricGranularity,
+        allowS3Sync,
       } = ec2Props;
 
       const userData =
@@ -478,8 +487,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         userData instanceof GuUserData && userData.configuration
           ? [new GuGetPrivateConfigPolicy(scope, "GetPrivateConfigFromS3Policy", userData.configuration)]
           : [];
+      const maybeListBucketPolicy = allowS3Sync ? [new GuListBucketPolicy(scope, props)] : [];
+
       const mergedRoleConfiguration: GuInstanceRoleProps = {
-        additionalPolicies: maybePrivateConfigPolicy.concat(additionalPolicies),
+        additionalPolicies: [...additionalPolicies, ...maybePrivateConfigPolicy, ...maybeListBucketPolicy],
       };
 
       if (versionedDeployments?.enabled && updatePolicy) {
