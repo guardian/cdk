@@ -3952,7 +3952,11 @@ exports[`the GuLoadBalancedAppExperimental pattern should support s3 sync for EC
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:s3:::",
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":s3:::",
                     {
                       "Ref": "DistributionBucketName",
                     },
