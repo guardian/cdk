@@ -2,4 +2,4 @@
 "@guardian/cdk": patch
 ---
 
-Add allowS3Sync flag in load balancer experimental's ec2props, so that developers can choose to use `aws s3 sync` in their userdata blocks.
+Add optional `allowS3Sync` boolean (default `false`) to `GuLoadBalancedAppExperimental` pattern to add permissions necessary to use `aws s3 sync` in EC2 user-data blocks.
