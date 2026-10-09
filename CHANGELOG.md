@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 65.1.1
+
+### Patch Changes
+
+- d81f193: Add optional `allowS3Sync` boolean (default `false`) to `GuLoadBalancedAppExperimental` pattern to add permissions necessary to use `aws s3 sync` in EC2 user-data blocks.
+
 ## 65.1.0
 
 ### Minor Changes
