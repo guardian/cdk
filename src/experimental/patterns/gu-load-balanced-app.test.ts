@@ -157,7 +157,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           containerPath: "/override",
           bucket: "custom-bucket",
           path: "custom/path/conf",
-          readOnly: false,
         },
       },
     });
@@ -175,7 +174,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           MountPoints: Match.arrayWith([
             Match.objectLike({
               ContainerPath: "/override",
-              ReadOnly: false,
+              ReadOnly: true,
             }),
           ]),
         }),
