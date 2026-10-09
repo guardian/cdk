@@ -1,4 +1,4 @@
-import { ArnFormat, Aspects, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { ArnFormat, Aspects, Duration, SecretValue, Size, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -9,28 +9,45 @@ import {
   UserPoolClientIdentityProvider,
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
-import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { UserData } from "aws-cdk-lib/aws-ec2";
+import type { InstanceType, ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { CpuManufacturer, InstanceGeneration, UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import { ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
-import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
+import {
+  Compatibility,
+  ContainerInsights,
+  CpuArchitecture,
+  FargateService,
+  FargateTaskDefinition,
+  ManagedInstancesCapacityProvider,
+  NetworkMode,
+  OperatingSystemFamily,
+  TaskDefinition,
+} from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   ContainerImage,
-  FargateService,
-  FargateTaskDefinition,
   FireLensLogDriver,
   FirelensLogRouterType,
   LogDriver,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Used for TSDoc comments
+import type { ManagedInstancesCapacityProviderProps, TaskDefinitionProps } from "aws-cdk-lib/aws-ecs";
 import type { CfnService } from "aws-cdk-lib/aws-ecs";
 import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import {
+  Effect,
+  InstanceProfile,
+  ManagedPolicy,
+  PolicyDocument,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
@@ -363,6 +380,10 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
       maximumTasks: number;
       cpuScaling?: Pick<TargetTrackingScalingPolicyProps, "targetValue" | "scaleInCooldown" | "scaleOutCooldown">;
     };
+    /**
+     * Use ECS Manages Instances instead of Fargate to run the app.
+     */
+    useManagedInstances?: boolean;
   };
   /**
    * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute types.
@@ -591,6 +612,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
     // Setup ECS-specific infrastructure
     if (ecsProps) {
       const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
+      const useManagedInstances = !!ecsProps.useManagedInstances;
 
       const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
       if (!ecrRepoName) {
@@ -644,11 +666,34 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Add the GitHub repo if we can
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
 
-      const taskDefinition = new FargateTaskDefinition(scope, "EcsTaskDefinition", {
-        memoryLimitMiB,
-        cpu,
-        runtimePlatform: { cpuArchitecture: CpuArchitecture.ARM64, operatingSystemFamily: OperatingSystemFamily.LINUX },
+      const httpsEgressSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
+        app: `${app}-ecs`,
+        vpc,
       });
+
+      const managedInstancesCapacityProvider = useManagedInstances
+        ? this.createManagedInstanceCapacityProvider(
+            this,
+            [httpsEgressSecurityGroup],
+            privateSubnets,
+            cpu,
+            memoryLimitMiB,
+          )
+        : undefined;
+      if (managedInstancesCapacityProvider) {
+        cluster.addManagedInstancesCapacityProvider(managedInstancesCapacityProvider);
+      }
+
+      const taskDefinition = useManagedInstances
+        ? this.createManagedInstanceTaskDefinition(scope, cpu, memoryLimitMiB)
+        : new FargateTaskDefinition(scope, "EcsTaskDefinition", {
+            memoryLimitMiB,
+            cpu,
+            runtimePlatform: {
+              cpuArchitecture: CpuArchitecture.ARM64,
+              operatingSystemFamily: OperatingSystemFamily.LINUX,
+            },
+          });
 
       taskDefinition.addContainer(app, {
         image,
@@ -694,6 +739,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
           resources: [
             // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
+            // TODO: This seams fargate specific, is there a managed instances version?
             "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
           ],
         }),
@@ -714,12 +760,17 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [
-          GuHttpsEgressSecurityGroup.forVpc(scope, {
-            app: `${app}-ecs`,
-            vpc,
-          }),
-        ],
+        ...(managedInstancesCapacityProvider
+          ? {
+              securityGroups: [httpsEgressSecurityGroup],
+              capacityProviderStrategies: [
+                {
+                  capacityProvider: managedInstancesCapacityProvider.capacityProviderName,
+                  weight: 1,
+                },
+              ],
+            }
+          : {}),
       });
 
       const cfnService = ecsService.node.defaultChild as CfnService;
@@ -814,7 +865,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       // Specifically apply App tag to resources.
       // Other resources obtain this tag by extending `GuAppAwareConstruct`.
-      [cluster, taskDefinition, ecsService].forEach((_) => AppIdentity.taggedConstruct(props, _));
+      [managedInstancesCapacityProvider, cluster, taskDefinition, ecsService].forEach((_) =>
+        _ ? AppIdentity.taggedConstruct(props, _) : _,
+      );
     }
 
     // Set up the load balancer and listener components
@@ -1049,6 +1102,132 @@ export class GuLoadBalancedAppExperimental extends Construct {
     this.loadBalancer = loadBalancer;
     this.listener = listener;
     this.targetGroups = targetGroups;
+  }
+
+  /**
+   * Returns a managed instances capacity provider that has been added to construct scope `scope`.
+   *
+   * @param scope - construct scope
+   * @param instanceSecurityGroups - {@link ManagedInstancesCapacityProviderProps#securityGroups}
+   * @param instanceSubnets - {@link ManagedInstancesCapacityProviderProps#subnets}
+   * @param cpuMin - Minimum task CPU units required for EC2 instance. This is converted to vCPU.
+   * @param memoryMinMiB - Minimum memory in MiB for EC2 instance tasks are placed on.
+   */
+  private createManagedInstanceCapacityProvider(
+    scope: Construct,
+    instanceSecurityGroups: ISecurityGroup[],
+    instanceSubnets: ISubnet[],
+    cpuMin: number,
+    memoryMinMiB: number,
+  ): ManagedInstancesCapacityProvider {
+    // Allows the ec2 instance to register with the cluster and ECS.
+    const ecsInstanceRolePolicy = ManagedPolicy.fromManagedPolicyArn(
+      scope,
+      "ECSInstanceRole",
+      "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
+    );
+
+    // Allows the EC2 instance to pull images from the registry
+    const ecsRegistryPullPolicy = ManagedPolicy.fromManagedPolicyArn(
+      scope,
+      "ECSRegistryPullPolicy ",
+      "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    );
+
+    // This is the same as the recommend role for ecs managed instances capacity providers,
+    // except without the `instanceProfileName` set to "ecsInstanceRole".
+    //
+    // AWS recommend instanceProfileName is set to ecsInstanceRole as the managed policy
+    // AmazonECSInfrastructureRolePolicyForManagedInstances is by default set to scope `iam:PassRole`
+    // to `arn:aws:iam::*:role/ecsInstanceRole*`.
+    //
+    // Unfortunately setting `instanceProfileName` to ecsInstanceRole means that cloud formation can not
+    // re-deploy the instance role, as it can't generate a different name to cycle between them. For this
+    // reason we do not specify `instanceProfileName`, and we create a custom infrastructure role that
+    // uses the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy and explicitly scopes
+    // `iam:PassRole` to EC2 instances.
+    //
+    // To read more {@link https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html}
+    const ecsInstanceRole = new Role(scope, "ECSManagedInstancesRole", {
+      managedPolicies: [ecsInstanceRolePolicy, ecsRegistryPullPolicy],
+      assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ec2.amazonaws.com"),
+    });
+
+    const instanceProfile = new InstanceProfile(scope, "ECSManagedInstancesProfile", {
+      role: ecsInstanceRole,
+    });
+
+    const ecsInfrastructurePolicy = ManagedPolicy.fromManagedPolicyArn(
+      scope,
+      "ECSInfrastructurePolicy",
+      "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForManagedInstances",
+    );
+
+    // Needs to be custom to allow for the instance profile not having the standard `instanceProfileName`
+    // set to ecsInstanceRole. See long comment above
+    const infrastructureRole = new Role(scope, "ECSInfrastructureRole", {
+      managedPolicies: [ecsInfrastructurePolicy],
+      assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ecs.amazonaws.com"),
+      inlinePolicies: {
+        PassInstanceRoleToEC2: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["iam:PassRole"],
+              resources: [ecsInstanceRole.roleArn],
+              conditions: {
+                StringLike: {
+                  "iam:PassedToService": "ec2.*",
+                },
+              },
+            }),
+          ],
+        }),
+      },
+    });
+
+    const managedInstancesCapacityProvider = new ManagedInstancesCapacityProvider(
+      scope,
+      "ManagedInstancesCapacityProvider",
+      {
+        subnets: instanceSubnets,
+        securityGroups: instanceSecurityGroups,
+        ec2InstanceProfile: instanceProfile,
+        infrastructureRole,
+        instanceRequirements: {
+          // Latest Graviton
+          instanceGenerations: [InstanceGeneration.CURRENT],
+          cpuManufacturers: [CpuManufacturer.AWS],
+          memoryMin: Size.mebibytes(memoryMinMiB),
+          // We are specifying EC2 vcpu, which is different from cpu units for task definitions.
+          vCpuCountMin: Math.ceil(cpuMin / 1024),
+        },
+      },
+    );
+
+    return managedInstancesCapacityProvider;
+  }
+
+  /**
+   * Creates an ECS Task Definition configured for Managed Instances.
+   *
+   * @param scope - TaskDefinition construct scope
+   * @param cpu - {@link TaskDefinitionProps#memoryMiB}
+   * @param memoryLimitMiB - {@link TaskDefinitionProps#memoryLimitMiB}
+   */
+  private createManagedInstanceTaskDefinition(scope: Construct, cpu: number, memoryLimitMiB: number): TaskDefinition {
+    // TODO: If you specify too high minimum memory/cpu then the cloud formation deployment will fail.
+    // Can we add some validation to ensure the task size can resolve to at least 1 instance? Helps surface issues earlier.
+    return new TaskDefinition(scope, "EcsTaskDefinition", {
+      compatibility: Compatibility.MANAGED_INSTANCES,
+      networkMode: NetworkMode.AWS_VPC,
+      memoryMiB: memoryLimitMiB.toString(),
+      cpu: cpu.toString(),
+      runtimePlatform: {
+        cpuArchitecture: CpuArchitecture.ARM64,
+        operatingSystemFamily: OperatingSystemFamily.LINUX,
+      },
+    });
   }
 }
 

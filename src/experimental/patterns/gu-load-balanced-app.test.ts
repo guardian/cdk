@@ -20,514 +20,540 @@ import { getTemplateAfterAspectInvocation, GuTemplate, simpleGuStackForTesting }
 import { RollingUpdateDurations } from "./ec2-app";
 import { GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
 
-describe("the GuLoadBalancedAppExperimental pattern should support new ECS and hybrid functionality", function () {
-  it("should produce a functional ECS app with minimal arguments", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
-    });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
-  });
-
-  it("should apply standard tags to all taggable resources", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
-    });
-
-    const taggableResources: CfnResource[] = stack.node
-      .findAll()
-      .filter((_) => TagManager.isTaggable(_) || TagManager.isTaggableV2(_))
-      .filter((_) => CfnResource.isCfnResource(_));
-
-    const template = GuTemplate.fromStack(stack);
-    taggableResources.forEach(({ cfnResourceType }) => {
-      template.hasGuTaggedResource(cfnResourceType, { appIdentity: { app: "test-gu" } });
-    });
-  });
-
-  it("should be capable of splitting traffic between EC2 and ECS target groups", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ec2Props: {
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        scaling: {
-          minimumInstances: 1,
+function ecsHybridFunctionalityTests(desc: string, extraEcsProps: Record<string, unknown> = {}) {
+  describe(desc, function () {
+    it("should produce a functional ECS app with minimal arguments", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
         },
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
-      targetGroupWeights: {
-        ec2: 499,
-        ecs: 500,
-      },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+      });
+      expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
     });
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
-      DefaultActions: [
-        {
-          ForwardConfig: {
-            TargetGroups: [
-              {
-                TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
-                Weight: 499,
-              },
-              {
-                TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
-                Weight: 500,
-              },
-            ],
+
+    it("should apply standard tags to all taggable resources", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+      });
+
+      const taggableResources: CfnResource[] = stack.node
+        .findAll()
+        .filter((_) => TagManager.isTaggable(_) || TagManager.isTaggableV2(_))
+        .filter((_) => CfnResource.isCfnResource(_));
+
+      const template = GuTemplate.fromStack(stack);
+      taggableResources.forEach(({ cfnResourceType }) => {
+        template.hasGuTaggedResource(cfnResourceType, { appIdentity: { app: "test-gu" } });
+      });
+    });
+
+    it("should be capable of splitting traffic between EC2 and ECS target groups", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        ec2Props: {
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          instanceMetricGranularity: "5Minute",
+          userData: UserData.forLinux(),
+          scaling: {
+            minimumInstances: 1,
           },
         },
-      ],
-    });
-  });
-
-  it("should create listener rules to deterministically route requests to EC2 or ECS during migration", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ec2Props: {
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        scaling: {
-          minimumInstances: 1,
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
         },
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
-      targetGroupWeights: {
-        ec2: 499,
-        ecs: 500,
-      },
-    });
-
-    Template.fromStack(stack).resourceCountIs("AWS::ElasticLoadBalancingV2::ListenerRule", 2);
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
-      Conditions: Match.arrayWith([
-        Match.objectLike({
-          Field: "http-header",
-          HttpHeaderConfig: {
-            HttpHeaderName: "X-Gu-Target-Group",
-            Values: ["ec2"],
-          },
-        }),
-      ]),
-      Actions: [
-        Match.objectLike({
-          Type: "forward",
-          TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
-        }),
-      ],
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
-      Conditions: Match.arrayWith([
-        Match.objectLike({
-          Field: "http-header",
-          HttpHeaderConfig: {
-            HttpHeaderName: "X-Gu-Target-Group",
-            Values: ["ecs"],
-          },
-        }),
-      ]),
-      Actions: [
-        Match.objectLike({
-          Type: "forward",
-          TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
-        }),
-      ],
-    });
-  });
-
-  it("should keep weighted forwarding as the default action", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ec2Props: {
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        scaling: { minimumInstances: 1 },
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
-      targetGroupWeights: {
-        ec2: 499,
-        ecs: 500,
-      },
-    });
-
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
-      DefaultActions: [
-        {
-          ForwardConfig: {
-            TargetGroups: [
-              {
-                TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
-                Weight: 499,
-              },
-              {
-                TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
-                Weight: 500,
-              },
-            ],
-          },
+        targetGroupWeights: {
+          ec2: 499,
+          ecs: 500,
         },
-      ],
-    });
-  });
-
-  it("should throw an error if EC2 and ECS are both present but no weights are provided", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: "domain-name-for-your-application.example",
-          },
-          ec2Props: {
-            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-            instanceMetricGranularity: "5Minute",
-            userData: UserData.forLinux(),
-            scaling: {
-              minimumInstances: 1,
+      });
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+        DefaultActions: [
+          {
+            ForwardConfig: {
+              TargetGroups: [
+                {
+                  TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
+                  Weight: 499,
+                },
+                {
+                  TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
+                  Weight: 500,
+                },
+              ],
             },
           },
-          ecsProps: {
-            cpu: 1024,
-            memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-            imageIdentifier: "sha256:12345",
-          },
-        }),
-    ).toThrow("EC2 and ECS are both enabled but no target group weights were provided");
-  });
+        ],
+      });
+    });
 
-  it("should throw an error if illegal weights are provided", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: "domain-name-for-your-application.example",
+    it("should create listener rules to deterministically route requests to EC2 or ECS during migration", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        ec2Props: {
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          instanceMetricGranularity: "5Minute",
+          userData: UserData.forLinux(),
+          scaling: {
+            minimumInstances: 1,
           },
-          ec2Props: {
-            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-            instanceMetricGranularity: "5Minute",
-            userData: UserData.forLinux(),
-            scaling: {
-              minimumInstances: 1,
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+        targetGroupWeights: {
+          ec2: 499,
+          ecs: 500,
+        },
+      });
+
+      Template.fromStack(stack).resourceCountIs("AWS::ElasticLoadBalancingV2::ListenerRule", 2);
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+        Conditions: Match.arrayWith([
+          Match.objectLike({
+            Field: "http-header",
+            HttpHeaderConfig: {
+              HttpHeaderName: "X-Gu-Target-Group",
+              Values: ["ec2"],
+            },
+          }),
+        ]),
+        Actions: [
+          Match.objectLike({
+            Type: "forward",
+            TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
+          }),
+        ],
+      });
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+        Conditions: Match.arrayWith([
+          Match.objectLike({
+            Field: "http-header",
+            HttpHeaderConfig: {
+              HttpHeaderName: "X-Gu-Target-Group",
+              Values: ["ecs"],
+            },
+          }),
+        ]),
+        Actions: [
+          Match.objectLike({
+            Type: "forward",
+            TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
+          }),
+        ],
+      });
+    });
+
+    it("should keep weighted forwarding as the default action", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        ec2Props: {
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          instanceMetricGranularity: "5Minute",
+          userData: UserData.forLinux(),
+          scaling: { minimumInstances: 1 },
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+        targetGroupWeights: {
+          ec2: 499,
+          ecs: 500,
+        },
+      });
+
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::Listener", {
+        DefaultActions: [
+          {
+            ForwardConfig: {
+              TargetGroups: [
+                {
+                  TargetGroupArn: stack.resolve(targetGroups.ec2!.targetGroupArn) as string,
+                  Weight: 499,
+                },
+                {
+                  TargetGroupArn: stack.resolve(targetGroups.ecs!.targetGroupArn) as string,
+                  Weight: 500,
+                },
+              ],
             },
           },
-          ecsProps: {
-            cpu: 1024,
-            memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-            imageIdentifier: "sha256:12345",
-          },
-          targetGroupWeights: {
-            ec2: 1000, // Outside of limit
-            ecs: 1,
-          },
-        }),
-    ).toThrow("targetGroupWeights.ec2 must be between 0 and 999");
-  });
-
-  it("should throw an error if EC2 and ECS props are both omitted", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: "domain-name-for-your-application.example",
-          },
-        }),
-    ).toThrow("At least one of 'ec2Props' or 'ecsProps' must be specified");
-  });
-
-  it("should use the ECR repo name from ecsProps if the user sets this explicitly", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
-      monitoringConfiguration: { noMonitoring: true },
-      applicationPort: 3000,
-      access: { scope: AccessScope.PUBLIC },
-      app: "test-gu",
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-        repositoryName: "guardian/some-other-repo",
-      },
+        ],
+      });
     });
-    Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
-      ContainerDefinitions: Match.arrayWith([
-        Match.objectLike({
-          Image: {
-            "Fn::Join": ["", Match.arrayWith(["/guardian/some-other-repo@sha256:12345"])],
-          },
-        }),
-      ]),
-    });
-  });
 
-  it("should throw an error if we cannot determine the right repository for ECR", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    // Remove the repositoryName
-    Object.defineProperty(stack, "repositoryName", { value: undefined });
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: "domain-name-for-your-application.example",
-          },
-          ecsProps: {
-            cpu: 1024,
-            memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-            imageIdentifier: "sha256:12345",
-          },
-        }),
-    ).toThrow("Could not determine an ECR repository name; please set this manually via ecsProps");
-  });
-
-  it("allows a custom healthcheck to be used for the ECS target group", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
-      applicationPort: 3000,
-      app: "test-gu-ec2-app",
-      access: { scope: AccessScope.PUBLIC },
-      monitoringConfiguration: { noMonitoring: true },
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      healthcheck: {
-        path: "/custom-healthcheck",
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
+    it("should throw an error if EC2 and ECS are both present but no weights are provided", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      expect(
+        () =>
+          new GuLoadBalancedAppExperimental(stack, {
+            monitoringConfiguration: { noMonitoring: true },
+            applicationPort: 3000,
+            access: { scope: AccessScope.PUBLIC },
+            app: "test-gu",
+            certificateProps: {
+              domainName: "domain-name-for-your-application.example",
+            },
+            ec2Props: {
+              instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+              instanceMetricGranularity: "5Minute",
+              userData: UserData.forLinux(),
+              scaling: {
+                minimumInstances: 1,
+              },
+            },
+            ecsProps: {
+              cpu: 1024,
+              memoryLimitMiB: 2048,
+              scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+              imageIdentifier: "sha256:12345",
+              ...extraEcsProps,
+            },
+          }),
+      ).toThrow("EC2 and ECS are both enabled but no target group weights were provided");
     });
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckPath: "/custom-healthcheck",
-      TargetType: "ip", // This target type helps to confirm that its the ECS target group
-    });
-  });
 
-  it("applies the custom healthcheck settings to both target groups when operating in hybrid mode", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
-      applicationPort: 3000,
-      app: "test-gu-ec2-app",
-      access: { scope: AccessScope.PUBLIC },
-      monitoringConfiguration: { noMonitoring: true },
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      healthcheck: {
-        path: "/custom-healthcheck",
-      },
-      ec2Props: {
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        scaling: {
-          minimumInstances: 1,
+    it("should throw an error if illegal weights are provided", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      expect(
+        () =>
+          new GuLoadBalancedAppExperimental(stack, {
+            monitoringConfiguration: { noMonitoring: true },
+            applicationPort: 3000,
+            access: { scope: AccessScope.PUBLIC },
+            app: "test-gu",
+            certificateProps: {
+              domainName: "domain-name-for-your-application.example",
+            },
+            ec2Props: {
+              instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+              instanceMetricGranularity: "5Minute",
+              userData: UserData.forLinux(),
+              scaling: {
+                minimumInstances: 1,
+              },
+            },
+            ecsProps: {
+              cpu: 1024,
+              memoryLimitMiB: 2048,
+              scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+              imageIdentifier: "sha256:12345",
+              ...extraEcsProps,
+            },
+            targetGroupWeights: {
+              ec2: 1000, // Outside of limit
+              ecs: 1,
+            },
+          }),
+      ).toThrow("targetGroupWeights.ec2 must be between 0 and 999");
+    });
+
+    it("should throw an error if EC2 and ECS props are both omitted", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      expect(
+        () =>
+          new GuLoadBalancedAppExperimental(stack, {
+            monitoringConfiguration: { noMonitoring: true },
+            applicationPort: 3000,
+            access: { scope: AccessScope.PUBLIC },
+            app: "test-gu",
+            certificateProps: {
+              domainName: "domain-name-for-your-application.example",
+            },
+          }),
+      ).toThrow("At least one of 'ec2Props' or 'ecsProps' must be specified");
+    });
+
+    it("should use the ECR repo name from ecsProps if the user sets this explicitly", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
         },
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-        imageIdentifier: "sha256:12345",
-      },
-      targetGroupWeights: {
-        ec2: 499,
-        ecs: 500,
-      },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          repositoryName: "guardian/some-other-repo",
+          ...extraEcsProps,
+        },
+      });
+      Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
+        ContainerDefinitions: Match.arrayWith([
+          Match.objectLike({
+            Image: {
+              "Fn::Join": ["", Match.arrayWith(["/guardian/some-other-repo@sha256:12345"])],
+            },
+          }),
+        ]),
+      });
     });
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckPath: "/custom-healthcheck",
-      TargetType: "instance", // The EC2 target group
-    });
-    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
-      HealthCheckPath: "/custom-healthcheck",
-      TargetType: "ip", // The ECS target group
-    });
-  });
 
-  // Because this has not been tested thoroughly yet
-  it("should throw an error if there is an ECS backend and the Google Auth feature is being used", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    const domain = "domain-name-for-your-application.example";
-    expect(
-      () =>
-        new GuLoadBalancedAppExperimental(stack, {
-          monitoringConfiguration: { noMonitoring: true },
-          applicationPort: 3000,
-          access: { scope: AccessScope.PUBLIC },
-          app: "test-gu",
-          certificateProps: {
-            domainName: domain,
+    it("should throw an error if we cannot determine the right repository for ECR", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      // Remove the repositoryName
+      Object.defineProperty(stack, "repositoryName", { value: undefined });
+      expect(
+        () =>
+          new GuLoadBalancedAppExperimental(stack, {
+            monitoringConfiguration: { noMonitoring: true },
+            applicationPort: 3000,
+            access: { scope: AccessScope.PUBLIC },
+            app: "test-gu",
+            certificateProps: {
+              domainName: "domain-name-for-your-application.example",
+            },
+            ecsProps: {
+              cpu: 1024,
+              memoryLimitMiB: 2048,
+              scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+              imageIdentifier: "sha256:12345",
+              ...extraEcsProps,
+            },
+          }),
+      ).toThrow("Could not determine an ECR repository name; please set this manually via ecsProps");
+    });
+
+    it("allows a custom healthcheck to be used for the ECS target group", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        applicationPort: 3000,
+        app: "test-gu-ec2-app",
+        access: { scope: AccessScope.PUBLIC },
+        monitoringConfiguration: { noMonitoring: true },
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        healthcheck: {
+          path: "/custom-healthcheck",
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+      });
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+        HealthCheckPath: "/custom-healthcheck",
+        TargetType: "ip", // This target type helps to confirm that its the ECS target group
+      });
+    });
+
+    it("applies the custom healthcheck settings to both target groups when operating in hybrid mode", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        applicationPort: 3000,
+        app: "test-gu-ec2-app",
+        access: { scope: AccessScope.PUBLIC },
+        monitoringConfiguration: { noMonitoring: true },
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        healthcheck: {
+          path: "/custom-healthcheck",
+        },
+        ec2Props: {
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          instanceMetricGranularity: "5Minute",
+          userData: UserData.forLinux(),
+          scaling: {
+            minimumInstances: 1,
           },
-          ec2Props: {
-            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-            instanceMetricGranularity: "5Minute",
-            userData: UserData.forLinux(),
-            scaling: {
-              minimumInstances: 1,
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+        targetGroupWeights: {
+          ec2: 499,
+          ecs: 500,
+        },
+      });
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+        HealthCheckPath: "/custom-healthcheck",
+        TargetType: "instance", // The EC2 target group
+      });
+      Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
+        HealthCheckPath: "/custom-healthcheck",
+        TargetType: "ip", // The ECS target group
+      });
+    });
+
+    // Because this has not been tested thoroughly yet
+    it("should throw an error if there is an ECS backend and the Google Auth feature is being used", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      const domain = "domain-name-for-your-application.example";
+      expect(
+        () =>
+          new GuLoadBalancedAppExperimental(stack, {
+            monitoringConfiguration: { noMonitoring: true },
+            applicationPort: 3000,
+            access: { scope: AccessScope.PUBLIC },
+            app: "test-gu",
+            certificateProps: {
+              domainName: domain,
+            },
+            ec2Props: {
+              instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+              instanceMetricGranularity: "5Minute",
+              userData: UserData.forLinux(),
+              scaling: {
+                minimumInstances: 1,
+              },
+            },
+            ecsProps: {
+              cpu: 1024,
+              memoryLimitMiB: 2048,
+              scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+              imageIdentifier: "sha256:12345",
+              repositoryName: "my-repository",
+              ...extraEcsProps,
+            },
+            targetGroupWeights: {
+              ec2: 899,
+              ecs: 100,
+            },
+            googleAuth: {
+              enabled: true,
+              domain,
+            },
+          }),
+      ).toThrow("Using Google Auth with ECS is currently unsupported");
+    });
+
+    it("should scale on CPU utilisation using aws target tracking", function () {
+      const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        applicationPort: 3000,
+        app: "test-gu-ec2-app",
+        access: { scope: AccessScope.PUBLIC },
+        monitoringConfiguration: { noMonitoring: true },
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        healthcheck: {
+          path: "/custom-healthcheck",
+        },
+        ec2Props: {
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          instanceMetricGranularity: "5Minute",
+          userData: UserData.forLinux(),
+          scaling: {
+            minimumInstances: 1,
+          },
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: {
+            minimumTasks: 3,
+            maximumTasks: 6,
+            cpuScaling: {
+              targetValue: 20,
+              scaleInCooldown: Duration.seconds(60),
+              scaleOutCooldown: Duration.seconds(60),
             },
           },
-          ecsProps: {
-            cpu: 1024,
-            memoryLimitMiB: 2048,
-            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
-            imageIdentifier: "sha256:12345",
-            repositoryName: "my-repository",
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+        targetGroupWeights: {
+          ec2: 499,
+          ecs: 500,
+        },
+      });
+      Template.fromStack(stack).hasResourceProperties("AWS::ApplicationAutoScaling::ScalingPolicy", {
+        TargetTrackingScalingPolicyConfiguration: {
+          TargetValue: 20,
+          PredefinedMetricSpecification: {
+            PredefinedMetricType: "ECSServiceAverageCPUUtilizationHighResolution",
           },
-          targetGroupWeights: {
-            ec2: 899,
-            ecs: 100,
-          },
-          googleAuth: {
-            enabled: true,
-            domain,
-          },
-        }),
-    ).toThrow("Using Google Auth with ECS is currently unsupported");
+        },
+      });
+    });
   });
+}
 
-  it("should scale on CPU utilisation using aws target tracking", function () {
-    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    new GuLoadBalancedAppExperimental(stack, {
-      applicationPort: 3000,
-      app: "test-gu-ec2-app",
-      access: { scope: AccessScope.PUBLIC },
-      monitoringConfiguration: { noMonitoring: true },
-      certificateProps: {
-        domainName: "domain-name-for-your-application.example",
-      },
-      healthcheck: {
-        path: "/custom-healthcheck",
-      },
-      ec2Props: {
-        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
-        instanceMetricGranularity: "5Minute",
-        userData: UserData.forLinux(),
-        scaling: {
-          minimumInstances: 1,
-        },
-      },
-      ecsProps: {
-        cpu: 1024,
-        memoryLimitMiB: 2048,
-        scaling: {
-          minimumTasks: 3,
-          maximumTasks: 6,
-          cpuScaling: {
-            targetValue: 20,
-            scaleInCooldown: Duration.seconds(60),
-            scaleOutCooldown: Duration.seconds(60),
-          },
-        },
-        imageIdentifier: "sha256:12345",
-      },
-      targetGroupWeights: {
-        ec2: 499,
-        ecs: 500,
-      },
-    });
-    Template.fromStack(stack).hasResourceProperties("AWS::ApplicationAutoScaling::ScalingPolicy", {
-      TargetTrackingScalingPolicyConfiguration: {
-        TargetValue: 20,
-        PredefinedMetricSpecification: {
-          PredefinedMetricType: "ECSServiceAverageCPUUtilizationHighResolution",
-        },
-      },
-    });
-  });
-});
+// Default behaviour is to use Fargate ECS Constructs
+ecsHybridFunctionalityTests(
+  "the GuLoadBalancedAppExperimental pattern should support new ECS and hybrid functionality",
+);
+
+// Managed Instances case
+ecsHybridFunctionalityTests(
+  "the GuLoadBalancedAppExperimental pattern should support new ECS and hybrid functionality with ECS Managed Instances",
+  { useManagedInstances: true },
+);
 
 describe("the GuLoadBalancedAppExperimental pattern should support all existing GuEc2App functionality", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
