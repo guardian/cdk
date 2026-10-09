@@ -101,10 +101,6 @@ export interface GuS3ConfigMount {
    * The S3 prefix to mount into the container.
    */
   path: string;
-  /**
-   * Whether the mount should be read-only.
-   */
-  readOnly: boolean;
 }
 
 /**
@@ -125,7 +121,6 @@ export function getDefaultS3ConfigMount(scope: GuStack, props: AppIdentity): GuS
     containerPath: `/etc/gu/s3-sync/`,
     bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
     path: `${scope.stack}/${scope.stage}/${props.app}/conf/`,
-    readOnly: true,
   };
 }
 
@@ -874,29 +869,24 @@ export class GuLoadBalancedAppExperimental extends Construct {
           }),
           description: `Role used by the S3 Files filesystem for ${app} mount`,
         });
-        // Add S3 permissions to the S3 Files service role
-        role.addToPrincipalPolicy(
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
-            resources: [bucketArn],
-          }),
-        );
 
+        // Add S3 permissions to the S3 Files service role, used for the mount.
+        // Note that https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-files-prereq-policies.html documents
+        // a policy for the entire bucket to mount it.  However, we only mount a prefix of the bucket, so we implicitly
+        // restrict the permissions to that prefix.
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
             actions: [
+              "s3:ListBucket",
+              "s3:GetBucketVersioning",
+              "s3:GetBucketLocation",
               "s3:GetObject",
               "s3:GetObjectVersion",
               "s3:GetObjectTagging",
               "s3:GetObjectVersionTagging",
-              "s3:PutObject",
-              "s3:PutObjectTagging",
-              "s3:DeleteObject",
-              "s3:DeleteObjectVersion",
             ],
-            resources: [`${bucketArn}/*`],
+            resources: [bucketArn],
           }),
         );
 
@@ -921,13 +911,16 @@ export class GuLoadBalancedAppExperimental extends Construct {
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: [
-              "events:DescribeRule",
-              "events:ListRuleNamesByTarget",
-              "events:ListRules",
-              "events:ListTargetsByRule",
-            ],
+            actions: ["events:DescribeRule", "events:ListTargetsByRule"],
             resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["events:ListRuleNamesByTarget", "events:ListRules"],
+            resources: ["*"],
           }),
         );
 
@@ -970,9 +963,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ecsService.node.addDependency(...mountTargets);
 
         const actions: string[] = ["s3files:ClientMount"];
-        if (!s3Config.readOnly) {
-          actions.push("s3files:ClientWrite");
-        }
 
         taskDefinition.addToTaskRolePolicy(
           new PolicyStatement({
@@ -999,20 +989,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
           }),
         );
 
-        if (!s3Config.readOnly) {
-          taskDefinition.addToTaskRolePolicy(
-            new PolicyStatement({
-              effect: Effect.ALLOW,
-              actions: ["s3:PutObject", "s3:DeleteObject"],
-              resources: [`${bucketArn}/*`],
-            }),
-          );
-        }
-
         appContainer.addMountPoints({
           containerPath: s3Config.containerPath,
           sourceVolume: `s3files-volume`,
-          readOnly: s3Config.readOnly,
+          readOnly: true,
         });
 
         // Capitalised because this is raw cfn json: cdk does not have a first-class construct for S3 Files volumes yet.

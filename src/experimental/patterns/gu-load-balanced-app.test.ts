@@ -57,7 +57,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
         s3Config: {
-          ...getDefaultS3ConfigMount(stack),
+          ...getDefaultS3ConfigMount(stack, { app: "test-gu" }),
           containerPath: "/amiable",
           path: "test-stack/TEST/test-gu/conf/",
         },
@@ -157,7 +157,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           containerPath: "/override",
           bucket: "custom-bucket",
           path: "custom/path/conf",
-          readOnly: false,
         },
       },
     });
@@ -175,7 +174,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
           MountPoints: Match.arrayWith([
             Match.objectLike({
               ContainerPath: "/override",
-              ReadOnly: false,
+              ReadOnly: true,
             }),
           ]),
         }),
