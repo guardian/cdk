@@ -12,21 +12,21 @@ import {
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { UserData } from "aws-cdk-lib/aws-ec2";
 import { Repository } from "aws-cdk-lib/aws-ecr";
-import { ContainerInsights, OperatingSystemFamily } from "aws-cdk-lib/aws-ecs";
-import { CpuArchitecture } from "aws-cdk-lib/aws-ecs";
-import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
+import type { CfnService, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
   ContainerImage,
+  ContainerInsights,
+  CpuArchitecture,
   FargateService,
   FargateTaskDefinition,
   FireLensLogDriver,
   FirelensLogRouterType,
   LogDriver,
+  OperatingSystemFamily,
+  PropagatedTagSource,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
-import type { CfnService } from "aws-cdk-lib/aws-ecs";
-import type { Volume } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
@@ -38,8 +38,7 @@ import { Construct } from "constructs";
 import { AccessScope, MetadataKeys, NAMED_SSM_PARAMETER_PATHS } from "../../constants";
 import { GuCertificate } from "../../constructs/acm";
 import type { GuUserDataProps } from "../../constructs/autoscaling";
-import { GuUserData } from "../../constructs/autoscaling";
-import { GuAutoScalingGroup } from "../../constructs/autoscaling";
+import { GuAutoScalingGroup, GuUserData } from "../../constructs/autoscaling";
 import type { NoMonitoring } from "../../constructs/cloudwatch";
 import {
   GuAlb4xxPercentageAlarm,
@@ -47,15 +46,16 @@ import {
   GuUnhealthyInstancesAlarm,
 } from "../../constructs/cloudwatch";
 import type { GuStack } from "../../constructs/core";
-import { AppIdentity } from "../../constructs/core";
-import { GuLoggingStreamNameParameter } from "../../constructs/core";
+import { AppIdentity, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
-import { GuListBucketPolicy } from "../../constructs/iam";
-import { GuLogShippingPolicy } from "../../constructs/iam";
-import { GuInstanceRole } from "../../constructs/iam";
-import { GuGetPrivateConfigPolicy } from "../../constructs/iam";
-import { GuParameterStoreReadPolicy } from "../../constructs/iam";
+import {
+  GuGetPrivateConfigPolicy,
+  GuInstanceRole,
+  GuListBucketPolicy,
+  GuLogShippingPolicy,
+  GuParameterStoreReadPolicy,
+} from "../../constructs/iam";
 import { GuLambdaFunction } from "../../constructs/lambda";
 import {
   GuApplicationLoadBalancer,
@@ -65,8 +65,8 @@ import {
 } from "../../constructs/loadbalancing";
 import type { Alarms, ApplicationLoggingProps } from "../../patterns";
 import { restrictedCidrRanges } from "../../patterns";
-import { AppAccess } from "../../types";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
+import { AppAccess } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
@@ -603,9 +603,11 @@ export class GuLoadBalancedAppExperimental extends Construct {
     if (ecsProps) {
       const { cpu, memoryLimitMiB, imageIdentifier, scaling } = ecsProps;
 
-      const ecrRepoName = ecsProps.repositoryName ?? scope.repositoryName;
+      const ecrRepoName = ecsProps.repositoryName ?? (scope.repositoryName && app && `${scope.repositoryName}/${app}`);
       if (!ecrRepoName) {
-        throw new Error("Could not determine an ECR repository name; please set this manually via ecsProps");
+        throw new Error(
+          "Could not determine an ECR repository name; please either set this manually via ecsProps, or ensure your GuStack has a repositoryName and props has an app.",
+        );
       }
 
       const cluster = new Cluster(this, "EcsCluster", {
