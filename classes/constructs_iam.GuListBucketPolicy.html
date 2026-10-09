@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>GuDenyPolicy | @guardian/cdk</title><meta name="description" content="Documentation for @guardian/cdk"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>GuListBucketPolicy | @guardian/cdk</title><meta name="description" content="Documentation for @guardian/cdk"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container"><a href="../index.html" class="title">@guardian/cdk</a>
 <div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
 <ul role="listbox" id="tsd-search-results"></ul>
@@ -9,16 +9,16 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="../modules/constructs_iam.html">constructs/iam</a></li>
-<li><a href="" aria-current="page">GuDenyPolicy</a></li></ul>
-<h1>Class GuDenyPolicy</h1></div>
-<section class="tsd-panel tsd-hierarchy" data-refl="4436">
-<h4>Hierarchy (<a href="../hierarchy.html#constructs/iam.GuDenyPolicy">View Summary</a>)</h4>
+<li><a href="" aria-current="page">GuListBucketPolicy</a></li></ul>
+<h1>Class GuListBucketPolicy</h1></div>
+<section class="tsd-panel tsd-hierarchy" data-refl="5377">
+<h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li class="tsd-hierarchy-item"><a href="constructs_iam.GuPolicy.html" class="tsd-signature-type tsd-kind-class">GuPolicy</a>
+<li class="tsd-hierarchy-item"><span class="tsd-signature-type">Mixin</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-keyword">typeof</span> <a href="constructs_iam.GuPolicy.html" class="tsd-signature-type tsd-kind-class">GuPolicy</a><span class="tsd-signature-symbol">,</span> <span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span> <span class="tsd-signature-symbol">&amp;</span> <a href="constructs_iam.GuPolicy.html" class="tsd-signature-type tsd-kind-class">GuPolicy</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span>
 <ul class="tsd-hierarchy">
-<li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">GuDenyPolicy</span></li></ul></li></ul></section><aside class="tsd-sources">
+<li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">GuListBucketPolicy</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8cc67d03043fd468b4dbe55b48a88d4181968494/src/constructs/iam/policies/base-policy.ts#L35">src/constructs/iam/policies/base-policy.ts:35</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8cc67d03043fd468b4dbe55b48a88d4181968494/src/constructs/iam/policies/s3-get-object.ts#L22">src/constructs/iam/policies/s3-get-object.ts:22</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -32,6 +32,7 @@
 <h3 class="tsd-index-heading tsd-anchor-link" id="properties">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-index-list"><a href="#document" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>document</span></a>
 <a href="#grantprincipal" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>grant<wbr/>Principal</span></a>
+<a href="#idwithapp" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>id<wbr/>With<wbr/>App</span></a>
 <a href="#node" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>node</span></a>
 <a href="#policyref" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>policy<wbr/>Ref</span></a>
 <a href="#property_injection_id" class="tsd-index-link tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>PROPERTY_<wbr/>INJECTION_<wbr/>ID</span></a>
@@ -69,18 +70,17 @@
 <h3 class="tsd-anchor-link" id="constructor"><span>constructor</span><a href="#constructor" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
-<div class="tsd-signature tsd-anchor-link" id="constructorgudenypolicy"><span class="tsd-signature-keyword">new</span> <span class="tsd-kind-constructor-signature">GuDenyPolicy</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">scope</span><span class="tsd-signature-symbol">:</span> <a href="constructs_core.GuStack.html" class="tsd-signature-type tsd-kind-class">GuStack</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">props</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/constructs_iam.GuAllowPolicyProps.html" class="tsd-signature-type tsd-kind-interface">GuAllowPolicyProps</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type tsd-kind-class">GuDenyPolicy</a><a href="#constructorgudenypolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-signature tsd-anchor-link" id="constructorgulistbucketpolicy"><span class="tsd-signature-keyword">new</span> <span class="tsd-kind-constructor-signature">GuListBucketPolicy</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">scope</span><span class="tsd-signature-symbol">:</span> <a href="constructs_core.GuStack.html" class="tsd-signature-type tsd-kind-class">GuStack</a><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">props</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/constructs_core.AppIdentity.html" class="tsd-signature-type tsd-kind-interface">AppIdentity</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type tsd-kind-class">GuListBucketPolicy</a><a href="#constructorgulistbucketpolicy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">scope</span>: <a href="constructs_core.GuStack.html" class="tsd-signature-type tsd-kind-class">GuStack</a></span></li>
-<li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><span class="tsd-kind-parameter">props</span>: <a href="../interfaces/constructs_iam.GuAllowPolicyProps.html" class="tsd-signature-type tsd-kind-interface">GuAllowPolicyProps</a></span></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">GuDenyPolicy</a></h4><aside class="tsd-sources">
-<p>Overrides <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#constructor">constructor</a></p>
+<li><span><span class="tsd-kind-parameter">props</span>: <a href="../interfaces/constructs_core.AppIdentity.html" class="tsd-signature-type tsd-kind-interface">AppIdentity</a></span></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">GuListBucketPolicy</a></h4><aside class="tsd-sources">
+<p>Overrides GuAppAwareConstruct(GuPolicy).constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/guardian/cdk/blob/8cc67d03043fd468b4dbe55b48a88d4181968494/src/constructs/iam/policies/base-policy.ts#L36">src/constructs/iam/policies/base-policy.ts:36</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8cc67d03043fd468b4dbe55b48a88d4181968494/src/constructs/iam/policies/s3-get-object.ts#L23">src/constructs/iam/policies/s3-get-object.ts:23</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="properties-1">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -89,7 +89,7 @@
 <div class="tsd-signature"><span class="tsd-kind-property">document</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PolicyDocument</span></div>
 <div class="tsd-comment tsd-typography"><p>The policy document.</p>
 </div><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#document">document</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).document</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:108</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -97,15 +97,24 @@
 <div class="tsd-signature"><span class="tsd-kind-property">grantPrincipal</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IPrincipal</span></div>
 <div class="tsd-comment tsd-typography"><p>The principal to grant permissions to</p>
 </div><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#grantprincipal">grantPrincipal</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).grantPrincipal</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:109</li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-inherited">
+<h3 class="tsd-anchor-link" id="idwithapp"><code class="tsd-tag">Readonly</code><span>id<wbr/>With<wbr/>App</span><a href="#idwithapp" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">idWithApp</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The ID of the construct with the App suffix.
+This should be used in place of <code>id</code> when trying to reference the construct.</p>
+</div><aside class="tsd-sources">
+<p>Inherited from GuAppAwareConstruct(GuPolicy).idWithApp</p>
+<ul>
+<li>Defined in <a href="https://github.com/guardian/cdk/blob/8cc67d03043fd468b4dbe55b48a88d4181968494/src/utils/mixin/app-aware-construct.ts#L11">src/utils/mixin/app-aware-construct.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="node"><code class="tsd-tag">Readonly</code><span>node</span><a href="#node" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">node</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Node</span></div>
 <div class="tsd-comment tsd-typography"><p>The tree node.</p>
 </div><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#node">node</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).node</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:325</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -113,7 +122,7 @@
 <div class="tsd-signature"><span class="tsd-kind-property">policyRef</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PolicyReference</span></div>
 <div class="tsd-comment tsd-typography"><p>A reference to a Policy resource.</p>
 </div><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#policyref">policyRef</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).policyRef</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:110</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -121,7 +130,7 @@
 <div class="tsd-signature"><span class="tsd-kind-property">PROPERTY_INJECTION_ID</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 <div class="tsd-comment tsd-typography"><p>Uniquely identifies this class.</p>
 </div><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#property_injection_id">PROPERTY_INJECTION_ID</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).PROPERTY_INJECTION_ID</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:100</li></ul></aside></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -142,7 +151,7 @@ is always the same as the environment of the stack they belong to.</p>
 different than the stack they were imported into.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ResourceEnvironment</span></h4><aside class="tsd-sources">
-<p>Inherited from GuPolicy.env</p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).env</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:94</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -162,7 +171,7 @@ cross-environment scenarios.</li>
 </ul>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from GuPolicy.physicalName</p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).physicalName</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:106</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -177,7 +186,7 @@ cross-environment scenarios.</li>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-attribute">
 <h4 class="tsd-anchor-link" id="attribute">Attribute<a href="#attribute" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4></div></div><aside class="tsd-sources">
-<p>Inherited from GuPolicy.policyName</p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).policyName</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:139</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -189,7 +198,7 @@ cross-environment scenarios.</li>
 <div class="tsd-comment tsd-typography"><p>The stack in which this resource is defined.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Stack</span></h4><aside class="tsd-sources">
-<p>Inherited from GuPolicy.stack</p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).stack</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:93</li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -207,7 +216,7 @@ for this resource during synthesis, so the resource can be referenced
 through its absolute name/arn.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#_enablecrossenvironment">_enableCrossEnvironment</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy)._enableCrossEnvironment</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:115</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -223,7 +232,7 @@ through its absolute name/arn.</p>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">statement</span>: <span class="tsd-signature-type">PolicyStatement</span><span class="tsd-signature-symbol">[]</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#addstatements">addStatements</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).addStatements</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:121</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -246,7 +255,7 @@ without changing the app-wide default.</p>
 <div class="tsd-comment tsd-typography"><p>The reference strength to use for this resource.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#applycrossstackreferencestrength">applyCrossStackReferenceStrength</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).applyCrossStackReferenceStrength</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:139</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -268,7 +277,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">policy</span>: <span class="tsd-signature-type">RemovalPolicy</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#applyremovalpolicy">applyRemovalPolicy</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).applyRemovalPolicy</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:127</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -284,7 +293,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">group</span>: <span class="tsd-signature-type">IGroup</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#attachtogroup">attachToGroup</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).attachToGroup</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:133</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -300,7 +309,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">role</span>: <span class="tsd-signature-type">IRole</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#attachtorole">attachToRole</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).attachToRole</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:129</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -316,7 +325,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">user</span>: <span class="tsd-signature-type">IUser</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#attachtouser">attachToUser</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).attachToUser</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:125</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -326,7 +335,7 @@ account for data recovery and cleanup later (<code>RemovalPolicy.RETAIN</code>).
 <div class="tsd-signature tsd-anchor-link" id="generatephysicalname-1"><span class="tsd-kind-call-signature">generatePhysicalName</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><a href="#generatephysicalname-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#generatephysicalname">generatePhysicalName</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).generatePhysicalName</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:140</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -356,7 +365,7 @@ reference <code>this.physicalName</code> somewhere within the ARN in order for
 cross-environment references to work.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#getresourcearnattribute">getResourceArnAttribute</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).getResourceArnAttribute</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:170</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited tsd-is-external">
@@ -379,7 +388,7 @@ which will be a concrete name.</p>
 Commonly this is the resource's <code>ref</code>.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#getresourcenameattribute">getResourceNameAttribute</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).getResourceNameAttribute</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:152</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -391,7 +400,7 @@ Commonly this is the resource's <code>ref</code>.</p>
 <div class="tsd-comment tsd-typography"><p>Returns a string representation of this construct.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#tostring">toString</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).toString</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:350</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -414,7 +423,7 @@ constructs.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IConstruct</span></h4><p>This construct for chaining</p>
 <aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#with">with</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).with</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:95</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -432,7 +441,7 @@ constructs.</p>
 <li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></span></li>
 <li><span><span class="tsd-kind-parameter">policyName</span>: <span class="tsd-signature-type">string</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IPolicy</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#frompolicyname">fromPolicyName</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).fromPolicyName</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/aws-iam/lib/policy.d.ts:104</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -463,7 +472,7 @@ this type-testing method instead.</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">x</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">Construct</span></h4><p>true if <code>x</code> is an object created from a class which extends <code>Construct</code>.</p>
 <aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#isconstruct">isConstruct</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).isConstruct</p>
 <ul>
 <li>Defined in node_modules/constructs/lib/construct.d.ts:321</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -479,7 +488,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type">IConstruct</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#isownedresource">isOwnedResource</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).isOwnedResource</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:80</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -495,7 +504,7 @@ this type-testing method instead.</p>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">construct</span>: <span class="tsd-signature-type">IConstruct</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">construct</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">Resource</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="constructs_iam.GuPolicy.html">GuPolicy</a>.<a href="constructs_iam.GuPolicy.html#isresource">isResource</a></p>
+<p>Inherited from GuAppAwareConstruct(GuPolicy).isResource</p>
 <ul>
 <li>Defined in node_modules/aws-cdk-lib/core/lib/resource.d.ts:76</li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
@@ -516,7 +525,7 @@ this type-testing method instead.</p>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Constructors</summary>
 <div><a href="#constructor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Properties</summary>
-<div><a href="#document" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>document</span></a><a href="#grantprincipal" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>grant<wbr/>Principal</span></a><a href="#node" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>node</span></a><a href="#policyref" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>policy<wbr/>Ref</span></a><a href="#property_injection_id" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>PROPERTY_<wbr/>INJECTION_<wbr/>ID</span></a></div></details>
+<div><a href="#document" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>document</span></a><a href="#grantprincipal" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>grant<wbr/>Principal</span></a><a href="#idwithapp" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>id<wbr/>With<wbr/>App</span></a><a href="#node" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>node</span></a><a href="#policyref" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>policy<wbr/>Ref</span></a><a href="#property_injection_id" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>PROPERTY_<wbr/>INJECTION_<wbr/>ID</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Accessors</summary>
 <div><a href="#env" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>env</span></a><a href="#physicalname" class="tsd-is-protected tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>physical<wbr/>Name</span></a><a href="#policyname" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>policy<wbr/>Name</span></a><a href="#stack" class="tsd-is-inherited tsd-is-external"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>stack</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
