@@ -911,13 +911,16 @@ export class GuLoadBalancedAppExperimental extends Construct {
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: [
-              "events:DescribeRule",
-              "events:ListRuleNamesByTarget",
-              "events:ListRules",
-              "events:ListTargetsByRule",
-            ],
+            actions: ["events:DescribeRule", "events:ListTargetsByRule"],
             resources: [`arn:${Aws.PARTITION}:events:*:*:rule/*`],
+          }),
+        );
+
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["events:ListRuleNamesByTarget", "events:ListRules"],
+            resources: ["*"],
           }),
         );
 
