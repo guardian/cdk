@@ -116,7 +116,7 @@ export interface GuS3ConfigMount {
  * /etc/nginx/nginx.d/appconfig) should be symlinked from this location.
  *
  */
-export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
+export function getDefaultS3ConfigMount(scope: GuStack, props: AppIdentity): GuS3ConfigMount {
   if (!scope.app) {
     throw new Error("Cannot create a default S3 config mount without an app on the GuStack.");
   }
@@ -124,7 +124,7 @@ export function getDefaultS3ConfigMount(scope: GuStack): GuS3ConfigMount {
   return {
     containerPath: `/etc/gu/s3-sync/`,
     bucket: GuDistributionBucketParameter.getInstance(scope).valueAsString,
-    path: `${scope.stack}/${scope.stage}/${scope.app}/conf/`,
+    path: `${scope.stack}/${scope.stage}/${props.app}/conf/`,
   };
 }
 

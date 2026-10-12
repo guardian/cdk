@@ -57,7 +57,7 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         scaling: { minimumTasks: 3, maximumTasks: 6 },
         imageIdentifier: "sha256:12345",
         s3Config: {
-          ...getDefaultS3ConfigMount(stack),
+          ...getDefaultS3ConfigMount(stack, { app: "test-gu" }),
           containerPath: "/amiable",
           path: "test-stack/TEST/test-gu/conf/",
         },
