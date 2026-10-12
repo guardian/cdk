@@ -886,7 +886,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
           new PolicyStatement({
             effect: Effect.ALLOW,
             actions: ["s3:GetObject", "s3:GetObjectVersion", "s3:GetObjectTagging", "s3:GetObjectVersionTagging"],
-            resources: [`${bucketArn}/*`],
+            resources: [`${bucketArn}/${normalizedPrefix}*`],
           }),
         );
 
