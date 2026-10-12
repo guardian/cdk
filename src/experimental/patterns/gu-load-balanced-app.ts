@@ -871,22 +871,33 @@ export class GuLoadBalancedAppExperimental extends Construct {
           description: `Role used by the S3 Files filesystem for ${app} mount`,
         });
 
-        // Add S3 permissions to the S3 Files service role, used for the mount.
-        // Note that https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-files-prereq-policies.html documents
-        // a policy for the entire bucket to mount it.  However, we only mount a prefix of the bucket, so we implicitly
-        // restrict the permissions to that prefix.
+        // S3 Files needs synchronization permissions even when the container mount is read-only.
+        // The file system prefix does not implicitly restrict these IAM permissions.
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
+            actions: ["s3:ListBucket", "s3:ListBucketVersions", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
             resources: [bucketArn],
           }),
         );
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ["s3:GetObject", "s3:GetObjectVersion", "s3:GetObjectTagging", "s3:GetObjectVersionTagging"],
+            actions: ["s3:AbortMultipartUpload", "s3:DeleteObject*", "s3:GetObject*", "s3:List*", "s3:PutObject*"],
             resources: [`${bucketArn}/*`],
+          }),
+        );
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["kms:GenerateDataKey", "kms:Encrypt", "kms:Decrypt", "kms:ReEncryptFrom", "kms:ReEncryptTo"],
+            resources: [`arn:${Aws.PARTITION}:kms:${scope.region}:${scope.account}:key/*`],
+            conditions: {
+              StringLike: {
+                "kms:ViaService": `s3.${scope.region}.${Aws.URL_SUFFIX}`,
+                "kms:EncryptionContext:aws:s3:arn": [bucketArn, `${bucketArn}/*`],
+              },
+            },
           }),
         );
 
@@ -929,6 +940,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
           prefix: normalizedPrefix,
           roleArn: role.roleArn,
         });
+        // Referencing the role ARN alone does not wait for its separately provisioned policy.
+        fileSystem.node.addDependency(role);
 
         const mountTargetSecurityGroup = new GuSecurityGroup(scope, "S3FilesMountTargetSecurityGroup", {
           app: `${app}-s3files`,
@@ -984,7 +997,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         taskDefinition.addToTaskRolePolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ["s3:GetObject"],
+            actions: ["s3:GetObject", "s3:GetObjectVersion"],
             resources: [`${bucketArn}/*`],
           }),
         );

@@ -74,6 +74,55 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         "Fn::GetAtt": [Match.stringLikeRegexp("^S3FilesRole"), "Arn"],
       },
     });
+    template.hasResource("AWS::S3Files::FileSystem", {
+      DependsOn: Match.arrayWith([Match.stringLikeRegexp("^S3FilesRoleDefaultPolicy")]),
+    });
+    const bucketArn = {
+      "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::", { Ref: "DistributionBucketName" }]],
+    };
+    const objectArn = {
+      "Fn::Join": ["", ["arn:", { Ref: "AWS::Partition" }, ":s3:::", { Ref: "DistributionBucketName" }, "/*"]],
+    };
+    template.hasResourceProperties("AWS::IAM::Policy", {
+      Roles: [{ Ref: Match.stringLikeRegexp("^S3FilesRole") }],
+      PolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: ["s3:ListBucket", "s3:ListBucketVersions", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
+            Effect: "Allow",
+            Resource: bucketArn,
+          }),
+          Match.objectLike({
+            Action: ["s3:AbortMultipartUpload", "s3:DeleteObject*", "s3:GetObject*", "s3:List*", "s3:PutObject*"],
+            Effect: "Allow",
+            Resource: objectArn,
+          }),
+          Match.objectLike({
+            Action: ["kms:GenerateDataKey", "kms:Encrypt", "kms:Decrypt", "kms:ReEncryptFrom", "kms:ReEncryptTo"],
+            Condition: {
+              StringLike: {
+                "kms:ViaService": {
+                  "Fn::Join": ["", ["s3.eu-west-1.", { Ref: "AWS::URLSuffix" }]],
+                },
+                "kms:EncryptionContext:aws:s3:arn": [bucketArn, objectArn],
+              },
+            },
+          }),
+        ]),
+      },
+    });
+    template.hasResourceProperties("AWS::IAM::Policy", {
+      Roles: [{ Ref: Match.stringLikeRegexp("^EcsTaskDefinitionTaskRole") }],
+      PolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: ["s3:GetObject", "s3:GetObjectVersion"],
+            Effect: "Allow",
+            Resource: objectArn,
+          }),
+        ]),
+      },
+    });
 
     template.resourceCountIs("AWS::S3Files::MountTarget", 3);
     template.hasResourceProperties("AWS::S3Files::MountTarget", {
