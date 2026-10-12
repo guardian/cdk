@@ -79,6 +79,7 @@ import {
   GuRollingUpdatePolicyExperimental,
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
+import { GuS3Bucket } from "../../constructs/s3";
 
 /**
  * This interface defines the configuration for mounting an S3 Files file system into a container.
@@ -857,7 +858,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       if (s3Config) {
         const normalizedPrefix = s3Config.path.endsWith("/") ? s3Config.path : `${s3Config.path}/`;
-        const bucketArn = `arn:${Aws.PARTITION}:s3:::${s3Config.bucket}`;
+        const bucketArn = GuS3Bucket.fromBucketName(this, "ConfigBucket", s3Config.bucket).bucketArn;
         const role = new Role(scope, `S3FilesRole`, {
           assumedBy: new ServicePrincipal("elasticfilesystem.amazonaws.com").withConditions({
             StringEquals: {
@@ -877,16 +878,15 @@ export class GuLoadBalancedAppExperimental extends Construct {
         role.addToPrincipalPolicy(
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: [
-              "s3:ListBucket",
-              "s3:GetBucketVersioning",
-              "s3:GetBucketLocation",
-              "s3:GetObject",
-              "s3:GetObjectVersion",
-              "s3:GetObjectTagging",
-              "s3:GetObjectVersionTagging",
-            ],
+            actions: ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketLocation"],
             resources: [bucketArn],
+          }),
+        );
+        role.addToPrincipalPolicy(
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["s3:GetObject", "s3:GetObjectVersion", "s3:GetObjectTagging", "s3:GetObjectVersionTagging"],
+            resources: [`${bucketArn}/*`],
           }),
         );
 
