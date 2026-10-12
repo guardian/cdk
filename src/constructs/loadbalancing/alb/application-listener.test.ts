@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
@@ -36,8 +37,8 @@ const getAppTargetGroup = (stack: GuStack): GuApplicationTargetGroup => {
   });
 };
 
-describe("The GuApplicationListener class", () => {
-  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+suite("The GuApplicationListener class", () => {
+  test("should use the AppIdentity to form its auto-generated logicalId", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationListener(stack, "ApplicationListener", {
@@ -102,8 +103,8 @@ describe("The GuApplicationListener class", () => {
   });
 });
 
-describe("The GuHttpsApplicationListener class", () => {
-  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+suite("The GuHttpsApplicationListener class", () => {
+  test("should use the AppIdentity to form its auto-generated logicalId", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuHttpsApplicationListener(stack, "HttpsApplicationListener", {

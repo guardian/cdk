@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration, Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
@@ -5,7 +6,7 @@ import { DatabaseInstanceEngine, PostgresEngineVersion, StorageType } from "aws-
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuDatabaseInstance } from "./instance";
 
-describe("The GuDatabaseInstance class", () => {
+suite("The GuDatabaseInstance class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],
@@ -13,7 +14,7 @@ describe("The GuDatabaseInstance class", () => {
     privateSubnetIds: [""],
   });
 
-  it("removes the db prefix from the instanceType prop (before CDK adds it back again)", () => {
+  test("removes the db prefix from the instanceType prop (before CDK adds it back again)", () => {
     const stack = simpleGuStackForTesting();
 
     new GuDatabaseInstance(stack, "DatabaseInstance", {

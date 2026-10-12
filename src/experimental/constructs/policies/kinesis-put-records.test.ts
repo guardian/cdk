@@ -1,10 +1,11 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { GuKinesisStream } from "../../../constructs/kinesis";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuKinesisPutRecordsPolicyExperimental } from "./kinesis-put-records";
 
-describe("The GuKinesisPutRecordsPolicy class", () => {
-  it("has the correct action permissions", () => {
+suite("The GuKinesisPutRecordsPolicy class", () => {
+  test("has the correct action permissions", () => {
     const stack = simpleGuStackForTesting();
     const stream = new GuKinesisStream(stack, "testStream");
 

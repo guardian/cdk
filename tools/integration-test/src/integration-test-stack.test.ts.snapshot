@@ -1,0 +1,11 @@
+exports[`The Cdk stack > matches the snapshot 1`] = `
+{
+  "Parameters": {
+    "DistributionBucketName": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts"
+    }
+  }
+}
+`;

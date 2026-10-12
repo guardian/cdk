@@ -1,9 +1,10 @@
+import { describe, it } from "node:test";
 import { App } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { IntegrationTestStack } from "./integration-test-stack";
 
 describe("The Cdk stack", () => {
-  it("matches the snapshot", () => {
+  it("matches the snapshot", (t) => {
     const app = new App();
 
     // Note, we disable metadata here as mocking parts of the @guardian/cdk
@@ -13,6 +14,6 @@ describe("The Cdk stack", () => {
       stage: "PROD",
       withoutMetadata: true,
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
@@ -10,7 +11,7 @@ import { GuApplicationTargetGroup } from "../loadbalancing";
 import type { GuAutoScalingGroupProps } from "./asg";
 import { GuAutoScalingGroup } from "./";
 
-describe("The GuAutoScalingGroup", () => {
+suite("The GuAutoScalingGroup", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],

@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuParameterStoreReadPolicy } from "./parameter-store-read";
 
-describe("GuParameterStoreReadPolicy", () => {
-  it("should constrain the policy to the path of a stack's identity", () => {
+suite("GuParameterStoreReadPolicy", () => {
+  test("should constrain the policy to the path of a stack's identity", () => {
     const stack = simpleGuStackForTesting();
 
     const policy = GuParameterStoreReadPolicy.getInstance(stack, { app: "MyApp" });
@@ -62,7 +63,7 @@ describe("GuParameterStoreReadPolicy", () => {
     });
   });
 
-  it("can be instantiated for multiple apps", () => {
+  test("can be instantiated for multiple apps", () => {
     const stack = simpleGuStackForTesting();
 
     const policy1 = GuParameterStoreReadPolicy.getInstance(stack, { app: "MyApp1" });

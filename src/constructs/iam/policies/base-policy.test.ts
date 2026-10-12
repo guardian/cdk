@@ -1,8 +1,9 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuAllowPolicy, GuDenyPolicy } from "./base-policy";
 
-describe("GuAllowPolicy", () => {
+suite("GuAllowPolicy", () => {
   test("if a single action is provided, the resulting resource's action will be a single item", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(
@@ -52,7 +53,7 @@ describe("GuAllowPolicy", () => {
   });
 });
 
-describe("GuDenyPolicy", () => {
+suite("GuDenyPolicy", () => {
   test("if a single action is provided, the resulting resource's action will be a single item", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(

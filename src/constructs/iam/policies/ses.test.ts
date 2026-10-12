@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuSESSenderPolicy } from "./ses";
 
-describe("GuSESSenderPolicy", () => {
-  it("should have a policy that is tightly scoped", () => {
+suite("GuSESSenderPolicy", () => {
+  test("should have a policy that is tightly scoped", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuSESSenderPolicy(stack, { sendingAddress: "no-reply@theguardian.com" }));
 

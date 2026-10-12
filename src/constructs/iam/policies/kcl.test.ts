@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuKCLPolicy } from "./kcl";
 
-describe("GuKCLPolicy", () => {
-  it("should create a policy granting sufficient permissions for the KCL", () => {
+suite("GuKCLPolicy", () => {
+  test("should create a policy granting sufficient permissions for the KCL", () => {
     const stack = simpleGuStackForTesting();
 
     const policy = new GuKCLPolicy(stack, "StreamFooKCLPolicy", { streamName: "streamFoo", applicationName: "appBar" });

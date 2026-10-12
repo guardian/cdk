@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuLogShippingPolicy } from "./log-shipping";
 
-describe("The GuLogShippingPolicy singleton class", () => {
-  it("creates a policy restricted to a kinesis stream defined in a parameter", () => {
+suite("The GuLogShippingPolicy singleton class", () => {
+  test("creates a policy restricted to a kinesis stream defined in a parameter", () => {
     const stack = simpleGuStackForTesting();
 
     const logShippingPolicy = GuLogShippingPolicy.getInstance(stack);
@@ -50,7 +51,7 @@ describe("The GuLogShippingPolicy singleton class", () => {
     });
   });
 
-  it("will only be defined once in a stack, even when attached to multiple roles", () => {
+  test("will only be defined once in a stack, even when attached to multiple roles", (t) => {
     const stack = simpleGuStackForTesting();
 
     const logShippingPolicy = GuLogShippingPolicy.getInstance(stack);
@@ -60,10 +61,10 @@ describe("The GuLogShippingPolicy singleton class", () => {
     const template = Template.fromStack(stack);
     template.resourceCountIs("AWS::IAM::Policy", 1);
     template.resourceCountIs("AWS::IAM::Role", 2);
-    expect(template.toJSON()).toMatchSnapshot();
+    t.assert.snapshot(template.toJSON());
   });
 
-  it("works across multiple stacks", () => {
+  test("works across multiple stacks", () => {
     const stack1 = simpleGuStackForTesting();
     const stack2 = simpleGuStackForTesting();
 

@@ -1,10 +1,11 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuGetS3ObjectsPolicy } from "../policies";
 import { GitHubOidcProvider, GuGithubActionsRole } from "./github-actions";
 
-describe("The GitHubActionsRole construct", () => {
-  it("should create the correct resources with minimal config", () => {
+suite("The GitHubActionsRole construct", () => {
+  test("should create the correct resources with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     new GuGithubActionsRole(stack, {
       policies: [
@@ -14,10 +15,10 @@ describe("The GitHubActionsRole construct", () => {
       ],
     });
 
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should be possible to limit which repositories can assume the role", () => {
+  test("should be possible to limit which repositories can assume the role", () => {
     const stack = simpleGuStackForTesting();
     new GuGithubActionsRole(stack, {
       policies: [
@@ -48,7 +49,7 @@ describe("The GitHubActionsRole construct", () => {
   });
 
   // See https://github.blog/changelog/2026-04-23-immutable-subject-claims-for-github-actions-oidc-tokens/
-  it("should be possible to use the immutable OIDC subject claim format", () => {
+  test("should be possible to use the immutable OIDC subject claim format", () => {
     const stack = simpleGuStackForTesting();
     new GuGithubActionsRole(stack, {
       policies: [
@@ -79,8 +80,8 @@ describe("The GitHubActionsRole construct", () => {
   });
 });
 
-describe("The GitHubOidcProvider construct", () => {
-  it("should be tagged correctly", () => {
+suite("The GitHubOidcProvider construct", () => {
+  test("should be tagged correctly", () => {
     const stack = simpleGuStackForTesting();
     new GitHubOidcProvider(stack);
 

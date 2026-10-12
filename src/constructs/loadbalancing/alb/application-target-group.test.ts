@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration, Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
@@ -16,8 +17,8 @@ const app: AppIdentity = {
   app: "testing",
 };
 
-describe("The GuApplicationTargetGroup class", () => {
-  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+suite("The GuApplicationTargetGroup class", () => {
+  test("should use the AppIdentity to form its auto-generated logicalId", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
@@ -27,7 +28,7 @@ describe("The GuApplicationTargetGroup class", () => {
     );
   });
 
-  it("should apply the App tag", () => {
+  test("should apply the App tag", () => {
     const stack = simpleGuStackForTesting();
     new GuApplicationTargetGroup(stack, "ApplicationTargetGroup", { ...app, vpc });
 
@@ -99,10 +100,10 @@ describe("The GuApplicationTargetGroup class", () => {
     });
   });
 
-  test("An illegal healthcheck is flagged", () => {
+  test("An illegal healthcheck is flagged", (t) => {
     const stack = simpleGuStackForTesting();
 
-    expect(() => {
+    t.assert.throws(() => {
       new GuApplicationTargetGroup(stack, "TargetGroup", {
         ...app,
         vpc,
@@ -111,6 +112,6 @@ describe("The GuApplicationTargetGroup class", () => {
           timeout: Duration.seconds(10),
         },
       });
-    }).toThrow(new Error("Illegal healthcheck configuration: timeout (10) must be lower than interval (10)"));
+    }, new Error("Illegal healthcheck configuration: timeout (10) must be lower than interval (10)"));
   });
 });

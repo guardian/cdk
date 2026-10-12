@@ -1,11 +1,12 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import type { NoMonitoring } from "../../constructs/cloudwatch";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuSnsLambdaExperimental } from "./sns-lambda";
 
-describe("The GuSnsLambda pattern", () => {
-  it("should create the correct resources for a new stack with minimal config", () => {
+suite("The GuSnsLambda pattern", () => {
+  test("should create the correct resources for a new stack with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -17,10 +18,10 @@ describe("The GuSnsLambda pattern", () => {
       app: "testing",
     };
     new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should inherit an existing SNS topic correctly", () => {
+  test("should inherit an existing SNS topic correctly", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -36,7 +37,7 @@ describe("The GuSnsLambda pattern", () => {
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
   });
 
-  it("should not generate a new SNS Topic if an externalTopicName is passed via existingSnsTopic", () => {
+  test("should not generate a new SNS Topic if an externalTopicName is passed via existingSnsTopic", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -55,7 +56,7 @@ describe("The GuSnsLambda pattern", () => {
     template.resourceCountIs("AWS::SNS::Topic", 0);
   });
 
-  it("should create an alarm if monitoring configuration is provided", () => {
+  test("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {
       fileName: "lambda.zip",
@@ -72,7 +73,7 @@ describe("The GuSnsLambda pattern", () => {
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
-  it("should send messages to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+  test("should send messages to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -91,7 +92,7 @@ describe("The GuSnsLambda pattern", () => {
     });
   });
 
-  it("should send messages to an alias if the enableVersioning prop is set to true", () => {
+  test("should send messages to an alias if the enableVersioning prop is set to true", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {

@@ -1,10 +1,11 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuAnghammaradTopicParameter } from "../../core";
 import { GuAnghammaradSenderPolicy } from "./anghammarad";
 
-describe("GuAnghammaradSenderPolicy", () => {
-  it("should add a parameter to the stack if it is not already defined", () => {
+suite("GuAnghammaradSenderPolicy", () => {
+  test("should add a parameter to the stack if it is not already defined", () => {
     const stack = simpleGuStackForTesting();
 
     // add the policy
@@ -12,7 +13,7 @@ describe("GuAnghammaradSenderPolicy", () => {
     Template.fromStack(stack).hasParameter("AnghammaradSnsArn", {});
   });
 
-  it("should not add a parameter to the stack if it already exists", () => {
+  test("should not add a parameter to the stack if it already exists", () => {
     const stack = simpleGuStackForTesting();
 
     // explicitly add an AnghammaradTopicParameter
@@ -23,7 +24,7 @@ describe("GuAnghammaradSenderPolicy", () => {
     Template.fromStack(stack).hasParameter("AnghammaradSnsArn", {});
   });
 
-  it("should define a policy that would allow writing to SNS", () => {
+  test("should define a policy that would allow writing to SNS", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, GuAnghammaradSenderPolicy.getInstance(stack));
 

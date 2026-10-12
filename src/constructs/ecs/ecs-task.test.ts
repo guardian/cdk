@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import type { ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { SecurityGroup, Subnet, Vpc } from "aws-cdk-lib/aws-ec2";
@@ -23,8 +24,8 @@ const testPolicy = new PolicyStatement({
   resources: ["databaseSecretArn"],
 });
 
-describe("The GuEcsTask pattern", () => {
-  it("should use the specified container", () => {
+suite("The GuEcsTask pattern", () => {
+  test("should use the specified container", () => {
     const stack = simpleGuStackForTesting();
     const vpc = makeVpc(stack);
     new GuEcsTask(stack, "test-ecs-task", {
@@ -59,15 +60,15 @@ describe("The GuEcsTask pattern", () => {
     });
   };
 
-  it("should create the correct resources with lots of config", () => {
+  test("should create the correct resources with lots of config", (t) => {
     const stack = simpleGuStackForTesting();
 
     generateComplexStack(stack, "ecs-test", makeVpc(stack));
 
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should support having more than one scheduled task in the same stack", () => {
+  test("should support having more than one scheduled task in the same stack", () => {
     const stack = simpleGuStackForTesting();
 
     const vpc = makeVpc(stack);
@@ -81,7 +82,7 @@ describe("The GuEcsTask pattern", () => {
     template.hasGuTaggedResource("AWS::ECS::TaskDefinition", { appIdentity: { app: "ecs-test2" } });
   });
 
-  it("should support overriding the subnets used by the task", () => {
+  test("should support overriding the subnets used by the task", (t) => {
     const stack = simpleGuStackForTesting();
 
     const subnets = [
@@ -90,6 +91,6 @@ describe("The GuEcsTask pattern", () => {
     ];
     generateComplexStack(stack, "ecs-test", makeVpc(stack), subnets);
 
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

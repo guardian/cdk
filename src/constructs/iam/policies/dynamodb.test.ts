@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuDynamoDBReadPolicy, GuDynamoDBWritePolicy } from "./dynamodb";
 
-describe("The GuDynamoDBReadPolicy construct", () => {
-  it("creates the correct policy", () => {
+suite("The GuDynamoDBReadPolicy construct", () => {
+  test("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuDynamoDBReadPolicy(stack, "ReadMyTablePolicy", { tableName: "MyTable" }));
 
@@ -62,8 +63,8 @@ describe("The GuDynamoDBReadPolicy construct", () => {
   });
 });
 
-describe("The GuDynamoDBWritePolicy construct", () => {
-  it("creates the correct policy", () => {
+suite("The GuDynamoDBWritePolicy construct", () => {
+  test("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuDynamoDBWritePolicy(stack, "WriteMyTablePolicy", { tableName: "MyTable" }));
 

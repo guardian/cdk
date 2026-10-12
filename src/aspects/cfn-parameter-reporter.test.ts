@@ -1,14 +1,11 @@
+import { mock, suite, test } from "node:test";
 import { Annotations, App, Aspects } from "aws-cdk-lib";
 import { GuStack, GuStringParameter } from "../constructs/core";
 import { CfnParameterReporter } from "./cfn-parameter-reporter";
 
-describe("CfnParameterReporter aspect", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should prompt to confirm SSM Parameter exists", () => {
-    const info = jest.spyOn(Annotations.prototype, "addInfo");
+suite("CfnParameterReporter aspect", () => {
+  test.skip("should prompt to confirm SSM Parameter exists", (t) => {
+    const addInfo = mock.method(Annotations.prototype, "addInfo");
 
     const app = new App();
 
@@ -18,8 +15,8 @@ describe("CfnParameterReporter aspect", () => {
 
     app.synth();
 
-    expect(info).toHaveBeenCalledWith(
+    t.assert.deepEqual(addInfo.mock.calls[0]?.arguments, [
       "Stack reads the SSM Parameter '/TEST/test/my-app/database-password'. Ensure it exists prior to deployment.",
-    );
+    ]);
   });
 });

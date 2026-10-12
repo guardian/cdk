@@ -1,43 +1,41 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
-
-exports[`The GuAppAwareConstruct mixin should add the app tag 1`] = `
+exports[`The GuAppAwareConstruct mixin > should add the app tag 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
-      "GuStack",
+      "GuStack"
     ],
-    "gu:cdk:version": "TEST",
+    "gu:cdk:version": "TEST"
   },
   "Resources": {
     "MyBucketTest262E966E": {
-      "DeletionPolicy": "Retain",
+      "Type": "AWS::S3::Bucket",
       "Properties": {
         "Tags": [
           {
             "Key": "App",
-            "Value": "Test",
+            "Value": "Test"
           },
           {
             "Key": "gu:cdk:version",
-            "Value": "TEST",
+            "Value": "TEST"
           },
           {
             "Key": "gu:repo",
-            "Value": "guardian/cdk",
+            "Value": "guardian/cdk"
           },
           {
             "Key": "Stack",
-            "Value": "test-stack",
+            "Value": "test-stack"
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
+            "Value": "TEST"
+          }
+        ]
       },
-      "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
-    },
-  },
+      "DeletionPolicy": "Retain"
+    }
+  }
 }
 `;

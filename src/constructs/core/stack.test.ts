@@ -1,3 +1,5 @@
+import { deepStrictEqual } from "node:assert";
+import { suite, test } from "node:test";
 import { App } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
@@ -7,8 +9,8 @@ import { GuTemplate } from "../../utils/test";
 import type { GuStackProps } from "./stack";
 import { GuStack } from "./stack";
 
-describe("The GuStack construct", () => {
-  it("should apply the stack and stage tags to resources added to it", () => {
+suite("The GuStack construct", () => {
+  test("should apply the stack and stage tags to resources added to it", () => {
     const stack = new GuStack(new App(), "Test", { stack: "test", stage: "TEST" });
 
     new Role(stack, "MyRole", {
@@ -18,7 +20,7 @@ describe("The GuStack construct", () => {
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::IAM::Role");
   });
 
-  it("should not apply any tags when withoutTags is set to true", () => {
+  test("should not apply any tags when withoutTags is set to true", () => {
     const stack = new GuStack(new App(), "Test", { stack: "test", stage: "TEST", withoutTags: true });
 
     new Role(stack, "MyRole", {
@@ -30,7 +32,7 @@ describe("The GuStack construct", () => {
     });
   });
 
-  it("should prefer context values for repository information", () => {
+  test("should prefer context values for repository information", () => {
     const stack = new GuStack(
       new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repository" } }),
       "Test",
@@ -54,7 +56,7 @@ describe("The GuStack construct", () => {
     });
   });
 
-  it("should expose the repository information as a property", () => {
+  test("should expose the repository information as a property", () => {
     const stack = new GuStack(
       new App({ context: { [ContextKeys.REPOSITORY_URL]: "https://github.com/guardian/my-repository" } }),
       "Test",
@@ -64,10 +66,10 @@ describe("The GuStack construct", () => {
       },
     );
 
-    expect(stack.repositoryName).toEqual("guardian/my-repository");
+    deepStrictEqual(stack.repositoryName, "guardian/my-repository");
   });
 
-  it("can persist the logicalId for any resource (consumer's POV)", () => {
+  test("can persist the logicalId for any resource (consumer's POV)", () => {
     class MigratingStack extends GuStack {
       // eslint-disable-next-line custom-rules/valid-constructors -- for testing purposes
       constructor(app: App, id: string, props: GuStackProps) {

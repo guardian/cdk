@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuSubnetListParameter } from "./vpc";
 
-describe("The GuSubnetListParameter class", () => {
-  it("should combine override and prop values", () => {
+suite("The GuSubnetListParameter class", () => {
+  test("should combine override and prop values", () => {
     const stack = simpleGuStackForTesting();
 
     new GuSubnetListParameter(stack, "Parameter", { description: "This is a test" });

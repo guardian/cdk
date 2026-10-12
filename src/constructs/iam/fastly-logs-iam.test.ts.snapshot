@@ -1,0 +1,99 @@
+exports[`The GuFastlyLogsIamRole construct > correctly wires up the policy 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuFastlyCustomerIdParameter",
+      "GuFastlyLogsIamRole",
+      "GuAllowPolicy"
+    ],
+    "gu:cdk:version": "TEST"
+  },
+  "Parameters": {
+    "FastlyCustomerId": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/account/external/fastly/customer.id",
+      "Description": "SSM parameter containing the Fastly Customer ID. Can be obtained from https://manage.fastly.com/account/company by an admin"
+    }
+  },
+  "Resources": {
+    "GuFastlyLogsIamRoleE2DAFAB3": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": {
+                    "Ref": "FastlyCustomerId"
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::717331877981:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    },
+    "GuFastlyLogsIamRoleAllowPolicy00A91AE8": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:PutObject",
+                "s3:AbortMultipartUpload"
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::test/TEST/stack/app/*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GuFastlyLogsIamRoleAllowPolicy00A91AE8",
+        "Roles": [
+          {
+            "Ref": "GuFastlyLogsIamRoleE2DAFAB3"
+          }
+        ]
+      }
+    }
+  }
+}
+`;

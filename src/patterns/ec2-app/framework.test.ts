@@ -1,10 +1,11 @@
+import { suite, test } from "node:test";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { InstanceClass, InstanceSize, InstanceType, UserData } from "aws-cdk-lib/aws-ec2";
 import { AccessScope } from "../../constants";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuNodeApp, GuPlayApp, GuPlayWorkerApp } from "./framework";
 
-describe("Framework level EC2 app patterns", () => {
+suite("Framework level EC2 app patterns", () => {
   test("GuNodeApp exposes port 3000", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuNodeApp(stack, {
@@ -28,7 +29,7 @@ describe("Framework level EC2 app patterns", () => {
     });
   });
 
-  it("GuPlayApp exposes port 9000", function () {
+  test("GuPlayApp exposes port 9000", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuPlayApp(stack, {
       app: "PlayApp",
@@ -51,7 +52,7 @@ describe("Framework level EC2 app patterns", () => {
     });
   });
 
-  it("GuPlayWorkerApp has no internal or external access", function () {
+  test("GuPlayWorkerApp has no internal or external access", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuPlayWorkerApp(stack, {
       app: "PlayApp",

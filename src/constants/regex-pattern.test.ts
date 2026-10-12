@@ -1,15 +1,16 @@
+import { suite, test } from "node:test";
 import { RegexPattern } from "./regex-pattern";
 
-describe("the regex patterns", () => {
-  it("should successfully regex against valid ARNs", () => {
+suite("the regex patterns", () => {
+  test("should successfully regex against valid ARNs", (t) => {
     const regex = new RegExp(RegexPattern.ARN);
-    expect(regex.test("fooooo")).toBeFalsy();
-    expect(regex.test("arn:aws:rds:us-east-2:123456789012:db:my-mysql-instance-1")).toBeTruthy();
+    t.assert.equal(regex.test("fooooo"), false);
+    t.assert.equal(regex.test("arn:aws:rds:us-east-2:123456789012:db:my-mysql-instance-1"), true);
   });
 
-  it("should successfully regex against ACM ARNs", () => {
+  test("should successfully regex against ACM ARNs", (t) => {
     const regex = new RegExp(RegexPattern.ACM_ARN);
-    expect(regex.test("arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc")).toBeTruthy();
-    expect(regex.test("arn:aws:acm:eu-west-1:000000000000:tls/123abc-0000-0000-0000-123abc")).toBeFalsy();
+    t.assert.equal(regex.test("arn:aws:acm:eu-west-1:000000000000:certificate/123abc-0000-0000-0000-123abc"), true);
+    t.assert.equal(regex.test("arn:aws:acm:eu-west-1:000000000000:tls/123abc-0000-0000-0000-123abc"), false);
   });
 });

@@ -1,3 +1,5 @@
+import { strictEqual } from "node:assert";
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
 import { Bucket } from "aws-cdk-lib/aws-s3";
@@ -21,26 +23,26 @@ class TestAppAwareConstruct extends GuAppAwareConstruct(Bucket) {
   }
 }
 
-describe("The GuAppAwareConstruct mixin", () => {
+suite("The GuAppAwareConstruct mixin", () => {
   // demonstrates usage of `GuAppAwareConstruct`
-  it("should throw if no app identifier is provided", () => {
+  test("should throw if no app identifier is provided", (t) => {
     const stack = simpleGuStackForTesting();
 
-    expect(() => {
+    t.assert.throws(() => {
       new TestConstruct(stack, "MyBucket", {});
-    }).toThrow("Cannot use the GuAppAwareConstruct mixin without an AppIdentity");
+    }, /Cannot use the GuAppAwareConstruct mixin without an AppIdentity/);
   });
 
-  it("should suffix the id with the app identifier", () => {
+  test("should suffix the id with the app identifier", () => {
     const stack = simpleGuStackForTesting();
     const bucket = new TestAppAwareConstruct(stack, "MyBucket", { app: "Test" });
 
-    expect(bucket.idWithApp).toBe("MyBucketTest");
+    strictEqual(bucket.idWithApp, "MyBucketTest");
   });
 
-  it("should add the app tag", () => {
+  test("should add the app tag", (t) => {
     const stack = simpleGuStackForTesting();
     new TestAppAwareConstruct(stack, "MyBucket", { app: "Test" });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

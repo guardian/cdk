@@ -1,21 +1,22 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { FASTLY_AWS_ACCOUNT_ID } from "../../../../constants";
 import { GuKinesisStream } from "../../../../constructs/kinesis";
 import { simpleGuStackForTesting } from "../../../../utils/test";
 import { GuFastlyKinesisLogRoleExperimental } from "./fastly-kinesis-log";
 
-describe("The GuFastlyKinesisLogRole construct", () => {
-  it("correctly wires up the policy", () => {
+suite("The GuFastlyKinesisLogRole construct", () => {
+  test("correctly wires up the policy", (t) => {
     const stack = simpleGuStackForTesting();
     const testStream = new GuKinesisStream(stack, "testStream");
     new GuFastlyKinesisLogRoleExperimental(stack, "testKinesisLogRole", {
       stream: testStream,
       roleName: "writeToKinesisRoleTest",
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("assumes the correct role", () => {
+  test("assumes the correct role", () => {
     const stack = simpleGuStackForTesting();
     const testStream = new GuKinesisStream(stack, "testStream");
     new GuFastlyKinesisLogRoleExperimental(stack, "testKinesisLogRole", {
@@ -56,7 +57,7 @@ describe("The GuFastlyKinesisLogRole construct", () => {
     });
   });
 
-  it("allows more than one role in the stack", () => {
+  test("allows more than one role in the stack", () => {
     const stack = simpleGuStackForTesting();
     const testStreamOne = new GuKinesisStream(stack, "testStreamOne");
     const testStreamTwo = new GuKinesisStream(stack, "testStreamTwo");

@@ -1,0 +1,96 @@
+exports[`The GitHubActionsRole construct > should create the correct resources with minimal config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuGetS3ObjectsPolicy",
+      "GuGithubActionsRole"
+    ],
+    "gu:cdk:version": "TEST"
+  },
+  "Resources": {
+    "GetObjectsDE66E0D1": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::super-secret-stuff/*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GetObjectsDE66E0D1",
+        "Roles": [
+          {
+            "Ref": "GithubActionsRoleF5CC769F"
+          }
+        ]
+      }
+    },
+    "GithubActionsRoleF5CC769F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": "repo:guardian/*"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":oidc-provider/token.actions.githubusercontent.com"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "GithubActionsRoleGithubActionsRoleArnC13D9654": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GithubActionsRoleF5CC769F",
+          "Arn"
+        ]
+      }
+    }
+  }
+}
+`;

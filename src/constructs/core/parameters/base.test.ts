@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuArnParameter, GuParameter, GuStringParameter } from "./base";
 
-describe("The GuParameter class", () => {
-  it("sets the type as passed through by default", () => {
+suite("The GuParameter class", () => {
+  test("sets the type as passed through by default", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { type: "Boolean" });
@@ -13,7 +14,7 @@ describe("The GuParameter class", () => {
     });
   });
 
-  it("wraps the type with SSM utility is fromSSM is true", () => {
+  test("wraps the type with SSM utility is fromSSM is true", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true });
@@ -24,7 +25,7 @@ describe("The GuParameter class", () => {
     });
   });
 
-  it("defaults to string if SSM is true but no type provided", () => {
+  test("defaults to string if SSM is true but no type provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { fromSSM: true });
@@ -35,7 +36,7 @@ describe("The GuParameter class", () => {
     });
   });
 
-  it("passes through other values without modification", () => {
+  test("passes through other values without modification", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true, description: "This is a test" });
@@ -47,7 +48,7 @@ describe("The GuParameter class", () => {
     });
   });
 
-  it("when from SSM, has a default SSM path to remind users that it's an SSM parameter", () => {
+  test("when from SSM, has a default SSM path to remind users that it's an SSM parameter", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { fromSSM: true });
@@ -57,7 +58,7 @@ describe("The GuParameter class", () => {
     });
   });
 
-  it("default SSM path gets overridden by prop", () => {
+  test("default SSM path gets overridden by prop", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { fromSSM: true, default: "/FOO/BAR" });
@@ -67,7 +68,7 @@ describe("The GuParameter class", () => {
     });
   });
 
-  it("when not from SSM, has no default", () => {
+  test("when not from SSM, has no default", () => {
     const stack = simpleGuStackForTesting();
 
     new GuParameter(stack, "Parameter", { fromSSM: false });
@@ -78,8 +79,8 @@ describe("The GuParameter class", () => {
   });
 });
 
-describe("The GuStringParameter class", () => {
-  it("should set the type to string", () => {
+suite("The GuStringParameter class", () => {
+  test("should set the type to string", () => {
     const stack = simpleGuStackForTesting();
 
     new GuStringParameter(stack, "Parameter", { description: "This is a test" });
@@ -91,8 +92,8 @@ describe("The GuStringParameter class", () => {
   });
 });
 
-describe("The GuArnParameter class", () => {
-  it("should constrain input to an ARN allowed pattern", () => {
+suite("The GuArnParameter class", () => {
+  test("should constrain input to an ARN allowed pattern", () => {
     const stack = simpleGuStackForTesting();
 
     new GuArnParameter(stack, "Parameter", { description: "This is a test" });

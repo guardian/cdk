@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment -- test deals with template JSON */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access -- test deals with template JSON */
 
+import { suite, test } from "node:test";
 import { Aspects, Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import type { BucketProps } from "aws-cdk-lib/aws-s3";
@@ -26,8 +27,8 @@ class NotGuExampleConstruct extends Bucket {
   }
 }
 
-describe("Metadata aspect", () => {
-  it("should include a list of Guardian constructs", () => {
+suite("Metadata aspect", () => {
+  test("should include a list of Guardian constructs", (t) => {
     const stack = new Stack();
     new GuExampleConstruct(stack, "some-id", {});
     new NotGuExampleConstruct(stack, "some-other-id", {});
@@ -35,15 +36,15 @@ describe("Metadata aspect", () => {
     Aspects.of(stack).add(new Metadata(stack));
 
     const constructs = Template.fromStack(stack).toJSON().Metadata["gu:cdk:constructs"];
-    expect(constructs).toEqual(["GuExampleConstruct"]);
+    t.assert.deepEqual(constructs, ["GuExampleConstruct"]);
   });
 
-  it("should include the Guardian CDK version", () => {
+  test("should include the Guardian CDK version", (t) => {
     const stack = simpleGuStackForTesting();
 
     Aspects.of(stack).add(new Metadata(stack));
 
     const version = Template.fromStack(stack).toJSON().Metadata["gu:cdk:version"];
-    expect(version).toBeDefined();
+    t.assert.equal(version !== undefined, true);
   });
 });

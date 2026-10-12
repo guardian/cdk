@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { MockIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { simpleGuStackForTesting } from "../../utils/test";
@@ -15,18 +16,18 @@ function setupBasicRestApi(stack: GuStack): RestApi {
   return restApi;
 }
 
-describe("The GuApiGateway5xxPercentageAlarm construct", () => {
-  it("should create the correct alarm resource with minimal config", () => {
+suite("The GuApiGateway5xxPercentageAlarm construct", () => {
+  test("should create the correct alarm resource with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const props = {
       tolerated5xxPercentage: 1,
       snsTopicName: "test-topic",
     };
     new GuApiGateway5xxPercentageAlarm(stack, { ...app, apiGatewayInstance: setupBasicRestApi(stack), ...props });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should use a custom description if one is provided", () => {
+  test("should use a custom description if one is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {
       alarmDescription: "test-custom-alarm-description",
@@ -39,7 +40,7 @@ describe("The GuApiGateway5xxPercentageAlarm construct", () => {
     });
   });
 
-  it("should use a custom alarm name if one is provided", () => {
+  test("should use a custom alarm name if one is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {
       alarmName: "test-custom-alarm-name",
@@ -52,7 +53,7 @@ describe("The GuApiGateway5xxPercentageAlarm construct", () => {
     });
   });
 
-  it("should adjust the number of evaluation periods if a custom value is provided", () => {
+  test("should adjust the number of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {
       tolerated5xxPercentage: 1,

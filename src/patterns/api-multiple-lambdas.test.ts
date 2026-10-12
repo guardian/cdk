@@ -1,11 +1,12 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
 import { GuApiGatewayWithLambdaByPath } from "./api-multiple-lambdas";
 
-describe("The GuApiGatewayWithLambdaByPath pattern", () => {
-  it("should create the correct resources with minimal config", () => {
+suite("The GuApiGatewayWithLambdaByPath pattern", () => {
+  test("should create the correct resources with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const defaultProps = {
       handler: "handler.ts",
@@ -55,10 +56,10 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
         },
       ],
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should create an alarm if the relevant monitoring configuration is provided", () => {
+  test("should create an alarm if the relevant monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       handler: "handler.ts",
@@ -90,7 +91,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     );
   });
 
-  it("should should route requests to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+  test("should should route requests to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
     const stack = simpleGuStackForTesting();
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       handler: "handler.ts",
@@ -143,7 +144,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     });
   });
 
-  it("should route requests to an alias if the enableVersioning prop is set to true", () => {
+  test("should route requests to an alias if the enableVersioning prop is set to true", () => {
     const stack = simpleGuStackForTesting();
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       enableVersioning: true,
