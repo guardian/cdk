@@ -1,14 +1,15 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuFastlyLogsIamRole } from "./fastly-logs-iam";
 
-describe("The GuFastlyLogsIamRole construct", () => {
-  it("correctly wires up the policy", () => {
+suite("The GuFastlyLogsIamRole construct", () => {
+  test("correctly wires up the policy", (t) => {
     const stack = simpleGuStackForTesting();
     new GuFastlyLogsIamRole(stack, {
       bucketName: "test",
       path: "TEST/stack/app/*",
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

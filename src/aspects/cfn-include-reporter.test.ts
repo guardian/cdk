@@ -1,16 +1,13 @@
+import { mock, suite, test } from "node:test";
 import { join } from "path";
 import { Annotations, App, Aspects, Stack } from "aws-cdk-lib";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import { LibraryInfo } from "../constants";
 import { CfnIncludeReporter } from "./cfn-include-reporter";
 
-describe("CfnIncludeReporter aspect", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("prompts to check for stateful resources", () => {
-    const warning = jest.spyOn(Annotations.prototype, "addWarning");
+suite("CfnIncludeReporter aspect", () => {
+  test("prompts to check for stateful resources", (t) => {
+    const addWarning = mock.method(Annotations.prototype, "addWarning");
 
     const app = new App();
 
@@ -21,13 +18,13 @@ describe("CfnIncludeReporter aspect", () => {
 
     app.synth();
 
-    expect(warning).toHaveBeenCalledWith(
+    t.assert.deepEqual(addWarning.mock.calls[0]?.arguments, [
       `As you're migrating a YAML/JSON template to ${LibraryInfo.NAME}, be sure to check for any stateful resources! See https://github.com/guardian/cdk/blob/main/docs/stateful-resources.md.`,
-    );
+    ]);
   });
 
-  it("does not prompt to check for stateful resources", () => {
-    const warning = jest.spyOn(Annotations.prototype, "addWarning");
+  test("does not prompt to check for stateful resources", (t) => {
+    const addWarning = mock.method(Annotations.prototype, "addWarning");
 
     const app = new App();
 
@@ -36,6 +33,6 @@ describe("CfnIncludeReporter aspect", () => {
 
     app.synth();
 
-    expect(warning).not.toHaveBeenCalled();
+    t.assert.deepEqual(addWarning.mock.calls.length, 0);
   });
 });

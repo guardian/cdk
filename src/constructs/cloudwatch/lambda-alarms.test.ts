@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
@@ -5,8 +6,8 @@ import { simpleGuStackForTesting } from "../../utils/test";
 import { GuLambdaFunction } from "../lambda";
 import { GuLambdaErrorPercentageAlarm } from "./lambda-alarms";
 
-describe("GuLambdaThrottlingAlarm construct", () => {
-  it("should match snapshot", () => {
+suite("GuLambdaThrottlingAlarm construct", () => {
+  test("should match snapshot", (t) => {
     const stack = simpleGuStackForTesting();
     new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -16,12 +17,12 @@ describe("GuLambdaThrottlingAlarm construct", () => {
       throttlingMonitoring: { snsTopicName: "alerts-topic" },
     });
 
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });
 
-describe("The GuLambdaErrorPercentageAlarm construct", () => {
-  it("should create the correct alarm resource with minimal config", () => {
+suite("The GuLambdaErrorPercentageAlarm construct", () => {
+  test("should create the correct alarm resource with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -35,10 +36,10 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
       lambda: lambda,
     };
     new GuLambdaErrorPercentageAlarm(stack, "my-lambda-function", props);
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should adjust the length of evaluation periods if a custom value is provided", () => {
+  test("should adjust the length of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -66,7 +67,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
   });
 
-  it("should adjust the number of evaluation periods if a custom value is provided", () => {
+  test("should adjust the number of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -86,7 +87,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
   });
 
-  it("should use a custom description if one is provided", () => {
+  test("should use a custom description if one is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -106,7 +107,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     });
   });
 
-  it("should use a custom alarm name if one is provided", () => {
+  test("should use a custom alarm name if one is provided", () => {
     const stack = simpleGuStackForTesting();
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",

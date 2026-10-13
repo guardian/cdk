@@ -1,17 +1,18 @@
+import { suite, test } from "node:test";
 import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Peer, Port, Vpc } from "aws-cdk-lib/aws-ec2";
 import { GuTemplate, simpleGuStackForTesting } from "../../../utils/test";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "./base";
 
-describe("The GuSecurityGroup class", () => {
+suite("The GuSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
   });
 
-  it("applies the Stack, Stage and App tags", () => {
+  test("applies the Stack, Stage and App tags", () => {
     const stack = simpleGuStackForTesting();
     new GuSecurityGroup(stack, "TestSecurityGroup", {
       vpc,
@@ -21,7 +22,7 @@ describe("The GuSecurityGroup class", () => {
     GuTemplate.fromStack(stack).hasGuTaggedResource("AWS::EC2::SecurityGroup", { appIdentity: { app: "testing" } });
   });
 
-  it("adds the ingresses passed in through props", () => {
+  test("adds the ingresses passed in through props", () => {
     const stack = simpleGuStackForTesting();
 
     new GuSecurityGroup(stack, "TestSecurityGroup", {
@@ -53,7 +54,7 @@ describe("The GuSecurityGroup class", () => {
     });
   });
 
-  it("adds the egresses passed in through props", () => {
+  test("adds the egresses passed in through props", () => {
     const stack = simpleGuStackForTesting();
 
     new GuSecurityGroup(stack, "TestSecurityGroup", {
@@ -86,27 +87,27 @@ describe("The GuSecurityGroup class", () => {
     });
   });
 
-  it("should not allow an ingress rule for port 22", () => {
+  test("should not allow an ingress rule for port 22", (t) => {
     const stack = simpleGuStackForTesting();
 
-    expect(() => {
+    t.assert.throws(() => {
       new GuSecurityGroup(stack, "TestSecurityGroup", {
         vpc,
         ingresses: [{ range: Peer.anyIpv4(), description: "SSH access", port: 22 }],
         app: "testing",
       });
-    }).toThrow(new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
+    }, new Error("An ingress rule on port 22 is not allowed. Prefer to setup SSH via SSM."));
   });
 });
 
-describe("The GuHttpsEgressSecurityGroup class", () => {
+suite("The GuHttpsEgressSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "test",
     availabilityZones: [""],
     publicSubnetIds: [""],
   });
 
-  it("adds global access on 443 by default", () => {
+  test("adds global access on 443 by default", () => {
     const stack = simpleGuStackForTesting();
 
     GuHttpsEgressSecurityGroup.forVpc(stack, { vpc, app: "testing" });

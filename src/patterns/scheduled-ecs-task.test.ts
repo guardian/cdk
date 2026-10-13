@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
@@ -15,8 +16,8 @@ const makeVpc = (stack: GuStack) =>
     privateSubnetIds: ["abc-123"],
   });
 
-describe("The GuScheduledEcsTask pattern", () => {
-  it("should use the specified schedule", () => {
+suite("The GuScheduledEcsTask pattern", () => {
+  test("should use the specified schedule", (t) => {
     const stack = simpleGuStackForTesting();
     const vpc = makeVpc(stack);
     new GuScheduledEcsTask(stack, "test", {
@@ -29,6 +30,6 @@ describe("The GuScheduledEcsTask pattern", () => {
       containerInsights: ContainerInsights.DISABLED,
     });
 
-    Template.fromStack(stack).hasResourceProperties("AWS::Events::Rule", { ScheduleExpression: "rate(1 minute)" });
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

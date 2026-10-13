@@ -106,8 +106,8 @@ function createPackageJson(outputDirectory: string): void {
     version: "0.0.0",
     private: true,
     scripts: {
-      test: "jest",
-      "test-update": "jest -u",
+      test: "NODE_ENV=test jest",
+      "test-update": "NODE_ENV=test jest -u",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
       lint: "eslint lib/** bin/** --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
@@ -122,7 +122,6 @@ function createPackageJson(outputDirectory: string): void {
       transform: {
         "^.+\\.tsx?$": "ts-jest",
       },
-      setupFilesAfterEnv: ["./jest.setup.js"],
     },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));

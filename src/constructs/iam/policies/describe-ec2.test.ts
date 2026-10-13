@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuDescribeEC2Policy } from "./describe-ec2";
 
-describe("DescribeEC2Policy", () => {
-  it("creates the correct policy", () => {
+suite("DescribeEC2Policy", () => {
+  test("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
 
     const policy = GuDescribeEC2Policy.getInstance(stack);

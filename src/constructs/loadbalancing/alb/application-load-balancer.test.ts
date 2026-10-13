@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Stack } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
@@ -19,8 +20,8 @@ const app: AppIdentity = {
   app: "testing",
 };
 
-describe("The GuApplicationLoadBalancer class", () => {
-  it("should use the AppIdentity to form its auto-generated logicalId", () => {
+suite("The GuApplicationLoadBalancer class", () => {
+  test("should use the AppIdentity to form its auto-generated logicalId", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
@@ -30,7 +31,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     );
   });
 
-  it("should apply the App tag", () => {
+  test("should apply the App tag", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
@@ -67,7 +68,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     });
   });
 
-  it("creates an cloudformation output of the dns name", () => {
+  test("creates an cloudformation output of the dns name", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
@@ -75,7 +76,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     Template.fromStack(stack).hasOutput("ApplicationLoadBalancerTestingDnsName", {});
   });
 
-  it("adds headers that include the TLS version and the cipher suite used during negotiation", () => {
+  test("adds headers that include the TLS version and the cipher suite used during negotiation", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
@@ -90,7 +91,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     });
   });
 
-  it("drops invalid headers before forwarding requests to the target", () => {
+  test("drops invalid headers before forwarding requests to the target", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
@@ -105,7 +106,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     });
   });
 
-  it("has access logging enabled by default", () => {
+  test("has access logging enabled by default", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc });
 
@@ -129,7 +130,7 @@ describe("The GuApplicationLoadBalancer class", () => {
     });
   });
 
-  it("can have access logging disabled", () => {
+  test("can have access logging disabled", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", { ...app, vpc, withAccessLogging: false });
 

@@ -1,8 +1,10 @@
+import { deepStrictEqual } from "node:assert";
+import { suite, test } from "node:test";
 import { primaryVpcSsmParameterPaths, vpcSsmParameterPaths } from "./vpc";
 
-describe("VPC utils", () => {
+suite("VPC utils", () => {
   test("Identification of primary VPC SSM parameter paths", () => {
-    expect(primaryVpcSsmParameterPaths).toEqual([
+    deepStrictEqual(primaryVpcSsmParameterPaths, [
       "/account/vpc/primary/id",
       "/account/vpc/primary/subnets/private",
       "/account/vpc/primary/subnets/public",
@@ -10,7 +12,7 @@ describe("VPC utils", () => {
   });
 
   test("VPC SSM parameter path regex patterns", () => {
-    expect(vpcSsmParameterPaths).toEqual([
+    deepStrictEqual(vpcSsmParameterPaths, [
       new RegExp("^/account/vpc/([A-z0-9.-_])+/id$"),
       new RegExp("^/account/vpc/([A-z0-9.-_])+/subnets/private$"),
       new RegExp("^/account/vpc/([A-z0-9.-_])+/subnets/public$"),

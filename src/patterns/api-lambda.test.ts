@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
@@ -7,8 +8,8 @@ import { GuCname } from "../constructs/dns";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuApiLambda } from "./api-lambda";
 
-describe("The GuApiLambda pattern", () => {
-  it("should create the correct resources with minimal config", () => {
+suite("The GuApiLambda pattern", () => {
+  test("should create the correct resources with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     new GuApiLambda(stack, "lambda", {
@@ -22,10 +23,10 @@ describe("The GuApiLambda pattern", () => {
         description: "this is a test",
       },
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should create an alarm if monitoring configuration is provided", () => {
+  test("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     new GuApiLambda(stack, "lambda", {
       fileName: "my-app.zip",
@@ -44,7 +45,7 @@ describe("The GuApiLambda pattern", () => {
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
-  it("should allow us to link a domain name to a LambdaRestApi", () => {
+  test("should allow us to link a domain name to a LambdaRestApi", (t) => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const apiLambda = new GuApiLambda(stack, "lambda", {
@@ -74,10 +75,10 @@ describe("The GuApiLambda pattern", () => {
       domainName: "code.theguardian.com",
       resourceRecord: domain.domainNameAliasDomainName,
     });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should route requests to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+  test("should route requests to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     new GuApiLambda(stack, "lambda", {
@@ -117,7 +118,7 @@ describe("The GuApiLambda pattern", () => {
     });
   });
 
-  it("should route requests to an alias if the enableVersioning prop is set to true", () => {
+  test("should route requests to an alias if the enableVersioning prop is set to true", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     new GuApiLambda(stack, "lambda", {

@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { RuleTargetInput, Schedule } from "aws-cdk-lib/aws-events";
@@ -6,8 +7,8 @@ import type { NoMonitoring } from "../constructs/cloudwatch";
 import { simpleGuStackForTesting } from "../utils/test";
 import { GuScheduledLambda } from "./scheduled-lambda";
 
-describe("The GuScheduledLambda pattern", () => {
-  it("should create the correct resources with minimal config", () => {
+suite("The GuScheduledLambda pattern", () => {
+  test("should create the correct resources with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -20,10 +21,10 @@ describe("The GuScheduledLambda pattern", () => {
       app: "testing",
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should create an alarm if monitoring configuration is provided", () => {
+  test("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const props = {
       fileName: "lambda.zip",
@@ -41,7 +42,7 @@ describe("The GuScheduledLambda pattern", () => {
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
-  it("should invoke $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+  test("should invoke $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -63,7 +64,7 @@ describe("The GuScheduledLambda pattern", () => {
     });
   });
 
-  it("should invoke an alias if the enableVersioning prop is set to true", () => {
+  test("should invoke an alias if the enableVersioning prop is set to true", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -86,7 +87,7 @@ describe("The GuScheduledLambda pattern", () => {
     });
   });
 
-  it("should create the correct resources with an input in the rule", () => {
+  test("should create the correct resources with an input in the rule", (t) => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const props = {
@@ -99,6 +100,6 @@ describe("The GuScheduledLambda pattern", () => {
       app: "testing",
     };
     new GuScheduledLambda(stack, "my-lambda-function", props);
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

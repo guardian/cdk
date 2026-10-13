@@ -1,8 +1,11 @@
+import type { TestContext } from "node:test";
+import { suite, test } from "node:test";
 import { Peer } from "aws-cdk-lib/aws-ec2";
+import type { SecurityGroupAccessRule } from "../../constructs/ec2";
 import { transformToSecurityGroupAccessRule } from "./helpers";
 
-describe("The transformToSecurityGroupAccessRule", () => {
-  const expected = [
+suite("The transformToSecurityGroupAccessRule", () => {
+  const expected: SecurityGroupAccessRule[] = [
     {
       range: Peer.ipv4("127.0.0.1/32"),
       description: "One",
@@ -14,21 +17,21 @@ describe("The transformToSecurityGroupAccessRule", () => {
       port: 443,
     },
   ];
-  test("correctly transforms objects", () => {
+  test("correctly transforms objects", (t: TestContext) => {
     const ingresses = {
       One: "127.0.0.1/32",
       Two: "127.0.0.2/32",
     };
 
-    expect(transformToSecurityGroupAccessRule(Object.entries(ingresses), 443)).toStrictEqual(expected);
+    t.assert.deepEqual(transformToSecurityGroupAccessRule(Object.entries(ingresses), 443), expected);
   });
 
-  test("correctly transforms enums", () => {
+  test("correctly transforms enums", (t: TestContext) => {
     enum Ingresses {
       One = "127.0.0.1/32",
       Two = "127.0.0.2/32",
     }
 
-    expect(transformToSecurityGroupAccessRule(Object.entries(Ingresses), 443)).toStrictEqual(expected);
+    t.assert.deepEqual(transformToSecurityGroupAccessRule(Object.entries(Ingresses), 443), expected);
   });
 });

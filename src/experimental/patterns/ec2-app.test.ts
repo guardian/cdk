@@ -1,3 +1,5 @@
+import { deepStrictEqual, ok } from "node:assert";
+import { suite, test } from "node:test";
 import { App, Aspects, Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import type { CfnAutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
@@ -44,14 +46,14 @@ function initialProps(scope: GuStack, app: string = "test-gu-ec2-app"): GuEc2App
 }
 
 // TODO test User Data includes a build number
-describe("The GuEc2AppExperimental pattern", () => {
-  it("matches the snapshot", () => {
+suite("The GuEc2AppExperimental pattern", () => {
+  test("matches the snapshot", (t) => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2AppExperimental(stack, { ...initialProps(stack), withAccessLogging: true });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should create an ASG with min, max, and desired capacity set", () => {
+  test("should create an ASG with min, max, and desired capacity set", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuEc2AppExperimental(stack, { ...initialProps(stack), scaling: { minimumInstances: 5 } });
@@ -65,7 +67,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should create an ASG with a resource signal count that matches the min instances", () => {
+  test("should create an ASG with a resource signal count that matches the min instances", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     new GuEc2AppExperimental(stack, { ...initialProps(stack), scaling: { minimumInstances: 5 } });
@@ -82,7 +84,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should have a PauseTime higher than the ASG healthcheck grace period", () => {
+  test("should have a PauseTime higher than the ASG healthcheck grace period", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const { autoScalingGroup } = new GuEc2AppExperimental(stack, initialProps(stack));
 
@@ -111,7 +113,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should add to the end of the user data", () => {
+  test("should add to the end of the user data", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const userDataCommand = `echo "Hello there"`;
@@ -129,13 +131,13 @@ describe("The GuEc2AppExperimental pattern", () => {
     const endMarkerPosition = splitUserData.indexOf("# GuEc2AppExperimental Instance Health Check End");
 
     // Application user data should be before the target group healthcheck polling.
-    expect(appCommandPosition).toBeLessThan(startMarkerPosition);
+    ok(appCommandPosition < startMarkerPosition);
 
     // The target group healthcheck polling should be the last thing in the user data.
-    expect(endMarkerPosition).toEqual(totalLines - 1);
+    deepStrictEqual(endMarkerPosition, totalLines - 1);
   });
 
-  it("should only adjust properties of a horizontally scaling service", () => {
+  test("should only adjust properties of a horizontally scaling service", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const scalingApp = "my-scaling-app";
@@ -187,7 +189,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should add a single CFN Parameter per ASG regardless of how many scaling policies are attached to it", () => {
+  test("should add a single CFN Parameter per ASG regardless of how many scaling policies are attached to it", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const scalingApp = "my-scaling-app";
@@ -237,7 +239,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     template.resourceCountIs("AWS::AutoScaling::ScalingPolicy", 3);
   });
 
-  it("should throw an error when a scaling policy is not created with a GuAutoScalingGroup scope", () => {
+  test("should throw an error when a scaling policy is not created with a GuAutoScalingGroup scope", (t) => {
     const cdkApp = new App();
     const stack = new GuStack(cdkApp, "test", {
       stack: "test-stack",
@@ -263,14 +265,12 @@ describe("The GuEc2AppExperimental pattern", () => {
       scalingAdjustment: 1,
     });
 
-    expect(() => {
+    t.assert.throws(() => {
       cdkApp.synth();
-    }).toThrow(
-      "Failed to detect the autoscaling group relating to the scaling policy on path test/ScaleOut. Was it created in the scope of a GuAutoScalingGroup?",
-    );
+    }, /Failed to detect the autoscaling group relating to the scaling policy on path test\/ScaleOut\. Was it created in the scope of a GuAutoScalingGroup\?/);
   });
 
-  it("should add the correct CFN Parameters for more than one EC2 app in the same stack", () => {
+  test("should add the correct CFN Parameters for more than one EC2 app in the same stack", () => {
     const app = new App();
     const stack = new GuStack(app, "test", {
       stack: "test-stack",
@@ -305,7 +305,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should add the correct CFN Parameters for two separate stacks in the same app", () => {
+  test("should add the correct CFN Parameters for two separate stacks in the same app", () => {
     const app = new App();
 
     interface MicroserviceProps extends GuStackProps {
@@ -355,7 +355,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should only add the relevant CFN Parameters for different services which share the same App", () => {
+  test("should only add the relevant CFN Parameters for different services which share the same App", () => {
     const app = new App();
 
     interface MicroserviceProps extends GuStackProps {
@@ -397,16 +397,16 @@ describe("The GuEc2AppExperimental pattern", () => {
       Type: "Number",
     });
 
-    expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
+    deepStrictEqual(templateA.findParameters("*")["MinInstancesInServiceForappb"], undefined);
 
     templateB.hasParameter("MinInstancesInServiceForappb", {
       Type: "Number",
     });
 
-    expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
+    deepStrictEqual(templateB.findParameters("*")["MinInstancesInServiceForappa"], undefined);
   });
 
-  it("should add the correct target group attributes if slow start is enabled", () => {
+  test("should add the correct target group attributes if slow start is enabled", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(44) });
     const template = getTemplateAfterAspectInvocation(stack);
@@ -421,7 +421,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should update the pause time for the rolling update correctly", () => {
+  test("should update the pause time for the rolling update correctly", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.minutes(1) });
     const template = getTemplateAfterAspectInvocation(stack);
@@ -434,7 +434,7 @@ describe("The GuEc2AppExperimental pattern", () => {
     });
   });
 
-  it("should update the script correctly if slow start is enabled", () => {
+  test("should update the script correctly if slow start is enabled", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const userDataCommand = `echo "Hello there"`;
     const userData = UserData.forLinux();
@@ -454,29 +454,29 @@ describe("The GuEc2AppExperimental pattern", () => {
     const slowStartMarkerEnd = splitUserData.indexOf("# GuEc2AppExperimental SlowStart Wait Period End");
 
     // Health check polling should end just before the slow start pause kicks in
-    expect(healthCheckMarkerEnd).toEqual(slowStartMarkerStart - 1);
+    deepStrictEqual(healthCheckMarkerEnd, slowStartMarkerStart - 1);
 
     // If slow start is enabled, the logic related to this should be the last thing in the user data script.
-    expect(slowStartMarkerEnd).toEqual(totalLines - 1);
+    deepStrictEqual(slowStartMarkerEnd, totalLines - 1);
   });
 
-  it("should throw an error if the slow start value is too low", () => {
+  test("should throw an error if the slow start value is too low", (t) => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    expect(() => {
+    t.assert.throws(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(29) });
-    }).toThrow("Slow start duration must be between 30 and 900 seconds");
+    }, /Slow start duration must be between 30 and 900 seconds/);
   });
 
-  it("should throw an error if the slow start value is too high", () => {
+  test("should throw an error if the slow start value is too high", (t) => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
-    expect(() => {
+    t.assert.throws(() => {
       new GuEc2AppExperimental(stack, { ...initialProps(stack), slowStartDuration: Duration.seconds(901) });
-    }).toThrow("Slow start duration must be between 30 and 900 seconds");
+    }, /Slow start duration must be between 30 and 900 seconds/);
   });
 });
 
-describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", () => {
-  it("should ignore scaling policies and ASGs from other stacks if it is applied at App level", () => {
+suite("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", () => {
+  test("should ignore scaling policies and ASGs from other stacks if it is applied at App level", () => {
     const app = new App();
 
     interface MicroserviceProps extends GuStackProps {
@@ -521,12 +521,12 @@ describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", 
       Type: "Number",
     });
 
-    expect(templateA.findParameters("*")["MinInstancesInServiceForappb"]).toEqual(undefined);
+    deepStrictEqual(templateA.findParameters("*")["MinInstancesInServiceForappb"], undefined);
 
     templateB.hasParameter("MinInstancesInServiceForappb", {
       Type: "Number",
     });
 
-    expect(templateB.findParameters("*")["MinInstancesInServiceForappa"]).toEqual(undefined);
+    deepStrictEqual(templateB.findParameters("*")["MinInstancesInServiceForappa"], undefined);
   });
 });

@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { AttributeType } from "aws-cdk-lib/aws-dynamodb";
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuDynamoTable } from "./dynamodb";
 
-describe("The GUDynamoTable class", () => {
+suite("The GUDynamoTable class", () => {
   const partitionKey = {
     name: "partitionKey",
     type: AttributeType.STRING,

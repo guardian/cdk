@@ -39,5 +39,11 @@ export default [
         rules: {
           "@guardian/tsdoc-required/tsdoc-required": "error",
         }
-      }
+      },
+      {
+        files: ["src/**/*.test.ts"],
+        rules: {
+          "@typescript-eslint/no-floating-promises": "off",
+        }
+      },
 ];

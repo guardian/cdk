@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -5,8 +6,8 @@ import { simpleGuStackForTesting } from "../../utils/test";
 import type { GuStack } from "../core";
 import { GuLambdaFunction } from "./lambda";
 
-describe("The GuLambdaFunction class", () => {
-  it("should create the code object from the bucket and key passed in", () => {
+suite("The GuLambdaFunction class", () => {
+  test("should create the code object from the bucket and key passed in", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -26,7 +27,7 @@ describe("The GuLambdaFunction class", () => {
     });
   });
 
-  it("should not have any schedule rules by default", () => {
+  test("should not have any schedule rules by default", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -39,7 +40,7 @@ describe("The GuLambdaFunction class", () => {
     Template.fromStack(stack).resourceCountIs("AWS::Events::Rule", 0);
   });
 
-  it("should add an alarm if errorPercentageMonitoring is passed in", () => {
+  test("should add an alarm if errorPercentageMonitoring is passed in", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -56,7 +57,7 @@ describe("The GuLambdaFunction class", () => {
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1); // The shape of this alarm is tested via lambda-alarms.test.ts
   });
 
-  it("should give the function read permissions to the required bucket", () => {
+  test("should give the function read permissions to the required bucket", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -112,7 +113,7 @@ describe("The GuLambdaFunction class", () => {
     });
   });
 
-  it("should use the memorySize provided via props when it is defined", () => {
+  test("should use the memorySize provided via props when it is defined", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -128,7 +129,7 @@ describe("The GuLambdaFunction class", () => {
     });
   });
 
-  it("should add a sensible default memorySize if none is provided", () => {
+  test("should add a sensible default memorySize if none is provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -143,7 +144,7 @@ describe("The GuLambdaFunction class", () => {
     });
   });
 
-  it("should use the timeout provided via props when it is defined", () => {
+  test("should use the timeout provided via props when it is defined", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -159,7 +160,7 @@ describe("The GuLambdaFunction class", () => {
     });
   });
 
-  it("should add a sensible default timeout if none is provided", () => {
+  test("should add a sensible default timeout if none is provided", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -174,7 +175,7 @@ describe("The GuLambdaFunction class", () => {
     });
   });
 
-  it("should support bucket override", () => {
+  test("should support bucket override", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -202,7 +203,7 @@ describe("The GuLambdaFunction class", () => {
     });
   }
 
-  it("should use JSON log formatting by default", () => {
+  test("should use JSON log formatting by default", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -215,7 +216,7 @@ describe("The GuLambdaFunction class", () => {
     hasLoggingFormat(stack, LoggingFormat.JSON);
   });
 
-  it("should use JSON log formatting when JSON is specified", () => {
+  test("should use JSON log formatting when JSON is specified", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -228,7 +229,7 @@ describe("The GuLambdaFunction class", () => {
 
     hasLoggingFormat(stack, LoggingFormat.JSON);
   });
-  it("should use Text log formatting when it is defined", () => {
+  test("should use Text log formatting when it is defined", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -242,7 +243,7 @@ describe("The GuLambdaFunction class", () => {
     hasLoggingFormat(stack, LoggingFormat.TEXT);
   });
 
-  it("should not create an alias or version if the enableVersioning prop is unset", () => {
+  test("should not create an alias or version if the enableVersioning prop is unset", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {
@@ -256,7 +257,7 @@ describe("The GuLambdaFunction class", () => {
     Template.fromStack(stack).resourceCountIs("AWS::Lambda::Alias", 0);
   });
 
-  it("should create a function version and alias if the enableVersioning prop is set to true", () => {
+  test("should create a function version and alias if the enableVersioning prop is set to true", () => {
     const stack = simpleGuStackForTesting();
 
     new GuLambdaFunction(stack, "lambda", {

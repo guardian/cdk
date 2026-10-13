@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { App } from "aws-cdk-lib";
 import { Annotations, Match, Template } from "aws-cdk-lib/assertions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -6,7 +7,7 @@ import { simpleGuStackForTesting } from "../../../utils/test";
 import { GuStack } from "../../core";
 import { GuDeveloperPolicy } from "./developer-policy";
 
-describe("GuDeveloperPolicy", () => {
+suite("GuDeveloperPolicy", () => {
   test("if a single policy statement is provided, the resulting Developer Policy resource's statement will have a single item", () => {
     const stack = simpleGuStackForTesting();
     new GuDeveloperPolicy(stack, "AllowS3GetObject", {

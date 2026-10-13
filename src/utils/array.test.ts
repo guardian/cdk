@@ -1,7 +1,9 @@
+import { deepEqual } from "node:assert";
+import { suite, test } from "node:test";
 import { groupBy } from "./array";
 
-describe("groupBy", () => {
-  it("should group an array of objects on a specific field", () => {
+suite("groupBy", () => {
+  test("should group an array of objects on a specific field", () => {
     interface Food {
       name: string;
       kind: "fruit" | "vegetable";
@@ -16,7 +18,7 @@ describe("groupBy", () => {
 
     const actual = groupBy(data, (_) => _.kind);
 
-    expect(actual).toEqual({
+    deepEqual(actual, {
       fruit: [
         { name: "apple", kind: "fruit" },
         { name: "banana", kind: "fruit" },
@@ -28,7 +30,7 @@ describe("groupBy", () => {
     });
   });
 
-  it("should support providing a default value when a field can be undefined", () => {
+  test("should support providing a default value when a field can be undefined", () => {
     interface Food {
       name: string;
       kind: "fruit" | "vegetable";
@@ -44,7 +46,7 @@ describe("groupBy", () => {
 
     const actual = groupBy(data, (_) => _.variety ?? "unknown");
 
-    expect(actual).toEqual({
+    deepEqual(actual, {
       gala: [{ name: "apple", kind: "fruit", variety: "gala" }],
       unknown: [
         { name: "banana", kind: "fruit" },

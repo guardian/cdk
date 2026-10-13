@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuGetCloudwatchMetricsPolicy, GuPutCloudwatchMetricsPolicy } from "./cloudwatch";
 
-describe("The GuGetCloudwatchMetricsPolicy construct", () => {
-  it("creates the correct policy", () => {
+suite("The GuGetCloudwatchMetricsPolicy construct", () => {
+  test("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuGetCloudwatchMetricsPolicy(stack));
 
@@ -27,8 +28,8 @@ describe("The GuGetCloudwatchMetricsPolicy construct", () => {
   });
 });
 
-describe("The GuPutCloudwatchMetricsPolicy construct", () => {
-  it("creates the correct policy", () => {
+suite("The GuPutCloudwatchMetricsPolicy construct", () => {
+  test("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuPutCloudwatchMetricsPolicy(stack));
 

@@ -9,8 +9,9 @@
     "sourceMap": true,
     "inlineSourceMap": false,
     "inlineSources": true,
-    "outDir": "lib"
+    "outDir": "lib",
+    "types": ["node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/**/*.test.ts", "src/**/__snapshots__/**"]
+  "exclude": ["node_modules", "src/**/*.test.ts"]
 }

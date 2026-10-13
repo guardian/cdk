@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { ComparisonOperator } from "aws-cdk-lib/aws-cloudwatch";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
@@ -6,7 +7,7 @@ import type { GuStack } from "../core";
 import { GuLambdaFunction } from "../lambda";
 import { GuAlarm } from "./alarm";
 
-describe("The GuAlarm class", () => {
+suite("The GuAlarm class", () => {
   const lambda = (stack: GuStack) =>
     new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
@@ -15,7 +16,7 @@ describe("The GuAlarm class", () => {
       app: "testing",
     });
 
-  it("should create a CloudWatch alarm", () => {
+  test("should create a CloudWatch alarm", () => {
     const stack = simpleGuStackForTesting();
     new GuAlarm(stack, "alarm", {
       app: "testing",
@@ -49,7 +50,7 @@ describe("The GuAlarm class", () => {
     },
   ];
 
-  it("should send alerts to the provided SNS Topic", () => {
+  test("should send alerts to the provided SNS Topic", () => {
     const stack = simpleGuStackForTesting();
     new GuAlarm(stack, "alarm", {
       app: "testing",
@@ -75,7 +76,7 @@ describe("The GuAlarm class", () => {
     );
   });
 
-  it("should send OK alerts to the provided SNS Topic, if `okAction: true`", () => {
+  test("should send OK alerts to the provided SNS Topic, if `okAction: true`", () => {
     const stack = simpleGuStackForTesting();
     new GuAlarm(stack, "alarm", {
       app: "testing",

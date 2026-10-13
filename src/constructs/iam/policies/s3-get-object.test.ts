@@ -1,9 +1,10 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { attachPolicyToTestRole, simpleGuStackForTesting } from "../../../utils/test";
 import { GuGetDistributablePolicy, GuGetS3ObjectsPolicy } from "./s3-get-object";
 
-describe("The GuGetS3ObjectPolicy class", () => {
-  it("sets default props", () => {
+suite("The GuGetS3ObjectPolicy class", () => {
+  test("sets default props", () => {
     const stack = simpleGuStackForTesting();
 
     const s3Policy = new GuGetS3ObjectsPolicy(stack, "S3Policy", { bucketName: "test" });
@@ -24,7 +25,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
     });
   });
 
-  it("merges defaults and passed in props", () => {
+  test("merges defaults and passed in props", () => {
     const stack = simpleGuStackForTesting();
 
     const s3Policy = new GuGetS3ObjectsPolicy(stack, "S3Policy", { bucketName: "test", policyName: "test" });
@@ -46,7 +47,7 @@ describe("The GuGetS3ObjectPolicy class", () => {
     });
   });
 
-  it("handles multiple paths correctly", () => {
+  test("handles multiple paths correctly", () => {
     const stack = simpleGuStackForTesting();
 
     const s3Policy = new GuGetS3ObjectsPolicy(stack, "S3Policy", {
@@ -71,8 +72,8 @@ describe("The GuGetS3ObjectPolicy class", () => {
   });
 });
 
-describe("The GuGetDistributablePolicy construct", () => {
-  it("creates the correct policy", () => {
+suite("The GuGetDistributablePolicy construct", () => {
+  test("creates the correct policy", () => {
     const stack = simpleGuStackForTesting();
     attachPolicyToTestRole(stack, new GuGetDistributablePolicy(stack, { app: "testing" }));
 

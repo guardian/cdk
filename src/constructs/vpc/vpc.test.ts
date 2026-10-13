@@ -1,18 +1,19 @@
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuVpc } from "./vpc";
 
-describe("The GuVpc construct", () => {
-  it("should match snapshot", () => {
+suite("The GuVpc construct", () => {
+  test("should match snapshot", (t) => {
     const stack = simpleGuStackForTesting({
       stack: "test-stack",
       env: { region: "eu-west-1", account: "000000000000" },
     });
     new GuVpc(stack, "MyVpc");
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should be possible to create two vpcs in the same stack", () => {
+  test("should be possible to create two vpcs in the same stack", () => {
     const stack = simpleGuStackForTesting({
       stack: "test-stack",
       env: { region: "eu-west-1", account: "000000000000" },

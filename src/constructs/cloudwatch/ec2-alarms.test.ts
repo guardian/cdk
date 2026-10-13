@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
@@ -17,8 +18,8 @@ const app: AppIdentity = {
   app: "testing",
 };
 
-describe("The GuAlb5xxPercentageAlarm construct", () => {
-  it("should create the correct alarm resource with minimal config", () => {
+suite("The GuAlb5xxPercentageAlarm construct", () => {
+  test("should create the correct alarm resource with minimal config", (t) => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -29,10 +30,10 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new GuAlb5xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should use a custom description if one is provided", () => {
+  test("should use a custom description if one is provided", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -49,7 +50,7 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
     });
   });
 
-  it("should use a custom alarm name if one is provided", () => {
+  test("should use a custom alarm name if one is provided", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -66,7 +67,7 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
     });
   });
 
-  it("should adjust the number of evaluation periods if a custom value is provided", () => {
+  test("should adjust the number of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -84,8 +85,8 @@ describe("The GuAlb5xxPercentageAlarm construct", () => {
   });
 });
 
-describe("The GuAlb4xxPercentageAlarm construct", () => {
-  it("should create the correct alarm resource with minimal config", () => {
+suite("The GuAlb4xxPercentageAlarm construct", () => {
+  test("should create the correct alarm resource with minimal config", (t) => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -96,10 +97,10 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
       snsTopicName: "test-topic",
     };
     new GuAlb4xxPercentageAlarm(stack, { ...app, loadBalancer: alb, ...props });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should use a custom description if one is provided", () => {
+  test("should use a custom description if one is provided", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -116,7 +117,7 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
     });
   });
 
-  it("should use a custom alarm name if one is provided", () => {
+  test("should use a custom alarm name if one is provided", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -133,7 +134,7 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
     });
   });
 
-  it("should adjust the number of evaluation periods if a custom value is provided", () => {
+  test("should adjust the number of evaluation periods if a custom value is provided", () => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -151,8 +152,8 @@ describe("The GuAlb4xxPercentageAlarm construct", () => {
   });
 });
 
-describe("The GuUnhealthyInstancesAlarm construct", () => {
-  it("should create the correct alarm resource with minimal config", () => {
+suite("The GuUnhealthyInstancesAlarm construct", () => {
+  test("should create the correct alarm resource with minimal config", (t) => {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const alb = new GuApplicationLoadBalancer(stack, "ApplicationLoadBalancer", {
       ...app,
@@ -166,6 +167,6 @@ describe("The GuUnhealthyInstancesAlarm construct", () => {
       defaultTargetGroups: [targetGroup],
     });
     new GuUnhealthyInstancesAlarm(stack, { ...app, targetGroup: targetGroup, snsTopicName: "test-topic" });
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 });

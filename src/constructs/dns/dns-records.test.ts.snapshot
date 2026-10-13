@@ -1,0 +1,51 @@
+exports[`The GuCname construct > should create the correct resources with minimal config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuCname"
+    ],
+    "gu:cdk:version": "TEST"
+  },
+  "Resources": {
+    "TestRecord": {
+      "Type": "Guardian::DNS::RecordSet",
+      "Properties": {
+        "Name": "xyz.domain-name-for-your-application.example",
+        "ResourceRecords": [
+          "apple.example.com"
+        ],
+        "RecordType": "CNAME",
+        "TTL": 3600,
+        "Stage": "TEST"
+      }
+    }
+  }
+}
+`;
+
+exports[`The GuDnsRecordSet construct > should create the correct resources with minimal config 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuDnsRecordSet"
+    ],
+    "gu:cdk:version": "TEST"
+  },
+  "Resources": {
+    "TestRecord": {
+      "Type": "Guardian::DNS::RecordSet",
+      "Properties": {
+        "Name": "banana.example.com",
+        "ResourceRecords": [
+          "apple.example.com"
+        ],
+        "RecordType": "CNAME",
+        "TTL": 3600,
+        "Stage": "TEST"
+      }
+    }
+  }
+}
+`;

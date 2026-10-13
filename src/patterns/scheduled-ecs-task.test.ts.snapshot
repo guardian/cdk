@@ -1,0 +1,715 @@
+exports[`The GuScheduledEcsTask pattern > should use the specified schedule 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStack",
+      "GuScheduledEcsTask",
+      "GuDistributionBucketParameter"
+    ],
+    "gu:cdk:version": "TEST"
+  },
+  "Resources": {
+    "testEcstestClusterEF06D2D7": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "ClusterName": "ecs-test-cluster-TEST",
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "disabled"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    },
+    "testEcstestCluster876B1872": {
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+      "Properties": {
+        "CapacityProviders": [
+          "FARGATE",
+          "FARGATE_SPOT"
+        ],
+        "Cluster": {
+          "Ref": "testEcstestClusterEF06D2D7"
+        },
+        "DefaultCapacityProviderStrategy": []
+      }
+    },
+    "testEcstestTaskDefinitionTaskRole647F51B7": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    },
+    "testEcstestTaskDefinitionTaskRoleDefaultPolicy5CE3E839": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName"
+                    },
+                    "/test-stack/TEST/ecs-test/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "testEcstestTaskDefinitionTaskRoleDefaultPolicy5CE3E839",
+        "Roles": [
+          {
+            "Ref": "testEcstestTaskDefinitionTaskRole647F51B7"
+          }
+        ]
+      }
+    },
+    "testEcstestTaskDefinition514C1CAA": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Cpu": 2048,
+            "Essential": true,
+            "Image": "node:10",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "testEcstestTaskDefinitiontestEcstestTaskContainerLogGroup8EACFC88"
+                },
+                "awslogs-stream-prefix": "ecs-test",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                }
+              }
+            },
+            "Memory": 4096,
+            "Name": "testEcstest-TaskContainer",
+            "ReadonlyRootFilesystem": true
+          }
+        ],
+        "Cpu": "2048",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "testEcstestTaskDefinitionExecutionRole9B7504C0",
+            "Arn"
+          ]
+        },
+        "Family": "test-stack-TEST-ecs-test",
+        "Memory": "4096",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "testEcstestTaskDefinitionTaskRole647F51B7",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "testEcstestTaskDefinitiontestEcstestTaskContainerLogGroup8EACFC88": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "testEcstestTaskDefinitionExecutionRole9B7504C0": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    },
+    "testEcstestTaskDefinitionExecutionRoleDefaultPolicyCA4AF591": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "testEcstestTaskDefinitiontestEcstestTaskContainerLogGroup8EACFC88",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "testEcstestTaskDefinitionExecutionRoleDefaultPolicyCA4AF591",
+        "Roles": [
+          {
+            "Ref": "testEcstestTaskDefinitionExecutionRole9B7504C0"
+          }
+        ]
+      }
+    },
+    "testEcstestStateMachineRole39EBBF56": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "states.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    },
+    "testEcstestStateMachineRoleDefaultPolicyBE04E046": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ecs:RunTask",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Fn::Select": [
+                        1,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "testEcstestTaskDefinition514C1CAA"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        2,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "testEcstestTaskDefinition514C1CAA"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        3,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "testEcstestTaskDefinition514C1CAA"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        4,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "testEcstestTaskDefinition514C1CAA"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        0,
+                        {
+                          "Fn::Split": [
+                            "/",
+                            {
+                              "Fn::Select": [
+                                5,
+                                {
+                                  "Fn::Split": [
+                                    ":",
+                                    {
+                                      "Ref": "testEcstestTaskDefinition514C1CAA"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "/",
+                    {
+                      "Fn::Select": [
+                        1,
+                        {
+                          "Fn::Split": [
+                            "/",
+                            {
+                              "Fn::Select": [
+                                5,
+                                {
+                                  "Fn::Split": [
+                                    ":",
+                                    {
+                                      "Ref": "testEcstestTaskDefinition514C1CAA"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    ":*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecs:StopTask",
+                "ecs:DescribeTasks"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "testEcstestTaskDefinitionTaskRole647F51B7",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "testEcstestTaskDefinitionExecutionRole9B7504C0",
+                    "Arn"
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "events:PutTargets",
+                "events:PutRule",
+                "events:DescribeRule"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":events:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":rule/StepFunctionsGetEventsForECSTaskRule"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "testEcstestStateMachineRoleDefaultPolicyBE04E046",
+        "Roles": [
+          {
+            "Ref": "testEcstestStateMachineRole39EBBF56"
+          }
+        ]
+      }
+    },
+    "testEcstestStateMachineDE3E7F51": {
+      "Type": "AWS::StepFunctions::StateMachine",
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{\\"StartAt\\":\\"testEcstest-task\\",\\"States\\":{\\"testEcstest-task\\":{\\"End\\":true,\\"Type\\":\\"Task\\",\\"TimeoutSeconds\\":900,\\"ResultPath\\":null,\\"Resource\\":\\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::ecs:runTask.sync\\",\\"Parameters\\":{\\"Cluster\\":\\"",
+              {
+                "Fn::GetAtt": [
+                  "testEcstestClusterEF06D2D7",
+                  "Arn"
+                ]
+              },
+              "\\",\\"TaskDefinition\\":\\"test-stack-TEST-ecs-test\\",\\"NetworkConfiguration\\":{\\"AwsvpcConfiguration\\":{\\"Subnets\\":[\\"abc-123\\"],\\"SecurityGroups\\":[]}},\\"Overrides\\":{\\"ContainerOverrides\\":[{\\"Name\\":\\"testEcstest-TaskContainer\\"}]},\\"LaunchType\\":\\"FARGATE\\",\\"PlatformVersion\\":\\"LATEST\\"}}}}"
+            ]
+          ]
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "testEcstestStateMachineRole39EBBF56",
+            "Arn"
+          ]
+        },
+        "StateMachineName": "ecs-test-TEST",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      },
+      "DependsOn": [
+        "testEcstestStateMachineRoleDefaultPolicyBE04E046",
+        "testEcstestStateMachineRole39EBBF56"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "testEcstestStateMachineEventsRole84E5DC2F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "ecs-test"
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ]
+      }
+    },
+    "testEcstestStateMachineEventsRoleDefaultPolicy6CAB79AB": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "testEcstestStateMachineDE3E7F51"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "testEcstestStateMachineEventsRoleDefaultPolicy6CAB79AB",
+        "Roles": [
+          {
+            "Ref": "testEcstestStateMachineEventsRole84E5DC2F"
+          }
+        ]
+      }
+    },
+    "testScheduleRule72E95162": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST"
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk"
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack"
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST"
+          }
+        ],
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "testEcstestStateMachineDE3E7F51"
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "testEcstestStateMachineEventsRole84E5DC2F",
+                "Arn"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "DistributionBucketName": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts"
+    }
+  },
+  "Outputs": {
+    "testEcstestStateMachineArnOutput": {
+      "Value": {
+        "Ref": "testEcstestStateMachineDE3E7F51"
+      }
+    }
+  }
+}
+`;

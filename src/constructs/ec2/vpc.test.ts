@@ -1,23 +1,25 @@
+import { strictEqual } from "node:assert";
+import { suite, test } from "node:test";
 import { Template } from "aws-cdk-lib/assertions";
 import { simpleGuStackForTesting } from "../../utils/test";
 import { GuVpc, SubnetType } from "./vpc";
 
-describe("The GuVpc class", () => {
-  describe("subnets method", () => {
+suite("The GuVpc class", () => {
+  suite("subnets method", () => {
     test("returns an array of subnets with the correct ids", () => {
       const stack = simpleGuStackForTesting();
 
       const [subnet1, subnet2, ...rest] = GuVpc.subnets(stack, ["subnet1", "subnet2"]);
 
-      expect(subnet1?.subnetId).toBe("subnet1");
-      expect(subnet2?.subnetId).toBe("subnet2");
+      strictEqual(subnet1?.subnetId, "subnet1");
+      strictEqual(subnet2?.subnetId, "subnet2");
 
       // test that no extra subnets are defined
-      expect(rest.length).toBe(0);
+      strictEqual(rest.length, 0);
     });
   });
 
-  describe("subnetsFromParameter method", () => {
+  suite("subnetsFromParameter method", () => {
     test("adds the parameter with default type as private", () => {
       const stack = simpleGuStackForTesting();
 
@@ -41,17 +43,17 @@ describe("The GuVpc class", () => {
     });
   });
 
-  describe("fromId method", () => {
+  suite("fromId method", () => {
     test("returns a vpc with the correct id", () => {
       const stack = simpleGuStackForTesting();
 
       const vpc = GuVpc.fromId(stack, "Vpc", { vpcId: "test" });
 
-      expect(vpc.vpcId).toBe("test");
+      strictEqual(vpc.vpcId, "test");
     });
   });
 
-  describe("fromIdParameter method", () => {
+  suite("fromIdParameter method", () => {
     test("adds the vpc parameter", () => {
       const stack = simpleGuStackForTesting();
 

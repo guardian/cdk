@@ -1,3 +1,4 @@
+import { suite, test } from "node:test";
 import { Duration } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import type { StreamProps } from "aws-cdk-lib/aws-kinesis";
@@ -9,8 +10,8 @@ import type { StreamErrorHandlingProps, StreamProcessingProps } from "../../util
 import { GuTemplate, simpleGuStackForTesting } from "../../utils/test";
 import { GuKinesisLambdaExperimental } from "./kinesis-lambda";
 
-describe("The GuKinesisLambda pattern", () => {
-  it("should create the correct resources for a new stack with minimal config", () => {
+suite("The GuKinesisLambda pattern", () => {
+  test("should create the correct resources for a new stack with minimal config", (t) => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -27,10 +28,10 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
-    expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+    t.assert.snapshot(Template.fromStack(stack).toJSON());
   });
 
-  it("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
+  test("should inherit an existing Kinesis stream correctly if an existingLogicalId is passed via existingSnsTopic in a migrating stack", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -51,7 +52,7 @@ describe("The GuKinesisLambda pattern", () => {
     GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
   });
 
-  it("should not generate a new Kinesis stream if an external stream name is passed in", () => {
+  test("should not generate a new Kinesis stream if an external stream name is passed in", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const basicErrorHandling: StreamErrorHandlingProps = {
@@ -92,7 +93,7 @@ describe("The GuKinesisLambda pattern", () => {
     template.resourceCountIs("AWS::Kinesis::Stream", 0);
   });
 
-  it("should create an alarm if monitoring configuration is provided", () => {
+  test("should create an alarm if monitoring configuration is provided", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -114,7 +115,7 @@ describe("The GuKinesisLambda pattern", () => {
     Template.fromStack(stack).resourceCountIs("AWS::CloudWatch::Alarm", 1);
   });
 
-  it("should use managed encryption by default", () => {
+  test("should use managed encryption by default", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -139,7 +140,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should override the default encryption type if encryption is explicitly set", () => {
+  test("should override the default encryption type if encryption is explicitly set", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -165,7 +166,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should pass through other Kinesis stream properties", () => {
+  test("should pass through other Kinesis stream properties", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -195,7 +196,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should pass through processing properties", () => {
+  test("should pass through processing properties", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -229,7 +230,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should configure error handling correctly based on max number of retry attempts", () => {
+  test("should configure error handling correctly based on max number of retry attempts", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const errorHandlingProps: StreamErrorHandlingProps = {
@@ -252,7 +253,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should configure error handling correctly based on max age of records", () => {
+  test("should configure error handling correctly based on max age of records", () => {
     const stack = simpleGuStackForTesting();
     const noMonitoring: NoMonitoring = { noMonitoring: true };
     const errorHandlingProps: StreamErrorHandlingProps = {
@@ -275,7 +276,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should send events to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
+  test("should send events to $LATEST (i.e. an unpublished version) if the enableVersioning prop is unset", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
@@ -297,7 +298,7 @@ describe("The GuKinesisLambda pattern", () => {
     });
   });
 
-  it("should send events to an alias if the enableVersioning prop is set to true", () => {
+  test("should send events to an alias if the enableVersioning prop is set to true", () => {
     const stack = simpleGuStackForTesting();
     const basicErrorHandling: StreamErrorHandlingProps = {
       bisectBatchOnError: false,
