@@ -26,3 +26,13 @@ export function acknowledgeEmptyTemplate(stack: GuStack) {
     reason: "Unit tests don't need to a non-empty CFN template",
   });
 }
+
+/**
+ * For tests only.
+ */
+export function acknowledgeHardcodedAZs(stack: GuStack) {
+  Validations.of(stack).acknowledge({
+    id: "CloudFormation-Validate::W3010",
+    reason: "We do not currently place region details in context file and hardcode AZ list for eu-west-1",
+  });
+}
