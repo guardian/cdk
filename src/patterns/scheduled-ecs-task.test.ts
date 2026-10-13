@@ -9,7 +9,7 @@ import { GuScheduledEcsTask } from "./scheduled-ecs-task";
 
 const makeVpc = (stack: GuStack) =>
   Vpc.fromVpcAttributes(stack, "VPC", {
-    vpcId: "test",
+    vpcId: "vpc-00000000",
     availabilityZones: [""],
     publicSubnetIds: [""],
     privateSubnetIds: ["abc-123"],

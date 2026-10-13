@@ -6,7 +6,7 @@ import { GuHttpsEgressSecurityGroup, GuSecurityGroup } from "./base";
 
 describe("The GuSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
+    vpcId: "vpc-00000000",
     availabilityZones: [""],
     publicSubnetIds: [""],
   });
@@ -101,7 +101,7 @@ describe("The GuSecurityGroup class", () => {
 
 describe("The GuHttpsEgressSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
+    vpcId: "vpc-00000000",
     availabilityZones: [""],
     publicSubnetIds: [""],
   });

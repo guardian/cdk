@@ -9,7 +9,7 @@ import type { GuUserDataPropsWithApp } from "./user-data";
 
 describe("GuUserData", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
+    vpcId: "vpc-00000000",
     availabilityZones: [""],
     publicSubnetIds: [""],
   });

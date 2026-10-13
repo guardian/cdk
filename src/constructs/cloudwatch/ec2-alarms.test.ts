@@ -8,7 +8,7 @@ import { GuApplicationLoadBalancer, GuApplicationTargetGroup } from "../loadbala
 import { GuAlb4xxPercentageAlarm, GuAlb5xxPercentageAlarm, GuUnhealthyInstancesAlarm } from "./ec2-alarms";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-  vpcId: "test",
+  vpcId: "vpc-00000000",
   availabilityZones: [""],
   publicSubnetIds: [""],
 });

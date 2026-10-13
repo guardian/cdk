@@ -1334,7 +1334,7 @@ UserData from accessed construct`);
     const sg = new GuSecurityGroup(stack, "SG", {
       app,
       vpc: Vpc.fromVpcAttributes(stack, "VPC", {
-        vpcId: "test",
+        vpcId: "vpc-00000000",
         availabilityZones: [""],
         publicSubnetIds: [""],
         privateSubnetIds: [""],
