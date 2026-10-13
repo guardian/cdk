@@ -47,8 +47,8 @@ describe("The GuKinesisLambda pattern", () => {
       app: "testing",
     };
     const { kinesisStream } = new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
-    stack.overrideLogicalId(kinesisStream, { logicalId: "pre-existing-kinesis-stream", reason: "testing" });
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
+    stack.overrideLogicalId(kinesisStream, { logicalId: "PreExistingKinesisStream", reason: "testing" });
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "PreExistingKinesisStream");
   });
 
   it("should not generate a new Kinesis stream if an external stream name is passed in", () => {

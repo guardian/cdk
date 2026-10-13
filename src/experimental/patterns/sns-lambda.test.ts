@@ -32,8 +32,8 @@ describe("The GuSnsLambda pattern", () => {
       app: "testing",
     };
     const { snsTopic } = new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
-    stack.overrideLogicalId(snsTopic, { logicalId: "in-use-sns-topic", reason: "testing" });
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
+    stack.overrideLogicalId(snsTopic, { logicalId: "InUseSnsTopic", reason: "testing" });
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "InUseSnsTopic");
   });
 
   it("should not generate a new SNS Topic if an externalTopicName is passed via existingSnsTopic", () => {

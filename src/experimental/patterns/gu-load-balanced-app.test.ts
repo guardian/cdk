@@ -2034,7 +2034,7 @@ UserData from accessed construct`);
     });
 
     stack.overrideLogicalId(app.loadBalancer.waf!, {
-      logicalId: "ssm param escape hatch",
+      logicalId: "SsmParamEscapeHatch",
       reason: "Retaining original parameter's logical ID to avoid deployment issues",
     });
 
@@ -2044,7 +2044,7 @@ UserData from accessed construct`);
       },
     });
 
-    expect(resourceId).toBe("ssm param escape hatch");
+    expect(resourceId).toBe("SsmParamEscapeHatch");
   });
 });
 
