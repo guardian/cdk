@@ -1223,8 +1223,8 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "PROD",
     });
 
-    appCode.addDependency(databaseCode);
-    appProd.addDependency(databaseProd);
+    appCode.addStackDependency(databaseCode);
+    appProd.addStackDependency(databaseProd);
 
     const actual = new RiffRaffYamlFile(app).toYAML();
 
