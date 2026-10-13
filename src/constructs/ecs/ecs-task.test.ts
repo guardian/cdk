@@ -11,7 +11,7 @@ const makeVpc = (stack: GuStack) =>
   Vpc.fromVpcAttributes(stack, "VPC", {
     vpcId: "vpc-00000000",
     availabilityZones: [""],
-    publicSubnetIds: [""],
+    publicSubnetIds: ["subnet-00000000"],
     privateSubnetIds: ["abc-123"],
   });
 

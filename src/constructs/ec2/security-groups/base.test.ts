@@ -8,7 +8,7 @@ describe("The GuSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "vpc-00000000",
     availabilityZones: [""],
-    publicSubnetIds: [""],
+    publicSubnetIds: ["subnet-00000000"],
   });
 
   it("applies the Stack, Stage and App tags", () => {
@@ -103,7 +103,7 @@ describe("The GuHttpsEgressSecurityGroup class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "vpc-00000000",
     availabilityZones: [""],
-    publicSubnetIds: [""],
+    publicSubnetIds: ["subnet-00000000"],
   });
 
   it("adds global access on 443 by default", () => {

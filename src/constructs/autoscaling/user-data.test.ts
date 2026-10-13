@@ -11,7 +11,7 @@ describe("GuUserData", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
     vpcId: "vpc-00000000",
     availabilityZones: [""],
-    publicSubnetIds: [""],
+    publicSubnetIds: ["subnet-00000000"],
   });
 
   test("Distributable should be downloaded from a standard path in S3 (bucket/stack/stage/app/filename)", () => {

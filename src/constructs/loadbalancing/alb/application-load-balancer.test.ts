@@ -12,7 +12,7 @@ import {
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
   vpcId: "vpc-00000000",
   availabilityZones: [""],
-  publicSubnetIds: [""],
+  publicSubnetIds: ["subnet-00000000"],
 });
 
 const app: AppIdentity = {

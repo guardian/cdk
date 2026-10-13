@@ -1336,7 +1336,7 @@ UserData from accessed construct`);
       vpc: Vpc.fromVpcAttributes(stack, "VPC", {
         vpcId: "vpc-00000000",
         availabilityZones: [""],
-        publicSubnetIds: [""],
+        publicSubnetIds: ["subnet-00000000"],
         privateSubnetIds: [""],
       }),
       ingresses: [{ port: Port.tcp(1234), range: Peer.ipv4("8.8.8.8/32"), description: "" }],
