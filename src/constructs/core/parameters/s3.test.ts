@@ -1,6 +1,6 @@
 import { App } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { acknowledgeUnusedParameters } from "../../../utils/test/validations";
+import { acknowledgeEmptyTemplate, acknowledgeUnusedParameters } from "../../../utils/test/validations";
 import { GuStack } from "../stack";
 import { GuDistributionBucketParameter } from "./s3";
 
@@ -17,6 +17,8 @@ describe("GuDistributionBucketParameter", () => {
     // In unit tests, we don't need to produce minimal CFN stacks.
     acknowledgeUnusedParameters(stack1);
     acknowledgeUnusedParameters(stack2);
+    acknowledgeEmptyTemplate(stack1);
+    acknowledgeEmptyTemplate(stack2);
 
     expect(stack1Param).not.toEqual(stack2Param);
 
