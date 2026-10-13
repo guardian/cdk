@@ -43,6 +43,7 @@ export class GuDatabaseInstance extends GuAppAwareConstruct(DatabaseInstance) {
       deleteAutomatedBackups: false,
       backupRetention: props.devXBackups.enabled ? undefined : props.devXBackups.backupRetention,
       preferredBackupWindow: props.devXBackups.enabled ? undefined : props.devXBackups.preferredBackupWindow,
+      storageEncrypted: true,
       ...props,
       instanceType,
     });
