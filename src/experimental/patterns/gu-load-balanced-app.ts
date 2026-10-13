@@ -625,7 +625,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const loggingImage = ContainerImage.fromEcrRepository(
         // Images are published to the ECR registry in the Artifacts account, so reference that here
-        Repository.fromRepositoryAttributes(this, "Repo", {
+        Repository.fromRepositoryAttributes(this, "loggingRepo", {
           repositoryArn: scope.formatArn({
             account: artifactsAccountId.stringValue,
             arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
