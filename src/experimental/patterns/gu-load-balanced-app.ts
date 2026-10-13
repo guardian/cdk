@@ -766,7 +766,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // See https://github.com/guardian/devx-logs
         image: ContainerImage.fromRegistry(
           // `${accountId.stringValue}.dkr.ecr.eu-west-1.amazonaws.com/guardian/devx-logs/devx-logs:lifecycle-am-ac-publish-to-ecr-58`,
-          `${accountId.stringValue}.dkr.ecr.eu-west-1.amazonaws.com/guardian/cdk/logging:branch-a777m-devx-logs-changes`
+          `${accountId.stringValue}.dkr.ecr.eu-west-1.amazonaws.com/guardian/cdk/logging:branch-a777m-devx-logs-changes`,
         ),
         environment,
         versionConsistency: VersionConsistency.DISABLED,
