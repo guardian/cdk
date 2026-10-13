@@ -6,21 +6,21 @@ describe("The GuParameter class", () => {
   it("sets the type as passed through by default", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuParameter(stack, "Parameter", { type: "Boolean" });
+    new GuParameter(stack, "Parameter", { type: "Number" });
 
     Template.fromStack(stack).hasParameter("Parameter", {
-      Type: "Boolean",
+      Type: "Number",
     });
   });
 
   it("wraps the type with SSM utility is fromSSM is true", () => {
     const stack = simpleGuStackForTesting();
 
-    new GuParameter(stack, "Parameter", { type: "Boolean", fromSSM: true });
+    new GuParameter(stack, "Parameter", { type: "Number", fromSSM: true });
 
     Template.fromStack(stack).hasParameter("Parameter", {
       Default: "Add the SSM path as the default value e.g. /$stage/$stack/$app/$param",
-      Type: "AWS::SSM::Parameter::Value<Boolean>",
+      Type: "AWS::SSM::Parameter::Value<Number>",
     });
   });
 
