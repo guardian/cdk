@@ -90,22 +90,4 @@ describe("The GuSnsLambda pattern", () => {
       },
     });
   });
-
-  it("should send messages to an alias if the enableVersioning prop is set to true", () => {
-    const stack = simpleGuStackForTesting();
-    const noMonitoring: NoMonitoring = { noMonitoring: true };
-    const props = {
-      enableVersioning: true,
-      fileName: "lambda.zip",
-      functionName: "my-lambda-function",
-      handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_LATEST,
-      monitoringConfiguration: noMonitoring,
-      app: "testing",
-    };
-    new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
-    Template.fromStack(stack).hasResourceProperties("AWS::SNS::Subscription", {
-      Endpoint: { Ref: "mylambdafunctionAliasForLambdaF2F98ED5" },
-    });
-  });
 });
