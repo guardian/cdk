@@ -37,8 +37,8 @@ describe("The GitHubActionsRole construct", () => {
           {
             Action: "sts:AssumeRoleWithWebIdentity",
             Condition: {
-              StringLike: {
-                "token.actions.githubusercontent.com:sub": "repo:guardian/platform-*",
+              StringEquals: {
+                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
               },
             },
           },
@@ -68,6 +68,9 @@ describe("The GitHubActionsRole construct", () => {
           {
             Action: "sts:AssumeRoleWithWebIdentity",
             Condition: {
+              StringEquals: {
+                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+              },
               StringLike: {
                 "token.actions.githubusercontent.com:sub": "repo:octocat@123456/my-repo@456789:*",
               },
