@@ -39,7 +39,7 @@ describe("The GitHubActionsRole construct", () => {
             Condition: {
               StringEquals: {
                 "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-              }
+              },
             },
           },
         ],
