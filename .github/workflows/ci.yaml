@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   CI:
     runs-on: ubuntu-latest
@@ -13,4 +15,55 @@ jobs:
         with:
           node-version-file: ".tool-versions"
           cache: npm
-      - run: ./script/ci
+
+      # We have `prepare` script to enable the use of `@guardian/cdk` directly from GitHub (`npm install guardian/cdk#some-branch-or-commit`).
+      # This is useful for testing before publishing a new version.
+      # In CI, we don't need to run this script, so ignore it.
+      - run: npm ci --ignore-scripts
+
+      - parallel:
+          - name: build
+            run: npm run build
+          - name: lint
+            run: |
+              npm run lint
+              npm run test:custom-lint-rule
+          - name: prettier
+            run: npm run prettier:check
+          - name: test
+            run: npm run test
+
+  # The purpose of these checks is to ensure:
+  # - the library can be installed into a project
+  # - a stack can be synthed without error
+  # See also tools/integration-test/README.md
+  IntegrationTest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ".tool-versions"
+          cache: npm
+
+      # We have `prepare` script to enable the use of `@guardian/cdk` directly from GitHub (`npm install guardian/cdk#some-branch-or-commit`).
+      # This is useful for testing before publishing a new version.
+      # In CI, we don't need to run this script, so ignore it.
+      - run: npm ci --ignore-scripts
+
+      - run: npm install --no-package-lock
+        working-directory: tools/integration-test
+
+      - parallel:
+          - name: build
+            working-directory: tools/integration-test
+            run: npm run build
+          - name: lint
+            working-directory: tools/integration-test
+            run: npm run lint
+          - name: test
+            working-directory: tools/integration-test
+            run: npm run test
+          - name: generate
+            working-directory: tools/integration-test
+            run: npm run generate
