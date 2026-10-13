@@ -602,15 +602,17 @@ export class GuLoadBalancedAppExperimental extends Construct {
         containerInsightsV2: ContainerInsights.ENHANCED,
       });
 
+      const artifactsAccountId = StringParameter.fromStringParameterName(
+        scope,
+        "ArtifactAccountId",
+        NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
+      );
+
       const image = ContainerImage.fromEcrRepository(
         // Images are published to the ECR registry in the Artifacts account, so reference that here
         Repository.fromRepositoryAttributes(this, "Repo", {
           repositoryArn: scope.formatArn({
-            account: StringParameter.fromStringParameterName(
-              scope,
-              "ArtifactAccountId",
-              NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
-            ).stringValue,
+            account: artifactsAccountId.stringValue,
             arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
             resource: "repository",
             resourceName: ecrRepoName,
@@ -619,6 +621,22 @@ export class GuLoadBalancedAppExperimental extends Construct {
           repositoryName: ecrRepoName,
         }),
         imageIdentifier,
+      );
+
+      const loggingImage = ContainerImage.fromEcrRepository(
+        // Images are published to the ECR registry in the Artifacts account, so reference that here
+        Repository.fromRepositoryAttributes(this, "Repo", {
+          repositoryArn: scope.formatArn({
+            account: artifactsAccountId.stringValue,
+            arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
+            resource: "repository",
+            resourceName: "guardian/cdk/logging",
+            service: "ecr",
+          }),
+          repositoryName: "guardian/cdk/logging",
+        }),
+        // branch-a777m-devx-logs-changes,
+        "sha256:32dce4e7a9e628b053ca42c271d7bbdf3697b4980c4612e845a15257c2bd1d99",
       );
 
       const loggingStreamName = GuLoggingStreamNameParameter.getInstance(scope).valueAsString;
@@ -756,18 +774,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       this.ecsService = ecsService;
 
-      const accountId = StringParameter.fromStringParameterName(
-        scope,
-        "artifacts-account-id-parameter",
-        NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
-      );
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
-        image: ContainerImage.fromRegistry(
-          // `${accountId.stringValue}.dkr.ecr.eu-west-1.amazonaws.com/guardian/devx-logs/devx-logs:lifecycle-am-ac-publish-to-ecr-58`,
-          `${accountId.stringValue}.dkr.ecr.eu-west-1.amazonaws.com/guardian/cdk/logging:branch-a777m-devx-logs-changes`,
-        ),
+        image: loggingImage,
         environment,
         versionConsistency: VersionConsistency.DISABLED,
         // Send this container's logs to CloudWatch logs, retained for 1 day
