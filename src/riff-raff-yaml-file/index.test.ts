@@ -9,6 +9,7 @@ import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
+import { acknowledgeUnusedParameters } from "../utils/test/validations";
 import { UnknownRiffRaffProjectName } from "./types";
 import { RiffRaffYamlFile, validateRiffRaffYamlDirectory } from "./index";
 
@@ -1471,6 +1472,9 @@ describe("The RiffRaffYamlFile class", () => {
             scalingAdjustment: 1,
           });
         }
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
       }
     }
 

@@ -17,6 +17,7 @@ import { GuSecurityGroup } from "../../constructs/ec2";
 import { GuDynamoDBWritePolicy } from "../../constructs/iam";
 import type { AppAccess, GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, GuTemplate, simpleGuStackForTesting } from "../../utils/test";
+import { acknowledgeUnusedParameters } from "../../utils/test/validations";
 import { RollingUpdateDurations } from "./ec2-app";
 import { getDefaultS3ConfigMount, GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
 
@@ -2324,13 +2325,8 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
   });
 
   it("should add the correct CFN Parameters for more than one EC2 app in the same stack", () => {
-    const app = new App();
-    const stack = new GuStack(app, "test", {
-      stack: "test-stack",
-      stage: "TEST",
-      env: { region: "eu-west-1" },
-    });
-
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    acknowledgeUnusedParameters(stack);
     const appA = new GuLoadBalancedAppExperimental(stack, {
       ...topLevelPropsForVersionedDeployment("app-a"),
       ec2Props: {
@@ -2377,6 +2373,10 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
         super(scope, id, {
           ...props,
         });
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
+
         const ec2App = new GuLoadBalancedAppExperimental(this, {
           ...topLevelPropsForVersionedDeployment(),
           ec2Props: { ...ec2PropsForVersionedDeployment(this), scaling: props.scaling },
@@ -2427,6 +2427,10 @@ describe("the GuLoadBalancedAppExperimental pattern should support experimental 
         super(scope, id, {
           ...props,
         });
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
+
         const ec2App = new GuLoadBalancedAppExperimental(this, {
           ...topLevelPropsForVersionedDeployment(props.appName),
           ec2Props: { ...ec2PropsForVersionedDeployment(this, props.appName) },

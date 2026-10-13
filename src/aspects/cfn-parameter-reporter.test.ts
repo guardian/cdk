@@ -1,5 +1,6 @@
 import { Annotations, App, Aspects } from "aws-cdk-lib";
-import { GuStack, GuStringParameter } from "../constructs/core";
+import { GuStringParameter } from "../constructs/core";
+import { simpleGuStackForTesting } from "../utils/test";
 import { CfnParameterReporter } from "./cfn-parameter-reporter";
 
 describe("CfnParameterReporter aspect", () => {
@@ -10,13 +11,11 @@ describe("CfnParameterReporter aspect", () => {
   it("should prompt to confirm SSM Parameter exists", () => {
     const info = jest.spyOn(Annotations.prototype, "addInfo");
 
-    const app = new App();
-
-    const stack = new GuStack(app, "Test", { stack: "test", stage: "TEST" });
+    const stack = simpleGuStackForTesting();
     new GuStringParameter(stack, "DatabasePassword", { fromSSM: true, default: "/TEST/test/my-app/database-password" });
     Aspects.of(stack).add(new CfnParameterReporter());
 
-    app.synth();
+    App.of(stack)?.synth();
 
     expect(info).toHaveBeenCalledWith(
       "Stack reads the SSM Parameter '/TEST/test/my-app/database-password'. Ensure it exists prior to deployment.",
