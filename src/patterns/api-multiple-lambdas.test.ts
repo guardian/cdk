@@ -9,7 +9,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     const stack = simpleGuStackForTesting();
     const defaultProps = {
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     };
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
@@ -62,7 +62,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     const stack = simpleGuStackForTesting();
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
       fileName: "my-app-1.zip",
     });
@@ -94,7 +94,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     const stack = simpleGuStackForTesting();
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
       fileName: "my-app-1.zip",
     });
@@ -148,7 +148,7 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
     const lambdaOne = new GuLambdaFunction(stack, "lambda-one", {
       enableVersioning: true,
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
       fileName: "my-app-1.zip",
     });

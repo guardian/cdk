@@ -12,7 +12,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
@@ -27,7 +27,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
@@ -43,7 +43,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       existingSnsTopic: { externalTopicName: "sns-topic-from-another-stack" },
       app: "testing",
@@ -61,7 +61,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
         snsTopicName: "alerts-topic",
@@ -79,7 +79,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
@@ -99,7 +99,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };

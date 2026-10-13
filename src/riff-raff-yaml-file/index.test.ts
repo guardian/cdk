@@ -292,7 +292,7 @@ describe("The RiffRaffYamlFile class", () => {
 
         new GuScheduledLambda(this, "test", {
           app: "my-lambda",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -369,7 +369,7 @@ describe("The RiffRaffYamlFile class", () => {
 
         new GuScheduledLambda(this, "test", {
           app: "my-lambda",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -454,7 +454,7 @@ describe("The RiffRaffYamlFile class", () => {
         new GuLambdaFunction(this, "test", {
           app: "my-lambda",
           withoutArtifactUpload: true,
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           timeout: Duration.minutes(1),
@@ -514,7 +514,7 @@ describe("The RiffRaffYamlFile class", () => {
         new GuScheduledLambda(this, "test", {
           enableVersioning: true, // This is the important prop
           app: "my-lambda",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -670,7 +670,7 @@ describe("The RiffRaffYamlFile class", () => {
 
         new GuScheduledLambda(this, "test", {
           app: "my-lambda-app",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-app.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
