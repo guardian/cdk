@@ -300,6 +300,71 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     ).toThrow("targetGroupWeights.ec2 must be between 0 and 999");
   });
 
+  it("should throw an error if a target receives traffic, but has no compute", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    expect(
+      () =>
+        new GuLoadBalancedAppExperimental(stack, {
+          monitoringConfiguration: { noMonitoring: true },
+          applicationPort: 3000,
+          access: { scope: AccessScope.PUBLIC },
+          app: "test-gu",
+          certificateProps: {
+            domainName: "domain-name-for-your-application.example",
+          },
+          ec2Props: {
+            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+            instanceMetricGranularity: "5Minute",
+            userData: UserData.forLinux(),
+            scaling: {
+              minimumInstances: 0,
+            },
+          },
+          ecsProps: {
+            cpu: 1024,
+            memoryLimitMiB: 2048,
+            scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+            imageIdentifier: "sha256:12345",
+          },
+          targetGroupWeights: {
+            ec2: 1,
+            ecs: 1,
+          },
+        }),
+    ).toThrow("Invalid configuration: EC2 is set to serve traffic (1 of 2 requests), but has 0 instances.");
+
+    expect(
+      () =>
+        new GuLoadBalancedAppExperimental(stack, {
+          monitoringConfiguration: { noMonitoring: true },
+          applicationPort: 3000,
+          access: { scope: AccessScope.PUBLIC },
+          app: "another-test-gu",
+          certificateProps: {
+            domainName: "domain-name-for-your-application.example",
+          },
+          ec2Props: {
+            instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+            instanceMetricGranularity: "5Minute",
+            userData: UserData.forLinux(),
+            scaling: {
+              minimumInstances: 1,
+            },
+          },
+          ecsProps: {
+            cpu: 1024,
+            memoryLimitMiB: 2048,
+            scaling: { minimumTasks: 0, maximumTasks: 0 },
+            imageIdentifier: "sha256:12345",
+          },
+          targetGroupWeights: {
+            ec2: 1,
+            ecs: 1,
+          },
+        }),
+    ).toThrow("Invalid configuration: ECS is set to serve traffic (1 of 2 requests), but has 0 tasks.");
+  });
+
   it("should throw an error if EC2 and ECS props are both omitted", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     expect(
