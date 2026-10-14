@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 65.3.0
+
+### Minor Changes
+
+- 7fb9b51: Add the option for s3 mounts to the ecs deployment properties
+
 ## 65.2.0
 
 ### Minor Changes
