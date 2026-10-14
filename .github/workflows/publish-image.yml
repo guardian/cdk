@@ -38,7 +38,7 @@ jobs:
         run: docker buildx build --load --platform linux/amd64,linux/arm64 -t logging:latest tools/logging
 
       - name: Publish image to ECR
-        uses: guardian/actions-ecr/push@v1.0.1
+        uses: guardian/actions-ecr/push@a777m/support-multi-arch-builds
         with:
           app: logging
           roleArn: ${{ secrets.GU_ARTIFACTS_ROLE_ARN }}
