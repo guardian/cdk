@@ -34,6 +34,8 @@ There are also some other commands defined in `package.json`:
 However, it's advised you configure your IDE to format on save to avoid horrible
 "correct linting" commits.
 
+To iterate quickly and test changes to `cdk` library, it can be copied into client projects (aka vendoring) to skip publishing a new version or canary. See [Vendoring](../docs/vendoring.md) for instructions to set this up.
+
 ### Development Environment
 
 This project comes with a [devcontainer.json](../.devcontainer/shared/devcontainer.json)
