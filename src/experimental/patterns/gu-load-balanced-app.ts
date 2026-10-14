@@ -460,6 +460,28 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     super(scope, app); // The assumption is `app` is unique
 
+    // If a target is set to receive traffic, ensure it has some compute.
+    if (targetGroupWeights) {
+      const { ec2: ec2Weight, ecs: ecsWeight } = targetGroupWeights;
+      const totalWeight = ec2Weight + ecsWeight;
+
+      // Default to 0 for this validation
+      const ec2Min = ec2Props?.scaling.minimumInstances ?? 0;
+      const ecsMin = ecsProps?.scaling.minimumTasks ?? 0;
+
+      if (ec2Weight > 0 && ec2Min <= 0) {
+        throw new Error(
+          `Invalid configuration: EC2 is set to serve traffic (${ec2Weight} of ${totalWeight} requests), but has ${ec2Min} instances.`,
+        );
+      }
+
+      if (ecsWeight > 0 && ecsMin <= 0) {
+        throw new Error(
+          `Invalid configuration: ECS is set to serve traffic (${ecsWeight} of ${totalWeight} requests), but has ${ecsMin} tasks.`,
+        );
+      }
+    }
+
     const { stack, stage } = scope;
 
     let targetGroups: TargetGroups = {};
