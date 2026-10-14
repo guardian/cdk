@@ -1,5 +1,15 @@
 # @guardian/cdk
 
+## 65.2.0
+
+### Minor Changes
+
+- 1b39183: Update GitHubActionsRole to add StringEquals STS Condition
+
+### Patch Changes
+
+- d0da032: Validate `GuLoadBalancedAppExperimental` weighting configuration: if a target is set to receive traffic, ensure it has some compute.
+
 ## 65.1.1
 
 ### Patch Changes
