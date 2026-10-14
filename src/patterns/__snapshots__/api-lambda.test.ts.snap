@@ -136,7 +136,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
             "Arn",
           ],
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -854,7 +854,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
             "Arn",
           ],
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",

@@ -9,9 +9,9 @@ import { GuEcsTask } from "./ecs-task";
 
 const makeVpc = (stack: GuStack) =>
   Vpc.fromVpcAttributes(stack, "VPC", {
-    vpcId: "test",
+    vpcId: "vpc-00000000",
     availabilityZones: [""],
-    publicSubnetIds: [""],
+    publicSubnetIds: ["subnet-00000000"],
     privateSubnetIds: ["abc-123"],
   });
 

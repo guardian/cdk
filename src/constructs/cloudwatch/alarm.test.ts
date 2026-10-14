@@ -11,7 +11,7 @@ describe("The GuAlarm class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
 
