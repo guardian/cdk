@@ -11,7 +11,7 @@ import {
 import type { InstanceType, IPeer, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { ApplicationProtocol, ListenerAction } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -665,6 +665,38 @@ export class GuEc2App extends Construct {
           userPoolDomain: userPoolDomain,
           next: ListenerAction.forward([targetGroup]),
           sessionTimeout: Duration.minutes(sessionTimeoutInMinutes),
+        }),
+      });
+
+      listener.addAction("CognitoAuthUnauthorizedHandler", {
+        priority: 1,
+        conditions: [
+          // action only takes effect if both conditions match
+          ListenerCondition.pathPatterns(["/oauth2/idpresponse"]),
+          ListenerCondition.queryStrings([
+            { key: "error", value: "invalid_request" },
+            { key: "error_description", value: "PreSignUp+failed*" },
+          ]),
+        ],
+        action: ListenerAction.fixedResponse(401, {
+          contentType: "text/html",
+          messageBody: `<!DOCTYPE html>
+<html>
+  <head>
+    <title>401 Authorization Required</title>
+  </head>
+  <body>
+    <center>
+      <h1>401 Authorization Required</h1>
+      <p id="message"></p>
+    </center>
+    <script type="application/javascript">
+      const params = new URLSearchParams(window.location.search);
+      const errorDescription = params.get('error_description');
+      document.getElementById('message').innerText = errorDescription;
+    </script>
+  </body>
+</html>`,
         }),
       });
 
