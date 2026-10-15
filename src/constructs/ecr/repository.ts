@@ -6,7 +6,7 @@ import type { GithubRepositoryName } from "../../types";
 import { GuArtifactsAccountId } from "../core";
 import type { GuStack } from "../core";
 
-// Should follow the following pattern: `<Github Organisation>/<Github Repository>/<App Name>`
+// Should follow the following pattern: `{Github Organisation}/{Github Repository}/{App Name}`
 export type CentralRepositoryName = `${GithubRepositoryName}/${string}`;
 export type GuRepositoryProps = {
   // The name of the ECR repository, must follow the pattern `guardian/{Github Repository}/{App Name}`
