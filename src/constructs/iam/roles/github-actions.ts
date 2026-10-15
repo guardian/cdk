@@ -96,6 +96,9 @@ export class GuGithubActionsRole extends GuRole {
       assumedBy: new FederatedPrincipal(
         `arn:aws:iam::${scope.account}:oidc-provider/${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}`,
         {
+          StringEquals: {
+            [`${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}:aud`]: "sts.amazonaws.com",
+          },
           StringLike: {
             [`${GITHUB_ACTIONS_ID_TOKEN_REQUEST_DOMAIN}:sub`]: GuGithubActionsRepositoryCondition.toString(
               props.condition ?? ALL_GUARDIAN_REPOSITORIES,

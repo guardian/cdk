@@ -12,7 +12,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
 
@@ -32,7 +32,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
 
@@ -45,7 +45,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorPercentageMonitoring: {
         toleratedErrorPercentage: 5,
         snsTopicName: "test-topic",
@@ -62,7 +62,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
 
@@ -118,7 +118,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_21,
       memorySize: 2048,
       app: "testing",
     });
@@ -134,7 +134,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_25,
       app: "testing",
     });
 
@@ -149,7 +149,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_25,
       timeout: Duration.seconds(60),
       app: "testing",
     });
@@ -165,7 +165,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_25,
       app: "testing",
     });
 
@@ -181,7 +181,7 @@ describe("The GuLambdaFunction class", () => {
       fileName: "my-app.jar",
       bucketNamePath: "/example-parameter-path", // the override
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_25,
       app: "testing",
     });
 
@@ -248,7 +248,7 @@ describe("The GuLambdaFunction class", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "my-app.jar",
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_25,
       app: "testing",
     });
 
@@ -263,7 +263,7 @@ describe("The GuLambdaFunction class", () => {
       enableVersioning: true,
       fileName: "build123.jar",
       handler: "handler.ts",
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_25,
       app: "testing",
     });
 

@@ -2,6 +2,7 @@ import { join } from "path";
 import { Annotations, App, Aspects, Stack } from "aws-cdk-lib";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 import { LibraryInfo } from "../constants";
+import { simpleGuStackForTesting } from "../utils/test";
 import { CfnIncludeReporter } from "./cfn-include-reporter";
 
 describe("CfnIncludeReporter aspect", () => {
@@ -29,12 +30,10 @@ describe("CfnIncludeReporter aspect", () => {
   it("does not prompt to check for stateful resources", () => {
     const warning = jest.spyOn(Annotations.prototype, "addWarning");
 
-    const app = new App();
-
-    const stack = new Stack(app, "Test");
+    const stack = simpleGuStackForTesting();
     Aspects.of(stack).add(new CfnIncludeReporter());
 
-    app.synth();
+    App.of(stack)?.synth();
 
     expect(warning).not.toHaveBeenCalled();
   });

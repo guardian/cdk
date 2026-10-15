@@ -7,9 +7,9 @@ import { GuDatabaseInstance } from "./instance";
 
 describe("The GuDatabaseInstance class", () => {
   const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-    vpcId: "test",
+    vpcId: "vpc-00000000",
     availabilityZones: [""],
-    publicSubnetIds: [""],
+    publicSubnetIds: ["subnet-00000000"],
     privateSubnetIds: [""],
   });
 

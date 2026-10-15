@@ -3,9 +3,9 @@ import { Annotations, Aspects } from "aws-cdk-lib";
 import { Effect, type PolicyDocument, type PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { CfnManagedPolicy, ManagedPolicy } from "aws-cdk-lib/aws-iam";
 import type { IConstruct } from "constructs";
-import type { GuStack } from "../../../../constructs/core";
+import type { GuStack } from "../../core";
 
-export type GuDeveloperPolicyExperimentalProps = {
+export type GuDeveloperPolicyProps = {
   /**
    * IAM policy statements to include in the developer policy.
    *
@@ -60,10 +60,9 @@ export type GuDeveloperPolicyExperimentalProps = {
  *       aws:cdk:path: janus-resources-for-testing-managed-policy-tagging/justin-testing/Resource* ```
  * ```
  *
- * @experimental
  */
-export class GuDeveloperPolicyExperimental extends ManagedPolicy {
-  constructor(scope: GuStack, id: string, props: GuDeveloperPolicyExperimentalProps) {
+export class GuDeveloperPolicy extends ManagedPolicy {
+  constructor(scope: GuStack, id: string, props: GuDeveloperPolicyProps) {
     super(scope, id, {
       ...props,
       // Bear in mind that path has max length 512 chars
@@ -71,17 +70,17 @@ export class GuDeveloperPolicyExperimental extends ManagedPolicy {
       description: props.friendlyName,
     });
 
-    Aspects.of(this).add(new GuDeveloperPolicyExperimentalRequiredChecker());
+    Aspects.of(this).add(new GuDeveloperPolicyRequiredChecker());
 
     if (!props.withoutPolicyChecks) {
       // Later, apply to the stack and check for specific errors
-      Aspects.of(this).add(new GuDeveloperPolicyExperimentalOptionalChecker());
+      Aspects.of(this).add(new GuDeveloperPolicyOptionalChecker());
     }
   }
 }
 
 // Add checks here that we require and don't allow users to opt out of.
-class GuDeveloperPolicyExperimentalRequiredChecker implements IAspect {
+class GuDeveloperPolicyRequiredChecker implements IAspect {
   public visit(node: IConstruct): void {
     if (node instanceof CfnManagedPolicy) {
       const description = node.description;
@@ -99,7 +98,7 @@ class GuDeveloperPolicyExperimentalRequiredChecker implements IAspect {
 }
 
 // Add checks here that we recommend for most scenarios but don't require.
-class GuDeveloperPolicyExperimentalOptionalChecker implements IAspect {
+class GuDeveloperPolicyOptionalChecker implements IAspect {
   public visit(node: IConstruct): void {
     if (node instanceof CfnManagedPolicy) {
       const policyDocumentJson: unknown = (node.policyDocument as PolicyDocument).toJSON();

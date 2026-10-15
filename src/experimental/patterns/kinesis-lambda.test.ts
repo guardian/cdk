@@ -21,7 +21,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       app: "testing",
@@ -41,14 +41,14 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
     const { kinesisStream } = new GuKinesisLambdaExperimental(stack, "my-lambda-function", props);
-    stack.overrideLogicalId(kinesisStream, { logicalId: "pre-existing-kinesis-stream", reason: "testing" });
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "pre-existing-kinesis-stream");
+    stack.overrideLogicalId(kinesisStream, { logicalId: "PreExistingKinesisStream", reason: "testing" });
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::Kinesis::Stream", "PreExistingKinesisStream");
   });
 
   it("should not generate a new Kinesis stream if an external stream name is passed in", () => {
@@ -62,7 +62,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       errorHandlingConfiguration: basicErrorHandling,
       existingKinesisStream: { externalKinesisStreamName: "kinesis-stream-from-another-stack" },
@@ -102,7 +102,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: {
         toleratedErrorPercentage: 1,
@@ -125,7 +125,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       app: "testing",
@@ -150,7 +150,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       kinesisStreamProps: {
@@ -181,7 +181,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       kinesisStreamProps: kinesisStreamProps,
@@ -213,7 +213,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       processingProps: processingProps,
@@ -240,7 +240,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: errorHandlingProps,
       monitoringConfiguration: noMonitoring,
       app: "testing",
@@ -263,7 +263,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: errorHandlingProps,
       monitoringConfiguration: noMonitoring,
       app: "testing",
@@ -286,7 +286,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       app: "testing",
@@ -309,7 +309,7 @@ describe("The GuKinesisLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       errorHandlingConfiguration: basicErrorHandling,
       monitoringConfiguration: noMonitoring,
       app: "testing",

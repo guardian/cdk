@@ -11,7 +11,7 @@ describe("GuLambdaThrottlingAlarm construct", () => {
     new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
       throttlingMonitoring: { snsTopicName: "alerts-topic" },
     });
@@ -26,7 +26,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
     const props = {
@@ -43,7 +43,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
     const props = {
@@ -71,7 +71,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
     const props = {
@@ -91,7 +91,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
     const props = {
@@ -111,7 +111,7 @@ describe("The GuLambdaErrorPercentageAlarm construct", () => {
     const lambda = new GuLambdaFunction(stack, "lambda", {
       fileName: "lambda.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       app: "testing",
     });
     const props = {

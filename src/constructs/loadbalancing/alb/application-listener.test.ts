@@ -10,9 +10,9 @@ import { GuApplicationLoadBalancer } from "./application-load-balancer";
 import { GuApplicationTargetGroup } from "./application-target-group";
 
 const vpc = Vpc.fromVpcAttributes(new Stack(), "VPC", {
-  vpcId: "test",
+  vpcId: "vpc-00000000",
   availabilityZones: [""],
-  publicSubnetIds: [""],
+  publicSubnetIds: ["subnet-00000000"],
 });
 
 const app: AppIdentity = { app: "testing" };

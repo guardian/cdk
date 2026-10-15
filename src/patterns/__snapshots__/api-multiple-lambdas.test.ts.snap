@@ -763,7 +763,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -973,7 +973,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -1183,7 +1183,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -1393,7 +1393,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",

@@ -10,6 +10,7 @@ import { GuStack } from "../../constructs/core";
 import { GuEc2App } from "../../patterns";
 import type { GuAsgCapacity } from "../../types";
 import { getTemplateAfterAspectInvocation, simpleGuStackForTesting } from "../../utils/test";
+import { acknowledgeUnusedParameters } from "../../utils/test/validations";
 import type { GuEc2AppExperimentalProps } from "./ec2-app";
 import { GuHorizontallyScalingDeploymentPropertiesExperimental } from "./ec2-app";
 import { GuEc2AppExperimental, RollingUpdateDurations } from "./ec2-app";
@@ -271,12 +272,7 @@ describe("The GuEc2AppExperimental pattern", () => {
   });
 
   it("should add the correct CFN Parameters for more than one EC2 app in the same stack", () => {
-    const app = new App();
-    const stack = new GuStack(app, "test", {
-      stack: "test-stack",
-      stage: "TEST",
-      env: { region: "eu-west-1" },
-    });
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
     const appA = new GuEc2AppExperimental(stack, {
       ...initialProps(stack, "app-a"),
@@ -318,6 +314,10 @@ describe("The GuEc2AppExperimental pattern", () => {
         super(scope, id, {
           ...props,
         });
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
+
         const ec2App = new GuEc2AppExperimental(this, {
           ...initialProps(this),
           scaling: props.scaling,
@@ -368,6 +368,10 @@ describe("The GuEc2AppExperimental pattern", () => {
         super(scope, id, {
           ...props,
         });
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
+
         const ec2App = new GuEc2AppExperimental(this, {
           ...initialProps(this, props.appName),
         });
@@ -489,6 +493,10 @@ describe("The GuHorizontallyScalingDeploymentPropertiesExperimental construct", 
         super(app, id, {
           ...props,
         });
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
+
         const ec2App = new GuEc2App(this, {
           ...initialProps(this, props.appName),
         });

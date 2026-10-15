@@ -1,5 +1,97 @@
 # @guardian/cdk
 
+## 65.3.0
+
+### Minor Changes
+
+- 7fb9b51: Add the option for s3 mounts to the ecs deployment properties
+
+## 65.2.0
+
+### Minor Changes
+
+- 1b39183: Update GitHubActionsRole to add StringEquals STS Condition
+
+### Patch Changes
+
+- d0da032: Validate `GuLoadBalancedAppExperimental` weighting configuration: if a target is set to receive traffic, ensure it has some compute.
+
+## 65.1.1
+
+### Patch Changes
+
+- d81f193: Add optional `allowS3Sync` boolean (default `false`) to `GuLoadBalancedAppExperimental` pattern to add permissions necessary to use `aws s3 sync` in EC2 user-data blocks.
+
+## 65.1.0
+
+### Minor Changes
+
+- d346a17: Update `GuLoadBalancedAppExperimental` to make the FireLens log driver accessible.
+  This allows clients to use it to ship the logs of their additional sidecars to Central ELK.
+  For example:
+
+  ```ts
+  const app = new GuLoadBalancedAppExperimental();
+
+  if (app.ecsService) {
+    const { taskDefinition } = app.ecsService;
+
+    if (!app.fireLensLogDriver) {
+      throw new Error("Unable to re-use FireLens log driver"); // This should not happen!
+    }
+
+    const fireLensLogDriver = app.fireLensLogDriver;
+
+    taskDefinition.addContainer("aws-otel-collector", {
+      image: ContainerImage.fromRegistry(
+        "public.ecr.aws/aws-observability/aws-otel-collector@sha256:90b3180c21acb9497110480371a413ed91f2836077f8a8fb4507b019d3c481c0",
+      ),
+      command: ["--config=/etc/ecs/ecs-default-config.yaml"],
+      logging: fireLensLogDriver,
+    });
+  }
+  ```
+
+## 65.0.0
+
+### Major Changes
+
+- a0ec968: BREAKING CHANGE: `GuDeveloperPolicyExperimental` has been promoted to stable and renamed `GuDeveloperPolicy`
+
+  Example usage:
+
+  ```ts
+  // Before
+  import { GuDeveloperPolicyExperimental } from "@guardian/cdk/lib/experimental/constructs/iam/policies";
+  new GuDeveloperPolicyExperimental(this, "ExampleDeveloperPolicy", {
+    grantId: "ExamplePolicy",
+    friendlyName: "An example policy",
+    statements: [
+      /* ... */
+    ],
+  });
+
+  // After
+  import { GuDeveloperPolicy } from "@guardian/cdk/iam/policies";
+  new GuDeveloperPolicy(this, "ExampleDeveloperPolicy", {
+    grantId: "ExamplePolicy",
+    friendlyName: "An example policy",
+    statements: [
+      /* ... */
+    ],
+  });
+  ```
+
+## 64.7.0
+
+### Minor Changes
+
+- f575ccb: Add support for ECS scaling using CPU Utilisation as a target metric to GuLoadBalancedAppExperimental.
+
+### Patch Changes
+
+- 91c8351: Update js-yaml dependency
+
 ## 64.6.0
 
 ### Minor Changes

@@ -86,7 +86,7 @@ exports[`The GuSnsLambda pattern should create the correct resources for a new s
             "Arn",
           ],
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
