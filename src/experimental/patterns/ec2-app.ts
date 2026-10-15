@@ -324,7 +324,7 @@ export class GuRoleForRollingUpdateExperimental {
     // Then create the ASG that requires the permissions.
     const cfnPolicy = policy.node.defaultChild as CfnPolicy;
     const cfnAutoScalingGroup = props.autoScalingGroup.node.defaultChild as CfnAutoScalingGroup;
-    cfnAutoScalingGroup.addDependency(cfnPolicy);
+    cfnAutoScalingGroup.addResourceDependency(cfnPolicy);
   }
 }
 

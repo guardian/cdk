@@ -85,7 +85,7 @@ exports[`The GuKinesisLambda pattern should create the correct resources for a n
             "Arn",
           ],
         },
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",

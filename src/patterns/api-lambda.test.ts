@@ -14,7 +14,7 @@ describe("The GuApiLambda pattern", () => {
     new GuApiLambda(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
       api: {
@@ -30,7 +30,7 @@ describe("The GuApiLambda pattern", () => {
     new GuApiLambda(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: {
         http5xxAlarm: { tolerated5xxPercentage: 5 },
         snsTopicName: "alerts-topic",
@@ -50,7 +50,7 @@ describe("The GuApiLambda pattern", () => {
     const apiLambda = new GuApiLambda(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
       api: {
@@ -83,7 +83,7 @@ describe("The GuApiLambda pattern", () => {
     new GuApiLambda(stack, "lambda", {
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
       api: {
@@ -124,7 +124,7 @@ describe("The GuApiLambda pattern", () => {
       enableVersioning: true,
       fileName: "my-app.zip",
       handler: "handler.ts",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
       api: {

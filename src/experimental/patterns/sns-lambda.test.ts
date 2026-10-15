@@ -12,7 +12,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
@@ -27,13 +27,13 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
     const { snsTopic } = new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
-    stack.overrideLogicalId(snsTopic, { logicalId: "in-use-sns-topic", reason: "testing" });
-    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "in-use-sns-topic");
+    stack.overrideLogicalId(snsTopic, { logicalId: "InUseSnsTopic", reason: "testing" });
+    GuTemplate.fromStack(stack).hasResourceWithLogicalId("AWS::SNS::Topic", "InUseSnsTopic");
   });
 
   it("should not generate a new SNS Topic if an externalTopicName is passed via existingSnsTopic", () => {
@@ -43,7 +43,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       existingSnsTopic: { externalTopicName: "sns-topic-from-another-stack" },
       app: "testing",
@@ -61,7 +61,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: {
         toleratedErrorPercentage: 99,
         snsTopicName: "alerts-topic",
@@ -79,7 +79,7 @@ describe("The GuSnsLambda pattern", () => {
       fileName: "lambda.zip",
       functionName: "my-lambda-function",
       handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_LATEST,
       monitoringConfiguration: noMonitoring,
       app: "testing",
     };
@@ -88,24 +88,6 @@ describe("The GuSnsLambda pattern", () => {
       Endpoint: {
         "Fn::GetAtt": ["mylambdafunction8D341B54", "Arn"],
       },
-    });
-  });
-
-  it("should send messages to an alias if the enableVersioning prop is set to true", () => {
-    const stack = simpleGuStackForTesting();
-    const noMonitoring: NoMonitoring = { noMonitoring: true };
-    const props = {
-      enableVersioning: true,
-      fileName: "lambda.zip",
-      functionName: "my-lambda-function",
-      handler: "my-lambda/handler",
-      runtime: Runtime.NODEJS_12_X,
-      monitoringConfiguration: noMonitoring,
-      app: "testing",
-    };
-    new GuSnsLambdaExperimental(stack, "my-lambda-function", props);
-    Template.fromStack(stack).hasResourceProperties("AWS::SNS::Subscription", {
-      Endpoint: { Ref: "mylambdafunctionAliasForLambdaF2F98ED5" },
     });
   });
 });

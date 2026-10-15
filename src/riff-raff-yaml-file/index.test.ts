@@ -9,6 +9,7 @@ import { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuEc2AppExperimental } from "../experimental/patterns/ec2-app";
 import { GuEc2App, GuNodeApp, GuPlayApp, GuScheduledLambda } from "../patterns";
+import { acknowledgeUnusedParameters } from "../utils/test/validations";
 import { UnknownRiffRaffProjectName } from "./types";
 import { RiffRaffYamlFile, validateRiffRaffYamlDirectory } from "./index";
 
@@ -292,7 +293,7 @@ describe("The RiffRaffYamlFile class", () => {
 
         new GuScheduledLambda(this, "test", {
           app: "my-lambda",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -369,7 +370,7 @@ describe("The RiffRaffYamlFile class", () => {
 
         new GuScheduledLambda(this, "test", {
           app: "my-lambda",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -454,7 +455,7 @@ describe("The RiffRaffYamlFile class", () => {
         new GuLambdaFunction(this, "test", {
           app: "my-lambda",
           withoutArtifactUpload: true,
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           timeout: Duration.minutes(1),
@@ -514,7 +515,7 @@ describe("The RiffRaffYamlFile class", () => {
         new GuScheduledLambda(this, "test", {
           enableVersioning: true, // This is the important prop
           app: "my-lambda",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-artifact.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -670,7 +671,7 @@ describe("The RiffRaffYamlFile class", () => {
 
         new GuScheduledLambda(this, "test", {
           app: "my-lambda-app",
-          runtime: Runtime.NODEJS_16_X,
+          runtime: Runtime.NODEJS_LATEST,
           fileName: "my-lambda-app.zip",
           handler: "handler.main",
           rules: [{ schedule: Schedule.rate(Duration.hours(1)) }],
@@ -1223,8 +1224,8 @@ describe("The RiffRaffYamlFile class", () => {
       stage: "PROD",
     });
 
-    appCode.addDependency(databaseCode);
-    appProd.addDependency(databaseProd);
+    appCode.addStackDependency(databaseCode);
+    appProd.addStackDependency(databaseProd);
 
     const actual = new RiffRaffYamlFile(app).toYAML();
 
@@ -1471,6 +1472,9 @@ describe("The RiffRaffYamlFile class", () => {
             scalingAdjustment: 1,
           });
         }
+
+        // In unit tests, we don't need to produce minimal CFN stacks.
+        acknowledgeUnusedParameters(this);
       }
     }
 

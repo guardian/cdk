@@ -1,5 +1,27 @@
 # @guardian/cdk
 
+## 65.3.0
+
+### Minor Changes
+
+- 7fb9b51: Add the option for s3 mounts to the ecs deployment properties
+
+## 65.2.0
+
+### Minor Changes
+
+- 1b39183: Update GitHubActionsRole to add StringEquals STS Condition
+
+### Patch Changes
+
+- d0da032: Validate `GuLoadBalancedAppExperimental` weighting configuration: if a target is set to receive traffic, ensure it has some compute.
+
+## 65.1.1
+
+### Patch Changes
+
+- d81f193: Add optional `allowS3Sync` boolean (default `false`) to `GuLoadBalancedAppExperimental` pattern to add permissions necessary to use `aws s3 sync` in EC2 user-data blocks.
+
 ## 65.1.0
 
 ### Minor Changes

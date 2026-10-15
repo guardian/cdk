@@ -1,10 +1,11 @@
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Bucket } from "aws-cdk-lib/aws-s3";
 import type { GuPrivateS3ConfigurationProps } from "../../../utils/ec2";
 import { GuAppAwareConstruct } from "../../../utils/mixin/app-aware-construct";
-import { GuDistributionBucketParameter } from "../../core";
-import type { AppIdentity, GuStack } from "../../core";
-import { GuAllowPolicy } from "./base-policy";
+import type { GuStack } from "../../core";
+import { AppIdentity, GuDistributionBucketParameter } from "../../core";
 import type { GuNoStatementsPolicyProps } from "./base-policy";
+import { GuAllowPolicy, GuPolicy } from "./base-policy";
 
 export interface GuGetS3ObjectPolicyProps extends GuNoStatementsPolicyProps {
   bucketName: string;
@@ -16,6 +17,25 @@ export class GuGetS3ObjectsPolicy extends GuAllowPolicy {
     const paths: string[] = props.paths ?? ["*"];
     const s3Resources: string[] = paths.map((path) => `arn:aws:s3:::${props.bucketName}/${path}`);
     super(scope, id, { ...props, actions: ["s3:GetObject"], resources: s3Resources });
+  }
+}
+
+export class GuListBucketPolicy extends GuAppAwareConstruct(GuPolicy) {
+  constructor(scope: GuStack, props: AppIdentity) {
+    const bucket = Bucket.fromBucketName(
+      scope,
+      AppIdentity.addAppToStringEnd(props, "ListableBucket"),
+      GuDistributionBucketParameter.getInstance(scope).valueAsString,
+    ).bucketArn;
+
+    const stmt = new PolicyStatement({
+      effect: Effect.ALLOW,
+      resources: [bucket],
+      actions: ["s3:ListBucket"],
+    });
+    stmt.addCondition("StringLike", { "s3:prefix": `${scope.stack}/${scope.stage}/${props.app}/conf/` });
+
+    super(scope, "GuListBucketPolicy", { ...props, statements: [stmt] });
   }
 }
 
