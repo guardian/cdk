@@ -126,3 +126,17 @@ jobs:
         run: |
           git remote set-url origin https://git:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git
           npm run release:docs
+
+      - name: Apply Core4 label
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        if: steps.changesets.outputs.published == 'true'
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const prNumber = ${{ steps.changesets.outputs.pr-number }};
+            github.rest.issues.addLabels({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['maintenance']
+            });
