@@ -587,14 +587,14 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
         imageIdentifier: "sha256:12345",
-        repositoryName: "guardian/some-other-repo",
+        repositoryName: "guardian/some-other-repo/app",
       },
     });
     Template.fromStack(stack).hasResourceProperties("AWS::ECS::TaskDefinition", {
       ContainerDefinitions: Match.arrayWith([
         Match.objectLike({
           Image: {
-            "Fn::Join": ["", Match.arrayWith(["/guardian/some-other-repo@sha256:12345"])],
+            "Fn::Join": ["", Match.arrayWith(["/guardian/some-other-repo/app@sha256:12345"])],
           },
         }),
       ]),

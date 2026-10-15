@@ -6,6 +6,7 @@ import { CfnIncludeReporter } from "../../aspects/cfn-include-reporter";
 import { CfnParameterReporter } from "../../aspects/cfn-parameter-reporter";
 import { Metadata } from "../../aspects/metadata";
 import { ContextKeys, MetadataKeys, TrackingTag } from "../../constants";
+import type { GithubRepositoryName } from "../../types";
 import { gitRemoteOriginUrl } from "../../utils/git";
 import type { StackStageIdentity } from "./identity";
 import type { GuStaticLogicalId } from "./migrating";
@@ -93,7 +94,7 @@ export class GuStack extends Stack implements StackStageIdentity {
    * The repository name, if it can be determined from the context or the git remote origin url.
    * If it cannot be determined from either of these sources, it will be `undefined`.
    */
-  public readonly repositoryName: string | undefined;
+  public readonly repositoryName: GithubRepositoryName | undefined;
 
   /**
    * A helper function to add a tag to all resources in a stack.
@@ -183,11 +184,11 @@ export class GuStack extends Stack implements StackStageIdentity {
    *
    * @private
    */
-  private tryGetRepositoryTag(): string | undefined {
+  private tryGetRepositoryTag(): GithubRepositoryName | undefined {
     try {
       const urlFromContext = this.node.tryGetContext(ContextKeys.REPOSITORY_URL) as string | undefined;
       const repositoryUrl: string = urlFromContext ?? gitRemoteOriginUrl();
-      return gitUrlParse(repositoryUrl).full_name;
+      return gitUrlParse(repositoryUrl).full_name as GithubRepositoryName;
     } catch {
       console.info(
         `Unable to find git repository name. Set the ${ContextKeys.REPOSITORY_URL} context value or configure a git remote`,
