@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Bump CDK versions
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           ref: main
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version-file: '.tool-versions'
           cache: npm
-      - uses: actions/create-github-app-token@v3
+      - uses: actions/create-github-app-token@v3.3.0
         id: app-token
         with:
           app-id: ${{ vars.APP_ID }}
