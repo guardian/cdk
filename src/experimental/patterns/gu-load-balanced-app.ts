@@ -48,7 +48,7 @@ import {
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuDistributionBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
-import type { CentralRepositoryName } from "../../constructs/ecr/repository";
+import type { ContainerRepositoryName } from "../../constructs/ecr/repository";
 import { GuRepository } from "../../constructs/ecr/repository";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
 import {
@@ -396,7 +396,7 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     /**
      * ECR repository name which contains your images.
      */
-    repositoryName?: CentralRepositoryName;
+    repositoryName?: ContainerRepositoryName;
     /**
      * Mount an S3 Files volume directly into the application container.
      *

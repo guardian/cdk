@@ -7,7 +7,7 @@ describe("GuRepository", () => {
     const stack = simpleGuStackForTesting();
 
     const repository = new GuRepository(stack, "GuRepository", {
-      name: "guardian/test/app",
+      name: "guardian/service-catalogue/cloudquery",
     });
 
     const template = Template.fromStack(stack);
@@ -19,7 +19,7 @@ describe("GuRepository", () => {
       Description: "Account ID of the Artifacts account. Useful as some shared resources live here.",
     });
 
-    expect(repository.repositoryName).toBe("guardian/test/app");
+    expect(repository.repositoryName).toBe("guardian/service-catalogue/cloudquery");
     expect(stack.resolve(repository.repositoryArn)).toStrictEqual({
       "Fn::Join": [
         "",
@@ -28,7 +28,7 @@ describe("GuRepository", () => {
           { Ref: "AWS::Partition" },
           ":ecr:eu-west-1:",
           { Ref: "ArtifactsAccountId" },
-          ":repository/guardian/test/app",
+          ":repository/guardian/service-catalogue/cloudquery",
         ],
       ],
     });

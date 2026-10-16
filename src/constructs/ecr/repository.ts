@@ -6,11 +6,13 @@ import type { GithubRepositoryName } from "../../types";
 import { GuArtifactsAccountId } from "../core";
 import type { GuStack } from "../core";
 
-// Should follow the following pattern: `{Github Organisation}/{Github Repository}/{App Name}`
-export type CentralRepositoryName = `${GithubRepositoryName}/${string}`;
+/**
+ * The name of an image repository in the central artifacts account.
+ * It follows the pattern `guardian/{Github Repository}/{App Name}`.
+ */
+export type ContainerRepositoryName = `${GithubRepositoryName}/${string}`;
 export type GuRepositoryProps = {
-  // The name of the ECR repository, must follow the pattern `guardian/{Github Repository}/{App Name}`
-  name: CentralRepositoryName;
+  name: ContainerRepositoryName;
 };
 
 /**
@@ -52,7 +54,7 @@ export class GuRepository extends RepositoryBase {
    * @param tag a docker tag or digest
    * @returns a `ContainerImage` representing the specified tag or digest of this repository.
    */
-  getImage(tag: string) {
-    return ContainerImage.fromEcrRepository(this, tag);
+  getImage(digestOrTag: string) {
+    return ContainerImage.fromEcrRepository(this, digestOrTag);
   }
 }
