@@ -2651,6 +2651,8 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "GuSubnetListParameter",
       "GuSubnetListParameter",
       "GuLoadBalancedAppExperimental",
+      "GuRepository",
+      "GuArtifactsAccountId",
       "GuLoggingStreamNameParameter",
       "GuRiffRaffDeploymentIdParameterExperimental",
       "GuLogShippingPolicy",
@@ -2681,8 +2683,9 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "Description": "S3 bucket to store your access logs",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "ArtifactAccountIdParameter": {
+    "ArtifactsAccountId": {
       "Default": "/organisation/accounts/artifacts",
+      "Description": "Account ID of the Artifacts account. Useful as some shared resources live here.",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "LoggingStreamName": {
@@ -2922,7 +2925,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                 "",
                 [
                   {
-                    "Ref": "ArtifactAccountIdParameter",
+                    "Ref": "ArtifactsAccountId",
                   },
                   ".dkr.ecr.eu-west-1.",
                   {
@@ -3116,7 +3119,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
                     },
                     ":ecr:eu-west-1:",
                     {
-                      "Ref": "ArtifactAccountIdParameter",
+                      "Ref": "ArtifactsAccountId",
                     },
                     ":repository/guardian/cdk/test-gu",
                   ],

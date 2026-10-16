@@ -6,3 +6,4 @@ export * from "./fastly";
 export * from "./log-shipping";
 export * from "./s3";
 export * from "./vpc";
+export * from "./artifacts";

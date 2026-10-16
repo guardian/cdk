@@ -1,4 +1,4 @@
-import { ArnFormat, Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
+import { Aspects, Aws, Duration, SecretValue, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -11,7 +11,6 @@ import {
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceType, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { CfnSecurityGroupEgress, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
-import { Repository } from "aws-cdk-lib/aws-ecr";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
@@ -49,6 +48,8 @@ import {
 import type { GuStack } from "../../constructs/core";
 import { AppIdentity, GuDistributionBucketParameter, GuLoggingStreamNameParameter } from "../../constructs/core";
 import { GuHttpsEgressSecurityGroup, GuSecurityGroup, GuVpc, SubnetType } from "../../constructs/ec2";
+import type { ContainerRepositoryName } from "../../constructs/ecr/repository";
+import { GuRepository } from "../../constructs/ecr/repository";
 import type { GuInstanceRoleProps, GuPolicy } from "../../constructs/iam";
 import {
   GuGetPrivateConfigPolicy,
@@ -393,10 +394,9 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     cpu: number;
     memoryLimitMiB: number;
     /**
-     * ECR repository name which contains your images. This defaults to the name of your GitHub repository as we
-     * expect there to be a one-to-one mapping between GitHub repositories and ECR repositories.
+     * ECR repository name which contains your images.
      */
-    repositoryName?: string;
+    repositoryName?: ContainerRepositoryName;
     /**
      * Mount an S3 Files volume directly into the application container.
      *
@@ -683,7 +683,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
     if (ecsProps) {
       const { cpu, memoryLimitMiB, imageIdentifier, scaling, s3Config } = ecsProps;
 
-      const ecrRepoName = ecsProps.repositoryName ?? (scope.repositoryName && app && `${scope.repositoryName}/${app}`);
+      const ecrRepoName =
+        ecsProps.repositoryName ?? (scope.repositoryName ? `${scope.repositoryName}/${app}` : undefined);
       if (!ecrRepoName) {
         throw new Error(
           "Could not determine an ECR repository name; please either set this manually via ecsProps, or ensure your GuStack has a repositoryName and props has an app.",
@@ -695,24 +696,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
         containerInsightsV2: ContainerInsights.ENHANCED,
       });
 
-      const image = ContainerImage.fromEcrRepository(
-        // Images are published to the ECR registry in the Artifacts account, so reference that here
-        Repository.fromRepositoryAttributes(this, "Repo", {
-          repositoryArn: scope.formatArn({
-            account: StringParameter.fromStringParameterName(
-              scope,
-              "ArtifactAccountId",
-              NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
-            ).stringValue,
-            arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
-            resource: "repository",
-            resourceName: ecrRepoName,
-            service: "ecr",
-          }),
-          repositoryName: ecrRepoName,
-        }),
-        imageIdentifier,
-      );
+      const image = new GuRepository(scope, "Repo", {
+        name: ecrRepoName,
+      }).getImage(imageIdentifier);
 
       const loggingStreamName = GuLoggingStreamNameParameter.getInstance(scope).valueAsString;
 
