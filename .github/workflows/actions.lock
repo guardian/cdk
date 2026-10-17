@@ -17,6 +17,13 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v6.5.0'
         - 'actions/setup-node@v7.1.0'
+    '.github/workflows/publish-image.yml':
+        - 'actions/checkout@v7.0.1'
+        - 'actions/setup-go@v6.5.0'
+        - 'docker/setup-buildx-action@v4.4.1'
+        - 'docker/setup-docker-action@v5.5.0'
+        - 'docker/setup-qemu-action@v4.4.0'
+        - 'guardian/actions-ecr@v1.0.2'
     '.github/workflows/stale.yml':
         - 'actions/stale@v11.0.0'
     '.github/workflows/update-aws-cdk.yaml':
@@ -39,11 +46,21 @@ dependencies:
         commit: 'sha1-64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         owner_id: 44036562
         repo_id: 642580244
+    'actions/github-script@v9':
+        ref: 'v9'
+        commit: 'sha1-3a2844b7e9c422d3c10d287c895573f7108da1b3'
+        owner_id: 44036562
+        repo_id: 205262760
     'actions/github-script@v9.0.0':
         ref: 'v9.0.0'
         commit: 'sha1-3a2844b7e9c422d3c10d287c895573f7108da1b3'
         owner_id: 44036562
         repo_id: 205262760
+    'actions/setup-go@v6.5.0':
+        ref: 'v6.5.0'
+        commit: 'sha1-924ae3a1cded613372ab5595356fb5720e22ba16'
+        owner_id: 44036562
+        repo_id: 192624594
     'actions/setup-node@v6.5.0':
         ref: 'v6.5.0'
         commit: 'sha1-249970729cb0ef3589644e2896645e5dc5ba9c38'
@@ -59,8 +76,42 @@ dependencies:
         commit: 'sha1-4391f3da665fdf50b6810c1a66712fb9ba21aa93'
         owner_id: 44036562
         repo_id: 200437066
+    'aws-actions/amazon-ecr-login@v2.1.7':
+        ref: 'v2.1.7'
+        commit: 'sha1-03f1aad4c6c7ffd436567f42f9384779290529bd'
+        owner_id: 57468012
+        repo_id: 220389860
+    'aws-actions/configure-aws-credentials@v6.3.0':
+        ref: 'v6.3.0'
+        commit: 'sha1-e1253824e5c10ff9df46874f81ed3ec929e19cfd'
+        owner_id: 57468012
+        repo_id: 220391287
     'changesets/action@v2.1.2':
         ref: 'v2.1.2'
         commit: 'sha1-ae32849d5ba541f9ae29e40e22a623bc13562f51'
         owner_id: 51163350
         repo_id: 202093906
+    'docker/setup-buildx-action@v4.4.1':
+        ref: 'v4.4.1'
+        commit: 'sha1-f87e5991a6d7451dcb8d9637bfbc97413f497069'
+        owner_id: 5429470
+        repo_id: 288485773
+    'docker/setup-docker-action@v5.5.0':
+        ref: 'v5.5.0'
+        commit: 'sha1-2bf61fb9464cc67f0cbdeabed6aa0380accd1c70'
+        owner_id: 5429470
+        repo_id: 398780917
+    'docker/setup-qemu-action@v4.4.0':
+        ref: 'v4.4.0'
+        commit: 'sha1-99012661954931238ded8c8b007157a8430204e1'
+        owner_id: 5429470
+        repo_id: 288487894
+    'guardian/actions-ecr@v1.0.2':
+        ref: 'v1.0.2'
+        commit: 'sha1-a9630321ca030f012f3c74447f4233aa8fac7d98'
+        owner_id: 164318
+        repo_id: 1267805879
+        uses:
+            - 'actions/github-script@v9'
+            - 'aws-actions/amazon-ecr-login@v2.1.7'
+            - 'aws-actions/configure-aws-credentials@v6.3.0'
