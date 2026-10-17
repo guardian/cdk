@@ -602,15 +602,17 @@ export class GuLoadBalancedAppExperimental extends Construct {
         containerInsightsV2: ContainerInsights.ENHANCED,
       });
 
+      const artifactsAccountId = StringParameter.fromStringParameterName(
+        scope,
+        "ArtifactAccountId",
+        NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
+      );
+
       const image = ContainerImage.fromEcrRepository(
         // Images are published to the ECR registry in the Artifacts account, so reference that here
         Repository.fromRepositoryAttributes(this, "Repo", {
           repositoryArn: scope.formatArn({
-            account: StringParameter.fromStringParameterName(
-              scope,
-              "ArtifactAccountId",
-              NAMED_SSM_PARAMETER_PATHS.ArtifactsAccountId.path,
-            ).stringValue,
+            account: artifactsAccountId.stringValue,
             arnFormat: ArnFormat.SLASH_RESOURCE_NAME,
             resource: "repository",
             resourceName: ecrRepoName,
