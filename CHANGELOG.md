@@ -1,5 +1,16 @@
 # @guardian/cdk
 
+## 66.0.0
+
+### Major Changes
+
+- 9f5b036: Encrypt storage by default in `GuDatabaseInstance`.
+  NOTE: This updates the [`StorageEncrypted` property](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-storageencrypted) of `AWS::RDS::DBInstance` resources, which is a replacement operation.
+
+### Minor Changes
+
+- ffedffb: Add `GuRepository` construct facilitating access to Central ECR
+
 ## 65.3.0
 
 ### Minor Changes
