@@ -4241,15 +4241,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             },
             {
               "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage",
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
-            },
-            {
-              "Action": [
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
               ],
