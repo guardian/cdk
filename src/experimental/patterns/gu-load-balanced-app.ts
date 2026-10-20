@@ -810,25 +810,30 @@ export class GuLoadBalancedAppExperimental extends Construct {
       GuardDuty is enabled at the organisation level and runs as a sidecar.
       We need to add specific permissions to allow pulling the GuardDuty image.
       See https://docs.aws.amazon.com/guardduty/latest/ug/prereq-runtime-monitoring-ecs-support.html.
-       */
-      const guardDutyPolicies = [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["ecr:GetAuthorizationToken"],
-          resources: ["*"],
-        }),
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
-          resources: [
-            // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
-            // TODO: This seams fargate specific, is there a managed instances version?
-            "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
-          ],
-        }),
-      ];
 
-      guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
+      GuardDuty only support runtime monitoring for ECS Fargate.
+      For ECS Managed Instances, it supports the Malware Protection for EC2.
+      See https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_managed-instances.html
+       */
+      if (!ecsProps.managedInstancesProps) {
+        const guardDutyPolicies = [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["ecr:GetAuthorizationToken"],
+            resources: ["*"],
+          }),
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
+            resources: [
+              // See https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring-ecr-repository-gdu-agent.html
+              "arn:aws:ecr:eu-west-1:694911143906:repository/aws-guardduty-agent-fargate",
+            ],
+          }),
+        ];
+
+        guardDutyPolicies.forEach((policy) => taskDefinition.addToExecutionRolePolicy(policy));
+      }
 
       const ecsService = new FargateService(scope, "EcsService", {
         cluster,
