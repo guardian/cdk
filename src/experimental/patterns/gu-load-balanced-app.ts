@@ -11,9 +11,8 @@ import {
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
 import { CfnSecurityGroupEgress, CpuManufacturer, InstanceGeneration, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
+import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
-  CfnService,
-  CfnTaskDefinition,
   Cluster,
   Compatibility,
   ContainerImage,
@@ -29,7 +28,6 @@ import {
   OperatingSystemFamily,
   TaskDefinition,
   VersionConsistency,
-  Volume,
 } from "aws-cdk-lib/aws-ecs";
 import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
@@ -86,6 +84,7 @@ import type { GuAsgCapacity, GuDomainName } from "../../types";
 import { AppAccess } from "../../types";
 import type { AmigoProps } from "../../types/amigo";
 import { getUserPoolDomainPrefix } from "../../utils/cognito/cognito";
+import { GuECSManagedInstanceRoleExperimental } from "../constructs/iam/roles";
 import { GuRiffRaffDeploymentIdParameterExperimental } from "../constructs/riff-raff-deployment-id";
 import {
   GuAutoScalingRollingUpdateTimeoutExperimental,
@@ -756,11 +755,12 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const managedInstancesCapacityProvider = ecsProps.managedInstancesProps
         ? this.createManagedInstanceCapacityProvider(
-            this,
+            scope,
             [httpsEgressSecurityGroup],
             privateSubnets,
             ecsProps.managedInstancesProps.instancesRequirements ??
               defaultManagedInstanceRequirements(memoryLimitMiB, cpu),
+            cluster.clusterArn,
           )
         : undefined;
       if (managedInstancesCapacityProvider) {
@@ -1360,29 +1360,17 @@ export class GuLoadBalancedAppExperimental extends Construct {
    * @param instanceSubnets - {@link ManagedInstancesCapacityProviderProps#subnets}
    * @param cpuMin - Minimum task CPU units required for EC2 instance. This is converted to vCPU.
    * @param memoryMinMiB - Minimum memory in MiB for EC2 instance tasks are placed on.
+   * @param clusterArn - ARN of the cluster this capacity provider is scoped to.
    */
   private createManagedInstanceCapacityProvider(
-    scope: Construct,
+    scope: GuStack,
     instanceSecurityGroups: ISecurityGroup[],
     instanceSubnets: ISubnet[],
     instanceRequirements: InstanceRequirementsConfig,
+    clusterArn: string,
   ): ManagedInstancesCapacityProvider {
-    // Allows the ec2 instance to register with the cluster and ECS.
-    const ecsInstanceRolePolicy = ManagedPolicy.fromManagedPolicyArn(
-      scope,
-      "ECSInstanceRole",
-      "arn:aws:iam::aws:policy/AmazonECSInstanceRolePolicyForManagedInstances",
-    );
-
-    // Allows the EC2 instance to pull images from the registry
-    const ecsRegistryPullPolicy = ManagedPolicy.fromManagedPolicyArn(
-      scope,
-      "ECSRegistryPullPolicy ",
-      "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-    );
-
     // This is the same as the recommend role for ecs managed instances capacity providers,
-    // except without the `instanceProfileName` set to "ecsInstanceRole".
+    // except without the `instanceProfileName` set to "ecsInstanceRole" in the `instanceProfile`.
     //
     // AWS recommend instanceProfileName is set to ecsInstanceRole as the managed policy
     // AmazonECSInfrastructureRolePolicyForManagedInstances is by default set to scope `iam:PassRole`
@@ -1395,12 +1383,11 @@ export class GuLoadBalancedAppExperimental extends Construct {
     // `iam:PassRole` to EC2 instances.
     //
     // To read more {@link https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html}
-    const ecsInstanceRole = new Role(scope, "ECSManagedInstancesRole", {
-      managedPolicies: [ecsInstanceRolePolicy, ecsRegistryPullPolicy],
-      assumedBy: ServicePrincipal.fromStaticServicePrincipleName("ec2.amazonaws.com"),
+    const ecsInstanceRole = new GuECSManagedInstanceRoleExperimental(scope, "ECSManagedInstancesRole", {
+      clusterArn,
     });
 
-    const instanceProfile = new InstanceProfile(scope, "ECSManagedInstancesProfile", {
+    const instanceProfile = new InstanceProfile(scope, "ECSInstanceProfile", {
       role: ecsInstanceRole,
     });
 
