@@ -66,6 +66,10 @@ export class Imports {
         types: [],
         components: ["Template"],
       },
+      "node:test": {
+        types: [],
+        components: ["suite", "test"],
+      },
       [`./${kebab}`]: {
         types: [],
         components: [pascal],

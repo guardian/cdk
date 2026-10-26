@@ -22,7 +22,7 @@ export function getCommands(
   return {
     installDependencies: () => runTask(packageManager, cwd, ["install"]),
     lint: () => runTask(packageManager, cwd, ["run", "lint"]),
-    test: () => runTask(packageManager, cwd, ["test", "--", "-u"]),
+    test: () => runTask(packageManager, cwd, ["test", "--", "--test-update-snapshots"]),
     synth: () => runTask(packageManager, cwd, ["run", "synth"]),
   };
 }
