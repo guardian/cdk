@@ -35,6 +35,7 @@ readiness and fix any issues, run:
 Once you've confirmed that your account is ready, you can start provisioning your infrastructure.
 
 > [!TIP]
+>
 > - Setting up a new project? [Start here!](./docs/setting-up-a-gucdk-project.md)
 > - Migrating an app? See the [Migration Guide](./docs/migration-guide.md) for more detail.
 > - New to CDK? The [AWS CDK Developer Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is worth a read.

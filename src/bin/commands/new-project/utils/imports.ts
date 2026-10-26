@@ -31,7 +31,7 @@ export class Imports {
         types: ["App"],
         components: [],
       },
-      "@guardian/cdk/lib/constructs/core": {
+      "@guardian/cdk/lib/constructs/core/index.js": {
         types: ["GuStackProps"],
         components: ["GuStack"],
       },
@@ -40,12 +40,7 @@ export class Imports {
 
   public static newAppImports({ kebab, pascal }: Name): Imports {
     return new Imports({
-      "source-map-support/register": {
-        basic: true,
-        types: [],
-        components: [],
-      },
-      "@guardian/cdk/lib/constructs/root": {
+      "@guardian/cdk/lib/constructs/root/index.js": {
         types: [],
         components: ["GuRoot"],
       },
@@ -65,6 +60,10 @@ export class Imports {
       "aws-cdk-lib/assertions": {
         types: [],
         components: ["Template"],
+      },
+      "node:test": {
+        types: [],
+        components: ["suite", "test"],
       },
       [`./${kebab}`]: {
         types: [],

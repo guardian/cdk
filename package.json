@@ -69,5 +69,27 @@
     "aws-cdk": "^2.1135.0",
     "aws-cdk-lib": "^2.263.0",
     "constructs": "^10.8.1"
+  },
+  "exports": {
+    ".": "./lib/patterns",
+    "./core": "./lib/constructs/core",
+    "./acm": "./lib/constructs/core",
+    "./autoscaling": "./lib/constructs/core",
+    "./cloudwatch": "./lib/constructs/core",
+    "./dns": "./lib/constructs/core",
+    "./dynamodb": "./lib/constructs/core",
+    "./ec2": "./lib/constructs/core",
+    "./ecr": "./lib/constructs/core",
+    "./ecs": "./lib/constructs/core",
+    "./iam": "./lib/constructs/core",
+    "./kinesis": "./lib/constructs/core",
+    "./lambda": "./lib/constructs/core",
+    "./loadbalancing": "./lib/constructs/core",
+    "./rds": "./lib/constructs/core",
+    "./s3": "./lib/constructs/core",
+    "./ses": "./lib/constructs/core",
+    "./experimental": "./lib/experimental/patterns",
+    "./experimental/iam": "./lib/experimental/constructs/iam",
+    "./experimental/policies": "./lib/experimental/constructs/policies"
   }
 }

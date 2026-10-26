@@ -70,18 +70,10 @@ function createPackageJson(outputDirectory: string): void {
   const { NODE_ENV, CI } = process.env;
   const isTest = NODE_ENV?.toUpperCase() === "TEST" || CI?.toUpperCase() === "TRUE";
 
-  const coreDeps: Record<string, string> = [
-    "@guardian/eslint-config",
-    "@guardian/tsconfig",
-    "@types/jest",
-    "@types/node",
-    "eslint",
-    "jest",
-    "prettier",
-    "ts-jest",
-    "ts-node",
-    "typescript",
-  ].reduce((acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }), {});
+  const coreDeps: Record<string, string> = ["@guardian/eslint-config", "@types/node", "eslint", "prettier"].reduce(
+    (acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }),
+    {},
+  );
 
   const cdkDeps: Record<string, string> = {
     "@guardian/cdk": isTest ? `file:../guardian-cdk-${LibraryInfo.VERSION}.tgz` : LibraryInfo.VERSION,
@@ -106,24 +98,15 @@ function createPackageJson(outputDirectory: string): void {
     version: "0.0.0",
     private: true,
     scripts: {
-      test: "jest",
-      "test-update": "jest -u",
+      test: "node --experimental-strip-types --test",
+      "test-update": "node --experimental-strip-types --test --test-update-snapshots",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
       lint: "eslint lib/** bin/** --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
       diff: "cdk diff --path-metadata false --version-reporting false",
     },
     devDependencies,
-
     prettier: "@guardian/prettier",
-
-    jest: {
-      testMatch: ["<rootDir>/lib/**/*.test.ts"],
-      transform: {
-        "^.+\\.tsx?$": "ts-jest",
-      },
-      setupFilesAfterEnv: ["./jest.setup.js"],
-    },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
 }
