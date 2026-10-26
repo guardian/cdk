@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 66.0.1
+
+### Patch Changes
+
+- 77b8260: Dependency updates
+
 ## 66.0.0
 
 ### Major Changes
