@@ -14,7 +14,6 @@ import { CfnSecurityGroupEgress, Peer, Port, UserData } from "aws-cdk-lib/aws-ec
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
   Cluster,
-  ContainerImage,
   ContainerInsights,
   CpuArchitecture,
   FargateService,
@@ -702,9 +701,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const loggingImage = new GuRepository(scope, "loggingRepo", {
         name: "guardian/cdk/logging",
-      }).getImage(
-        "sha256:32dce4e7a9e628b053ca42c271d7bbdf3697b4980c4612e845a15257c2bd1d99",
-      );
+      }).getImage("sha256:32dce4e7a9e628b053ca42c271d7bbdf3697b4980c4612e845a15257c2bd1d99");
 
       const loggingStreamName = GuLoggingStreamNameParameter.getInstance(scope).valueAsString;
 
