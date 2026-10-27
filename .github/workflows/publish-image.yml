@@ -2,8 +2,12 @@ name: Create and publish a devx-logs (for ECS) Docker image
 
 on:
   pull_request:
+    paths:
+      - tools/logging/**
   push:
     branches: [main]
+    paths:
+      - tools/logging/**
   # Run manually
   workflow_dispatch:
 
