@@ -1,1 +1,20 @@
+export { GuRoot } from "./constructs/root";
+export { GuStack, GuStackProps } from "./constructs/core";
 export * from "./patterns";
+
+export * as acm from "./constructs/acm";
+export * as autoscaling from "./constructs/autoscaling";
+export * as cloudwatch from "./constructs/cloudwatch";
+export * as dns from "./constructs/dns";
+export * as dynamodb from "./constructs/dynamodb";
+export * as ec2 from "./constructs/ec2";
+export * as ecr from "./constructs/ecr";
+export * as ecs from "./constructs/ecs";
+export * as iam from "./constructs/iam";
+export * as kinesis from "./constructs/kinesis";
+export * as lambda from "./constructs/lambda";
+export * as loadbalancing from "./constructs/loadbalancing";
+export * as rds from "./constructs/rds";
+export * as s3 from "./constructs/s3";
+export * as ses from "./constructs/ses";
+export * as vpc from "./constructs/vpc";
