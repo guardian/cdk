@@ -861,6 +861,13 @@ export class GuLoadBalancedAppExperimental extends Construct {
           : {}),
       });
 
+      // Important to make sure the ECS service is deleted before the capacity provider.
+      // Without this dependency the capacity provider will fail to be deleted since
+      // it is part of the default strategy for the `ecsService`.
+      if (managedInstancesCapacityProvider) {
+        ecsService.node.addDependency(managedInstancesCapacityProvider);
+      }
+
       const cfnService = ecsService.node.defaultChild as CfnService;
       cfnService.addPropertyOverride("Monitoring", {
         MetricConfigurations: [
