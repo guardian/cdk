@@ -5,7 +5,11 @@ const valueOrUnknown = (value: string | undefined) => value ?? "unknown";
 
 const packageJson: PackageJson | NormalizedPackageJson = readPkgUp.sync({ cwd: __dirname })?.packageJson ?? {};
 
-const version = valueOrUnknown(packageJson.version);
+// Static values when NODE_ENV=test so snapshots don't change on every version bump
+const isTest = process.env.NODE_ENV === "test";
+const mockVersion = "0.0.1";
+
+const version = isTest ? "1.0.0" : valueOrUnknown(packageJson.version);
 
 export function getDevDependency(packageName: string): string | undefined {
   const { devDependencies = {} } = packageJson;
@@ -32,17 +36,17 @@ export const LibraryInfo = {
    * The version of the `aws-cdk` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_VERSION: valueOrUnknown(getDevDependency("aws-cdk")),
+  AWS_CDK_VERSION: isTest ? mockVersion : valueOrUnknown(getDevDependency("aws-cdk")),
 
   /**
    * The version of the `aws-cdk-lib` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  AWS_CDK_LIB_VERSION: valueOrUnknown(getDevDependency("aws-cdk-lib")),
+  AWS_CDK_LIB_VERSION: isTest ? mockVersion : valueOrUnknown(getDevDependency("aws-cdk-lib")),
 
   /**
    * The version of the `constructs` library used by `@guardian/cdk`.
    * You need to match this version exactly.
    */
-  CONSTRUCTS_VERSION: valueOrUnknown(getDevDependency("constructs")),
+  CONSTRUCTS_VERSION: isTest ? mockVersion : valueOrUnknown(getDevDependency("constructs")),
 };
