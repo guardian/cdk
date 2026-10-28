@@ -73,12 +73,9 @@ function createPackageJson(outputDirectory: string): void {
   const coreDeps: Record<string, string> = [
     "@guardian/eslint-config",
     "@guardian/tsconfig",
-    "@types/jest",
     "@types/node",
     "eslint",
-    "jest",
     "prettier",
-    "ts-jest",
     "ts-node",
     "typescript",
   ].reduce((acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }), {});
@@ -106,8 +103,8 @@ function createPackageJson(outputDirectory: string): void {
     version: "0.0.0",
     private: true,
     scripts: {
-      test: "jest",
-      "test-update": "jest -u",
+      test: "NODE_ENV=test node --require ts-node/register --test \"lib/**/*.test.ts\"",
+      "test-update": "NODE_ENV=test node --require ts-node/register --test --test-update-snapshots \"lib/**/*.test.ts\"",
       format: 'prettier --write "{lib,bin}/**/*.ts"',
       lint: "eslint lib/** bin/** --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
@@ -116,14 +113,6 @@ function createPackageJson(outputDirectory: string): void {
     devDependencies,
 
     prettier: "@guardian/prettier",
-
-    jest: {
-      testMatch: ["<rootDir>/lib/**/*.test.ts"],
-      transform: {
-        "^.+\\.tsx?$": "ts-jest",
-      },
-      setupFilesAfterEnv: ["./jest.setup.js"],
-    },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
 }

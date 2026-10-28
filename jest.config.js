@@ -8,7 +8,6 @@ module.exports = {
       },
     ],
   },
-  setupFilesAfterEnv: ["./jest.setup.js"],
 
   // ignore these files as they're used to demonstrate custom lint rules and Jest flags unused declarations
   testPathIgnorePatterns: ["<rootDir>/tools/eslint/rules/*.test.ts"],
