@@ -3967,6 +3967,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     },
     "EcsService81FC6EF6": {
       "DependsOn": [
+        "ECSInstanceProfileBA4A4DA9",
         "EcsTaskDefinitionTaskRoleB7B6D8DD",
         "ListenerTestguCB542308",
         "ManagedInstancesCapacityProviderC2946447",
@@ -4068,6 +4069,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
     },
     "EcsServiceTaskCountTarget02FCCE22": {
       "DependsOn": [
+        "ECSInstanceProfileBA4A4DA9",
         "EcsTaskDefinitionTaskRoleB7B6D8DD",
         "ManagedInstancesCapacityProviderC2946447",
       ],
