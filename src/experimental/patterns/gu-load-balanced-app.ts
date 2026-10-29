@@ -753,7 +753,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         vpc,
       });
 
-      const [managedInstancesCapacityProvider, instanceProfile] = ecsProps.managedInstancesProps
+      const [managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole] = ecsProps.managedInstancesProps
         ? this.createManagedInstanceCapacityProvider(
             scope,
             [httpsEgressSecurityGroup],
@@ -762,7 +762,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
               defaultManagedInstanceRequirements(memoryLimitMiB, cpu),
             cluster.clusterArn,
           )
-        : [undefined, undefined];
+        : [undefined, undefined, undefined];
       if (managedInstancesCapacityProvider) {
         cluster.addManagedInstancesCapacityProvider(managedInstancesCapacityProvider);
       }
@@ -865,7 +865,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Without this dependency the capacity provider will fail to be deleted since
       // it is part of the default strategy for the `ecsService`.
       if (managedInstancesCapacityProvider) {
-        ecsService.node.addDependency(managedInstancesCapacityProvider, instanceProfile);
+        ecsService.node.addDependency(managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole);
       }
 
       const cfnService = ecsService.node.defaultChild as CfnService;
@@ -1375,7 +1375,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
     instanceSubnets: ISubnet[],
     instanceRequirements: InstanceRequirementsConfig,
     clusterArn: string,
-  ): [ManagedInstancesCapacityProvider, InstanceProfile] {
+  ): [ManagedInstancesCapacityProvider, InstanceProfile, Role] {
     // This is the same as the recommend role for ecs managed instances capacity providers,
     // except without the `instanceProfileName` set to "ecsInstanceRole" in the `instanceProfile`.
     //
@@ -1439,7 +1439,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       },
     );
 
-    return [managedInstancesCapacityProvider, instanceProfile];
+    return [managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole];
   }
 
   /**
