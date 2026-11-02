@@ -122,7 +122,6 @@ function createPackageJson(outputDirectory: string): void {
       transform: {
         "^.+\\.tsx?$": "ts-jest",
       },
-      setupFilesAfterEnv: ["./jest.setup.js"],
     },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));

@@ -25,23 +25,10 @@ The `@guardian/cdk` library follows [Semantic Versioning](https://semver.org/).
 
 GuCDK will add the `gu:cdk:version` tag to resources to aid usage tracking.
 This number changes with every version and as a result automatic version upgrade PRs (e.g. via Dependabot) will fail their snapshot tests.
-To reduce friction, GuCDK ships a mock that can be used with Jest, resulting in snapshots having a static value for this tag.
+To reduce friction, GuCDK sets the tag to a static value when `NODE_ENV=test` (Jest sets this automatically), resulting in snapshots having a static value for this tag.
+No setup is required. If you previously mocked `@guardian/cdk/lib/constants/tracking-tag` in a `jest.setup.js`, it can be removed.
 
-To use it, first, create `jest.setup.js` and add the global mock:
-
-```javascript
-jest.mock("@guardian/cdk/lib/constants/tracking-tag");
-```
-
-Next, edit `jest.config.js` setting the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) property:
-
-```javascript
-module.exports = {
-  setupFilesAfterEnv: ["./jest.setup.js"],
-};
-```
-
-Finally, update your snapshots (`jest -u`).
+Update your snapshots (`jest -u`) after upgrading.
 
 The `gu:cdk:version` tag should now be:
 
