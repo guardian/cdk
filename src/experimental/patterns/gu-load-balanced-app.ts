@@ -449,6 +449,13 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
        */
       instancesRequirements?: InstanceRequirementsConfig;
     };
+    /**
+     * If true we provision the instanceRole and profile for managed instanes.
+     * This needs to be set to true when using Fargate and deployed after managed instances, for a clean rollback.
+     *
+     * @default - false
+     */
+    provisionManagedSecurityRole?: boolean;
   };
   /**
    * If you are specifying `ec2Props` and `ecsProps` use these weights to distribute traffic across the different compute types.
@@ -753,16 +760,46 @@ export class GuLoadBalancedAppExperimental extends Construct {
         vpc,
       });
 
-      const [managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole] = ecsProps.managedInstancesProps
-        ? this.createManagedInstanceCapacityProvider(
-            scope,
-            [httpsEgressSecurityGroup],
-            privateSubnets,
-            ecsProps.managedInstancesProps.instancesRequirements ??
-              defaultManagedInstanceRequirements(memoryLimitMiB, cpu),
-            cluster.clusterArn,
-          )
-        : [undefined, undefined, undefined];
+      // This is the same as the recommend role for ecs managed instances capacity providers,
+      // except without the `instanceProfileName` set to "ecsInstanceRole" in the `instanceProfile`.
+      //
+      // AWS recommend instanceProfileName is set to ecsInstanceRole as the managed policy
+      // AmazonECSInfrastructureRolePolicyForManagedInstances is by default set to scope `iam:PassRole`
+      // to `arn:aws:iam::*:role/ecsInstanceRole*`.
+      //
+      // Unfortunately setting `instanceProfileName` to ecsInstanceRole means that cloud formation can not
+      // re-deploy the instance role, as it can't generate a different name to cycle between them. For this
+      // reason we do not specify `instanceProfileName`, and we create a custom infrastructure role that
+      // uses the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy and explicitly scopes
+      // `iam:PassRole` to EC2 instances.
+      //
+      // To read more {@link https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html}
+      const ecsInstanceRole =
+        ecsProps.provisionManagedSecurityRole || ecsProps.managedInstancesProps
+          ? new GuECSManagedInstanceRoleExperimental(scope, "ECSManagedInstancesRole", {
+              clusterArn: cluster.clusterArn,
+            })
+          : undefined;
+      const instanceProfile =
+        ecsProps.provisionManagedSecurityRole || ecsProps.managedInstancesProps
+          ? new InstanceProfile(scope, "ECSInstanceProfile", {
+              role: ecsInstanceRole,
+            })
+          : undefined;
+
+      const managedInstancesCapacityProvider =
+        ecsProps.managedInstancesProps && ecsInstanceRole && instanceProfile
+          ? this.createManagedInstanceCapacityProvider(
+              scope,
+              [httpsEgressSecurityGroup],
+              privateSubnets,
+              ecsProps.managedInstancesProps.instancesRequirements ??
+                defaultManagedInstanceRequirements(memoryLimitMiB, cpu),
+              cluster.clusterArn,
+              ecsInstanceRole,
+              instanceProfile,
+            )
+          : undefined;
       if (managedInstancesCapacityProvider) {
         cluster.addManagedInstancesCapacityProvider(managedInstancesCapacityProvider);
       }
@@ -864,7 +901,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Important to make sure the ECS service is deleted before the capacity provider.
       // Without this dependency the capacity provider will fail to be deleted since
       // it is part of the default strategy for the `ecsService`.
-      if (managedInstancesCapacityProvider) {
+      if (managedInstancesCapacityProvider && instanceProfile && ecsInstanceRole) {
         ecsService.node.addDependency(managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole);
       }
 
@@ -1375,29 +1412,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
     instanceSubnets: ISubnet[],
     instanceRequirements: InstanceRequirementsConfig,
     clusterArn: string,
-  ): [ManagedInstancesCapacityProvider, InstanceProfile, Role] {
-    // This is the same as the recommend role for ecs managed instances capacity providers,
-    // except without the `instanceProfileName` set to "ecsInstanceRole" in the `instanceProfile`.
-    //
-    // AWS recommend instanceProfileName is set to ecsInstanceRole as the managed policy
-    // AmazonECSInfrastructureRolePolicyForManagedInstances is by default set to scope `iam:PassRole`
-    // to `arn:aws:iam::*:role/ecsInstanceRole*`.
-    //
-    // Unfortunately setting `instanceProfileName` to ecsInstanceRole means that cloud formation can not
-    // re-deploy the instance role, as it can't generate a different name to cycle between them. For this
-    // reason we do not specify `instanceProfileName`, and we create a custom infrastructure role that
-    // uses the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy and explicitly scopes
-    // `iam:PassRole` to EC2 instances.
-    //
-    // To read more {@link https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html}
-    const ecsInstanceRole = new GuECSManagedInstanceRoleExperimental(scope, "ECSManagedInstancesRole", {
-      clusterArn,
-    });
-
-    const instanceProfile = new InstanceProfile(scope, "ECSInstanceProfile", {
-      role: ecsInstanceRole,
-    });
-
+    ecsInstanceRole: GuECSManagedInstanceRoleExperimental,
+    instanceProfile: InstanceProfile,
+  ): ManagedInstancesCapacityProvider {
     const ecsInfrastructurePolicy = ManagedPolicy.fromManagedPolicyArn(
       scope,
       "ECSInfrastructurePolicy",
@@ -1439,7 +1456,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       },
     );
 
-    return [managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole];
+    return managedInstancesCapacityProvider;
   }
 
   /**
