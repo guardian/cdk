@@ -5,10 +5,7 @@ const valueOrUnknown = (value: string | undefined) => value ?? "unknown";
 
 const packageJson: PackageJson | NormalizedPackageJson = readPkgUp.sync({ cwd: __dirname })?.packageJson ?? {};
 
-// Jest sets NODE_ENV=test, keeping the version static across library upgrades
-const isTestEnv = process.env.NODE_ENV?.toLowerCase() === "test";
-
-const version = isTestEnv ? "1.0.0" : valueOrUnknown(packageJson.version);
+const version = valueOrUnknown(packageJson.version);
 
 export function getDevDependency(packageName: string): string | undefined {
   const { devDependencies = {} } = packageJson;
