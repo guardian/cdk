@@ -888,6 +888,29 @@ UserData from accessed construct`);
         },
       ],
     });
+    Template.fromStack(stack).hasResourceProperties("AWS::ElasticLoadBalancingV2::ListenerRule", {
+      Actions: [
+        {
+          Type: "fixed-response",
+        },
+      ],
+      Conditions: [
+        {
+          Field: "path-pattern",
+          PathPatternConfig: { Values: ["/oauth2/idpresponse"] },
+        },
+        {
+          Field: "query-string",
+          QueryStringConfig: {
+            Values: [
+              { Key: "error", Value: "invalid_request" },
+              { Key: "error_description", Value: "PreSignUp+failed*" },
+            ],
+          },
+        },
+      ],
+      Priority: 1,
+    });
   });
 
   it("throws when googleAuth.allowedGroups is empty", () => {
