@@ -1,20 +1,42 @@
-> **Warning**
-> This is a work in progress.
+# Manual testing
 
-# Manual Testing
+These scripts run the ECS logging sidecar locally without deploying to AWS. Prefer the automated
+Go test for routine validation; this workflow is useful when inspecting Fluent Bit output interactively.
 
-The scripts in this directory show how the `ecs` project can be tested in a local environment, without needing to 
-deploy to AWS, and also show how the process is wired up.
+## Prerequisites
 
-The container listens on port 24224, for messages in the webpack format.
+- A running Docker daemon
+- Go
 
-The container can be started locally by running the `start-container.sh` script from this directory.
-It will build the image and run it, and you can then send messages to it using the `send-message.sh` script.
+## Run the container
 
-In normal operation, the process sends messages to an AWS Kinesis stream, which is then read by a Lambda function and 
-sent to the Central ELK stack.
+From this directory, start the container:
 
-For testing purposes, we have added
+```sh
+./start-container.sh
+```
+
+The script builds the image, publishes its Fluent Bit forward input on port `24224`, and sets the test-only output plugin to `stdout`.
+
+In a second terminal, send a test record:
+
+```sh
+./send-message.sh
+```
+
+Pass an argument to change the message value:
+
+```sh
+./send-message.sh "hello from local testing"
+```
+
+The first terminal should print the transformed record, including the configured application and ECS metadata.
+It may also report a failure to send to AWS because the local container has no Kinesis credentials; that
+failure is expected for this test. Stop the container with `Ctrl-C` when finished.
+
+## Test output
+
+The logging configuration includes an additional output controlled by `OUTPUT_PLUGIN`:
 
 ```
 [OUTPUT]
@@ -22,10 +44,4 @@ For testing purposes, we have added
     Match *
 ```
 
-to the `guardian.conf`.
-
-In normal operation, `OUTPUT_PLUGIN` is null and there is no output, but in testing `OUTPUT_PLUGIN` can be set to `stdout`
-(see -e switches) and the messages will be printed to stdout.  Note that you 
-will *also* see a failure to send to AWS, but this part of the process is not relevant to testing the container.
-
-If desired, we can create a dev profile which will have permissions to output to ELK.
+The image defaults this value to `null`, so the additional output is discarded in production. `start-container.sh` changes it to `stdout` so transformed records are visible locally.
