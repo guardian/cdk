@@ -43,8 +43,8 @@ export class TestBuilder {
   addTest(): void {
     const { appName, stackName } = this.config;
 
-    this.code.openBlock(`describe("The ${appName.pascal} stack", () =>`);
-    this.code.openBlock(`it("matches the snapshot", () =>`);
+    this.code.openBlock(`suite("The ${appName.pascal} stack", () =>`);
+    this.code.openBlock(`test("matches the snapshot", (t) =>`);
 
     this.code.line("const app = new App();");
     this.code.line(
@@ -52,7 +52,7 @@ export class TestBuilder {
     );
 
     this.code.line(`const template = Template.fromStack(stack);`);
-    this.code.line(`expect(template.toJSON()).toMatchSnapshot();`);
+    this.code.line(`t.assert.snapshot(template.toJSON());`);
 
     this.code.closeBlock("});");
     this.code.closeBlock("});");

@@ -15,7 +15,7 @@ Here are some recommendations for using the Guardian CDK library:
 - Upload generated json files from cdk.out
 
 ### Snapshot testing
-[Snapshot testing with Jest](https://jestjs.io/docs/snapshot-testing) makes it easy to review any stack changes when
+[Snapshot testing with the Node.js test runner](https://nodejs.org/api/test.html#snapshot-testing) makes it easy to review any stack changes when
 developing locally and in PRs. This enables us to catch things early, creating a shorter feedback loop. 
 `npm run test-update`/`yarn test-update` will update the snapshots. See the
 [AWS docs](https://docs.aws.amazon.com/cdk/v2/guide/testing.html#testing_snapshot) on snapshot testing.
@@ -25,10 +25,10 @@ The `@guardian/cdk` library follows [Semantic Versioning](https://semver.org/).
 
 GuCDK will add the `gu:cdk:version` tag to resources to aid usage tracking.
 This number changes with every version and as a result automatic version upgrade PRs (e.g. via Dependabot) will fail their snapshot tests.
-To reduce friction, GuCDK sets the tag to a static value when `NODE_ENV=test` (Jest sets this automatically), resulting in snapshots having a static value for this tag.
+To reduce friction, GuCDK sets the tag to a static value when `NODE_ENV=test` (set `NODE_ENV=test` in your test scripts; new projects do this by default), resulting in snapshots having a static value for this tag.
 No setup is required. If you previously mocked `@guardian/cdk/lib/constants/tracking-tag` in a `jest.setup.js`, it can be removed.
 
-Update your snapshots (`jest -u`) after upgrading.
+Update your snapshots (`npm run test-update`) after upgrading.
 
 The `gu:cdk:version` tag should now be:
 

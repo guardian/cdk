@@ -58,6 +58,10 @@ export class Imports {
 
   public static newTestImports({ kebab, pascal }: Name): Imports {
     return new Imports({
+      "node:test": {
+        types: [],
+        components: ["suite", "test"],
+      },
       "aws-cdk-lib": {
         types: [],
         components: ["App"],
