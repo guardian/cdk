@@ -113,6 +113,9 @@ function createPackageJson(outputDirectory: string): void {
     devDependencies,
 
     prettier: "@guardian/prettier",
+    engines: {
+      node: ">=22.13.0",
+    },
   };
   writeFileSync(`${outputDirectory}/package.json`, JSON.stringify(contents, null, 2));
 }
