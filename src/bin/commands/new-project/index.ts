@@ -154,8 +154,8 @@ export const newCdkProject = async (props: NewProjectProps): CliCommandResponse 
   await commands.lint();
   console.log(chalk.green("  ✅ Successfully passed lint check"));
 
-  console.log(chalk.yellow("Running tests..."));
-  await commands.test();
+  console.log(chalk.yellow("Generating snapshots and running tests..."));
+  await commands.testUpdate();
   console.log(chalk.green("  ✅ Successfully passed tests"));
 
   console.log(chalk.yellow("Running initial synthesis..."));

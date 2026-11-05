@@ -17,12 +17,12 @@ export function getCommands(
   installDependencies: () => Promise<string>;
   lint: () => Promise<string>;
   synth: () => Promise<string>;
-  test: () => Promise<string>;
+  testUpdate: () => Promise<string>;
 } {
   return {
     installDependencies: () => runTask(packageManager, cwd, ["install"]),
     lint: () => runTask(packageManager, cwd, ["run", "lint"]),
-    test: () => runTask(packageManager, cwd, ["test", "--", "-u"]),
+    testUpdate: () => runTask(packageManager, cwd, ["run", "test-update"]),
     synth: () => runTask(packageManager, cwd, ["run", "synth"]),
   };
 }
