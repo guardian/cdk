@@ -43,8 +43,8 @@ export class TestBuilder {
   addTest(): void {
     const { appName, stackName } = this.config;
 
-    this.code.openBlock(`suite("The ${appName.pascal} stack", () =>`);
-    this.code.openBlock(`test("matches the snapshot", (t) =>`);
+    this.code.openBlock(`void suite("The ${appName.pascal} stack", () =>`);
+    this.code.openBlock(`void test("matches the snapshot", (t) =>`);
 
     this.code.line("const app = new App();");
     this.code.line(
