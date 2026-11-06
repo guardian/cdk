@@ -20,6 +20,12 @@ import { getTemplateAfterAspectInvocation, GuTemplate, simpleGuStackForTesting }
 import { acknowledgeUnusedParameters } from "../../utils/test/validations";
 import { RollingUpdateDurations } from "./ec2-app";
 import { getDefaultS3ConfigMount, GuLoadBalancedAppExperimental } from "./gu-load-balanced-app";
+import {
+  GUARDIAN_FLUENT_BIT_CONFIG,
+  GUARDIAN_FLUENT_BIT_PARSERS,
+  LOGGING_SIDECAR_COMMAND,
+  LOGGING_SIDECAR_IMAGE,
+} from "./logging-sidecar";
 
 function ecsHybridFunctionalityTests(desc: string, extraEcsProps: Record<string, unknown> = {}) {
   describe(desc, function () {
@@ -234,6 +240,63 @@ function ecsHybridFunctionalityTests(desc: string, extraEcsProps: Record<string,
           }),
         ]),
       });
+    });
+
+    it("should run the stock Fluent Bit image as the log router with Guardian config supplied inline", function () {
+      const stack = simpleGuStackForTesting({ app: "test-gu", env: { region: "eu-west-1" } });
+      new GuLoadBalancedAppExperimental(stack, {
+        monitoringConfiguration: { noMonitoring: true },
+        applicationPort: 3000,
+        access: { scope: AccessScope.PUBLIC },
+        app: "test-gu",
+        certificateProps: {
+          domainName: "domain-name-for-your-application.example",
+        },
+        ecsProps: {
+          cpu: 1024,
+          memoryLimitMiB: 2048,
+          scaling: { minimumTasks: 3, maximumTasks: 6 },
+          imageIdentifier: "sha256:12345",
+          ...extraEcsProps,
+        },
+      });
+      const template = Template.fromStack(stack);
+
+      template.hasResourceProperties("AWS::ECS::TaskDefinition", {
+        Volumes: Match.arrayWith([{ Name: "logging-volume" }]),
+        ContainerDefinitions: Match.arrayWith([
+          Match.objectLike({
+            Name: "LogShipping",
+            Image: LOGGING_SIDECAR_IMAGE,
+            Command: LOGGING_SIDECAR_COMMAND,
+            ReadonlyRootFilesystem: true,
+            FirelensConfiguration: { Type: "fluentbit" },
+            MountPoints: [{ ContainerPath: "/tmp", SourceVolume: "logging-volume", ReadOnly: false }],
+            Environment: Match.arrayWith([
+              { Name: "APP", Value: "test-gu" },
+              { Name: "aws_fluent_bit_init_file_1", Value: "/tmp/guardian/guardian-parsers.conf" },
+              { Name: "aws_fluent_bit_init_file_2", Value: "/ecs/ecs-metadata.conf" },
+              { Name: "aws_fluent_bit_init_file_3", Value: "/tmp/guardian/guardian.conf" },
+              { Name: "OUTPUT_PLUGIN", Value: "null" },
+              { Name: "GU_FLUENT_BIT_PARSERS", Value: GUARDIAN_FLUENT_BIT_PARSERS },
+              { Name: "GU_FLUENT_BIT_CONFIG", Value: GUARDIAN_FLUENT_BIT_CONFIG },
+            ]),
+          }),
+        ]),
+      });
+
+      // The sidecar config is only relevant to the log router
+      template.hasResourceProperties("AWS::ECS::TaskDefinition", {
+        ContainerDefinitions: Match.arrayWith([
+          Match.objectLike({
+            Name: "test-gu",
+            Environment: Match.not(Match.arrayWith([Match.objectLike({ Name: "GU_FLUENT_BIT_CONFIG" })])),
+          }),
+        ]),
+      });
+
+      // The image is public, so no ECR permissions are needed to pull it
+      expect(JSON.stringify(template.toJSON())).not.toContain("guardian/cdk/logging");
     });
 
     it("should apply standard tags to all taggable resources", function () {
