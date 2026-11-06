@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 67.0.1
+
+### Patch Changes
+
+- 0454a88: use aws ecr for devx-logs image
+
 ## 67.0.0
 
 ### Major Changes
