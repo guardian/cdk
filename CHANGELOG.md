@@ -1,5 +1,15 @@
 # @guardian/cdk
 
+## 67.1.0
+
+### Minor Changes
+
+- 3184698: Support running on ECS Managed Instances instead of Fargate.
+
+### Patch Changes
+
+- 0454a88: use aws ecr for devx-logs image
+
 ## 67.0.0
 
 ### Major Changes
