@@ -152,7 +152,7 @@
   });
 
   // After
-  import { GuDeveloperPolicy } from "@guardian/cdk/iam/policies";
+  import { GuDeveloperPolicy } from "@guardian/cdk/lib/constructs/iam";
   new GuDeveloperPolicy(this, "ExampleDeveloperPolicy", {
     grantId: "ExamplePolicy",
     friendlyName: "An example policy",
