@@ -69,5 +69,28 @@
     "aws-cdk": "^2.1135.0",
     "aws-cdk-lib": "^2.263.0",
     "constructs": "^10.8.1"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./constants": "./lib/constants/index.js",
+    "./acm": "./lib/constructs/acm/index.js",
+    "./autoscaling": "./lib/constructs/autoscaling/index.js",
+    "./cloudwatch": "./lib/constructs/cloudwatch/index.js",
+    "./dns": "./lib/constructs/dns/index.js",
+    "./dynamodb": "./lib/constructs/dynamodb/index.js",
+    "./ec2": "./lib/constructs/ec2/index.js",
+    "./ecr": "./lib/constructs/ecr/index.js",
+    "./ecs": "./lib/constructs/ecs/index.js",
+    "./iam": "./lib/constructs/iam/index.js",
+    "./kinesis": "./lib/constructs/kinesis/index.js",
+    "./lambda": "./lib/constructs/lambda/index.js",
+    "./loadbalancing": "./lib/constructs/loadbalancing/index.js",
+    "./rds": "./lib/constructs/rds/index.js",
+    "./s3": "./lib/constructs/s3/index.js",
+    "./ses": "./lib/constructs/ses/index.js",
+    "./vpc": "./lib/constructs/vpc/index.js",
+    "./experimental": "./lib/experimental/index.js",
+    "./experimental/iam": "./lib/experimental/constructs/iam/index.js",
+    "./experimental/policies": "./lib/experimental/constructs/policies/index.js"
   }
 }
