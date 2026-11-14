@@ -1,12 +1,12 @@
 {
   "extends": "@guardian/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS"
-  },
-  "include": ["lib/**/*", "bin/**/*"],
-  "exclude": [
-    "node_modules",
-    "cdk.out",
-    "lib/**/__snapshots__/**"
-  ]
+    "types": ["node"],
+    "noEmit": true, 
+    "target": "esnext",
+    "module": "nodenext",
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true
+  }
 }
