@@ -1,4 +1,4 @@
-import { App, CfnResource, Duration, TagManager } from "aws-cdk-lib";
+import { App, CfnResource, Duration, Lazy, TagManager } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import {
   BlockDeviceVolume,
@@ -8,6 +8,7 @@ import {
   UpdatePolicy,
 } from "aws-cdk-lib/aws-autoscaling";
 import { InstanceClass, InstanceSize, InstanceType, Peer, Port, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
+import { ContainerImage } from "aws-cdk-lib/aws-ecs";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, MetadataKeys } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
@@ -776,6 +777,100 @@ ecsHybridFunctionalityTests(
     managedInstancesProps: {},
   },
 );
+
+describe("Managed Instances task memory validation", () => {
+  it.each([
+    {
+      description: "allows containers without explicit memory",
+      sidecars: [{}],
+      exceeds: false,
+    },
+    {
+      description: "allows a total below task memory",
+      sidecars: [{ memoryLimitMiB: 512 }, { memoryReservationMiB: 256 }],
+      exceeds: false,
+    },
+    {
+      description: "allows a total equal to task memory",
+      sidecars: [{ memoryLimitMiB: 1024 }, { memoryReservationMiB: 1024 }],
+      exceeds: false,
+    },
+    {
+      description: "rejects combined hard limits exceeding task memory by one MiB",
+      sidecars: [{ memoryLimitMiB: 1024 }, { memoryLimitMiB: 1025 }],
+      exceeds: true,
+    },
+    {
+      description: "rejects combined reservations exceeding task memory",
+      sidecars: [{ memoryReservationMiB: 1024 }, { memoryReservationMiB: 1025 }],
+      exceeds: true,
+    },
+    {
+      description: "rejects a mixed total exceeding task memory",
+      sidecars: [{ memoryLimitMiB: 1024 }, { memoryReservationMiB: 1025 }],
+      exceeds: true,
+    },
+    {
+      description: "uses the hard limit instead of the reservation",
+      sidecars: [{ memoryLimitMiB: 1536, memoryReservationMiB: 512 }, { memoryLimitMiB: 1024 }],
+      exceeds: true,
+    },
+    {
+      description: "does not double-count a container with both memory settings",
+      sidecars: [{ memoryLimitMiB: 1536, memoryReservationMiB: 1024 }],
+      exceeds: false,
+    },
+    {
+      description: "excludes unresolved container memory",
+      sidecars: [{ memoryLimitMiB: Lazy.number({ produce: () => 512 }) }, { memoryLimitMiB: 1024 }],
+      exceeds: false,
+    },
+    {
+      description: "still checks known memory when another container has unresolved memory",
+      sidecars: [
+        { memoryLimitMiB: Lazy.number({ produce: () => 512 }) },
+        { memoryLimitMiB: 1024 },
+        { memoryLimitMiB: 1025 },
+      ],
+      exceeds: true,
+    },
+  ])("$description", ({ sidecars, exceeds }) => {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const app = new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: { domainName: "domain-name-for-your-application.example" },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+        managedInstancesProps: {},
+      },
+    });
+
+    if (!app.ecsService) {
+      throw new Error("Expected an ECS service");
+    }
+
+    const { taskDefinition } = app.ecsService;
+    sidecars.forEach((memory, index) => {
+      taskDefinition.addContainer(`sidecar-${index}`, {
+        image: ContainerImage.fromRegistry("example/sidecar:latest"),
+        ...memory,
+      });
+    });
+
+    const synth = () => Template.fromStack(stack);
+    if (exceeds) {
+      expect(synth).toThrow(/Total container memory \(\d+ MiB\) exceeds task memory \(2048 MiB\)/);
+    } else {
+      expect(synth).not.toThrow();
+    }
+  });
+});
 
 describe("the GuLoadBalancedAppExperimental pattern should support all existing GuEc2App functionality", function () {
   it("should produce a functional EC2 app with minimal arguments", function () {
