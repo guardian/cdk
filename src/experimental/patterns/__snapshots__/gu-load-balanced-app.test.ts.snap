@@ -2653,7 +2653,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "GuLoadBalancedAppExperimental",
       "GuRepository",
       "GuArtifactsAccountId",
-      "GuRepository",
       "GuLoggingStreamNameParameter",
       "GuHttpsEgressSecurityGroup",
       "GuECSManagedInstanceRoleExperimental",
@@ -3144,47 +3143,73 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             "VersionConsistency": "disabled",
           },
           {
+            "Command": [
+              "/bin/bash",
+              "-c",
+              "mkdir -p /tmp/guardian && printf '%s\\n' "$GU_FLUENT_BIT_PARSERS" > /tmp/guardian/guardian-parsers.conf && printf '%s\\n' "$GU_FLUENT_BIT_CONFIG" > /tmp/guardian/guardian.conf && exec /init/fluent_bit_init_entrypoint.sh",
+            ],
             "Environment": [
               {
-                "Name": "STACK",
-                "Value": "test-stack",
+                "Name": "aws_fluent_bit_init_file_1",
+                "Value": "/tmp/guardian/guardian-parsers.conf",
               },
               {
-                "Name": "STAGE",
-                "Value": "TEST",
+                "Name": "aws_fluent_bit_init_file_2",
+                "Value": "/ecs/ecs-metadata.conf",
               },
               {
-                "Name": "APP",
-                "Value": "test-gu",
+                "Name": "aws_fluent_bit_init_file_3",
+                "Value": "/tmp/guardian/guardian.conf",
               },
               {
-                "Name": "TASK_NAME",
-                "Value": "test-gu",
+                "Name": "OUTPUT_PLUGIN",
+                "Value": "null",
               },
               {
-                "Name": "GU_REPO",
-                "Value": "guardian/cdk",
+                "Name": "GU_FLUENT_BIT_PARSERS",
+                "Value": "
+[PARSER]
+    Name json
+    Format json
+    Time_Key time
+    Time_Format %Y-%m-%dT%H:%M:%SZ",
+              },
+              {
+                "Name": "GU_FLUENT_BIT_CONFIG",
+                "Value": "
+[FILTER]
+    Name modify
+    Match *
+    Rename log message
+
+[FILTER]
+    Name parser
+    Match *
+    Key_Name message
+    Parser json
+    Reserve_Data On
+
+[FILTER]
+    Name modify
+    Match *
+    Add ShippedBy devx-logs
+    Add gu:logging-sidecar sha256:0aa2921b14e44b8f00e057c68a0a3bafb944261a1c5aac36362bf2e1be8bef4d
+    Add stack test-stack
+    Add stage TEST
+    Add app test-gu
+    Add gu:repo guardian/cdk
+    Add task test-gu
+
+[OUTPUT]
+    Name \${OUTPUT_PLUGIN}
+    Match *",
               },
             ],
             "Essential": true,
             "FirelensConfiguration": {
               "Type": "fluentbit",
             },
-            "Image": {
-              "Fn::Join": [
-                "",
-                [
-                  {
-                    "Ref": "ArtifactsAccountId",
-                  },
-                  ".dkr.ecr.eu-west-1.",
-                  {
-                    "Ref": "AWS::URLSuffix",
-                  },
-                  "/guardian/cdk/logging@sha256:32dce4e7a9e628b053ca42c271d7bbdf3697b4980c4612e845a15257c2bd1d99",
-                ],
-              ],
-            },
+            "Image": "public.ecr.aws/aws-observability/aws-for-fluent-bit:init-3.4.11@sha256:0aa2921b14e44b8f00e057c68a0a3bafb944261a1c5aac36362bf2e1be8bef4d",
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
@@ -3197,7 +3222,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
             },
             "MountPoints": [
               {
-                "ContainerPath": "/init",
+                "ContainerPath": "/tmp",
                 "ReadOnly": false,
                 "SourceVolume": "logging-volume",
               },
@@ -3331,30 +3356,6 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
               "Action": "ecr:GetAuthorizationToken",
               "Effect": "Allow",
               "Resource": "*",
-            },
-            {
-              "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ecr:eu-west-1:",
-                    {
-                      "Ref": "ArtifactsAccountId",
-                    },
-                    ":repository/guardian/cdk/logging",
-                  ],
-                ],
-              },
             },
             {
               "Action": [
