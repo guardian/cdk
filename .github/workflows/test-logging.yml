@@ -1,0 +1,51 @@
+name: Test the ECS logging sidecar
+
+on:
+  pull_request:
+    paths:
+      - tools/logging/**
+      - src/experimental/patterns/logging-sidecar.ts
+      - script/generate-logging-sidecar
+      - package.json
+      - package-lock.json
+      - .github/workflows/test-logging.yml
+  push:
+    branches: [main]
+    paths:
+      - tools/logging/**
+      - src/experimental/patterns/logging-sidecar.ts
+      - script/generate-logging-sidecar
+      - package.json
+      - package-lock.json
+      - .github/workflows/test-logging.yml
+  # Run manually
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: ".tool-versions"
+          cache: npm
+
+      - name: Generate logging sidecar config
+        run: script/generate-logging-sidecar
+
+      - name: Set up Go
+        uses: actions/setup-go@v6.5.0
+        with:
+          go-version-file: tools/logging/go.mod
+          cache-dependency-path: tools/logging/go.sum
+
+      - name: Test logging sidecar
+        working-directory: tools/logging
+        run: go test ./...
