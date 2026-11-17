@@ -15,6 +15,7 @@ import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs"
 import {
   Cluster,
   Compatibility,
+  ContainerImage,
   ContainerInsights,
   CpuArchitecture,
   FargateService,
@@ -91,6 +92,12 @@ import {
   GuRollingUpdatePolicyExperimental,
   GuUserDataForRollingUpdateExperimental,
 } from "./ec2-app";
+import {
+  LOGGING_SIDECAR_COMMAND,
+  LOGGING_SIDECAR_IMAGE,
+  LOGGING_SIDECAR_WRITABLE_PATH,
+  loggingSidecarEnvironment,
+} from "./logging-sidecar";
 
 /**
  * This interface defines the configuration for mounting an S3 Files file system into a container.
@@ -732,10 +739,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         name: ecrRepoName,
       }).getImage(imageIdentifier);
 
-      const loggingImage = new GuRepository(scope, "loggingRepo", {
-        name: "guardian/cdk/logging",
-      }).getImage("sha256:32dce4e7a9e628b053ca42c271d7bbdf3697b4980c4612e845a15257c2bd1d99");
-
       const loggingStreamName = GuLoggingStreamNameParameter.getInstance(scope).valueAsString;
 
       this.fireLensLogDriver = new FireLensLogDriver({
@@ -758,6 +761,14 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       // Add the GitHub repo if we can
       const environment = scope.repositoryName ? { ...env, GU_REPO: scope.repositoryName } : env;
+
+      // The log router doesn't need the app's environment, as the identity is written directly into its config
+      const logRouterEnvironment = loggingSidecarEnvironment({
+        stack,
+        stage,
+        app,
+        repositoryName: scope.repositoryName,
+      });
 
       const httpsEgressSecurityGroup = GuHttpsEgressSecurityGroup.forVpc(scope, {
         app: `${app}-ecs`,
@@ -905,8 +916,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // It's possible to opt-out of log shipping to ELK in the EC2 patterns; should we mirror that here?
       const logRouter = taskDefinition.addFirelensLogRouter("LogShipping", {
         // See https://github.com/guardian/devx-logs
-        image: loggingImage,
-        environment,
+        image: ContainerImage.fromRegistry(LOGGING_SIDECAR_IMAGE),
+        command: LOGGING_SIDECAR_COMMAND,
+        environment: logRouterEnvironment,
         versionConsistency: VersionConsistency.DISABLED,
         // Send this container's logs to CloudWatch logs, retained for 1 day
         logging: LogDriver.awsLogs({
@@ -1095,7 +1107,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       cfnTaskDefinition.addPropertyOverride("Volumes", volumes);
 
       logRouter.addMountPoints({
-        containerPath: "/init",
+        containerPath: LOGGING_SIDECAR_WRITABLE_PATH,
         sourceVolume: logVolume.name,
         readOnly: false,
       });
