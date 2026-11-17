@@ -1,5 +1,5 @@
 import { Duration } from "aws-cdk-lib";
-import { Template } from "aws-cdk-lib/assertions";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuCertificate } from "../constructs/acm";
 import type { NoMonitoring } from "../constructs/cloudwatch";
@@ -20,6 +20,12 @@ describe("The GuApiLambda pattern", () => {
       api: {
         id: "api",
         description: "this is a test",
+      },
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApiGateway::Stage", {
+      AccessLogSetting: {
+        DestinationArn: { "Fn::GetAtt": [Match.anyValue(), "Arn"] },
+        Format: Match.stringLikeRegexp("\\$context.requestId"),
       },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();

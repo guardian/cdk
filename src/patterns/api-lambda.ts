@@ -5,6 +5,7 @@ import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gat
 import type { GuStack } from "../constructs/core";
 import { GuLambdaFunction } from "../constructs/lambda";
 import type { GuFunctionProps } from "../constructs/lambda";
+import { apiGatewayDeployOptions } from "../utils/api-gateway/access-logging";
 import type { ApiGatewayAlarms } from "./api-multiple-lambdas";
 
 interface ApiProps extends Omit<LambdaRestApiProps, "handler"> {
@@ -25,6 +26,15 @@ export interface GuApiLambdaProps extends Omit<GuFunctionProps, "errorPercentage
    * ```
    */
   monitoringConfiguration: NoMonitoring | ApiGatewayAlarms;
+  /**
+   * Deliver API Gateway access logs through Firehose to the account access-log S3 bucket.
+   * Applies to the automatically deployed stage, independently of alarm monitoring.
+   * Explicit logging settings in `api.deployOptions` take precedence.
+   * Set to false to disable library defaults without removing explicit logging settings.
+   *
+   * @defaultValue true
+   */
+  withAccessLogging?: boolean;
 }
 
 /**
@@ -76,6 +86,11 @@ export class GuApiLambda extends GuLambdaFunction {
       restApiName: `${scope.stack}-${scope.stage}-${props.api.id}`,
 
       ...props.api,
+      deployOptions: apiGatewayDeployOptions(this, scope, {
+        ...props.api,
+        app: props.app,
+        withAccessLogging: props.withAccessLogging,
+      }),
     });
 
     if (!props.monitoringConfiguration.noMonitoring) {

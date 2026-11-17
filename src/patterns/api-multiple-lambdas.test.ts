@@ -1,4 +1,4 @@
-import { Template } from "aws-cdk-lib/assertions";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { GuLambdaFunction } from "../constructs/lambda";
 import { GuTemplate, simpleGuStackForTesting } from "../utils/test";
@@ -54,6 +54,12 @@ describe("The GuApiGatewayWithLambdaByPath pattern", () => {
           apiKeyRequired: true,
         },
       ],
+    });
+    Template.fromStack(stack).hasResourceProperties("AWS::ApiGateway::Stage", {
+      AccessLogSetting: {
+        DestinationArn: { "Fn::GetAtt": [Match.anyValue(), "Arn"] },
+        Format: Match.stringLikeRegexp("\\$context.requestId"),
+      },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
   });

@@ -3,6 +3,59 @@
 This document assumes you have completed initial setup and other steps described
 in the [Migration Guide](./migration-guide.md).
 
+## Access logging
+
+`GuApiLambda` and `GuApiGatewayWithLambdaByPath` enable access logging for their
+automatically deployed API Gateway stages by default, including when alarm
+monitoring is disabled. Each API gets a Firehose delivery stream and IAM role,
+plus a CloudWatch log group and stream for delivery errors. Delivery error logs
+are retained for one month.
+
+Access logs are written to the existing account bucket identified by the SSM
+parameter `/account/services/access-logging/bucket`. The S3 prefix is
+`api-gateway/<stage>/<stack>/<app>/`, followed by Firehose's date-based prefix.
+Firehose writes GZIP-compressed, newline-delimited records, with buffering hints
+of 5 MiB and 300 seconds. Delivery is not immediate and incurs Firehose and S3
+charges.
+
+The default JSON fields are `requestId`, `ip`, `requestTime`, `httpMethod`,
+`resourcePath`, `status`, `protocol`, and `responseLength`. The resource path is
+the API route template rather than the raw request URL. Request bodies,
+credentials, and request headers are not included. S3 retention follows the
+existing bucket lifecycle policy.
+
+Before deploying, confirm that the bucket exists in the deployment region and
+that its policy and encryption settings permit delivery from the new Firehose
+role. A bucket encrypted with a customer-managed KMS key needs the corresponding
+key permissions; the imported bucket name does not provide that configuration.
+The deployment role must also be able to provision the delivery resources and,
+if absent, allow API Gateway to create its service-linked role.
+
+Set the top-level `withAccessLogging: false` property on either pattern to
+disable the library's logging defaults. Existing explicit logging settings
+remain in place. To configure your own destination or format, use
+`api.deployOptions` for `GuApiLambda` or `deployOptions` for
+`GuApiGatewayWithLambdaByPath`. An explicit destination takes precedence and
+prevents creation of the default Firehose resources. An explicit format on its
+own uses the default destination when defaults are enabled.
+
+Other stage options are preserved. With `deploy: false`, the pattern creates
+neither a stage nor default logging resources. Configure logging yourself for
+any stages you create separately.
+
+### Account configuration to confirm before rollout
+
+The account-specific configuration remains to be confirmed:
+
+- **Bucket policy, encryption, and lifecycle:** confirm that the account's access-log bucket supports the delivery role, and arrange any required policy or KMS changes in account setup.
+- **Deployment permissions:** confirm that the deployment role can create the delivery resources and any missing API Gateway service-linked role.
+- **Athena schema:** add a separate table for the API Gateway prefix and JSON schema if querying is required. The existing ALB access-log table does not cover these records.
+
+Inspect a CloudFormation change set before upgrading an existing API to confirm
+that it is not replaced. In CODE, send successful and failing requests and check
+that readable records arrive in S3 after buffering. Review the Firehose delivery
+error log group if records do not arrive.
+
 ---
 
 For apps where avoiding downtime is critical, we recommend a _dual-stack

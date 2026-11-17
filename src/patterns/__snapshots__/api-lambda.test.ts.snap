@@ -7,6 +7,7 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
       "GuStack",
       "GuDistributionBucketParameter",
       "GuApiLambda",
+      "GuAccessLoggingBucketParameter",
       "GuCertificate",
       "GuCname",
     ],
@@ -41,6 +42,11 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
     },
   },
   "Parameters": {
+    "AccessLoggingBucket": {
+      "Default": "/account/services/access-logging/bucket",
+      "Description": "S3 bucket to store your access logs",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
@@ -162,6 +168,231 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "lambdaAccessLoggingDeliveryErrorsDE0FEF55": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "lambdaAccessLoggingDeliveryRole141DBB31": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "firehose.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":s3:::",
+                        {
+                          "Ref": "AccessLoggingBucket",
+                        },
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetObject",
+                    "s3:PutObject",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":s3:::",
+                        {
+                          "Ref": "AccessLoggingBucket",
+                        },
+                        "/api-gateway/TEST/test-stack/testing/*",
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": "logs:PutLogEvents",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "lambdaAccessLoggingDeliveryErrorsDE0FEF55",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Delivery",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdaAccessLoggingDeliveryStreamB52224AE": {
+      "Properties": {
+        "DeliveryStreamEncryptionConfigurationInput": {
+          "KeyType": "AWS_OWNED_CMK",
+        },
+        "DeliveryStreamName": "amazon-apigateway-TestlambdaAccessLogging2E7E0D17",
+        "DeliveryStreamType": "DirectPut",
+        "ExtendedS3DestinationConfiguration": {
+          "BucketARN": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":s3:::",
+                {
+                  "Ref": "AccessLoggingBucket",
+                },
+              ],
+            ],
+          },
+          "BufferingHints": {
+            "IntervalInSeconds": 300,
+            "SizeInMBs": 5,
+          },
+          "CloudWatchLoggingOptions": {
+            "Enabled": true,
+            "LogGroupName": {
+              "Ref": "lambdaAccessLoggingDeliveryErrorsDE0FEF55",
+            },
+            "LogStreamName": {
+              "Ref": "lambdaAccessLoggingS3Delivery0EA0CACF",
+            },
+          },
+          "CompressionFormat": "GZIP",
+          "ErrorOutputPrefix": "api-gateway/TEST/test-stack/testing/errors/!{firehose:error-output-type}/",
+          "Prefix": "api-gateway/TEST/test-stack/testing/",
+          "ProcessingConfiguration": {
+            "Enabled": true,
+            "Processors": [
+              {
+                "Type": "AppendDelimiterToRecord",
+              },
+            ],
+          },
+          "RoleARN": {
+            "Fn::GetAtt": [
+              "lambdaAccessLoggingDeliveryRole141DBB31",
+              "Arn",
+            ],
+          },
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::KinesisFirehose::DeliveryStream",
+    },
+    "lambdaAccessLoggingS3Delivery0EA0CACF": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Ref": "lambdaAccessLoggingDeliveryErrorsDE0FEF55",
+        },
+      },
+      "Type": "AWS::Logs::LogStream",
+      "UpdateReplacePolicy": "Retain",
     },
     "lambdaServiceRole494E4CA6": {
       "Properties": {
@@ -559,6 +790,15 @@ exports[`The GuApiLambda pattern should allow us to link a domain name to a Lamb
         "lambdaapiAccountAF0DCB01",
       ],
       "Properties": {
+        "AccessLogSetting": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "lambdaAccessLoggingDeliveryStreamB52224AE",
+              "Arn",
+            ],
+          },
+          "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
+        },
         "DeploymentId": {
           "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
         },
@@ -785,6 +1025,7 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
       "GuStack",
       "GuDistributionBucketParameter",
       "GuApiLambda",
+      "GuAccessLoggingBucketParameter",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -817,6 +1058,11 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
     },
   },
   "Parameters": {
+    "AccessLoggingBucket": {
+      "Default": "/account/services/access-logging/bucket",
+      "Description": "S3 bucket to store your access logs",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
@@ -880,6 +1126,231 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "lambdaAccessLoggingDeliveryErrorsDE0FEF55": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "lambdaAccessLoggingDeliveryRole141DBB31": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "firehose.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":s3:::",
+                        {
+                          "Ref": "AccessLoggingBucket",
+                        },
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetObject",
+                    "s3:PutObject",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":s3:::",
+                        {
+                          "Ref": "AccessLoggingBucket",
+                        },
+                        "/api-gateway/TEST/test-stack/testing/*",
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": "logs:PutLogEvents",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "lambdaAccessLoggingDeliveryErrorsDE0FEF55",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Delivery",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdaAccessLoggingDeliveryStreamB52224AE": {
+      "Properties": {
+        "DeliveryStreamEncryptionConfigurationInput": {
+          "KeyType": "AWS_OWNED_CMK",
+        },
+        "DeliveryStreamName": "amazon-apigateway-TestlambdaAccessLogging2E7E0D17",
+        "DeliveryStreamType": "DirectPut",
+        "ExtendedS3DestinationConfiguration": {
+          "BucketARN": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":s3:::",
+                {
+                  "Ref": "AccessLoggingBucket",
+                },
+              ],
+            ],
+          },
+          "BufferingHints": {
+            "IntervalInSeconds": 300,
+            "SizeInMBs": 5,
+          },
+          "CloudWatchLoggingOptions": {
+            "Enabled": true,
+            "LogGroupName": {
+              "Ref": "lambdaAccessLoggingDeliveryErrorsDE0FEF55",
+            },
+            "LogStreamName": {
+              "Ref": "lambdaAccessLoggingS3Delivery0EA0CACF",
+            },
+          },
+          "CompressionFormat": "GZIP",
+          "ErrorOutputPrefix": "api-gateway/TEST/test-stack/testing/errors/!{firehose:error-output-type}/",
+          "Prefix": "api-gateway/TEST/test-stack/testing/",
+          "ProcessingConfiguration": {
+            "Enabled": true,
+            "Processors": [
+              {
+                "Type": "AppendDelimiterToRecord",
+              },
+            ],
+          },
+          "RoleARN": {
+            "Fn::GetAtt": [
+              "lambdaAccessLoggingDeliveryRole141DBB31",
+              "Arn",
+            ],
+          },
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::KinesisFirehose::DeliveryStream",
+    },
+    "lambdaAccessLoggingS3Delivery0EA0CACF": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Ref": "lambdaAccessLoggingDeliveryErrorsDE0FEF55",
+        },
+      },
+      "Type": "AWS::Logs::LogStream",
+      "UpdateReplacePolicy": "Retain",
     },
     "lambdaServiceRole494E4CA6": {
       "Properties": {
@@ -1277,6 +1748,15 @@ exports[`The GuApiLambda pattern should create the correct resources with minima
         "lambdaapiAccountAF0DCB01",
       ],
       "Properties": {
+        "AccessLogSetting": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "lambdaAccessLoggingDeliveryStreamB52224AE",
+              "Arn",
+            ],
+          },
+          "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
+        },
         "DeploymentId": {
           "Ref": "lambdaapiDeployment8E95B585b2a6e9ca12f368f15997c85321f29670",
         },

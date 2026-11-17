@@ -11,6 +11,7 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
       "GuLambdaFunction",
       "GuLambdaFunction",
       "GuApiGatewayWithLambdaByPath",
+      "GuAccessLoggingBucketParameter",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -43,6 +44,11 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
     },
   },
   "Parameters": {
+    "AccessLoggingBucket": {
+      "Default": "/account/services/access-logging/bucket",
+      "Description": "S3 bucket to store your access logs",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
@@ -169,6 +175,15 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         "RestApiAccount7C83CF5A",
       ],
       "Properties": {
+        "AccessLogSetting": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "testingAccessLoggingDeliveryStream91C263DA",
+              "Arn",
+            ],
+          },
+          "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
+        },
         "DeploymentId": {
           "Ref": "RestApiDeployment180EC50383363c5ced7927aa10a2d324d85bde7b",
         },
@@ -1572,6 +1587,231 @@ exports[`The GuApiGatewayWithLambdaByPath pattern should create the correct reso
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "testingAccessLoggingDeliveryErrors40C96618": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "testingAccessLoggingDeliveryRole3D485EF3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "firehose.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":s3:::",
+                        {
+                          "Ref": "AccessLoggingBucket",
+                        },
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetObject",
+                    "s3:PutObject",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":s3:::",
+                        {
+                          "Ref": "AccessLoggingBucket",
+                        },
+                        "/api-gateway/TEST/test-stack/testing/*",
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": "logs:PutLogEvents",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "testingAccessLoggingDeliveryErrors40C96618",
+                      "Arn",
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Delivery",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "testingAccessLoggingDeliveryStream91C263DA": {
+      "Properties": {
+        "DeliveryStreamEncryptionConfigurationInput": {
+          "KeyType": "AWS_OWNED_CMK",
+        },
+        "DeliveryStreamName": "amazon-apigateway-TesttestingAccessLogging9978D307",
+        "DeliveryStreamType": "DirectPut",
+        "ExtendedS3DestinationConfiguration": {
+          "BucketARN": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":s3:::",
+                {
+                  "Ref": "AccessLoggingBucket",
+                },
+              ],
+            ],
+          },
+          "BufferingHints": {
+            "IntervalInSeconds": 300,
+            "SizeInMBs": 5,
+          },
+          "CloudWatchLoggingOptions": {
+            "Enabled": true,
+            "LogGroupName": {
+              "Ref": "testingAccessLoggingDeliveryErrors40C96618",
+            },
+            "LogStreamName": {
+              "Ref": "testingAccessLoggingS3DeliveryB87CF6B3",
+            },
+          },
+          "CompressionFormat": "GZIP",
+          "ErrorOutputPrefix": "api-gateway/TEST/test-stack/testing/errors/!{firehose:error-output-type}/",
+          "Prefix": "api-gateway/TEST/test-stack/testing/",
+          "ProcessingConfiguration": {
+            "Enabled": true,
+            "Processors": [
+              {
+                "Type": "AppendDelimiterToRecord",
+              },
+            ],
+          },
+          "RoleARN": {
+            "Fn::GetAtt": [
+              "testingAccessLoggingDeliveryRole3D485EF3",
+              "Arn",
+            ],
+          },
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "testing",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/cdk",
+          },
+          {
+            "Key": "Stack",
+            "Value": "test-stack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::KinesisFirehose::DeliveryStream",
+    },
+    "testingAccessLoggingS3DeliveryB87CF6B3": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Ref": "testingAccessLoggingDeliveryErrors40C96618",
+        },
+      },
+      "Type": "AWS::Logs::LogStream",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }

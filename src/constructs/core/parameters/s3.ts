@@ -40,7 +40,7 @@ export class GuPrivateConfigBucketParameter extends GuStringParameter {
 }
 
 /**
- * Creates a CloudFormation parameter which references the bucket used to store load balancer access logs.
+ * Creates a CloudFormation parameter which references the bucket used to store load balancer and API Gateway access logs.
  * By default, the bucket name is stored in an SSM Parameter called `/account/services/access-logging/bucket`.
  */
 export class GuAccessLoggingBucketParameter extends GuStringParameter {

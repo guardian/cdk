@@ -5,6 +5,7 @@ import type { Http5xxAlarmProps, NoMonitoring } from "../constructs/cloudwatch";
 import { GuApiGateway5xxPercentageAlarm } from "../constructs/cloudwatch/api-gateway-alarms";
 import type { AppIdentity, GuStack } from "../constructs/core";
 import type { GuLambdaFunction } from "../constructs/lambda";
+import { apiGatewayDeployOptions } from "../utils/api-gateway/access-logging";
 
 /**
  * See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
@@ -65,6 +66,15 @@ export interface GuApiGatewayWithLambdaByPathProps extends RestApiProps, AppIden
    * ```
    */
   monitoringConfiguration: NoMonitoring | ApiGatewayAlarms;
+  /**
+   * Deliver API Gateway access logs through Firehose to the account access-log S3 bucket.
+   * Applies to the automatically deployed stage, independently of alarm monitoring.
+   * Explicit logging settings in `deployOptions` take precedence.
+   * Set to false to disable library defaults without removing explicit logging settings.
+   *
+   * @defaultValue true
+   */
+  withAccessLogging?: boolean;
 }
 
 function isNoMonitoring(
@@ -136,6 +146,7 @@ export class GuApiGatewayWithLambdaByPath extends Construct {
       // Override to avoid clashes as default is just api ID, which is often shared across stages.
       restApiName: `${scope.stack}-${scope.stage}-${props.app}`,
       ...props,
+      deployOptions: apiGatewayDeployOptions(this, scope, props),
     });
 
     this.api = apiGateway;
