@@ -2,16 +2,52 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/moby/moby/api/types/container"
 	"github.com/testcontainers/testcontainers-go"
 )
+
+// sidecarConfig mirrors config/sidecar.json, which is generated from the GuCDK construct's settings.
+type sidecarConfig struct {
+	Image       string            `json:"image"`
+	Command     []string          `json:"command"`
+	Environment map[string]string `json:"environment"`
+
+	// The application identity GuCDK wrote into the Fluent Bit config.
+	Identity struct {
+		Stack          string `json:"stack"`
+		Stage          string `json:"stage"`
+		App            string `json:"app"`
+		RepositoryName string `json:"repositoryName"`
+	} `json:"identity"`
+}
+
+func loadSidecarConfig(t *testing.T) sidecarConfig {
+	t.Helper()
+
+	path := filepath.Join("config", "sidecar.json")
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("reading %s: %v\nGenerate it by running script/generate-logging-sidecar from the repository root.", path, err)
+	}
+
+	var config sidecarConfig
+	if err := json.Unmarshal(content, &config); err != nil {
+		t.Fatalf("parsing %s: %v", path, err)
+	}
+
+	return config
+}
 
 type logConsumer struct {
 	mu   sync.Mutex
@@ -37,26 +73,32 @@ func TestFluentBit(t *testing.T) {
 
 	consumer := &logConsumer{}
 
+	sidecar := loadSidecarConfig(t)
+
+	env := map[string]string{
+		// ECS provides these at runtime through the task metadata endpoint, which doesn't exist locally.
+		"ECS_CLUSTER":         "test-cluster",
+		"ECS_TASK_ARN":        "test-task-arn",
+		"ECS_TASK_DEFINITION": "test-task-definition",
+	}
+	for key, value := range sidecar.Environment {
+		env[key] = value
+	}
+	// Test-only override:
+	env["OUTPUT_PLUGIN"] = "stdout"
+
 	req := testcontainers.ContainerRequest{
-		FromDockerfile: testcontainers.FromDockerfile{
-			Context:    ".",
-			Dockerfile: "Dockerfile",
-		},
+		Image: sidecar.Image,
+		Cmd:   sidecar.Command,
 
 		ExposedPorts: []string{"24224/tcp"},
 
-		Env: map[string]string{
-			"STACK":               "test",
-			"STAGE":               "test",
-			"APP":                 "test",
-			"GU_REPO":             "test/repo",
-			"TASK_NAME":           "test-task",
-			"ECS_CLUSTER":         "test-cluster",
-			"ECS_TASK_ARN":        "test-task-arn",
-			"ECS_TASK_DEFINITION": "test-task-definition",
+		Env: env,
 
-			// Test-only override:
-			"OUTPUT_PLUGIN": "stdout",
+		// Match the ECS task definition: a read-only root filesystem with a writable volume at /tmp.
+		HostConfigModifier: func(hostConfig *container.HostConfig) {
+			hostConfig.ReadonlyRootfs = true
+			hostConfig.Tmpfs = map[string]string{"/tmp": ""}
 		},
 		//WaitingFor: wait.ForListeningPort("24224/tcp"),
 	}
@@ -103,16 +145,19 @@ func TestFluentBit(t *testing.T) {
 
 	address := net.JoinHostPort(host, port.Port())
 
+	identity := sidecar.Identity
+	_, imageDigest, _ := strings.Cut(sidecar.Image, "@")
 	expectedFields := []string{
 		`"ecs_cluster"=>"test-cluster"`,
 		`"ecs_task_arn"=>"test-task-arn"`,
 		`"ecs_task_definition"=>"test-task-definition"`,
 		`"ShippedBy"=>"devx-logs"`,
-		`"stack"=>"test"`,
-		`"stage"=>"test"`,
-		`"app"=>"test"`,
-		`"gu:repo"=>"test/repo"`,
-		`"task"=>"test-task"`,
+		fmt.Sprintf(`"gu:logging-sidecar"=>"%s"`, imageDigest),
+		fmt.Sprintf(`"stack"=>"%s"`, identity.Stack),
+		fmt.Sprintf(`"stage"=>"%s"`, identity.Stage),
+		fmt.Sprintf(`"app"=>"%s"`, identity.App),
+		fmt.Sprintf(`"gu:repo"=>"%s"`, identity.RepositoryName),
+		fmt.Sprintf(`"task"=>"%s"`, identity.App),
 	}
 
 	// "log" exercises the rename filter (log -> message) before JSON parsing.
