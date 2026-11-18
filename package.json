@@ -29,7 +29,8 @@
     "release": "npx changeset",
     "release:docs": "rm -rf target && typedoc && gh-pages -d target -u \"github-actions-bot <support+actions@github.com>\"",
     "serve:docs": "rm -rf target && typedoc && open target/index.html",
-    "cli:dev": "ts-node src/bin/index.ts"
+    "cli:dev": "ts-node src/bin/index.ts",
+    "generate:logging-sidecar": "ts-node tools/logging/generate-sidecar.ts"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
