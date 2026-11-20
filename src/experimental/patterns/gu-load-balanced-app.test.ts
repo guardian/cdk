@@ -310,6 +310,54 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
   });
 
+  it("should be capable of adding additionalSecurityGroups to both EC2 and ECS deployments", function () {
+    const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 3000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "test-gu",
+      certificateProps: {
+        domainName: "domain-name-for-your-application.example",
+      },
+      ec2Props: {
+        instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+        instanceMetricGranularity: "5Minute",
+        userData: UserData.forLinux(),
+        scaling: {
+          minimumInstances: 1,
+        },
+        securityGroupIds: ["sg-0123456789abcdef0", "sg-0123456789abcdef1"],
+      },
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
+        imageIdentifier: "sha256:12345",
+        securityGroupIds: ["sg-0123456789abcdef0", "sg-0123456789abcdef1"],
+      },
+      targetGroupWeights: {
+        ec2: 499,
+        ecs: 500,
+      },
+    });
+
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::EC2::LaunchTemplate", {
+      LaunchTemplateData: {
+        SecurityGroupIds: Match.arrayWith(["sg-0123456789abcdef0", "sg-0123456789abcdef1"]),
+      },
+    });
+    template.hasResourceProperties("AWS::ECS::Service", {
+      NetworkConfiguration: {
+        AwsvpcConfiguration: {
+          SecurityGroups: Match.arrayWith(["sg-0123456789abcdef0", "sg-0123456789abcdef1"]),
+        },
+      },
+    });
+  });
+
   it("should create listener rules to deterministically route requests to EC2 or ECS during migration", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
     const { targetGroups } = new GuLoadBalancedAppExperimental(stack, {
