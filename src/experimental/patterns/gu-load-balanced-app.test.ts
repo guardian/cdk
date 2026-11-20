@@ -367,17 +367,29 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     });
 
     const template = Template.fromStack(stack);
-    console.log(template.findResources("AWS::EC2::LaunchTemplate"));
     template.hasResourceProperties("AWS::EC2::LaunchTemplate", {
       LaunchTemplateData: {
-        SecurityGroupIds: Match.arrayWith(["sg-testing1", "sg-testing2"]),
+        SecurityGroupIds: Match.arrayWith([
+          {
+            "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEc2SecurityGroup0"), "GroupId"],
+          },
+          {
+            "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEc2SecurityGroup1"), "GroupId"],
+          },
+        ]),
       },
     });
-
     template.hasResourceProperties("AWS::ECS::Service", {
       NetworkConfiguration: {
         AwsvpcConfiguration: {
-          SecurityGroups: Match.arrayWith(["sg-0123456789abcdef0", "sg-abcdef01234567890"]),
+          SecurityGroups: Match.arrayWith([
+            {
+              "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEcsSecurityGroup0"), "GroupId"],
+            },
+            {
+              "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEcsSecurityGroup1"), "GroupId"],
+            },
+          ]),
         },
       },
     });

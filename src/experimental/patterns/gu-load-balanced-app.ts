@@ -628,8 +628,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         securityGroupIds?.map((securityGroupId, index) =>
           SecurityGroup.fromLookupById(this, `ImportedEc2SecurityGroup${index}`, securityGroupId)) ?? [];
 
-      console.log(additionalSecurityGroups.map((sg) => sg.securityGroupId));
-
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
         additionalSecurityGroups,
