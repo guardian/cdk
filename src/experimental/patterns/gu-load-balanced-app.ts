@@ -9,7 +9,8 @@ import {
   UserPoolClientIdentityProvider,
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
-import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc} from "aws-cdk-lib/aws-ec2";
+import { SecurityGroup, } from "aws-cdk-lib/aws-ec2";
 import { CfnSecurityGroupEgress, CpuManufacturer, InstanceGeneration, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
@@ -174,6 +175,10 @@ export interface EcsProps {
    * @default - false
    */
   provisionManagedSecurityRole?: boolean;
+  /**
+   * Ids of additional security groups to apply to the ECS service
+   */
+  securityGroupIds?: string[];
 }
 
 /**
@@ -448,6 +453,8 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * This enables the simplification of userdata as a first step toward a docker based deployment.
      */
     allowS3Sync?: boolean;
+
+    securityGroupIds?: string[];
   };
   /**
    * If you want to use an ECS service and ECS tasks to serve requests, then pass in relevant props here.
@@ -591,6 +598,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         defaultInstanceWarmup,
         instanceMetricGranularity,
         allowS3Sync,
+        securityGroupIds,
       } = ec2Props;
 
       const userData =
@@ -616,8 +624,15 @@ export class GuLoadBalancedAppExperimental extends Construct {
           )
         : updatePolicy;
 
+      const additionalSecurityGroups: ISecurityGroup[] =
+        securityGroupIds?.map((securityGroupId, index) =>
+          SecurityGroup.fromLookupById(this, `ImportedEc2SecurityGroup${index}`, securityGroupId)) ?? [];
+
+      console.log(additionalSecurityGroups.map((sg) => sg.securityGroupId));
+
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
+        additionalSecurityGroups,
         vpc,
         instanceType,
         minimumInstances,
@@ -837,6 +852,11 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
 
+      const additionalSecurityGroups: ISecurityGroup[] =
+        ecsProps.securityGroupIds?.map((securityGroupId, index) =>
+          SecurityGroup.fromLookupById(this, `ImportedEcsSecurityGroup${index}`, securityGroupId),
+        ) ?? [];
+
       // FargateService can also be used for tasks that will run on managed instances provided by the capacityProvider.
       //
       // AWS CDK docs use FargateService in their example of a managed instances capacity provider:
@@ -854,7 +874,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         // We don't want this so explicitly allow outbound HTTPS only
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [httpsEgressSecurityGroup],
+        securityGroups: [httpsEgressSecurityGroup, ...additionalSecurityGroups],
         capacityProviderStrategies: [
           {
             capacityProvider: managedInstancesCapacityProvider.capacityProviderName,
