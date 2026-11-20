@@ -9,8 +9,8 @@ import {
   UserPoolClientIdentityProvider,
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
-import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc} from "aws-cdk-lib/aws-ec2";
-import { SecurityGroup, } from "aws-cdk-lib/aws-ec2";
+import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
+import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { CfnSecurityGroupEgress, CpuManufacturer, InstanceGeneration, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
@@ -626,7 +626,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const additionalSecurityGroups: ISecurityGroup[] =
         securityGroupIds?.map((securityGroupId, index) =>
-          SecurityGroup.fromLookupById(this, `ImportedEc2SecurityGroup${index}`, securityGroupId)) ?? [];
+          SecurityGroup.fromLookupById(this, `ImportedEc2SecurityGroup${index}`, securityGroupId),
+        ) ?? [];
 
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
