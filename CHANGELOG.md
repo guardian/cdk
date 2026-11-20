@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 67.2.0
+
+### Minor Changes
+
+- cb3bec5: Switch to using ECS Managed Instances as the default and remove support for ECS Fargate in GuLoadBalancedAppExperimental.
+
 ## 67.1.0
 
 ### Minor Changes
