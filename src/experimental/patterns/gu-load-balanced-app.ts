@@ -626,7 +626,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const additionalSecurityGroups: ISecurityGroup[] =
         securityGroupIds?.map((securityGroupId, index) =>
-          SecurityGroup.fromLookupById(this, `ImportedEc2SecurityGroup${index}`, securityGroupId),
+          SecurityGroup.fromSecurityGroupId(this, `ImportedEc2SecurityGroup${index}`, securityGroupId),
         ) ?? [];
 
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
@@ -853,7 +853,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const additionalSecurityGroups: ISecurityGroup[] =
         ecsProps.securityGroupIds?.map((securityGroupId, index) =>
-          SecurityGroup.fromLookupById(this, `ImportedEcsSecurityGroup${index}`, securityGroupId),
+          SecurityGroup.fromSecurityGroupId(this, `ImportedEcsSecurityGroup${index}`, securityGroupId),
         ) ?? [];
 
       const ecsService = new FargateService(scope, "EcsService", {

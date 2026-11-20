@@ -7,16 +7,7 @@ import {
   EbsDeviceVolumeType,
   UpdatePolicy,
 } from "aws-cdk-lib/aws-autoscaling";
-import {
-  InstanceClass,
-  InstanceSize,
-  InstanceType,
-  Peer,
-  Port,
-  SecurityGroup,
-  UserData,
-  Vpc,
-} from "aws-cdk-lib/aws-ec2";
+import { InstanceClass, InstanceSize, InstanceType, Peer, Port, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, MetadataKeys } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
@@ -322,20 +313,6 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
   it("should be capable of adding additionalSecurityGroups to both EC2 and ECS deployments", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
 
-    const dummyVpc = Vpc.fromVpcAttributes(stack, "DummyVpc", {
-      vpcId: "vpc-00000000",
-      availabilityZones: ["eu-west-1a"],
-      privateSubnetIds: ["subnet-00000000"],
-    });
-
-    jest.spyOn(SecurityGroup, "fromLookupById").mockImplementation(
-      (scope, id, securityGroupId) =>
-        new SecurityGroup(scope, id, {
-          vpc: dummyVpc,
-          description: `Test group for ${securityGroupId}`,
-        }),
-    );
-
     new GuLoadBalancedAppExperimental(stack, {
       monitoringConfiguration: { noMonitoring: true },
       applicationPort: 3000,
@@ -351,14 +328,14 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         scaling: {
           minimumInstances: 1,
         },
-        securityGroupIds: ["sg-testing1", "sg-testing2"],
+        securityGroupIds: ["sg-0123456789abcdef0", "sg-0123456789abcdef1"],
       },
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
         imageIdentifier: "sha256:12345",
-        securityGroupIds: ["sg-testing1", "sg-testing2"],
+        securityGroupIds: ["sg-0123456789abcdef0", "sg-0123456789abcdef1"],
       },
       targetGroupWeights: {
         ec2: 499,
@@ -369,27 +346,13 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
     const template = Template.fromStack(stack);
     template.hasResourceProperties("AWS::EC2::LaunchTemplate", {
       LaunchTemplateData: {
-        SecurityGroupIds: Match.arrayWith([
-          {
-            "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEc2SecurityGroup0"), "GroupId"],
-          },
-          {
-            "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEc2SecurityGroup1"), "GroupId"],
-          },
-        ]),
+        SecurityGroupIds: Match.arrayWith(["sg-0123456789abcdef0", "sg-0123456789abcdef1"]),
       },
     });
     template.hasResourceProperties("AWS::ECS::Service", {
       NetworkConfiguration: {
         AwsvpcConfiguration: {
-          SecurityGroups: Match.arrayWith([
-            {
-              "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEcsSecurityGroup0"), "GroupId"],
-            },
-            {
-              "Fn::GetAtt": [Match.stringLikeRegexp("^testguImportedEcsSecurityGroup1"), "GroupId"],
-            },
-          ]),
+          SecurityGroups: Match.arrayWith(["sg-0123456789abcdef0", "sg-0123456789abcdef1"]),
         },
       },
     });
