@@ -1,4 +1,4 @@
-import { Aspects, Aws, Duration, SecretValue, Size, Tags } from "aws-cdk-lib";
+import { Aspects, Aws, Duration, SecretValue, Size, Tags, Token } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -15,6 +15,7 @@ import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs"
 import {
   Cluster,
   Compatibility,
+  ContainerDefinition,
   ContainerInsights,
   CpuArchitecture,
   FargateService,
@@ -130,6 +131,14 @@ export interface EcsProps {
    */
   imageIdentifier: string;
   cpu: number;
+  /**
+   * Total task memory in MiB, shared by the application and its sidecars.
+   *
+   * For Managed Instances, synthesis fails if the sum of container memory limits exceeds this value.
+   * Each container contributes its hard limit, or its reservation if no hard limit is set.
+   * Containers without either value and unresolved tokens are excluded from the sum.
+   * An unresolved task memory value cannot be checked.
+   */
   memoryLimitMiB: number;
   /**
    * ECR repository name which contains your images.
@@ -1429,7 +1438,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
   private createManagedInstanceTaskDefinition(scope: Construct, cpu: number, memoryLimitMiB: number): TaskDefinition {
     // TODO: If you specify too high minimum memory/cpu then the cloud formation deployment will fail.
     // Can we add some validation to ensure the task size can resolve to at least 1 instance? Helps surface issues earlier.
-    return new TaskDefinition(scope, "EcsTaskDefinition", {
+    const taskDefinition = new TaskDefinition(scope, "EcsTaskDefinition", {
       compatibility: Compatibility.MANAGED_INSTANCES,
       networkMode: NetworkMode.AWS_VPC,
       memoryMiB: memoryLimitMiB.toString(),
@@ -1439,6 +1448,32 @@ export class GuLoadBalancedAppExperimental extends Construct {
         operatingSystemFamily: OperatingSystemFamily.LINUX,
       },
     });
+
+    taskDefinition.node.addValidation({
+      validate: () => {
+        if (Token.isUnresolved(memoryLimitMiB)) {
+          return [];
+        }
+
+        const containerMemoryMiB = taskDefinition.node.findAll().reduce((total, construct) => {
+          if (!(construct instanceof ContainerDefinition) || construct.taskDefinition !== taskDefinition) {
+            return total;
+          }
+
+          const { memory, memoryReservation } = construct.renderContainerDefinition();
+          const containerMemory = memory ?? memoryReservation ?? 0;
+          return Token.isUnresolved(containerMemory) ? total : total + containerMemory;
+        }, 0);
+
+        return containerMemoryMiB > memoryLimitMiB
+          ? [
+              `Total container memory (${containerMemoryMiB} MiB) exceeds task memory (${memoryLimitMiB} MiB). Reduce container memory limits/reservations or increase ecsProps.memoryLimitMiB.`,
+            ]
+          : [];
+      },
+    });
+
+    return taskDefinition;
   }
 }
 
