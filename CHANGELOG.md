@@ -1,5 +1,14 @@
 # @guardian/cdk
 
+## 67.2.1
+
+### Patch Changes
+
+- 68b584b: Propagate all custom tags to managed EC2 instances (which are provisioned via GuLoadBalancedAppExperimental).
+- bf77dd3: Update `GuLoadBalancedAppExperimental` to run the stock AWS for Fluent Bit image as its logging sidecar, instead of the Guardian-built `guardian/cdk/logging` image.
+
+  The Guardian Fluent Bit configuration is now passed to the sidecar in environment variables and written to a writable volume mounted at `/tmp`. The sidecar no longer needs permission to pull from the `guardian/cdk/logging` ECR repository. The shipped log records are unchanged.
+
 ## 67.2.0
 
 ### Minor Changes
