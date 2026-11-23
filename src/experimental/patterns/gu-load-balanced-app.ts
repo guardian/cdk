@@ -10,7 +10,6 @@ import {
   UserPoolIdentityProviderGoogle,
 } from "aws-cdk-lib/aws-cognito";
 import type { InstanceRequirementsConfig, InstanceType, ISecurityGroup, ISubnet, IVpc } from "aws-cdk-lib/aws-ec2";
-import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import { CfnSecurityGroupEgress, CpuManufacturer, InstanceGeneration, Peer, Port, UserData } from "aws-cdk-lib/aws-ec2";
 import type { CfnService, CfnTaskDefinition, Volume } from "aws-cdk-lib/aws-ecs";
 import {
@@ -175,10 +174,6 @@ export interface EcsProps {
    * @default - false
    */
   provisionManagedSecurityRole?: boolean;
-  /**
-   * Ids of additional security groups to apply to the ECS service. These groups must already exist
-   */
-  securityGroupIds?: string[];
 }
 
 /**
@@ -453,11 +448,6 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      * This enables the simplification of userdata as a first step toward a docker based deployment.
      */
     allowS3Sync?: boolean;
-
-    /**
-     * Ids of additional security groups to apply to the EC2 auto-scaling group. These groups must already exist
-     */
-    securityGroupIds?: string[];
   };
   /**
    * If you want to use an ECS service and ECS tasks to serve requests, then pass in relevant props here.
@@ -483,6 +473,10 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     ecs: number;
     ec2: number;
   };
+  /**
+   * Additional security groups that will be applied to either the EC2 auto-scaling group or ECS service, or both.
+   */
+  additionalApplicationSecurityGroups?: ISecurityGroup[];
 }
 
 interface TargetGroups {
@@ -548,6 +542,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       ec2Props,
       ecsProps,
       targetGroupWeights,
+      additionalApplicationSecurityGroups,
       additionalPolicies = [],
     } = props;
     const privateSubnets =
@@ -601,7 +596,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
         defaultInstanceWarmup,
         instanceMetricGranularity,
         allowS3Sync,
-        securityGroupIds,
       } = ec2Props;
 
       const userData =
@@ -627,14 +621,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
           )
         : updatePolicy;
 
-      const additionalSecurityGroups: ISecurityGroup[] =
-        securityGroupIds?.map((securityGroupId, index) =>
-          SecurityGroup.fromSecurityGroupId(this, `ImportedEc2SecurityGroup${index}`, securityGroupId),
-        ) ?? [];
-
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
-        additionalSecurityGroups,
+        additionalSecurityGroups: additionalApplicationSecurityGroups ?? [],
         vpc,
         instanceType,
         minimumInstances,
@@ -854,11 +843,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
 
-      const additionalSecurityGroups: ISecurityGroup[] =
-        ecsProps.securityGroupIds?.map((securityGroupId, index) =>
-          SecurityGroup.fromSecurityGroupId(this, `ImportedEcsSecurityGroup${index}`, securityGroupId),
-        ) ?? [];
-
       // FargateService can also be used for tasks that will run on managed instances provided by the capacityProvider.
       //
       // AWS CDK docs use FargateService in their example of a managed instances capacity provider:
@@ -873,10 +857,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         circuitBreaker: { enable: true, rollback: true },
         propagateTags: PropagatedTagSource.SERVICE,
         // By default, AWS will create a new security group which allows all outbound traffic
-        // We don't want this so explicitly allow outbound HTTPS only
+        // We don't want this so explicitly allow outbound HTTPS only with the httpsEgressSecurityGroup
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [httpsEgressSecurityGroup, ...additionalSecurityGroups],
+        securityGroups: [httpsEgressSecurityGroup, ...(additionalApplicationSecurityGroups ?? [])],
         capacityProviderStrategies: [
           {
             capacityProvider: managedInstancesCapacityProvider.capacityProviderName,

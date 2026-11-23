@@ -7,7 +7,16 @@ import {
   EbsDeviceVolumeType,
   UpdatePolicy,
 } from "aws-cdk-lib/aws-autoscaling";
-import { InstanceClass, InstanceSize, InstanceType, Peer, Port, UserData, Vpc } from "aws-cdk-lib/aws-ec2";
+import {
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  Peer,
+  Port,
+  SecurityGroup,
+  UserData,
+  Vpc,
+} from "aws-cdk-lib/aws-ec2";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AccessScope, MetadataKeys } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
@@ -312,6 +321,9 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
 
   it("should be capable of adding additionalSecurityGroups to both EC2 and ECS deployments", function () {
     const stack = simpleGuStackForTesting({ env: { region: "eu-west-1" } });
+    const securityGroups = ["sg-0123456789abcdef0", "sg-0123456789abcdef1"].map((securityGroupId, index) =>
+      SecurityGroup.fromSecurityGroupId(stack, `ImportedSecurityGroup${index}`, securityGroupId),
+    );
 
     new GuLoadBalancedAppExperimental(stack, {
       monitoringConfiguration: { noMonitoring: true },
@@ -328,19 +340,18 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
         scaling: {
           minimumInstances: 1,
         },
-        securityGroupIds: ["sg-0123456789abcdef0", "sg-0123456789abcdef1"],
       },
       ecsProps: {
         cpu: 1024,
         memoryLimitMiB: 2048,
         scaling: { minimumTasks: 3, maximumTasks: 6, cpuScaling: { targetValue: 20 } },
         imageIdentifier: "sha256:12345",
-        securityGroupIds: ["sg-0123456789abcdef0", "sg-0123456789abcdef1"],
       },
       targetGroupWeights: {
         ec2: 499,
         ecs: 500,
       },
+      additionalApplicationSecurityGroups: securityGroups,
     });
 
     const template = Template.fromStack(stack);
