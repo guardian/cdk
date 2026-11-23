@@ -25,10 +25,11 @@ import {
   ManagedInstancesCapacityProvider,
   NetworkMode,
   OperatingSystemFamily,
+  PropagatedTagSource,
+  PropagateManagedInstancesTags,
   TaskDefinition,
   VersionConsistency,
 } from "aws-cdk-lib/aws-ecs";
-import { PropagatedTagSource } from "aws-cdk-lib/aws-ecs";
 import type { HealthCheck as ALBHealthCheck } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { ApplicationProtocol, ListenerAction, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { AuthenticateCognitoAction } from "aws-cdk-lib/aws-elasticloadbalancingv2-actions";
@@ -1425,6 +1426,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         ec2InstanceProfile: instanceProfile,
         infrastructureRole,
         instanceRequirements,
+        propagateTags: PropagateManagedInstancesTags.CAPACITY_PROVIDER,
       },
     );
 

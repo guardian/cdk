@@ -3752,6 +3752,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
               },
             },
           },
+          "PropagateTags": "CAPACITY_PROVIDER",
         },
         "Tags": [
           {
