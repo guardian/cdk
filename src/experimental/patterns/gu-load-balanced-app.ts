@@ -176,7 +176,7 @@ export interface EcsProps {
    */
   provisionManagedSecurityRole?: boolean;
   /**
-   * Ids of additional security groups to apply to the ECS service
+   * Ids of additional security groups to apply to the ECS service. These groups must already exist
    */
   securityGroupIds?: string[];
 }
@@ -454,6 +454,9 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
      */
     allowS3Sync?: boolean;
 
+    /**
+     * Ids of additional security groups to apply to the EC2 auto-scaling group. These groups must already exist
+     */
     securityGroupIds?: string[];
   };
   /**
