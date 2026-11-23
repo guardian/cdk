@@ -481,6 +481,10 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
     ecs: number;
     ec2: number;
   };
+  /**
+   * Additional security groups that will be applied to either the EC2 auto-scaling group or ECS service, or both.
+   */
+  additionalApplicationSecurityGroups?: ISecurityGroup[];
 }
 
 interface TargetGroups {
@@ -546,6 +550,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       ec2Props,
       ecsProps,
       targetGroupWeights,
+      additionalApplicationSecurityGroups,
       additionalPolicies = [],
     } = props;
     const privateSubnets =
@@ -626,6 +631,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
+        additionalSecurityGroups: additionalApplicationSecurityGroups ?? [],
         vpc,
         instanceType,
         minimumInstances,
@@ -863,10 +869,10 @@ export class GuLoadBalancedAppExperimental extends Construct {
         circuitBreaker: { enable: true, rollback: true },
         propagateTags: PropagatedTagSource.SERVICE,
         // By default, AWS will create a new security group which allows all outbound traffic
-        // We don't want this so explicitly allow outbound HTTPS only
+        // We don't want this so explicitly allow outbound HTTPS only with the httpsEgressSecurityGroup
         // This is what we do for the current GuEc2App pattern:
         // https://github.com/guardian/cdk/blob/3b5688637024642055ed0bf576f668e56e40830d/src/constructs/autoscaling/asg.ts#L143-L145
-        securityGroups: [httpsEgressSecurityGroup],
+        securityGroups: [httpsEgressSecurityGroup, ...(additionalApplicationSecurityGroups ?? [])],
         capacityProviderStrategies: [
           {
             capacityProvider: managedInstancesCapacityProvider.capacityProviderName,
