@@ -1,5 +1,11 @@
 # @guardian/cdk
 
+## 67.3.0
+
+### Minor Changes
+
+- 69188d4: Update GuLoadBalancedAppExperimental to accept an `additionalApplicationSecurityGroups` argument to allow users to specify additional security groups to add to either an EC2 ASG or ECS service, or both.
+
 ## 67.2.1
 
 ### Patch Changes
