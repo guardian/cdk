@@ -31,7 +31,7 @@ export class Imports {
         types: ["App"],
         components: [],
       },
-      "@guardian/cdk/lib/constructs/core": {
+      "@guardian/cdk": {
         types: ["GuStackProps"],
         components: ["GuStack"],
       },
@@ -40,16 +40,11 @@ export class Imports {
 
   public static newAppImports({ kebab, pascal }: Name): Imports {
     return new Imports({
-      "source-map-support/register": {
-        basic: true,
-        types: [],
-        components: [],
-      },
-      "@guardian/cdk/lib/constructs/root": {
+      "@guardian/cdk": {
         types: [],
         components: ["GuRoot"],
       },
-      [`../lib/${kebab}`]: {
+      [`../lib/${kebab}.ts`]: {
         types: [],
         components: [pascal],
       },
@@ -70,7 +65,7 @@ export class Imports {
         types: [],
         components: ["Template"],
       },
-      [`./${kebab}`]: {
+      [`./${kebab}.ts`]: {
         types: [],
         components: [pascal],
       },

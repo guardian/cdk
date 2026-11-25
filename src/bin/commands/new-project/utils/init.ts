@@ -76,8 +76,6 @@ function createPackageJson(outputDirectory: string): void {
     "@types/node",
     "eslint",
     "prettier",
-    "ts-node",
-    "typescript",
   ].reduce((acc, depName) => ({ ...acc, [depName]: getDevDependency(depName)! }), {});
 
   const cdkDeps: Record<string, string> = {
@@ -88,7 +86,6 @@ function createPackageJson(outputDirectory: string): void {
   };
 
   const customDeps = {
-    "source-map-support": "^0.5.20",
     "@guardian/prettier": "5.0.0",
   };
 
@@ -103,8 +100,8 @@ function createPackageJson(outputDirectory: string): void {
     version: "0.0.0",
     private: true,
     scripts: {
-      test: 'NODE_ENV=test node --require ts-node/register --test "lib/**/*.test.ts"',
-      "test-update": 'NODE_ENV=test node --require ts-node/register --test --test-update-snapshots "lib/**/*.test.ts"',
+      test: 'NODE_ENV=test node  --test "lib/**/*.test.ts"',
+      "test-update": 'NODE_ENV=test node --test --test-update-snapshots "lib/**/*.test.ts"',
       format: 'prettier --write "{lib,bin}/**/*.ts"',
       lint: "eslint lib/** bin/** --no-error-on-unmatched-pattern",
       synth: "cdk synth --path-metadata false --version-reporting false",
