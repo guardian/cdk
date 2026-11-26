@@ -1,3 +1,4 @@
+import { RemovalPolicy } from "aws-cdk-lib";
 import type { ICluster } from "aws-cdk-lib/aws-ecs";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../../constructs/core";
@@ -48,5 +49,8 @@ export class GuECSInstanceRolePolicyForManagedInstancesExperimental extends GuPo
         }),
       ],
     });
+
+    // Required to keep allow for deletion of cluster using cloud formation
+    this.applyRemovalPolicy(RemovalPolicy.RETAIN);
   }
 }
