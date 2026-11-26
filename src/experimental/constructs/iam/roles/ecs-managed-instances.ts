@@ -1,3 +1,4 @@
+import { RemovalPolicy } from "aws-cdk-lib";
 import type { ICluster } from "aws-cdk-lib/aws-ecs";
 import { ManagedPolicy, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import type { GuStack } from "../../../../constructs/core";
@@ -41,5 +42,11 @@ export class GuECSManagedInstanceRoleExperimental extends GuRole {
     );
 
     ecsInstanceRolePolicy.attachToRole(this);
+
+    // We keep the this role around to ensure managed instances can always be deleted.
+    // Without this the managed instances loose the permissions to communicate the status
+    // of their running tasks to Amazon ECS. This causes them to never deregister tasks
+    // from the cluster.
+    this.applyRemovalPolicy(RemovalPolicy.RETAIN);
   }
 }

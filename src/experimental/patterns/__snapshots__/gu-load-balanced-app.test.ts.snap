@@ -2815,6 +2815,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "Type": "AWS::IAM::Role",
     },
     "ECSInstanceProfileBA4A4DA9": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "Roles": [
           {
@@ -2823,6 +2824,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
+      "UpdateReplacePolicy": "Retain",
     },
     "ECSInstanceRolePolicyD0240271": {
       "Properties": {
@@ -2885,6 +2887,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
       "Type": "AWS::IAM::Policy",
     },
     "ECSManagedInstancesRole1E652558": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2921,6 +2924,7 @@ exports[`the GuLoadBalancedAppExperimental pattern should support new ECS and hy
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
     "EcsService81FC6EF6": {
       "DependsOn": [
