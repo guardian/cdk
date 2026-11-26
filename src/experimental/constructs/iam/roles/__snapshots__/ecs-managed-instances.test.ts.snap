@@ -12,6 +12,7 @@ exports[`GuECSManagedInstanceRole matches snapshot of the generated CloudFormati
   },
   "Resources": {
     "ECSInstanceRole5196E36E": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -48,8 +49,10 @@ exports[`GuECSManagedInstanceRole matches snapshot of the generated CloudFormati
         ],
       },
       "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
     },
     "ECSInstanceRolePolicyD0240271": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -98,6 +101,7 @@ exports[`GuECSManagedInstanceRole matches snapshot of the generated CloudFormati
         ],
       },
       "Type": "AWS::IAM::Policy",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }
