@@ -1,4 +1,4 @@
-import { Aspects, Aws, Duration, SecretValue, Size, Tags } from "aws-cdk-lib";
+import { Aspects, Aws, Duration, RemovalPolicy, SecretValue, Size, Tags } from "aws-cdk-lib";
 import type { PredefinedMetric, TargetTrackingScalingPolicyProps } from "aws-cdk-lib/aws-applicationautoscaling";
 import { TargetTrackingScalingPolicy } from "aws-cdk-lib/aws-applicationautoscaling";
 import type { BlockDevice, CfnAutoScalingGroup, UpdatePolicy } from "aws-cdk-lib/aws-autoscaling";
@@ -813,6 +813,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const instanceProfile = new InstanceProfile(scope, "ECSInstanceProfile", {
         role: ecsInstanceRole,
       });
+      // Ensures the Instance Profile is kept around long enough for the managed instances to deregister themselves
+      // with Amazon ECS.
+      instanceProfile.applyRemovalPolicy(RemovalPolicy.RETAIN);
 
       const managedInstancesCapacityProvider = this.createManagedInstanceCapacityProvider(
         scope,
