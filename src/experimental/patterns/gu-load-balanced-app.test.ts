@@ -18,6 +18,7 @@ import {
   Vpc,
 } from "aws-cdk-lib/aws-ec2";
 import type { CfnLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { Key } from "aws-cdk-lib/aws-kms";
 import { AccessScope, MetadataKeys } from "../../constants";
 import { GuUserData } from "../../constructs/autoscaling";
 import type { NoMonitoring } from "../../constructs/cloudwatch";
@@ -55,6 +56,82 @@ describe("the GuLoadBalancedAppExperimental pattern should support new ECS and h
       },
     });
     expect(Template.fromStack(stack).toJSON()).toMatchSnapshot();
+  });
+
+  it.each([false, true])("uses one Play secret writer and grants runtime readers access (hybrid: %s)", (hybrid) => {
+    const stack = simpleGuStackForTesting({ env: { account: "123456789012", region: "eu-west-1" } });
+    const kmsKey = new Key(stack, "PlayKey");
+    new GuLoadBalancedAppExperimental(stack, {
+      monitoringConfiguration: { noMonitoring: true },
+      applicationPort: 9000,
+      access: { scope: AccessScope.PUBLIC },
+      app: "play",
+      ecsProps: {
+        cpu: 1024,
+        memoryLimitMiB: 2048,
+        scaling: { minimumTasks: 3, maximumTasks: 6 },
+        imageIdentifier: "sha256:12345",
+      },
+      ...(hybrid && {
+        ec2Props: {
+          instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MEDIUM),
+          instanceMetricGranularity: "5Minute",
+          userData: UserData.forLinux(),
+          scaling: { minimumInstances: 2 },
+        },
+        targetGroupWeights: { ec2: 1, ecs: 1 },
+      }),
+      playSecretRotation: {
+        parameterName: "/existing/play/secret",
+        interval: Duration.hours(6),
+        usageDelay: Duration.minutes(3),
+        overlapDuration: Duration.hours(2),
+        kmsKey,
+      },
+    });
+
+    const template = Template.fromStack(stack);
+    template.resourceCountIs("AWS::Events::Rule", 1);
+    template.resourceCountIs("AWS::Lambda::Function", 1);
+    template.resourceCountIs("AWS::SSM::Parameter", 0);
+    template.hasResourceProperties("AWS::ECS::TaskDefinition", {
+      TaskRoleArn: { "Fn::GetAtt": [Match.stringLikeRegexp("^EcsTaskDefinitionTaskRole"), "Arn"] },
+      ContainerDefinitions: Match.arrayWith([Match.objectLike({ Name: "play", Secrets: Match.absent() })]),
+    });
+
+    const parameterArn = {
+      "Fn::Join": [
+        "",
+        ["arn:", { Ref: "AWS::Partition" }, ":ssm:eu-west-1:123456789012:parameter/existing/play/secret"],
+      ],
+    };
+    const policyDocument = {
+      Statement: Match.arrayWith([
+        { Effect: "Allow", Action: "ssm:GetParameters", Resource: parameterArn },
+        Match.objectLike({
+          Effect: "Allow",
+          Action: "kms:Decrypt",
+          Resource: { "Fn::GetAtt": [template.getResourceId("AWS::KMS::Key"), "Arn"] },
+          Condition: { StringEquals: { "kms:EncryptionContext:PARAMETER_ARN": parameterArn } },
+        }),
+      ]),
+    };
+    const readers = template.findResources("AWS::IAM::Policy", { Properties: { PolicyDocument: policyDocument } });
+    expect(Object.keys(readers)).toHaveLength(hybrid ? 2 : 1);
+    const taskPolicy = template.getResourceId("AWS::IAM::Policy", {
+      Properties: {
+        Roles: [{ Ref: Match.stringLikeRegexp("^EcsTaskDefinitionTaskRole") }],
+        PolicyDocument: policyDocument,
+      },
+    });
+    if (hybrid) {
+      const instancePolicy = template.getResourceId("AWS::IAM::Policy", {
+        Properties: { Roles: [{ Ref: Match.stringLikeRegexp("^InstanceRolePlay") }], PolicyDocument: policyDocument },
+      });
+      template.hasResource("AWS::AutoScaling::AutoScalingGroup", { DependsOn: Match.arrayWith([instancePolicy]) });
+    }
+    template.hasResource("AWS::ECS::Service", { DependsOn: Match.arrayWith([taskPolicy]) });
+    expect(template.toJSON()).toMatchSnapshot();
   });
 
   it("should create S3 Files resources and mount them in the ECS task definition", function () {

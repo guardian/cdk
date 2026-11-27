@@ -78,6 +78,8 @@ import {
   type WafProps,
 } from "../../constructs/loadbalancing";
 import { GuS3Bucket } from "../../constructs/s3";
+import type { PlaySecretRotationProps } from "../../constructs/ssm/play-secret-rotation/rotation";
+import { PlaySecretRotation } from "../../constructs/ssm/play-secret-rotation/rotation";
 import type { Alarms, ApplicationLoggingProps } from "../../patterns";
 import { restrictedCidrRanges } from "../../patterns";
 import type { GuAsgCapacity, GuDomainName } from "../../types";
@@ -230,6 +232,11 @@ export interface GuLoadBalancedAppExperimentalProps extends AppIdentity {
    * Enable and configure alarms.
    */
   monitoringConfiguration: Alarms | NoMonitoring;
+  /**
+   * Opt in to rotating the existing Parameter Store secret read by a Play application.
+   * In a hybrid deployment both EC2 and ECS read the same parameter, with one writer for the app.
+   */
+  playSecretRotation?: PlaySecretRotationProps;
   /**
    * Specify certificate for the load balancer.
    */
@@ -543,6 +550,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       applicationPort,
       certificateProps,
       monitoringConfiguration,
+      playSecretRotation,
       vpc = GuVpc.fromIdParameter(scope, AppIdentity.addAppToStringEnd({ app }, "VPC")),
       publicSubnets = GuVpc.subnetsFromParameter(scope, { type: SubnetType.PUBLIC, app }),
       waf,
@@ -587,6 +595,16 @@ export class GuLoadBalancedAppExperimental extends Construct {
 
     const { stack, stage } = scope;
 
+    const rotation = playSecretRotation
+      ? new PlaySecretRotation(scope, {
+          ...playSecretRotation,
+          appScope: this,
+          snsTopicName:
+            playSecretRotation.snsTopicName ??
+            (monitoringConfiguration.noMonitoring ? undefined : monitoringConfiguration.snsTopicName),
+        })
+      : undefined;
+
     let targetGroups: TargetGroups = {};
 
     // Setup EC2-specific infrastructure
@@ -617,7 +635,6 @@ export class GuLoadBalancedAppExperimental extends Construct {
       const mergedRoleConfiguration: GuInstanceRoleProps = {
         additionalPolicies: [...additionalPolicies, ...maybePrivateConfigPolicy, ...maybeListBucketPolicy],
       };
-
       if (versionedDeployments?.enabled && updatePolicy) {
         throw new Error("If versionedDeployments are enabled then updatePolicy should not be set via ec2Props");
       }
@@ -629,6 +646,8 @@ export class GuLoadBalancedAppExperimental extends Construct {
           )
         : updatePolicy;
 
+      const instanceRole = new GuInstanceRole(scope, { app, ...mergedRoleConfiguration });
+      const rotationReadPolicy = rotation?.grantRead(instanceRole);
       const autoScalingGroup = new GuAutoScalingGroup(scope, "AutoScalingGroup", {
         app,
         additionalSecurityGroups: additionalApplicationSecurityGroups,
@@ -636,7 +655,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
         instanceType,
         minimumInstances,
         maximumInstances,
-        role: new GuInstanceRole(scope, { app, ...mergedRoleConfiguration }),
+        role: instanceRole,
 
         healthChecks: HealthChecks.withAdditionalChecks({
           additionalTypes: [AdditionalHealthCheckType.ELB],
@@ -652,6 +671,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
         defaultInstanceWarmup,
         instanceMetricGranularity,
       });
+      if (rotationReadPolicy) {
+        autoScalingGroup.node.addDependency(rotationReadPolicy);
+      }
 
       // This allows automatic shipping of instance Cloud Init logs when using the
       // `cdk-base` Amigo role on your AMI.
@@ -854,6 +876,7 @@ export class GuLoadBalancedAppExperimental extends Construct {
       ];
 
       applicationPermissions.forEach((policy) => policy.attachToRole(taskDefinition.taskRole));
+      const rotationReadPolicy = rotation?.grantRead(taskDefinition.taskRole);
 
       // FargateService can also be used for tasks that will run on managed instances provided by the capacityProvider.
       //
@@ -885,6 +908,9 @@ export class GuLoadBalancedAppExperimental extends Construct {
       // Without this dependency the capacity provider will fail to be deleted since
       // it is part of the default strategy for the `ecsService`.
       ecsService.node.addDependency(managedInstancesCapacityProvider, instanceProfile, ecsInstanceRole);
+      if (rotationReadPolicy) {
+        ecsService.node.addDependency(rotationReadPolicy);
+      }
 
       const cfnService = ecsService.node.defaultChild as CfnService;
       cfnService.addPropertyOverride("Monitoring", {

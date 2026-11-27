@@ -20,6 +20,7 @@ Jump to:
 - [CDK demo including screencast](https://github.com/guardian/cdk-demo)
 - [Setting up a new project](./docs/setting-up-a-gucdk-project.md)
 - [Migrating an existing Cloudformation template](./docs/migration-guide.md)
+- [Rotating a Play application secret on EC2 and ECS](./docs/play-secret-rotation.md)
 - View the [typedocs](https://guardian.github.io/cdk/)
 - [Contributing](#contributing) to `@guardian/cdk`
 - [Best practices](./docs/best-practices.md)

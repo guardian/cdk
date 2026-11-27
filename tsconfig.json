@@ -9,6 +9,7 @@
     "sourceMap": true,
     "inlineSourceMap": false,
     "inlineSources": true,
+    "allowJs": true,
     "outDir": "lib"
   },
   "include": ["src/**/*"],
