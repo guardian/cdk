@@ -31,7 +31,7 @@ export class Imports {
         types: ["App"],
         components: [],
       },
-      "@guardian/cdk/lib/constructs/core": {
+      "@guardian/cdk": {
         types: ["GuStackProps"],
         components: ["GuStack"],
       },
@@ -45,7 +45,7 @@ export class Imports {
         types: [],
         components: [],
       },
-      "@guardian/cdk/lib/constructs/root": {
+      "@guardian/cdk": {
         types: [],
         components: ["GuRoot"],
       },
